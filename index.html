@@ -211,8 +211,8 @@ function makeWorld(){
  for(const[x,y]of[[20,15],[29,15]])prop('column',x,y);
  for(const s of SEALS){for(const dx of[-32,32])props.push({kind:'column',x:s.x+dx,y:s.y-30});props.push({kind:'altar',x:s.x,y:s.y});}
  for(const[x,y,k]of[[60,8,'column'],[67,8,'column_b'],[60,15,'column_b'],[67,15,'column'],[61,45,'column_b'],[67,44,'column'],[60,51,'column'],[66,51,'column_b']])prop(k,x,y);
- props.push({kind:'camp',x:24*16+8,y:38*16+8},{kind:'tent',x:21*16+8,y:38*16+8});prop('crates',19,36);prop('jar',19,39);
- props.push({kind:'camp',x:25*16+8,y:57*16+8},{kind:'tent',x:20*16+8,y:56*16+8});prop('crates',27,55);prop('jar',28,57);prop('crates',18,58);props.push({kind:'bones',x:29*16+8,y:54*16+8});
+ props.push({kind:'tent',x:21*16+8,y:38*16+8});prop('crates',19,36);prop('jar',19,39);
+ props.push({kind:'tent',x:20*16+8,y:56*16+8});prop('crates',27,55);prop('jar',28,57);prop('crates',18,58);props.push({kind:'bones',x:29*16+8,y:54*16+8});
  // épave de caravane dans les dunes
  prop('crates',36,54);prop('jar',38,55);props.push({kind:'bones',x:35*16+6,y:55*16+9},{kind:'skull',x:37*16+4,y:53*16+9});
  // --- obstacles répartis par région (grille irrégulière, espacement propre à chaque région)
@@ -343,13 +343,13 @@ class Game{
  burst(x,y,color,n){for(let i=0;i<n;i++){let a=(i/n)*Math.PI*2;this.particles.push({x,y,vx:Math.cos(a)*(18+i%4*7),vy:Math.sin(a)*(18+i%3*9),life:.3+i%3*.12,color});}}
  context(){const mechanism=this.mechanismContext();if(mechanism)return mechanism;const p=this.player;for(let i=0;i<3;i++)if(!this.seals[i]&&dist(p,SEALS[i])<30){return {kind:'seal',i,text:this.enemies.find(e=>e.id==='g'+i).dead?'E  RECUPERER LE SCEAU':'VAINCRE LE GARDIEN'};}
   for(let i=0;i<this.chests.length;i++)if(this.sameLevel(p,this.chests[i])&&!this.chests[i].open&&dist(p,this.chests[i])<24)return {kind:'chest',i,text:'E  OUVRIR LE COFFRE'};
-  if(!p.level&&this.world.props.some(o=>o.kind==='camp'&&dist(p,o)<34))return {kind:'camp',text:'E  FEU : SOIN ET SAUVEGARDE'};
+  
   if(!this.gate&&p.y>197&&p.y<236&&p.x>345&&p.x<455)return {kind:'gate',text:this.seals.every(Boolean)?'E  OUVRIR LE TEMPLE':'TEMPLE SCELLE : 3 SCEAUX REQUIS'};return null;
  }
  interact(){const c=this.context();if(!c||this.dead||this.won)return;if(['lever','lift','stairs','talk'].includes(c.kind)){this.useMechanism(c);return;}
   if(c.kind==='seal'){if(!this.enemies.find(e=>e.id==='g'+c.i).dead){this.emit('message',{text:'Le gardien protège encore ce sceau.'});return;}this.emit('notice',{title:'SCEAU OBTENU',text:'Sceau '+(c.i+1)+' sur 3 · santé restaurée'});this.seals[c.i]=true;this.player.hp=this.player.maxHp;this.burst(SEALS[c.i].x,SEALS[c.i].y,'#edcf80',24);this.emit('seal');this.emit('save');this.emit('message',{text:this.seals.every(Boolean)?'Les trois sceaux sont réunis. Le temple t’attend au nord.':'Sceau récupéré ! Santé restaurée. Nouveau point de reprise.'});}
   if(c.kind==='chest'){const ch=this.chests[c.i];ch.open=true;this.ejectLoot(ch,['coin','coin','coin','coin','coin','heart','heart']);this.emit('chest');this.emit('save');this.emit('message',{text:'Le coffre s’ouvre : approche-toi pour ramasser le butin.'});}
-  if(c.kind==='camp'){this.player.hp=this.player.maxHp;this.emit('save');this.emit('heal');this.emit('message',{text:'Le feu de Crom te restaure. Progression sauvegardée.'});}
+  
   if(c.kind==='gate'){if(this.seals.every(Boolean)){this.gate=true;this.emit('seal');this.emit('save');this.emit('message',{text:'Le temple est ouvert. Affronte le Prêtre du Serpent.'});}else this.emit('message',{text:'Il faut réunir les trois sceaux avant d’entrer.'});}
  }
  foeSound(e,act,kind=e.kind){const d=dist(e,this.player);if(d>230)return;this.emit('foe',{kind,act,vol:clamp(1.15-d/200,.3,1)});}
