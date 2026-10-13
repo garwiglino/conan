@@ -61,10 +61,14 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Avant de lancer le jeu, on regarde s'il y a une nouvelle version (5 s au plus ; sans réseau, lancement immédiat).
+        // Si l'app a été installée sans le jeu (projet allégé), le premier lancement le télécharge.
+        let firstRun = !GameUpdater.hasLocalGame
         let status = UILabel()
-        status.text = "MISE À JOUR DU JEU…"
+        status.text = firstRun ? "TÉLÉCHARGEMENT DU JEU…" : "MISE À JOUR DU JEU…"
         status.textColor = UIColor(red: 241 / 255, green: 227 / 255, blue: 189 / 255, alpha: 1)
         status.font = .monospacedSystemFont(ofSize: 13, weight: .semibold)
+        status.numberOfLines = 0
+        status.textAlignment = .center
         status.alpha = 0
         status.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(status)
@@ -72,10 +76,15 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
             status.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             status.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-        UIView.animate(withDuration: 0.25, delay: 0.7, options: [], animations: { status.alpha = 1 })
+        UIView.animate(withDuration: 0.25, delay: firstRun ? 0 : 0.7, options: [], animations: { status.alpha = 1 })
 
         let updater = GameUpdater()
-        updater.check(wait: 5) { [weak self] _ in
+        updater.check(wait: firstRun ? 120 : 5) { [weak self] _ in
+            guard GameUpdater.hasLocalGame else {
+                status.alpha = 1
+                status.text = "CONNEXION INTERNET NÉCESSAIRE\nAU PREMIER LANCEMENT.\n\nFERME ET ROUVRE L’APP."
+                return
+            }
             status.removeFromSuperview()
             self?.webView?.load(URLRequest(url: GameSchemeHandler.startURL))
         }

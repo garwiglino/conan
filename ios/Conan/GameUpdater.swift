@@ -16,6 +16,12 @@ final class GameUpdater {
     private static var gameFile: URL { folder.appendingPathComponent("index.html") }
     private static var etagFile: URL { folder.appendingPathComponent("etag.txt") }
 
+    /// Vrai si une version du jeu est disponible sur l'iPhone (téléchargée ou livrée avec l'app).
+    static var hasLocalGame: Bool {
+        let bundled = (Bundle.main.resourceURL ?? Bundle.main.bundleURL).appendingPathComponent("Game/index.html")
+        return FileManager.default.fileExists(atPath: gameFile.path) || FileManager.default.fileExists(atPath: bundled.path)
+    }
+
     private var completion: ((Bool) -> Void)?
 
     /// `completion` est appelé une seule fois, sur le fil principal : quand la vérification est finie,
