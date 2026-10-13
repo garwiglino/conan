@@ -60,7 +60,25 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        webView?.load(URLRequest(url: GameSchemeHandler.startURL))
+        // Avant de lancer le jeu, on regarde s'il y a une nouvelle version (5 s au plus ; sans réseau, lancement immédiat).
+        let status = UILabel()
+        status.text = "MISE À JOUR DU JEU…"
+        status.textColor = UIColor(red: 241 / 255, green: 227 / 255, blue: 189 / 255, alpha: 1)
+        status.font = .monospacedSystemFont(ofSize: 13, weight: .semibold)
+        status.alpha = 0
+        status.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(status)
+        NSLayoutConstraint.activate([
+            status.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            status.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        UIView.animate(withDuration: 0.25, delay: 0.7, options: [], animations: { status.alpha = 1 })
+
+        let updater = GameUpdater()
+        updater.check(wait: 5) { [weak self] _ in
+            status.removeFromSuperview()
+            self?.webView?.load(URLRequest(url: GameSchemeHandler.startURL))
+        }
     }
 
     /// Déclenche l'enregistrement de la partie par le jeu lui-même (même fonction que lors de la fermeture d'une page web).

@@ -12,6 +12,7 @@
 		B8A36779F63D54C8D0D456C3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2F53FAE94DBE7E3B7E33DE /* GameViewController.swift */; };
 		10EBF8BD5B5C3DBD622827EE /* GameSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */; };
 		A6EC2AD5F281D5C14FC38980 /* SaveMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */; };
+		5C961F27657A86DE3213D084 /* GameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4228288160A5A93573BC33B6 /* GameUpdater.swift */; };
 		54AE4F1C1654F6C7540A33F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A26E73A2E8FA2140B58CF59D /* Assets.xcassets */; };
 		38C986325E6D0E0D64EBD4A7 /* Game in Resources */ = {isa = PBXBuildFile; fileRef = 258F8F2EA57204E8C1C44273 /* Game */; };
 /* End PBXBuildFile section */
@@ -23,6 +24,7 @@
 		8C2F53FAE94DBE7E3B7E33DE /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSchemeHandler.swift; sourceTree = "<group>"; };
 		20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveMirror.swift; sourceTree = "<group>"; };
+		4228288160A5A93573BC33B6 /* GameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUpdater.swift; sourceTree = "<group>"; };
 		A26E73A2E8FA2140B58CF59D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		258F8F2EA57204E8C1C44273 /* Game */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Game; sourceTree = "<group>"; };
 		24A87B8500628070CF803101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -55,6 +57,7 @@
 				8C2F53FAE94DBE7E3B7E33DE /* GameViewController.swift */,
 				A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */,
 				20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */,
+				4228288160A5A93573BC33B6 /* GameUpdater.swift */,
 				A26E73A2E8FA2140B58CF59D /* Assets.xcassets */,
 				258F8F2EA57204E8C1C44273 /* Game */,
 				24A87B8500628070CF803101 /* Info.plist */,
@@ -146,6 +149,7 @@
 				B8A36779F63D54C8D0D456C3 /* GameViewController.swift in Sources */,
 				10EBF8BD5B5C3DBD622827EE /* GameSchemeHandler.swift in Sources */,
 				A6EC2AD5F281D5C14FC38980 /* SaveMirror.swift in Sources */,
+				5C961F27657A86DE3213D084 /* GameUpdater.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

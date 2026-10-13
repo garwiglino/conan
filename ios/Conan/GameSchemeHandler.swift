@@ -2,16 +2,26 @@ import Foundation
 import UniformTypeIdentifiers
 import WebKit
 
-/// Sert les fichiers du dossier « Game » de l'app sous l'adresse conan://localhost/…
-/// Tout est local : le jeu fonctionne sans réseau.
+/// Sert le jeu sous l'adresse conan://localhost/… : d'abord la dernière version téléchargée (GameUpdater),
+/// sinon la copie livrée avec l'app (dossier « Game »). Tout est local au moment de jouer : pas besoin de réseau.
 final class GameSchemeHandler: NSObject, WKURLSchemeHandler {
 
     static let scheme = "conan"
     static let startURL = URL(string: "conan://localhost/index.html")!
 
-    private let root: URL = (Bundle.main.resourceURL ?? Bundle.main.bundleURL)
-        .appendingPathComponent("Game", isDirectory: true)
-        .standardizedFileURL
+    private let roots: [URL] = [
+        GameUpdater.folder.standardizedFileURL,
+        (Bundle.main.resourceURL ?? Bundle.main.bundleURL).appendingPathComponent("Game", isDirectory: true).standardizedFileURL
+    ]
+
+    private func load(_ relative: String) -> (URL, Data)? {
+        for root in roots {
+            let file = root.appendingPathComponent(relative).standardizedFileURL
+            guard file.path.hasPrefix(root.path + "/") else { continue }
+            if let data = try? Data(contentsOf: file) { return (file, data) }
+        }
+        return nil
+    }
 
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         guard let url = urlSchemeTask.request.url else {
@@ -20,14 +30,14 @@ final class GameSchemeHandler: NSObject, WKURLSchemeHandler {
         }
         var path = url.path
         if path.isEmpty || path == "/" { path = "/index.html" }
-        let file = root.appendingPathComponent(String(path.dropFirst())).standardizedFileURL
 
-        guard file.path.hasPrefix(root.path + "/"), let data = try? Data(contentsOf: file) else {
+        guard let found = load(String(path.dropFirst())) else {
             let missing = HTTPURLResponse(url: url, statusCode: 404, httpVersion: "HTTP/1.1", headerFields: ["Content-Length": "0"])!
             urlSchemeTask.didReceive(missing)
             urlSchemeTask.didFinish()
             return
         }
+        let (file, data) = found
 
         var mime = UTType(filenameExtension: file.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
         if mime.hasPrefix("text/") || mime == "application/javascript" { mime += "; charset=utf-8" }
