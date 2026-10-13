@@ -2,6 +2,8 @@
 
 Elles sont exportées depuis le jeu, qui dessine lui-même chaque image au lancement, à partir du code (`CharacterAtlas` dans `index.html`).
 
+**Exception : `conan.png` est la planche fournie pour le joueur.** Le jeu l'utilise directement, et le dessin par le code ne sert plus que de secours tant que l'image n'est pas chargée. Elle suit exactement la même disposition : pieds au bas de la case (ligne 51), centrés en x = 40.
+
 - Il y a une planche PNG par personnage : Conan, squelette, serpent, cultiste (aussi utilisé pour le Veilleur), gardien, Zahra, et le Prêtre du serpent (normal et enragé).
 - Chaque case fait 80 × 80 pixels, avec les pieds du personnage en (40, 52).
 - Chaque ligne correspond à une animation dans une direction (haut, droite, bas, gauche). Chaque colonne est une image de l'animation, avec 6 images au plus.
