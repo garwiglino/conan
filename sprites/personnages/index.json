@@ -1,0 +1,1482 @@
+{
+ "conan": [
+  {
+   "ligne": 0,
+   "animation": "idle",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 1,
+   "animation": "idle",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 2,
+   "animation": "idle",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 3,
+   "animation": "idle",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 4,
+   "animation": "walk",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "walk",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "walk",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "walk",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "attack (coup 1)",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "attack (coup 1)",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "attack (coup 1)",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "attack (coup 1)",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "attack (coup 2)",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "attack (coup 2)",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "attack (coup 2)",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "attack (coup 2)",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "attack (coup 3)",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 17,
+   "animation": "attack (coup 3)",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 18,
+   "animation": "attack (coup 3)",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 19,
+   "animation": "attack (coup 3)",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 20,
+   "animation": "attack (coup 4)",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 21,
+   "animation": "attack (coup 4)",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 22,
+   "animation": "attack (coup 4)",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 23,
+   "animation": "attack (coup 4)",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 24,
+   "animation": "guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 25,
+   "animation": "guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 26,
+   "animation": "guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 27,
+   "animation": "guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 28,
+   "animation": "dash",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 29,
+   "animation": "dash",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 30,
+   "animation": "dash",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 31,
+   "animation": "dash",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 32,
+   "animation": "use",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 33,
+   "animation": "use",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 34,
+   "animation": "use",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 35,
+   "animation": "use",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 36,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 37,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 38,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 39,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "squelette": [
+  {
+   "ligne": 0,
+   "animation": "idle",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 1,
+   "animation": "idle",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 2,
+   "animation": "idle",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 3,
+   "animation": "idle",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 4,
+   "animation": "walk",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "walk",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "walk",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "walk",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "attack",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "attack",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "attack",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "attack",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 17,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 18,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 19,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "serpent": [
+  {
+   "ligne": 0,
+   "animation": "idle",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 1,
+   "animation": "idle",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 2,
+   "animation": "idle",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 3,
+   "animation": "idle",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 4,
+   "animation": "walk",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "walk",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "walk",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "walk",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "attack",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "attack",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "attack",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "attack",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "melee",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "melee",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "melee",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "melee",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 17,
+   "animation": "guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 18,
+   "animation": "guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 19,
+   "animation": "guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 20,
+   "animation": "use",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 21,
+   "animation": "use",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 22,
+   "animation": "use",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 23,
+   "animation": "use",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 24,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 25,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 26,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 27,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "cultiste_et_veilleur": [
+  {
+   "ligne": 0,
+   "animation": "idle",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 1,
+   "animation": "idle",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 2,
+   "animation": "idle",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 3,
+   "animation": "idle",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 4,
+   "animation": "walk",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "walk",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "walk",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "walk",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "attack",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "attack",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "attack",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "attack",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "melee",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "melee",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "melee",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "melee",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 17,
+   "animation": "guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 18,
+   "animation": "guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 19,
+   "animation": "guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 20,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 21,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 22,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 23,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "gardien": [
+  {
+   "ligne": 0,
+   "animation": "idle",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 1,
+   "animation": "idle",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 2,
+   "animation": "idle",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 3,
+   "animation": "idle",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 4,
+   "animation": "walk",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "walk",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "walk",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "walk",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "attack",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "attack",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "attack",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "attack",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "dash",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 17,
+   "animation": "dash",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 18,
+   "animation": "dash",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 19,
+   "animation": "dash",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 20,
+   "animation": "use",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 21,
+   "animation": "use",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 22,
+   "animation": "use",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 23,
+   "animation": "use",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 24,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 25,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 26,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 27,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "zahra": [
+  {
+   "ligne": 0,
+   "animation": "idle",
+   "direction": "haut",
+   "images": 1
+  },
+  {
+   "ligne": 1,
+   "animation": "idle",
+   "direction": "droite",
+   "images": 1
+  },
+  {
+   "ligne": 2,
+   "animation": "idle",
+   "direction": "bas",
+   "images": 1
+  },
+  {
+   "ligne": 3,
+   "animation": "idle",
+   "direction": "gauche",
+   "images": 1
+  },
+  {
+   "ligne": 4,
+   "animation": "walk",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "walk",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "walk",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "walk",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "attack",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "attack",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "attack",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "attack",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "melee",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "melee",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "melee",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "melee",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 17,
+   "animation": "guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 18,
+   "animation": "guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 19,
+   "animation": "guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 20,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 21,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 22,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 23,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "pretre_du_serpent": [
+  {
+   "ligne": 0,
+   "animation": "boss_move",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 1,
+   "animation": "boss_move",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 2,
+   "animation": "boss_move",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 3,
+   "animation": "boss_move",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 4,
+   "animation": "boss_slash",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "boss_slash",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "boss_slash",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "boss_slash",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "boss_nova",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "boss_nova",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "boss_nova",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "boss_nova",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "boss_charge",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "boss_charge",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "boss_charge",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "boss_charge",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "boss_fan",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 17,
+   "animation": "boss_fan",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 18,
+   "animation": "boss_fan",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 19,
+   "animation": "boss_fan",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 20,
+   "animation": "boss_eruption",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 21,
+   "animation": "boss_eruption",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 22,
+   "animation": "boss_eruption",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 23,
+   "animation": "boss_eruption",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 24,
+   "animation": "boss_guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 25,
+   "animation": "boss_guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 26,
+   "animation": "boss_guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 27,
+   "animation": "boss_guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 28,
+   "animation": "boss_recover",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 29,
+   "animation": "boss_recover",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 30,
+   "animation": "boss_recover",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 31,
+   "animation": "boss_recover",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 32,
+   "animation": "boss_transform",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 33,
+   "animation": "boss_transform",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 34,
+   "animation": "boss_transform",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 35,
+   "animation": "boss_transform",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 36,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 37,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 38,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 39,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ],
+ "pretre_du_serpent_rage": [
+  {
+   "ligne": 0,
+   "animation": "boss_move",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 1,
+   "animation": "boss_move",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 2,
+   "animation": "boss_move",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 3,
+   "animation": "boss_move",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 4,
+   "animation": "boss_slash",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 5,
+   "animation": "boss_slash",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 6,
+   "animation": "boss_slash",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 7,
+   "animation": "boss_slash",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 8,
+   "animation": "boss_nova",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 9,
+   "animation": "boss_nova",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 10,
+   "animation": "boss_nova",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 11,
+   "animation": "boss_nova",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 12,
+   "animation": "boss_charge",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 13,
+   "animation": "boss_charge",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 14,
+   "animation": "boss_charge",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 15,
+   "animation": "boss_charge",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 16,
+   "animation": "boss_fan",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 17,
+   "animation": "boss_fan",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 18,
+   "animation": "boss_fan",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 19,
+   "animation": "boss_fan",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 20,
+   "animation": "boss_eruption",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 21,
+   "animation": "boss_eruption",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 22,
+   "animation": "boss_eruption",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 23,
+   "animation": "boss_eruption",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 24,
+   "animation": "boss_guard",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 25,
+   "animation": "boss_guard",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 26,
+   "animation": "boss_guard",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 27,
+   "animation": "boss_guard",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 28,
+   "animation": "boss_recover",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 29,
+   "animation": "boss_recover",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 30,
+   "animation": "boss_recover",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 31,
+   "animation": "boss_recover",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 32,
+   "animation": "boss_transform",
+   "direction": "haut",
+   "images": 6
+  },
+  {
+   "ligne": 33,
+   "animation": "boss_transform",
+   "direction": "droite",
+   "images": 6
+  },
+  {
+   "ligne": 34,
+   "animation": "boss_transform",
+   "direction": "bas",
+   "images": 6
+  },
+  {
+   "ligne": 35,
+   "animation": "boss_transform",
+   "direction": "gauche",
+   "images": 6
+  },
+  {
+   "ligne": 36,
+   "animation": "hurt",
+   "direction": "haut",
+   "images": 4
+  },
+  {
+   "ligne": 37,
+   "animation": "hurt",
+   "direction": "droite",
+   "images": 4
+  },
+  {
+   "ligne": 38,
+   "animation": "hurt",
+   "direction": "bas",
+   "images": 4
+  },
+  {
+   "ligne": 39,
+   "animation": "hurt",
+   "direction": "gauche",
+   "images": 4
+  }
+ ]
+}
