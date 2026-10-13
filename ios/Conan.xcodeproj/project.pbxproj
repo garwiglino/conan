@@ -1,0 +1,267 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		088246814F3A533515F954A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FCABA9C2ADFE9E865220AA /* AppDelegate.swift */; };
+		024634B163DAFFB53ACCF673 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CB0EDC556472E368FD7F8 /* SceneDelegate.swift */; };
+		B8A36779F63D54C8D0D456C3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2F53FAE94DBE7E3B7E33DE /* GameViewController.swift */; };
+		10EBF8BD5B5C3DBD622827EE /* GameSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */; };
+		A6EC2AD5F281D5C14FC38980 /* SaveMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */; };
+		54AE4F1C1654F6C7540A33F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A26E73A2E8FA2140B58CF59D /* Assets.xcassets */; };
+		38C986325E6D0E0D64EBD4A7 /* Game in Resources */ = {isa = PBXBuildFile; fileRef = 258F8F2EA57204E8C1C44273 /* Game */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34B3331DFE8AA5B7CCC532B0 /* Conan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		54FCABA9C2ADFE9E865220AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		458CB0EDC556472E368FD7F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		8C2F53FAE94DBE7E3B7E33DE /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSchemeHandler.swift; sourceTree = "<group>"; };
+		20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveMirror.swift; sourceTree = "<group>"; };
+		A26E73A2E8FA2140B58CF59D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		258F8F2EA57204E8C1C44273 /* Game */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Game; sourceTree = "<group>"; };
+		24A87B8500628070CF803101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BAC44CB759309DAEE2ABA7BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1227D14E73C4061EB58EA276 = {
+			isa = PBXGroup;
+			children = (
+				EDB9FDD019C6E3F06F142C9C /* Conan */,
+				C82A40B3A3D45EF5AEF705DC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EDB9FDD019C6E3F06F142C9C /* Conan */ = {
+			isa = PBXGroup;
+			children = (
+				54FCABA9C2ADFE9E865220AA /* AppDelegate.swift */,
+				458CB0EDC556472E368FD7F8 /* SceneDelegate.swift */,
+				8C2F53FAE94DBE7E3B7E33DE /* GameViewController.swift */,
+				A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */,
+				20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */,
+				A26E73A2E8FA2140B58CF59D /* Assets.xcassets */,
+				258F8F2EA57204E8C1C44273 /* Game */,
+				24A87B8500628070CF803101 /* Info.plist */,
+			);
+			path = Conan;
+			sourceTree = "<group>";
+		};
+		C82A40B3A3D45EF5AEF705DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34B3331DFE8AA5B7CCC532B0 /* Conan.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		52EE9165B23D0EBA7C06EDEE /* Conan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0B5DD510D55D740694797E91 /* Build configuration list for PBXNativeTarget "Conan" */;
+			buildPhases = (
+				5085D1F82C37E395FFDE11BB /* Sources */,
+				BAC44CB759309DAEE2ABA7BE /* Frameworks */,
+				D7B9006503C618D36651997E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Conan;
+			productName = Conan;
+			productReference = 34B3331DFE8AA5B7CCC532B0 /* Conan.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2E5FAC7BC89538BBA3D8C8F1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					52EE9165B23D0EBA7C06EDEE = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A32E41779436BAC944610041 /* Build configuration list for PBXProject "Conan" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = fr;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				fr,
+				en,
+				Base,
+			);
+			mainGroup = 1227D14E73C4061EB58EA276;
+			productRefGroup = C82A40B3A3D45EF5AEF705DC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				52EE9165B23D0EBA7C06EDEE /* Conan */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D7B9006503C618D36651997E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54AE4F1C1654F6C7540A33F5 /* Assets.xcassets in Resources */,
+				38C986325E6D0E0D64EBD4A7 /* Game in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5085D1F82C37E395FFDE11BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				088246814F3A533515F954A7 /* AppDelegate.swift in Sources */,
+				024634B163DAFFB53ACCF673 /* SceneDelegate.swift in Sources */,
+				B8A36779F63D54C8D0D456C3 /* GameViewController.swift in Sources */,
+				10EBF8BD5B5C3DBD622827EE /* GameSchemeHandler.swift in Sources */,
+				A6EC2AD5F281D5C14FC38980 /* SaveMirror.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2AE22FA4266B8E4604F0CA5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C0F1FB355A3FF77DE2D5CEF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3BDFAC352FAC544CC4A44C7B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Conan/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.garwiglino.conan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4D155CA91AB5C8CF65501440 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Conan/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.garwiglino.conan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A32E41779436BAC944610041 /* Build configuration list for PBXProject "Conan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AE22FA4266B8E4604F0CA5E /* Debug */,
+				C0F1FB355A3FF77DE2D5CEF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0B5DD510D55D740694797E91 /* Build configuration list for PBXNativeTarget "Conan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BDFAC352FAC544CC4A44C7B /* Debug */,
+				4D155CA91AB5C8CF65501440 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2E5FAC7BC89538BBA3D8C8F1 /* Project object */;
+}
