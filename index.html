@@ -236,6 +236,8 @@ function makeWorld(){
   else if(hash(x,y,9)<F.smallP*(at(x,y)===1?.35:1))props.push({kind:F.small[Math.floor(hash(x,y,10)*F.small.length)],x:x*16+4+Math.floor(hash(x,y,11)*8),y:y*16+9});}
  return {tiles,props,trails}; // trails : tracé exact des pistes, pour un rendu au pixel près
 }
+// Emprise au sol des personnages (demi-largeur, demi-profondeur) : deux corps ne se chevauchent jamais, ils se touchent.
+const BODY={hero:[7,5],snake:[8,4.5],skeleton:[7,5],cultist:[8,5],guardian:[10,5.5],boss:[13,6.5],npc:[8,5]};
 const STATS={snake:{hp:2,speed:29,r:5,reach:15,windup:.45,damage:1},skeleton:{hp:3,speed:24,r:6,reach:20,windup:.55,damage:1},cultist:{hp:3,speed:19,r:6,reach:95,windup:.9,damage:1},guardian:{hp:7,speed:23,r:8,reach:25,windup:.7,damage:2},boss:{hp:28,speed:15,r:10,reach:105,windup:1.15,damage:2,armor:.5,design:2}};
 function enemy(kind,x,y,id){return {kind,x,y,homeX:x,homeY:y,id,...STATS[kind],maxHp:STATS[kind].hp,dir:2,anim:0,cooldown:1,wind:0,flash:0,stun:0,defenseCD:1,guardTime:0,guardRaise:0,guardCount:0,hurt:0,hurtDuration:0,hitX:0,hitY:0,attackX:0,attackY:0,attack:0,phase:0,dead:false};}
 class Game{
@@ -294,7 +296,15 @@ class Game{
  emit(type,data={}){this.events.push({type,...data});}
  tile(x,y){return this.world.tiles[Math.floor(y/16)]?.[Math.floor(x/16)]??6;}
  solid(x,y,r=5,level=0){if(level===1){const d=this.deck,l=this.lifts[0];if(l.y>l.top+1&&x+r>l.x-18&&x-r<l.x+18&&y+r>l.top-12&&y-r<l.top+12)return true;return x-r<d.x||x+r>d.x+d.w||y-r<d.y||y+r>d.y+d.h;}if(this.doors?.some(d=>d.progress<.98&&x+r>d.x&&x-r<d.x+d.w&&y+r>d.y&&y-r<d.y+d.h))return true;for(const dx of [-r,r])for(const dy of [-r,r]){let t=this.tile(x+dx,y+dy);if(t===3||t===4||t===6||t===8||(t===7&&(!this.gate||this.arenaLock)))return true;}return false;}
- move(o,dx,dy){if(!this.solid(o.x+dx,o.y,o.r||5,o.level||0))o.x+=dx;if(!this.solid(o.x,o.y+dy,o.r||5,o.level||0))o.y+=dy;}
+ move(o,dx,dy){for(const ax of[0,1]){const d=ax?dy:dx;if(!d)continue;const at=t=>[o.x+(ax?0:d*t),o.y+(ax?d*t:0)],free=t=>{const[x,y]=at(t);return !this.solid(x,y,o.r||5,o.level||0)&&!this.crowd(o,x,y);};
+   if(free(1)){if(ax)o.y+=d;else o.x+=d;continue;}const[x1,y1]=at(1);if(this.solid(x1,y1,o.r||5,o.level||0))continue;
+   let lo=0,hi=1;for(let k=0;k<7;k++){const m=(lo+hi)/2;if(free(m))lo=m;else hi=m;}if(ax)o.y+=d*lo;else o.x+=d*lo;}} // s'arrête pile au contact d'un corps
+ bodies(o){const p=this.player;if(this.dying||p.spawnFX>SPAWN_T-.9)return [];
+  if(o===p)return [...this.enemies.filter(e=>!e.dead&&e.mode!=='transform'&&(e.kind!=='boss'||this.bossActive)),...this.npcs];
+  return o.kind&&BODY[o.kind]?[p]:[];}
+ bodySize(b){return b===this.player?BODY.hero:BODY[b.kind]||BODY.npc;}
+ crowd(o,x,y){const ro=this.bodySize(o);for(const b of this.bodies(o)){if((b.level||0)!==(o.level||0)||b===o)continue;const rb=this.bodySize(b),ax=ro[0]+rb[0],ay=ro[1]+rb[1],n1=((x-b.x)/ax)**2+((y-b.y)/ay)**2;
+   if(n1<1&&n1<((o.x-b.x)/ax)**2+((o.y-b.y)/ay)**2-1e-9)return true;}return false;}
  movePlayer(p,mx,my){const s=this.stairs,inX=x=>x>s.x-s.hw+2&&x<s.x+s.hw-2;if(!p.onStairs){if(!p.level&&my<0&&inX(p.x)&&p.y>=s.bottom-.5&&p.y+my<s.bottom)p.onStairs=true;else if(p.level===1&&my>0&&inX(p.x)&&p.y+my>s.top){p.onStairs=true;p.level=0;}}if(p.onStairs){p.x=clamp(p.x+mx,s.x-s.hw+4,s.x+s.hw-4);p.y+=my;this.stairState(p);return;}this.move(p,mx,my);}
  stairState(p){const s=this.stairs;if(!p.onStairs)return;if(p.y<=s.top){p.y=s.top;p.level=1;p.onStairs=false;delete p.elevation;}else if(p.y>=s.bottom){p.y=s.bottom;p.level=0;p.onStairs=false;delete p.elevation;}else p.elevation=12*(s.bottom-p.y)/(s.bottom-s.top);}
  target(){const e=this.enemies.find(e=>e.id===this.targetId);if(!e||e.dead||!this.sameLevel(e,this.player)||dist(e,this.player)>112){this.targetId=null;return null;}return e;}
@@ -411,7 +421,7 @@ class Game{
    const active=d<115&&Math.hypot(e.x-e.homeX,e.y-e.homeY)<155;
    let mx=0,my=0;if(e.attack>0){e.anim=0;continue;}if(active){if(d>Math.max(12,e.reach-8)){mx=hx;my=hy;}}else if(Math.hypot(e.x-e.homeX,e.y-e.homeY)>5){mx=e.homeX-e.x;my=e.homeY-e.y;}
    let ml=Math.hypot(mx,my);if(ml&&e.kind!=='boss'){e.dir=this.direction(mx,my);const ox=e.x,oy=e.y;this.move(e,mx/ml*e.speed*dt,my/ml*e.speed*dt);let moved=Math.hypot(e.x-ox,e.y-oy);e.anim=moved>.001?e.anim+moved/3:0;}else e.anim=0;
-   if(e.kind==='boss'&&d<20)this.damagePlayer(1,e);
+   if(e.kind==='boss'&&d<22)this.damagePlayer(1,e);
   }
   for(const s of this.shots){(s.trail||(s.trail=[])).unshift({x:s.x,y:s.y,z:s.z??6});if(s.trail.length>7)s.trail.pop();s.age=(s.age||0)+dt;s.z=6+((s.z??6)-6)*Math.exp(-dt*7);s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt;if(this.solid(s.x,s.y,1,s.level||0)){s.life=0;this.burst(s.x,s.y-6,s.owner==='boss'?'#e07a5f':'#b8e08a',9);this.foeSound(s,'impact','bolt');}else if(this.sameLevel(s,p)&&dist(s,p)<9){this.damagePlayer(s.damage,s);s.life=0;this.foeSound(s,'impact','bolt');}}
   for(const h of this.hazards){if(h.delay>0){h.delay-=dt;continue;}h.life-=dt;if(!h.hit&&dist(h,p)<h.r&&this.lineClear(h,p)){h.hit=true;this.damagePlayer(2,h);}}this.hazards=this.hazards.filter(h=>h.life>0);
