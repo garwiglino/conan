@@ -2518,7 +2518,7 @@
    "nom": "Serpent",
    "fichier": "serpent.png",
    "apercu": "serpent_apercu.png",
-   "lignes": 28,
+   "lignes": 16,
    "animations": [
     {
      "ligne": 0,
@@ -2534,7 +2534,7 @@
        80
       ]
      ],
-     "description": "Immobile."
+     "description": "Immobile, tête dressée, langue sortie."
     },
     {
      "ligne": 1,
@@ -2550,7 +2550,7 @@
        80
       ]
      ],
-     "description": "Immobile."
+     "description": "Immobile, tête dressée, langue sortie."
     },
     {
      "ligne": 2,
@@ -2566,7 +2566,7 @@
        80
       ]
      ],
-     "description": "Immobile."
+     "description": "Immobile, tête dressée, langue sortie."
     },
     {
      "ligne": 3,
@@ -2582,7 +2582,7 @@
        80
       ]
      ],
-     "description": "Immobile."
+     "description": "Immobile, tête dressée, langue sortie."
     },
     {
      "ligne": 4,
@@ -2628,7 +2628,7 @@
        80
       ]
      ],
-     "description": "6 images en boucle ; on passe à l'image suivante tous les 5,5 pixels parcourus."
+     "description": "6 images en boucle : l’ondulation parcourt le corps de la queue vers la tête ; on passe à l’image suivante tous les 5,5 pixels parcourus."
     },
     {
      "ligne": 5,
@@ -2674,7 +2674,7 @@
        80
       ]
      ],
-     "description": "6 images en boucle ; on passe à l'image suivante tous les 5,5 pixels parcourus."
+     "description": "6 images en boucle : l’ondulation parcourt le corps de la queue vers la tête ; on passe à l’image suivante tous les 5,5 pixels parcourus."
     },
     {
      "ligne": 6,
@@ -2720,7 +2720,7 @@
        80
       ]
      ],
-     "description": "6 images en boucle ; on passe à l'image suivante tous les 5,5 pixels parcourus."
+     "description": "6 images en boucle : l’ondulation parcourt le corps de la queue vers la tête ; on passe à l’image suivante tous les 5,5 pixels parcourus."
     },
     {
      "ligne": 7,
@@ -2766,7 +2766,7 @@
        80
       ]
      ],
-     "description": "6 images en boucle ; on passe à l'image suivante tous les 5,5 pixels parcourus."
+     "description": "6 images en boucle : l’ondulation parcourt le corps de la queue vers la tête ; on passe à l’image suivante tous les 5,5 pixels parcourus."
     },
     {
      "ligne": 8,
@@ -2812,15 +2812,7 @@
        80
       ]
      ],
-     "description": "Images 0 et 1 : préparation (début puis fin), visibles pendant l'élan. Puis les 6 images de la frappe.",
-     "duree_par_image_s": [
-      0.075,
-      0.045,
-      0.045,
-      0.055,
-      0.07,
-      0.09
-     ]
+     "description": "Images 0 et 1 : le cou se replie en arrière, corps ramassé (visibles pendant l’élan). Puis la détente : tête projetée gueule ouverte, morsure, retour."
     },
     {
      "ligne": 9,
@@ -2866,15 +2858,7 @@
        80
       ]
      ],
-     "description": "Images 0 et 1 : préparation (début puis fin), visibles pendant l'élan. Puis les 6 images de la frappe.",
-     "duree_par_image_s": [
-      0.075,
-      0.045,
-      0.045,
-      0.055,
-      0.07,
-      0.09
-     ]
+     "description": "Images 0 et 1 : le cou se replie en arrière, corps ramassé (visibles pendant l’élan). Puis la détente : tête projetée gueule ouverte, morsure, retour."
     },
     {
      "ligne": 10,
@@ -2920,15 +2904,7 @@
        80
       ]
      ],
-     "description": "Images 0 et 1 : préparation (début puis fin), visibles pendant l'élan. Puis les 6 images de la frappe.",
-     "duree_par_image_s": [
-      0.075,
-      0.045,
-      0.045,
-      0.055,
-      0.07,
-      0.09
-     ]
+     "description": "Images 0 et 1 : le cou se replie en arrière, corps ramassé (visibles pendant l’élan). Puis la détente : tête projetée gueule ouverte, morsure, retour."
     },
     {
      "ligne": 11,
@@ -2974,22 +2950,14 @@
        80
       ]
      ],
-     "description": "Images 0 et 1 : préparation (début puis fin), visibles pendant l'élan. Puis les 6 images de la frappe.",
-     "duree_par_image_s": [
-      0.075,
-      0.045,
-      0.045,
-      0.055,
-      0.07,
-      0.09
-     ]
+     "description": "Images 0 et 1 : le cou se replie en arrière, corps ramassé (visibles pendant l’élan). Puis la détente : tête projetée gueule ouverte, morsure, retour."
     },
     {
      "ligne": 12,
-     "animation": "melee",
-     "nom": "Coup de sceptre",
+     "animation": "hurt",
+     "nom": "Touché",
      "direction": "haut",
-     "images": 6,
+     "images": 4,
      "cadres": [
       [
        0,
@@ -3014,28 +2982,16 @@
        960,
        80,
        80
-      ],
-      [
-       320,
-       960,
-       80,
-       80
-      ],
-      [
-       400,
-       960,
-       80,
-       80
       ]
      ],
-     "description": "Attaque au corps à corps du cultiste : 6 images (préparation, élan, frappe, suivi, retour, garde)."
+     "description": "Recul après un coup reçu (tête rejetée, yeux blancs, corps qui se tord) : 4 images réparties sur la durée du recul."
     },
     {
      "ligne": 13,
-     "animation": "melee",
-     "nom": "Coup de sceptre",
+     "animation": "hurt",
+     "nom": "Touché",
      "direction": "droite",
-     "images": 6,
+     "images": 4,
      "cadres": [
       [
        0,
@@ -3060,28 +3016,16 @@
        1040,
        80,
        80
-      ],
-      [
-       320,
-       1040,
-       80,
-       80
-      ],
-      [
-       400,
-       1040,
-       80,
-       80
       ]
      ],
-     "description": "Attaque au corps à corps du cultiste : 6 images (préparation, élan, frappe, suivi, retour, garde)."
+     "description": "Recul après un coup reçu (tête rejetée, yeux blancs, corps qui se tord) : 4 images réparties sur la durée du recul."
     },
     {
      "ligne": 14,
-     "animation": "melee",
-     "nom": "Coup de sceptre",
+     "animation": "hurt",
+     "nom": "Touché",
      "direction": "bas",
-     "images": 6,
+     "images": 4,
      "cadres": [
       [
        0,
@@ -3106,540 +3050,12 @@
        1120,
        80,
        80
-      ],
-      [
-       320,
-       1120,
-       80,
-       80
-      ],
-      [
-       400,
-       1120,
-       80,
-       80
       ]
      ],
-     "description": "Attaque au corps à corps du cultiste : 6 images (préparation, élan, frappe, suivi, retour, garde)."
+     "description": "Recul après un coup reçu (tête rejetée, yeux blancs, corps qui se tord) : 4 images réparties sur la durée du recul."
     },
     {
      "ligne": 15,
-     "animation": "melee",
-     "nom": "Coup de sceptre",
-     "direction": "gauche",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1200,
-       80,
-       80
-      ],
-      [
-       80,
-       1200,
-       80,
-       80
-      ],
-      [
-       160,
-       1200,
-       80,
-       80
-      ],
-      [
-       240,
-       1200,
-       80,
-       80
-      ],
-      [
-       320,
-       1200,
-       80,
-       80
-      ],
-      [
-       400,
-       1200,
-       80,
-       80
-      ]
-     ],
-     "description": "Attaque au corps à corps du cultiste : 6 images (préparation, élan, frappe, suivi, retour, garde)."
-    },
-    {
-     "ligne": 16,
-     "animation": "guard",
-     "nom": "Garde",
-     "direction": "haut",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1280,
-       80,
-       80
-      ],
-      [
-       80,
-       1280,
-       80,
-       80
-      ],
-      [
-       160,
-       1280,
-       80,
-       80
-      ],
-      [
-       240,
-       1280,
-       80,
-       80
-      ],
-      [
-       320,
-       1280,
-       80,
-       80
-      ],
-      [
-       400,
-       1280,
-       80,
-       80
-      ]
-     ],
-     "description": "Bouclier levé ; les 6 images servent quand on se déplace en garde, l'image 2 quand on est immobile."
-    },
-    {
-     "ligne": 17,
-     "animation": "guard",
-     "nom": "Garde",
-     "direction": "droite",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1360,
-       80,
-       80
-      ],
-      [
-       80,
-       1360,
-       80,
-       80
-      ],
-      [
-       160,
-       1360,
-       80,
-       80
-      ],
-      [
-       240,
-       1360,
-       80,
-       80
-      ],
-      [
-       320,
-       1360,
-       80,
-       80
-      ],
-      [
-       400,
-       1360,
-       80,
-       80
-      ]
-     ],
-     "description": "Bouclier levé ; les 6 images servent quand on se déplace en garde, l'image 2 quand on est immobile."
-    },
-    {
-     "ligne": 18,
-     "animation": "guard",
-     "nom": "Garde",
-     "direction": "bas",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1440,
-       80,
-       80
-      ],
-      [
-       80,
-       1440,
-       80,
-       80
-      ],
-      [
-       160,
-       1440,
-       80,
-       80
-      ],
-      [
-       240,
-       1440,
-       80,
-       80
-      ],
-      [
-       320,
-       1440,
-       80,
-       80
-      ],
-      [
-       400,
-       1440,
-       80,
-       80
-      ]
-     ],
-     "description": "Bouclier levé ; les 6 images servent quand on se déplace en garde, l'image 2 quand on est immobile."
-    },
-    {
-     "ligne": 19,
-     "animation": "guard",
-     "nom": "Garde",
-     "direction": "gauche",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1520,
-       80,
-       80
-      ],
-      [
-       80,
-       1520,
-       80,
-       80
-      ],
-      [
-       160,
-       1520,
-       80,
-       80
-      ],
-      [
-       240,
-       1520,
-       80,
-       80
-      ],
-      [
-       320,
-       1520,
-       80,
-       80
-      ],
-      [
-       400,
-       1520,
-       80,
-       80
-      ]
-     ],
-     "description": "Bouclier levé ; les 6 images servent quand on se déplace en garde, l'image 2 quand on est immobile."
-    },
-    {
-     "ligne": 20,
-     "animation": "use",
-     "nom": "Action",
-     "direction": "haut",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1600,
-       80,
-       80
-      ],
-      [
-       80,
-       1600,
-       80,
-       80
-      ],
-      [
-       160,
-       1600,
-       80,
-       80
-      ],
-      [
-       240,
-       1600,
-       80,
-       80
-      ],
-      [
-       320,
-       1600,
-       80,
-       80
-      ],
-      [
-       400,
-       1600,
-       80,
-       80
-      ]
-     ],
-     "description": "Actionner un levier ou ouvrir un coffre : 6 images sur 0,4 s."
-    },
-    {
-     "ligne": 21,
-     "animation": "use",
-     "nom": "Action",
-     "direction": "droite",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1680,
-       80,
-       80
-      ],
-      [
-       80,
-       1680,
-       80,
-       80
-      ],
-      [
-       160,
-       1680,
-       80,
-       80
-      ],
-      [
-       240,
-       1680,
-       80,
-       80
-      ],
-      [
-       320,
-       1680,
-       80,
-       80
-      ],
-      [
-       400,
-       1680,
-       80,
-       80
-      ]
-     ],
-     "description": "Actionner un levier ou ouvrir un coffre : 6 images sur 0,4 s."
-    },
-    {
-     "ligne": 22,
-     "animation": "use",
-     "nom": "Action",
-     "direction": "bas",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1760,
-       80,
-       80
-      ],
-      [
-       80,
-       1760,
-       80,
-       80
-      ],
-      [
-       160,
-       1760,
-       80,
-       80
-      ],
-      [
-       240,
-       1760,
-       80,
-       80
-      ],
-      [
-       320,
-       1760,
-       80,
-       80
-      ],
-      [
-       400,
-       1760,
-       80,
-       80
-      ]
-     ],
-     "description": "Actionner un levier ou ouvrir un coffre : 6 images sur 0,4 s."
-    },
-    {
-     "ligne": 23,
-     "animation": "use",
-     "nom": "Action",
-     "direction": "gauche",
-     "images": 6,
-     "cadres": [
-      [
-       0,
-       1840,
-       80,
-       80
-      ],
-      [
-       80,
-       1840,
-       80,
-       80
-      ],
-      [
-       160,
-       1840,
-       80,
-       80
-      ],
-      [
-       240,
-       1840,
-       80,
-       80
-      ],
-      [
-       320,
-       1840,
-       80,
-       80
-      ],
-      [
-       400,
-       1840,
-       80,
-       80
-      ]
-     ],
-     "description": "Actionner un levier ou ouvrir un coffre : 6 images sur 0,4 s."
-    },
-    {
-     "ligne": 24,
-     "animation": "hurt",
-     "nom": "Touché",
-     "direction": "haut",
-     "images": 4,
-     "cadres": [
-      [
-       0,
-       1920,
-       80,
-       80
-      ],
-      [
-       80,
-       1920,
-       80,
-       80
-      ],
-      [
-       160,
-       1920,
-       80,
-       80
-      ],
-      [
-       240,
-       1920,
-       80,
-       80
-      ]
-     ],
-     "description": "Recul après un coup reçu : 4 images réparties sur la durée du recul."
-    },
-    {
-     "ligne": 25,
-     "animation": "hurt",
-     "nom": "Touché",
-     "direction": "droite",
-     "images": 4,
-     "cadres": [
-      [
-       0,
-       2000,
-       80,
-       80
-      ],
-      [
-       80,
-       2000,
-       80,
-       80
-      ],
-      [
-       160,
-       2000,
-       80,
-       80
-      ],
-      [
-       240,
-       2000,
-       80,
-       80
-      ]
-     ],
-     "description": "Recul après un coup reçu : 4 images réparties sur la durée du recul."
-    },
-    {
-     "ligne": 26,
-     "animation": "hurt",
-     "nom": "Touché",
-     "direction": "bas",
-     "images": 4,
-     "cadres": [
-      [
-       0,
-       2080,
-       80,
-       80
-      ],
-      [
-       80,
-       2080,
-       80,
-       80
-      ],
-      [
-       160,
-       2080,
-       80,
-       80
-      ],
-      [
-       240,
-       2080,
-       80,
-       80
-      ]
-     ],
-     "description": "Recul après un coup reçu : 4 images réparties sur la durée du recul."
-    },
-    {
-     "ligne": 27,
      "animation": "hurt",
      "nom": "Touché",
      "direction": "gauche",
@@ -3647,30 +3063,30 @@
      "cadres": [
       [
        0,
-       2160,
+       1200,
        80,
        80
       ],
       [
        80,
-       2160,
+       1200,
        80,
        80
       ],
       [
        160,
-       2160,
+       1200,
        80,
        80
       ],
       [
        240,
-       2160,
+       1200,
        80,
        80
       ]
      ],
-     "description": "Recul après un coup reçu : 4 images réparties sur la durée du recul."
+     "description": "Recul après un coup reçu (tête rejetée, yeux blancs, corps qui se tord) : 4 images réparties sur la durée du recul."
     }
    ]
   },
