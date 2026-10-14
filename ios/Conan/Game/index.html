@@ -1036,12 +1036,12 @@ function ocCultistH(c,dir,state,f){
 const SQ_PAL={B:'#f4ecd4',b:'#cfc29e',n:'#8c7c5a',F:'#1a1418',e:'#ff5a3c',l:'#c27a44',L:'#8a4a28',k:'#5a2e1a',C:'#b23c2c',c:'#6e2418',
  Y:'#e3bd6b',y:'#9c7a36',G:'#9c7a36',g:'#6a3c1c','3':'#dfe2ea','2':'#9a8a80',W:'#fffbe8',w:'#d8d2c0',X:'#ffffff',O:'#100c14'};
 const SQ_HEAD={
- 2:['......BBBBBB......','....BBBBBBBBbb....','...BBBBBBBBBBbb...','..BBBBBBBBBBBBbb..','..BBFFFBBBBFFFbb..','..BFFFFFBBFFFFFb..',
-    '..BFFeFFBBFFeFFb..','..bBFFFBnnBFFFbn..','...bBBBBnnBBBbn...','....BnBnBnBnBn....','.....bBBBBBBn.....'],
- 0:['......BBBBBB......','....BBBBBBBBbb....','...BBBBBBBBBBbb...','..BBBBBBBBBBBBbb..','..BBBBBBBBBBBBbb..','..BBBBBBnBBBBBbb..',
-    '..BBBBBnBBBBBBbb..','..bBBBBBnBBBBBbn..','...bBBBBBBBBBbn...','....bBBBBBBBBn....','.....bbBBBBbn.....'],
- 1:['.....BBBBB........','...BBBBBBBBb......','..BBBBBBBBBBb.....','.BBBBBBBBBBBBb....','.BBBBBBBBBBBBBb...','.BBBBBBBBBFFFF....',
-    '.bBBBBBBBFFeFF....','.bBBBBBBBBFFFBb...','..bBBnnnBBBBnB....','...bbBBBBBnBnBn...','.....bnBBBBBBn....']};
+ 2:['.......BBBB.......','.....BBBBBBbb.....','....BBBBBBBBbb....','...BBBBBBBBBBbb...','...BFFFFBBFFFFb...','...BFeFFBBFFeFb...',
+    '...bBFFBnnBFFbn...','....bBBBnnBBbn....','....BnBnBnBnBn....','.....bBBBBBBn.....'],
+ 0:['.......BBBB.......','.....BBBBBBbb.....','....BBBBBBBBbb....','...BBBBBBBBBBbb...','...BBBBBnBBBBbb...','...BBBBnBBBBBbb...',
+    '...bBBBBnBBBBbn...','....bBBBBBBBbn....','....bBBBBBBBBn....','.....bbBBBBbn.....'],
+ 1:['......BBBB........','....BBBBBBBb......','..BBBBBBBBBBb.....','..BBBBBBBBBBBb....','..BBBBBBBBFFFF....','..bBBBBBBFFeFF....',
+    '..bBBBBBBBFFFBb...','...bBnnnBBBBnB....','....bbBBBBnBnBn...','.....bnBBBBBBn....']};
 SQ_HEAD[3]=SQ_HEAD[1];
 // corps sans le bras de l'épée (lignes 11 à 16) ; vue 3 = profil gauche dessiné tourné à droite : bras gauche (proche) pendant, épée dans la main éloignée
 const SQ_BODY={
@@ -1077,7 +1077,7 @@ function ocSkeletonH(c,dir,state,f){
  const body=ocShape(),put=(rows,j0,dy)=>rows.forEach((row,j)=>{for(let i=0;i<row.length;i++){let k=row[i];if(k==='.')continue;if(k==='e')k=eyes;body.set((X0+i+shx)+','+(Y0+j0+j+dy),k);}});
  const ft=SQ_FEET[v][feet];for(let i=0;i<ft.length;i++)if(ft[i]!=='.')body.set((X0+i)+','+(Y0+17),ft[i]);
  put(SQ_BODY[v],11,bob);
- const H=SQ_HEAD[v];put(H.slice(0,9),0,bob);put(H.slice(9),9,bob+jaw);   // mâchoire qui tombe quand il est touché
+ const H=SQ_HEAD[v];put(H.slice(0,8),1,bob);put(H.slice(8),9,bob+jaw);   // mâchoire qui tombe quand il est touché
  const off=(p)=>[p[0]+shx,p[1]+bob];
  const sh=off(SQ_SH[v]),L=ocLimb(sh,off(pose.h),{r0:.9,r1:1,L:'B',M:'B',D:'n',cuff:'L',cuffD:'k',cuffLen:1.6,max:6}),w=L.end;
  const arm=new Map(L.m);for(const [k,c2] of ocHand(w,'B','b',2,2))arm.set(k,c2);
