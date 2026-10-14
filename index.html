@@ -180,16 +180,17 @@ img,.action-pad button,.joystick,.joystick-knob,.tools button,.dlg-next,.menu-cl
 /* Aseprite crimson/gold menu. */
 :root{--title-idle:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAYCAYAAABZY7uwAAABMUlEQVRYhWNkwAIE+ET/YxMf7uDDp9eM6GIYAgJ8ov931BszmIdH0M1hgwGcXLmCwaPxLEYgoXBggTOSAXogwRnogRPafnUAnDdwYHWlNpyNHEiMDKOBAwfYAokRX+BocvMxqPFw0t2h9AS3vnxnuP71E5yPHkiMAnyi/99f62Y4uXIFRuCMJIAtkDwazzIwYVM80gKHAY+fsQbQKEAAvAHUlCdLP5cMECDkx9EURADgDKCmPFkG8/CIYZ2KiPEj3hR0cuUKWrhrUAFCfhzNYgQAzgCqm/QYhR6OgBg/4k1BwzlwYICQH7EGEHKrcqQAXH5GCSDkfshICiRcfTGG0d48KsDam4cJjPRAwjseBAOjI4p4RhRhADmQVq56QGfnDRwID1MgPCYNA6OzGqOAaAAA7A+SoeXw0BkAAAAASUVORK5CYII=);--title-hover:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAYCAYAAABZY7uwAAABMUlEQVRYhWNkwAIE+ET/YxMf7uDDp9eM6GIYAgJ8ov931BszmIdH0M1hgwGcXLmCwaPxLEYgoXBggTOSAXogwRnogRPafnUAnDdwYHWlNpyNHEiMDKOBAwfYAokRX+D484sw6Evw0t2h9AQXX3xm2PjxDZyPHkiMAnyi/99f62Y4uXIFRuCMJIAtkDwazzIwYVM80gKHAY+fsQbQKEAAvAEUkyVOP5cMECDkx9EURADgDKCYLHEG8/CIYZ2KiPEj3hR0cuUKWrhrUAFCfhzNYgQAzgBaMu0lCj0cATF+xJuChnPgwAAhP2INIORW5UgBuPyMEkDI/ZCRFEi4+mIMo715VIC1Nw8TGOmBhHc8CAZGRxTxjCjCAHIgrVz1gM7OGzgQHqZAeEwaBkZnNUYB0QAAVEKSQZzfsGoAAAAASUVORK5CYII=);--title-pressed:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAYCAYAAABZY7uwAAABNUlEQVRYhWNkwAIE+ET/YxMf7uDDp9eM6GIYAgJ8ov931BszXL78mW4OGwxAV5eXwaPxLEYgoXBggTOSAXogwRnogRPafnUAnDdwYHWlNpyNHEiMDKOBAwfYAokRX+BIsLIxmAsJ0t2h9AQn371nePH7F5yPHkgsDAwMDJcvf2bQ1eXFCByYAcMdSLCywQMptP0qSiAx4dIw0gAuP2MNoFGAAHgDaHKJKv1cMkCAkB9HUxABgDOAJpeoMly+/HlYpyJi/Ig3Benq8tLCXYMKEPLjaBYjAHAGUG7PbRR6OAJi/Ig3BQ3nwIEBQn7EGkDITe+RAnD5GSWAkJvYIymQcPXFGEZ786gAa28eJjDSAwnveBAMjI4o4hlRhAHkQFq56gGdnTdwIDxMgfCYNAyMzmqMAqIBAFVSkyqgs5/aAAAAAElFTkSuQmCC);--title-disabled:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAYCAYAAABZY7uwAAABMklEQVRYhe2ZPQvCMBBAryKiSKuLCJ1EKnRzERwdHMTdn+kuDh0cBRe3gkWcCuLiB6K46JTYtPnoYipJ3tLmoOXucYXkagGFptN60+Kqc76erHQsE2g6rfdsOgTfc6Ul9g+EUQzzxTojiVggOTqTloRv0nKWwbaA9IpjMu7j+6QkC4wcDE2SxZNTbdhQr1WkJyqT++MFz8sNr9OSygAAvudCGMUZOegFqlNt2FjSMtgSkkqsB3SDVTNVkOELV9Bo0JWXSUGIajQdJIApaDTogu+5SndRnhq5HRRG8S/y+itENZpPTABT0GqzJ64qkqdGbgepLAchqpEqKLn11gVWzYSg5BZbJ0mssxiY0zwJ9TSPArpL4s6DEGaiyJkoIpKSdoej5PSKo9dpi2fSCPNXw5CbD1N5ktMIqbvNAAAAAElFTkSuQmCC)}
 #titleScene,#titleBrandWrap,#mainMenu,.title-options[hidden]{display:none!important}
-.screen-overlay.title{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;padding:0!important;z-index:80;background:#081218!important;isolation:isolate;overflow:auto;overscroll-behavior:contain}
+.screen-overlay.title{--title-safe-top:env(safe-area-inset-top,0px);--title-safe-right:env(safe-area-inset-right,0px);--title-safe-bottom:env(safe-area-inset-bottom,0px);--title-safe-left:env(safe-area-inset-left,0px);--title-height:100vh;--title-menu-height:222px;--title-gap:18px;--title-pad:16px;position:fixed!important;inset:0!important;width:100%!important;height:100%!important;box-sizing:border-box;padding:calc(var(--title-safe-top) + var(--title-pad)) calc(var(--title-safe-right) + 20px) calc(var(--title-safe-bottom) + var(--title-pad)) calc(var(--title-safe-left) + 20px)!important;z-index:80;background:#081218!important;isolation:isolate;overflow:auto;overscroll-behavior:contain}
+@supports(height:100dvh){.screen-overlay.title{--title-height:100dvh}}
 .screen-overlay.title #titleScene{display:block!important;position:fixed;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;pointer-events:none;z-index:-2}
 .screen-overlay.title::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(90deg,#02090dbb,transparent 23% 77%,#02090dbb),linear-gradient(0deg,#05090dcc,transparent 45% 75%,#05090d55)}
-.screen-overlay.title .overlay-content{width:min(100vw,1440px)!important;max-width:none!important;box-sizing:border-box;border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;padding:18px 3px!important;margin:auto!important;text-align:center}
+.screen-overlay.title .overlay-content{width:100%!important;max-width:1240px!important;box-sizing:border-box;border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;padding:0!important;margin:auto!important;text-align:center}
 .screen-overlay.title .small-rune,.screen-overlay.title #overlayLabel,.screen-overlay.title #overlayText,.screen-overlay.title #overlayHint,.screen-overlay.title #credits,.screen-overlay.title #start,.screen-overlay.title #newGame{display:none!important}
-.screen-overlay.title #titleBrandWrap{display:block!important;position:relative;width:min(100%,1400px);margin:0 auto 22px;filter:drop-shadow(0 5px 0 #08121899)}
+.screen-overlay.title #titleBrandWrap{display:block!important;position:relative;width:min(90%,1100px,calc((var(--title-height) - var(--title-safe-top) - var(--title-safe-bottom) - var(--title-pad) * 2 - var(--title-menu-height) - var(--title-gap)) * 3.356));margin:0 auto var(--title-gap);filter:drop-shadow(0 5px 0 #08121899)}
 .screen-overlay.title #titleBrand{display:block;width:100%;height:auto;image-rendering:pixelated}
 .screen-overlay.title #titleFlame{display:block;position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none}
 .screen-overlay.title #overlayTitle{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0!important}
-.screen-overlay.title #mainMenu{display:grid!important;grid-template-columns:1fr;gap:10px;width:min(86vw,340px);margin:auto}
+.screen-overlay.title #mainMenu{display:grid!important;grid-template-columns:minmax(0,1fr);gap:10px;width:min(100%,320px);margin:auto}
 .title-button{appearance:none;min-height:48px;padding:10px 20px;border:2px solid transparent;border-image:var(--title-idle) 10 fill / 10px / 1px stretch;background:none;color:#ffe4a0;font:400 clamp(16px,4.8vw,20px)/1.2 'PixelUI',monospace;letter-spacing:.03em;white-space:nowrap;text-shadow:1px 2px #1a1019;cursor:pointer;image-rendering:pixelated;touch-action:manipulation}
 .title-button:hover:not(:disabled){border-image-source:var(--title-hover);color:#fff0bd}
 .title-button:active:not(:disabled){border-image-source:var(--title-pressed);transform:translateY(1px)}
@@ -212,20 +213,28 @@ img,.action-pad button,.joystick,.joystick-knob,.tools button,.dlg-next,.menu-cl
 .title-volume::-moz-range-progress{height:6px;background:#ae3d3c}
 .title-volume::-moz-range-thumb{border-radius:0;width:18px;height:18px;border:3px solid #cf9855;background:#741f2c}
 .title-options>.title-button{min-width:200px;margin-top:2px}
-@media(max-width:600px){.screen-overlay.title .overlay-content{padding:16px 2px!important;width:100vw!important}.screen-overlay.title #titleBrandWrap{width:100%;margin-bottom:26px}}
 @media(max-width:420px){.title-options{padding:20px 16px}.title-option-row{gap:8px}.title-option-row>span{font-size:14px}.title-option-row .title-button{font-size:12px;min-width:140px;padding:8px}}
-@media(max-height:520px) and (min-width:601px){
-.screen-overlay.title .overlay-content{padding:8px 4px!important}
-.screen-overlay.title #titleBrandWrap{width:min(96vw,1000px,calc((100vh - 148px) * 3.356));margin-bottom:12px}
-.screen-overlay.title #mainMenu{width:min(80vw,580px);grid-template-columns:1fr 1fr;gap:8px 14px}
-.title-button{min-height:44px;padding:8px 16px;font-size:18px}
-.title-options{padding:15px 24px;width:min(90vw,460px)}.title-options h2{margin-bottom:12px;font-size:25px}.title-volume{margin-bottom:10px;height:25px}.title-option-row{margin-bottom:2px}
+@media(max-height:520px) and (orientation:landscape){
+.screen-overlay.title{--title-menu-height:194px;--title-gap:10px;--title-pad:10px}
+.screen-overlay.title #mainMenu{width:min(100%,290px);gap:6px}
+.screen-overlay.title #mainMenu>.title-button{height:44px;min-height:44px;padding:8px 16px;font-size:18px}
+.title-options{padding:12px 24px;width:min(100%,460px)}.title-options h2{margin-bottom:8px;font-size:25px}.title-volume{margin-bottom:6px;height:25px}.title-option-row{margin-bottom:2px}.title-options>.title-button{min-height:44px;padding:8px 16px}
 }
+@media(max-height:360px) and (orientation:landscape){
+.title-options{padding:8px 20px}.title-options h2{font-size:22px;margin-bottom:4px}.title-option-row{margin-bottom:0}.title-volume-label{margin-top:2px}.title-volume{margin-top:0;margin-bottom:2px}
+}
+#landscapeGate[hidden]{display:none!important}
+#landscapeGate{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;box-sizing:border-box;padding:32px;background:#081218;color:#ffe4a0;text-align:center;font:20px/1.5 'PixelUI',monospace}
+#landscapeGate h2{font:400 26px/1.2 'PixelUI',monospace;margin:0}
+#landscapeGate p{max-width:290px;margin:0;color:#c8ac85}
+.landscape-device{width:88px;height:48px;border:3px solid #c88d48;box-shadow:inset 0 0 0 5px #081218,inset 0 0 0 7px #5d2633;background:#251c27;position:relative}
+.landscape-device::after{content:'';position:absolute;right:3px;top:18px;width:3px;height:8px;background:#ffe4a0}
 
 /* END HEARTHREAVER TITLE */
 </style>
 </head>
 <body>
+<section id="landscapeGate" role="dialog" aria-modal="true" aria-labelledby="landscapeHeading" tabindex="-1" hidden><span class="landscape-device" aria-hidden="true"></span><h2 id="landscapeHeading">Tourne ton appareil</h2><p>Hearthreaver se joue en paysage.</p></section>
 <div class="page"><div id="safeProbe" aria-hidden="true"></div>
 
 <main>
@@ -2451,8 +2460,34 @@ const $=id=>document.getElementById(id),KEY='conan-serpent-v1';
 let saved=null,storageWorks=true;try{saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved?.version!==1)saved=null;}catch{storageWorks=false;}
 let game;try{game=new Game(saved);}catch{saved=null;game=new Game();}
 const renderer=new Renderer($('game'),$('map'),game),sound=new Sound();let state='title',keys=new Set(),pending={dodge:false,interact:false,attack:false},last=0,toastUntil=0,uiTime=0,newConfirm=false,confirmReturn='title';
+// BEGIN LANDSCAPE UI
+// Native UIKit and the web manifest enforce landscape where supported.
+// Browsers that decline orientation lock show a gate and suspend the game.
+let landscapeBlocked=false,landscapeFocus=null;
+async function lockLandscape(){try{await window.screen.orientation?.lock?.('landscape');}catch{}}
+function syncLandscape(){
+ const blocked=innerHeight>innerWidth;
+ if(blocked===landscapeBlocked)return;
+ landscapeBlocked=blocked;
+ const gate=$('landscapeGate');gate.hidden=!blocked;document.querySelector('.page').inert=blocked;
+ if(blocked){
+  landscapeFocus=document.activeElement;keys.clear();resetTouch();
+  if(state==='playing')pause();
+  sound.tick(false,null);sound.rain(0);sound.ambience({active:false});
+  gate.focus({preventScroll:true});
+ }else{
+  fitScreen();
+  if(state==='paused')$('start').focus({preventScroll:true});
+  else if(landscapeFocus?.isConnected)landscapeFocus.focus({preventScroll:true});
+ }
+}
+addEventListener('resize',syncLandscape);
+addEventListener('orientationchange',()=>setTimeout(syncLandscape,250));
+window.visualViewport?.addEventListener('resize',syncLandscape);
+
+// END LANDSCAPE UI
 const PANEL=150;
-function fitScreen(){const cv=$('game'),scr=$('screen'),sw=Math.max(1,scr.clientWidth||innerWidth),sh=Math.max(1,scr.clientHeight||innerHeight),cs=getComputedStyle($('safeProbe')),ins={t:parseFloat(cs.paddingTop)||0,r:parseFloat(cs.paddingRight)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0},touch=document.body.classList.contains('mobile'),land=sw>=sh;let gl=0,gr=0,gt=0,gb=0;scr.classList.toggle('panels-x',touch&&land);scr.classList.toggle('panels-y',touch&&!land);if(touch&&land){gl=ins.l+PANEL;gr=ins.r+PANEL;}else if(touch){gb=ins.b+Math.min(210,Math.round(sh*.26));}const gw=Math.max(1,sw-gl-gr),gh=Math.max(1,sh-gt-gb),ratio=gw/gh;let H=200,W=Math.round(200*ratio);if(W<216){W=216;H=Math.min(1000,Math.round(216/ratio));}const scale=gw/W,safe={t:Math.ceil(Math.max(0,ins.t-gt)/scale),r:Math.ceil(Math.max(0,ins.r-gr)/scale),b:Math.ceil(Math.max(0,ins.b-gb)/scale),l:Math.ceil(Math.max(0,ins.l-gl)/scale)};const K=Math.max(1,Math.min(4,Math.round(scale*(window.devicePixelRatio||1))));if(cv.width!==W*K)cv.width=W*K;if(cv.height!==H*K)cv.height=H*K;renderer.resize(W,H,safe,K,scale);for(const [k,v] of [['--gl',gl],['--gr',gr],['--gt',gt],['--gb',gb],['--hud',Math.round((20+safe.t)*scale)],['--pc',PANEL]])scr.style.setProperty(k,v+'px');}
+function fitScreen(){if(innerHeight>innerWidth)return;const cv=$('game'),scr=$('screen'),sw=Math.max(1,scr.clientWidth||innerWidth),sh=Math.max(1,scr.clientHeight||innerHeight),cs=getComputedStyle($('safeProbe')),ins={t:parseFloat(cs.paddingTop)||0,r:parseFloat(cs.paddingRight)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0},touch=document.body.classList.contains('mobile'),land=sw>=sh;let gl=0,gr=0,gt=0,gb=0;scr.classList.toggle('panels-x',touch&&land);scr.classList.toggle('panels-y',touch&&!land);if(touch&&land){gl=ins.l+PANEL;gr=ins.r+PANEL;}else if(touch){gb=ins.b+Math.min(210,Math.round(sh*.26));}const gw=Math.max(1,sw-gl-gr),gh=Math.max(1,sh-gt-gb),ratio=gw/gh;let H=200,W=Math.round(200*ratio);if(W<216){W=216;H=Math.min(1000,Math.round(216/ratio));}const scale=gw/W,safe={t:Math.ceil(Math.max(0,ins.t-gt)/scale),r:Math.ceil(Math.max(0,ins.r-gr)/scale),b:Math.ceil(Math.max(0,ins.b-gb)/scale),l:Math.ceil(Math.max(0,ins.l-gl)/scale)};const K=Math.max(1,Math.min(4,Math.round(scale*(window.devicePixelRatio||1))));if(cv.width!==W*K)cv.width=W*K;if(cv.height!==H*K)cv.height=H*K;renderer.resize(W,H,safe,K,scale);for(const [k,v] of [['--gl',gl],['--gr',gr],['--gt',gt],['--gb',gb],['--hud',Math.round((20+safe.t)*scale)],['--pc',PANEL]])scr.style.setProperty(k,v+'px');}
 fitScreen();addEventListener('resize',fitScreen);addEventListener('orientationchange',()=>setTimeout(fitScreen,250));document.addEventListener('fullscreenchange',fitScreen);document.addEventListener('webkitfullscreenchange',fitScreen);window.visualViewport?.addEventListener('resize',fitScreen);
 const titleScene=new TitleScene($('titleScene'),$('titleFlame')),reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');let titleTime=0,titleDeparture=false;
 // BEGIN TITLE MENU UI
@@ -2522,7 +2557,7 @@ function musicMode(){const now=performance.now(),dt=Math.min(.1,(now-lastMusicT)
 function save(){if(game.dead||game.won||['title','options','quit'].includes(state))return;try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));$('saveStatus').textContent='PROGRESSION SAUVEGARDÉE DANS CE NAVIGATEUR';}catch{storageWorks=false;$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';}}
 function toast(msg,force=false){if(!force)return;$('toast').textContent=msg;$('toast').classList.add('visible');toastUntil=performance.now()+4800;}
 function overlay(label,title,desc,button,hint='',secondary=false,opt={}){$("overlay").inert=false;$('overlayLabel').textContent=label;$('overlayTitle').innerHTML=title;$('overlayText')[opt.html?'innerHTML':'textContent']=desc;$('start').innerHTML=button+' <span>↵</span>';$('overlayHint').textContent=hint;$('newGame').hidden=!secondary;$('newGame').textContent=opt.second||'Nouvelle partie';$('newGame').classList.toggle('as-button',!!opt.second);$('overlay').className='screen-overlay'+(opt.mode?' '+opt.mode:'');const act=$('overlay').querySelector('.overlay-actions');if(opt.second&&!act){const w=document.createElement('div');w.className='overlay-actions';$('start').before(w);w.append($('start'),$('newGame'));}else if(!opt.second&&act){act.before($('start'));$('start').after($('newGame'));act.remove();}$('toast').classList.remove('visible');keys.clear();pending={dodge:false,interact:false,attack:false};}
-function run(){titleFocus(false);$("overlay").inert=true;if(state==='title'||state==='confirm')titleDeparture=true;state='playing';newConfirm=false;$('overlay').classList.add('hidden');$('game').focus({preventScroll:true});$('pause').textContent='Ⅱ';last=performance.now();}
+function run(){if(landscapeBlocked)return;if(mobileMode)enterFull(true);titleFocus(false);$("overlay").inert=true;if(state==='title'||state==='confirm')titleDeparture=true;state='playing';newConfirm=false;$('overlay').classList.add('hidden');$('game').focus({preventScroll:true});$('pause').textContent='Ⅱ';last=performance.now();}
 function begin(){if(!BITMAPS.ready){toast(BITMAPS.errors.length?'Un atlas n’a pas pu être chargé. Recharge ce fichier.':'Chargement des sprites…',true);return;}if(state==='confirm'){game=new Game();renderer.setGame(game);save();run();toast('Remonte la piste au nord jusqu’au camp du Veilleur. Les sceaux sont indiqués en or sur la carte.');return;}if(state==='dead'){game=new Game();renderer.setGame(game);save();run();return;}if(state==='deathscreen'){run();game.revive();return;}if(state==='win'||game.won){game=new Game();renderer.setGame(game);save();run();return;}if(state==='title'){run();toast(saved?'L’aventure reprend. Avar veille sur ton acier.':'Remonte la piste au nord jusqu’au camp du Veilleur. Les sceaux sont indiqués en or sur la carte.');return;}if(state==='paused')run();}
 function showTitle(){state='title';$('titleOptions').hidden=true;$('titleExit').hidden=true;overlay('','HearthreaveR','','COMMENCER','',false,{mode:'title'});refreshTitleMenu();}
 function cancelNewGame(){newConfirm=false;if(confirmReturn==='title')showTitle();else{state='playing';pause();}}
@@ -2533,7 +2568,7 @@ $('newGame').addEventListener('click',()=>{if(state==='deathscreen'){game.revive
 function syncSoundButton(){for(const[id,on,lab]of[['sound',sound.musicOn,'la musique'],['sfx',sound.sfxOn,'les bruitages']]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-label',(on?'Couper ':'Activer ')+lab);}}
 function toggleSound(){sound.toggleMusic();syncSoundButton();}
 function toggleSfx(){const on=sound.toggleSfx();syncSoundButton();if(on)sound.fx('loot');}
-function unlockAudio(e){if(e.target?.closest?.('#sound,#sfx,#musicToggle,#sfxToggle')||e.code==='KeyM'||e.code==='KeyN')return;if(sound.unlock())syncSoundButton();}
+function unlockAudio(e){if(landscapeBlocked)return;if(e.target?.closest?.('#sound,#sfx,#musicToggle,#sfxToggle')||e.code==='KeyM'||e.code==='KeyN')return;if(sound.unlock())syncSoundButton();}
 for(const t of ['pointerup','touchend','click','keydown'])addEventListener(t,unlockAudio,{capture:true,passive:true});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)sound.silent?.pause();else if(sound.enabled)sound.silent?.play()?.catch(()=>{});});
 $('sound').addEventListener('click',toggleSound);$('sfx').addEventListener('click',toggleSfx);syncSoundButton();
@@ -2541,7 +2576,7 @@ const mobileMode=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoint
 document.body.classList.toggle('mobile',mobileMode);renderer.touch=mobileMode;fitScreen();
 const FULL_HELP=/iPhone|iPod/.test(navigator.userAgent)?'Sur iPhone, Safari interdit le plein écran aux pages web. Ouvre le jeu depuis sa propre adresse, puis Partager › Sur l’écran d’accueil.':'Le plein écran est bloqué ici : ouvre le jeu directement dans le navigateur.';
 const fsElement=()=>document.fullscreenElement||document.webkitFullscreenElement;
-async function enterFull(silent=false){const el=document.documentElement,req=el.requestFullscreen||el.webkitRequestFullscreen,allowed=document.fullscreenEnabled||document.webkitFullscreenEnabled;if(!req||!allowed){if(!silent)toast(FULL_HELP,true);return;}try{await req.call(el);}catch{if(!silent)toast(FULL_HELP,true);}}
+async function enterFull(silent=false){const el=document.documentElement,req=el.requestFullscreen||el.webkitRequestFullscreen,allowed=document.fullscreenEnabled||document.webkitFullscreenEnabled;if(!req||!allowed){await lockLandscape();if(!silent)toast(FULL_HELP,true);return;}try{await req.call(el);await lockLandscape();}catch{if(!silent)toast(FULL_HELP,true);}}
 if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)$('full').hidden=true;
 $('full').addEventListener('click',async()=>{if(fsElement()){try{await (document.exitFullscreen||document.webkitExitFullscreen).call(document);}catch{}}else await enterFull();});
 $('start').addEventListener('click',()=>{if(mobileMode)enterFull(true);});
@@ -2584,7 +2619,7 @@ function queueNotice(title,detail){const previous=noticeQueue[noticeQueue.length
 function showNotice(){if(noticeTimer||!noticeQueue.length)return;const item=noticeQueue.shift(),card=document.createElement('div'),title=document.createElement('strong'),detail=document.createElement('span');card.className='notice-card';title.textContent=item.title;detail.textContent=item.detail+(item.count>1?' ×'+item.count:'');card.append(title,detail);$('notices').replaceChildren(card);noticeTimer=setTimeout(()=>{$('notices').replaceChildren();noticeTimer=0;showNotice();},2800);}
 
 const blocked=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','Numpad0','NumpadDecimal','ShiftLeft','ShiftRight','KeyE','KeyP'];
-window.addEventListener('keydown',e=>{if(titleKeys(e))return;if(blocked.includes(e.code))e.preventDefault();if(state==='menu'){if(!e.repeat&&['Escape','KeyJ','KeyI','KeyP'].includes(e.code)){e.preventDefault();closeMenu();}return;}if(state==='sleep'){if(!e.repeat&&(e.code==='Escape'||e.code==='Enter')){e.preventDefault();closeSleepPanel(e.code==='Enter');}return;}
+window.addEventListener('keydown',e=>{if(landscapeBlocked){e.preventDefault();return;}if(titleKeys(e))return;if(blocked.includes(e.code))e.preventDefault();if(state==='menu'){if(!e.repeat&&['Escape','KeyJ','KeyI','KeyP'].includes(e.code)){e.preventDefault();closeMenu();}return;}if(state==='sleep'){if(!e.repeat&&(e.code==='Escape'||e.code==='Enter')){e.preventDefault();closeSleepPanel(e.code==='Enter');}return;}
   if(e.code==='Enter'&&state!=='playing'){e.preventDefault();if(!e.repeat)begin();return;}if(e.code==='KeyM'&&!e.repeat){toggleSound();return;}if(e.code==='KeyN'&&!e.repeat){toggleSfx();return;}if(e.code==='Escape'&&!e.repeat&&!$('qpanel').hidden){e.preventDefault();if($('qpNo'))closeQuestPanel(false);return;}if((e.code==='KeyP'||e.code==='Escape')&&!e.repeat){if(state==='confirm'){cancelNewGame();}else pause();return;}if(state!=='playing')return;if(game.dialogue){if(!e.repeat)dialogueKey(e);return;}if(!e.repeat&&(e.code==='KeyJ'||e.code==='KeyI')){openMenu(e.code==='KeyJ'?'quests':'bag');return;}keys.add(e.code==='Numpad0'?'attack':e.code==='NumpadDecimal'?'guard':e.key.toLowerCase());if(!e.repeat&&e.code==='Numpad0')pending.attack=true;if(!e.repeat&&(e.code==='ShiftLeft'||e.code==='ShiftRight'||e.code==='KeyK'))pending.dodge=true;if(!e.repeat&&e.code==='KeyE')pending.interact=true;});
 window.addEventListener('keyup',e=>keys.delete(e.code==='Numpad0'?'attack':e.code==='NumpadDecimal'?'guard':e.key.toLowerCase()));
 window.addEventListener('blur',()=>{keys.clear();if(state==='playing')pause();});
@@ -2760,13 +2795,13 @@ $('menu').addEventListener('click',e=>{if(e.target===$('menu'))closeMenu();});
 for(const b of [$('btnQuests'),$('btnBag')])for(const t of ['touchstart','pointerdown'])b.addEventListener(t,e=>e.stopPropagation(),{passive:true});
 addEventListener('resize',()=>setTimeout(layoutStick,60));
 function handleEvents(){for(const ev of game.events.splice(0)){if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}if(ev.type==='dialogue'){syncDialogue();continue;}if(ev.type==='save')save();else if(ev.type==='message'){}else if(ev.type==='fallen'){resetTouch();noticeQueue.length=0;clearTimeout(noticeTimer);noticeTimer=0;$('notices').replaceChildren();if(ev.over){state='dead';try{localStorage.removeItem(KEY);}catch{}saved=null;overlay('PLUS AUCUNE VIE','Game over','Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.','RECOMMENCER','ENTREE POUR RECOMMENCER',true,{mode:'gameover',second:'QUITTER'});}else{state='deathscreen';overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.','CONTINUER','ENTREE POUR CONTINUER',true,{mode:'death',second:'QUITTER',html:true});}}else if(ev.type==='quests'){renderTracker(true);syncBadge();if(state==='menu')renderMenu();}else if(ev.type==='questpanel'){openQuestPanel(ev);}else if(ev.type==='sleepmenu'){openSleepPanel();}else if(ev.type==='win'){state='win';try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));}catch{}let m=Math.floor(game.elapsed/60),s=Math.floor(game.elapsed%60);overlay('L’ACIER A TRIOMPHE','Le serpent<br>est vaincu.','Tu as libéré le temple en '+m+' min '+String(s).padStart(2,'0')+' s. '+game.player.kills+' ennemis vaincus, '+game.player.coins+' pièces retrouvées.','REJOUER','PAR AVAR, QUELLE AVENTURE !');sound.fx('win');}else sound.fx(ev.type,ev);}}
-function frame(now){let dt=Math.min((now-last)/1000||.016,.04);last=now;if(state==='playing'){let x=(keys.has('arrowright')||keys.has('d')?1:0)-(keys.has('arrowleft')||keys.has('q')||keys.has('a')?1:0),y=(keys.has('arrowdown')||keys.has('s')?1:0)-(keys.has('arrowup')||keys.has('z')||keys.has('w')?1:0);x+=stick.x;y+=stick.y;game.update(dt,{x,y,attack:keys.has('attack')||touchHas('attack'),attackPressed:pending.attack,guard:keys.has('guard')||touchHas('guard'),dodge:pending.dodge,interact:pending.interact});pending.dodge=false;pending.interact=false;pending.attack=false;handleEvents();}else if(['title','options','deathscreen','menu','dead','sleep'].includes(state))game.time+=dt;
+function frame(now){let dt=Math.min((now-last)/1000||.016,.04);last=now;if(landscapeBlocked){sound.tick(false,null);requestAnimationFrame(frame);return;}if(state==='playing'){let x=(keys.has('arrowright')||keys.has('d')?1:0)-(keys.has('arrowleft')||keys.has('q')||keys.has('a')?1:0),y=(keys.has('arrowdown')||keys.has('s')?1:0)-(keys.has('arrowup')||keys.has('z')||keys.has('w')?1:0);x+=stick.x;y+=stick.y;game.update(dt,{x,y,attack:keys.has('attack')||touchHas('attack'),attackPressed:pending.attack,guard:keys.has('guard')||touchHas('guard'),dodge:pending.dodge,interact:pending.interact});pending.dodge=false;pending.interact=false;pending.attack=false;handleEvents();}else if(['title','options','deathscreen','menu','dead','sleep'].includes(state))game.time+=dt;
  syncDialogue();syncAct();if(['title','options','quit'].includes(state)){titleScene.draw(titleTime,reduceMotion.matches||state==='quit');if(!document.hidden&&state!=='quit')titleTime+=dt;}else renderer.frame();sound.tick(!document.hidden&&['title','options','playing','dead','deathscreen','menu','sleep'].includes(state),state==='dead'||state==='deathscreen'?'gameover':musicMode());{const on=state==='playing'||state==='menu'||state==='sleep',p=game.player;sound.rain(on?game.sky().rain:0);sound.ambience({active:on,night:renderer.nightK(),rain:game.sky().rain,battle:combatHold>0||(game.bossActive&&!game.won),region:regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).id});}if(now-uiTime>150){updateUI();uiTime=now;}if(now>toastUntil)$('toast').classList.remove('visible');requestAnimationFrame(frame);}
 if(saved&&!game.won)$('start').innerHTML='CONTINUER <span>↵</span>';
 if(saved&&!game.won)$('newGame').hidden=false;
 if(!storageWorks)$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';
 BITMAPS.promise.then(()=>{if(BITMAPS.ready)renderer.characters.cache.clear();});
-refreshTitleMenu();syncTitleOptions();updateUI();requestAnimationFrame(frame);
+refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();requestAnimationFrame(frame);
 
 })();
 </script>

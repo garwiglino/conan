@@ -4,6 +4,7 @@ Une app iOS native en Swift qui contient **le jeu exact** : le fichier HTML du d
 
 ## Ce que l'app apporte en plus du site
 - Un vrai plein écran : pas de barre d'état, barre d'accueil discrète, gestes système sur les bords qui demandent un second glissement.
+- Un jeu verrouillé en paysage sur iPhone et iPad, dans les deux sens. Le titre et les boutons du menu restent à l'intérieur des marges de sécurité.
 - Le jeu marche hors ligne : la dernière version reçue est gardée sur l'iPhone.
 - Le jeu se met à jour tout seul (voir plus bas).
 - La sauvegarde est copiée dans un fichier de l'app, en plus du stockage web.
@@ -33,4 +34,6 @@ Xcode n'est nécessaire que pour réinstaller l'app (tous les 7 jours avec un co
 
 Le nouveau menu et le nom Hearthreaver dans le jeu arrivent par cette mise à jour après publication. Le nom sous l'icône iOS et l'icône elle-même appartiennent à l'app native : reconstruis-la depuis les sources fournies pour les changer, en conservant le même identifiant pour retrouver ta sauvegarde.
 
-Le projet, la cible, le schéma partagé et le produit s'appellent **Hearthreaver** (version 1.1, build 2). L'icône H/R rouge et or avec son épée est incluse dans `Hearthreaver/Assets.xcassets`. Ouvre le nouveau projet et sélectionne le schéma **Hearthreaver**. Conserve exactement le Bundle Identifier et la Team de ta précédente installation si tu les avais personnalisés ; installe cette version par-dessus, sans désinstaller l'app.
+Le projet, la cible, le schéma partagé et le produit s'appellent **Hearthreaver** (version 1.2, build 3). L'icône H/R rouge et or avec son épée est incluse dans `Hearthreaver/Assets.xcassets`. Ouvre le nouveau projet et sélectionne le schéma **Hearthreaver**. Conserve exactement le Bundle Identifier et la Team de ta précédente installation si tu les avais personnalisés ; installe cette version par-dessus, sans désinstaller l'app.
+
+Le verrouillage natif en paysage nécessite lui aussi cette réinstallation depuis Xcode. Une ancienne installation reçoit immédiatement le menu adapté et la protection contre le jeu en portrait via la mise à jour web, mais ses orientations système restent celles de son ancien binaire.

@@ -20,8 +20,10 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { .all }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        UIDevice.current.userInterfaceIdiom == .pad ? .all : .allButUpsideDown
+        .landscape
     }
+
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation { .landscapeRight }
 
     override func loadView() {
         let saves = SaveMirror()

@@ -12,6 +12,8 @@ Le menu utilise un logo rouge métallique bordé d'or, dessiné dans Aseprite, a
 
 Sur iPhone : ouvrir l'adresse dans Safari, puis Partager › « Sur l'écran d'accueil » (laisser « Ouvrir en tant qu'app web » activé) pour jouer en plein écran.
 
+Le jeu se joue en **paysage**. Le menu garde ses quatre boutons dans une colonne et adapte la taille du logo à la hauteur disponible, à l'encoche et à la barre d'accueil. L'app iOS autorise uniquement les deux orientations paysage. La version web demande le verrouillage lorsque le navigateur le permet ; sinon, passer en portrait affiche une invitation à tourner l'appareil et met la partie en pause, sans mouvement ni combat en arrière-plan.
+
 Le colosse gardien utilise 32 animations Aseprite : huit actions dans quatre directions, avec un repos animé, une saisie synchronisée avec Kaldor et une mort en pierres sans sang. Sa chute accélère sous la gravité, avec des rebonds amortis et un peu de poussière. Les sprites sont inclus dans le jeu pour rester disponibles hors ligne.
 
 Le morceau de combat accompagne les affrontements avec les colosses. Il entre par un fondu croisé de 650 ms ; après quatre secondes sans affrontement, l'exploration revient sur 1,8 s. Le boss conserve sa musique. Le bruit de mort est composé en [MIDI multipiste](audio/guardian-death.mid) et joué par le séquenceur du jeu, indépendamment du réglage de musique.
@@ -29,7 +31,7 @@ Après publication, fermer complètement l'app iOS native puis la rouvrir avec u
 - `scripts/title-art.lua` reconstruit les dessins dans Aseprite ; `npm run build:title-theme` reconstruit le MIDI et sa partition JSON ; `npm run embed:title` intègre le tout dans les versions web et iOS hors ligne.
 - Les identifiants techniques historiques de stockage, d'origine iOS et de dépôt restent stables pour préserver les sauvegardes et les mises à jour des installations existantes.
 - [Archive iOS](Hearthreaver-iOS.zip) : sources natives, nouvelles icônes et jeu hors ligne synchronisé.
-- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.1 (build 2). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
+- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.2 (build 3). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
 
 ## Crédits
 - Polices : [Alagard](https://www.dafont.com/alagard.font) (Hewett Tsoi) · [Pixel Operator](https://www.dafont.com/pixel-operator.font) (Jayvee Enaguas, CC0)
