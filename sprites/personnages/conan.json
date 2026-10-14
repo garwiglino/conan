@@ -260,7 +260,7 @@
   "attaque_coup_1": {
    "code_du_jeu": "attack",
    "nom": "Attaque, coup 1 du combo",
-   "description": "6 poses : anticipation, élan, frappe, suivi, retour, garde. L'image 0 n'est pas jouée dans le combo.",
+   "description": "Taille horizontale de gauche à droite devant lui. 6 poses : anticipation, élan, frappe, suivi, retour, fin du geste (à mi-chemin vers le port de l'épée). L'image 0 n'est pas jouée dans le combo ; traînée sur les images 2 et 3.",
    "images": 6,
    "en_boucle": false,
    "duree_par_image_s": [
@@ -277,7 +277,7 @@
     "frappe",
     "suivi",
     "retour",
-    "garde"
+    "fin du geste"
    ],
    "directions": {
     "haut": {
@@ -449,7 +449,7 @@
   "attaque_coup_2": {
    "code_du_jeu": "attack",
    "nom": "Attaque, coup 2 du combo",
-   "description": "6 poses : anticipation, élan, frappe, suivi, retour, garde. L'image 0 n'est pas jouée dans le combo.",
+   "description": "Revers : taille de droite à gauche, qui finit l'épée haute. 6 poses : anticipation, élan, frappe, suivi, retour, fin du geste. L'image 0 n'est pas jouée dans le combo ; traînée sur les images 2 et 3.",
    "images": 6,
    "en_boucle": false,
    "duree_par_image_s": [
@@ -466,7 +466,7 @@
     "frappe",
     "suivi",
     "retour",
-    "garde"
+    "fin du geste"
    ],
    "directions": {
     "haut": {
@@ -638,7 +638,7 @@
   "attaque_coup_3": {
    "code_du_jeu": "attack",
    "nom": "Attaque, coup 3 du combo",
-   "description": "6 poses : anticipation, élan, frappe, suivi, retour, garde. L'image 0 n'est pas jouée dans le combo.",
+   "description": "Taille en diagonale descendante, de l'épaule droite vers le bas à gauche (remplace l'ancien estoc). 6 poses : anticipation, élan, frappe, suivi, retour, fin du geste. L'image 0 n'est pas jouée dans le combo ; traînée sur les images 2 et 3.",
    "images": 6,
    "en_boucle": false,
    "duree_par_image_s": [
@@ -655,7 +655,7 @@
     "frappe",
     "suivi",
     "retour",
-    "garde"
+    "fin du geste"
    ],
    "directions": {
     "haut": {
@@ -827,7 +827,7 @@
   "attaque_coup_4": {
    "code_du_jeu": "attack",
    "nom": "Attaque, coup 4 du combo",
-   "description": "6 poses : anticipation, élan, frappe, suivi, retour, garde. L'image 0 n'est pas jouée dans le combo. Le 4e coup brise les gardes.",
+   "description": "Coup lourd par-dessus la tête, jusqu'au sol devant lui ; Conan s'accroupit à l'impact. 6 poses : anticipation, épée levée, abattue, impact, appui, fin du geste. L'image 0 n'est pas jouée dans le combo ; traînée sur les images 2 et 3. Le 4e coup brise les gardes.",
    "images": 6,
    "en_boucle": false,
    "duree_par_image_s": [
@@ -840,11 +840,11 @@
    ],
    "images_detail": [
     "anticipation",
-    "élan",
-    "frappe",
-    "suivi",
-    "retour",
-    "garde"
+    "épée levée",
+    "abattue",
+    "impact",
+    "appui",
+    "fin du geste"
    ],
    "directions": {
     "haut": {

@@ -215,7 +215,17 @@ const SWORD_POSES=[
  [[-6,-14,-15,-9],[-7,-10,-15,2],[-4,-5,-9,18],[5,-5,10,18],[8,-9,16,4],[6,-12,7,-15]],
  [[0,-14,8,-15],[-4,-16,-3,-20],[-9,-13,-21,-5],[-9,-9,-20,8],[-6,-7,-9,14],[-6,-12,-7,-15]]
 ];
-function authoredSwordPose(dir,f,combo=0){if(combo===0)return SWORD_POSES[dir][f];if(combo===2){const thrust=[[3,-14,2,-13],[3,-16,1,-15],[3,-19,0,-23],[3,-20,0,-24],[3,-16,0,-17],[6,-13,5,-16]][f];if(dir===0)return thrust;if(dir===2)return [thrust[0],-24-thrust[1],thrust[2],-thrust[3]];const sg=dir===1?1:-1;return [(-thrust[1]-11)*sg,-12+thrust[0],-thrust[3]*sg,thrust[2]];}if(combo===1)return SWORD_POSES[dir][[4,3,2,1,0,5][f]];const a=[[0,-18,-5,-19],[0,-19,0,-23],[0,-12,0,23],[0,-7,0,26],[2,-9,4,18],[6,-12,7,-15]][f];if(dir===2)return a;if(dir===0)return [a[0],-22-a[1],a[2],-a[3]];const sg=dir===1?1:-1;return [(a[1]+15)*sg,-12+a[0],a[3]*sg,a[2]];}
+// Coups 3 et 4 du héros, image par image, vues haut / droite / bas (gauche = droite en miroir) [poignet x, y, lame x, y] :
+// coup 3 = taille en diagonale descendante, de l'épaule droite vers le bas à gauche (suit le revers du coup 2) ;
+// coup 4 = coup lourd par-dessus la tête, de l'épée levée jusqu'au sol devant lui.
+const HERO_SWINGS={
+ 2:{0:[[7,-18,12,-16],[7,-18,12,-16],[3,-18,4,-22],[-4,-16,-16,-14],[-7,-12,-18,-2],[6,-13,5,-16]],
+    1:[[-2,-16,-12,-19],[-2,-16,-12,-19],[6,-14,16,-16],[9,-11,22,4],[7,-8,14,16],[6,-12,7,-15]],
+    2:[[8,-16,12,-19],[8,-16,12,-19],[9,-9,19,10],[2,-5,4,22],[-5,-6,-16,14],[6,-12,7,-15]]},
+ 3:{0:[[0,-22,2,-20],[0,-22,2,-20],[0,-16,0,-23],[0,-12,0,-26],[2,-11,6,-20],[6,-13,5,-16]],
+    1:[[-3,-18,-10,-20],[-3,-18,-10,-20],[6,-16,18,-12],[10,-10,20,10],[8,-7,12,18],[6,-12,7,-15]],
+    2:[[0,-20,-3,-22],[0,-20,-3,-22],[0,-12,0,23],[0,-7,0,26],[3,-8,8,18],[6,-12,7,-15]]}};
+function authoredSwordPose(dir,f,combo=0){if(combo===0)return SWORD_POSES[dir][f];if(combo===1)return SWORD_POSES[dir][[4,3,2,1,0,5][f]];const T=HERO_SWINGS[combo];if(dir===3){const p=T[1][f];return [-p[0],p[1],-p[2],p[3]];}return T[dir][f];}
 function swordPose(dir,f,combo=0){const p=authoredSwordPose(dir,f,combo);return [p[0],p[1],p[2]*1.1,p[3]*1.1];}
 function greatsword(c,pose,pal=CP){const [x,y,vx,vy]=pose,l=Math.hypot(vx,vy),ux=vx/l,uy=vy/l,nx=-uy,ny=ux;
  const point=(u,n)=>[x+ux*u+nx*n,y+uy*u+ny*n];
@@ -818,7 +828,7 @@ function skeletonTall(c,dir,state,f){const walk=state==='walk',atk=state==='atta
 // l'angle du coup (8 orientations comme les épées de Zelda) et une longueur de grande épée (16 px au plus) ; le jeu teste
 // toujours les coups sur la trajectoire d'origine, la pointe visible arrive au bord des ennemis.
 // Chaque pièce posée par le code reçoit son propre contour noir.
-const OC={O:'#100c14',K:'#2a2638',h:'#5a5e86',S:'#f8b07a',s:'#c8743e',F:'#e8b860',f:'#a0602c',Y:'#f8d838',G:'#b08a2a',g:'#6a3c1c','3':'#f0f4ff','2':'#9aa8c8',W:'#fffbe8'};
+const OC={O:'#100c14',K:'#2a2638',h:'#5a5e86',S:'#f8b07a',s:'#c8743e',F:'#e8b860',f:'#a0602c',Y:'#f8d838',G:'#b08a2a',g:'#6a3c1c','3':'#f0f4ff','2':'#9aa8c8',W:'#fffbe8',w:'#c6d6ee'};
 const OC_HEAD={
  2:['.....OOOOOO.....','...OOKKKKKKOO...','..OKKhhKKKKKKO..','.OKKhKKKKKKKKKO.','OKKhKKKKKKKKKKKO','OKhKSOOSSOOSKKKO',
     'OKhKSSOSSOSsKKKO','OKhKSSOSSOSsKKKO','OKKKSSSSSSssKKKO','OKKKSSSOOSsSKKKO','OKKKOSSSSSsOKKKO','.OKKKOOOOOOKKKO.'],
@@ -865,7 +875,19 @@ function ocSword(w,v){const m=ocShape(),k=Math.round(Math.atan2(v[1],v[0])/(Math
  const cx=wx+2*ux,cy=wy+2*uy,gx=-uy,gy=ux,gr=diag?1:2;for(let s=-gr;s<=gr;s++)ocPut(m,cx+gx*s,cy+gy*s,s===0?'G':'Y');   // garde
  for(let i=3;i<=len;i++){const x=wx+ux*i,y=wy+uy*i;ocPut(m,x,y,'3');if(i<len)ocPut(m,x+(diag?ux:sx),y+(diag?0:sy),'2');}
  return m;}
-function ocArc(B,a,b){for(let i=1;i<=5;i++){const t=i/6;ocPut(B,(a[0]+(b[0]-a[0])*t),(a[1]+(b[1]-a[1])*t),i>3?'W':'2');}}
+function ocBlade(q){const l=Math.hypot(q[2],q[3])||1,k=Math.min(16,l)/l;return [q[2]*k,q[3]*k];}
+function ocTurn(a0,a1){let d=a1-a0;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d;}
+// image 5 (fin du coup) : à mi-chemin entre la dernière position et le port de l'épée, en continuant le geste — pas de saut
+function ocAtkPose(d,f,combo){if(f<5)return swordPose(d,f,combo);const a=swordPose(d,4,combo),cw=OC_CARRY[d],a0=Math.atan2(a[3],a[2]),am=a0+ocTurn(a0,Math.atan2(cw[3],cw[2]))*.5,l=Math.hypot(a[2],a[3]);
+ return [(a[0]+cw[0])/2,(a[1]+cw[1])/2,Math.cos(am)*l,Math.sin(am)*l];}
+// traînée (smear) : zone balayée par la moitié haute de la lame entre deux images ; bord extérieur clair, intérieur bleuté, début tramé
+function ocSmear(B,p0,p1){const w0=[p0[0]/2,p0[1]/2],w1=[p1[0]/2,p1[1]/2],v0=ocBlade(p0),v1=ocBlade(p1),a0=Math.atan2(v0[1],v0[0]),da=ocTurn(a0,Math.atan2(v1[1],v1[0])),
+ l0=Math.hypot(v0[0],v0[1]),l1=Math.hypot(v1[0],v1[1]),lin=Math.abs(da)>2.7,m=new Map();
+ for(let i=0;i<=28;i++){const t=i/28,wx=w0[0]+(w1[0]-w0[0])*t,wy=w0[1]+(w1[1]-w0[1])*t;let vx,vy;
+  if(lin){vx=v0[0]+(v1[0]-v0[0])*t;vy=v0[1]+(v1[1]-v0[1])*t;}else{const a=a0+da*t,l=l0+(l1-l0)*t;vx=Math.cos(a)*l;vy=Math.sin(a)*l;}
+  const L=Math.hypot(vx,vy);if(L<2)continue;
+  for(let r=L*.5;r<=L+.01;r+=.5){const x=Math.round(wx+vx/L*r),y=Math.round(wy+vy/L*r),k=x+','+y;if(t<.3&&(x+y)%2)continue;const c=r>L*.8&&t>.3?'W':'w';if(m.get(k)!=='W')m.set(k,c);}}
+ for(const [k,c] of m)B.set(k,c);}
 function oracleConan(c,dir,state,f,combo=0){
  const B=new Map(),flip=dir===3,d=flip?1:dir,side=d===1;
  const attack=state==='attack',guard=state==='guard',use=state==='use',dash=state==='dash',hurt=state==='hurt';
@@ -873,17 +895,17 @@ function oracleConan(c,dir,state,f,combo=0){
  // jambes
  let leg='idle';if(moving)leg=['a','a','idle','b','b','idle'][walkF];if(attack&&f>=2&&f<=4)leg='lunge';if(guard&&!moving)leg='lunge';if(dash)leg='a';if(hurt&&f<2)leg='lunge';
  // fente : tout le corps avance d'un pixel logique au moment du coup
- const leanPx=attack?(combo===3?[-2,-3,2,3,1,0]:combo===1?[1,1,-1,-2,-1,0]:[-1,-1,1,2,1,0])[f]:0,lean=Math.sign(leanPx)*(Math.abs(leanPx)>=2?1:0);
+ const lean=attack?(combo>=2?[0,-1,1,1,1,0]:[0,-1,1,1,0,0])[f]:0;
  let tx=0,ty=0;if(side)tx=lean;else ty=d===2?lean:-lean;
- const bob=moving&&!guard?[1,0,0,1,0,0][walkF]:0;   // léger rebond : le haut du corps s'abaisse d'un pixel quand le pied se pose
+ const bob=(moving&&!guard?[1,0,0,1,0,0][walkF]:0)+(attack&&combo===3&&(f===3||f===4)?1:0);   // rebond de marche ; accroupi à l'impact du coup lourd
  if(dash)tx=side?1:0;if(hurt&&f<2){if(side)tx=-1;else ty=d===2?-1:1;}
  // pose de l'épée (pixels de la case → logiques) et mains
  let pose=null,carry=false;
- if(attack)pose=swordPose(d,f,combo);else if(guard)pose=OC_GUARD[d];else if(!use){pose=OC_CARRY[d];carry=true;}
+ if(attack)pose=ocAtkPose(d,f,combo);else if(guard)pose=OC_GUARD[d];else if(!use){pose=OC_CARRY[d];carry=true;}
  const L=p=>[p[0]/2,p[1]/2];
  const mainS=side?[1+tx,-7+ty+bob]:[4+tx,-7+ty+bob],offS=side?[-2+tx,-7+ty+bob]:[-4+tx,-7+ty+bob];
   let mainH=null,offH=null,sw=null;
- const blv=q=>{const l=Math.hypot(q[2],q[3])||1,k=Math.min(16,l)/l;return [q[2]*k,q[3]*k];};
+ const blv=ocBlade;
  if(pose){const w=L(pose),v=blv(pose),l=Math.hypot(v[0],v[1])||1;sw={w,v};mainH=w;
   if(carry){sw.w=[w[0]+tx,w[1]+ty+bob];mainH=sw.w;}offH=[sw.w[0]-v[0]/l*2.2,sw.w[1]-v[1]/l*2.2];}
  if(use){const r=[0,1,2,2,1,0][f];if(d===2){mainH=[3,-4+Math.min(r,1)];offH=[-3,-4+Math.min(r,1)];}else if(d===0){mainH=[3,-9-r];offH=[-3,-9-r];}else{mainH=[4+r,-7];offH=[3+r,-6];}}
@@ -893,7 +915,7 @@ function oracleConan(c,dir,state,f,combo=0){
  const body=()=>{const legs=OC_LEGS[d][leg],torso=OC_TORSO[d];ocStamp(B,torso,-8+tx,-7+ty+bob);ocStamp(B,legs,-8,-4+ty);
   ocStamp(B,OC_HEAD[hurt&&f<2&&d!==0?'h'+d:d],-8+tx,-19+ty+bob);};
  const arm=(s,h,dark)=>{if(h)ocLayer(B,ocArm(s,h,dark));},fist=(h,dark)=>{if(h)ocLayer(B,ocFist(h,dark));};
- const blade=()=>{if(!sw)return;if(attack&&(f===2||f===3)){const p=swordPose(d,f-1,combo),pv=blv(p);const a=[p[0]/2+pv[0],p[1]/2+pv[1]],b=[sw.w[0]+sw.v[0],sw.w[1]+sw.v[1]];ocArc(B,a,b);}ocLayer(B,ocSword(sw.w,sw.v));};
+ const blade=()=>{if(!sw)return;if(attack&&(f===2||f===3))ocSmear(B,ocAtkPose(d,f-1,combo),ocAtkPose(d,f,combo));ocLayer(B,ocSword(sw.w,sw.v));};
  if(d===0){blade();arm(offS,offH,true);arm(mainS,mainH,true);body();}
  else if(side){arm(offS,offH,true);if(swordBehind)blade();body();arm(mainS,mainH,false);if(!swordBehind)blade();fist(offH,true);fist(mainH,false);}
  else{if(swordBehind)blade();body();arm(offS,offH,false);arm(mainS,mainH,false);if(!swordBehind)blade();fist(offH,false);fist(mainH,false);}
