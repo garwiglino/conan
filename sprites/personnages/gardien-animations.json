@@ -1,0 +1,1255 @@
+{
+  "name": "Veilleur de Set",
+  "version": 2,
+  "cell": [
+    80,
+    80
+  ],
+  "anchor": [
+    40,
+    52
+  ],
+  "directionCodes": {
+    "0": "north",
+    "1": "east",
+    "2": "south",
+    "3": "west"
+  },
+  "palette": [
+    "#24212b",
+    "#4c3b41",
+    "#795445",
+    "#a57550",
+    "#c49a63",
+    "#e0bf83",
+    "#f4deb0",
+    "#285652",
+    "#4a9b88",
+    "#a6dfbb"
+  ],
+  "clips": [
+    {
+      "name": "idle_sud",
+      "state": "idle",
+      "direction": 2,
+      "asepriteFrom": 1,
+      "asepriteTo": 8,
+      "row": 0,
+      "durationsMs": [
+        700,
+        180,
+        220,
+        340,
+        180,
+        220,
+        180,
+        500
+      ],
+      "handSocketPx": [
+        [
+          57,
+          34
+        ],
+        [
+          57,
+          34
+        ],
+        [
+          57,
+          34
+        ],
+        [
+          58,
+          34
+        ],
+        [
+          58,
+          34
+        ],
+        [
+          57,
+          34
+        ],
+        [
+          57,
+          35
+        ],
+        [
+          57,
+          34
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "walk_sud",
+      "state": "walk",
+      "direction": 2,
+      "asepriteFrom": 9,
+      "asepriteTo": 14,
+      "row": 1,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140
+      ],
+      "handSocketPx": [
+        [
+          57,
+          37
+        ],
+        [
+          57,
+          38
+        ],
+        [
+          57,
+          36
+        ],
+        [
+          57,
+          31
+        ],
+        [
+          57,
+          30
+        ],
+        [
+          57,
+          32
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "attack_sud",
+      "state": "attack",
+      "direction": 2,
+      "asepriteFrom": 15,
+      "asepriteTo": 20,
+      "row": 2,
+      "durationsMs": [
+        220,
+        280,
+        120,
+        160,
+        170,
+        150
+      ],
+      "handSocketPx": [
+        [
+          60,
+          25
+        ],
+        [
+          61,
+          21
+        ],
+        [
+          46,
+          36
+        ],
+        [
+          45,
+          37
+        ],
+        [
+          52,
+          35
+        ],
+        [
+          56,
+          34
+        ]
+      ],
+      "loop": false,
+      "hitMs": 500
+    },
+    {
+      "name": "guard_sud",
+      "state": "guard",
+      "direction": 2,
+      "asepriteFrom": 21,
+      "asepriteTo": 26,
+      "row": 3,
+      "durationsMs": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "handSocketPx": [
+        [
+          35,
+          29
+        ],
+        [
+          35,
+          29
+        ],
+        [
+          35,
+          29
+        ],
+        [
+          35,
+          29
+        ],
+        [
+          35,
+          29
+        ],
+        [
+          35,
+          29
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "hurt_sud",
+      "state": "hurt",
+      "direction": 2,
+      "asepriteFrom": 27,
+      "asepriteTo": 30,
+      "row": 4,
+      "durationsMs": [
+        65,
+        65,
+        65,
+        65
+      ],
+      "handSocketPx": [
+        [
+          58,
+          33
+        ],
+        [
+          58,
+          33
+        ],
+        [
+          58,
+          33
+        ],
+        [
+          58,
+          33
+        ]
+      ],
+      "loop": false
+    },
+    {
+      "name": "slam_sud",
+      "state": "slam",
+      "direction": 2,
+      "asepriteFrom": 31,
+      "asepriteTo": 36,
+      "row": 5,
+      "durationsMs": [
+        300,
+        450,
+        130,
+        170,
+        200,
+        200
+      ],
+      "handSocketPx": [
+        [
+          47,
+          9
+        ],
+        [
+          47,
+          6
+        ],
+        [
+          48,
+          46
+        ],
+        [
+          48,
+          46
+        ],
+        [
+          52,
+          40
+        ],
+        [
+          57,
+          34
+        ]
+      ],
+      "loop": false,
+      "hitMs": 750
+    },
+    {
+      "name": "grab_sud",
+      "state": "grab",
+      "direction": 2,
+      "asepriteFrom": 37,
+      "asepriteTo": 42,
+      "row": 6,
+      "durationsMs": [
+        250,
+        200,
+        150,
+        450,
+        150,
+        300
+      ],
+      "handSocketPx": [
+        [
+          59,
+          30
+        ],
+        [
+          50,
+          37
+        ],
+        [
+          49,
+          36
+        ],
+        [
+          50,
+          12
+        ],
+        [
+          47,
+          29
+        ],
+        [
+          55,
+          33
+        ]
+      ],
+      "loop": false,
+      "grabMs": 450,
+      "throwMs": 1050
+    },
+    {
+      "name": "idle_est",
+      "state": "idle",
+      "direction": 1,
+      "asepriteFrom": 43,
+      "asepriteTo": 50,
+      "row": 7,
+      "durationsMs": [
+        700,
+        180,
+        220,
+        340,
+        180,
+        220,
+        180,
+        500
+      ],
+      "handSocketPx": [
+        [
+          45,
+          35
+        ],
+        [
+          45,
+          35
+        ],
+        [
+          45,
+          35
+        ],
+        [
+          46,
+          35
+        ],
+        [
+          46,
+          35
+        ],
+        [
+          45,
+          35
+        ],
+        [
+          45,
+          36
+        ],
+        [
+          45,
+          35
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "walk_est",
+      "state": "walk",
+      "direction": 1,
+      "asepriteFrom": 51,
+      "asepriteTo": 56,
+      "row": 8,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140
+      ],
+      "handSocketPx": [
+        [
+          48,
+          35
+        ],
+        [
+          49,
+          35
+        ],
+        [
+          47,
+          35
+        ],
+        [
+          42,
+          35
+        ],
+        [
+          41,
+          35
+        ],
+        [
+          43,
+          35
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "attack_est",
+      "state": "attack",
+      "direction": 1,
+      "asepriteFrom": 57,
+      "asepriteTo": 62,
+      "row": 9,
+      "durationsMs": [
+        220,
+        280,
+        120,
+        160,
+        170,
+        150
+      ],
+      "handSocketPx": [
+        [
+          35,
+          26
+        ],
+        [
+          32,
+          23
+        ],
+        [
+          64,
+          30
+        ],
+        [
+          65,
+          32
+        ],
+        [
+          54,
+          34
+        ],
+        [
+          47,
+          35
+        ]
+      ],
+      "loop": false,
+      "hitMs": 500
+    },
+    {
+      "name": "guard_est",
+      "state": "guard",
+      "direction": 1,
+      "asepriteFrom": 63,
+      "asepriteTo": 68,
+      "row": 10,
+      "durationsMs": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "handSocketPx": [
+        [
+          49,
+          27
+        ],
+        [
+          49,
+          27
+        ],
+        [
+          49,
+          27
+        ],
+        [
+          49,
+          27
+        ],
+        [
+          49,
+          27
+        ],
+        [
+          49,
+          27
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "hurt_est",
+      "state": "hurt",
+      "direction": 1,
+      "asepriteFrom": 69,
+      "asepriteTo": 72,
+      "row": 11,
+      "durationsMs": [
+        65,
+        65,
+        65,
+        65
+      ],
+      "handSocketPx": [
+        [
+          46,
+          34
+        ],
+        [
+          46,
+          34
+        ],
+        [
+          46,
+          34
+        ],
+        [
+          46,
+          34
+        ]
+      ],
+      "loop": false
+    },
+    {
+      "name": "slam_est",
+      "state": "slam",
+      "direction": 1,
+      "asepriteFrom": 73,
+      "asepriteTo": 78,
+      "row": 12,
+      "durationsMs": [
+        300,
+        450,
+        130,
+        170,
+        200,
+        200
+      ],
+      "handSocketPx": [
+        [
+          47,
+          9
+        ],
+        [
+          47,
+          6
+        ],
+        [
+          60,
+          46
+        ],
+        [
+          60,
+          46
+        ],
+        [
+          52,
+          40
+        ],
+        [
+          45,
+          35
+        ]
+      ],
+      "loop": false,
+      "hitMs": 750
+    },
+    {
+      "name": "grab_est",
+      "state": "grab",
+      "direction": 1,
+      "asepriteFrom": 79,
+      "asepriteTo": 84,
+      "row": 13,
+      "durationsMs": [
+        250,
+        200,
+        150,
+        450,
+        150,
+        300
+      ],
+      "handSocketPx": [
+        [
+          41,
+          31
+        ],
+        [
+          58,
+          29
+        ],
+        [
+          60,
+          28
+        ],
+        [
+          47,
+          13
+        ],
+        [
+          64,
+          20
+        ],
+        [
+          49,
+          33
+        ]
+      ],
+      "loop": false,
+      "grabMs": 450,
+      "throwMs": 1050
+    },
+    {
+      "name": "idle_nord",
+      "state": "idle",
+      "direction": 0,
+      "asepriteFrom": 85,
+      "asepriteTo": 92,
+      "row": 14,
+      "durationsMs": [
+        700,
+        180,
+        220,
+        340,
+        180,
+        220,
+        180,
+        500
+      ],
+      "handSocketPx": [
+        [
+          22,
+          33
+        ],
+        [
+          22,
+          33
+        ],
+        [
+          21,
+          32
+        ],
+        [
+          21,
+          32
+        ],
+        [
+          21,
+          32
+        ],
+        [
+          21,
+          33
+        ],
+        [
+          22,
+          33
+        ],
+        [
+          22,
+          33
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "walk_nord",
+      "state": "walk",
+      "direction": 0,
+      "asepriteFrom": 93,
+      "asepriteTo": 98,
+      "row": 15,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140
+      ],
+      "handSocketPx": [
+        [
+          22,
+          30
+        ],
+        [
+          22,
+          29
+        ],
+        [
+          22,
+          31
+        ],
+        [
+          22,
+          36
+        ],
+        [
+          22,
+          37
+        ],
+        [
+          22,
+          35
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "attack_nord",
+      "state": "attack",
+      "direction": 0,
+      "asepriteFrom": 99,
+      "asepriteTo": 104,
+      "row": 16,
+      "durationsMs": [
+        220,
+        280,
+        120,
+        160,
+        170,
+        150
+      ],
+      "handSocketPx": [
+        [
+          19,
+          25
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          32,
+          4
+        ],
+        [
+          33,
+          5
+        ],
+        [
+          27,
+          24
+        ],
+        [
+          23,
+          33
+        ]
+      ],
+      "loop": false,
+      "hitMs": 500
+    },
+    {
+      "name": "guard_nord",
+      "state": "guard",
+      "direction": 0,
+      "asepriteFrom": 105,
+      "asepriteTo": 110,
+      "row": 17,
+      "durationsMs": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "handSocketPx": [
+        [
+          38,
+          24
+        ],
+        [
+          38,
+          24
+        ],
+        [
+          38,
+          24
+        ],
+        [
+          38,
+          24
+        ],
+        [
+          38,
+          24
+        ],
+        [
+          38,
+          24
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "hurt_nord",
+      "state": "hurt",
+      "direction": 0,
+      "asepriteFrom": 111,
+      "asepriteTo": 114,
+      "row": 18,
+      "durationsMs": [
+        65,
+        65,
+        65,
+        65
+      ],
+      "handSocketPx": [
+        [
+          21,
+          32
+        ],
+        [
+          21,
+          32
+        ],
+        [
+          21,
+          32
+        ],
+        [
+          21,
+          32
+        ]
+      ],
+      "loop": false
+    },
+    {
+      "name": "slam_nord",
+      "state": "slam",
+      "direction": 0,
+      "asepriteFrom": 115,
+      "asepriteTo": 120,
+      "row": 19,
+      "durationsMs": [
+        300,
+        450,
+        130,
+        170,
+        200,
+        200
+      ],
+      "handSocketPx": [
+        [
+          32,
+          10
+        ],
+        [
+          32,
+          7
+        ],
+        [
+          23,
+          34
+        ],
+        [
+          23,
+          34
+        ],
+        [
+          27,
+          39
+        ],
+        [
+          22,
+          33
+        ]
+      ],
+      "loop": false,
+      "hitMs": 750
+    },
+    {
+      "name": "grab_nord",
+      "state": "grab",
+      "direction": 0,
+      "asepriteFrom": 121,
+      "asepriteTo": 126,
+      "row": 20,
+      "durationsMs": [
+        250,
+        200,
+        150,
+        450,
+        150,
+        300
+      ],
+      "handSocketPx": [
+        [
+          20,
+          29
+        ],
+        [
+          18,
+          21
+        ],
+        [
+          18,
+          20
+        ],
+        [
+          24,
+          5
+        ],
+        [
+          31,
+          4
+        ],
+        [
+          24,
+          32
+        ]
+      ],
+      "loop": false,
+      "grabMs": 450,
+      "throwMs": 1050
+    },
+    {
+      "name": "idle_ouest",
+      "state": "idle",
+      "direction": 3,
+      "asepriteFrom": 127,
+      "asepriteTo": 134,
+      "row": 21,
+      "durationsMs": [
+        700,
+        180,
+        220,
+        340,
+        180,
+        220,
+        180,
+        500
+      ],
+      "handSocketPx": [
+        [
+          35,
+          35
+        ],
+        [
+          35,
+          35
+        ],
+        [
+          35,
+          35
+        ],
+        [
+          36,
+          35
+        ],
+        [
+          36,
+          35
+        ],
+        [
+          35,
+          35
+        ],
+        [
+          35,
+          36
+        ],
+        [
+          35,
+          35
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "walk_ouest",
+      "state": "walk",
+      "direction": 3,
+      "asepriteFrom": 135,
+      "asepriteTo": 140,
+      "row": 22,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140
+      ],
+      "handSocketPx": [
+        [
+          32,
+          35
+        ],
+        [
+          31,
+          35
+        ],
+        [
+          33,
+          35
+        ],
+        [
+          38,
+          35
+        ],
+        [
+          39,
+          35
+        ],
+        [
+          37,
+          35
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "attack_ouest",
+      "state": "attack",
+      "direction": 3,
+      "asepriteFrom": 141,
+      "asepriteTo": 146,
+      "row": 23,
+      "durationsMs": [
+        220,
+        280,
+        120,
+        160,
+        170,
+        150
+      ],
+      "handSocketPx": [
+        [
+          45,
+          26
+        ],
+        [
+          48,
+          23
+        ],
+        [
+          16,
+          30
+        ],
+        [
+          15,
+          32
+        ],
+        [
+          26,
+          34
+        ],
+        [
+          33,
+          35
+        ]
+      ],
+      "loop": false,
+      "hitMs": 500
+    },
+    {
+      "name": "guard_ouest",
+      "state": "guard",
+      "direction": 3,
+      "asepriteFrom": 147,
+      "asepriteTo": 152,
+      "row": 24,
+      "durationsMs": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "handSocketPx": [
+        [
+          31,
+          27
+        ],
+        [
+          31,
+          27
+        ],
+        [
+          31,
+          27
+        ],
+        [
+          31,
+          27
+        ],
+        [
+          31,
+          27
+        ],
+        [
+          31,
+          27
+        ]
+      ],
+      "loop": true
+    },
+    {
+      "name": "hurt_ouest",
+      "state": "hurt",
+      "direction": 3,
+      "asepriteFrom": 153,
+      "asepriteTo": 156,
+      "row": 25,
+      "durationsMs": [
+        65,
+        65,
+        65,
+        65
+      ],
+      "handSocketPx": [
+        [
+          36,
+          34
+        ],
+        [
+          36,
+          34
+        ],
+        [
+          36,
+          34
+        ],
+        [
+          36,
+          34
+        ]
+      ],
+      "loop": false
+    },
+    {
+      "name": "slam_ouest",
+      "state": "slam",
+      "direction": 3,
+      "asepriteFrom": 157,
+      "asepriteTo": 162,
+      "row": 26,
+      "durationsMs": [
+        300,
+        450,
+        130,
+        170,
+        200,
+        200
+      ],
+      "handSocketPx": [
+        [
+          33,
+          9
+        ],
+        [
+          33,
+          6
+        ],
+        [
+          20,
+          46
+        ],
+        [
+          20,
+          46
+        ],
+        [
+          28,
+          40
+        ],
+        [
+          35,
+          35
+        ]
+      ],
+      "loop": false,
+      "hitMs": 750
+    },
+    {
+      "name": "grab_ouest",
+      "state": "grab",
+      "direction": 3,
+      "asepriteFrom": 163,
+      "asepriteTo": 168,
+      "row": 27,
+      "durationsMs": [
+        250,
+        200,
+        150,
+        450,
+        150,
+        300
+      ],
+      "handSocketPx": [
+        [
+          39,
+          31
+        ],
+        [
+          22,
+          29
+        ],
+        [
+          20,
+          28
+        ],
+        [
+          33,
+          13
+        ],
+        [
+          16,
+          20
+        ],
+        [
+          31,
+          33
+        ]
+      ],
+      "loop": false,
+      "grabMs": 450,
+      "throwMs": 1050
+    }
+  ],
+  "status": "Integrated in index.html; offline embedded atlas, timed idle and combat, frame-specific grab attachment.",
+  "sheet": "gardien.png",
+  "gripSheet": "gardien-prise.png"
+}

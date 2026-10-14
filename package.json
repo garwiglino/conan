@@ -1,0 +1,9 @@
+{
+  "name": "conan-temple-du-serpent",
+  "private": true,
+  "scripts": {
+    "embed:guardian": "node scripts/embed-guardian.cjs",
+    "test": "node --test tests/guardian.test.cjs"
+  },
+  "devDependencies": {"@napi-rs/canvas": "0.1.100"}
+}

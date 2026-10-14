@@ -1,0 +1,23 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const canvas = require('@napi-rs/canvas');
+const root = path.resolve(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+
+async function loadGame(Image = canvas.Image) {
+  new vm.Script(script); // Check the whole shipped script, including UI boot code.
+  const context = vm.createContext({
+    console, Image, Uint8ClampedArray, Path2D: canvas.Path2D,
+    document: {
+      createElement(tag) {if (tag !== 'canvas') throw new Error(tag); return canvas.createCanvas(1, 1);},
+      getElementById() {return {hidden: true, clientHeight: 224};}
+    }
+  });
+  vm.runInContext(script.slice(0, script.indexOf('// app.js')) +
+    'globalThis.api={Game,Renderer,CharacterAtlas,BITMAPS,CO_ART,CO_MOVES,guardianFrame,guardianClip,enemy};})();', context);
+  await context.api.BITMAPS.promise;
+  return context.api;
+}
+module.exports = {loadGame, canvas, root, html};
