@@ -26,7 +26,7 @@
   "repos": {
    "code_du_jeu": "idle",
    "nom": "Repos",
-   "description": "Immobile.",
+   "description": "Immobile, sceptre dans la main gauche.",
    "images": 1,
    "en_boucle": true,
    "directions": {
@@ -260,7 +260,7 @@
   "attaque": {
    "code_du_jeu": "attack",
    "nom": "Attaque",
-   "description": "Images 0 et 1 : préparation (début puis fin), visibles pendant l'élan. Puis les 6 images de la frappe.",
+   "description": "Sort : images 0 et 1 = préparation (le sceptre monte, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
    "images": 6,
    "en_boucle": false,
    "duree_par_image_s": [
@@ -449,7 +449,7 @@
   "coup_de_sceptre": {
    "code_du_jeu": "melee",
    "nom": "Coup de sceptre",
-   "description": "Attaque au corps à corps du cultiste : 6 images (préparation, élan, frappe, suivi, retour, garde).",
+   "description": "Coup de bâton : élan en arrière, frappe vers l'avant avec traînée (image 2, moment du coup), accompagnement, retour.",
    "images": 6,
    "en_boucle": false,
    "images_detail": [
@@ -630,7 +630,7 @@
   "garde": {
    "code_du_jeu": "guard",
    "nom": "Garde",
-   "description": "Bouclier levé ; les 6 images servent quand on se déplace en garde, l'image 2 quand on est immobile.",
+   "description": "Accroupi, sceptre en barrage devant le corps ; les 6 images servent quand on se déplace en garde, l'image 2 quand on est immobile.",
    "images": 6,
    "en_boucle": true,
    "directions": {
@@ -803,7 +803,7 @@
   "touche": {
    "code_du_jeu": "hurt",
    "nom": "Touché",
-   "description": "Recul après un coup reçu : 4 images réparties sur la durée du recul.",
+   "description": "Recul après un coup reçu (yeux blancs, sceptre rejeté en arrière) : 4 images réparties sur la durée du recul.",
    "images": 4,
    "en_boucle": false,
    "images_detail": [
