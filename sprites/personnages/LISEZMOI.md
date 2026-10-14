@@ -2,7 +2,7 @@
 
 Elles sont exportées depuis le jeu, qui dessine lui-même chaque image au lancement, à partir du code (`CharacterAtlas` dans `index.html`).
 
-Conan est dessiné par le code dans le style des personnages de *Zelda: Oracle of Seasons* (Game Boy Color) : pixels doublés (1 pixel du dessin = 2 × 2 pixels de la case), gros contour noir, couleurs franches, crinière noire coupée au carré, peau bronzée, pagne et bottes de fourrure, épée à deux mains tenue en oblique devant lui. Tête et corps sont des grilles faites main ; bras, poings et épée sont posés par le code, l'épée suivant la même trajectoire que celle qui sert à toucher les ennemis. La planche fournie auparavant reste comme référence dans `conan_original_grand.png`.
+Conan est dessiné par le code dans le style des personnages de *Zelda: Oracle of Seasons* (Game Boy Color) : en pixels natifs, à l'échelle du décor (environ 19 px de haut), gros contour noir, couleurs franches, crinière noire coupée au carré, peau bronzée, pagne et bottes de fourrure, épée à deux mains tenue en oblique devant lui. Tête et corps sont des grilles faites main ; bras, poings et épée sont posés par le code. L'épée garde les angles de la trajectoire qui sert à toucher les ennemis (portée de jeu inchangée), avec une lame de grande épée de 16 px au plus. À la marche, le haut du corps s'abaisse d'un pixel à chaque pas. La planche fournie auparavant reste comme référence dans `conan_original_grand.png`.
 
 - Il y a une planche PNG par personnage : Conan, squelette, serpent, cultiste (aussi utilisé pour le Veilleur), gardien, Zahra, et le Prêtre du serpent (normal et enragé).
 - Chaque case fait 80 × 80 pixels, avec les pieds du personnage en (40, 52).

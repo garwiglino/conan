@@ -813,9 +813,11 @@ function skeletonTall(c,dir,state,f){const walk=state==='walk',atk=state==='atta
  limb(c,[[-5,-20+b],[-8,-15],[-7,-11-s]],p,1);limb(c,[[5,-20+b],[(5+pose[0])/2+1,-16],[pose[0],pose[1]]],p,1);if(atk)arc(c,dir,f);sword(c,pose,{...p,gold:'#b6a074'});
 }
 // ================================================================ Conan, style Zelda Oracle of Seasons (Game Boy Color)
-// Dessiné en pixels « logiques » (1 pixel logique = 2 × 2 pixels de la case) : tête et corps sont des grilles faites main,
-// bras, poings et épée sont posés par le code. L'épée suit swordPose (qui sert aussi à toucher les ennemis), ramenée à
-// 8 orientations comme les sprites d'épée de Zelda. Chaque pièce posée par le code reçoit son propre contour noir.
+// Dessiné en pixels natifs, à l'échelle du décor (~19 px de haut) : tête et corps sont des grilles faites main,
+// bras, poings et épée sont posés par le code. Les poignets de swordPose sont ramenés à l'échelle du corps, la lame garde
+// l'angle du coup (8 orientations comme les épées de Zelda) et une longueur de grande épée (16 px au plus) ; le jeu teste
+// toujours les coups sur la trajectoire d'origine, la pointe visible arrive au bord des ennemis.
+// Chaque pièce posée par le code reçoit son propre contour noir.
 const OC={O:'#100c14',K:'#2a2638',h:'#5a5e86',S:'#f8b07a',s:'#c8743e',F:'#e8b860',f:'#a0602c',Y:'#f8d838',G:'#b08a2a',g:'#6a3c1c','3':'#f0f4ff','2':'#9aa8c8',W:'#fffbe8'};
 const OC_HEAD={
  2:['.....OOOOOO.....','...OOKKKKKKOO...','..OKKhhKKKKKKO..','.OKKhKKKKKKKKKO.','OKKhKKKKKKKKKKKO','OKhKSOOSSOOSKKKO',
@@ -844,8 +846,8 @@ const OC_LEGS={
 OC_LEGS[0]=OC_LEGS[2];
 // port de l'épée au repos [poignet x, y, lame x, y] en pixels de la case (pieds en 0,0)
 // épée à deux mains : les deux mains sur la poignée, au centre devant le ventre ; lame en oblique vers le haut et l'extérieur, loin du visage
-const OC_CARRY={2:[9,-11,20,-20],0:[9,-11,20,-20],1:[9,-11,20,-20]};
-const OC_GUARD={2:[-6,-13,17,-5],0:[6,-19,-16,-2],1:[11,-12,16,-16]};
+const OC_CARRY={2:[9,-12,11,-11],0:[9,-12,11,-11],1:[9,-12,11,-11]};
+const OC_GUARD={2:[-6,-13,16,-4],0:[6,-19,-16,-2],1:[11,-12,11,-11]};
 function ocShape(){return new Map();}
 function ocPut(m,x,y,c){m.set(Math.round(x)+','+Math.round(y),c);}
 function ocStamp(B,rows,x0,y0){for(let j=0;j<rows.length;j++)for(let i=0;i<rows[j].length;i++){const k=rows[j][i];if(k!=='.')B.set((x0+i)+','+(y0+j),k);}}
@@ -857,7 +859,7 @@ function ocArm(from,to,dark){const m=ocShape(),[x0,y0]=from,[x1,y1]=to,n=Math.ma
 function ocFist(at,dark){const m=ocShape(),hx=Math.round(at[0]-.5),hy=Math.round(at[1]-.5);for(let dx=0;dx<=2;dx++)for(let dy=0;dy<=1;dy++)ocPut(m,hx+dx-.5,hy+dy,dark||(dy===1&&dx===2)?'s':'S');return m;}
 // épée : 8 orientations, lame de 2 pixels (clair / moyen), pointe d'un pixel, garde dorée, poignée, pommeau
 function ocSword(w,v){const m=ocShape(),k=Math.round(Math.atan2(v[1],v[0])/(Math.PI/4)),ux=Math.round(Math.cos(k*Math.PI/4)),uy=Math.round(Math.sin(k*Math.PI/4)),diag=ux!==0&&uy!==0;
- const len=Math.max(6,Math.round(Math.hypot(v[0],v[1])/(diag?1.25:1))),wx=Math.round(w[0]),wy=Math.round(w[1]);
+ const len=Math.max(6,Math.round(Math.hypot(v[0],v[1])/(diag?1.41:1))),wx=Math.round(w[0]),wy=Math.round(w[1]);
  const sx=ux===0?1:0,sy=ux===0?0:1;                       // côté de la deuxième rangée de la lame
  for(let i=-2;i<=1;i++)ocPut(m,wx+ux*i,wy+uy*i,'g');ocPut(m,wx-3*ux,wy-3*uy,'Y');   // poignée longue (deux mains) et pommeau
  const cx=wx+2*ux,cy=wy+2*uy,gx=-uy,gy=ux,gr=diag?1:2;for(let s=-gr;s<=gr;s++)ocPut(m,cx+gx*s,cy+gy*s,s===0?'G':'Y');   // garde
@@ -873,28 +875,30 @@ function oracleConan(c,dir,state,f,combo=0){
  // fente : tout le corps avance d'un pixel logique au moment du coup
  const leanPx=attack?(combo===3?[-2,-3,2,3,1,0]:combo===1?[1,1,-1,-2,-1,0]:[-1,-1,1,2,1,0])[f]:0,lean=Math.sign(leanPx)*(Math.abs(leanPx)>=2?1:0);
  let tx=0,ty=0;if(side)tx=lean;else ty=d===2?lean:-lean;
+ const bob=moving&&!guard?[1,0,0,1,0,0][walkF]:0;   // léger rebond : le haut du corps s'abaisse d'un pixel quand le pied se pose
  if(dash)tx=side?1:0;if(hurt&&f<2){if(side)tx=-1;else ty=d===2?-1:1;}
  // pose de l'épée (pixels de la case → logiques) et mains
  let pose=null,carry=false;
  if(attack)pose=swordPose(d,f,combo);else if(guard)pose=OC_GUARD[d];else if(!use){pose=OC_CARRY[d];carry=true;}
  const L=p=>[p[0]/2,p[1]/2];
- const mainS=side?[1+tx,-7+ty]:[4+tx,-7+ty],offS=side?[-2+tx,-7+ty]:[-4+tx,-7+ty];
+ const mainS=side?[1+tx,-7+ty+bob]:[4+tx,-7+ty+bob],offS=side?[-2+tx,-7+ty+bob]:[-4+tx,-7+ty+bob];
   let mainH=null,offH=null,sw=null;
- if(pose){const w=L(pose),v=L(pose.slice(2)),l=Math.hypot(v[0],v[1])||1;sw={w,v};mainH=w;
-  if(carry){sw.w=[w[0]+tx,w[1]+ty];mainH=sw.w;}offH=[sw.w[0]-v[0]/l*2.2,sw.w[1]-v[1]/l*2.2];}
- if(use){const r=[0,1,2,2,1,0][f];if(d===2){mainH=[3,-4+r];offH=[-3,-4+r];}else if(d===0){mainH=[3,-9-r];offH=[-3,-9-r];}else{mainH=[4+r,-7];offH=[3+r,-6];}}
+ const blv=q=>{const l=Math.hypot(q[2],q[3])||1,k=Math.min(16,l)/l;return [q[2]*k,q[3]*k];};
+ if(pose){const w=L(pose),v=blv(pose),l=Math.hypot(v[0],v[1])||1;sw={w,v};mainH=w;
+  if(carry){sw.w=[w[0]+tx,w[1]+ty+bob];mainH=sw.w;}offH=[sw.w[0]-v[0]/l*2.2,sw.w[1]-v[1]/l*2.2];}
+ if(use){const r=[0,1,2,2,1,0][f];if(d===2){mainH=[3,-4+Math.min(r,1)];offH=[-3,-4+Math.min(r,1)];}else if(d===0){mainH=[3,-9-r];offH=[-3,-9-r];}else{mainH=[4+r,-7];offH=[3+r,-6];}}
  // ordre de pose selon la vue
  const v=sw?sw.v:[0,0];
- const swordBehind=sw&&(d===0||(side?v[0]<-0.5&&v[1]>-Math.abs(v[0])*.8:(v[1]<0&&!carry&&Math.abs(v[0])<Math.abs(v[1])*1.6)));
- const body=()=>{const legs=OC_LEGS[d][leg],torso=OC_TORSO[d];ocStamp(B,torso,-8+tx,-7+ty);ocStamp(B,legs,-8,-4+ty);
-  ocStamp(B,OC_HEAD[hurt&&f<2&&d!==0?'h'+d:d],-8+tx,-19+ty);};
+ const swordBehind=sw&&(d===0||(side?(v[0]<-0.5&&v[1]>-Math.abs(v[0])*.8)||v[1]<-Math.abs(v[0])*2.4:(v[1]<0&&!carry&&Math.abs(v[0])<Math.abs(v[1])*1.6)));   // de profil, une lame dressée passe derrière la tête
+ const body=()=>{const legs=OC_LEGS[d][leg],torso=OC_TORSO[d];ocStamp(B,torso,-8+tx,-7+ty+bob);ocStamp(B,legs,-8,-4+ty);
+  ocStamp(B,OC_HEAD[hurt&&f<2&&d!==0?'h'+d:d],-8+tx,-19+ty+bob);};
  const arm=(s,h,dark)=>{if(h)ocLayer(B,ocArm(s,h,dark));},fist=(h,dark)=>{if(h)ocLayer(B,ocFist(h,dark));};
- const blade=()=>{if(!sw)return;if(attack&&(f===2||f===3)){const p=L(swordPose(d,f-1,combo));const a=[p[0]+p[2]/2,p[1]+p[3]/2],b=[sw.w[0]+sw.v[0],sw.w[1]+sw.v[1]];ocArc(B,a,b);}ocLayer(B,ocSword(sw.w,sw.v));};
+ const blade=()=>{if(!sw)return;if(attack&&(f===2||f===3)){const p=swordPose(d,f-1,combo),pv=blv(p);const a=[p[0]/2+pv[0],p[1]/2+pv[1]],b=[sw.w[0]+sw.v[0],sw.w[1]+sw.v[1]];ocArc(B,a,b);}ocLayer(B,ocSword(sw.w,sw.v));};
  if(d===0){blade();arm(offS,offH,true);arm(mainS,mainH,true);body();}
  else if(side){arm(offS,offH,true);if(swordBehind)blade();body();arm(mainS,mainH,false);if(!swordBehind)blade();fist(offH,true);fist(mainH,false);}
  else{if(swordBehind)blade();body();arm(offS,offH,false);arm(mainS,mainH,false);if(!swordBehind)blade();fist(offH,false);fist(mainH,false);}
  // rendu ×2 (miroir pour la gauche)
- for(const [k,col] of B){const i=k.indexOf(','),x=+k.slice(0,i),y=+k.slice(i+1);c.fillStyle=OC[col];c.fillRect((flip?-x-1:x)*2,y*2,2,2);}
+ for(const [k,col] of B){const i=k.indexOf(','),x=+k.slice(0,i),y=+k.slice(i+1);c.fillStyle=OC[col];c.fillRect(flip?-x-1:x,y,1,1);}
 }
 function hurtSprite(c,kind,dir,frame){
  const scratch=document.createElement('canvas');scratch.width=80;scratch.height=80;const b=scratch.getContext('2d');b.translate(40,52);
@@ -1326,15 +1330,15 @@ class Renderer{
   c.fillRect(sx+2,sy-2,w-4,1);c.fillRect(sx,sy-1,w,2);c.fillRect(sx+1,sy+1,w-2,1);if(w>=12)c.fillRect(sx+3,sy+2,w-6,1);}
  hero(p){const g=this.g;if(g.dying){this.heroFallen(p,g.dying);return;}const st=p.spawnFX>0?SPAWN_T-p.spawnFX:-1;if(st>=0)this.spawnBack(p,st);if(st>=0&&st<.9){this.heroSpawn(p,st);this.spawnFront(p,st);return;}this.heroBody(p);if(st>=0)this.spawnFront(p,st);}
  heroFallen(p,D){const c=this.c,ch=this.characters,t=D.stage==='fall'?D.t:1.25,side=D.side,a=t<.2?0:Math.min(1,Math.round((t-.2)/.22*4)/4),ang=a*Math.PI/2*side,lift=t>.42&&t<.56?-Math.round(Math.sin((t-.42)/.14*Math.PI)*2):0;
-  if(t>.5){const r=Math.min(1,(t-.5)/.7),bx=Math.round(p.x+side*15),by=Math.round(p.y+1);if(D.stage!=='dissolve'||D.d<.9){box(c,bx-Math.round(9*r),by-1,Math.round(18*r),3,'#5e1822');box(c,bx-Math.round(6*r),by-2,Math.round(12*r),5,'#5e1822');box(c,bx-Math.round(4*r),by-1,Math.round(7*r),2,'#7e2430');}}
-  const dq=D.stage==='dissolve'?Math.min(1,D.d/.85):0;if(dq>=1)return;this.shadow(p.x+side*15*a,p.y,Math.round((17+a*22)*(1-dq)));
+  if(t>.5){const r=Math.min(1,(t-.5)/.7),bx=Math.round(p.x+side*10),by=Math.round(p.y+1);if(D.stage!=='dissolve'||D.d<.9){box(c,bx-Math.round(9*r),by-1,Math.round(18*r),3,'#5e1822');box(c,bx-Math.round(6*r),by-2,Math.round(12*r),5,'#5e1822');box(c,bx-Math.round(4*r),by-1,Math.round(7*r),2,'#7e2430');}}
+  const dq=D.stage==='dissolve'?Math.min(1,D.d/.85):0;if(dq>=1)return;this.shadow(p.x+side*9*a,p.y,Math.round((12+a*10)*(1-dq)));
   let img=ch.get('hero',D.dir,'hurt',t<.2?Math.min(3,Math.floor(t/.05)):3,t<.12&&Math.floor(t*30)%2===0,0);if(dq>0)img=this.dissolved(img,dq);
   c.save();c.translate(Math.round(p.x*SUBPX)/SUBPX,Math.round(p.y*SUBPX)/SUBPX+lift);c.rotate(ang);c.drawImage(img,-40,-52);c.restore();}
  dissolved(img,q){const k=Math.min(12,Math.floor(q*12));if(!this.dcache||this.dcache.src!==img)this.dcache={src:img,steps:{}};if(this.dcache.steps[k])return this.dcache.steps[k];const o=document.createElement('canvas');o.width=img.width;o.height=img.height;const x=o.getContext('2d');x.drawImage(img,0,0);const d=x.getImageData(0,0,o.width,o.height),A=d.data,lim=k/12;for(let i=0;i<A.length;i+=4){if(!A[i+3])continue;const px=(i>>2)%o.width,py=(i>>2)/o.width|0,hv=hash(px,py,77)*.8+(1-py/o.height)*.2;if(hv<lim)A[i+3]=0;else if(hv<lim+.09){A[i]=255;A[i+1]=222;A[i+2]=140;}}x.putImageData(d,0,0);return this.dcache.steps[k]=o;}
- heroSpawn(p,t){if(t<.15)return;const c=this.c,ch=this.characters,X=Math.round(p.x*SUBPX)/SUBPX-40,Y=Math.round(p.y*SUBPX)/SUBPX-52,q=Math.min(1,(t-.15)/.6),e=1-Math.pow(1-q,2),cut=Math.round(58-e*50),img=ch.get('hero',p.dir,'idle',0,false,0),sil=ch.get('hero',p.dir,'idle',0,true,0);this.shadow(p.x,p.y,Math.max(4,Math.round(17*e)));c.drawImage(sil,0,cut,80,80-cut,X,Y+cut,80,80-cut);const a=clamp((t-.5)/.35,0,1);if(a>0){c.save();c.globalAlpha=a;c.drawImage(img,0,cut,80,80-cut,X,Y+cut,80,80-cut);c.restore();}if(q<1)for(let i=-8;i<=8;i++)if(hash(i,Math.floor(t*30),7)>.35)box(c,p.x+i,Y+cut,1,1,'#fff6d8');}
+ heroSpawn(p,t){if(t<.15)return;const c=this.c,ch=this.characters,X=Math.round(p.x*SUBPX)/SUBPX-40,Y=Math.round(p.y*SUBPX)/SUBPX-52,q=Math.min(1,(t-.15)/.6),e=1-Math.pow(1-q,2),cut=Math.round(58-e*50),img=ch.get('hero',p.dir,'idle',0,false,0),sil=ch.get('hero',p.dir,'idle',0,true,0);this.shadow(p.x,p.y,Math.max(4,Math.round(12*e)));c.drawImage(sil,0,cut,80,80-cut,X,Y+cut,80,80-cut);const a=clamp((t-.5)/.35,0,1);if(a>0){c.save();c.globalAlpha=a;c.drawImage(img,0,cut,80,80-cut,X,Y+cut,80,80-cut);c.restore();}if(q<1)for(let i=-8;i<=8;i++)if(hash(i,Math.floor(t*30),7)>.35)box(c,p.x+i,Y+cut,1,1,'#fff6d8');}
  spawnBack(p,t){const c=this.c,bw=Math.round(t<.12?t/.12*8:t<.8?8+Math.sin(t*60):Math.max(0,8*(1-(t-.8)/.3))),top=this.cam.y-8,len=Math.max(0,p.y-top);c.save();if(bw>0){c.globalAlpha=.3;box(c,p.x-bw/2-3,top,bw+6,len,'#e8a64a');c.globalAlpha=.55;box(c,p.x-bw/2,top,bw,len,'#ffd77a');c.globalAlpha=.9;box(c,p.x-Math.max(1,bw>>2),top,Math.max(1,bw>>1),len,'#fff6d8');}const rr=6+t*18;c.globalAlpha=t<.9?1:Math.max(0,1-(t-.9)/.4);for(let i=0;i<24;i++){const a=i*Math.PI/12+t*2;box(c,p.x+Math.cos(a)*rr,p.y+Math.sin(a)*rr*.45,2,1,i%2?'#ffd77a':'#e8a64a');}c.restore();}
  spawnFront(p,t){const c=this.c;c.save();for(let i=0;i<12;i++){const ph=(t*1.3+i/12)%1,al=(1-ph)*(t<1?1:Math.max(0,(1.3-t)/.3));if(al<=0)continue;c.globalAlpha=al;box(c,p.x+Math.sin(i*2.4+t*4)*(5+i%4*3),p.y-4-ph*42,1,i%3?1:2,i%2?'#fff0bf':'#ffd77a');}if(t>.8&&t<1.1){const r=(t-.8)*80;c.globalAlpha=1-(t-.8)/.3;for(let i=0;i<20;i++){const a=i*Math.PI/10;box(c,p.x+Math.cos(a)*r,p.y-14+Math.sin(a)*r*.8,1,1,'#fff6d8');}}c.restore();}
- heroBody(p){if(p.lvlFX>0){const c=this.c,t=1.2-p.lvlFX;c.save();c.globalAlpha=Math.min(1,p.lvlFX*1.5);for(let k=0;k<2;k++){const r=6+(t+k*.25)*26;for(let i=0;i<20;i++){const a=i*Math.PI/10+t*3;box(c,p.x+Math.cos(a)*r,p.y-2+Math.sin(a)*r*.45,1,1,k?'#fff3c0':'#ffd77a');}}c.restore();}if(p.hurt>0&&p.dash<=0&&Math.floor(this.g.time*18)%2===0)return;this.shadow(p.x,p.y,17);this.characters.draw(this.c,'hero',p,this.g.time);if(p.guardFlash>0){box(this.c,p.x-9,p.y-18,3,2,'#fff5be');box(this.c,p.x+7,p.y-16,3,2,'#fff5be');}}
+ heroBody(p){if(p.lvlFX>0){const c=this.c,t=1.2-p.lvlFX;c.save();c.globalAlpha=Math.min(1,p.lvlFX*1.5);for(let k=0;k<2;k++){const r=6+(t+k*.25)*26;for(let i=0;i<20;i++){const a=i*Math.PI/10+t*3;box(c,p.x+Math.cos(a)*r,p.y-2+Math.sin(a)*r*.45,1,1,k?'#fff3c0':'#ffd77a');}}c.restore();}if(p.hurt>0&&p.dash<=0&&Math.floor(this.g.time*18)%2===0)return;this.shadow(p.x,p.y,12);this.characters.draw(this.c,'hero',p,this.g.time);if(p.guardFlash>0){box(this.c,p.x-7,p.y-11,2,2,'#fff5be');box(this.c,p.x+6,p.y-9,2,2,'#fff5be');}}
  targetRing(x,y,r){const c=this.c,pulse=Math.floor(this.g.time*5)%2;for(let i=0;i<40;i++){const a=i*Math.PI/20,xx=Math.round(x+Math.cos(a)*r),yy=Math.round(y+Math.sin(a)*r*.43);box(c,xx-1,yy-1,3,3,'#382727');box(c,xx,yy,1,1,pulse?'#ffe6a0':'#dca957');}for(const sign of [-1,1]){box(c,x+sign*(r+3)-1,y-1,3,3,'#fff0b3');box(c,x-1,y+sign*8,3,2,'#fff0b3');}}
  enemy(e){if(e.kind==='boss'){if(!this.g.bossActive)return;const a=clamp((this.g.time-(e.appearAt??-9))/.8,0,1);if(a<1){this.c.save();this.c.globalAlpha=a;this.enemyBody(e);this.c.restore();return;}}this.enemyBody(e);}
  enemyBody(e){const c=this.c,x=Math.round(e.x),y=Math.round(e.y);this.shadow(e.x,e.y,e.kind==='boss'?27:16);if(this.g.targetId===e.id)this.targetRing(x,y,e.kind==='boss'?19:13);this.characters.draw(c,e.kind,e,this.g.time);
