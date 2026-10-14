@@ -10,13 +10,14 @@ async function loadGame(Image = canvas.Image) {
   new vm.Script(script); // Check the whole shipped script, including UI boot code.
   const context = vm.createContext({
     console, Image, Uint8ClampedArray, Path2D: canvas.Path2D,
+    setTimeout: () => 0,
     document: {
       createElement(tag) {if (tag !== 'canvas') throw new Error(tag); return canvas.createCanvas(1, 1);},
       getElementById() {return {hidden: true, clientHeight: 224};}
     }
   });
   vm.runInContext(script.slice(0, script.indexOf('// app.js')) +
-    'globalThis.api={Game,Renderer,CharacterAtlas,BITMAPS,CO_ART,CO_MOVES,guardianFrame,guardianClip,enemy};})();', context);
+    'globalThis.api={Game,Renderer,CharacterAtlas,BITMAPS,CO_ART,CO_MOVES,guardianFrame,guardianClip,enemy,Music,MusicDirector,Sound,MUSIC_DATA,CUE_DATA};})();', context);
   await context.api.BITMAPS.promise;
   return context.api;
 }

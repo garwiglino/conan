@@ -1,6 +1,6 @@
 {
   "name": "Veilleur de Set",
-  "version": 2,
+  "version": 3,
   "cell": [
     80,
     80
@@ -1247,9 +1247,116 @@
       "loop": false,
       "grabMs": 450,
       "throwMs": 1050
+    },
+    {
+      "name": "death_sud",
+      "state": "death",
+      "direction": 2,
+      "row": 28,
+      "asepriteFrom": 169,
+      "asepriteTo": 180,
+      "durationsMs": [
+        80,
+        100,
+        80,
+        80,
+        80,
+        80,
+        80,
+        100,
+        100,
+        120,
+        150,
+        350
+      ],
+      "handSocketPx": [],
+      "loop": false
+    },
+    {
+      "name": "death_est",
+      "state": "death",
+      "direction": 1,
+      "row": 29,
+      "asepriteFrom": 181,
+      "asepriteTo": 192,
+      "durationsMs": [
+        80,
+        100,
+        80,
+        80,
+        80,
+        80,
+        80,
+        100,
+        100,
+        120,
+        150,
+        350
+      ],
+      "handSocketPx": [],
+      "loop": false
+    },
+    {
+      "name": "death_nord",
+      "state": "death",
+      "direction": 0,
+      "row": 30,
+      "asepriteFrom": 193,
+      "asepriteTo": 204,
+      "durationsMs": [
+        80,
+        100,
+        80,
+        80,
+        80,
+        80,
+        80,
+        100,
+        100,
+        120,
+        150,
+        350
+      ],
+      "handSocketPx": [],
+      "loop": false
+    },
+    {
+      "name": "death_ouest",
+      "state": "death",
+      "direction": 3,
+      "row": 31,
+      "asepriteFrom": 205,
+      "asepriteTo": 216,
+      "durationsMs": [
+        80,
+        100,
+        80,
+        80,
+        80,
+        80,
+        80,
+        100,
+        100,
+        120,
+        150,
+        350
+      ],
+      "handSocketPx": [],
+      "loop": false
     }
   ],
-  "status": "Integrated in index.html; offline embedded atlas, timed idle and combat, frame-specific grab attachment.",
+  "status": "Integrated Aseprite art with 4 stone-collapse directions; no guardian blood.",
   "sheet": "gardien.png",
-  "gripSheet": "gardien-prise.png"
+  "gripSheet": "gardien-prise.png",
+  "sheetSize": [
+    960,
+    2560
+  ],
+  "death": {
+    "durationMs": 1400,
+    "impactMs": 580,
+    "gravityPxPerSecondSquared": 360,
+    "restitution": 0.24,
+    "lastFrame": "persistent stone rubble"
+  }
 }

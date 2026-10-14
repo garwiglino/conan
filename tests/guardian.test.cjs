@@ -7,9 +7,9 @@ let api;
 before(async () => {api = await loadGame();});
 const raw = c => Buffer.from(c.getContext('2d').getImageData(0, 0, 80, 80).data);
 
-test('all 168 shipped frames match the Aseprite atlas, including independent west lighting', () => {
+test('all 216 shipped frames match the Aseprite atlas, including independent west lighting', () => {
   assert.equal(api.BITMAPS.ready, true);
-  assert.equal(Object.keys(api.CO_ART.clips).length, 28);
+  assert.equal(Object.keys(api.CO_ART.clips).length, 32);
   let count = 0;
   for (const [key, clip] of Object.entries(api.CO_ART.clips)) {
     const [dir, state] = key.split(':');
@@ -20,7 +20,7 @@ test('all 168 shipped frames match the Aseprite atlas, including independent wes
       count++;
     }
   }
-  assert.equal(count, 168);
+  assert.equal(count, 216);
   assert.notDeepEqual(raw(api.BITMAPS.get('guardian', 1, 'idle', 0)), raw(api.BITMAPS.get('guardian', 3, 'idle', 0)));
 });
 
@@ -146,7 +146,7 @@ test('published sprite metadata points to the same rows and frame counts as the 
   const art=path.join(root,'sprites/personnages');
   const index=JSON.parse(fs.readFileSync(path.join(art,'index.json'))).personnages.gardien;
   const meta=JSON.parse(fs.readFileSync(path.join(art,'gardien.json')));
-  assert.equal(meta.taille_planche.largeur,640);
+  assert.equal(meta.taille_planche.largeur,960);
   const dirs=['haut','droite','bas','gauche'];
   for(const [key,clip] of Object.entries(api.CO_ART.clips)) {
     const [dir,state]=key.split(':');
