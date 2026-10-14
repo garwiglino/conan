@@ -2,6 +2,8 @@
   "name": "conan-temple-du-serpent",
   "private": true,
   "scripts": {
+    "embed:boss": "node scripts/embed-boss.cjs",
+    "preview:boss": "node scripts/preview-boss.cjs",
     "embed:guardian": "node scripts/embed-guardian.cjs",
     "build:guardian-cue": "node scripts/build-guardian-cue.cjs",
     "test": "node --test tests/*.test.cjs"
