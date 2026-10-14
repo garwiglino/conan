@@ -3972,7 +3972,7 @@
        80
       ]
      ],
-     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
+     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, la main droite se lève, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
      "duree_par_image_s": [
       0.075,
       0.045,
@@ -4026,7 +4026,7 @@
        80
       ]
      ],
-     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
+     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, la main droite se lève, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
      "duree_par_image_s": [
       0.075,
       0.045,
@@ -4080,7 +4080,7 @@
        80
       ]
      ],
-     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
+     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, la main droite se lève, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
      "duree_par_image_s": [
       0.075,
       0.045,
@@ -4134,7 +4134,7 @@
        80
       ]
      ],
-     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
+     "description": "Sort : images 0 et 1 = préparation (le sceptre monte, la main droite se lève, l'orbe se charge), visibles pendant l'élan ; puis l'orbe jaillit vers l'avant et le sceptre revient.",
      "duree_par_image_s": [
       0.075,
       0.045,

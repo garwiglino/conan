@@ -961,12 +961,18 @@ const CU_FEET={2:{idle:'...DDD....DDD...',a:'..DDD...........',b:'...........DDD
  1:{idle:'..DDD...DDD..',a:'.DDD.....DDD.',b:'....DDDDD....'},3:{idle:'..DDD...DDD..',a:'.DDD.....DDD.',b:'....DDDDD....'}};
 // pose de chaque image : bob (corps vers le bas), lift (main vers le haut), sdx (main vers l'avant), ang (inclinaison du sceptre, en degrés,
 // 0 = droit, + = vers l'avant / la droite de l'écran), shx (recul du corps), sway (bas de tunique), glow, smear [angle de départ, angle d'arrivée]
+// main droite (sans sceptre) levée pendant le sort : lignes de la grille sans la manche pendante, épaule, main levée, devant ou derrière le corps
+const CU_FREE={
+ 2:{rows:{11:'....druTTuROlRd.',12:'....druTTuROrRd.',13:'....dyYYYYyOrRd.',14:'....dRdTTdROdRd.',15:'....rRdTTdRRd...'},sh:[3,11.5],up:[-1,5],behind:0},
+ 0:{rows:{11:'.lRddRRRRRRd....',12:'.rRddRRdRRRd....',13:'.rRddyYYYYyd....',14:'.dRddRRdRRRd....',15:'...rRRRdRRRd....'},sh:[12.5,11.5],up:[16,4],behind:0},
+ 1:{rows:{10:'..rRRRRRRuTd.',11:'.rRRRRRRRuTd.',12:'.rRdRRRRRYYyd',13:'rRdRRRRRRRuTd',14:'rRdRRdRRRRuTd'},sh:[6,10.5],up:[8,1.5],behind:0},
+ 3:{rows:{},sh:[8,10.5],up:[10,-2],behind:1}};
 function cuPose(v,state,f){
- const side=v===1||v===3,p={bob:0,lift:0,sdx:0,ang:0,shx:0,sway:0,feet:'idle',glow:0,smear:null,eyes:'e',behind:false};
+ const side=v===1||v===3,p={bob:0,lift:0,sdx:0,ang:0,shx:0,sway:0,feet:'idle',glow:0,smear:null,eyes:'e',behind:false,free:0};
  if(state==='walk'){const w=f%6;p.feet=['a','a','idle','b','b','idle'][w];p.bob=[1,0,0,1,0,0][w];
   p.sway=side?[-1,0,0,-1,0,0][w]:[1,1,0,-1,-1,0][w];}
  else if(state==='attack'){                    // sort : le sceptre monte, l'orbe se charge puis jaillit vers l'avant, retour
-  p.lift=[3,5,6,5,3,1][f];p.glow=[0,1,2,1,0,0][f];p.sdx=side?[0,0,2,1,0,0][f]:0;p.ang=side?[-8,-4,18,10,4,0][f]:0;p.bob=[0,0,1,1,0,0][f];p.shx=side?[-1,-1,1,1,0,0][f]:0;}
+  p.free=[.5,1,1,1,.5,0][f];p.lift=[3,5,6,5,3,1][f];p.glow=[0,1,2,1,0,0][f];p.sdx=side?[0,0,2,1,0,0][f]:0;p.ang=side?[-8,-4,18,10,4,0][f]:0;p.bob=[0,0,1,1,0,0][f];p.shx=side?[-1,-1,1,1,0,0][f]:0;}
  else if(state==='melee'){                     // coup de bâton : élan en arrière, frappe vers l'avant avec traînée, accompagnement, retour
   if(side){p.ang=[-20,-40,100,125,60,15][f];p.lift=[1,4,0,-1,1,0][f];p.sdx=[-1,-2,2,2,1,0][f];p.shx=[-1,-1,1,1,0,0][f];p.bob=[0,0,1,1,0,0][f];p.smear=f===2?[-40,100]:f===3?[100,125]:null;p.behind=f<2;}
   else if(v===2){p.ang=[30,-25,150,165,120,30][f];p.behind=f===1;p.lift=[1,4,0,-1,1,0][f];p.sdx=[0,-3,-2,-2,-1,0][f];p.bob=[0,0,1,1,0,0][f];p.smear=f===2?[-25,150]:f===3?[150,165]:null;}
@@ -983,12 +989,19 @@ function ocCultistH(c,dir,state,f){
  const v=dir,flip=dir===3,side=v===1||v===3,G=CU_G[v],S=CU_ST[v],X0=CU_X0[v],Y0=-19,p=cuPose(v,state,f);
  const body=ocShape();
  const ft=CU_FEET[v][p.feet];for(let i=0;i<ft.length;i++)if(ft[i]!=='.')body.set((X0+i)+','+(Y0+17),ft[i]);
- G.forEach((row,j)=>{for(let i=0;i<row.length;i++){let k=row[i];if(k==='.')continue;if(k==='e')k=p.eyes;
+ const FR=CU_FREE[v];
+ G.forEach((row0,j)=>{const row=p.free>0&&FR.rows[j]||row0;for(let i=0;i<row.length;i++){let k=row[i];if(k==='.')continue;if(k==='e')k=p.eyes;
   const x=X0+i+p.shx+(j>=15?p.sway:0),y=Y0+j+p.bob;body.set(x+','+y,k);}});
  // main du sceptre et manche drapée qui la rejoint
  const hand=[X0+S.x+p.sdx+p.shx,Y0+S.h+.5+p.bob-p.lift];
  if(S.sh){const L=ocLimb([X0+S.sh[0]+p.shx,Y0+S.sh[1]+p.bob],[hand[0]-(v===2?0:1),hand[1]+.5],{r0:1.3,r1:1.5,L:'r',M:'R',D:'d',cuff:'Y',cuffD:'y',cuffLen:1,max:9});
   for(const [k,c2] of L.m)if(!body.has(k)||body.get(k)!=='O')body.set(k,c2);}
+ // main droite levée (sort) : manche évasée fondue dans la silhouette, paume ouverte
+ let fhand=null,farm=null;
+ if(p.free>0){const sh=[X0+FR.sh[0]+p.shx,Y0+FR.sh[1]+p.bob],rest=[sh[0],sh[1]+4],up=[X0+FR.up[0]+p.shx,Y0+FR.up[1]+p.bob];
+  fhand=[rest[0]+(up[0]-rest[0])*p.free,rest[1]+(up[1]-rest[1])*p.free];const dx=sh[0]-fhand[0],dy=sh[1]-fhand[1],l=Math.hypot(dx,dy)||1;
+  farm=ocLimb(sh,[fhand[0]+dx/l*1.5,fhand[1]+dy/l*1.5],{r0:1.3,r1:1.8,L:'r',M:'R',D:'d',cuff:'Y',cuffD:'y',cuffLen:1.2,max:11}).m;
+  if(!FR.behind)for(const [k,c2] of farm)if(!body.has(k)||body.get(k)!=='O')body.set(k,c2);}
  // sceptre (2 px : bois clair / bois sombre), orbe au bout
  const a=p.ang*Math.PI/180,u=[Math.sin(a),-Math.cos(a)],top=[hand[0]+u[0]*(S.h+2.5),hand[1]+u[1]*(S.h+2.5)],dn=Math.abs(p.ang)<40?16.5-S.h:2,bot=[hand[0]-u[0]*dn,hand[1]-u[1]*dn];
  const st=ocShape(),vert=Math.abs(u[1])>=Math.abs(u[0]);ocLine(st,[bot[0]+(vert?1:0),bot[1]+(vert?0:1)],[top[0]+(vert?1:0),top[1]+(vert?0:1)],'k',1);ocLine(st,bot,top,'t',1);
@@ -997,8 +1010,10 @@ function ocCultistH(c,dir,state,f){
  const B=new Map();
  if(p.smear){const [a0,a1]=p.smear,n=28;for(let i=0;i<=n;i++){const g=(a0+(a1-a0)*i/n)*Math.PI/180,R=S.h+2.5;
   ocPut(B,hand[0]+Math.sin(g)*R,hand[1]-Math.cos(g)*R,'V');ocPut(B,hand[0]+Math.sin(g)*(R-1.4),hand[1]-Math.cos(g)*(R-1.4),'W');}}
+ if(farm&&FR.behind){const m=new Map(farm);for(const [k,c2] of ocHand(fhand,'S','s',2,2))m.set(k,c2);ocLayer(B,m);}
  if(S.front&&!p.behind){ocLayer(B,body);soft(B,st);soft(B,ocHand([hand[0],hand[1]],'S','s',3,2));}
  else{ocLayer(B,st);ocLayer(B,body);if(S.front)soft(B,ocHand([hand[0],hand[1]],'S','s',3,2));}
+ if(fhand&&!FR.behind)soft(B,ocHand(fhand,'S','s',2,2));
  if(p.glow)for(let i=0;i<8;i++){const g=i*Math.PI/4+(p.glow>1?.4:0),r=p.glow>1?4:3;ocPut(B,ox+Math.round(Math.cos(g)*r),oy+Math.round(Math.sin(g)*r),i%2?'W':'V');}
  ocRender(c,B,CU_PAL,flip);
 }
