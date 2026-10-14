@@ -1,0 +1,22 @@
+<nav id="mainMenu" aria-label="Menu principal">
+ <button class="title-button" id="menuNew" type="button">Nouvelle partie</button>
+ <button class="title-button" id="menuLoad" type="button" disabled>Charger</button>
+ <button class="title-button" id="menuOptions" type="button">Options</button>
+ <button class="title-button" id="menuQuit" type="button">Quitter</button>
+ <p id="menuStatus" role="status"></p>
+</nav>
+<!-- PANELS -->
+<section class="title-options" id="titleOptions" role="dialog" aria-modal="true" aria-labelledby="optionsTitle" hidden>
+ <h2 id="optionsTitle">Options</h2>
+ <div class="title-option-row"><span id="musicLabel">Musique</span><button class="title-button" id="musicToggle" type="button" aria-pressed="true" aria-labelledby="musicLabel musicToggle">Activée</button></div>
+ <label class="title-volume-label" for="musicVolume">Volume de la musique <output id="musicVolumeValue" for="musicVolume">100 %</output></label>
+ <input class="title-volume" id="musicVolume" type="range" min="0" max="100" step="1" value="100">
+ <div class="title-option-row"><span id="sfxLabel">Bruitages</span><button class="title-button" id="sfxToggle" type="button" aria-pressed="true" aria-labelledby="sfxLabel sfxToggle">Activés</button></div>
+ <label class="title-volume-label" for="sfxVolume">Volume des bruitages <output id="sfxVolumeValue" for="sfxVolume">100 %</output></label>
+ <input class="title-volume" id="sfxVolume" type="range" min="0" max="100" step="1" value="100">
+ <button class="title-button" id="optionsBack" type="button">Retour</button>
+</section>
+<section class="title-options" id="titleExit" role="dialog" aria-modal="true" aria-labelledby="exitTitle" hidden>
+ <h2 id="exitTitle">Session terminée</h2>
+ <button class="title-button" id="returnFromQuit" type="button">Retour au menu</button>
+</section>

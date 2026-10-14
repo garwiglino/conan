@@ -135,7 +135,7 @@ test('release on guardian death prevents a stuck held state; saves keep the exis
 });
 
 test('iOS receives all sprite bytes in index.html with the same game code and save key', () => {
-  const ios=fs.readFileSync(path.join(root,'ios/Conan/Game/index.html'),'utf8');
+  const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');
   assert.equal(ios.slice(ios.indexOf('<script>')),html.slice(html.indexOf('<script>')));
   assert.ok(Buffer.byteLength(html)>500000);assert.ok(html.includes('conan-serpent-v1'));assert.ok(html.slice(-64).includes('</html>'));
   const m=JSON.parse(fs.readFileSync(path.join(root,'sprites/personnages/gardien-animations.json')));

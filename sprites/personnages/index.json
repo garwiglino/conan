@@ -19,7 +19,7 @@
   },
   "personnages": {
     "conan": {
-      "nom": "Conan",
+      "nom": "Kaldor",
       "fichier": "conan.png",
       "apercu": "conan_apercu.png",
       "lignes": 40,
@@ -4455,7 +4455,7 @@
             300
           ],
           "en_boucle": false,
-          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Conan soulevé ; 4 = lancer (traînée) ; 5 = retour."
+          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Kaldor soulevé ; 4 = lancer (traînée) ; 5 = retour."
         },
         {
           "ligne": 7,
@@ -4840,7 +4840,7 @@
             300
           ],
           "en_boucle": false,
-          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Conan soulevé ; 4 = lancer (traînée) ; 5 = retour."
+          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Kaldor soulevé ; 4 = lancer (traînée) ; 5 = retour."
         },
         {
           "ligne": 14,
@@ -5225,7 +5225,7 @@
             300
           ],
           "en_boucle": false,
-          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Conan soulevé ; 4 = lancer (traînée) ; 5 = retour."
+          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Kaldor soulevé ; 4 = lancer (traînée) ; 5 = retour."
         },
         {
           "ligne": 21,
@@ -5610,7 +5610,7 @@
             300
           ],
           "en_boucle": false,
-          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Conan soulevé ; 4 = lancer (traînée) ; 5 = retour."
+          "description": "Saisie : 0 et 1 = main tendue ; 2 = prise ; 3 = Kaldor soulevé ; 4 = lancer (traînée) ; 5 = retour."
         },
         {
           "ligne": 28,

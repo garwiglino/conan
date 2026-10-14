@@ -13,7 +13,7 @@ class Param {
  cancelScheduledValues(t){this.events=this.events.filter(e=>e.t<t);}
 }
 class Node {
- constructor(){for(const k of ['gain','frequency','pan','delayTime','detune','playbackRate'])this[k]=new Param();this.connections=[];this.starts=[];this.stops=[];}
+ constructor(){for(const k of ['gain','frequency','pan','delayTime','detune','playbackRate','Q'])this[k]=new Param();this.connections=[];this.starts=[];this.stops=[];}
  connect(to){this.connections.push(to);return to;}
  disconnect(){this.connections=[];this.disconnected=true;}
  setPeriodicWave(){}
@@ -29,6 +29,24 @@ class AudioContext {
  createBuffer(ch,len){return {getChannelData:()=>new Float32Array(len)};}
 }
 function sequence(){const ctx=new AudioContext(),m=new api.Music(ctx,ctx.destination);m.notes=[];m.note=(song,tr,t)=>m.notes.push({song:song.name,t});return {ctx,m};}
+test('music and SFX volume controls use independent buses and retain levels when muted',()=>{
+ const sound=new api.Sound(),ctx=new AudioContext();sound.ctx=ctx;sound.enabled=true;sound.master=ctx.createGain();sound.music=new api.Music(ctx,ctx.destination);
+ sound.setMusicVolume(.25);sound.setSfxVolume(.5);
+ assert.equal(sound.music.out.gain.events.at(-1).v,.0625);assert.equal(sound.master.gain.events.at(-1).v,.15);
+ sound.toggleSfx();assert.equal(sound.master.gain.events.at(-1).v,0);assert.equal(sound.music.out.gain.events.at(-1).v,.0625);
+ sound.toggleSfx();assert.equal(sound.master.gain.events.at(-1).v,.15);assert.equal(sound.sfxVolume,.5);
+ sound.setMusicVolume(-1);assert.equal(sound.musicVolume,0);sound.setSfxVolume(2);assert.equal(sound.sfxVolume,1);
+ sound.setMusicVolume(NaN);assert.equal(sound.musicVolume,0);
+});
+test('title voices schedule correctly and crossfade continuously into exploration and back',()=>{
+ const ctx=new AudioContext(),m=new api.Music(ctx,ctx.destination);m.update('title');const title=m.current;
+ assert.equal(Object.keys(title.tracks).length,12);assert.equal(title.tracks.choir.p.kind,'choir');
+ ctx.currentTime=2;m.update('title');assert.ok(ctx.nodes.filter(n=>n.type==='bandpass').length>=6);
+ ctx.currentTime=3;m.update('ambient');assert.equal(m.retiring[0],title);assert.equal(title.envelope.end,4.8);
+ ctx.currentTime=3.6;assert.ok(m.songGain(title,3.6)>0);assert.ok(m.songGain(m.current,3.6)>0);
+ m.update('title');assert.equal(m.current,title);assert.equal(m.retiring.length,1);
+ ctx.currentTime=5.5;m.update(null);ctx.currentTime=6.1;m.update(null);assert.equal(m.retiring.length,0);
+});
 function world(){
  const p={x:0,y:0,spawnFX:0,level:0};
  return {player:p,enemies:[],clock:720,sameLevel:(a,b)=>a.level===b.level,lineClear:()=>true,safeZone:()=>false};

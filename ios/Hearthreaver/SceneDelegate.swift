@@ -10,7 +10,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.backgroundColor = .conanInk
+        window.backgroundColor = .hearthreaverInk
         window.rootViewController = GameViewController()
         window.makeKeyAndVisible()
         self.window = window

@@ -21,7 +21,7 @@ const file=path.join(root,'index.html');let html=fs.readFileSync(file,'utf8');
 if(html.includes('// BEGIN BOSS ASSETS'))html=html.replace(/\/\/ BEGIN BOSS ASSETS[^\n]*\n[\s\S]*?\/\/ END BOSS ASSETS/,()=>block);
 else html=html.replace('// END GUARDIAN ASSETS','// END GUARDIAN ASSETS\n'+block);
 fs.writeFileSync(file,html);
-fs.writeFileSync(path.join(root,'ios/Conan/Game/index.html'),html.replace('<meta name="apple-mobile-web-app-title" content="Conan"><link rel="apple-touch-icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest">',''));
+fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
 const indexFile=path.join(root,'sprites/personnages/index.json'),index=JSON.parse(fs.readFileSync(indexFile,'utf8'));
 for(const phase of [0,1]){
  const sheet=meta.phaseSheets[phase];

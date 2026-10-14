@@ -1,0 +1,44 @@
+/* Aseprite crimson/gold menu. */
+:root{--title-idle:url(__TITLE_BUTTON_IDLE__);--title-hover:url(__TITLE_BUTTON_HOVER__);--title-pressed:url(__TITLE_BUTTON_PRESSED__);--title-disabled:url(__TITLE_BUTTON_DISABLED__)}
+#titleScene,#titleBrandWrap,#mainMenu,.title-options[hidden]{display:none!important}
+.screen-overlay.title{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;padding:0!important;z-index:80;background:#081218!important;isolation:isolate;overflow:auto;overscroll-behavior:contain}
+.screen-overlay.title #titleScene{display:block!important;position:fixed;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;pointer-events:none;z-index:-2}
+.screen-overlay.title::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(90deg,#02090dbb,transparent 23% 77%,#02090dbb),linear-gradient(0deg,#05090dcc,transparent 45% 75%,#05090d55)}
+.screen-overlay.title .overlay-content{width:min(100vw,1440px)!important;max-width:none!important;box-sizing:border-box;border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;padding:18px 3px!important;margin:auto!important;text-align:center}
+.screen-overlay.title .small-rune,.screen-overlay.title #overlayLabel,.screen-overlay.title #overlayText,.screen-overlay.title #overlayHint,.screen-overlay.title #credits,.screen-overlay.title #start,.screen-overlay.title #newGame{display:none!important}
+.screen-overlay.title #titleBrandWrap{display:block!important;position:relative;width:min(100%,1400px);margin:0 auto 22px;filter:drop-shadow(0 5px 0 #08121899)}
+.screen-overlay.title #titleBrand{display:block;width:100%;height:auto;image-rendering:pixelated}
+.screen-overlay.title #titleFlame{display:block;position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none}
+.screen-overlay.title #overlayTitle{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0!important}
+.screen-overlay.title #mainMenu{display:grid!important;grid-template-columns:1fr;gap:10px;width:min(86vw,340px);margin:auto}
+.title-button{appearance:none;min-height:48px;padding:10px 20px;border:2px solid transparent;border-image:var(--title-idle) 10 fill / 10px / 1px stretch;background:none;color:#ffe4a0;font:400 clamp(16px,4.8vw,20px)/1.2 'PixelUI',monospace;letter-spacing:.03em;white-space:nowrap;text-shadow:1px 2px #1a1019;cursor:pointer;image-rendering:pixelated;touch-action:manipulation}
+.title-button:hover:not(:disabled){border-image-source:var(--title-hover);color:#fff0bd}
+.title-button:active:not(:disabled){border-image-source:var(--title-pressed);transform:translateY(1px)}
+.title-button:disabled{border-image-source:var(--title-disabled);color:#8b8178;text-shadow:1px 1px #141219;cursor:default}
+.title-button:focus-visible,.title-volume:focus-visible{outline:2px solid #ffe4a0;outline-offset:4px}
+#menuStatus:empty{display:none}#menuStatus{grid-column:1/-1;color:#f2c29e;font:16px/1.4 'PixelUI',monospace}
+.screen-overlay.title.options-open .overlay-content,.screen-overlay.title.quit-open .overlay-content{display:none}
+.title-options{position:relative;width:min(92vw,420px);box-sizing:border-box;margin:auto;padding:24px 28px;border:2px solid transparent;border-image:var(--title-idle) 10 fill / 12px / 2px stretch;color:#ead5ae;font:18px/1.3 'PixelUI',monospace;text-align:center;z-index:3}
+.title-options h2{margin:0 0 20px;font:28px/1.1 'PixelUI',monospace;color:#ffe4a0;font-weight:400;text-shadow:2px 2px #21111b}
+.title-option-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.title-option-row .title-button{font-size:13px;min-height:40px;min-width:158px;padding:8px 10px}
+.title-option-row>span{font-size:16px}
+.title-volume-label output{white-space:nowrap;padding-left:8px}
+.title-option-row .title-button[aria-pressed=false]{border-image-source:var(--title-pressed);color:#bc9891}
+.title-volume-label{display:flex;align-items:center;justify-content:space-between;font-size:14px;margin-top:4px}
+.title-volume{appearance:none;-webkit-appearance:none;width:100%;height:32px;background:transparent;cursor:pointer;margin:4px 0 18px}
+.title-volume::-webkit-slider-runnable-track{height:8px;border:1px solid #9b603b;background:linear-gradient(90deg,#ae3d3c var(--level,100%),#211824 var(--level,100%));box-shadow:0 2px #130f17}
+.title-volume::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8px;border:3px solid #cf9855;background:#741f2c;box-shadow:inset 2px 2px #ffe4a0,2px 2px #130f17}
+.title-volume::-moz-range-track{height:6px;border:1px solid #9b603b;background:#211824}
+.title-volume::-moz-range-progress{height:6px;background:#ae3d3c}
+.title-volume::-moz-range-thumb{border-radius:0;width:18px;height:18px;border:3px solid #cf9855;background:#741f2c}
+.title-options>.title-button{min-width:200px;margin-top:2px}
+@media(max-width:600px){.screen-overlay.title .overlay-content{padding:16px 2px!important;width:100vw!important}.screen-overlay.title #titleBrandWrap{width:100%;margin-bottom:26px}}
+@media(max-width:420px){.title-options{padding:20px 16px}.title-option-row{gap:8px}.title-option-row>span{font-size:14px}.title-option-row .title-button{font-size:12px;min-width:140px;padding:8px}}
+@media(max-height:520px) and (min-width:601px){
+.screen-overlay.title .overlay-content{padding:8px 4px!important}
+.screen-overlay.title #titleBrandWrap{width:min(96vw,1000px,calc((100vh - 148px) * 3.356));margin-bottom:12px}
+.screen-overlay.title #mainMenu{width:min(80vw,580px);grid-template-columns:1fr 1fr;gap:8px 14px}
+.title-button{min-height:44px;padding:8px 16px;font-size:18px}
+.title-options{padding:15px 24px;width:min(90vw,460px)}.title-options h2{margin-bottom:12px;font-size:25px}.title-volume{margin-bottom:10px;height:25px}.title-option-row{margin-bottom:2px}
+}

@@ -1,5 +1,5 @@
 {
- "personnage": "Conan",
+ "personnage": "Kaldor",
  "fichier": "conan.png",
  "apercu": "conan_apercu.png",
  "taille_planche": {
@@ -827,7 +827,7 @@
   "attaque_coup_4": {
    "code_du_jeu": "attack",
    "nom": "Attaque, coup 4 du combo",
-   "description": "Coup lourd par-dessus la tête, jusqu'au sol devant lui ; Conan s'accroupit à l'impact. 6 poses : anticipation, épée levée, abattue, impact, appui, fin du geste. L'image 0 n'est pas jouée dans le combo ; traînée sur les images 2 et 3. Le 4e coup brise les gardes.",
+   "description": "Coup lourd par-dessus la tête, jusqu'au sol devant lui ; Kaldor s'accroupit à l'impact. 6 poses : anticipation, épée levée, abattue, impact, appui, fin du geste. L'image 0 n'est pas jouée dans le combo ; traînée sur les images 2 et 3. Le 4e coup brise les gardes.",
    "images": 6,
    "en_boucle": false,
    "duree_par_image_s": [

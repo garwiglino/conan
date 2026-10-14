@@ -84,5 +84,5 @@ test('iOS receives the complete self-contained boss pack and the existing save f
  const dir=path.join(root,'sprites/personnages/pretre');
  for(const [i,f] of ['pretre-rituel.png','pretre-enrage.png'].entries())assert.deepEqual(Buffer.from(api.BOSS_ART.sheets[i].png.split(',')[1],'base64'),fs.readFileSync(path.join(dir,f)));
  for(const [k,f] of [['rear','sortileges-arriere.png'],['front','sortileges-avant.png'],['bolt','projectiles.png']])assert.deepEqual(Buffer.from(api.BOSS_ART[k].split(',')[1],'base64'),fs.readFileSync(path.join(dir,f)));
- const ios=fs.readFileSync(path.join(root,'ios/Conan/Game/index.html'),'utf8');assert.equal(ios.slice(ios.indexOf('<script>')),html.slice(html.indexOf('<script>')));assert.ok(html.includes('conan-serpent-v1'));assert.ok(html.trimEnd().endsWith('</html>'));
+ const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');assert.equal(ios.slice(ios.indexOf('<script>')),html.slice(html.indexOf('<script>')));assert.ok(html.includes('conan-serpent-v1'));assert.ok(html.trimEnd().endsWith('</html>'));
 });

@@ -1,18 +1,35 @@
-# Conan — Le Temple du Serpent
+# Hearthreaver — Le Temple du Serpent
 
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
+
+Le héros est **Kaldor « the Flamebearer »**. Son aventure traverse les terres arides de Sahrak, sous la menace du culte de Nharos.
+
+Le menu utilise un logo rouge métallique bordé d'or, dessiné dans Aseprite, avec douze images de reflets de flammes. Six plans de ciel, reliefs et poussière composent un panorama qui défile lentement. L'option système de réduction des animations immobilise le décor et les reflets. Les quatre commandes sont **Nouvelle partie**, **Charger**, **Options** et **Quitter**. Charger est grisé sans sauvegarde valide. Les options mémorisent séparément l'activation et le volume de la musique et des bruitages. Quitter coupe la session et tente de fermer la fenêtre lorsque le navigateur l'autorise ; sinon un écran de fin permet de revenir au menu. Sur iOS, la fermeture de l'app reste un geste système.
+
+**The Ember Crown**, le thème principal, comporte douze pistes instrumentales et une piste de direction : cuivres, cors, cordes, harpe, basse, chœurs, timbales, tambours et cloches. La boucle de 48 mesures en ré mineur dure 102,86 secondes à 112 BPM. [Partition MIDI multipiste](audio/hearthreaver-theme.mid) · [Écoute du synthétiseur du jeu](audio/hearthreaver-theme-preview.mp3). Le thème démarre à la première interaction autorisée par le navigateur si la musique est activée ; un fondu croisé de 1,8 s accompagne l'entrée dans l'aventure.
 
 **Jouer :** https://garwiglino.github.io/conan/
 
 Sur iPhone : ouvrir l'adresse dans Safari, puis Partager › « Sur l'écran d'accueil » (laisser « Ouvrir en tant qu'app web » activé) pour jouer en plein écran.
 
-Le colosse gardien utilise 32 animations Aseprite : huit actions dans quatre directions, avec un repos animé, une saisie synchronisée avec Conan et une mort en pierres sans sang. Sa chute accélère sous la gravité, avec des rebonds amortis et un peu de poussière. Les sprites sont inclus dans le jeu pour rester disponibles hors ligne.
+Le colosse gardien utilise 32 animations Aseprite : huit actions dans quatre directions, avec un repos animé, une saisie synchronisée avec Kaldor et une mort en pierres sans sang. Sa chute accélère sous la gravité, avec des rebonds amortis et un peu de poussière. Les sprites sont inclus dans le jeu pour rester disponibles hors ligne.
 
 Le morceau de combat accompagne les affrontements avec les colosses. Il entre par un fondu croisé de 650 ms ; après quatre secondes sans affrontement, l'exploration revient sur 1,8 s. Le boss conserve sa musique. Le bruit de mort est composé en [MIDI multipiste](audio/guardian-death.mid) et joué par le séquenceur du jeu, indépendamment du réglage de musique.
 
 Le Prêtre du Serpent utilise maintenant son [pack Aseprite](sprites/personnages/pretre/) : 124 animations, 1 280 poses, quatre directions et deux phases. Ses frappes gardent leur direction pendant l'élan et le retour ; les sorts de jade suivent les mêmes images que leurs zones de dégâts. L'éventail lance trois projectiles depuis sa main, la nova s'étend au sol et les trois éruptions jaillissent successivement. La victoire attend les 1,9 seconde de sa chute. Les sources et les effets sont inclus dans la mise à jour iOS.
 
-Dans l'app iOS native, fermer complètement l'app puis la rouvrir avec une connexion pour recevoir la mise à jour. La sauvegarde existante est conservée ; cette mise à jour du jeu ne demande pas de réinstallation Xcode. Voir [les instructions iOS](ios/LISEZMOI.md).
+Après publication, fermer complètement l'app iOS native puis la rouvrir avec une connexion pour recevoir le jeu actualisé. La sauvegarde existante est conservée. Le nouveau nom sous l'icône et l'icône native sont inclus dans les sources Xcode ; leur installation nécessite une reconstruction de l'app. Voir [les instructions iOS](ios/LISEZMOI.md).
+
+## Sources du menu
+
+- [Logo animé Aseprite](art/title/hearthreaver-logo.aseprite) : quatre calques et douze images de 120 ms.
+- [Paysage Aseprite](art/title/hearthreaver-landscape.aseprite) : panorama de 960 × 360 pixels et six calques.
+- [Boutons Aseprite](art/title/hearthreaver-menu.aseprite) : quatre états, dont l'état grisé.
+- [Icône Aseprite H/R](art/title/hearthreaver-icon.aseprite) : monogramme rouge et or, lame centrale, quatre calques éditables à 128 × 128 pixels. `scripts/app-icon.lua` produit les tailles web et iOS sans lissage ; le fond est opaque et iOS applique ses propres coins arrondis.
+- `scripts/title-art.lua` reconstruit les dessins dans Aseprite ; `npm run build:title-theme` reconstruit le MIDI et sa partition JSON ; `npm run embed:title` intègre le tout dans les versions web et iOS hors ligne.
+- Les identifiants techniques historiques de stockage, d'origine iOS et de dépôt restent stables pour préserver les sauvegardes et les mises à jour des installations existantes.
+- [Archive iOS](Hearthreaver-iOS.zip) : sources natives, nouvelles icônes et jeu hors ligne synchronisé.
+- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.1 (build 2). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
 
 ## Crédits
 - Polices : [Alagard](https://www.dafont.com/alagard.font) (Hewett Tsoi) · [Pixel Operator](https://www.dafont.com/pixel-operator.font) (Jayvee Enaguas, CC0)

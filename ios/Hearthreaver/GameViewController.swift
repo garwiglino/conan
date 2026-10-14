@@ -3,7 +3,7 @@ import WebKit
 
 extension UIColor {
     /// Fond du jeu (#0e0b09), aussi utilisé au lancement pour éviter tout flash blanc.
-    static let conanInk = UIColor(red: 14 / 255, green: 11 / 255, blue: 9 / 255, alpha: 1)
+    static let hearthreaverInk = UIColor(red: 14 / 255, green: 11 / 255, blue: 9 / 255, alpha: 1)
 }
 
 /// Affiche le jeu exact (Game/index.html, identique à la version web) dans un WKWebView plein écran.
@@ -39,8 +39,8 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.isOpaque = false
-        web.backgroundColor = .conanInk
-        web.scrollView.backgroundColor = .conanInk
+        web.backgroundColor = .hearthreaverInk
+        web.scrollView.backgroundColor = .hearthreaverInk
         web.scrollView.isScrollEnabled = false
         web.scrollView.bounces = false
         // Les marges de sécurité (encoche, barre d'accueil) restent gérées par le jeu via env(safe-area-inset-*).
