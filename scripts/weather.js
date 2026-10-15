@@ -1,5 +1,5 @@
 // One clock and one weather state drive colour, lamps, wildlife, rain and sound.
-const DAY_LEN=480,CLOCK_START=8*60,WEATHER_WIN=240;
+const DAY_LEN=960,CLOCK_START=8*60,WEATHER_WIN=240;
 const SKY_KEYS=[[0,[78,92,156]],[5,[78,92,156]],[6,[128,112,166]],[7.2,[238,183,158]],
  [8.2,[255,225,194]],[9,[255,255,255]],[16,[255,255,255]],[17,[255,232,202]],
  [18,[248,207,164]],[19.5,[220,155,142]],[21,[142,119,166]],[23,[78,92,156]],[24,[78,92,156]]].map(([h,c])=>[h/24,c]);

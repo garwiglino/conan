@@ -33,11 +33,17 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   // The actual shipped world UI opens, paints, calculates, tracks and closes.
   $('worldCanvas').getBoundingClientRect=()=>({x:0,y:0,left:0,top:0,right:640,bottom:420,width:640,height:420});
   const prisonPos={x:a.game.player.x,y:a.game.player.y};Object.assign(a.game.player,{x:376,y:888});
-  click('btnWorld');assert.equal(a.state,'world');assert.equal($('worldPanel').hidden,false);assert.equal($('worldDestination').options.length,86);assert.match($('worldRoute').textContent,/Traversée maritime requise/);assert.equal($('worldGo').disabled,true);
-  $('worldDestination').value='town-1';$('worldDestination').dispatchEvent(new w.Event('change'));assert.match($('worldRoute').textContent,/km/);assert.match($('worldRoute').textContent,/Parcours terrestre/);click('worldZoomIn');click('worldLocate');click('worldFit');
+  click('btnWorld');assert.equal(a.state,'world');assert.equal($('worldPanel').hidden,false);assert.ok($('worldDestination').options.length>250);assert.equal($('worldGo'),null);assert.match($('worldRoute').textContent,/vol d’oiseau/);
+  $('worldDestination').value='town-1';$('worldDestination').dispatchEvent(new w.Event('change'));assert.match($('worldRoute').textContent,/km/);assert.match($('worldRoute').textContent,/vol d’oiseau/);click('worldZoomIn');click('worldLocate');click('worldFit');
   fs.mkdirSync(require('node:path').join(__dirname,'../test-output'),{recursive:true});fs.writeFileSync(require('node:path').join(__dirname,'../test-output/world-atlas-ui.png'),map.get($('worldCanvas')).native.toBuffer('image/png'));
   click('worldTrack');assert.equal(a.state,'playing');assert.equal(a.game.navigation,'town-1');assert.equal($('game').inert,false);
   w.dispatchEvent(new w.KeyboardEvent('keydown',{code:'KeyG',bubbles:true}));assert.equal(a.state,'world');w.dispatchEvent(new w.KeyboardEvent('keydown',{code:'Escape',bubbles:true}));assert.equal(a.state,'playing');assert.equal($('worldPanel').hidden,true);a.game.navigation=null;Object.assign(a.game.player,prisonPos);
+  click('btnParty');assert.equal(a.state,'party');assert.equal($('partyList').children.length,2);click('partyClose');
+  a.game.talkTo(a.game.escortActor);a.game.dialogue=null;click('btnParty');assert.equal($('partyList').children.length,3);$('partyList').querySelector('[data-member="elyne"]').click();assert.match($('partyDetail').textContent,/Réserve de nourriture/);click('partyClose');
+  a.openMenu('quests');click('menuMap');assert.equal(a.state,'world');click('worldClose');assert.equal(a.state,'menu');a.closeMenu();
+  assert.equal(a.game.startJourney({to:'town-1',mode:'horse'}),false);
+  const station=a.game.stations.find(s=>s.site==='camp');Object.assign(a.game.player,{x:station.actor.x,y:station.actor.y+16});Object.assign(a.game.escortActor,{x:station.actor.x+16,y:station.actor.y+16});
+  a.game.talkTo(station.actor);const option=a.game.npcMenu(station.actor).find(o=>o.label.includes('acheter'));option.act();raf(500);assert.equal(a.state,'transport');assert.ok($('transportDestination').options.length>80);click('transportClose');assert.equal(a.game.transportSession,null);Object.assign(a.game.player,prisonPos);
   for(const id of ['os','culte','steles','viperes','tresors'])a.game.acceptQuest(id);
   a.game.discover(['colosse'],true);a.game.toggleTrack('colosse');a.renderTracker();
   const list=$('trkList');assert.equal(list.children.length,2);assert.equal(list.style.getPropertyValue('--trk-rows'),'2');

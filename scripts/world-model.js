@@ -34,8 +34,16 @@ const createWorldAtlas = (raw) => {
  // Redirect the macro spur through the preserved southern gate of the original map.
  for(const r of roads){for(const end of [0,r.pts.length-1]){if(r.pts[end][2]!=='c'+geole.cell)continue;const other=r.pts[end===0?1:end-1],right=other[0]>=origin.x+36,side=origin.x+(right?84:-12),ys=origin.y+74;let via=[[anchor[0],ys],[side,ys]];if(other[1]<origin.y)via.push([side,origin.y-12]);via=via.map(p=>[...p,'gate-'+extraVertex++]);if(end===0)r.pts.splice(1,0,...via);else r.pts.splice(end,0,...via.reverse());}}
  const prison={x:origin.x-25,y:origin.y+80,w:18,h:15,door:{x:origin.x-7,y:origin.y+90}};
- const prisonPath=[[anchor[0],anchor[1],'c'+geole.cell],[anchor[0],origin.y+74,'prison-junction'],[origin.x+5,origin.y+74,'prison-turn'],[origin.x+5,prison.door.y+.5,'prison-approach'],[prison.door.x+1.5,prison.door.y+.5,'prison-door']];
- roads.push({id:'prison-road',name:'Piste de Grise-Gueule',type:'trails',width:3.2,modes:['foot','horse'],danger:1,interval:0,pts:prisonPath});
+ // Marine routes begin at an actual coastline. The inland approach stays a road.
+ for(const r of roads.filter(r=>r.type==='searoutes'))for(const reverse of [false,true]){
+  const pts=reverse?r.pts.slice().reverse():r.pts.slice(),town=nodes.find(n=>n.vertex===pts[0][2]);if(!town)continue;
+  let crossing=null;
+  for(let i=1;i<pts.length&&!crossing;i++){const a=pts[i-1],b=pts[i],len=distance(a,b),steps=Math.ceil(len/50);for(let j=1;j<=steps;j++){const t=j/steps,x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t;if(!cellAt(x,y)?.land){let lo=(j-1)/steps,hi=t;for(let k=0;k<22;k++){const mid=(lo+hi)/2;if(cellAt(a[0]+(b[0]-a[0])*mid,a[1]+(b[1]-a[1])*mid)?.land)lo=mid;else hi=mid;}const ux=(b[0]-a[0])/len,uy=(b[1]-a[1])/len;crossing={i,x:a[0]+(b[0]-a[0])*lo-ux*2,y:a[1]+(b[1]-a[1])*lo-uy*2,ux,uy};break;}}}
+  if(!crossing)continue;const q=crossing,id='dock-'+r.id+'-'+(reverse?'b':'a'),point=[q.x,q.y,id],dock={id,name:'Embarcadère de '+town.name,x:q.x,y:q.y,cell:town.cell,region:town.region,vertex:id,radius:5,kind:'dock',rest:true,town:town.id,boat:{x:q.x+q.ux*4,y:q.y+q.uy*4},shore:{x:q.ux,y:q.uy}};
+  nodes.push(dock);byId[id]=dock;
+  roads.push({id:'access-'+id,name:'Chemin du port de '+town.name,type:'roads',width:4.6,modes:['foot','horse','cart'],danger:1,interval:0,pts:[...pts.slice(0,q.i),point]});
+  const sea=[point,...pts.slice(q.i)];r.pts=reverse?sea.reverse():sea;
+ }
  for(const r of roads){const cs=r.pts.map(p=>cellById.get(Number(p[2].slice(1)))).filter(Boolean);if(r.type==='trails'&&r.id!=='prison-road'&&cs.every(c=>c.height<58&&c.biome!==12))r.modes.push('cart');r.danger=Math.min(5,r.danger+(cs.some(c=>c.height>60)?1:0)+(cs.some(c=>raw.zones.some(z=>z.cells.includes(c.id)))?2:0));}
  const roadById=Object.fromEntries(roads.map(r=>[r.id,r])),segments=[],roadIndex=new Index(2048),riverIndex=new Index(2048),vertices=new Map(),adj=new Map();
  const curseCells=new Set(raw.zones.flatMap(z=>z.cells));
@@ -177,7 +185,7 @@ const createWorldAtlas = (raw) => {
   constructor(){this.current=null;this.pending=null;this.age=0;this.last=null;}
   update(x,y,dt,{override=null,level=0}={}){const jump=!this.last||Math.hypot(x-this.last.x,y-this.last.y)>60||this.last.level!==level;this.last={x,y,level};let next=override;
    if(!next){let site=siteAt(x,y);const oldSite=byId[this.current?.site];if(!site&&oldSite&&Math.hypot(x-oldSite.x,y-oldSite.y)<oldSite.radius+8)site=oldSite;const c=cellAt(x,y),region=regions.get(c?.region);let near=closestRoad(x,y);const old=roadById[this.current?.route];if(old){const keep=old.segments.map(s=>({...project(x,y,s.a,s.b),road:old})).find(p=>p.d<=old.width/2+9);if(keep)near=keep;}
-    const close=near&&near.d<=near.road.width/2+(old?.id===near.road.id?9:5),detail=site?(site.kind==='port'?'Port et relais':site.kind==='ruin'?'Ruines anciennes':'Lieu de halte'):close?near.road.name:'Terres sauvages';next={title:site?.name||region?.name||'Haute mer',detail,territory:region?.territory||region?.continent||'',site:site?.id,route:close?near.road.id:null};}
+    const close=near&&near.d<=near.road.width/2+(old?.id===near.road.id?9:5),detail=site?(site.kind==='dock'?'Embarcadere':site.kind==='port'?'Port et relais':site.kind==='ruin'?'Ruines anciennes':'Lieu de halte'):close?near.road.name:'Terres sauvages';next={title:site?.name||region?.name||'Haute mer',detail,territory:region?.territory||region?.continent||'',site:site?.id,route:close?near.road.id:null};}
    next={...next,key:next.key||next.title+'|'+next.detail};if(!this.current||jump){this.current=next;this.pending=null;this.age=0;}else if(next.key===this.current.key){this.pending=null;this.age=0;}else{if(this.pending?.key!==next.key){this.pending=next;this.age=0;}this.age+=Math.max(0,Math.min(dt,.25));if(this.age>=.9){this.current=next;this.pending=null;this.age=0;}}return this.current;
   }
  }

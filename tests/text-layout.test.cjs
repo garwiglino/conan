@@ -23,7 +23,7 @@ test('canvas text measurement and drawing share the global scale, with bounded l
   assert.ok(lines.every(line=>ctx.measureText(line).width<=80));
   assert.equal(lines.join('').replace(/ /g,''),message.replace(/ /g,''));
   const renderer={c:ctx};Renderer.prototype.resize.call(renderer,220,160,{l:0,r:0,t:0,b:0});
-  assert.equal(renderer.hudRows,2);assert.ok(renderer.top>=36);
+  assert.equal(renderer.hudRows,1);assert.equal(renderer.top,22);
   assert.ok(textSettings.trackerHeight>=2*14*textSettings.scale+15);
  }
  assert.ok(widths[0]<widths[1]&&widths[1]<widths[2]);assert.ok(Math.abs(widths[2]/widths[0]-125/85)<.03);
