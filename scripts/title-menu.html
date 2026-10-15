@@ -8,6 +8,11 @@
 <!-- PANELS -->
 <section class="title-options" id="titleOptions" role="dialog" aria-modal="true" aria-labelledby="optionsTitle" hidden>
  <h2 id="optionsTitle">Options</h2>
+ <div class="text-size-setting">
+  <label class="title-volume-label" for="textSize">Taille des textes <output id="textSizeValue" for="textSize">100 %</output></label>
+  <input class="title-volume" id="textSize" type="range" min="85" max="125" step="5" value="100" aria-describedby="textSizeHint">
+  <div class="text-size-tools"><small id="textSizeHint">85 % à 125 % · aperçu immédiat</small><button class="title-button" id="textSizeReset" type="button">Par défaut</button></div>
+ </div>
  <div class="title-option-row"><span id="musicLabel">Musique</span><button class="title-button" id="musicToggle" type="button" aria-pressed="true" aria-labelledby="musicLabel musicToggle">Activée</button></div>
  <label class="title-volume-label" for="musicVolume">Volume de la musique <output id="musicVolumeValue" for="musicVolume">100 %</output></label>
  <input class="title-volume" id="musicVolume" type="range" min="0" max="100" step="1" value="100">

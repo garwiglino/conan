@@ -14,6 +14,7 @@ function titleLoadGame(){
  catch{$('menuStatus').textContent='Cette sauvegarde ne peut pas être chargée.';}
 }
 function syncTitleOptions(){
+ syncTextSettings();
  for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
  $('musicToggle').textContent=sound.musicOn?'Activée':'Désactivée';$('hapticsToggle').textContent=haptics.enabled?'Activées':'Désactivées';$('hapticsHint').textContent=haptics.available?'Retours discrets pour les actions importantes.':'Vibrations indisponibles dans cette version de l’app ou ce navigateur.';
  for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}
@@ -33,7 +34,7 @@ function titleKeys(e){
  if(!['title','options','quit'].includes(state))return false;
  if(e.code==='Escape'&&!e.repeat){if(state==='options')closeTitleOptions();else if(state==='quit')returnFromQuit();e.preventDefault();return true;}
  if(e.code==='Tab'){
-  const box=$(state==='options'?'titleOptions':state==='quit'?'titleExit':'mainMenu'),items=[...box.querySelectorAll('button:not([disabled]),input')];
+  const box=$(state==='options'?'titleOptions':state==='quit'?'titleExit':'mainMenu'),items=[...box.querySelectorAll('button:not([disabled]),input')].filter(el=>!el.closest('[hidden]'));
   const at=items.indexOf(document.activeElement),next=(at+(e.shiftKey?-1:1)+items.length)%items.length;items[next]?.focus();e.preventDefault();
  }
  if(state==='title'&&e.code==='Enter'&&!e.repeat&&!e.target.closest?.('button,input')){e.preventDefault();titleNewGame();}
@@ -52,3 +53,6 @@ $('optionsHome').addEventListener('click',()=>{if(state!=='menu')return;save();c
 $('musicVolume').addEventListener('input',e=>{sound.setMusicVolume(+e.target.value/100);syncTitleOptions();});
 $('sfxVolume').addEventListener('input',e=>{sound.setSfxVolume(+e.target.value/100);syncTitleOptions();});
 $('sfxVolume').addEventListener('change',()=>sound.fx('ui_select'));
+$('textSize').addEventListener('input',e=>setTextSize(Number(e.target.value)));
+$('textSize').addEventListener('change',()=>sound.fx('ui_select'));
+$('textSizeReset').addEventListener('click',()=>setTextSize(100));

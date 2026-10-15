@@ -24,6 +24,10 @@ html=html.replace("new TitleScene($('titleScene'))","new TitleScene($('titleScen
 html=html.replace(/(<canvas id="titleFlame" width=")\d+(" height=")\d+/,(_,a,b)=>a+meta.logo[0]+b+meta.logo[1]);
 const menuCode='// BEGIN TITLE MENU UI\n'+fs.readFileSync(path.join(root,'scripts/title-menu.js'),'utf8')+'\n// END TITLE MENU UI';
 html=html.replace(/\/\/ BEGIN TITLE MENU UI[\s\S]*?\/\/ END TITLE MENU UI/,()=>menuCode);
+const textCode='// BEGIN TEXT LAYOUT\n'+fs.readFileSync(path.join(root,'scripts/text-layout.js'),'utf8')+'\n// END TEXT LAYOUT';
+html=html.includes('// BEGIN TEXT LAYOUT')?html.replace(/\/\/ BEGIN TEXT LAYOUT[\s\S]*?\/\/ END TEXT LAYOUT/,()=>textCode):html.replace('// app.js',()=>textCode+'\n// app.js');
+const textCSS='/* BEGIN READABILITY */\n'+fs.readFileSync(path.join(root,'scripts/readability.css'),'utf8')+'\n/* END READABILITY */';
+html=html.includes('/* BEGIN READABILITY */')?html.replace(/\/\* BEGIN READABILITY \*\/[\s\S]*?\/\* END READABILITY \*\//,()=>textCSS):html.replace('</style>',()=>textCSS+'\n</style>');
 const [nav,panels]=fs.readFileSync(path.join(root,'scripts/title-menu.html'),'utf8').split('<!-- PANELS -->');
 for(const [label,content]of [['NAV',nav],['PANELS',panels]]){
  const block='<!-- BEGIN TITLE '+label+' -->'+content+'<!-- END TITLE '+label+' -->',re=new RegExp('<!-- BEGIN TITLE '+label+' -->[\\s\\S]*?<!-- END TITLE '+label+' -->');

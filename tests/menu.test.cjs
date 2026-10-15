@@ -2,7 +2,7 @@ const {test}=require('node:test'),fs=require('node:fs'),assert=require('node:ass
 const {JSDOM}=require('jsdom'),canvas=require('@napi-rs/canvas'),{RenderingAudioContext}=require('web-audio-engine');
 const {html}=require('./game-harness.cjs');
 test('main menu loads real saves, cancels overwrite, persists audio levels, and ends/resumes its session',async()=>{
- const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics};})();');
+ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics,textSettings,setTextSize};})();');
  const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
  const destroy=w.close.bind(w);w.close=()=>{closes++;};
  w.HTMLElement.prototype.scrollTo=function(options){this.scrollTop=options.top||0;};
@@ -45,6 +45,8 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   const frozen=a.game.elapsed;raf(310);assert.equal(a.game.elapsed,frozen);
   click('btnBag');assert.equal($('menuTitle').textContent,'Inventaire');
   click('btnOptions');assert.equal($('titleOptions').parentElement.id,'menuSettings');assert.equal(a.state,'menu');
+  level('textSize',125);assert.equal(a.textSettings.percent,125);assert.equal(w.localStorage.getItem('hearthreaver-text-size'),'125');assert.equal($('textSizeValue').value,'125 %');
+  a.setTextSize(999);assert.equal(a.textSettings.percent,125);a.setTextSize(0);assert.equal(a.textSettings.percent,85);click('textSizeReset');assert.equal(a.textSettings.percent,100);
   level('musicVolume',25);click('hapticsToggle');assert.equal(a.haptics.enabled,false);assert.equal(new a.Haptics().enabled,false);
   click('optionsBack');assert.equal($('menuTitle').textContent,'Inventaire');assert.equal($('titleOptions').parentElement.id,'overlay');
   click('btnHelp');assert.match($('menuBody').textContent,/parade/);
