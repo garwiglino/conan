@@ -8,11 +8,37 @@ Igea (neige), Teremor (forêts tempérées) et Sarak (aride) forment une **seule
 
 Les sources éditables sont dans `data/world/` : fichier Azgaar `.map`, export intégral, géométrie en mètres et export compact `atlas.json`. `npm run build:world` reconstruit ce dernier et les deux HTML. Deux lignes Azgaar frôlaient des baies : le générateur ajoute des détours côtiers vérifiés tous les 75 m. Ces détours, le raccord de la geôle et le raccord du camp appartiennent au même réseau utilisé par le rendu et la navigation. Les rivières reçoivent un détail métrique, et les intersections traversables deviennent des ponts.
 
-## Terrain et limites de la première passe
+## Terrain, atlas procédural et limites
 
 La zone du Temple du Serpent, ses quêtes, ses mécanismes et ses décors sont conservés. Une sortie au sud relie son camp au réseau mondial. Le monde charge des secteurs de **32 × 32 tuiles**, avec au maximum 48 secteurs de données et 32 textures en mémoire. Le terrain est déterministe ; revenir au même endroit retrouve le même sol. Les morts des rencontres sauvages sont sauvegardées.
 
-Les 83 localités sont pour cette passe des **relais de test** : habitants, halte, tente, charrette et panneau. Elles ont leurs coordonnées, leur région et leurs itinéraires, mais ne sont pas encore 83 villes entièrement bâties avec intérieurs et quêtes propres. Le kit désert existant reste la base des objets ; les sols, transitions et quelques éléments procéduraux donnent les premiers repères des autres biomes. Les nouveaux arbres, pierres maudites, charrettes, panneaux et la fée sont dessinés en JavaScript avec le système de pixels du jeu. Elyne réutilise provisoirement le sprite de nomade.
+Les 83 localités sont pour cette passe des **relais de test** : habitants, halte, tente, charrette et panneau. Elles ont leurs coordonnées, leur région et leurs itinéraires, mais ne sont pas encore 83 villes entièrement bâties avec intérieurs et quêtes propres. Le kit désert de la première carte reste la référence et son sol est conservé. Les nouvelles matières reprennent ses rampes de couleurs, sa lumière en haut à gauche, sa quantification et son dessin pixel par pixel. Les nouveaux arbres, pierres maudites, charrettes, panneaux et la fée sont dessinés en JavaScript avec le système de pixels du jeu. Elyne réutilise provisoirement le sprite de nomade.
+
+## Direction artistique et fabrication des biomes
+
+`scripts/world-terrain-art.js` fabrique les sols directement en JavaScript, à 16 pixels par mètre. Les coordonnées absolues pilotent dunes, grain, strates, fissures, plaques végétales, neige et ornières. Les rives disposent de hauts-fonds, d’une bordure humide et d’ombres. Les plages suivent les vraies côtes ; les ponts suivent la direction de la route, même en diagonale. Les petites flaques de marais sont une couche de sol peu profonde et traversable ; les rivières et la mer restent des obstacles nécessitant un pont ou un transport.
+
+| Milieu | Matières et végétation |
+| --- | --- |
+| Sarak, aride | Sable et pistes du kit initial, ondulations de dunes, roche stratifiée, arbustes, arbres morts |
+| Teremor, tempéré | Humus, herbe en touffes, chênes et feuillage clair, rochers moussus, fougères, fleurs et champignons |
+| Igea, froid | Neige, sol gelé, rochers froids, conifères enneigés ; taïga et toundra entre forêt et neige |
+| Varan, humide | Boue, flaques peu profondes, cyprès à racines, roseaux, mousses et sous-bois humide |
+| Tagon, tropical | Sol végétal dense, grands feuillages, lianes, palmiers, fougères, plages de sable |
+| Zones maudites | Pierre grise, cendres fissurées, arbres morts pâles, pierres à veines et lumières violettes/vertes |
+
+Les transitions de 800 m mélangent des plaques de matières et les espèces, pas seulement la couleur générale. Les décors occupent des bosquets et laissent des clairières ; une marge dégagée protège les routes. Les relais choisissent leur végétation selon leur biome. `scripts/world-props-art.js` contient les silhouettes et variantes, en tampons de 64 × 64 pixels ancrés au pied comme les objets originaux. Les ombres ne sont pas retournées avec les variantes.
+
+Le calcul des sols utilise une bordure de 32 pixels pour les distances à l’eau et les reliefs. Elle est retirée après rendu, ce qui assure les raccords entre secteurs. `world-art-stream.js` prépare les secteurs voisins dans un Web Worker, avec huit demandes maximum et 32 images en cache. Si les workers sont indisponibles, le même dessin fonctionne de manière synchrone ; le premier affichage ou un déplacement instantané vers une région non préparée peut demander un calcul initial. Les reflets d’eau utilisent quatre phases légères. La fée utilise les lumières radiales et les lueurs additives des projectiles magiques, centrées sur son mouvement ; le carré translucide a été supprimé.
+
+Références étudiées pour la méthode (aucun sprite tiers importé) :
+
+- [Tiled — terrains et raccords](https://doc.mapeditor.org/en/stable/manual/terrain/) : cohérence des bords et des coins, variantes compatibles.
+- [SLYNYRD — Top Down Tiles](https://www.slynyrd.com/blog/2019/8/27/pixelblog-20-top-down-tiles) : amas de pixels, zones calmes, palettes limitées et contrastes entre matières.
+- [Saint11 — Pixel Art Tutorials](https://saint11.art/blog/pixel-art-tutorials/) : références de fabrication des textures et des silhouettes.
+- [SorceressGameLab — Top down RPG tileset sur itch.io](https://sorceressgamelab.itch.io/top-down-rpg-tileset) : référence de famille de tuiles 16 × 16 et de palette cohérente.
+
+`node scripts/preview-world-art.cjs` produit des captures du véritable rendu dans `test-output/world-art/`, dont les biomes, les transitions, les décors et la fée. Les tests comparent les pixels de rendus qui se chevauchent, vérifient le dessin des routes/ponts, les décors, la parité worker/repli, les limites du préchargement et la lumière de la fée.
 
 ## Début et compagnons
 

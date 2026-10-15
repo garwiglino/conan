@@ -2990,21 +2990,26 @@ const createWorldAtlas = (raw) => {
  function closestRoad(x,y,land=true){let best=null;for(const s of roadIndex.near(x,y)){if(land&&s.r.type==='searoutes')continue;const p=project(x,y,s.a,s.b);if(!best||p.d<best.d-0.01||Math.abs(p.d-best.d)<.01&&s.r.id<best.road.id)best={...p,road:s.r,segment:s,along:s.start+p.t*s.length};}return best;}
  function atDistance(r,d){d=clamp(d,0,r.length);let i=1;while(i<r.cumulative.length-1&&r.cumulative[i]<d)i++;const a=r.pts[i-1],b=r.pts[i],t=(d-r.cumulative[i-1])/(r.cumulative[i]-r.cumulative[i-1]||1);return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}
  function riverAt(x,y){let best=null;for(const s of riverIndex.near(x,y)){const p=project(x,y,s.a,s.b);if(p.d<s.r.width/2&&(!best||p.d<best.d))best={...p,river:s.r};}return best;}
+ function coastDistance(x,y,max=12){const c=cellAt(x,y);if(!c?.land)return 0;let best=Infinity;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,a=[c.polygon[i],c.polygon[i+1]],b=[c.polygon[j],c.polygon[j+1]],p=project(x,y,a,b);if(p.d>max||p.d>=best)continue;const len=distance(a,b)||1,nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len;if([1,-1].some(sign=>cellAt(p.x+nx*sign*2,p.y+ny*sign*2)?.land===false))best=p.d;}return best;}
  function terrain(x,y){const c=cellAt(x+.5,y+.5);if(!c)return 8;const near=closestRoad(x+.5,y+.5),on=near&&near.d<=near.road.width/2+.2;
   if(!c.land)return 3;
   if(riverAt(x+.5,y+.5))return on?5:3;
   if(on)return 1;
   const site=siteAt(x+.5,y+.5);if(site)return site.kind==='town'||site.kind==='ruin'?2:0;
   const noise=Math.sin(x/94)*Math.cos(y/113)+Math.sin((x+y)/39)*.2;
-  if(c.height>58&&noise>1.1)return 8;
-  if(random(x,y,39)<.016)return 4;
+  if((c.height>58&&noise>1.1)||([1,2].includes(c.biome)&&c.height>30&&noise>1.08))return 8;
+  // Woodland clumps with clearings. The cleared road corridor takes priority.
+  const wooded=[5,6,7,8,9,12].includes(c.biome),grove=(Math.sin(x/8)*Math.cos(y/11)+1)/2;
+  const density=wooded?.018+.055*grove*grove:c.biome===11?.012:.016;
+  if((!near||near.d>near.road.width/2+1)&&random(x,y,39)<density)return 4;
   return 0;
  }
  function environment(x,y){const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}const own={biome:c.biome,cursed:curseCells.has(c.id),weight:1};if(nearest&&nearest.d<800){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);if(other){const weight=.5*(1-nearest.d/800);own.weight=1-weight;return {biome:c.biome,mix:[own,{biome:other.biome,cursed:curseCells.has(other.id),weight}]};}}return {biome:c.biome,mix:[own]};}
  function propAt(x,y,t){const c=cellAt(x+.5,y+.5);if(!c)return null;let kind;
   const blend=environment(x+.5,y+.5),sample=blend.mix.length>1&&random(x,y,49)<blend.mix[1].weight?blend.mix[1]:blend.mix[0],biome=sample?.biome??c.biome;
-  if(t===4)kind=sample?.cursed?'world_cursed':biome===11?'rock_e':[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(random(x,y,40)*5)]:[5,7].includes(biome)?'palm':biome===12?'reeds':'world_tree';
-  else if(t===0&&random(x,y,41)<.035)kind=curseCells.has(c.id)?'bones':['scrub','pebbles'][Math.floor(random(x,y,42)*2)];
+  const r=random(x,y,40),v=Math.floor(random(x,y,44)*3);
+  if(t===4)kind=sample?.cursed?(r<.65?'world_cursed':'world_dead_cursed'):biome===11?(r<.65?'world_pine_1':'world_boulder_1'):biome===10?(r<.7?'world_boulder_1':'world_pine_2'):biome===9?(r<.8?'world_pine_0':'world_boulder_2'):[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(r*5)]:biome===8?(r<.55?'world_cypress':'world_oak_'+v):[5,7].includes(biome)?(r<.3?'palm':r<.85?'world_jungle':'world_boulder_2'):biome===12?(r<.7?'world_cypress':'world_boulder_2'):biome===3?(r<.4?'shrub':'rock_a'):(r<.86?'world_oak_'+v:'world_boulder_2');
+  else if(t===0&&random(x,y,41)<.06){const plants=sample?.cursed?['bones','world_gravel']:biome===11?['world_gravel','world_frostgrass']:biome===10?['world_frostgrass','world_gravel']:biome===9?['world_mushrooms','world_frostgrass']:[1,2,3].includes(biome)?['scrub','pebbles']:[5,7].includes(biome)?['world_fern','world_fern','world_flowers']:[8,12].includes(biome)?['world_reeds','world_fern','world_mushrooms']:['world_flowers','world_mushrooms','world_fern'];kind=plants[Math.floor(random(x,y,42)*plants.length)];}
   if(!kind)return null;const q=toGame(x+.5,y+.65);return {kind,...q,world:true};
  }
  const modes={foot:{name:'À pied',metresPerMinute:80,costPerKm:0,verb:'Marche'},horse:{name:'À cheval',metresPerMinute:133.333,costPerKm:.04,verb:'Chevauche'},cart:{name:'En charrette',metresPerMinute:100,costPerKm:.025,verb:'Voyage en charrette'},boat:{name:'En embarcation',metresPerMinute:166.667,costPerKm:.05,verb:'Navigue'}};
@@ -3126,7 +3131,7 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36||!free(x*16+8,y*16+8))continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,crossings,curseCells,riverAt,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;
 
@@ -3145,7 +3150,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=WorldJournalStore;
 const Atlas=createWorldAtlas(WORLD_DATA);
 const ATLAS_TRAIL_NAMES=['Piste du campement','Voie royale','Brèche du Canyon','Chemin de la Source','Piste des Vautours','Route de l’Oasis','Voie des Ruines','Sentier du Ruisseau','Piste de la Citadelle','Chemin du Plateau','Sentier du Monte-charge','Sortie de Grise-Gueule'];
 function atlasCore(x,y){return x>=0&&y>=0&&x<MW&&y<MH;}
-function atlasSiteProps(n){if(n.id==='camp')return [];const p=Atlas.toGame(n.x,n.y),spec=n.kind==='ruin'?[[-6,-7,'column'],[6,-7,'column_b'],[-7,4,'rock_c']]:[[-6,-4,'tent'],[7,-5,'world_cart'],[-9,5,'palm'],[8,6,'barrel'],[0,-7,'world_sign']];return spec.map(([x,y,kind],i)=>({kind,x:p.x+x*16,y:p.y+y*16,world:true,rest:kind==='tent',site:n.id,id:'site-'+n.id+'-'+i}));}
+function atlasSiteProps(n){if(n.id==='camp')return [];const p=Atlas.toGame(n.x,n.y),biome=Atlas.cellAt(n.x,n.y)?.biome,tree=[1,2,5,7].includes(biome)?'palm':biome===11?'world_pine_1':biome===9||biome===10?'world_pine_0':[8,12].includes(biome)?'world_cypress':'world_oak_0',spec=n.kind==='ruin'?[[-6,-7,'column'],[6,-7,'column_b'],[-7,4,'rock_c']]:[[-6,-4,'tent'],[7,-5,'world_cart'],[-9,5,tree],[8,6,'barrel'],[0,-7,'world_sign']];return spec.map(([x,y,kind],i)=>({kind,x:p.x+x*16,y:p.y+y*16,world:true,rest:kind==='tent',site:n.id,id:'site-'+n.id+'-'+i}));}
 Game.prototype.initAtlas=function(saved){const s=saved?.atlas||{};this.atlas=new Atlas.ChunkStore();this.worldState=new Atlas.WorldState(s.world||{clock:saved?.clock??this.clock});this.worldStore=new WorldJournalStore();this.location=new Atlas.LocationTracker();this.atlasProps=Atlas.nodes.flatMap(atlasSiteProps);this.atlasNpcs=[];this.atlasDeaths=s.deaths&&typeof s.deaths==='object'?s.deaths:{};this.journey=null;this.mounted=!!s.mounted;this.atlasMeters=Math.max(0,Number(s.metres)||0);this.journeySerial=Math.max(0,Number(s.serial)||0);this.discovered=new Set(Array.isArray(s.discovered)?s.discovered.filter(id=>Atlas.byId[id]):['camp']);this.worldCheckpoint=s.checkpoint||null;this.navigation=s.navigation&&Atlas.byId[s.navigation]?s.navigation:null;
  this.supplies={food:12,water:18,fatigue:0,...s.supplies};for(const k of ['food','water','fatigue'])this.supplies[k]=clamp(Number(this.supplies[k])||0,0,k==='fatigue'?100:999);
  this.story={escaped:!!saved,fairy:false,recruited:false,delivered:false,home:false,templeFreed:!!saved?.won,...s.story};this.companion={hp:10,hunger:15,thirst:10,trust:30,down:false,x:0,y:0,...s.companion};for(const [k,max]of [['hp',10],['hunger',100],['thirst',100],['trust',100]])this.companion[k]=clamp(Number(this.companion[k])||0,0,max);this.footprints=[];
@@ -3177,7 +3182,7 @@ Game.prototype.coreLocation=function(){const p=this.player,x=p.x/16,y=p.y/16;if(
 Game.prototype.updateLocation=function(dt=0){const w=Atlas.toWorld(this.player.x,this.player.y),d=Atlas.prison,inside=w.x>=d.x&&w.x<=d.x+d.w&&w.y>=d.y&&w.y<=d.y+d.h;return this.location.update(w.x,w.y,dt,{level:this.player.level||0,override:inside?{title:'Geôle de Grise-Gueule',detail:'Prison gobeline · Sarak'}:this.coreLocation()});};
 Game.prototype.atlasContext=function(){if(this.player.level)return null;const w=Atlas.toWorld(this.player.x,this.player.y);return Atlas.siteAt(w.x,w.y,7);};
 const atlasSolid=Game.prototype.solid;
-Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore(x/16,y/16)){const w=Atlas.toWorld(x,y);if([...this.atlasProps,...this.prisonProps||[]].some(o=>{if(Math.abs(x-o.x)>32+r||Math.abs(y-o.y)>40+r)return false;if(o.kind==='tent')return Math.abs(x-o.x)<21+r&&y+r>o.y-24&&y-r<o.y+5;const radius={world_cart:16,column:6,column_b:6,barrel:6,crates:9,jar:5,world_sign:2}[o.kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-10&&y-r<o.y+2;}))return true;
+Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore(x/16,y/16)){const w=Atlas.toWorld(x,y);if([...this.atlasProps,...this.prisonProps||[]].some(o=>{if(Math.abs(x-o.x)>32+r||Math.abs(y-o.y)>40+r)return false;if(o.kind==='tent')return Math.abs(x-o.x)<21+r&&y+r>o.y-24&&y-r<o.y+5;const radius={world_cart:16,column:6,column_b:6,barrel:6,crates:9,jar:5,world_sign:2,palm:5,world_oak_0:5,world_pine_0:5,world_pine_1:5,world_cypress:6}[o.kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-10&&y-r<o.y+2;}))return true;
  for(const e of this.worldState.active(this.clock)){if(!Atlas.EVENT_TYPES[e.type].closed||!Atlas.roadById[e.target]||Atlas.roadById[e.target].type==='searoutes')continue;const route=Atlas.roadById[e.target];if(Math.hypot(w.x-e.x,w.y-e.y)<route.width/2+1+r/16)return true;}}
  return atlasSolid.call(this,x,y,r,level);};
 const atlasNpcMenu=Game.prototype.npcMenu;
@@ -3227,16 +3232,240 @@ const atlasSerialize=Game.prototype.serialize;Game.prototype.serialize=function(
 const atlasMechanismContext=Game.prototype.mechanismContext;
 Game.prototype.mechanismContext=function(){const c=atlasMechanismContext.call(this);if(c?.kind==='talk'&&['fairy','elyne'].includes(c.npc.id)){const other=this.npcs.filter(n=>!['fairy','elyne'].includes(n.id)&&this.npcPresent(n)&&dist(n,this.player)<24).sort((a,b)=>dist(a,this.player)-dist(b,this.player))[0];if(other)return {kind:'talk',npc:other,text:'E  PARLER À '+other.label};}return c;};
 
+/* Native 16 px terrain. The original desert ramps remain the art direction.
+ * All sampling is in absolute world pixels: no tile/chunk-local noise, seams,
+ * rotated lighting or random changes when a chunk is evicted. See docs/world.md.
+ */
+function createWorldTerrainArt(atlas, ramps) {
+ 'use strict';
+ const Math=globalThis.Math;
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), mod=(v,n)=>(v%n+n)%n;
+ const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+ const colors={
+  sand:ramps.sand, road:ramps.road, pave:ramps.pave, water:ramps.water,
+  rock:ramps.rock, mesa:ramps.mesa, wood:ramps.wood,
+  grass:['#26362c','#384b32','#4b6039','#607546','#768850','#929d65','#b3b984'],
+  forest:['#202f2a','#304131','#405439','#526542','#677a4a','#82905c','#a2ab78'],
+  jungle:['#1c3430','#294c39','#376243','#4c7849','#658b51','#84a568','#b1bc7e'],
+  marsh:['#29382f','#3a4b38','#4e5e42','#63734d','#7a8559','#94976c','#b3ae83'],
+  mud:['#282e29','#3e4234','#53513c','#6a6349','#81775a','#9e916c','#b9aa83'],
+  humus:['#2e3025','#434333','#59553d','#6d684b','#827e5c','#9a9270','#b8ad86'],
+  steppe:['#44452b','#5d5d34','#77733e','#918a4d','#a69e60','#bfb57a','#d6ca99'],
+  snow:['#4a6774','#66828d','#839fa7','#a3b9ba','#c2d0ca','#dce1d2','#f0eedc'],
+  tundra:['#343f3a','#4a5549','#626c59','#7b826b','#949b80','#b3b79a','#d1d1b6'],
+  stone:['#262d33','#3e4950','#56626a','#728086','#939e9e','#b6bfba','#d4d6c6'],
+  cursed:['#25242e','#3c3947','#53505d','#6c6874','#84818a','#a09ca5','#bfbbc0'],
+  ash:['#29262e','#423b49','#59515e','#716875','#887d8c','#a398a6','#bfb5bf'],
+  swampWater:['#182f31','#24453e','#35594a','#496d57','#61816b','#82a38a','#a9c2a0','#d4dfb6'],
+  tropicalWater:['#133b49','#1a5360','#216e76','#318c8b','#54a9a0','#83c8b6','#b2ded0','#e1eee1']
+ };
+ const rgb=Object.fromEntries(Object.entries(colors).map(([k,p])=>[k,p.map(hex)]));
+ const bayer=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v=>(v+.5)/16);
+ function noise(x,y,scale,seed){const gx=x/scale,gy=y/scale,ix=Math.floor(gx),iy=Math.floor(gy),fx=gx-ix,fy=gy-iy,sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy),a=atlas.random(ix,iy,seed),b=atlas.random(ix+1,iy,seed),c=atlas.random(ix,iy+1,seed),d=atlas.random(ix+1,iy+1,seed);return a+(b-a)*sx+(c-a)*sy+(a-b-c+d)*sx*sy;}
+ // Cache the lattice, not a huge world texture. Negative coordinates work too.
+ function field(x0,y0,w,h,scale,seed){const ox=Math.floor(x0/scale),oy=Math.floor(y0/scale),gw=Math.ceil(w/scale)+3,gh=Math.ceil(h/scale)+3,L=new Float32Array(gw*gh);for(let y=0;y<gh;y++)for(let x=0;x<gw;x++)L[y*gw+x]=atlas.random(ox+x,oy+y,seed);return (x,y)=>{const gx=x/scale-ox,gy=y/scale-oy,ix=Math.floor(gx),iy=Math.floor(gy),fx=gx-ix,fy=gy-iy,sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy),k=iy*gw+ix,a=L[k],b=L[k+1],c=L[k+gw],d=L[k+gw+1];return a+(b-a)*sx+(c-a)*sy+(a-b-c+d)*sx*sy;};}
+ function family(m){return m.cursed?'cursed':m.biome===11?'snow':m.biome===10?'tundra':m.biome===9?'taiga':m.biome===12?'marsh':m.biome===8?'wetforest':[5,7].includes(m.biome)?'jungle':[6].includes(m.biome)?'forest':[1,2].includes(m.biome)?'desert':m.biome===3?'steppe':'grass';}
+ const profiles={
+  desert:{ground:'sand',bare:'sand',rock:'rock',top:'mesa',water:'water'},
+  steppe:{ground:'steppe',bare:'sand',rock:'rock',top:'mesa',water:'water'},
+  grass:{ground:'grass',bare:'humus',rock:'stone',top:'tundra',water:'water'},
+  forest:{ground:'forest',bare:'humus',rock:'stone',top:'tundra',water:'water'},
+  jungle:{ground:'jungle',bare:'humus',rock:'stone',top:'marsh',water:'tropicalWater'},
+  wetforest:{ground:'forest',bare:'mud',rock:'stone',top:'marsh',water:'swampWater'},
+  marsh:{ground:'marsh',bare:'mud',rock:'stone',top:'marsh',water:'swampWater'},
+  taiga:{ground:'forest',bare:'tundra',rock:'stone',top:'stone',water:'water'},
+  tundra:{ground:'tundra',bare:'stone',rock:'stone',top:'stone',water:'water'},
+  snow:{ground:'snow',bare:'tundra',rock:'stone',top:'snow',water:'water'},
+  cursed:{ground:'cursed',bare:'ash',rock:'cursed',top:'ash',water:'swampWater'}
+ };
+ function tileInfo(x,y){
+  const e=atlas.environment(x+.5,y+.5),parts=e.mix.filter(m=>m.weight>0).map(m=>({...m,family:family(m)})).sort((a,b)=>a.family.localeCompare(b.family)||a.biome-b.biome),shore=atlas.coastDistance(x+.5,y+.5);
+  const gradient=(dx,dy)=>{if(!Number.isFinite(shore))return 0;const n=atlas.coastDistance(x+.5+dx,y+.5+dy,14);return Number.isFinite(n)?n-shore:0;};
+  return {x,y,t:atlas.terrain(x,y),parts:parts.length?parts:[{family:'desert',weight:1}],cell:atlas.cellAt(x+.5,y+.5),shore,shoreX:gradient(1,0),shoreY:gradient(0,1)};
+ }
+
+ function distanceField(mat,w,h,water){const D=new Uint16Array(w*h).fill(320);for(let i=0;i<D.length;i++)if((mat[i]===3)===water)D[i]=0;for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x;let d=D[i];if(x)d=Math.min(d,D[i-1]+10);if(y){d=Math.min(d,D[i-w]+10);if(x)d=Math.min(d,D[i-w-1]+14);if(x<w-1)d=Math.min(d,D[i-w+1]+14);}D[i]=d;}for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;let d=D[i];if(x<w-1)d=Math.min(d,D[i+1]+10);if(y<h-1){d=Math.min(d,D[i+w]+10);if(x)d=Math.min(d,D[i+w-1]+14);if(x<w-1)d=Math.min(d,D[i+w+1]+14);}D[i]=d;}return D;}
+ // Public rectangular renderer also makes overlapping-chunk tests possible.
+ function render(x0,y0,width=512,height=512){
+  const PAD=32,ox=x0-PAD,oy=y0-PAD,w=width+PAD*2,h=height+PAD*2,N=w*h;
+  const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
+  for(let y=0;y<th;y++)for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));
+  const info=(x,y)=>meta[(Math.floor(y/16)-ty0)*tw+Math.floor(x/16)-tx0];
+  const category=t=>t===4?0:t===5?3:t;
+  const edge=field(ox,oy,w,h,9,31),edge2=field(ox,oy,w,h,4,32),broad=field(ox,oy,w,h,40,41),grain=field(ox,oy,w,h,24,45),dunes=field(ox,oy,w,h,56,42),ripple=field(ox,oy,w,h,11,43),patch=field(ox,oy,w,h,86,450),fine=field(ox,oy,w,h,7,451);
+  // Shared route segments: continuous curves, intersections and carriage ruts.
+  const roadTiles=meta.map(m=>atlas.roadIndex.near(m.x+.5,m.y+.5).filter(s=>s.r.type!=='searoutes'&&atlas.project(m.x+.5,m.y+.5,s.a,s.b).d<s.r.width/2+2));
+  const mat=new Uint8Array(N),roadDistance=new Float32Array(N).fill(99),roadWidth=new Float32Array(N),roadAngle=new Float32Array(N);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+   const px=ox+x,py=oy+y,i=y*w+x,m=info(px,py),a=category(m.t),lx=mod(px,16),ly=mod(py,16);let v=a,best=99;
+   const n=edge(px,py)*.75+edge2(px,py)*.25;
+   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const b=category(info(px+dx*16,py+dy*16).t);if(a===b||a===1||b===1)continue;const ex=dx<0?lx+.5:dx>0?15.5-lx:0,ey=dy<0?ly+.5:dy>0?15.5-ly:0,d=Math.hypot(ex,ey);let off=-99;if(a===3||b===3)off=(n-.5)*6*(a===3?1:-1);else if(a===8||b===8)off=(n-.45)*4*(a===8?1:-1);else if(a===2)off=(n-.3)*6;if(d<best&&d<off){v=b;best=d;}}
+   const candidates=roadTiles[(Math.floor(py/16)-ty0)*tw+Math.floor(px/16)-tx0];
+   let rd=99,rw=0,ang=0;
+   for(const s of candidates){const dx=s.b[0]-s.a[0],dy=s.b[1]-s.a[1],q=dx*dx+dy*dy,t=q?clamp(((px/16+.03125-s.a[0])*dx+(py/16+.03125-s.a[1])*dy)/q,0,1):0,d=Math.hypot(px+.5-(s.a[0]+dx*t)*16,py+.5-(s.a[1]+dy*t)*16),hw=s.r.width*8;if(d-hw<rd-rw){rd=d;rw=hw;ang=Math.atan2(dy,dx);}}
+   roadDistance[i]=rd;roadWidth[i]=rw;roadAngle[i]=ang;
+   if(v===1)v=0;
+   if(rw&&rd<rw+(n-.5)*5&&(v===0||v===2))v=1;
+   mat[i]=v;
+  }
+  const dW=distanceField(mat,w,h,true),dL=distanceField(mat,w,h,false);
+  const ds=new Uint8Array(N),dn=new Uint8Array(N),dl=new Uint8Array(N),dr=new Uint8Array(N);
+  for(let x=0;x<w;x++){let r=0;for(let y=h-1;y>=0;y--){const i=y*w+x;ds[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let y=0;y<h;y++){const i=y*w+x;dn[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
+  for(let y=0;y<h;y++){let r=0;for(let x=0;x<w;x++){const i=y*w+x;dl[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let x=w-1;x>=0;x--){const i=y*w+x;dr[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
+  const data=new Uint8ClampedArray(width*height*4),surface=new Uint8Array(width*height);
+  for(let y=PAD;y<h-PAD;y++)for(let x=PAD;x<w-PAD;x++){
+   const px=ox+x,py=oy+y,i=y*w+x,m=mat[i],tile=info(px,py),n=broad(px,py),np=patch(px,py),f=fine(px,py),rand=atlas.random(px,py,5),up=atlas.random(px,py-1,5),dw=dW[i]/10;
+   // Patch selection is ordered independently of the containing macro cell.
+   // A forest/snow border therefore contains snowdrifts and exposed moss,
+   // rather than an abrupt palette swap along the Azgaar polygon.
+   let part=tile.parts[0],acc=0;const pick=clamp((np-.18)/.64,0,.99999);
+   for(const p of tile.parts){acc+=p.weight;if(pick<acc){part=p;break;}}
+   const name=part.family,profile=profiles[name],snow=name==='snow',desert=name==='desert',cursed=name==='cursed';let P=rgb[profile.ground],L=4+(n-.5)*2.2;
+   if(m===0){
+    const exposed=!desert&&(snow?np<.18:np>.68||name==='marsh'&&np<.4);
+    if(exposed){P=rgb[profile.bare];L=3.7+(n-.5)*1.5;}
+    if(desert||name==='steppe'){
+     const nr=dunes(px,py);if(nr>(desert?.34:.64)&&ripple(px,py)>.3){const phase=(py+3*Math.sin(px*.09+nr*6)+1.5*Math.sin(px*.23))/7,r=mod(phase,1);if(r<1/7)L-=1;else if(r>=6/7)L+=1;}
+     if(rand>.994)L-=1.5;else if(rand<.004)L+=1;
+    }else if(snow&&!exposed){
+     const ridge=mod(py+Math.round(Math.sin(px/34)*4+n*7),19);if(ridge===0&&f>.48)L-=.8;else if(ridge===1&&f>.48)L+=.35;
+     if(rand>.998)L=6;
+    }else if(cursed){
+     const crack=Math.abs(grain(px,py)-.5);if(crack<.012&&np>.4)L-=1.4;else if(Math.abs(grain(px,py+1)-.5)<.012&&np>.4)L+=.6;
+    }else{
+     // Little clusters with a dark root and a lit blade; large quiet patches.
+     const gx=Math.floor(px/5),gy=Math.floor(py/5),seed=atlas.random(gx,gy,458),lx=mod(px,5),ly=mod(py,5),tip=1+Math.floor(seed*3);
+     if(!exposed&&f>.38&&seed>.5){if(ly===3&&(lx===tip||lx===tip+1))L-=1.2;if(lx===tip&&ly===2)L+=.7;if(lx===tip-1&&ly===1&&seed>.78)L+=1;}
+     if(rand>.997&&np>.4)L-=1;
+    }
+    if(dw<5)L-=(5-dw)*.24;
+    // Damp beach sand, mud and banks, only on the land side of real water.
+    if(dw<22&&!cursed&&!snow){P=rgb[name==='marsh'?'mud':'sand'];L=dw<4?2+dw*.3:4+(n-.5)*1.7;if(dw>17&&f>.45){P=rgb[profile.ground];L=3.6+(n-.5)*1.4;}}
+    // Ankle-deep wet patches are walkable ground, not invented river crossings.
+    if((name==='marsh'||name==='wetforest')&&np<(name==='marsh'?.36:.23)&&dw>24){P=rgb.swampWater;L=3.7+(n-.5)*1.2;const rim=(name==='marsh'?.36:.23)-np;if(rim<.018)L-=.7;if(mod(py+Math.floor(n*5),13)===0&&f>.58)L+=1;}
+    if(tile.cell?.land&&!cursed&&!snow&&(tile.shore+(mod(px,16)-7.5)/16*tile.shoreX+(mod(py,16)-7.5)/16*tile.shoreY)<6+(n-.5)*3){P=rgb.sand;L=4.5+(n-.5)*1.4-Math.max(0,4-dw)*.38;const r=mod(py+Math.round(Math.sin(px/24)*3),11);if(r===0&&ripple(px,py)>.6)L-=.6;}
+    if(mat[i-w]===1)L+=.8;
+   }else if(m===1){
+    P=rgb[cursed?'ash':snow?'tundra':name==='marsh'?'mud':'road'];L=4+(grain(px,py)-.5)*1.25;
+    if(rand>.988)L=5.5;else if(up>.988)L=2.5;
+    if(mat[i-w]===0||mat[i-w]===2)L-=1.4;else if(mat[i-w*2]===0)L-=.5;
+    if(mat[i-1]===0)L-=.5;
+    const rut=Math.abs(roadDistance[i]-roadWidth[i]*.48);if(rut<1.1&&ripple(px,py)>.33)L-=.65;else if(rut<2&&ripple(px,py)>.33)L+=.25;
+    if(dw<4)L-=(4-dw)*.4;
+   }else if(m===2){
+    P=rgb.pave;const row=Math.floor(py/11),shift=Math.floor(atlas.random(row,0,91)*11),xx=mod(px+shift,17),yy=mod(py,11),stone=atlas.random(Math.floor((px+shift)/17),row,92);L=4+(stone>.8?-1:stone<.12?1:0);
+    if(xx===0||yy===0)L=1;else if(xx===1||yy===1)L+=1;else if(xx===16||yy===10)L-=1;
+    if(rand>.98)L-=1;
+   }else if(m===3){
+    P=rgb[tile.cell?.land?profile.water:'water'];const landDistance=dL[i]/10;let bank=0;for(let j=1;j<=5;j++)if(mat[i-j*w]!==3){bank=j;break;}
+    if(bank===1){P=rgb[profile.bare];L=2;}else if(bank===2){P=rgb[profile.bare];L=1;}else if(bank&&bank<=4)L=1;else if(bank===5)L=2;
+    else L=landDistance<=1?6:landDistance<=2.5?5:4.5-Math.min(1,Math.max(0,(landDistance-4)/3))-Math.min(1,Math.max(0,(landDistance-14)/4));
+    if(!bank&&landDistance>5){const gy=Math.floor(py/9),gx=Math.floor(px/17),h=atlas.random(gx,gy,470),lx=mod(px,17),ly=mod(py,9);if(h>.65&&ly===Math.floor(h*6)+1&&lx>4&&lx<8+Math.floor(h*3))L+=.65;}
+   }else if(m===8){
+    const F=15+Math.floor(noise(px,0,7,47)*5);P=rgb[profile.rock];
+    if(ds[i]<=F){const s=mod(py+Math.round(noise(px,0,13,48)*6+Math.sin(px*.21)),4);L=s===0?4:s===3?2:3;if(dl[i]<=3)L++;else if(dr[i]<=3)L--;if(dl[i]===1||dr[i]===1||ds[i]===1)L=0;if(ds[i]===F)L=1;}
+    else if(dl[i]<4)L=dl[i]===1?0:5;else if(dr[i]<4)L=dr[i]===1?0:2;
+    else{P=rgb[profile.top];L=4+(grain(px,py)-.5)*1.2;const crack=Math.abs(grain(px,py)-.5);if(crack<.018)L=2;else if(Math.abs(grain(px,py+1)-.5)<.018)L=5;if(ds[i]===F+1||dn[i]===2)L=6;else if(dn[i]===1)L=1;}
+   }
+   // Bridges follow the actual road direction, including diagonal crossings.
+   if(tile.t===5&&roadWidth[i]&&roadDistance[i]<=roadWidth[i]+1){
+    const angle=roadAngle[i],along=px*Math.cos(angle)+py*Math.sin(angle),plank=mod(Math.floor(along),5),side=roadWidth[i]-roadDistance[i];P=rgb.wood;L=plank===0?1:plank===1?5:3;if(side<2)L=side<1?1:5;if(plank===2&&side<4)L=1;
+   }
+   if(m!==8)for(let j=1;j<=4;j++)if(mat[i-j*w]===8){L-=j<=2?1.6:.7;break;}
+   const floor=Math.floor(L),fraction=clamp(((L-floor)-.5)*5+.5,0,1),q=clamp(floor+(fraction>bayer[mod(py,4)*4+mod(px,4)]?1:0),0,P.length-1),col=P[q],o=((y-PAD)*width+x-PAD)*4;data[o]=col[0];data[o+1]=col[1];data[o+2]=col[2];data[o+3]=255;surface[o/4]=tile.t===5?5:m;
+  }
+  return {data,width,height,surface};
+ }
+ return {render,noise,family,profiles,colors};
+}
+if(typeof module!=='undefined'&&module.exports)module.exports=createWorldTerrainArt;
+
+/* Authored pixel silhouettes, shared 64 × 64 buffers, feet anchored at 32,56.
+ * Foliage is painted in lit clusters, never independent random colour pixels.
+ * Variants keep the same north-west light; no mirrored shadows.
+ */
+const WORLD_FOLIAGE={
+ oak:['#172a25','#253d2d','#385232','#526d3d','#71894d','#96a469','#bac38b'],
+ birch:['#253328','#3e4b2e','#5b6939','#7b8745','#9fa356','#bdbe77','#d8d49c'],
+ pine:['#172c2a','#25423a','#365a44','#4f7253','#70916a','#95ac87','#bed0ac'],
+ jungle:['#15352e','#245039','#396b43','#52874b','#73a25c','#a0bd79','#cccf9b'],
+ cypress:['#24332d','#394b36','#52633e','#6d7b48','#8d975b','#adb377','#c9c893'],
+ cursed:['#282331','#3b3046','#51435c','#6c5971','#867389','#a595aa','#c0b6c6']
+};
+const WORLD_STONE=['#252c33','#3e4851','#58636d','#74828a','#98a3a5','#bec5bf','#e0dfce'];
+const WORLD_SNOW=['#4a6774','#66828d','#839fa7','#a3b9ba','#c2d0ca','#dce1d2','#f0eedc'];
+function worldLeafCluster(b,cx,cy,rx,ry,P,seed){
+ for(let y=Math.floor(cy-ry-2);y<=cy+ry+2;y++)for(let x=Math.floor(cx-rx-2);x<=cx+rx+2;x++){
+  const dx=(x-cx)/rx,dy=(y-cy)/ry,angle=Math.atan2(dy,dx),edge=1+.07*Math.sin(angle*9+seed)+.035*Math.sin(angle*17),d=dx*dx+dy*dy;if(d>edge)continue;
+  const light=-dx*.5-dy*.8,cluster=hash(Math.floor((x+seed%3)/3),Math.floor(y/3),seed),curl=(x+2*y+Math.floor(cluster*3))%5;
+  let k=d>.84?(light>.12?3:1):light>.4?5:light>-.2?4:light>-.6?3:2;
+  if(d<.83&&cluster>.72&&curl<2)k++;if(d<.8&&cluster<.18&&curl===3)k--;
+  b.set(x,y,P[clamp(k,0,6)],P[0]);
+ }
+}
+function worldTrunk(b,variant=0,P=RAMP.wood){
+ b.shadow(35,57,18,4);const M=new Uint8Array(4096),lean=variant===1?3:-2;
+ strokeMask(M,64,64,[[30,56],[32,42],[31+lean,23]],3,1.4);
+ strokeMask(M,64,64,[[31,43],[22,32],[20,22]],2,1);
+ strokeMask(M,64,64,[[32,38],[42,29],[44,20]],2,1);
+ b.shadeMask(M,P,5,3,1,P[0]);b.line(30,48,28,56,P[5]);b.line(34,50,39,56,P[2]);b.line(32,38,32,51,P[2]);
+}
+for(let v=0;v<3;v++){
+ PROPS['world_oak_'+v]=b=>{worldTrunk(b,v);const P=WORLD_FOLIAGE[v===2?'birch':'oak'];for(const [x,y,rx,ry]of [[19,32,11,9],[43,31,12,10],[32,36,14,10],[20,20,13,11],[42,18,12,10],[31,11,12,9]])worldLeafCluster(b,x+(v===1?2:0),y+(v===2?2:0),rx,ry,P,830+v+x);};
+ PROPS['world_pine_'+v]=b=>{b.shadow(35,57,15,4);blockTier(b,30,33,38,4,14,RAMP.wood);const P=WORLD_FOLIAGE.pine;for(const [cy,rx,ry]of [[44,18,6],[35,15,6],[26,12,5],[18,9,4],[10,5,4]]){
+   for(let y=cy-10;y<=cy+ry;y++)for(let x=32-rx-1;x<=32+rx+1;x++){const width=rx*clamp((y-cy+11)/(10+ry),.05,1),dx=x-32;if(Math.abs(dx)>width||y>cy+ry-Math.abs(dx)*.15)continue;let k=dx<0?4:2;if(y<cy-5)k++;if(modWorld(x+y,5)===0&&y>cy-2)k--;b.set(x,y,P[clamp(k,0,6)],P[0]);}
+   if(v===1){for(let y=cy-6;y<cy+1;y++)for(let x=32-rx;x<32+rx;x++){const dx=Math.abs(x-31),lim=rx*(y-cy+8)/11;if(dx<lim&&modWorld(x*3+y,9)>1)b.set(x,y,WORLD_SNOW[x<32?5:4],P[1]);}}
+  }b.set(31,2,v===1?WORLD_SNOW[6]:P[5]);};
+ PROPS['world_boulder_'+v]=b=>{b.shadow(35,57,13,4);rockTier(b,31,54,11,4,9,882+v,WORLD_STONE);rockTier(b,41,57,5,2,3,887+v,WORLD_STONE);if(v===1){for(let y=40;y<49;y++)for(let x=20;x<42;x++)if(b.solid(x,y)&&!b.solid(x,y-2))b.set(x,y,WORLD_SNOW[x<32?5:4]);}else if(v===2){for(const [x,y]of [[24,45],[29,43],[33,44],[24,49]])for(let dy=0;dy<2;dy++)for(let dx=0;dx<4;dx++)if(b.solid(x+dx,y+dy))b.set(x+dx,y+dy,WORLD_FOLIAGE.oak[dy?2:4]);}};
+}
+function modWorld(v,n){return (v%n+n)%n;}
+PROPS.world_cypress=b=>{worldTrunk(b,1);for(const [a,c]of [[21,51],[42,54],[24,56],[39,48]]){b.line(31,45,a,c,RAMP.wood[1]);b.line(30,45,a-1,c-1,RAMP.wood[4]);}const P=WORLD_FOLIAGE.cypress;for(const [x,y,rx,ry]of [[22,30,11,9],[42,25,12,9],[30,16,13,12],[31,7,7,6]])worldLeafCluster(b,x,y,rx,ry,P,900+x);for(const [x,y,h]of [[13,32,10],[22,34,13],[40,29,12],[48,28,8]]){b.line(x,y,x-1,y+h,P[2]);b.line(x+1,y,x,y+h-2,P[4]);}};
+PROPS.world_jungle=b=>{worldTrunk(b,0);const P=WORLD_FOLIAGE.jungle;for(const [x,y,rx,ry]of [[18,32,12,9],[44,30,13,9],[33,22,17,10],[22,16,12,9],[40,12,13,9],[29,7,9,5]])worldLeafCluster(b,x,y,rx,ry,P,940+x);b.line(42,23,43,41,P[1]);b.line(41,23,42,40,P[4]);b.line(42,40,38,46,P[3]);};
+PROPS.world_fern=b=>{b.shadow(33,56,10,2);const P=WORLD_FOLIAGE.jungle;for(let j=0;j<7;j++){const ang=(j-3)*.35,ex=32+Math.sin(ang)*13,ey=54-Math.cos(ang)*14;b.line(32,55,ex,ey,P[2]);for(let k=2;k<=7;k++){const t=k/8,x=32+(ex-32)*t,y=55+(ey-55)*t,w=4*(1-t)+1;b.line(x,y,x-w,y-2,P[4]);b.line(x,y,x+w,y-1,P[j<3?5:3]);}}};
+PROPS.world_reeds=b=>{b.shadow(34,57,10,3);const P=WORLD_FOLIAGE.cypress;for(let j=0;j<8;j++){const x=24+j*2,h=10+Math.floor(hash(j,0,960)*16);b.line(x,55,x-2,55-h,P[2]);b.line(x-1,54,x-3,56-h,P[4]);b.line(x,52,x+3,45,P[3]);if(j%3===0){b.line(x-2,54-h,x-2,59-h,RAMP.wood[2]);b.line(x-3,54-h,x-3,58-h,RAMP.wood[4]);}}};
+PROPS.world_flowers=b=>{b.shadow(33,56,7,2);for(const [x,y,s]of [[27,53,0],[35,50,1],[39,55,0]]){b.line(x,y,x,y-5,WORLD_FOLIAGE.oak[3]);b.set(x-1,y-1,WORLD_FOLIAGE.oak[5]);b.set(x-1,y-5,s?'#ad88a7':'#c9b986');b.set(x+1,y-5,s?'#ad88a7':'#c9b986');b.set(x,y-6,s?'#dac1cc':'#eee0b1');b.set(x,y-5,'#d3ac64');}};
+PROPS.world_mushrooms=b=>{b.shadow(34,57,7,2);for(const [x,y,r]of [[29,55,3],[36,57,2]]){b.line(x,y,x,y-3,'#c1b598');for(let dx=-r;dx<=r;dx++){b.set(x+dx,y-4,dx<0?'#af8168':'#795a50');if(Math.abs(dx)<r)b.set(x+dx,y-5,'#c29d7d');}b.set(x-1,y-5,'#e3cba1');}};
+PROPS.world_log=b=>{b.shadow(34,57,15,3);for(let y=48;y<=55;y++)for(let x=18;x<=44;x++){const k=y===48?5:y===49?4:y===55?1:2+((x+2*y)%7===0?1:0);b.set(x,y,RAMP.wood[k]);}for(let y=-3;y<=3;y++)for(let x=-2;x<=2;x++)if(x*x/4+y*y/9<=1)b.set(44+x,51+y,RAMP.wood[x===0&&Math.abs(y)<2?2:5]);b.line(25,48,21,42,RAMP.wood[2]);b.line(26,48,22,42,RAMP.wood[4]);for(let x=20;x<36;x++)if(x%5<3)b.set(x,48,WORLD_FOLIAGE.oak[4]);};
+PROPS.world_dead_cursed=b=>{worldTrunk(b,1,WORLD_STONE);const M=new Uint8Array(4096);for(const pts of [[[22,32],[15,25],[14,14]],[[33,29],[32,14],[38,7]],[[41,28],[48,19],[47,10]]])strokeMask(M,64,64,pts,1.8,.6);b.shadeMask(M,WORLD_STONE,5,3,1,WORLD_STONE[0]);b.line(31,42,29,48,'#8b73a0');b.set(30,49,'#c2a5d2');for(const [x,y]of [[16,16],[43,22],[34,34]]){b.set(x,y,'#80a48b');b.set(x+1,y+1,'#b8d1a2');}};
+PROPS.world_gravel=b=>{for(const [x,y,rx]of [[27,55,2],[35,57,3],[39,54,1.5]]){b.shadow(x+1,y+1,rx+1,1);rockTier(b,x,y,rx,1,1,970+x,WORLD_STONE,false);}};
+PROPS.world_frostgrass=b=>{b.shadow(33,57,6,1.5);for(let j=0;j<6;j++){const x=27+j*2,y=55-(j%3);b.line(x,56,x-2,y-3,WORLD_FOLIAGE.cypress[3]);b.line(x,56,x+1,y-4,WORLD_SNOW[3]);b.set(x+1,y-4,WORLD_SNOW[5]);}};
+
+/* Prefetch native terrain off the main thread. The exact same renderer is used
+ * for the first visible sector and the worker, so completion never repaints a
+ * different quality level. 32 images + at most 8 pending jobs, at any distance.
+ */
+function worldArtWorkerSource(){return '"use strict";const createWorldAtlas='+createWorldAtlas.toString()+';const createWorldTerrainArt='+createWorldTerrainArt.toString()+`;let art=null;
+ onmessage=function(e){const m=e.data;if(m.kind==='init'){art=createWorldTerrainArt(createWorldAtlas(m.raw),m.ramps);postMessage({kind:'ready'});return;}if(!art||m.kind!=='render')return;const image=art.render(m.cx*512,m.cy*512);postMessage({key:m.key,width:image.width,height:image.height,data:image.data},[image.data.buffer]);};`;}
+function WorldArtStream(cache,makeCanvas,environment=globalThis){
+ this.cache=cache;this.pending=new Set();this.worker=null;this.failed=false;
+ const put=(key,data,width,height)=>{if(this.cache.has(key))return;const cv=makeCanvas();cv.width=width;cv.height=height;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);this.cache.set(key,cv);while(this.cache.size>32)this.cache.delete(this.cache.keys().next().value);};
+ if(typeof environment.Worker!=='function'||typeof environment.Blob!=='function'||!environment.URL?.createObjectURL)return;
+ let url;
+ const release=()=>{if(url){environment.URL.revokeObjectURL(url);url=null;}};
+ try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}this.pending.delete(m.key);put(m.key,m.data,m.width,m.height);};this.worker.onerror=()=>{release();this.failed=true;this.pending.clear();this.worker?.terminate();this.worker=null;};this.worker.postMessage({kind:'init',raw:Atlas.raw,ramps:RAMP});}
+ catch(e){release();this.failed=true;this.worker?.terminate();this.worker=null;}
+ this.prefetch=(cx,cy)=>{if(!this.worker)return;const jobs=[];for(let y=cy-1;y<=cy+1;y++)for(let x=cx-1;x<=cx+1;x++){const key=x+','+y;if(!cache.has(key)&&!this.pending.has(key))jobs.push({kind:'render',key,cx:x,cy:y,d:Math.hypot(x-cx,y-cy)});}jobs.sort((a,b)=>a.d-b.d);for(const job of jobs){if(this.pending.size>=8)break;this.pending.add(job.key);this.worker.postMessage(job);}};
+}
+
 /* All new game artwork uses the game's native pixel buffer and shared ramps. */
 PROPS.world_sign=function(b){const W=RAMP.wood;b.shadow(34,57,10,3);blockTier(b,30,33,34,2,21,W);blockTier(b,21,45,29,5,3,W);blockTier(b,18,41,39,5,3,W);for(let x=23;x<43;x+=4){b.set(x,32,W[2]);b.set(x-2,42,W[2]);}b.set(32,31,'#dac8a1');b.set(32,41,'#dac8a1');b.line(42,29,47,32,W[4]);b.line(47,32,43,35,W[2]);};
 PROPS.world_cart=function(b){const W=RAMP.wood,I=RAMP.iron;b.shadow(34,57,21,4);blockTier(b,16,45,38,9,5,W);for(let y=31;y<46;y+=4){blockTier(b,16,45,y,2,1,W);b.set(18,y,I[3]);b.set(43,y,I[3]);}for(const x of [20,42]){for(let y=-6;y<=6;y++)for(let dx=-5;dx<=5;dx++){const d=dx*dx/25+y*y/36;if(d<=1&&d>.5)b.set(x+dx,51+y,d>.8?I[1]:W[4]);}b.line(x-4,51,x+4,51,W[2]);b.line(x,46,x,56,W[2]);b.set(x,51,I[4]);}b.line(43,40,57,48,W[1]);b.line(43,39,57,47,W[4]);blockTier(b,24,35,30,4,6,RAMP.rock);};
-PROPS.world_tree=function(b){const W=RAMP.wood;b.shadow(34,57,17,4);const M=new Uint8Array(4096);strokeMask(M,64,64,[[31,56],[32,40],[29,27]],3,1.5);strokeMask(M,64,64,[[32,43],[42,29]],2,1);b.shadeMask(M,W,5,3,1,W[0]);const P=['#182c22','#263f29','#385335','#4f6840','#718252','#99a46c'];for(const [cx,cy,rx,ry]of [[22,27,12,11],[39,23,13,12],[30,14,13,10]])for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++){const d=(x-cx)**2/rx**2+(y-cy)**2/ry**2;if(d>1)continue;const n=hash(x,y,741),lit=(cx-x)/rx*.4+(cy-y)/ry*.6,k=d>.84?1:lit>.35?4:lit>-.35?3:2;b.set(x,y,P[clamp(k+(n>.87?1:0)-(n<.15?1:0),0,5)],P[0]);}};
 PROPS.world_cursed=function(b){const P=['#24232f','#383744','#51515d','#686975','#858995','#b5b6b9','#d2cdd1'];b.shadow(35,57,13,4);rockTier(b,31,55,9,4,12,523,P);rockTier(b,32,43,6,2,16,524,P);b.line(31,31,29,38,'#7160a1');b.line(29,38,33,43,'#a88bca');b.line(33,43,30,50,'#8cd6a3');for(const [x,y]of [[25,37],[37,48],[29,53]]){b.set(x,y,'#ae9eda');b.set(x+1,y+1,'#658b7a');}};
 const atlasNpcDraw=Renderer.prototype.npcDraw;
-Renderer.prototype.npcDraw=function(n){if(n.id!=='fairy'){atlasNpcDraw.call(this,n);if(n.id==='elyne'&&this.g.story.recruited&&!this.g.story.delivered&&this.g.companion.hp<10){box(this.c,n.x-10,n.y-45,20,2,'#34252c');box(this.c,n.x-10,n.y-45,2*this.g.companion.hp,2,'#be807b');}return;}const c=this.c,x=Math.round(n.x),y=Math.round(n.y-12+Math.sin(this.g.time*4)*2),wing=Math.sin(this.g.time*18)>0;c.save();c.globalAlpha=.27;box(c,x-6,y-6,13,13,'#bfbbf2');c.globalAlpha=.8;pixels(c,wing?['11.....11','122...221','.122.221.','..12221..']:['.........','..1...1..','.122.221.','112222211'],x-4,y-5,{'1':'#b4c5c9','2':'#dee8d0'});c.globalAlpha=1;pixels(c,['..11..','.1221.','..33..','..44..','.4554.','..44..','..66..'],x-3,y-6,{'1':'#745b8d','2':'#f3dfb4','3':'#f5edce','4':'#799b95','5':'#d3e4bb','6':'#aaa5c4'});for(let i=0;i<3;i++){const t=this.g.time+i*2;box(c,x-8-Math.sin(t)*6,y+5+i*3,1,1,i%2?'#b2d1a1':'#b6a1ca');}c.restore();};
-Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;this.atlasGround=this.atlasGround||new Map();const a=Atlas.toWorld(this.cam.x-32,this.cam.y-32),b=Atlas.toWorld(this.cam.x+this.W+32,this.cam.y+this.H+32);this.atlasVisible=[];
- for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++){const chunk=g.atlas.get(cx,cy),p=Atlas.toGame(cx*32,cy*32);this.atlasVisible.push(chunk);let cv=this.atlasGround.get(chunk.key);if(!cv){cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;for(let y=0;y<32;y++)for(let x=0;x<32;x++){const wx=cx*32+x,wy=cy*32+y,t=chunk.tiles[y*32+x],h=Atlas.random(wx,wy,622),X=x*16,Y=y*16,cell=Atlas.cellAt(wx,wy),cursed=Atlas.curseCells.has(cell?.id);let palette=atlasGroundPalette(wx+.5,wy+.5);if(t===3)palette=['#456e68','#699286','#345750'];if(t===1)palette=cursed?['#98909a','#b2a8af','#79717d']:['#c29a68','#d7b281','#ac8256'];if(t===2)palette=['#b6a185','#c9b492','#9e896f'];if(t===5)palette=['#91734f','#c1a06d','#664c35'];if(t===8)palette=['#79614b','#9c7c58','#604d40'];box(c,X,Y,16,16,palette[0]);for(let k=0;k<7;k++){const rx=Math.floor(Atlas.random(wx,wy,k+631)*15),ry=Math.floor(Atlas.random(wx,wy,k+651)*15);box(c,X+rx,Y+ry,k%3===0?3:1,1,palette[k%2+1]);}if(t===2){box(c,X,Y,16,1,palette[2]);box(c,X,Y,1,16,palette[2]);box(c,X+2,Y+2,12,1,palette[1]);}if(t===5){for(let yy=1;yy<16;yy+=4){box(c,X,Y+yy,16,1,palette[2]);box(c,X+2,Y+yy+1,12,1,palette[1]);}}if(t===3&&h>.65)box(c,X+2,Y+9,7,1,palette[1]);}this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}this.c.drawImage(cv,Math.round(p.x),Math.round(p.y));}
+Renderer.prototype.npcDraw=function(n){if(n.id!=='fairy'){atlasNpcDraw.call(this,n);if(n.id==='elyne'&&this.g.story.recruited&&!this.g.story.delivered&&this.g.companion.hp<10){box(this.c,n.x-10,n.y-45,20,2,'#34252c');box(this.c,n.x-10,n.y-45,2*this.g.companion.hp,2,'#be807b');}return;}const c=this.c,x=Math.round(n.x),y=Math.round(n.y-12+Math.sin(this.g.time*4)*2),wing=Math.sin(this.g.time*18)>0;c.save();c.globalAlpha=.8;pixels(c,wing?['11.....11','122...221','.122.221.','..12221..']:['.........','..1...1..','.122.221.','112222211'],x-4,y-5,{'1':'#b4c5c9','2':'#dee8d0'});c.globalAlpha=1;pixels(c,['..11..','.1221.','..33..','..44..','.4554.','..44..','..66..'],x-3,y-6,{'1':'#745b8d','2':'#f3dfb4','3':'#f5edce','4':'#799b95','5':'#d3e4bb','6':'#aaa5c4'});for(let i=0;i<3;i++){const t=this.g.time+i*2;box(c,x-8-Math.sin(t)*6,y+5+i*3,1,1,i%2?'#b2d1a1':'#b6a1ca');}c.restore();};
+const WorldTerrainArt=createWorldTerrainArt(Atlas,RAMP);
+Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;this.atlasGround=this.atlasGround||new Map();const a=Atlas.toWorld(this.cam.x-64,this.cam.y-64),b=Atlas.toWorld(this.cam.x+this.W+64,this.cam.y+this.H+64);this.atlasVisible=[];
+ for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++){
+  const chunk=g.atlas.get(cx,cy),p=Atlas.toGame(cx*32,cy*32);this.atlasVisible.push(chunk);let cv=this.atlasGround.get(chunk.key);
+  if(!cv){cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d'),art=WorldTerrainArt.render(cx*512,cy*512),im=c.createImageData(512,512);im.data.set(art.data);c.putImageData(im,0,0);this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}
+  this.c.drawImage(cv,Math.round(p.x),Math.round(p.y));
+  // Four sparse native-pixel glint phases, only on genuinely open water.
+  if(!chunk.glints){chunk.glints=[];for(let y=1;y<31;y++)for(let x=1;x<31;x++){const i=y*32+x,wx=cx*32+x,wy=cy*32+y;if(chunk.tiles[i]!==3||chunk.tiles[i-1]!==3||chunk.tiles[i+1]!==3||chunk.tiles[i-32]!==3||chunk.tiles[i+32]!==3||Atlas.random(wx,wy,475)<.8)continue;chunk.glints.push({x:p.x+x*16+4+Math.floor(Atlas.random(wx,wy,476)*7),y:p.y+y*16+4+Math.floor(Atlas.random(wx,wy,477)*7),phase:Math.floor(Atlas.random(wx,wy,478)*4)});}}
+  for(const glint of chunk.glints){if(glint.x<this.cam.x-3||glint.x>this.cam.x+this.W+3||glint.y<this.cam.y-3||glint.y>this.cam.y+this.H+3)continue;const frame=(Math.floor(g.time*3)+glint.phase)%4;if(frame<3){box(this.c,glint.x+frame-1,glint.y,frame===1?3:2,1,RAMP.water[frame===1?6:5]);if(frame===1)box(this.c,glint.x,glint.y-1,1,1,RAMP.water[5]);}}
+
+ }
  while(this.atlasGround.size>32)this.atlasGround.delete(this.atlasGround.keys().next().value);
+ this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));const centre=Atlas.toWorld(g.player.x,g.player.y);this.atlasArtStream.prefetch?.(Math.floor(centre.x/32),Math.floor(centre.y/32));
  const d=Atlas.prison,dp=Atlas.toGame(Math.floor(d.x),Math.floor(d.y));if(dp.x>this.cam.x-400&&dp.x<this.cam.x+this.W+20&&dp.y>this.cam.y-300&&dp.y<this.cam.y+this.H+20){for(let y=0;y<=d.h;y++)for(let x=0;x<=d.w;x++){const X=dp.x+x*16,Y=dp.y+y*16,t=g.tile(X+8,Y+8);box(this.c,X,Y,16,16,t===6?'#494247':'#928277');box(this.c,X+1,Y+1,14,t===6?11:14,t===6?'#75666a':Atlas.random(x,y,781)>.5?'#978b7b':'#9f917f');box(this.c,X+2,Y+2,12,1,t===6?'#9c8880':'#ac9c88');if(t!==6){for(let i=0;i<4;i++)box(this.c,X+Math.floor(Atlas.random(x,y,i+782)*14)+1,Y+Math.floor(Atlas.random(x,y,i+792)*14)+1,2,1,'#847a70');if(Atlas.random(x,y,801)>.6){box(this.c,X+8,Y+8,1,5,'#776f68');box(this.c,X+7,Y+6,1,3,'#776f68');}}if(t===6)box(this.c,X+1,Y+12,14,3,'#38343d');}if(!g.story.escaped){const door=Atlas.toGame(Math.floor(d.door.x),Math.floor(d.door.y)-1);for(let i=0;i<48;i+=6)box(this.c,door.x+4,door.y+i,9,3,'#b0a18d');}}
 };
 Renderer.prototype.visibleAtlasProps=function(){const g=this.g,d=Atlas.prison,inside=o=>{const w=Atlas.toWorld(o.x,o.y);return w.x>=d.x-1&&w.x<=d.x+d.w+1&&w.y>=d.y-1&&w.y<=d.y+d.h+1;};const result=[...g.world.props,...(this.atlasVisible||[]).flatMap(c=>c.props).filter(o=>!inside(o)),...g.atlasProps,...g.prisonProps];for(const e of g.worldState.active(g.clock)){const r=Atlas.roadById[e.target];if(!Atlas.EVENT_TYPES[e.type].closed||!r||r.type==='searoutes')continue;const p=Atlas.toGame(e.x,e.y);for(let i=-2;i<=2;i++)result.push({x:p.x+i*13,y:p.y+i%2*6,kind:'rock_b',world:true});}return result;};
@@ -3249,12 +3478,11 @@ Renderer.prototype.frame=function(){if(this.g.journey){const c=this.c;c.save();c
 const atlasGuidance=Game.prototype.questGuidance;
 Game.prototype.questGuidance=function(){const original=atlasGuidance.call(this);if(this.navigation&&Atlas.byId[this.navigation]){const p=Atlas.byId[this.navigation],w=Atlas.toWorld(this.player.x,this.player.y),road=Atlas.closestRoad(w.x,w.y);let target=p;if(road&&road.d<50){const start=road.segment.a[2],path=Atlas.findPath(start,p.vertex,{mode:'foot',allowBoat:true,state:this.worldState,clock:this.clock});if(path?.length){const next=Atlas.vertices.get(path[0].to);target={x:next[0],y:next[1]};}}return [{quest:{main:true},target:Atlas.toGame(target.x,target.y)}];}return original;};
 
-function atlasGroundPalette(x,y){const mix=Atlas.environment(x,y).mix,palette=m=>m.cursed?['#777177','#87818b','#66646d']:[1,2].includes(m.biome)?['#bd8a50','#c9975c','#a67844']:m.biome===11?['#c5ccca','#e0dfd0','#a1afae']:[9,10].includes(m.biome)?['#98a49a','#b4bcb0','#7e8c83']:m.biome===12?['#66775e','#7e8b6b','#50644f']:[5,7,8].includes(m.biome)?['#777f56','#8c9161','#646e48']:['#8a9065','#9ca373','#757c51'];if(mix.length<2)return palette(mix[0]||{biome:1});const colors=mix.map(m=>({p:palette(m),weight:m.weight}));return [0,1,2].map(i=>'#'+[1,3,5].map(channel=>Math.round(colors.reduce((v,m)=>v+parseInt(m.p[i].slice(channel,channel+2),16)*m.weight,0)).toString(16).padStart(2,'0')).join(''));}
 const atlasWeatherFX=Renderer.prototype.weatherFX;
 Renderer.prototype.weatherFX=function(...args){const w=Atlas.toWorld(this.g.player.x,this.g.player.y),p=Atlas.prison;if(w.x>p.x&&w.x<p.x+p.w&&w.y>p.y&&w.y<p.y+p.h){const old=this.g.sky();this.g._sky={...old,rain:0,storm:0};try{return atlasWeatherFX.apply(this,args);}finally{this.g._sky=old;this.g._skyClock=null;}}return atlasWeatherFX.apply(this,args);};
 
 const atlasMagic=Renderer.prototype.magic;
-Renderer.prototype.magic=function(){const result=atlasMagic.call(this),g=this.g;for(const o of (this.atlasVisible||[]).flatMap(c=>c.props)){if(o.kind!=='world_cursed'||Math.abs(o.x-g.player.x)>this.W||Math.abs(o.y-g.player.y)>this.H)continue;const pulse=.7+.15*Math.sin(g.time*2+o.x),col=[153,120,199];result.L.push([o.x,o.y-5,23,col,.25*pulse]);result.G.push([o.x,o.y-19,9,col,.35*pulse],[o.x-2,o.y-8,7,[124,207,153],.3*pulse]);}const f=g.fairyActor;result.L.push([f.x,f.y-8,18,[167,192,173],.3]);result.G.push([f.x,f.y-12,9,[194,180,228],.4]);for(const o of g.prisonProps||[])if(o.kind==='torch')result.L.push([o.x,o.y-10,45,[255,171,95],.6]);return result;};
+Renderer.prototype.magic=function(){const result=atlasMagic.call(this),g=this.g;for(const o of (this.atlasVisible||[]).flatMap(c=>c.props)){if(o.kind!=='world_cursed'||Math.abs(o.x-g.player.x)>this.W||Math.abs(o.y-g.player.y)>this.H)continue;const pulse=.7+.15*Math.sin(g.time*2+o.x),col=[153,120,199];result.L.push([o.x,o.y-5,23,col,.25*pulse]);result.G.push([o.x,o.y-19,9,col,.35*pulse],[o.x-2,o.y-8,7,[124,207,153],.3*pulse]);}const f=g.fairyActor,fy=f.y-12+Math.sin(g.time*4)*2,pulse=.88+.12*Math.sin(g.time*3);result.L.push([f.x,fy,28,[173,210,198],.55*pulse]);result.G.push([f.x,fy,13,[190,180,235],.7*pulse],[f.x,fy,5,[228,247,205],.65]);for(const o of g.prisonProps||[])if(o.kind==='torch')result.L.push([o.x,o.y-10,45,[255,171,95],.6]);return result;};
 const atlasRainGround=renderRainGround;
 renderRainGround=function(renderer,...args){if(!renderer.g?.atlas||!renderer.g.player)return atlasRainGround(renderer,...args);const w=Atlas.toWorld(renderer.g.player.x,renderer.g.player.y),p=Atlas.prison;if(w.x>p.x&&w.x<p.x+p.w&&w.y>p.y&&w.y<p.y+p.h){renderer.rainVisuals=null;return;}return atlasRainGround(renderer,...args);};
 

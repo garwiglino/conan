@@ -50,21 +50,26 @@ const createWorldAtlas = (raw) => {
  function closestRoad(x,y,land=true){let best=null;for(const s of roadIndex.near(x,y)){if(land&&s.r.type==='searoutes')continue;const p=project(x,y,s.a,s.b);if(!best||p.d<best.d-0.01||Math.abs(p.d-best.d)<.01&&s.r.id<best.road.id)best={...p,road:s.r,segment:s,along:s.start+p.t*s.length};}return best;}
  function atDistance(r,d){d=clamp(d,0,r.length);let i=1;while(i<r.cumulative.length-1&&r.cumulative[i]<d)i++;const a=r.pts[i-1],b=r.pts[i],t=(d-r.cumulative[i-1])/(r.cumulative[i]-r.cumulative[i-1]||1);return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}
  function riverAt(x,y){let best=null;for(const s of riverIndex.near(x,y)){const p=project(x,y,s.a,s.b);if(p.d<s.r.width/2&&(!best||p.d<best.d))best={...p,river:s.r};}return best;}
+ function coastDistance(x,y,max=12){const c=cellAt(x,y);if(!c?.land)return 0;let best=Infinity;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,a=[c.polygon[i],c.polygon[i+1]],b=[c.polygon[j],c.polygon[j+1]],p=project(x,y,a,b);if(p.d>max||p.d>=best)continue;const len=distance(a,b)||1,nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len;if([1,-1].some(sign=>cellAt(p.x+nx*sign*2,p.y+ny*sign*2)?.land===false))best=p.d;}return best;}
  function terrain(x,y){const c=cellAt(x+.5,y+.5);if(!c)return 8;const near=closestRoad(x+.5,y+.5),on=near&&near.d<=near.road.width/2+.2;
   if(!c.land)return 3;
   if(riverAt(x+.5,y+.5))return on?5:3;
   if(on)return 1;
   const site=siteAt(x+.5,y+.5);if(site)return site.kind==='town'||site.kind==='ruin'?2:0;
   const noise=Math.sin(x/94)*Math.cos(y/113)+Math.sin((x+y)/39)*.2;
-  if(c.height>58&&noise>1.1)return 8;
-  if(random(x,y,39)<.016)return 4;
+  if((c.height>58&&noise>1.1)||([1,2].includes(c.biome)&&c.height>30&&noise>1.08))return 8;
+  // Woodland clumps with clearings. The cleared road corridor takes priority.
+  const wooded=[5,6,7,8,9,12].includes(c.biome),grove=(Math.sin(x/8)*Math.cos(y/11)+1)/2;
+  const density=wooded?.018+.055*grove*grove:c.biome===11?.012:.016;
+  if((!near||near.d>near.road.width/2+1)&&random(x,y,39)<density)return 4;
   return 0;
  }
  function environment(x,y){const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}const own={biome:c.biome,cursed:curseCells.has(c.id),weight:1};if(nearest&&nearest.d<800){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);if(other){const weight=.5*(1-nearest.d/800);own.weight=1-weight;return {biome:c.biome,mix:[own,{biome:other.biome,cursed:curseCells.has(other.id),weight}]};}}return {biome:c.biome,mix:[own]};}
  function propAt(x,y,t){const c=cellAt(x+.5,y+.5);if(!c)return null;let kind;
   const blend=environment(x+.5,y+.5),sample=blend.mix.length>1&&random(x,y,49)<blend.mix[1].weight?blend.mix[1]:blend.mix[0],biome=sample?.biome??c.biome;
-  if(t===4)kind=sample?.cursed?'world_cursed':biome===11?'rock_e':[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(random(x,y,40)*5)]:[5,7].includes(biome)?'palm':biome===12?'reeds':'world_tree';
-  else if(t===0&&random(x,y,41)<.035)kind=curseCells.has(c.id)?'bones':['scrub','pebbles'][Math.floor(random(x,y,42)*2)];
+  const r=random(x,y,40),v=Math.floor(random(x,y,44)*3);
+  if(t===4)kind=sample?.cursed?(r<.65?'world_cursed':'world_dead_cursed'):biome===11?(r<.65?'world_pine_1':'world_boulder_1'):biome===10?(r<.7?'world_boulder_1':'world_pine_2'):biome===9?(r<.8?'world_pine_0':'world_boulder_2'):[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(r*5)]:biome===8?(r<.55?'world_cypress':'world_oak_'+v):[5,7].includes(biome)?(r<.3?'palm':r<.85?'world_jungle':'world_boulder_2'):biome===12?(r<.7?'world_cypress':'world_boulder_2'):biome===3?(r<.4?'shrub':'rock_a'):(r<.86?'world_oak_'+v:'world_boulder_2');
+  else if(t===0&&random(x,y,41)<.06){const plants=sample?.cursed?['bones','world_gravel']:biome===11?['world_gravel','world_frostgrass']:biome===10?['world_frostgrass','world_gravel']:biome===9?['world_mushrooms','world_frostgrass']:[1,2,3].includes(biome)?['scrub','pebbles']:[5,7].includes(biome)?['world_fern','world_fern','world_flowers']:[8,12].includes(biome)?['world_reeds','world_fern','world_mushrooms']:['world_flowers','world_mushrooms','world_fern'];kind=plants[Math.floor(random(x,y,42)*plants.length)];}
   if(!kind)return null;const q=toGame(x+.5,y+.65);return {kind,...q,world:true};
  }
  const modes={foot:{name:'À pied',metresPerMinute:80,costPerKm:0,verb:'Marche'},horse:{name:'À cheval',metresPerMinute:133.333,costPerKm:.04,verb:'Chevauche'},cart:{name:'En charrette',metresPerMinute:100,costPerKm:.025,verb:'Voyage en charrette'},boat:{name:'En embarcation',metresPerMinute:166.667,costPerKm:.05,verb:'Navigue'}};
@@ -186,6 +191,6 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36||!free(x*16+8,y*16+8))continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,crossings,curseCells,riverAt,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;
