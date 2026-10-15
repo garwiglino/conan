@@ -39,6 +39,45 @@ test('lightning lifts the same night tint that controls the lamps without washin
  for(const h of [0,7,12,17,20,23]){const s={...a.dayCycle(h*60),rain:.95,cloud:.98};const normal=a.weatherTint(s),flash=a.weatherTint(s,.85);assert.ok(flash.every(v=>v<255));if(s.night>.5)assert.ok(flash.every((v,i)=>v>normal[i]));}
  const g=new a.Game(),r={g,nightK:a.Renderer.prototype.nightK},torch={x:376,y:600};g.clock=720;const daytime=a.Renderer.prototype.litOf.call(r,torch);g.clock=1380;assert.ok(a.Renderer.prototype.litOf.call(r,torch)>=daytime);assert.equal(r.nightK(),1);
 });
+test('rain always falls down-left through changing wind and intensity, even after hours of play',()=>{
+ let sky={rain:.95,wind:.9};const cam={x:100,y:200};
+ const fresh={time:0,sky:()=>sky,tile:()=>0},old={...fresh,time:36000};
+ const first=new a.RainVisuals(fresh,320,180),late=new a.RainVisuals(old,320,180);
+ first.step(sky,cam);late.step(sky,cam);
+ for(let frame=1;frame<=600;frame++){
+  sky={rain:.15+.8*(.5+.5*Math.cos(frame*.08)),wind:frame%100<50?0:1};
+  const prev=late.drops.map(d=>({...d}));fresh.time=frame/60;old.time=36000+frame/60;
+  first.step(sky,cam);late.step(sky,cam);
+  assert.ok(late.slant>=.04&&late.slant<=1);
+  for(let i=0;i<prev.length;i++){
+   const p=prev[i],d=late.drops[i];
+   if(p.x>=0&&p.x<=320&&p.y>=0&&p.y<=180){
+    assert.ok(d.x<=p.x&&d.y>=p.y,'visible drops cannot reverse direction');
+    assert.ok(d.y-p.y<7.1&&p.x-d.x<7.1,'weather changes cannot teleport drops');
+   }
+   assert.ok(Math.abs(d.x-first.drops[i].x)<1e-5&&Math.abs(d.y-first.drops[i].y)<1e-5,'absolute session age cannot affect trajectories');
+  }
+ }
+ const stopped=late.drops.map(d=>[d.x,d.y]);late.step(sky,cam);assert.deepEqual(late.drops.map(d=>[d.x,d.y]),stopped);
+});
+test('ground impacts remain anchored while the camera moves and weather changes; walls and shelters stay clear',()=>{
+ let sky={rain:1,wind:.8};const g={time:0,sky:()=>sky,tile:(x,y)=>x<40?6:y<50?3:0,tentAt:(x,y)=>x>120&&x<150&&y>100};
+ const fx=new a.RainVisuals(g,320,180),cam={x:0,y:0};
+ for(let i=0;i<40;i++){g.time+=1/60;fx.step(sky,cam);}
+ assert.ok(fx.impacts.length>30);assert.ok(fx.impacts.some(h=>h.water));
+ const anchors=new Map(fx.impacts.map(h=>[h,{x:h.x,y:h.y,age:h.age}]));
+ sky={rain:.2,wind:0};g.time+=1/60;fx.step(sky,{x:12,y:7});
+ let retained=0;
+ for(const hit of fx.impacts){assert.notEqual(g.tile(hit.x,hit.y),6);assert.ok(!g.tentAt(hit.x,hit.y));if(anchors.has(hit)){const before=anchors.get(hit);retained++;assert.equal(hit.x,before.x);assert.equal(hit.y,before.y);assert.ok(hit.age>before.age);}}
+ assert.ok(retained>20);
+});
+test('ground splashes draw distinct visible pixel-art poses through their lifetime',()=>{
+ const sky={rain:.52,wind:.3,night:0},g={time:0,sky:()=>sky,tile:()=>0},r={g,cam:{x:0,y:0}};
+ const fx=r.rainVisuals=new a.RainVisuals(g,320,180),hit={x:100,y:90,age:0,life:.5,water:false};fx.impacts.push(hit);
+ const poses=[];let drawn;const c={save(){},restore(){},fillRect(...rect){drawn.push([...rect,this.globalAlpha]);}};
+ for(const phase of [.05,.3,.55,.8]){hit.age=phase*hit.life;drawn=[];a.renderRainGround(r,c,320,180);assert.ok(drawn.length>0&&drawn.every(p=>p[4]>.2));poses.push(JSON.stringify(drawn.map(p=>p.slice(0,4))));}
+ assert.equal(new Set(poses).size,4);
+});
 function midiTracks(file){const b=fs.readFileSync(file);assert.equal(b.toString('ascii',0,4),'MThd');assert.equal(b.readUInt16BE(8),1);assert.equal(b.readUInt16BE(10),5);assert.equal(b.readUInt16BE(12),480);let offset=14;const parsed={};
  for(let track=0;track<5;track++){assert.equal(b.toString('ascii',offset,offset+4),'MTrk');const end=offset+8+b.readUInt32BE(offset+4);let p=offset+8,t=0,name='',notes=[],active=new Map();const vlq=()=>{let n=0,c;do{c=b[p++];n=(n<<7)|(c&127);}while(c&128);return n;};
   while(p<end){t+=vlq();const status=b[p++];if(status===255){const type=b[p++],n=vlq();if(type===3)name=b.toString('utf8',p,p+n);p+=n;continue;}if((status&240)===192){p++;continue;}const n=b[p++],v=b[p++];if((status&240)===144&&v){assert.ok(!active.has(n));active.set(n,{t,v});}else{const on=active.get(n);assert.ok(on);notes.push([on.t,t-on.t,n,on.v]);active.delete(n);}}
