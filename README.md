@@ -22,6 +22,12 @@ Le Prêtre du Serpent utilise maintenant son [pack Aseprite](sprites/personnages
 
 Après publication, fermer complètement l'app iOS native puis la rouvrir avec une connexion pour recevoir le jeu actualisé. La sauvegarde existante est conservée. Le nouveau nom sous l'icône et l'icône native sont inclus dans les sources Xcode ; leur installation nécessite une reconstruction de l'app. Voir [les instructions iOS](ios/LISEZMOI.md).
 
+## Quêtes et repos
+
+Le suivi conserve une flèche or pour la quête principale et une flèche bleue pour la première quête secondaire suivie encore à accomplir, dans l’ordre de suivi. Dès que son objectif est rempli, la flèche passe à la suivante : elle ne pointe jamais vers le donneur. La récompense reste à récupérer auprès du PNJ ; le journal distingue « En cours », « À rendre » et « Accomplies », avec le donneur indiqué discrètement.
+
+Le panneau au-dessus du joystick permet de faire défiler toutes les quêtes suivies au doigt, à la molette ou au clavier. Il affiche trois cartes entières (deux sur les écrans les plus courts), avec un arrêt doux aligné sur les cartes. Les mises à jour de progression conservent le défilement en cours. Les abris du Veilleur et de Zahra sont privés : seule la tente de repos du campement de départ permet de dormir.
+
 ## Sources du menu
 
 - [Logo animé Aseprite](art/title/hearthreaver-logo.aseprite) : quatre calques et douze images de 120 ms.
