@@ -78,7 +78,8 @@ const travelStart=Game.prototype.startJourney;
 Game.prototype.startJourney=function(plan){if(this.party.some(c=>!c.spirit&&(c.status==='waiting'||c.down||!this.nearCompanion(c)))){this.emit('notice',{title:'Rassemble le groupe',text:'Les compagnons doivent être présents, soignés et prêts à suivre.'});return false;}return travelStart.call(this,plan);};
 const travelBodies=Game.prototype.bodies;
 Game.prototype.bodies=function(o){return travelBodies.call(this,o).filter(n=>!this.party?.some(c=>c.id===n.id));};
-Game.prototype.navigationInfo=function(){const site=this.mapPlaces.find(n=>n.id===this.navigation);if(!site)return null;const w=Atlas.toWorld(this.player.x,this.player.y),metres=Math.hypot(site.x-w.x,site.y-w.y);return {site,metres,label:metres>=1000?(metres/1000).toFixed(1).replace('.',',')+' km':Math.round(metres)+' m',target:Atlas.toGame(site.x,site.y),arrived:metres<=site.radius};};
+function travelDistance(metres){return metres>=1000?(metres/1000).toFixed(3).replace('.',',')+' km':Math.round(metres)+' m';}
+Game.prototype.navigationInfo=function(){const site=this.mapPlaces.find(n=>n.id===this.navigation);if(!site||!this.isPlaceVisited(site))return null;const w=Atlas.toWorld(this.player.x,this.player.y),metres=Math.hypot(site.x-w.x,site.y-w.y);return {site,metres,label:travelDistance(metres),target:Atlas.toGame(site.x,site.y),arrived:metres<=site.radius};};
 const travelNpcPresent=Game.prototype.npcPresent;
 Game.prototype.npcPresent=function(n){return this.party?.some(c=>c.id===n.id)||travelNpcPresent.call(this,n);};
 const travelSolid=Game.prototype.solid;

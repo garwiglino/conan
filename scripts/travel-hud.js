@@ -19,10 +19,14 @@ const travelHud=Renderer.prototype.hud;
 Renderer.prototype.hud=function(){travelHud.call(this);const g=this.g;if(!g.location?.current||g.dialogue||g.journey)return;const c=this.c,L=g.location.current,x=(this.safe.l||0)+5,y=this.top+5,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80));
  c.save();c.globalAlpha=.88;box(c,x-2,y-2,max+5,18,'#1b1715');c.globalAlpha=1;box(c,x-2,y-2,1,18,'#b79c66');c.font='6px PixelUI, monospace';travelText(c,travelFit(c,L.title,max-4),x+2,y,'#e9d8b6');travelText(c,travelFit(c,L.detail||'Terres Sauvages',max-4),x+2,y+8,'#b8baa1');c.restore();this.navigationMarker();
 };
+// A native-pixel cloth pennant: bronze staff, sage cloth, cream stitching.
+function drawTravelPin(c,x,y){pixels(c,['.11........','.14333331..','.142222231.','.14222231..','.1433331...','.14........','.14........','.14........','.14........','11111......'],Math.round(x),Math.round(y),{'1':'#24180f','2':'#8eaa76','3':'#d4d7a6','4':'#ba8a4a'});}
 Renderer.prototype.navigationMarker=function(){const info=this.g.navigationInfo();if(!info)return;const c=this.c,x=(this.safe.l||0)+5,y=this.top+26,w=Math.min(144,this.W-76),name=info.site.name;
- c.save();c.font='6px PixelUI, monospace';box(c,x-2,y-2,w+5,10,'#182729');c.strokeStyle='#adbcff';c.lineWidth=1;c.beginPath();c.moveTo(x+3,y);c.lineTo(x+6,y+3);c.lineTo(x+3,y+6);c.lineTo(x,y+3);c.closePath();c.stroke();travelText(c,info.label+' · '+travelFit(c,name,w-10-c.measureText(info.label+' · ').width),x+10,y,'#adbcff');
- // A hollow compass circle is visually separate from filled quest arrows.
- const sx=info.target.x-this.cam.x,sy=info.target.y-this.cam.y+this.top-24,centre={x:this.W/2,y:(this.H+this.top)/2},dx=sx-centre.x,dy=sy-centre.y,top=this.top+46,bottom=this.H-28;
- let mx=sx,my=sy;if(mx<12||mx>this.W-12||my<top||my>bottom){const k=Math.min((this.W/2-12)/Math.max(.0001,Math.abs(dx)),(dy<0?centre.y-top:bottom-centre.y)/Math.max(.0001,Math.abs(dy)));mx=centre.x+dx*k;my=centre.y+dy*k;}
- mx=Math.round(mx);my=Math.round(my);c.fillStyle='#172b2ddd';c.strokeStyle='#a4b4ff';c.lineWidth=1;c.beginPath();c.arc(mx,my,5,0,Math.PI*2);c.fill();c.stroke();if(info.arrived){box(c,mx-1,my-1,2,2,'#c7f0eb');}else{const angle=Math.atan2(dy,dx);c.beginPath();c.moveTo(mx+Math.cos(angle)*3,my+Math.sin(angle)*3);c.lineTo(mx-Math.cos(angle+.7)*2,my-Math.sin(angle+.7)*2);c.lineTo(mx-Math.cos(angle-.7)*2,my-Math.sin(angle-.7)*2);c.closePath();c.fillStyle='#c5cfff';c.fill();}c.restore();
+ c.save();c.font='6px PixelUI, monospace';box(c,x-2,y-2,w+5,12,'#211a13');box(c,x-2,y-2,1,12,'#92703f');drawTravelPin(c,x,y-1);travelText(c,info.label+' · '+travelFit(c,name,w-14-c.measureText(info.label+' · ').width),x+14,y,'#d4d7a6');
+ const sx=info.target.x-this.cam.x,sy=info.target.y-this.cam.y+this.top-24,centre={x:this.W/2,y:(this.H+this.top)/2},dx=sx-centre.x,dy=sy-centre.y,top=this.top+50,bottom=this.H-28;
+ let mx=sx,my=sy;const offscreen=mx<12||mx>this.W-12||my<top||my>bottom;
+ if(offscreen){const k=Math.min((this.W/2-12)/Math.max(.0001,Math.abs(dx)),(dy<0?centre.y-top:bottom-centre.y)/Math.max(.0001,Math.abs(dy)));mx=centre.x+dx*k;my=centre.y+dy*k;}
+ mx=Math.round(mx);my=Math.round(my);drawTravelPin(c,mx-4,my-6);
+ if(offscreen){const a=Math.round(Math.atan2(dy,dx)/(Math.PI/4))*Math.PI/4;for(const d of [9,12])box(c,mx+Math.round(Math.cos(a)*d),my+Math.round(Math.sin(a)*d),1,1,'#d4d7a6');}
+ this.navigationReadout={metres:info.metres,label:info.label};c.restore();
 };
