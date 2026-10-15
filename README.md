@@ -48,6 +48,14 @@ Chaque éclair produit une seule impulsion douce qui éclaire ensemble le terrai
 
 Cinq compositions MIDI originales, chacune avec quatre pistes d’instruments et une piste de direction, alimentent le synthétiseur météo du jeu : [pluie fine](audio/rain-light.mid), [pluie soutenue](audio/rain-steady.mid), [grosse averse](audio/rain-downpour.mid), [tonnerre proche](audio/thunder-near.mid), [tonnerre lointain](audio/thunder-distant.mid). Les gouttes irrégulières, éclaboussures, nappes de pluie et rafales se mélangent en douceur ; les claquements, roulements et échos du tonnerre se superposent. Leur volume suit les **bruitages**, indépendamment de la musique. `npm run build:weather` reconstruit les MIDI et intègre les partitions et les sources météo dans les versions web et iOS.
 
+Les trois pluies utilisent des nappes stéréo continues à boucles croisées, pilotées en legato par leurs pistes MIDI. Les changements de notes modulent leur intensité sans relancer la texture. Les gouttes et éclaboussures restent irrégulières et discrètes ; les raccords des échantillons et de la partition ne créent ni silence ni reprise d’attaque. Les trois niveaux se fondent entre eux et les sources sont libérées après le retour au sec.
+
+## Introduction du studio
+
+Le [logo Crest Interactive fourni](art/studio/crest-interactive.svg) est intégré au HTML, y compris dans la version iOS hors ligne. Au lancement : apparition sur noir, maintien, disparition vers le noir, puis apparition progressive du menu. Toucher l’écran, Entrée, Espace ou Échap passe l’introduction ; le geste est consommé pour ne pas activer accidentellement Nouvelle partie. Le mode de réduction des animations raccourcit cette séquence.
+
+La musique du titre démarre dès l’introduction et continue sans redémarrer à l’arrivée du menu. Les réglages de volume et de coupure mémorisés sont respectés. L’app native autorise la lecture automatique ; lorsqu’un navigateur bloque l’audio avant toute interaction, le premier toucher le déverrouille. Les sources sont `scripts/startup.js` et `scripts/startup.css` ; `npm run embed:title` les intègre avec le SVG.
+
 ## Sources du menu
 
 - [Logo animé Aseprite](art/title/hearthreaver-logo.aseprite) : quatre calques et douze images de 120 ms.

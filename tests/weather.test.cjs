@@ -58,3 +58,25 @@ test('weather synth renders increasing rain levels and thunder through SFX only,
  sound.sfxOn=false;sound.rain(1);// No extra cue when SFX are muted.
  const music=sound.music;let cues=0;music.cue=()=>cues++;sound.fx('thunder',{near:false});assert.equal(cues,0);
 });
+test('each rain texture stays stereo and continuous across three MIDI loops and noise-buffer wraps',()=>{
+ for(const level of [.24,.52,.96]){
+  const rate=8000,c=new RenderingAudioContext({sampleRate:rate,numberOfChannels:2});Object.defineProperty(c,'state',{value:'running'});
+  const sound=new a.Sound();sound.ctx=c;sound.enabled=true;sound.master=c.createGain();sound.master.gain.value=.3;sound.master.connect(c.destination);
+  for(let t=0;t<66;t+=.1){sound.rain(level);c.processTo(t+.1);}
+  const [left,right]=c.exportAsAudioData().channelData;
+  const rms=(start,end)=>{let sum=0;for(let i=Math.round(start*rate);i<Math.round(end*rate);i++)sum+=left[i]*left[i];return Math.sqrt(sum/Math.round((end-start)*rate));};
+  const bins=[];for(let t=4;t<65;t+=.5)bins.push(rms(t,t+.5));
+  assert.ok(Math.min(...bins)>Math.max(...bins)*.65,'no periodic silences or pumping');
+  for(const boundary of [21.333333+.025,42.666667+.025,64+.025]){
+   const before=rms(boundary-.5,boundary-.1),seam=rms(boundary-.1,boundary+.1),after=rms(boundary+.1,boundary+.5);
+   assert.ok(seam>Math.min(before,after)*.8&&seam<Math.max(before,after)*1.2,'MIDI wrap has no level dip or burst');
+  }
+  let ll=0,rr=0,lr=0;for(let i=rate*5;i<rate*15;i++){ll+=left[i]**2;rr+=right[i]**2;lr+=left[i]*right[i];}
+  assert.ok(Math.abs(lr/Math.sqrt(ll*rr))<.4,'decorrelated stereo texture');
+  for(const buffer of Object.values(sound.music.weatherNoise))for(let ch=0;ch<2;ch++){
+   const d=buffer.getChannelData(ch),n=d.length;let energy=0;
+   for(let i=n-801;i<n-1;i++)energy+=(d[i+1]-d[i])**2;
+   assert.ok(Math.abs(d[0]-d[n-1])<Math.sqrt(energy/800)*5,'noise wrap behaves like adjacent samples');
+  }
+ }
+});

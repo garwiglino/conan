@@ -2,7 +2,7 @@ const {test}=require('node:test'),fs=require('node:fs'),assert=require('node:ass
 const {JSDOM}=require('jsdom'),canvas=require('@napi-rs/canvas'),{RenderingAudioContext}=require('web-audio-engine');
 const {html}=require('./game-harness.cjs');
 test('main menu loads real saves, cancels overwrite, persists audio levels, and ends/resumes its session',async()=>{
- const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics,textSettings,setTextSize};})();');
+ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,studioIntro,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics,textSettings,setTextSize};})();');
  const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
  const destroy=w.close.bind(w);w.close=()=>{closes++;};
  w.HTMLElement.prototype.scrollTo=function(options){this.scrollTop=options.top||0;};
@@ -16,7 +16,7 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
  const errors=[];w.addEventListener('error',e=>{errors.push(e.error?.stack||e.message);e.preventDefault();});
  const $=id=>w.document.getElementById(id),click=id=>$(id).click(),level=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event('input',{bubbles:true}));};
  try{
-  w.eval(script);const a=w.testAPI;await a.BITMAPS.promise;await a.titleScene.promise;assert.equal(a.state,'title');raf(100);
+  w.eval(script);const a=w.testAPI;await a.BITMAPS.promise;await a.titleScene.promise;assert.equal(a.state,'title');assert.equal(a.studioIntro.active,true);assert.equal(a.sound.music.current.name,'title');a.studioIntro.skip();a.studioIntro.update(1);await new Promise(resolve=>setTimeout(resolve,450));raf(100);
   assert.equal($('menuLoad').disabled,true);assert.equal($('titleAudio'),null);w.dispatchEvent(new w.Event('pagehide'));assert.equal(w.localStorage.getItem('conan-serpent-v1'),null);
   const rotate=(width,height)=>{w.innerWidth=width;w.innerHeight=height;w.dispatchEvent(new w.Event('resize'));};
   rotate(390,844);raf(120);assert.equal(a.state,'title');assert.equal($('landscapeGate').hidden,false);assert.equal(w.document.querySelector('.page').inert,true);

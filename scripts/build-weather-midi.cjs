@@ -4,10 +4,18 @@ const scores={},tpb=480,bpm=90,loopTicks=8*4*tpb;
 const rng=seed=>()=>{seed=seed*16807%2147483647;return seed/2147483647;};
 for(const [name,density,gain]of [['rain_light',.3,.7],['rain_steady',.65,.85],['rain_downpour',1,1.05]]){
  const r=rng(730+Math.round(density*100)),tracks={lead:[],arp:[],saw:[],bass:[]};
- // Uneven droplets, separate stone splashes, a rain sheet and slow gusts.
- for(let t=0;t<loopTicks-130;){t+=Math.round(85+(1-density)*300+r()*330);if(t>=loopTicks-130)break;tracks.lead.push(t,25+Math.round(r()*55),62+Math.floor(r()*20),Math.round(25+r()*40+density*18));}
- for(let t=90;t<loopTicks-130;){t+=Math.round(170+(1-density)*540+r()*400);if(t>=loopTicks-130)break;tracks.arp.push(t,25+Math.round(r()*35),70+Math.floor(r()*20),Math.round(20+r()*35+density*20));}
- for(let i=0;i<8;i++){tracks.saw.push(i*1920,1920,48+i%3,Math.round(28+density*65+(i%3-1)*6));tracks.bass.push(i*1920+120,1620,30+i%4,Math.round(12+density*35+(i%4)*4));}
+ // Subtle, irregular foreground droplets over uninterrupted, gently changing beds.
+ for(let t=35;t<loopTicks-80;){t+=Math.round(55+(1-density)*170+r()*310);if(t>=loopTicks-80)break;tracks.lead.push(t,22+Math.round(r()*46),62+Math.floor(r()*20),Math.round(24+r()*32+density*12));}
+ for(let t=110;t<loopTicks-90;){t+=Math.round(120+(1-density)*360+r()*460);if(t>=loopTicks-90)break;tracks.arp.push(t,30+Math.round(r()*48),70+Math.floor(r()*20),Math.round(18+r()*24+density*12));}
+ // Adjacent note gates become legato changes in the rain instrument, including the wrap.
+ // Unequal phrase lengths and a cyclic contour avoid an audible bar-by-bar pumping rhythm.
+ for(const [part,steps,note,base,depth]of [['saw',12,48,42+density*54,5],['bass',7,30,20+density*37,7]]){
+  for(let i=0;i<steps;i++){
+   const t=Math.round(i*loopTicks/steps),end=Math.round((i+1)*loopTicks/steps);
+   const shape=Math.sin(i/(steps-1)*Math.PI*2)*.65+Math.sin(i/(steps-1)*Math.PI*4)*.35;
+   tracks[part].push(t,end-t,note,Math.round(base+depth*shape));
+  }
+ }
  scores[name]={bpm,tpb,bars:8,dur:8*240/bpm,style:'rain',gain,tracks};
 }
 scores.thunder_near={bpm:120,tpb,bars:4,dur:7,style:'thunder',gain:1.1,tracks:{

@@ -8,6 +8,13 @@ const runtime=fs.readFileSync(path.join(root,'scripts/title-runtime.js'),'utf8')
 const landscape='// BEGIN LANDSCAPE UI\n'+fs.readFileSync(path.join(root,'scripts/landscape.js'),'utf8')+'\n// END LANDSCAPE UI';
 const block='// BEGIN HEARTHREAVER TITLE\nconst TITLE_ART='+JSON.stringify(data)+';\nconst TITLE_THEME='+JSON.stringify(theme)+';\n'+runtime+'\n// END HEARTHREAVER TITLE';
 let html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const studio=fs.readFileSync(path.join(root,'art/studio/crest-interactive.svg'),'utf8').replace(/<\?xml[^>]*>\s*/,'');
+const introMarkup='<!-- BEGIN STUDIO INTRO --><div id="studioIntro" role="button" tabindex="0" aria-label="Crest Interactive. Toucher pour passer l’introduction."><div class="studio-mark" aria-hidden="true">'+studio+'</div></div><!-- END STUDIO INTRO -->';
+html=html.includes('<!-- BEGIN STUDIO INTRO -->')?html.replace(/<!-- BEGIN STUDIO INTRO -->[\s\S]*?<!-- END STUDIO INTRO -->/,()=>introMarkup):html.replace('<body>',()=>'<body>\n'+introMarkup);
+const introCSS='/* BEGIN STUDIO INTRO */\n'+fs.readFileSync(path.join(root,'scripts/startup.css'),'utf8')+'\n/* END STUDIO INTRO */';
+html=html.includes('/* BEGIN STUDIO INTRO */')?html.replace(/\/\* BEGIN STUDIO INTRO \*\/[\s\S]*?\/\* END STUDIO INTRO \*\//,()=>introCSS):html.replace('</style>',()=>introCSS+'\n</style>');
+const introCode='// BEGIN STUDIO INTRO\n'+fs.readFileSync(path.join(root,'scripts/startup.js'),'utf8')+'\n// END STUDIO INTRO';
+html=html.includes('// BEGIN STUDIO INTRO')?html.replace(/\/\/ BEGIN STUDIO INTRO[\s\S]*?\/\/ END STUDIO INTRO/,()=>introCode):html.replace('// app.js',()=>introCode+'\n// app.js');
 if(html.includes('// BEGIN LANDSCAPE UI'))html=html.replace(/\/\/ BEGIN LANDSCAPE UI[\s\S]*?\/\/ END LANDSCAPE UI/,()=>landscape);
 else html=html.replace('const PANEL=150;',()=>landscape+'\nconst PANEL=150;');
 if(!html.includes('id="landscapeGate"'))html=html.replace('<body>','<body>\n<section id="landscapeGate" role="dialog" aria-modal="true" aria-labelledby="landscapeHeading" tabindex="-1" hidden><span class="landscape-device" aria-hidden="true"></span><h2 id="landscapeHeading">Tourne ton appareil</h2><p>Hearthreaver se joue en paysage.</p></section>');
