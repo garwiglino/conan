@@ -14,12 +14,12 @@ function titleLoadGame(){
  catch{$('menuStatus').textContent='Cette sauvegarde ne peut pas être chargée.';}
 }
 function syncTitleOptions(){
- for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
- $('musicToggle').textContent=sound.musicOn?'Activée':'Désactivée';
+ for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
+ $('musicToggle').textContent=sound.musicOn?'Activée':'Désactivée';$('hapticsToggle').textContent=haptics.enabled?'Activées':'Désactivées';$('hapticsHint').textContent=haptics.available?'Retours discrets pour les actions importantes.':'Vibrations indisponibles dans cette version de l’app ou ce navigateur.';
  for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}
 }
-function openTitleOptions(){state='options';$('overlay').classList.add('options-open');$('titleOptions').hidden=false;syncTitleOptions();$('musicToggle').focus({preventScroll:true});}
-function closeTitleOptions(){state='title';$('titleOptions').hidden=true;$('overlay').classList.remove('options-open');$('menuOptions').focus({preventScroll:true});}
+function openTitleOptions(){stashOptions();state='options';$('overlay').classList.add('options-open');$('titleOptions').hidden=false;syncTitleOptions();$('musicToggle').focus({preventScroll:true});}
+function closeTitleOptions(){if(state==='menu'){selectMenuTab(menuPrevious,true);return;}state='title';$('titleOptions').hidden=true;$('overlay').classList.remove('options-open');$('menuOptions').focus({preventScroll:true});}
 function quitTitle(){
  state='quit';keys.clear();resetTouch();sound.music?.update(null);sound.silent?.pause();
  $('overlay').classList.add('quit-open');$('titleExit').hidden=false;$('returnFromQuit').focus({preventScroll:true});
@@ -46,7 +46,9 @@ $('menuQuit').addEventListener('click',quitTitle);
 $('optionsBack').addEventListener('click',closeTitleOptions);
 $('returnFromQuit').addEventListener('click',returnFromQuit);
 $('musicToggle').addEventListener('click',()=>{sound.toggleMusic();syncTitleOptions();syncSoundButton();});
-$('sfxToggle').addEventListener('click',()=>{sound.toggleSfx();syncTitleOptions();syncSoundButton();});
+$('sfxToggle').addEventListener('click',()=>{sound.toggleSfx();syncTitleOptions();syncSoundButton();if(sound.sfxOn)sound.fx('ui_select');});
+$('hapticsToggle').addEventListener('click',()=>{haptics.setEnabled(!haptics.enabled);syncTitleOptions();if(haptics.enabled)haptics.pulse('ui');});
+$('optionsHome').addEventListener('click',()=>{if(state!=='menu')return;save();closeMenu();showTitle();});
 $('musicVolume').addEventListener('input',e=>{sound.setMusicVolume(+e.target.value/100);syncTitleOptions();});
 $('sfxVolume').addEventListener('input',e=>{sound.setSfxVolume(+e.target.value/100);syncTitleOptions();});
-$('sfxVolume').addEventListener('change',()=>sound.fx('loot'));
+$('sfxVolume').addEventListener('change',()=>sound.fx('ui_select'));

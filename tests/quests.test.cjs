@@ -16,8 +16,8 @@ test('a fulfilled objective immediately hands guidance to the next tracked quest
   g.checkQuests();
   assert.equal(g.player.xp, xp);
   assert.equal(g.quests.done.has('tresors'), false);
-  assert.equal(g.quests.tracked.has('tresors'), true);
-  assert.equal(g.trackedQuests().at(-1).id, 'tresors');
+  assert.equal(g.quests.tracked.has('tresors'), false);
+  assert.equal(g.trackedQuests().at(-1).id, 'steles');
   // Returning at night or loading an older save must never redirect guidance to a tent/NPC.
   const restored = new Game(g.serialize());restored.clock = 23*60;restored.stepNpcs(0);
   assert.equal(restored.npcs.find(n => n.id === 'zahra').phase, 'away');
@@ -40,7 +40,9 @@ test('hunt guidance targets living enemies, skips fulfilled hunts, and respects 
   g.enemies.filter(e => e.kind === 'skeleton').slice(0,6).forEach(e => e.dead = true);
   assert.equal(g.questTarget('os'), null);
   assert.equal(side(g).quest.id, 'culte');
-  g.toggleTrack('culte');assert.equal(side(g).target.kind, 'snake');
+  g.toggleTrack('viperes');assert.equal(side(g).target.kind, 'snake');
+  assert.equal(g.quests.tracked.has('culte'),false);
+  g.enemies.filter(e => e.kind === 'cultist').forEach(e => e.dead = true);
   g.enemies.filter(e => e.kind === 'snake').forEach(e => e.dead = true);
   assert.equal(side(g), undefined);
   assert.equal(g.questGuidance().length, 1); // Only the gold main objective remains.
@@ -96,4 +98,36 @@ test('the starting camp remains usable for rest, only at its entrance and on the
   assert.equal(g.clock, clock+480);assert.equal(g.player.hp,g.player.maxHp);
   g.player.level = 1;assert.equal(g.sleep(60),false);
   g.player.level = 0;g.player.y += 60;assert.equal(g.sleep(60),false);
+});
+
+test('only one side quest is followed; new accepts do not steal focus and completion advances by acceptance order',()=>{
+ const g=new Game();for(const id of ['tresors','os','viperes','culte'])g.acceptQuest(id);
+ assert.deepEqual(Array.from(g.trackedQuests(),q=>q.id),['sceaux','tresors']);
+ g.toggleTrack('viperes');assert.equal(side(g).quest.id,'viperes');
+ assert.equal(g.quests.tracked.has('tresors'),false);
+ g.enemies.filter(e=>e.kind==='snake').forEach(e=>e.dead=true);g.checkQuests();
+ assert.equal(side(g).quest.id,'culte');
+ assert.equal(g.trackedQuests().some(q=>q.id==='viperes'),false);
+ g.enemies.filter(e=>e.kind==='cultist').forEach(e=>e.dead=true);g.checkQuests();
+ assert.equal(side(g).quest.id,'tresors'); // Wrap to the earliest unfinished acceptance.
+ const restored=new Game(g.serialize());assert.equal(side(restored).quest.id,'tresors');
+ restored.toggleTrack('viperes');assert.equal(side(restored).quest.id,'tresors'); // No follow button for ready quests.
+ restored.toggleTrack('tresors');assert.equal(side(restored),undefined);
+ assert.equal(side(new Game(restored.serialize())),undefined); // Explicit unfollow is respected.
+});
+test('old saves with multiple follows migrate to one incomplete side quest without losing journal entries',()=>{
+ const g=new Game();for(const id of ['tresors','steles','os'])g.acceptQuest(id);
+ const save=g.serialize();save.quests.tracked=['sceaux','tresors','steles','os'];save.chests=save.chests.map(()=>true);
+ const r=new Game(save);assert.equal(side(r).quest.id,'steles');
+ assert.equal(r.quests.tracked.size,2);assert.equal(r.quests.known.has('os'),true);assert.equal(r.questTarget('tresors'),null);
+});
+test('NPC markers show offers and rewards but never an inactive grey question mark',()=>{
+ const g=new Game(),n=g.npcs.find(n=>n.id==='zahra');
+ assert.equal(g.npcMark(n),'offer');
+ for(const id of ['tresors','steles','viperes'])g.acceptQuest(id);
+ // Accept every quest from this NPC so no offer can hide an active marker.
+ for(const option of g.npcMenu(n).filter(o=>o.mark==='offer'))g.acceptQuest(option.panel.id);
+ assert.equal(g.npcMark(n),null);
+ g.chests.forEach(c=>c.open=true);assert.equal(g.npcMark(n),'turnin');
+ g.completeQuest('tresors');assert.equal(g.npcMark(n),null);
 });
