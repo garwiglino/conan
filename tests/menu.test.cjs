@@ -2,9 +2,10 @@ const {test}=require('node:test'),fs=require('node:fs'),assert=require('node:ass
 const {JSDOM}=require('jsdom'),canvas=require('@napi-rs/canvas'),{RenderingAudioContext}=require('web-audio-engine');
 const {html}=require('./game-harness.cjs');
 test('main menu loads real saves, cancels overwrite, persists audio levels, and ends/resumes its session',async()=>{
- const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape};})();');
+ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel};})();');
  const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
  const destroy=w.close.bind(w);w.close=()=>{closes++;};
+ w.HTMLElement.prototype.scrollTo=function(options){this.scrollTop=options.top||0;};
  const proto=w.HTMLCanvasElement.prototype;
  for(const key of ['width','height']){const d=Object.getOwnPropertyDescriptor(proto,key);Object.defineProperty(proto,key,{get:d.get,set(v){d.set.call(this,v);if(map.has(this))map.get(this).native[key]=v;},configurable:true});}
  proto.getContext=function(){if(!map.has(this)){const native=canvas.createCanvas(this.width||1,this.height||1),ctx=native.getContext('2d');const proxy=new Proxy(ctx,{get(target,k){if(k==='drawImage'||k==='createPattern')return (im,...args)=>target[k](map.get(im)?.native||im,...args);const v=target[k];return typeof v==='function'?v.bind(target):v;},set(t,k,v){t[k]=v;return true;}});map.set(this,{native,proxy});}return map.get(this).proxy;};
@@ -29,6 +30,23 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   const restored=new a.Sound();assert.equal(restored.musicVolume,.37);assert.equal(restored.sfxVolume,.72);assert.equal(restored.musicOn,false);assert.equal(restored.sfxOn,false);
   click('musicToggle');click('sfxToggle');raf(250);click('optionsBack');assert.equal(a.state,'title');
   click('menuNew');assert.equal(a.state,'playing');assert.ok(a.game.player.spawnFX>0);assert.equal(a.musicMode(),'ambient');raf(300);assert.equal(a.sound.music.current.name,'ambient');assert.ok(a.sound.music.retiring.some(s=>s.name==='title'));
+  for(const id of ['os','culte','steles','viperes','tresors'])a.game.acceptQuest(id);
+  a.game.discover(['colosse'],true);a.game.toggleTrack('colosse');a.renderTracker();
+  const list=$('trkList');assert.equal(list.children.length,7);assert.equal(list.style.getPropertyValue('--trk-rows'),'3');
+  list.scrollTop=112;a.game.enemies.find(e=>e.kind==='skeleton').dead=true;a.renderTracker(true);
+  assert.equal($('trkList'),list);assert.equal(list.scrollTop,112); // Progress never rebuilds the scrolling container.
+  a.game.chests.slice(0,4).forEach(c=>c.open=true);a.game.checkQuests();a.renderTracker();
+  assert.equal($('trkList').lastElementChild.dataset.quest,'tresors');
+  assert.match($('trkList').lastElementChild.textContent,/À rendre/);
+  assert.equal($('trkList').querySelectorAll('.trk-guided:not(.main)').length,1);
+  a.openMenu('quests');
+  assert.match($('menuBody').querySelector('.q.ready .q-giver').textContent,/Confiée par Zahra/);
+  assert.ok([...$('menuBody').querySelectorAll('.m-sec')].some(el=>el.textContent==='À rendre'));a.closeMenu();
+  const pos={x:a.game.player.x,y:a.game.player.y};
+  const home=a.game.world.props.find(p=>p.owner==='zahra');Object.assign(a.game.player,{x:home.x,y:home.y+16});
+  a.openSleepPanel();assert.equal(a.state,'playing');assert.equal($('qpanel').hidden,true);
+  const tent=a.game.world.props.find(p=>p.rest);Object.assign(a.game.player,{x:tent.x,y:tent.y+16});
+  a.openSleepPanel();assert.equal(a.state,'sleep');click('slNo');assert.equal(a.state,'playing');Object.assign(a.game.player,pos);
   a.game.player.coins=42;rotate(390,844);assert.equal(a.state,'paused');assert.equal(JSON.parse(w.localStorage.getItem('conan-serpent-v1')).player.coins,42);
   const gameTime=a.game.time;raf(400);raf(500);assert.equal(a.game.time,gameTime);assert.equal(a.sound.music.current,null);
   rotate(844,390);assert.equal(a.state,'paused');assert.equal($('landscapeGate').hidden,true);click('start');assert.equal(a.state,'playing');
