@@ -38,6 +38,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         config.userContentController.addUserScript(
             WKUserScript(source: saves.bootstrapScript(), injectionTime: .atDocumentStart, forMainFrameOnly: true))
         config.userContentController.add(saves, name: SaveMirror.channel)
+        config.userContentController.add(GameHaptics(), name: "hearthreaverHaptics")
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.isOpaque = false
@@ -100,5 +101,33 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     // Si iOS ferme le moteur web en arrière-plan (mémoire), on recharge le jeu : la sauvegarde est reprise.
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         webView.load(URLRequest(url: GameSchemeHandler.startURL))
+    }
+}
+
+/// Retours courts demandés par le jeu ; aucune vibration continue ni donnée externe.
+private final class GameHaptics: NSObject, WKScriptMessageHandler {
+    private let light = UIImpactFeedbackGenerator(style: .light)
+    private let impact = UIImpactFeedbackGenerator(style: .medium)
+    private let selection = UISelectionFeedbackGenerator()
+    private let notification = UINotificationFeedbackGenerator()
+    private var last: [String: TimeInterval] = [:]
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard message.frameInfo.isMainFrame,
+              message.frameInfo.request.url?.scheme == GameSchemeHandler.scheme,
+              message.frameInfo.request.url?.host == "localhost",
+              UIApplication.shared.applicationState == .active,
+              let kind = message.body as? String,
+              ["ui", "hurt", "parry", "success"].contains(kind) else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        let cooldown: TimeInterval = kind == "success" ? 0.8 : kind == "ui" ? 0.09 : 0.2
+        guard now - (last[kind] ?? -.infinity) >= cooldown else { return }
+        last[kind] = now
+        switch kind {
+        case "hurt": impact.impactOccurred(intensity: 0.7); impact.prepare()
+        case "parry": light.impactOccurred(intensity: 0.65); light.prepare()
+        case "success": notification.notificationOccurred(.success); notification.prepare()
+        default: selection.selectionChanged(); selection.prepare()
+        }
     }
 }

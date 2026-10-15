@@ -5,6 +5,7 @@
     "embed:boss": "node scripts/embed-boss.cjs",
     "preview:boss": "node scripts/preview-boss.cjs",
     "embed:guardian": "node scripts/embed-guardian.cjs",
+    "build:ui-cues": "node scripts/build-ui-cues.cjs",
     "build:guardian-cue": "node scripts/build-guardian-cue.cjs",
     "test": "node --test tests/*.test.cjs",
     "embed:title": "node scripts/embed-title.cjs",

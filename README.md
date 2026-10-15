@@ -24,9 +24,17 @@ Après publication, fermer complètement l'app iOS native puis la rouvrir avec u
 
 ## Quêtes et repos
 
-Le suivi conserve une flèche or pour la quête principale et une flèche bleue pour la première quête secondaire suivie encore à accomplir, dans l’ordre de suivi. Dès que son objectif est rempli, la flèche passe à la suivante : elle ne pointe jamais vers le donneur. La récompense reste à récupérer auprès du PNJ ; le journal distingue « En cours », « À rendre » et « Accomplies », avec le donneur indiqué discrètement.
+Le suivi conserve une flèche or pour la quête principale et une seule quête secondaire suivie, indiquée en bleu. Accepter une autre quête ne remplace pas celle suivie. Dès que son objectif est rempli, la quête sort du petit encart et le suivi passe à la prochaine quête inachevée dans l’ordre d’acceptation (puis revient aux plus anciennes s’il n’en reste aucune après). Le joueur peut choisir une autre quête dans le journal ou arrêter le suivi. Les anciennes sauvegardes avec plusieurs quêtes suivies sont normalisées sans perte de progression.
 
-Le panneau au-dessus du joystick permet de faire défiler toutes les quêtes suivies au doigt, à la molette ou au clavier. Il affiche trois cartes entières (deux sur les écrans les plus courts), avec un arrêt doux aligné sur les cartes. Les mises à jour de progression conservent le défilement en cours. Les abris du Veilleur et de Zahra sont privés : seule la tente de repos du campement de départ permet de dormir.
+Une quête à rendre reste dans le journal avec son donneur indiqué discrètement, sans flèche de retour. Les « ! » et « ? » dorés au-dessus des PNJ sont légèrement agrandis et dessinés en pixels ; aucun « ? » gris n’apparaît pendant une quête en cours. Le panneau au-dessus du joystick conserve ses cartes entières et son défilement avec arrêt doux lorsque nécessaire. Les abris du Veilleur et de Zahra sont privés : seule la tente du campement de départ permet de dormir.
+
+## Menu, sons et vibrations
+
+Un seul bouton **Menu** apparaît en haut à droite en jeu. Le menu suspend la simulation et place **Quêtes**, **Inventaire**, **Options**, **Aide** et **Reprendre** à droite, dans la zone du pouce. Les options sont partagées avec l’écran titre ; Retour revient au panneau précédent, et Menu principal sauvegarde avant de quitter la partie. Les commandes restent utilisables sur les petits écrans paysage et au clavier.
+
+Quatre sons originaux en MIDI multipiste accompagnent l’ouverture, la sélection, la validation et le retour : [ouvrir](audio/ui-open.mid), [sélectionner](audio/ui-select.mid), [valider](audio/ui-confirm.mid), [revenir](audio/ui-back.mid). Ils utilisent le synthétiseur du jeu et le réglage des bruitages, avec une limite de fréquence pour les appuis rapides. `npm run build:ui-cues` reconstruit les MIDI et leur partition intégrée.
+
+Les vibrations sont courtes et espacées : sélection d’interface, dégâts reçus, parade réussie, stèle et récompense importante. Elles sont désactivables dans les options, indépendamment du son ; le réglage est conservé. Le relais UIKit dans l’app iOS utilise des retours haptiques natifs. **Une réinstallation depuis Xcode est nécessaire pour activer ce nouveau relais sur iPhone** ; la mise à jour du HTML seule ne peut pas l’ajouter. Les navigateurs compatibles utilisent l’API Vibration et les autres restent silencieux. La caméra ne tremble que lorsqu’un coup blesse réellement le joueur, jamais pour les caisses, l’apparition du héros ou la mort des ennemis. La réduction des animations désactive aussi cette secousse.
 
 ## Sources du menu
 
@@ -37,7 +45,7 @@ Le panneau au-dessus du joystick permet de faire défiler toutes les quêtes sui
 - `scripts/title-art.lua` reconstruit les dessins dans Aseprite ; `npm run build:title-theme` reconstruit le MIDI et sa partition JSON ; `npm run embed:title` intègre le tout dans les versions web et iOS hors ligne.
 - Les identifiants techniques historiques de stockage, d'origine iOS et de dépôt restent stables pour préserver les sauvegardes et les mises à jour des installations existantes.
 - [Archive iOS](Hearthreaver-iOS.zip) : sources natives, nouvelles icônes et jeu hors ligne synchronisé.
-- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.2 (build 3). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
+- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.3 (build 4). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
 
 ## Crédits
 - Polices : [Alagard](https://www.dafont.com/alagard.font) (Hewett Tsoi) · [Pixel Operator](https://www.dafont.com/pixel-operator.font) (Jayvee Enaguas, CC0)

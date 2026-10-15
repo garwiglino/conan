@@ -2,7 +2,7 @@ const {test}=require('node:test'),fs=require('node:fs'),assert=require('node:ass
 const {JSDOM}=require('jsdom'),canvas=require('@napi-rs/canvas'),{RenderingAudioContext}=require('web-audio-engine');
 const {html}=require('./game-harness.cjs');
 test('main menu loads real saves, cancels overwrite, persists audio levels, and ends/resumes its session',async()=>{
- const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel};})();');
+ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics};})();');
  const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
  const destroy=w.close.bind(w);w.close=()=>{closes++;};
  w.HTMLElement.prototype.scrollTo=function(options){this.scrollTop=options.top||0;};
@@ -32,16 +32,26 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   click('menuNew');assert.equal(a.state,'playing');assert.ok(a.game.player.spawnFX>0);assert.equal(a.musicMode(),'ambient');raf(300);assert.equal(a.sound.music.current.name,'ambient');assert.ok(a.sound.music.retiring.some(s=>s.name==='title'));
   for(const id of ['os','culte','steles','viperes','tresors'])a.game.acceptQuest(id);
   a.game.discover(['colosse'],true);a.game.toggleTrack('colosse');a.renderTracker();
-  const list=$('trkList');assert.equal(list.children.length,7);assert.equal(list.style.getPropertyValue('--trk-rows'),'3');
-  list.scrollTop=112;a.game.enemies.find(e=>e.kind==='skeleton').dead=true;a.renderTracker(true);
-  assert.equal($('trkList'),list);assert.equal(list.scrollTop,112); // Progress never rebuilds the scrolling container.
+  const list=$('trkList');assert.equal(list.children.length,2);assert.equal(list.style.getPropertyValue('--trk-rows'),'2');
+  list.scrollTop=0;a.game.enemies.find(e=>e.kind==='skeleton').dead=true;a.renderTracker(true);
+  assert.equal($('trkList'),list);assert.equal(list.scrollTop,0); // Progress never rebuilds the scrolling container.
   a.game.chests.slice(0,4).forEach(c=>c.open=true);a.game.checkQuests();a.renderTracker();
-  assert.equal($('trkList').lastElementChild.dataset.quest,'tresors');
-  assert.match($('trkList').lastElementChild.textContent,/À rendre/);
+  assert.equal($('trkList').querySelector('[data-quest="tresors"]'),null);
   assert.equal($('trkList').querySelectorAll('.trk-guided:not(.main)').length,1);
   a.openMenu('quests');
   assert.match($('menuBody').querySelector('.q.ready .q-giver').textContent,/Confiée par Zahra/);
-  assert.ok([...$('menuBody').querySelectorAll('.m-sec')].some(el=>el.textContent==='À rendre'));a.closeMenu();
+  assert.ok([...$('menuBody').querySelectorAll('.m-sec')].some(el=>el.textContent==='À rendre'));
+  assert.equal($('menuBody').querySelector('.q.ready .q-track'),null);
+  const frozen=a.game.elapsed;raf(310);assert.equal(a.game.elapsed,frozen);
+  click('btnBag');assert.equal($('menuTitle').textContent,'Inventaire');
+  click('btnOptions');assert.equal($('titleOptions').parentElement.id,'menuSettings');assert.equal(a.state,'menu');
+  level('musicVolume',25);click('hapticsToggle');assert.equal(a.haptics.enabled,false);assert.equal(new a.Haptics().enabled,false);
+  click('optionsBack');assert.equal($('menuTitle').textContent,'Inventaire');assert.equal($('titleOptions').parentElement.id,'overlay');
+  click('btnHelp');assert.match($('menuBody').textContent,/parade/);
+  click('menuResume');assert.equal(a.state,'playing');assert.equal($('game').inert,false);
+  click('btnMenu');click('btnOptions');click('optionsHome');assert.equal(a.state,'title');
+  click('menuOptions');assert.equal($('titleOptions').hidden,false);assert.equal(a.sound.musicVolume,.25);assert.equal($('hapticsToggle').getAttribute('aria-pressed'),'false');
+  click('optionsBack');click('menuLoad');assert.equal(a.state,'playing');
   const pos={x:a.game.player.x,y:a.game.player.y};
   const home=a.game.world.props.find(p=>p.owner==='zahra');Object.assign(a.game.player,{x:home.x,y:home.y+16});
   a.openSleepPanel();assert.equal(a.state,'playing');assert.equal($('qpanel').hidden,true);

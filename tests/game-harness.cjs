@@ -17,7 +17,7 @@ async function loadGame(Image = canvas.Image) {
     }
   });
   vm.runInContext(script.slice(0, script.indexOf('// app.js')) +
-    'globalThis.api={Game,Renderer,CharacterAtlas,BITMAPS,CO_ART,CO_MOVES,guardianFrame,guardianClip,BOSS_ART,bossClip,bossFrame,bossVisual,bossPlay,bossIdle,stepBossHazard,drawBossFX,drawBossBolt,enemy,Music,MusicDirector,Sound,MUSIC_DATA,CUE_DATA,TitleScene,TITLE_ART};})();', context);
+    'globalThis.api={Game,Renderer,CharacterAtlas,BITMAPS,CO_ART,CO_MOVES,guardianFrame,guardianClip,BOSS_ART,bossClip,bossFrame,bossVisual,bossPlay,bossIdle,stepBossHazard,drawBossFX,drawBossBolt,enemy,Music,MusicDirector,Sound,Haptics,UI_CUES,MUSIC_DATA,CUE_DATA,TitleScene,TITLE_ART};})();', context);
   await context.api.BITMAPS.promise;
   return context.api;
 }

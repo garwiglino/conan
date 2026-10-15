@@ -123,3 +123,22 @@ test('the MIDI death cue uses the SFX bus, works with music off, and respects th
  const n=ctx.nodes.length;sound.sfxOn=false;sound.fx('guardianfall');assert.equal(ctx.nodes.length,n);
  sound.sfxOn=true;sound.enabled=false;sound.fx('guardianfall');assert.equal(ctx.nodes.length,n);
 });
+
+test('each interface cue is a layered type-1 MIDI score and uses the independently muted SFX bus',()=>{
+ const sound=new api.Sound(),ctx=new AudioContext();sound.ctx=ctx;sound.master=ctx.createGain();sound.enabled=true;sound.musicOn=false;
+ for(const [name,score]of Object.entries(api.UI_CUES)){
+  const data=fs.readFileSync(path.join(root,'audio',name.replace('_','-')+'.mid'));
+  assert.equal(data.toString('ascii',0,4),'MThd');assert.equal(data.readUInt16BE(8),1);assert.equal(data.readUInt16BE(10),4);assert.equal(data.readUInt16BE(12),score.tpb);
+  let offset=14;const parsed={};
+  for(let track=0;track<4;track++){
+   const end=offset+8+data.readUInt32BE(offset+4);let p=offset+8,t=0,part='',notes=[],active=new Map();
+   const vlq=()=>{let n=0,c;do{c=data[p++];n=(n<<7)|(c&127);}while(c&128);return n;};
+   while(p<end){t+=vlq();const status=data[p++];if(status===255){const type=data[p++],len=vlq();if(type===3)part=data.toString('utf8',p,p+len);p+=len;continue;}if((status&240)===192){p++;continue;}const n=data[p++],v=data[p++];if((status&240)===144&&v)active.set(n,{at:t,v});else{const on=active.get(n);assert.ok(on);notes.push([on.at,t-on.at,n,on.v]);active.delete(n);}}
+   assert.equal(active.size,0);if(track)parsed[part]=notes.sort((a,b)=>a[0]-b[0]).flat();offset=end;
+  }
+  for(const [part,notes]of Object.entries(score.tracks))assert.deepEqual(parsed[part],Array.from(notes));
+  ctx.currentTime+=1;const before=ctx.nodes.length;sound.fx(name);assert.ok(ctx.nodes.length>before);assert.ok(ctx.nodes.some(n=>n.connections.includes(sound.master)));
+  const played=ctx.nodes.length;sound.fx(name);assert.equal(ctx.nodes.length,played); // Ignore double taps inside 65ms.
+  ctx.currentTime+=1;sound.sfxOn=false;sound.fx(name);assert.equal(ctx.nodes.length,played);sound.sfxOn=true;
+ }
+});
