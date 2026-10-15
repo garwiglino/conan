@@ -822,10 +822,67 @@ const AI={skeleton:{sight:84,feel:30,react:.4,memory:4,leash:180},snake:{sight:6
 // temps (s) des images des attaques du colosse : début de chaque image, instant du coup, fin, temps de récupération
 const CO_MOVES={punch:{f:[0,.22,.5,.62,.78,.95],hit:.5,end:1.1,cd:1.2},slam:{f:[0,.3,.75,.88,1.05,1.25],hit:.75,end:1.45,cd:1.6},grab:{f:[0,.25,.45,.6,1.05,1.2],hit:.45,throw:1.05,end:1.5,cd:1.8}};
 const BODY={hero:[7,5],snake:[8,4.5],skeleton:[7,5],cultist:[8,5],guardian:[15,7],boss:[13,6.5],npc:[8,5]};
-// Ciel : une journée dure DAY_LEN s de jeu (départ le matin) ; le temps est découpé en fenêtres de RAIN_WIN s,
-// dont environ une sur trois apporte une averse (montée, pluie, accalmie). Jamais de pluie dans la toute première.
-const DAY_LEN=480,CLOCK_START=8*60,RAIN_WIN=450; // une journée de 24 h = 8 min de jeu (1 h = 20 s) ; partie neuve à 08:00 ; météo par tranches de 7 h 30
-const SKY_KEYS=[[0,[78,92,156]],[4.9,[78,92,156]],[5.6,[120,102,160]],[6.3,[238,180,152]],[7,[255,210,168]],[7.6,[255,255,255]],[20.2,[255,255,255]],[21,[255,216,172]],[21.8,[244,178,136]],[22.4,[152,108,150]],[23,[78,92,156]],[24,[78,92,156]]].map(([h,c])=>[h/24,c]); // teinte du ciel selon l'heure
+// BEGIN WEATHER MODEL
+// One clock and one weather state drive colour, lamps, wildlife, rain and sound.
+const DAY_LEN=480,CLOCK_START=8*60,WEATHER_WIN=240;
+const SKY_KEYS=[[0,[78,92,156]],[5,[78,92,156]],[6,[128,112,166]],[7.2,[238,183,158]],
+ [8.2,[255,225,194]],[9,[255,255,255]],[16,[255,255,255]],[17,[255,232,202]],
+ [18,[248,207,164]],[19.5,[220,155,142]],[21,[142,119,166]],[23,[78,92,156]],[24,[78,92,156]]].map(([h,c])=>[h/24,c]);
+function skySmooth(a,b,x){const u=clamp((x-a)/(b-a),0,1);return u*u*(3-2*u);}
+function dayCycle(clock=CLOCK_START){
+ const hour=((clock/60)%24+24)%24,phase=hour/24;
+ const period=hour<5||hour>=23?'night':hour<9?'dawn':hour<16?'day':hour<18?'lateDay':'dusk';
+ const night=period==='night'?1:period==='dawn'?1-skySmooth(5,9,hour):period==='day'?0:
+  period==='lateDay'?.28*skySmooth(16,18,hour):.28+.72*skySmooth(18,23,hour);
+ let a=SKY_KEYS[0],b=SKY_KEYS[1];for(let i=1;i<SKY_KEYS.length;i++)if(phase<=SKY_KEYS[i][0]){a=SKY_KEYS[i-1];b=SKY_KEYS[i];break;}
+ const u=skySmooth(a[0],b[0],phase),tint=a[1].map((v,i)=>v+(b[1][i]-v)*u);
+ return {hour,phase,period,night,tint};
+}
+function weatherFront(k){
+ // The opening morning is dry. Subsequent fronts have no dependency on hour of day.
+ const r=k===0?0:hash(k,7,2026),kind=r<.36?'clear':r<.55?'light':r<.79?'steady':r<.91?'shower':'storm';
+ const rain={clear:0,light:.24,steady:.52,shower:.9,storm:.96}[kind];
+ return {kind,rain,cloud:kind==='clear'?.12*hash(k,4,78):.3+rain*.7,
+  wind:kind==='clear'?.12:.18+rain*.62,cell:.2+hash(k,9,116)*.35,short:hash(k,8,116)>.45};
+}
+function skyAt(clock=CLOCK_START){
+ const cycle=dayCycle(clock),w=(clock-CLOCK_START)/WEATHER_WIN,k=Math.floor(w),u=w-k,a=weatherFront(k),b=weatherFront(k+1),blend=skySmooth(.76,1,u);
+ // Showers can peak briefly. Steady rain stays sustained and need never produce thunder.
+ const ar=a.rain*(a.kind==='shower'?.5+.5*(skySmooth(.08,.22,u)*(1-skySmooth(.52,.72,u))):1),br=b.rain*(b.kind==='shower'?.5:1);
+ let rain=ar+(br-ar)*blend,cloud=a.cloud+(b.cloud-a.cloud)*blend,wind=a.wind+(b.wind-a.wind)*blend;
+ const duration=a.short?.16:.32,cell=skySmooth(a.cell,a.cell+.035,u)*(1-skySmooth(a.cell+duration-.04,a.cell+duration,u));
+ const storm=a.kind==='storm'?cell:0;
+ const gust=.5+.5*Math.sin(clock*.021);wind=clamp(wind*(.8+.2*gust),0,1);
+ const level=rain<.04?'dry':rain<.35?'light':rain<.7?'steady':'downpour';
+ return {...cycle,rain:clamp(rain,0,1),cloud,wind,storm,level,front:k,kind:a.kind};
+}
+function weatherTint(sky,flash=0){
+ const cold=[.61,.69,.8],wet=sky.cloud*.38+sky.rain*.32;
+ return sky.tint.map((v,i)=>{const shaded=v*(1-wet*(1-cold[i]));return Math.round(shaded+([216,228,248][i]-shaded)*flash*(.46+.3*sky.night));});
+}
+class StormSystem{
+ constructor(){this.time=0;this.serial=0;this.next=6;this.strike=null;this.pending=[];this.front=null;}
+ clear(){this.strike=null;this.pending=[];this.next=this.time+6;}
+ step(dt,sky,listener,active=true){
+  this.time+=Math.max(0,dt);if(!active){this.clear();return [];}
+  if(this.strike&&this.time-this.strike.at>1.1)this.strike=null;
+  if(this.front!==sky.front){this.front=sky.front;this.next=Math.max(this.next,this.time+2+hash(sky.front,3,66)*5);}
+  if(sky.storm>.4&&this.time>=this.next){
+   const seed=++this.serial,near=hash(seed,sky.front,41)>.55,distance=near?.18+hash(seed,1,34)*.4:.65+hash(seed,2,35)*.35;
+   const pan=(hash(seed,sky.front,62)*2-1)*.82,strength=.62+hash(seed,5,54)*.32;
+   this.strike={at:this.time,pan,strength,x:listener.x+pan*200,y:listener.y-130,distance};
+   this.pending.push({due:this.time+.32+distance*2.3,pan,strength,near});
+   this.next=this.time+7+hash(seed,sky.front,73)*11;
+  }
+  const due=this.pending.filter(v=>v.due<=this.time);this.pending=this.pending.filter(v=>v.due>this.time);return due;
+ }
+ flash(reduced=false){if(!this.strike)return 0;const age=this.time-this.strike.at;
+  // One broad pulse, no rapid strobe; the system accessibility preference softens it further.
+  return this.strike.strength*skySmooth(0,.07,age)*(1-skySmooth(.12,.85,age))*(reduced?.16:1);
+ }
+}
+
+// END WEATHER MODEL
 // Objets cassables : points de résistance, rayon touché par la lame, matière des éclats, butin éventuel.
 const BREAKABLE={crates:{hp:2,r:10,mat:'wood',loot:()=>Math.random()<.5?Array(1+Math.floor(Math.random()*2)).fill('coin'):[]},
  barrel:{hp:2,r:8,mat:'barrel',loot:()=>Math.random()<.12?['heart']:Math.random()<.5?Array(1+Math.floor(Math.random()*3)).fill('coin'):[]},
@@ -885,7 +942,7 @@ class Game{
   this.world=makeWorld();for(const o of this.world.props)if(BREAKABLE[o.kind]){o.id='b'+o.x+'_'+o.y;o.hp=BREAKABLE[o.kind].hp;}this.debris=[];this.fxProps=new Set();this.player={x:START.x,y:START.y,hp:10,maxHp:10,dir:0,anim:0,attack:0,attackCD:0,dash:0,dashCD:0,inv:0,moving:false,attackHeld:false,attackBuffer:0,bufferX:0,bufferY:0,guard:false,guardHeld:false,parry:0,parryCD:0,guardFlash:0,riposte:0,hitPause:0,hurt:0,hurtDuration:.24,hitX:0,hitY:0,combo:0,comboWindow:0,coins:0,kills:0,lives:LIVES,spawnFX:SPAWN_T,xp:0,flasks:0,lvlFX:0};
   this.seals=[false,false,false];this.chests=CHEST_SPOTS.map(([x,y])=>({x:x*16+8,y:y*16+8,open:false}));
   this.enemies=ENEMY_SPOTS.map((v,i)=>enemy(v[0],v[1]*16+8,v[2]*16+8,'e'+i));SEALS.forEach((s,i)=>this.enemies.push(enemy('guardian',s.x,s.y+29,'g'+i)));
-  this.enemies.push(enemy('boss',25*16,6*16,'boss'));this.drops=[];this.particles=[];this.blood=[];this.bloodFX=[];this.remains=[];this.shots=[];this.hazards=[];this.events=[];this.time=0;this.elapsed=0;this.clock=CLOCK_START;this.sleeping=null;this.shake=0;this.gate=false;this.won=false;this.dead=false;this.bossActive=false;this.hits=new Set();this.swing=0;this.saveTimer=0;this.campCooldown=0;this.checkpoint={level:this.player.level||0,x:this.player.x,y:this.player.y};this.usedDash=false;this.targetId=null;
+  this.enemies.push(enemy('boss',25*16,6*16,'boss'));this.drops=[];this.particles=[];this.blood=[];this.bloodFX=[];this.remains=[];this.shots=[];this.hazards=[];this.events=[];this.time=0;this.elapsed=0;this.clock=CLOCK_START;this.weather=new StormSystem();this.sleeping=null;this.shake=0;this.gate=false;this.won=false;this.dead=false;this.bossActive=false;this.hits=new Set();this.swing=0;this.saveTimer=0;this.campCooldown=0;this.checkpoint={level:this.player.level||0,x:this.player.x,y:this.player.y};this.usedDash=false;this.targetId=null;
   this.initMechanisms();
   this.steles=STELES.map((s,i)=>({...s,active:i===0,glow:0}));this.steleLast=0;this.checkpoint={level:0,x:STELES[0].x,y:STELES[0].y};this.floaters=[];this.dying=null;this.quests={known:new Set(['sceaux']),done:new Set(),tracked:new Set(['sceaux']),ready:new Set(),fresh:false};this.questTimer=0;
   RELICS.forEach((r,i)=>this.drops.push({level:0,x:r.x,y:r.y,kind:'flask',z:0,relic:'r'+i}));
@@ -1045,7 +1102,7 @@ class Game{
  bossTransform(e){this.emit('bosscue',{cue:'transform'});e.rage=true;bossPlay(e,'transform');e.wind=0;e.attack=0;e.stun=0;e.block=0;e.hurt=0;this.shots=[];this.hazards=[];this.talk('LE PRÊTRE DU SERPENT',['Nharos ! Que ton venin coule dans mes veines !'],e,50);this.burst(e.x,e.y-18,'#a7cda0',18);}
  bossStep(e,dt){stepBoss(this,e,dt);}
 
- update(dt,input={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}this.stepNpcs(dt);if(this.dying){this.stepDying(dt);return;}if(this.sleeping){this.stepSleep(dt);return;}this.updateEffects(dt);if(this.tickMechanisms(dt))return;if(this.dead||this.won)return;this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.saveTimer+=dt;if(this.saveTimer>5){this.saveTimer=0;this.emit('save');}const p=this.player;
+ update(dt,input={}){dt=clamp(dt,0,.04);this.time+=dt;for(const event of this.weather.step(dt,this.sky(),this.player,!this.sleeping&&!this.dying&&!this.dead&&!this.won))this.emit('thunder',event);this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}this.stepNpcs(dt);if(this.dying){this.stepDying(dt);return;}if(this.sleeping){this.stepSleep(dt);return;}this.updateEffects(dt);if(this.tickMechanisms(dt))return;if(this.dead||this.won)return;this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.saveTimer+=dt;if(this.saveTimer>5){this.saveTimer=0;this.emit('save');}const p=this.player;
   for(const k of ['attack','attackCD','dash','dashCD','inv','comboWindow','hurt','parry','parryCD','guardFlash','riposte','hitPause','attackBuffer'])p[k]=Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));
   if(this.heldStep(p,dt))input={};
   if(p.useTime>0)input={};p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);if(p.spawnFX>SPAWN_T-.9)input={};let dx=input.x||0,dy=input.y||0,l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l;}p.moving=!!l;p.steer=!!l;
@@ -1175,8 +1232,7 @@ class Game{
 
  drinkFlask(){const p=this.player;if(!(p.flasks>0)||p.hp>=p.maxHp||this.dying)return false;p.flasks--;p.hp=Math.min(p.maxHp,p.hp+2);this.float('heart',1);this.emit('flask');this.emit('save');return true;}
  lineClear(a,b){if(!this.sameLevel(a,b))return false;const n=Math.ceil(dist(a,b)/6);for(let i=1;i<n;i++)if(this.solid(a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n,0,a.level||0))return false;return true;}
- sky(){const c=this.clock??CLOCK_START,w=(c-CLOCK_START)/RAIN_WIN,k=Math.floor(w),u=w-k,rain=k>0&&hash(k,7,99)<.34?clamp(Math.min(u-.08,.92-u)/.18,0,1):0;
-  return {phase:(((c/1440)%1)+1)%1,rain};}
+ sky(){const clock=this.clock??CLOCK_START;if(this._skyClock!==clock){this._skyClock=clock;this._sky=skyAt(clock);}return this._sky;}
  hourText(m=this.clock){const t=((Math.floor(m)%1440)+1440)%1440;return String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60/10)*10).padStart(2,'0');}
  // Dormir : écran noir, l'horloge défile jusqu'à l'heure du réveil, la santé revient.
  // Only an explicitly public rest tent can open a sleep session; NPC homes are private.
@@ -1196,7 +1252,7 @@ class Game{
    this.debris.push({x:o.x+(Math.random()-.5)*10,y:o.y-1+(Math.random()-.5)*4,z:4+Math.random()*14,vx:Math.cos(g)*sp,vy:Math.sin(g)*sp*.6,vz:(55+Math.random()*95)*k,w:P.w[i%P.w.length],h:P.h[i%P.h.length],c:P.c[i%P.c.length],life:2.4+Math.random()*1.4,spin:i%2===0});}}
  zone(){const p=this.player;if(p.level===1)return 'PASSERELLE · ETAGE 1';return regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).name;}
  serialize(){return {worldFlags:this.worldFlags,mechanisms:{doors:this.doors.map(d=>d.open),lifts:this.lifts.map(l=>l.riding?l.goal:l.y)},version:1,player:{level:this.dying?0:this.transit?.toLevel??(this.lifts.find(l=>l.riding)?(this.lifts.find(l=>l.riding).goal===this.lifts[0].top?1:0):(this.player.level||0)),x:this.dying?this.checkpoint.x:this.transit?.toX??this.player.x,y:this.dying?this.checkpoint.y:this.transit?.toY??this.lifts.find(l=>l.riding)?.goal??(this.player.onStairs?this.stairs.bottom+2:this.player.y),hp:this.dying?this.player.maxHp:this.player.hp,coins:this.player.coins,kills:this.player.kills,lives:this.player.lives,xp:this.player.xp||0,flasks:this.player.flasks||0},steles:{on:this.steles.map(s=>s.active),last:this.steleLast},quests:{known:[...this.quests.known],done:[...this.quests.done],tracked:[...this.quests.tracked],ready:[...this.quests.ready]},seals:this.seals,chests:this.chests.map(c=>c.open),enemies:this.enemies.map(e=>({id:e.id,hp:e.hp,dead:e.dead})),gate:this.gate,checkpoint:this.checkpoint,elapsed:this.elapsed,clock:Math.round(this.clock),won:this.won,drops:this.drops.filter(d=>!d.taken&&!d.relic).map(d=>({level:d.level||0,x:Math.round(d.x),y:Math.round(d.y),kind:d.kind}))};}
- restore(s){if(s.version!==1)return;this.doors.forEach((d,i)=>{d.open=!!s.mechanisms?.doors?.[i];d.progress=d.open?1:0;});this.levers.forEach(l=>l.progress=this.doors[l.door].open?1:0);this.lifts.forEach((l,i)=>{l.y=s.mechanisms?.lifts?.[i]===l.bottom?l.bottom:l.top;l.goal=l.y;});this.worldFlags=s.worldFlags||{};let p=s.player;if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y)){this.gate=!!s.gate;this.player.level=p.level===1?1:0;this.player.x=clamp(p.x,40,MW*16-40);this.player.y=clamp(p.y,40,MH*16-40);if(this.solid(this.player.x,this.player.y,5,this.player.level)){this.player.level=0;this.player.x=START.x;this.player.y=START.y;}this.player.hp=clamp(Number(p.hp)||10,1,10);this.player.coins=clamp(Number(p.coins)||0,0,9999);this.player.kills=clamp(Number(p.kills)||0,0,9999);this.player.lives=Number.isFinite(p.lives)?clamp(Math.round(p.lives),1,9):LIVES;}
+ restore(s){if(s.version!==1)return;this.weather=new StormSystem();this._skyClock=null;this.doors.forEach((d,i)=>{d.open=!!s.mechanisms?.doors?.[i];d.progress=d.open?1:0;});this.levers.forEach(l=>l.progress=this.doors[l.door].open?1:0);this.lifts.forEach((l,i)=>{l.y=s.mechanisms?.lifts?.[i]===l.bottom?l.bottom:l.top;l.goal=l.y;});this.worldFlags=s.worldFlags||{};let p=s.player;if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y)){this.gate=!!s.gate;this.player.level=p.level===1?1:0;this.player.x=clamp(p.x,40,MW*16-40);this.player.y=clamp(p.y,40,MH*16-40);if(this.solid(this.player.x,this.player.y,5,this.player.level)){this.player.level=0;this.player.x=START.x;this.player.y=START.y;}this.player.hp=clamp(Number(p.hp)||10,1,10);this.player.coins=clamp(Number(p.coins)||0,0,9999);this.player.kills=clamp(Number(p.kills)||0,0,9999);this.player.lives=Number.isFinite(p.lives)?clamp(Math.round(p.lives),1,9):LIVES;}
   if(Array.isArray(s.seals))this.seals=[0,1,2].map(i=>!!s.seals[i]);this.chests.forEach((c,i)=>c.open=!!s.chests?.[i]);this.enemies.forEach(e=>{const old=s.enemies?.find(v=>v.id===e.id);if(old){e.dead=!!old.dead;e.hp=clamp(Number(old.hp)||0,0,e.maxHp);}});
   if(s.checkpoint&&Number.isFinite(s.checkpoint.x)&&Number.isFinite(s.checkpoint.y)&&!this.solid(s.checkpoint.x,s.checkpoint.y,5,s.checkpoint.level||0))this.checkpoint={...s.checkpoint};this.elapsed=Math.max(0,Number(s.elapsed)||0);this.clock=Number.isFinite(s.clock)?s.clock:CLOCK_START+this.elapsed*1440/DAY_LEN;this.won=!!s.won;if(Array.isArray(s.drops))this.drops=s.drops.filter(d=>d&&Number.isFinite(d.x)&&Number.isFinite(d.y)&&['coin','heart','flask'].includes(d.kind)).slice(0,60).map(d=>({level:d.level===1?1:0,x:d.x,y:d.y,kind:d.kind,z:0}));
   this.drops=this.drops.filter(d=>!d.relic);RELICS.forEach((r,i)=>{if(!this.worldFlags['r'+i])this.drops.push({level:0,x:r.x,y:r.y,kind:'flask',z:0,relic:'r'+i});});
@@ -2249,9 +2305,9 @@ class Renderer{
  prop(o){if(o.broken){this.breakAnim(o);return;}const BK=BREAKABLE[o.kind],s=this.propCache[BK&&o.hp<BK.hp?o.kind+'_k1':o.kind],c=this.c,dx=o.shake>0?Math.round(Math.sin(o.shake*70)*o.shake*9+(o.kick||0)*o.shake*4):0,dy=o.shake>.12?-1:0;
   if(s){c.drawImage(s,Math.round(o.x)-32+dx,Math.round(o.y)-56+dy);if(o.flash>0){c.save();c.globalAlpha=Math.min(1,o.flash*8)*.55;c.globalCompositeOperation='lighter';c.drawImage(s,Math.round(o.x)-32+dx,Math.round(o.y)-56+dy);c.restore();}}if(o.kind==='torch'||o.kind==='camp')this.rawProp(o);}
  rawProp(o){const c=this.c,x=Math.round(o.x),y=Math.round(o.y),t=this.g.time,camp=o.kind==='camp',lit=camp?1:this.litOf(o);if(lit<.06)return;this.flame(x,camp?y-2:y-12,Math.max(2,Math.round((camp?10:7)*lit)),t+x*.37);}
- // Nuit (0 → 1) selon l'heure : les feux s'allument au coucher du soleil (21 h 36 – 22 h 48), s'éteignent après l'aube (5 h 48 – 7 h).
- nightK(){const h=(((this.g.clock??CLOCK_START)/60)%24+24)%24;return h>=12?clamp((h-21.6)/1.2,0,1):clamp((7-h)/1.2,0,1);}
- litOf(o){const n=this.nightK();return n<=0?0:clamp((n-hash(Math.round(o.x),Math.round(o.y),90)*.4)/.3,0,1);} // chaque brasero à son tour
+ // Lampes, faune et décor suivent le même cycle, avec une aide pendant les gros fronts nuageux.
+ nightK(){return this.g.sky().night;}
+ litOf(o){const s=this.g.sky(),n=s.night+.48*s.cloud*(1-s.night);return clamp((n-hash(Math.round(o.x),Math.round(o.y),90)*.4)/.3,0,1);}
  // Cristal d'un personnage (couleur exacte du sprite) : centre en pixels depuis ses pieds, calculé une fois par image.
  orbOf(img,rgb){const m=this.orbMap||(this.orbMap=new Map());if(m.has(img))return m.get(img);let r=null;
   try{const w=img.width,h=img.height,t=this.orbCv||(this.orbCv=document.createElement('canvas'));t.width=w;t.height=h;const x=t.getContext('2d',{willReadFrequently:true});x.clearRect(0,0,w,h);x.drawImage(img,0,0);
@@ -2291,35 +2347,17 @@ class Renderer{
   for(const yy of[y0,y0+h-4]){box(c,x0-2,yy,w+4,3,P[3]);box(c,x0-2,yy,w+4,1,P[5]);box(c,x0-2,yy+3,w+4,1,P[0]);}
   box(c,x0-2,y0+h-1,w+4,2,P[1]);box(c,x0-2,y0+h+1,w+4,1,P[0]);
   for(let x=x0-2;x<=x0+w-1;x+=Math.max(8,(w+1)/3|0)){for(const yy of[y0-4,y0+h-8]){box(c,x,yy,3,7,P[2]);box(c,x,yy,1,7,P[4]);box(c,x,yy,3,1,P[5]);box(c,x-1,yy,1,7,P[0]);box(c,x+3,yy,1,7,P[0]);box(c,x-1,yy-1,5,1,P[0]);}}}
- skyTint(ph,rain){let a=SKY_KEYS[0],b=SKY_KEYS[1];for(let i=1;i<SKY_KEYS.length;i++)if(ph<=SKY_KEYS[i][0]){a=SKY_KEYS[i-1];b=SKY_KEYS[i];break;}
-  const u=(ph-a[0])/Math.max(1e-6,b[0]-a[0]),c=a[1].map((v,i)=>v+(b[1][i]-v)*u),wet=[.64,.7,.8];return c.map((v,i)=>Math.round(v*(1-rain*.8*(1-wet[i]))));}
+ skyTint(ph,rain=0){return weatherTint({...dayCycle(ph*1440),rain,cloud:rain});}
  lights(){const g=this.g,p=g.player,t=g.time,L=[],fl=(k,sp)=>1+.06*Math.sin(t*sp+k)+.035*Math.sin(t*sp*1.63+k*.7); // [x, y, rayon, couleur, intensité]
   if(!g.dying&&!(p.spawnFX>SPAWN_T-.4)){const ly=p.y-6-(p.elevation!==undefined?p.elevation:p.level?12:0);L.push([p.x,ly,78,[178,164,136],.95],[p.x,ly-10,26,[200,188,160],.45]);}
   for(const o of g.world.props)if(o.kind==='torch'){const lit=this.litOf(o);if(lit<=0)continue;const f=fl(o.x,9)*lit;L.push([o.x,o.y-6,(54+2*Math.sin(t*6.3+o.x))*(.55+.45*lit),[255,160,80],.82*f],[o.x,o.y-15,13,[255,196,120],.7*f]);}
   for(const s of g.steles)if(s.active){const f=fl(s.x,7);L.push([s.x,s.y-6,44+1.5*Math.sin(t*5.1+s.x),[255,170,92],.72*f],[s.x,s.y-41,11,[255,200,130],.65*f]);}
   SEALS.forEach((s,i)=>{if(!g.seals[i])L.push([s.x,s.y-14,26,[230,210,150],.55]);});
   if(this.mg)L.push(...this.mg.L);return L;}
- weatherFX(c,W,VH){const g=this.g,{phase,rain}=g.sky(),t=g.time,cx=this.cam.x,cy=this.cam.y;
-  if(rain>0){c.save();c.fillStyle='#c4d8e8';c.globalAlpha=.7;const n=Math.round(160*rain);
-   for(let i=0;i<n;i++){const sp=250+hash(i,1,71)*90,y=(hash(i,3,71)*(VH+40)+t*sp)%(VH+40)-20,x=((hash(i,2,71)*(W+60)-t*sp*.28)%(W+60)+W+60)%(W+60)-30,X=Math.round(cx+x),Y=Math.round(cy+y);
-    c.fillRect(X,Y,1,4);c.fillRect(X-1,Y+4,1,3);}
-   c.fillStyle='#dbe9f2';c.globalAlpha=.7;const m=Math.round(46*rain);
-   for(let j=0;j<m;j++){const q=t/.42+hash(j,4,71),cyc=Math.floor(q),ph=q-cyc,X=Math.round(cx+hash(j,cyc,72)*W),Y=Math.round(cy+hash(j,cyc,73)*VH);
-    if(ph<.3)c.fillRect(X,Y,1,1);else if(ph<.65){c.fillRect(X-1,Y,1,1);c.fillRect(X+1,Y,1,1);c.fillRect(X,Y-1,1,1);}else{c.fillRect(X-2,Y,1,1);c.fillRect(X+2,Y,1,1);}}
-   c.restore();}
-  const tint=this.skyTint(phase,rain),dark=1-(tint[0]*.3+tint[1]*.55+tint[2]*.15)/255;this.mg=this.magic();if(tint.every(v=>v>=254)){this.glowFX(c,0);return;}
-  const O=this.skyCv||(this.skyCv=document.createElement('canvas')),w=Math.ceil(W)+2,h=Math.ceil(VH)+2;
-  if(O.width!==w||O.height!==h){O.width=w;O.height=h;}const x=O.getContext('2d'),ox=Math.floor(cx),oy=Math.floor(cy);
-  x.globalCompositeOperation='source-over';x.fillStyle='rgb('+tint.join(',')+')';x.fillRect(0,0,w,h);
-  if(dark>.18){const k=Math.min(1,(dark-.18)/.4);x.globalCompositeOperation='lighter';
-   for(const[lx,ly,R,col,amp]of this.lights()){if(!(R>0)||!Number.isFinite(lx+ly+amp))continue;const X=lx-ox,Y=ly-oy;if(X<-R||Y<-R||X>w+R||Y>h+R)continue; // halo au sol, vu en perspective, qui s'éteint en douceur
-    x.save();x.translate(X,Y);x.scale(1,.72);const gr=x.createRadialGradient(0,0,0,0,0,R);
-    for(const[st,a]of[[0,.92],[.18,.72],[.42,.4],[.68,.15],[.86,.04],[1,0]])gr.addColorStop(st,'rgb('+col.map(v=>Math.round(v*a*amp*k)).join(',')+')');
-    x.fillStyle=gr;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.fill();x.restore();}}
-  c.save();c.globalCompositeOperation='multiply';c.drawImage(O,ox,oy);c.restore();if(rain>0){const k=clamp(dark/.6,0,1),col=[150-116*k,154-116*k,160-114*k].map(Math.round);c.save();c.globalAlpha=.24*rain;c.fillStyle='rgb('+col.join(',')+')';c.fillRect(Math.floor(cx)-2,Math.floor(cy)-2,Math.ceil(W)+4,Math.ceil(VH)+4);c.restore();}this.glowFX(c,dark);}
- clockPill(g){const c=this.c,s=this.safe,T=this.top,txt=g.hourText(),tw=textW(c,txt),w=tw+19,x=Math.round(this.W-s.r-w-4),y=T+4,hr=(g.clock/60)%24,day=hr>=6.5&&hr<22.2;
+ weatherFX(c,W,VH){renderWeather(this,c,W,VH);}
+ clockPill(g){const c=this.c,s=this.safe,T=this.top,txt=g.hourText(),tw=textW(c,txt),w=tw+19,x=Math.round(this.W-s.r-w-4),y=T+4,period=g.sky().period;
   this.uiBox(x,y-1,w,Math.ceil(8*textSettings.scale)+7);
-  if(day)pixels(c,['..1..','.111.','11211','.111.','..1..'],x+5,y+4,{1:'#e5bf67',2:'#fff3c0'});else pixels(c,['.11..','11...','11...','11..1','.111.'],x+5,y+4,{1:'#bfd4ea'});
+  if(period==='day')pixels(c,['..1..','.111.','11211','.111.','..1..'],x+5,y+4,{1:'#e5bf67',2:'#fff3c0'});else if(period==='night')pixels(c,['.11..','11...','11...','11..1','.111.'],x+5,y+4,{1:'#bfd4ea'});else pixels(c,['..1..','.121.','12221','.....','11111'],x+5,y+4,{1:period==='dawn'?'#e9bc91':'#d69379',2:'#ffe0ab'});
   text(c,txt,x+14,y+3,PAL.cream);}
  sleepFX(c,W,VH){const g=this.g,S=g.sleeping,a=clamp(Math.min(S.t/.45,(S.dur-S.t)/.45),0,1),cx=this.cam.x,cy=this.cam.y;c.save();c.globalAlpha=a*.94;c.fillStyle='#05080c';c.fillRect(cx-2,cy-2,W+4,VH+4);c.globalAlpha=a;
   const t=g.hourText(),tw=textW(c,t);text(c,t,Math.round(cx+W/2-tw/2),Math.round(cy+VH/2-4),PAL.cream);
@@ -2431,7 +2469,7 @@ class MusicDirector{
   }
   if(this.hold>0)return 'combat';
   const hour=(((g.clock??CLOCK_START)/60)%24+24)%24;
-  return MUSIC_DATA.night&&(hour>=23||hour<6)?'night':'ambient';
+  return MUSIC_DATA.night&&dayCycle(g.clock??CLOCK_START).night>.65?'night':'ambient';
  }
 }
 // music.js — séquenceur chiptune : joue les notes MIDI des boucles (exploration / combat / boss)
@@ -2465,12 +2503,12 @@ class Music{
   const spt=60/d.bpm/d.tpb,beat=60/d.bpm,loop=(d.bars||1)*4*beat,tracks={};
   const P={lead:{w:'p25',g:.30,pan:0,a:.006,tau:.35,sus:.7,rel:.06,vib:14},harm:{w:'p50',g:fond?.15:.19,pan:.35,a:.008,tau:.3,sus:.65,rel:.05,vib:8},
    arp:{w:'p125',g:.20,pan:-.3,a:.003,tau:.09,sus:.45,rel:.04},saw:{w:'saw',g:fond?.10:.13,pan:-.1,a:fond?.18:.03,tau:.8,sus:.8,rel:.12},
-   bass:{w:'tri',g:.42,pan:0,a:.0014,flat:true,rel:.008},drums:{g:.30,pan:.15}};if(d.style==='title')Object.assign(P,TITLE_TIMBRES);if(d.style==='ui'){Object.assign(P.lead,{w:'tri',g:.4,a:.003,tau:.035,sus:.25,rel:.025,vib:0});Object.assign(P.arp,{w:'p125',g:.12,a:.002,tau:.02,sus:.15,rel:.02});P.bass.g=.18;}
+   bass:{w:'tri',g:.42,pan:0,a:.0014,flat:true,rel:.008},drums:{g:.30,pan:.15}};if(WEATHER_TIMBRES[d.style])Object.assign(P,WEATHER_TIMBRES[d.style]);if(d.style==='title')Object.assign(P,TITLE_TIMBRES);if(d.style==='ui'){Object.assign(P.lead,{w:'tri',g:.4,a:.003,tau:.035,sus:.25,rel:.025,vib:0});Object.assign(P.arp,{w:'p125',g:.12,a:.002,tau:.02,sus:.15,rel:.02});P.bass.g=.18;}
   for(const k in d.tracks){const pan=c.createStereoPanner();pan.pan.value=P[k].pan;pan.connect(bus);tracks[k]={ev:d.tracks[k],i:0,iter:0,node:pan,p:P[k]};}
   // écho façon delay NES : 3/4 de temps, plutôt à droite
-  const dl=c.createDelay(2),eg=c.createGain(),ep=c.createStereoPanner();dl.delayTime.value=d.style==='ui'?.055:beat*.75;eg.gain.value=d.style==='ui'?.10:.22;ep.pan.value=.45;tracks.lead.node.connect(dl);dl.connect(eg);eg.connect(ep);ep.connect(bus);
+  if(!WEATHER_TIMBRES[d.style]){const dl=c.createDelay(2),eg=c.createGain(),ep=c.createStereoPanner();dl.delayTime.value=d.style==='ui'?.055:beat*.75;eg.gain.value=d.style==='ui'?.10:.22;ep.pan.value=.45;tracks.lead.node.connect(dl);dl.connect(eg);eg.connect(ep);ep.connect(bus);}
   return {name,bus,tracks,spt,loop,t0:at,once,end:once?at+(d.dur||loop):Infinity,envelope:{from:fadeTime?0:g,to:g,start:at,end:at+fadeTime}};}
- note(song,tr,t,dur,note,vel){const c=this.ctx,p=tr.p,amp=p.g*vel/127;if(p.kind){titleVoice(this,song,tr,t,dur,note,vel);return;}
+ note(song,tr,t,dur,note,vel){const c=this.ctx,p=tr.p,amp=p.g*vel/127;if(p.kind==='weather'){weatherVoice(this,song,tr,t,dur,note,vel);return;}if(p.kind){titleVoice(this,song,tr,t,dur,note,vel);return;}
   if(tr===song.tracks.drums){const b=this.drums[note];if(!b)return;const s=c.createBufferSource(),g=c.createGain();s.buffer=b;g.gain.value=amp;s.connect(g);g.connect(tr.node);s.start(t);return;}
   const o=c.createOscillator(),g=c.createGain();o.setPeriodicWave(this.waves[p.w]);o.frequency.value=440*2**((note-69)/12);
   const end=t+dur;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(amp,t+p.a);
@@ -2482,7 +2520,7 @@ class Music{
   for(let guard=0;guard<400;guard++){const j=tr.i*4,t=song.t0+tr.iter*song.loop+ev[j]*song.spt;if(t>=until)break;
    if(t>=this.ctx.currentTime-.02)this.note(song,tr,t,ev[j+1]*song.spt,ev[j+2],ev[j+3]);
    tr.i++;if(tr.i*4>=ev.length){if(song.once){tr.done=true;break;}tr.i=0;tr.iter++;}}}}
- cue(name,at=this.ctx.currentTime+.01,destination=null,volume=1){const data=CUE_DATA[name];if(!data)return;
+ cue(name,at=this.ctx.currentTime+.01,destination=null,volume=1){const data=CUE_DATA[name]||WEATHER_SCORES[name];if(!data)return;
   const d={...data,gain:data.gain*volume},song=this.start('cue',at,d,true,false,false,destination);
   this.schedule(song,at+d.dur+1);setTimeout(()=>{try{song.bus.disconnect();}catch{}},(d.dur+2)*1000);
  }
@@ -2548,12 +2586,9 @@ class Sound{
  pick(group){const list=SFX_GROUPS[group].filter(n=>this.buffers[n]);if(!list.length)return null;let i=Math.floor(Math.random()*list.length);if(list.length>1&&list[i]===this.lastPick[group])i=(i+1)%list.length;return this.lastPick[group]=list[i];}
  play(name,{vol=1,rate=1,spread=0,delay=0}={}){const buf=name&&this.buffers[name];if(!this.enabled||!this.sfxOn||!this.ctx||!buf)return null;const src=this.ctx.createBufferSource(),g=this.ctx.createGain();src.buffer=buf;src.playbackRate.value=rate*(1+(Math.random()*2-1)*spread);g.gain.value=vol;src.connect(g);g.connect(this.master);src.start(this.ctx.currentTime+delay);return src;}
  tone(freq,duration=.1,type='square',vol=.035,delay=0,to=null){if(!this.enabled||!this.sfxOn||!this.ctx||this.sfxVolume===0)return;const t=this.ctx.currentTime+delay;const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);if(to)o.frequency.exponentialRampToValueAtTime(Math.max(20,to),t+duration);g.gain.setValueAtTime(vol*this.sfxVolume,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(this.ctx.destination);o.start(t);o.stop(t+duration+.01);}
- rain(level){if(!this.enabled||!this.ctx||this.ctx.state!=='running'){if(this.rainG&&!this.enabled)this.rainG.gain.value=0;return;}if(!this.rainG){if(level<=0)return;const ctx=this.ctx,len=ctx.sampleRate*2,buf=ctx.createBuffer(1,len,ctx.sampleRate),d=buf.getChannelData(0);
-   let b=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b=b*.6+w*.4;d[i]=(Math.random()<.002?w*3:0)+b*.5;}
-   const src=ctx.createBufferSource(),hp=ctx.createBiquadFilter(),lp=ctx.createBiquadFilter();src.buffer=buf;src.loop=true;hp.type='highpass';hp.frequency.value=700;lp.type='lowpass';lp.frequency.value=5200;
-   this.rainG=ctx.createGain();this.rainG.gain.value=0;src.connect(hp);hp.connect(lp);lp.connect(this.rainG);this.rainG.connect(this.master||ctx.destination);src.start();}
-  const g=this.rainG.gain,now=this.ctx.currentTime;g.setTargetAtTime(Math.max(0,level)*.11,now,.4);}
+ rain(level){weatherRain(this,level);}
  fx(name,ev={}){if(!this.enabled||!this.sfxOn||!this.ctx)return;
+  if(name==='thunder'){weatherThunder(this,ev);return;}
   if(name.startsWith('ui_')){const now=this.ctx.currentTime;if(now-(this.lastUI??-1)<.065)return;this.lastUI=now;this.music??=new Music(this.ctx,this.ctx.destination);this.music.cue(name,now+.006,this.master);return;}
   if(name==='guardianfall'){this.music??=new Music(this.ctx,this.ctx.destination);this.music.cue('guardian_death',this.ctx.currentTime+.01,this.master,ev.vol??1);return;}
   // Bruitages échantillonnés (repli sur les bips d'origine tant qu'ils ne sont pas décodés)
@@ -2645,6 +2680,111 @@ function setTextSize(value,persist=true){textSettings.set(value,persist);applyTe
 function canvasLines(ctx,value,maxWidth){const out=[];let line='';for(const word of String(value).split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width<=maxWidth){line=next;continue;}if(line)out.push(line);line='';for(const char of word){if(line&&ctx.measureText(line+char).width>maxWidth){out.push(line);line='';}line+=char;}}if(line)out.push(line);return out;}
 
 // END TEXT LAYOUT
+// BEGIN WEATHER RENDER
+function renderWeather(renderer,c,W,VH){
+ const g=renderer.g,sky=g.sky(),{rain,wind}=sky,t=g.time,cx=renderer.cam.x,cy=renderer.cam.y;
+ const reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const flash=g.weather?.flash(reduced)||0,tint=weatherTint(sky,flash),dark=1-(tint[0]*.3+tint[1]*.55+tint[2]*.15)/255;
+ renderer.mg=renderer.magic();
+ const O=renderer.skyCv||(renderer.skyCv=document.createElement('canvas')),w=Math.ceil(W)+2,h=Math.ceil(VH)+2;
+ if(O.width!==w||O.height!==h){O.width=w;O.height=h;}
+ const x=O.getContext('2d'),ox=Math.floor(cx),oy=Math.floor(cy);
+ x.globalCompositeOperation='source-over';x.fillStyle='rgb('+tint.join(',')+')';x.fillRect(0,0,w,h);
+ if(dark>.18){const k=Math.min(1,(dark-.18)/.4);x.globalCompositeOperation='lighter';
+  for(const[lx,ly,R,col,amp]of renderer.lights()){
+   if(!(R>0)||!Number.isFinite(lx+ly+amp))continue;const X=lx-ox,Y=ly-oy;if(X<-R||Y<-R||X>w+R||Y>h+R)continue;
+   x.save();x.translate(X,Y);x.scale(1,.72);const gr=x.createRadialGradient(0,0,0,0,0,R);
+   for(const[st,a]of[[0,.92],[.18,.72],[.42,.4],[.68,.15],[.86,.04],[1,0]])gr.addColorStop(st,'rgb('+col.map(v=>Math.round(v*a*amp*k)).join(',')+')');
+   x.fillStyle=gr;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.fill();x.restore();
+  }
+ }
+ c.save();c.globalCompositeOperation='multiply';c.drawImage(O,ox,oy);c.restore();
+ if(flash>0){
+  // The same strike illuminates the landscape, airborne rain and wet surfaces.
+  const side=g.weather.strike.pan,gr=c.createLinearGradient(cx+(side<0?0:W),cy,cx+(side<0?W:0),cy+VH);
+  gr.addColorStop(0,'rgba(202,222,250,'+(flash*.12)+')');gr.addColorStop(1,'rgba(156,185,223,0)');
+  c.save();c.fillStyle=gr;c.fillRect(cx,cy,W,VH);c.restore();
+ }
+ if(rain>.01){
+  const area=W*VH/64000,n=Math.min(420,Math.round(area*(60+270*rain)*rain)),bright=.46+.2*rain+.25*flash;
+  c.save();c.fillStyle=flash>.15?'#deebff':sky.night>.6?'#91afce':'#b7cedd';
+  for(let i=0;i<n;i++){
+   const near=i%3!==0,speed=(160+160*rain+hash(i,1,71)*90)*(near?1:.65),span=VH+40;
+   const yy=(hash(i,3,71)*span+t*speed)%span-20,xx=((hash(i,2,71)*(W+80)-t*speed*wind*.45)%(W+80)+W+80)%(W+80)-40;
+   const X=Math.round(cx+xx),Y=Math.round(cy+yy),len=Math.round((3+rain*7)*(near?1:.65)),drift=Math.round(wind*len*.45);
+   c.globalAlpha=bright*(near?1:.45);c.fillRect(X,Y,1,Math.ceil(len/2));c.fillRect(X-drift,Y+Math.ceil(len/2),1,Math.floor(len/2));
+  }
+  const count=Math.min(96,Math.round(area*95*rain));c.fillStyle=flash>.15?'#dceaff':'#a1bbcf';
+  for(let j=0;j<count;j++){
+   const q=t/(.5-.2*rain)+hash(j,4,71),cyc=Math.floor(q),ph=q-cyc,X=Math.round(cx+hash(j,cyc,72)*W),Y=Math.round(cy+hash(j,cyc,73)*VH);
+   if([4,6,8].includes(g.tile(X,Y)))continue;c.globalAlpha=(.22+.25*rain+.25*flash)*(1-ph);
+   if(ph<.3)c.fillRect(X,Y,1,1);else{const r=ph<.65?1:2;c.fillRect(X-r,Y,1,1);c.fillRect(X+r,Y,1,1);if(ph<.65)c.fillRect(X,Y-1,1,1);}
+  }
+  // Low, transparent spray during a downpour; enough contrast remains for combat.
+  if(rain>.65){c.globalAlpha=(rain-.65)*.12;c.fillStyle='#9fb3c7';c.fillRect(cx,cy,W,VH);}
+  c.restore();
+ }
+ renderer.glowFX(c,dark);
+}
+
+// END WEATHER RENDER
+// BEGIN WEATHER AUDIO
+// These noise instruments play the exact note events exported in the weather MIDI files.
+// Filtered, enveloped layers keep the rain organic without adding a competing melody.
+const WEATHER_TIMBRES={
+ rain:{lead:{kind:'weather',voice:'drop',g:.16,pan:-.42},arp:{kind:'weather',voice:'splash',g:.13,pan:.42},
+  saw:{kind:'weather',voice:'sheet',g:.22,pan:-.12},bass:{kind:'weather',voice:'wind',g:.2,pan:.2}},
+ thunder:{lead:{kind:'weather',voice:'crack',g:.72,pan:0},arp:{kind:'weather',voice:'echo',g:.38,pan:.35},
+  saw:{kind:'weather',voice:'roll',g:.65,pan:-.25},bass:{kind:'weather',voice:'body',g:.8,pan:0}}
+};
+function weatherVoice(music,song,tr,t,dur,note,velocity){
+ const c=music.ctx,p=tr.p,voice=p.voice;
+ if(!music.weatherNoise){const count=c.sampleRate*6,b=c.createBuffer(1,count,c.sampleRate),d=b.getChannelData(0);let seed=52691;
+  for(let i=0;i<count;i++){seed=(seed*16807)%2147483647;d[i]=(seed/2147483647*2-1);}
+  music.weatherNoise=b;
+ }
+ const profiles={drop:[950,5500,.003,.055],splash:[1500,7000,.002,.035],sheet:[650,5200,.35,.4],wind:[90,950,.55,.6],
+  crack:[220,4300,.008,.14],echo:[120,1500,.12,.5],roll:[45,680,.25,.75],body:[28,300,.045,.9]},[low,high,attack,release]=profiles[voice];
+ const s=c.createBufferSource(),hp=c.createBiquadFilter(),lp=c.createBiquadFilter(),g=c.createGain();
+ s.buffer=music.weatherNoise;s.loop=true;hp.type='highpass';hp.frequency.value=Math.min(low*(.84+(note%12)*.035),c.sampleRate*.4);lp.type='lowpass';lp.frequency.value=Math.min(high,c.sampleRate*.45);
+ const amplitude=p.g*velocity/127,end=t+dur;
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(amplitude,t+Math.min(attack,dur*.35));
+ g.gain.setTargetAtTime(amplitude*(voice==='crack'?.12:.65),t+Math.min(attack,dur*.35),Math.max(.025,dur*.3));
+ g.gain.setTargetAtTime(0,end,release/3);
+ s.connect(hp);hp.connect(lp);lp.connect(g);g.connect(tr.node);s.start(t,(note*.173+t*.127)%3);s.stop(end+release*3+.02);
+ s.onended=()=>{s.disconnect();hp.disconnect();lp.disconnect();g.disconnect();};
+}
+function weatherRain(sound,level){
+ const c=sound.ctx;if(!c)return;
+ level=sound.enabled&&sound.sfxOn&&c.state==='running'?clamp(level,0,1):0;
+ if(!sound.rainAudio){if(level<=0||!sound.master)return;sound.music??=new Music(c,c.destination);
+  const bus=sound.weatherBus||(sound.weatherBus=c.createGain());bus.gain.value=1;bus.connect(sound.master);
+  const names=['rain_light','rain_steady','rain_downpour'],songs=names.map(name=>sound.music.start(name,c.currentTime+.025,WEATHER_SCORES[name],false,false,false,bus));
+  for(const song of songs){song.bus.gain.cancelScheduledValues(c.currentTime);song.bus.gain.value=0;}
+  sound.rainAudio={bus,songs,last:c.currentTime};
+ }
+ const R=sound.rainAudio,now=c.currentTime;R.bus.gain.setTargetAtTime(level>0?1:0,now,.2);
+ const weights=[clamp(level/.24,0,1)*(1-skySmooth(.24,.54,level)),skySmooth(.24,.54,level)*(1-skySmooth(.58,.95,level)),skySmooth(.58,.95,level)];
+ R.songs.forEach((song,i)=>{
+  const score=WEATHER_SCORES[song.name];song.bus.gain.setTargetAtTime(weights[i]*score.gain*CUE_VOLUME,now,.55);
+  // Resuming a suspended tab must not iterate over hours of missed rain notes.
+  if(now-R.last>1)for(const tr of Object.values(song.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-song.t0)/song.loop));}
+  if(level>0||now-R.last<2)sound.music.schedule(song,now+.18);
+ });
+ if(level>0)R.last=now;
+}
+function weatherThunder(sound,event){
+ if(!sound.enabled||!sound.sfxOn||!sound.ctx||!sound.master)return;
+ sound.music??=new Music(sound.ctx,sound.ctx.destination);
+ const pan=sound.ctx.createStereoPanner();pan.pan.value=clamp(event.pan||0,-.85,.85);pan.connect(sound.weatherBus||sound.master);
+ sound.music.cue(event.near?'thunder_near':'thunder_distant',sound.ctx.currentTime+.01,pan,.7+.3*(event.strength??1));
+ setTimeout(()=>{try{pan.disconnect();}catch{}},9000);
+}
+
+// END WEATHER AUDIO
+// BEGIN WEATHER MIDI
+const WEATHER_SCORES={"rain_light":{"bpm":90,"tpb":480,"bars":8,"dur":21.333333333333332,"style":"rain","gain":0.7,"tracks":{"lead":[297,78,67,53,890,47,77,68,1273,45,71,61,1744,40,74,53,2063,72,69,62,2453,77,74,36,2777,51,79,70,3125,75,78,41,3573,29,70,49,4134,73,65,57,4676,66,66,52,5022,38,62,45,5403,62,72,33,5932,76,62,52,6476,37,81,32,6948,49,69,49,7523,48,67,69,7917,28,72,68,8404,53,74,70,8747,29,77,45,9089,40,63,39,9670,50,72,43,10159,42,66,63,10709,30,66,68,11064,55,75,58,11475,59,67,52,12043,50,78,35,12398,71,63,58,12853,78,79,68,13288,63,65,35,13633,63,67,65,14069,50,78,44,14523,43,64,53,14902,70,66,57],"arp":[688,34,82,43,1280,48,81,37,2093,52,76,48,2749,48,78,53,3623,47,74,37,4552,40,76,39,5135,56,79,46,5792,30,88,29,6675,50,71,28,7331,25,83,37,8152,32,70,48,8999,53,71,35,9783,42,85,29,10432,31,80,36,11119,40,76,27,12020,56,85,48,12839,33,77,60,13739,41,89,47,14552,36,73,41],"saw":[0,1920,48,42,1920,1920,49,48,3840,1920,50,54,5760,1920,48,42,7680,1920,49,48,9600,1920,50,54,11520,1920,48,42,13440,1920,49,48],"bass":[120,1620,30,23,2040,1620,31,27,3960,1620,32,31,5880,1620,33,35,7800,1620,30,23,9720,1620,31,27,11640,1620,32,31,13560,1620,33,35]}},"rain_steady":{"bpm":90,"tpb":480,"bars":8,"dur":21.333333333333332,"style":"rain","gain":0.85,"tracks":{"lead":[192,56,76,62,563,29,70,65,766,29,79,74,1160,52,72,41,1536,32,78,42,2023,79,66,65,2445,75,64,71,2872,50,76,75,3277,65,65,75,3780,44,79,54,4101,32,72,73,4607,68,64,50,5062,77,69,69,5262,55,74,52,5710,60,78,43,5966,30,71,62,6282,64,73,42,6628,60,63,52,6910,52,64,46,7126,70,70,49,7354,62,74,50,7629,52,67,65,8007,48,69,58,8216,28,80,59,8605,25,64,46,8847,80,68,68,9105,51,80,48,9588,41,72,72,10073,32,77,54,10268,33,65,64,10569,41,69,51,10880,42,74,66,11338,49,65,52,11698,62,76,46,11985,41,78,46,12220,55,64,68,12650,78,76,40,12985,45,80,40,13239,69,78,47,13672,66,65,54,13873,67,72,60,14247,71,63,73,14520,36,67,40,14802,77,71,54,15052,48,74,75],"arp":[680,29,83,35,1088,35,81,63,1600,48,74,44,2344,56,79,45,2714,34,82,59,3175,52,85,60,3537,34,89,41,3957,42,87,62,4376,27,88,53,5013,48,73,47,5518,37,86,39,6161,53,74,56,6810,38,81,48,7433,26,80,45,8027,25,73,61,8619,49,75,44,9041,35,72,41,9799,42,83,62,10251,51,71,53,10629,31,89,54,11317,31,89,46,11880,25,85,49,12285,59,75,66,12654,35,86,54,13082,55,76,40,13840,42,83,34,14472,42,80,61,15079,44,77,47],"saw":[0,1920,48,64,1920,1920,49,70,3840,1920,50,76,5760,1920,48,64,7680,1920,49,70,9600,1920,50,76,11520,1920,48,64,13440,1920,49,70],"bass":[120,1620,30,35,2040,1620,31,39,3960,1620,32,43,5880,1620,33,47,7800,1620,30,35,9720,1620,31,39,11640,1620,32,43,13560,1620,33,47]}},"rain_downpour":{"bpm":90,"tpb":480,"bars":8,"dur":21.333333333333332,"style":"rain","gain":1.05,"tracks":{"lead":[87,35,65,70,237,65,62,61,591,69,68,48,907,63,69,69,1010,46,66,62,1264,26,79,53,1454,44,68,73,1631,79,73,68,1992,47,80,60,2107,70,73,52,2206,53,78,54,2542,43,67,55,2742,37,65,64,2943,34,65,51,3295,28,74,54,3664,66,72,75,4050,25,79,55,4348,37,73,77,4756,51,75,63,4845,56,63,54,4959,28,65,60,5257,54,63,47,5524,53,73,53,5722,26,74,50,5816,50,72,74,6219,45,69,43,6498,51,81,60,6779,66,80,46,6965,42,74,79,7250,57,66,53,7507,75,71,78,7693,33,71,48,7825,56,66,51,8167,53,66,75,8511,50,69,76,8857,79,74,82,8989,40,76,78,9161,51,64,71,9446,69,81,55,9587,55,81,65,9906,49,64,71,10173,46,81,78,10395,56,79,47,10646,59,81,52,10743,33,62,79,10863,48,70,55,11234,61,63,59,11518,53,64,81,11711,57,69,70,12006,35,74,63,12373,71,68,50,12641,32,63,82,13007,60,75,65,13169,63,71,82,13451,48,74,77,13670,66,73,47,13801,70,65,47,14094,69,75,72,14336,54,77,50,14715,36,63,50,15014,78,63,64,15126,56,67,63],"arp":[488,42,84,71,933,57,84,56,1450,38,74,54,1951,42,86,44,2339,42,74,50,2798,35,79,60,3147,43,84,68,3560,47,73,75,3887,32,71,60,4206,34,79,69,4700,44,88,75,5050,56,77,44,5546,49,83,71,6092,50,84,70,6470,40,81,70,6829,58,83,66,7011,47,79,65,7261,54,89,40,7500,38,75,51,7948,57,72,40,8359,54,75,47,8888,60,87,68,9441,56,85,60,9722,45,84,48,9950,38,76,71,10184,33,88,58,10626,53,86,46,10943,47,88,49,11277,46,83,50,11772,35,73,68,12142,26,75,47,12444,40,85,57,12778,39,88,74,13113,60,84,43,13495,40,76,53,13961,56,84,48,14236,38,76,57,14622,42,72,47,14910,25,84,43],"saw":[0,1920,48,87,1920,1920,49,93,3840,1920,50,99,5760,1920,48,87,7680,1920,49,93,9600,1920,50,99,11520,1920,48,87,13440,1920,49,93],"bass":[120,1620,30,47,2040,1620,31,51,3960,1620,32,55,5880,1620,33,59,7800,1620,30,47,9720,1620,31,51,11640,1620,32,55,13560,1620,33,59]}},"thunder_near":{"bpm":120,"tpb":480,"bars":4,"dur":7,"style":"thunder","gain":1.1,"tracks":{"lead":[0,120,49,116,85,95,51,70,220,140,46,42],"arp":[420,500,45,52,1180,650,40,40,2120,850,36,24],"saw":[90,1320,32,80,860,1440,29,66,2220,1500,26,42,3640,1100,24,22],"bass":[20,1650,24,115,640,2100,22,82,2110,1900,19,56,3580,1150,17,28]}},"thunder_distant":{"bpm":120,"tpb":480,"bars":4,"dur":7,"style":"thunder","gain":0.8,"tracks":{"lead":[0,180,40,30],"arp":[580,700,36,26,1840,1000,32,18,3100,1000,29,12],"saw":[0,1600,30,72,920,1900,27,62,2600,1750,24,38],"bass":[80,2100,22,80,1460,2250,20,61,3150,1500,17,28]}}};
+// END WEATHER MIDI
 // app.js
 installTextScaling();
 const $=id=>document.getElementById(id),KEY='conan-serpent-v1';
@@ -2746,7 +2886,7 @@ const musicDirector=new MusicDirector();let combatHold=0,lastMusicT=performance.
 function musicMode(){const now=performance.now(),dt=Math.min(.1,(now-lastMusicT)/1000);lastMusicT=now;
  if(state==='title'||state==='options')return 'title';if(state==='quit')return null;
  const p=game.player,playing=state==='playing';
- if(titleDeparture){if(!p.spawnFX||game.dying||game.dead||game.won)titleDeparture=false;else if(playing)return game.clock/60%24>=23||game.clock/60%24<6?'night':'ambient';}
+ if(titleDeparture){if(!p.spawnFX||game.dying||game.dead||game.won)titleDeparture=false;else if(playing)return game.sky().night>.65?'night':'ambient';}
  if(playing){const near=game.enemies.some(e=>!e.dead&&e.kind!=='boss'&&game.sameLevel(e,p)&&dist(e,p)<88);combatHold=near?4:Math.max(0,combatHold-dt);}
  return musicDirector.update(game,playing,dt);
 }
@@ -2767,7 +2907,7 @@ function toggleSound(){sound.toggleMusic();syncSoundButton();}
 function toggleSfx(){const on=sound.toggleSfx();syncSoundButton();if(on)sound.fx('loot');}
 function unlockAudio(e){if(landscapeBlocked)return;if(e.target?.closest?.('#sound,#sfx,#musicToggle,#sfxToggle')||e.code==='KeyM'||e.code==='KeyN')return;if(sound.unlock())syncSoundButton();}
 for(const t of ['pointerup','touchend','click','keydown'])addEventListener(t,unlockAudio,{capture:true,passive:true});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)sound.silent?.pause();else if(sound.enabled)sound.silent?.play()?.catch(()=>{});});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){sound.silent?.pause();sound.rain(0);sound.ambience({active:false});}else if(sound.enabled)sound.silent?.play()?.catch(()=>{});});
 $('sound').addEventListener('click',toggleSound);$('sfx').addEventListener('click',toggleSfx);syncSoundButton();
 const mobileMode=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0&&innerWidth<1000;
 document.body.classList.toggle('mobile',mobileMode);renderer.touch=mobileMode;fitScreen();
@@ -3038,7 +3178,7 @@ document.addEventListener('click',e=>{const b=e.target.closest?.('button');if(!b
 addEventListener('resize',()=>setTimeout(layoutStick,60));
 function handleEvents(){for(const ev of game.events.splice(0)){if(ev.type==='haptic'){haptics.pulse(ev.kind);continue;}if(['questdone','levelup','stele'].includes(ev.type))haptics.pulse('success');if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}if(ev.type==='dialogue'){syncDialogue();continue;}if(ev.type==='save')save();else if(ev.type==='message'){}else if(ev.type==='fallen'){resetTouch();noticeQueue.length=0;clearTimeout(noticeTimer);noticeTimer=0;$('notices').replaceChildren();if(ev.over){state='dead';try{localStorage.removeItem(KEY);}catch{}saved=null;overlay('PLUS AUCUNE VIE','Game over','Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.','RECOMMENCER','ENTREE POUR RECOMMENCER',true,{mode:'gameover',second:'QUITTER'});}else{state='deathscreen';overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.','CONTINUER','ENTREE POUR CONTINUER',true,{mode:'death',second:'QUITTER',html:true});}}else if(ev.type==='quests'){renderTracker(true);syncBadge();if(state==='menu')renderMenu();}else if(ev.type==='questpanel'){openQuestPanel(ev);}else if(ev.type==='sleepmenu'){openSleepPanel();}else if(ev.type==='win'){state='win';try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));}catch{}let m=Math.floor(game.elapsed/60),s=Math.floor(game.elapsed%60);overlay('L’ACIER A TRIOMPHE','Le serpent<br>est vaincu.','Tu as libéré le temple en '+m+' min '+String(s).padStart(2,'0')+' s. '+game.player.kills+' ennemis vaincus, '+game.player.coins+' pièces retrouvées.','REJOUER','PAR AVAR, QUELLE AVENTURE !');sound.fx('win');}else sound.fx(ev.type,ev);}}
 function frame(now){let dt=Math.min((now-last)/1000||.016,.04);last=now;if(landscapeBlocked){sound.tick(false,null);requestAnimationFrame(frame);return;}if(state==='playing'){let x=(keys.has('arrowright')||keys.has('d')?1:0)-(keys.has('arrowleft')||keys.has('q')||keys.has('a')?1:0),y=(keys.has('arrowdown')||keys.has('s')?1:0)-(keys.has('arrowup')||keys.has('z')||keys.has('w')?1:0);x+=stick.x;y+=stick.y;game.update(dt,{x,y,attack:keys.has('attack')||touchHas('attack'),attackPressed:pending.attack,guard:keys.has('guard')||touchHas('guard'),dodge:pending.dodge,interact:pending.interact});pending.dodge=false;pending.interact=false;pending.attack=false;handleEvents();}else if(['title','options','deathscreen','menu','dead','sleep'].includes(state))game.time+=dt;
- syncDialogue();syncAct();if(['title','options','quit'].includes(state)){titleScene.draw(titleTime,reduceMotion.matches||state==='quit');if(!document.hidden&&state!=='quit')titleTime+=dt;}else renderer.frame();sound.tick(!document.hidden&&['title','options','playing','dead','deathscreen','menu','sleep'].includes(state),state==='dead'||state==='deathscreen'?'gameover':musicMode());{const on=state==='playing'||state==='menu'||state==='sleep',p=game.player;sound.rain(on?game.sky().rain:0);sound.ambience({active:on,night:renderer.nightK(),rain:game.sky().rain,battle:combatHold>0||(game.bossActive&&!game.won),region:regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).id});}if(now-uiTime>150){updateUI();uiTime=now;}if(now>toastUntil)$('toast').classList.remove('visible');requestAnimationFrame(frame);}
+ syncDialogue();syncAct();if(['title','options','quit'].includes(state)){titleScene.draw(titleTime,reduceMotion.matches||state==='quit');if(!document.hidden&&state!=='quit')titleTime+=dt;}else renderer.frame();sound.tick(!document.hidden&&['title','options','playing','dead','deathscreen','menu','sleep'].includes(state),state==='dead'||state==='deathscreen'?'gameover':musicMode());{const on=!document.hidden&&(state==='playing'||state==='menu'||state==='sleep'),p=game.player;sound.rain(on?game.sky().rain:0);sound.ambience({active:on,night:renderer.nightK(),rain:game.sky().rain,battle:combatHold>0||(game.bossActive&&!game.won),region:regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).id});}if(now-uiTime>150){updateUI();uiTime=now;}if(now>toastUntil)$('toast').classList.remove('visible');requestAnimationFrame(frame);}
 if(saved&&!game.won)$('start').innerHTML='CONTINUER <span>↵</span>';
 if(saved&&!game.won)$('newGame').hidden=false;
 if(!storageWorks)$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';

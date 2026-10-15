@@ -10,7 +10,8 @@
     "test": "node --test tests/*.test.cjs",
     "embed:title": "node scripts/embed-title.cjs",
     "build:title-theme": "node scripts/build-title-theme.cjs",
-    "render:title-theme": "node scripts/render-title-theme.cjs"
+    "render:title-theme": "node scripts/render-title-theme.cjs",
+    "build:weather": "node scripts/build-weather-midi.cjs && node scripts/embed-title.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

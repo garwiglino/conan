@@ -24,6 +24,12 @@ html=html.replace("new TitleScene($('titleScene'))","new TitleScene($('titleScen
 html=html.replace(/(<canvas id="titleFlame" width=")\d+(" height=")\d+/,(_,a,b)=>a+meta.logo[0]+b+meta.logo[1]);
 const menuCode='// BEGIN TITLE MENU UI\n'+fs.readFileSync(path.join(root,'scripts/title-menu.js'),'utf8')+'\n// END TITLE MENU UI';
 html=html.replace(/\/\/ BEGIN TITLE MENU UI[\s\S]*?\/\/ END TITLE MENU UI/,()=>menuCode);
+for(const [tag,file]of [['WEATHER MODEL','weather.js'],['WEATHER RENDER','weather-render.js'],['WEATHER AUDIO','weather-audio.js']]){
+ const code='// BEGIN '+tag+'\n'+fs.readFileSync(path.join(root,'scripts',file),'utf8')+'\n// END '+tag,re=new RegExp('// BEGIN '+tag+'[\\s\\S]*?// END '+tag);
+ html=re.test(html)?html.replace(re,()=>code):html.replace('// app.js',()=>code+'\n// app.js');
+}
+const weatherScores='// BEGIN WEATHER MIDI\nconst WEATHER_SCORES='+JSON.stringify(json(path.join(root,'audio/weather-scores.json')))+';\n// END WEATHER MIDI';
+html=html.includes('// BEGIN WEATHER MIDI')?html.replace(/\/\/ BEGIN WEATHER MIDI[\s\S]*?\/\/ END WEATHER MIDI/,()=>weatherScores):html.replace('// app.js',()=>weatherScores+'\n// app.js');
 const textCode='// BEGIN TEXT LAYOUT\n'+fs.readFileSync(path.join(root,'scripts/text-layout.js'),'utf8')+'\n// END TEXT LAYOUT';
 html=html.includes('// BEGIN TEXT LAYOUT')?html.replace(/\/\/ BEGIN TEXT LAYOUT[\s\S]*?\/\/ END TEXT LAYOUT/,()=>textCode):html.replace('// app.js',()=>textCode+'\n// app.js');
 const textCSS='/* BEGIN READABILITY */\n'+fs.readFileSync(path.join(root,'scripts/readability.css'),'utf8')+'\n/* END READABILITY */';

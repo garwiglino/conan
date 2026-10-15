@@ -38,6 +38,16 @@ Quatre sons originaux en MIDI multipiste accompagnent l’ouverture, la sélecti
 
 Les vibrations sont courtes et espacées : sélection d’interface, dégâts reçus, parade réussie, stèle et récompense importante. Elles sont désactivables dans les options, indépendamment du son ; le réglage est conservé. Le relais UIKit dans l’app iOS utilise des retours haptiques natifs. **Une réinstallation depuis Xcode est nécessaire pour activer ce nouveau relais sur iPhone** ; la mise à jour du HTML seule ne peut pas l’ajouter. Les navigateurs compatibles utilisent l’API Vibration et les autres restent silencieux. La caméra ne tremble que lorsqu’un coup blesse réellement le joueur, jamais pour les caisses, l’apparition du héros ou la mort des ennemis. La réduction des animations désactive aussi cette secousse.
 
+## Cycle du ciel et météo
+
+La lumière commence à baisser à **16 h**. Le crépuscule s’étend de **18 h à 23 h**, la nuit de **23 h à 5 h**, et l’aube de **5 h à 9 h**. Les couleurs, les braseros, les ambiances et la musique évoluent progressivement avec ce cycle. Une journée conserve sa durée de huit minutes de jeu.
+
+Les fronts météo sont indépendants de l’heure : ciel sec, pluie fine, pluie moyenne soutenue, grosses averses sans tonnerre ou épisodes orageux. **Une pluie ne finit pas forcément en orage.** Les cellules orageuses peuvent être brèves puis laisser la pluie continuer. Les changements d’intensité et les nuages se fondent progressivement ; les anciennes sauvegardes restent compatibles.
+
+Chaque éclair produit une seule impulsion douce qui éclaire ensemble le terrain, les personnages et la pluie, sans tremblement de caméra. Le tonnerre arrive ensuite, avec une direction et un retard liés à la distance. Les éclairs sont atténués lorsque la réduction des animations est activée. Dormir ou charger une partie ne rejoue pas les anciens coups de tonnerre.
+
+Cinq compositions MIDI originales, chacune avec quatre pistes d’instruments et une piste de direction, alimentent le synthétiseur météo du jeu : [pluie fine](audio/rain-light.mid), [pluie soutenue](audio/rain-steady.mid), [grosse averse](audio/rain-downpour.mid), [tonnerre proche](audio/thunder-near.mid), [tonnerre lointain](audio/thunder-distant.mid). Les gouttes irrégulières, éclaboussures, nappes de pluie et rafales se mélangent en douceur ; les claquements, roulements et échos du tonnerre se superposent. Leur volume suit les **bruitages**, indépendamment de la musique. `npm run build:weather` reconstruit les MIDI et intègre les partitions et les sources météo dans les versions web et iOS.
+
 ## Sources du menu
 
 - [Logo animé Aseprite](art/title/hearthreaver-logo.aseprite) : quatre calques et douze images de 120 ms.
