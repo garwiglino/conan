@@ -1,0 +1,71 @@
+/* Compact bronze menus, with fluid content and a fixed thumb rail. */
+html{font-size:16px}body{font-size:14px}
+#menu{--menu-rail-width:max(128px,calc(128px * var(--text-scale,1)));padding-right:calc(env(safe-area-inset-right) + var(--menu-rail-width) + 36px)}
+#menuTitle{font-size:21px;letter-spacing:.3px}
+#menu .menu-head{padding:10px 14px 3px}
+#menu .menu-head h3::after{height:6px;margin-top:5px}
+#menu .menu-body{padding:0 14px 14px;scrollbar-width:thin;scrollbar-color:#99733b #17120f}
+#menu .q{padding:10px 12px;margin:9px 0 12px}
+#menu .q-top{font-size:14px;line-height:1.35;align-items:flex-start;flex-wrap:wrap}
+#menu .q-top>span{flex:1;min-width:120px;overflow-wrap:anywhere}
+#menu .q-top b{font-size:11px;padding:3px 5px;background:#15110e;border:1px solid #755226;color:#e9cd89}
+#menu .q p{font-size:12px;line-height:1.5;margin:7px 0 10px}
+#menu .q-giver{font-size:10px;line-height:1.4}
+#menu .q-foot{flex-wrap:wrap;line-height:1.4;gap:8px}
+#menu .q-foot>span{flex:1;min-width:100px}
+#menu .q-track,#menu .inv-act{min-height:44px;font-size:12px;padding:8px 12px;white-space:normal}
+#menu .m-sec{font-size:11px;letter-spacing:.6px;margin:16px 0 6px;color:#cba45e}
+#menu .m-empty{font-size:11px;line-height:1.5;color:#b5aa91}
+#menu .inv-row{font-size:13px;line-height:1.5;flex-wrap:wrap;gap:10px;padding:12px 0}
+#menu .inv-row .grow{min-width:100px}#menu .inv-row small{font-size:11px;line-height:1.5}
+#menu .help-line{font-size:13px;line-height:1.6}
+#menu .menu-rail{gap:12px;width:var(--menu-rail-width)}
+#menu .menu-tabs button{font-size:12px;line-height:1.15;white-space:nowrap;overflow-wrap:normal;min-height:48px;padding:5px;gap:4px}
+#menu .menu-tabs button.on{box-shadow:0 3px #0009,inset 3px 0 #fff0b0!important}
+#menu #menuResume{font-size:13px;min-height:46px;padding:7px 4px}
+#menuSettings{padding:0 14px 14px;scrollbar-width:thin;scrollbar-color:#99733b #17120f}
+#menuSettings .title-options{padding:0;max-width:580px;margin:0 auto}
+#menuSettings .title-option-row{gap:12px;margin:8px 0 4px;flex-wrap:wrap}
+#menuSettings .title-option-row>span{font-size:13px}
+#menuSettings .title-volume-label{font-size:11px;line-height:1.4;gap:6px;flex-wrap:wrap}
+#menuSettings .settings-note{font-size:10px;line-height:1.5;margin:4px 0 12px}
+#menuSettings .title-button{font-size:12px;line-height:1.3;min-width:0;min-height:44px;white-space:normal;padding:8px 12px;color:#e5d2a5;text-shadow:none;border-image:var(--ui-dark) var(--ui-dark-s) fill / 6px / 1px stretch}
+#menuSettings .title-button:hover{border-image-source:var(--ui-darkDown)}
+#menuSettings .title-option-row .title-button{min-width:130px}
+#menuSettings .title-option-row .title-button[aria-pressed=true]{color:#f1d48c}
+#menuSettings .title-option-row .title-button[aria-pressed=false]{color:#a39985}
+.text-size-setting{margin:14px 0 18px;padding:12px 0;border-top:1px solid #6a4220;border-bottom:1px solid #6a4220}
+.text-size-setting label{color:#e5cc97}
+.text-size-setting .title-volume{margin-bottom:4px}
+.text-size-tools{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.text-size-tools small{font-size:10px;line-height:1.4;color:#b7a98a}
+.text-size-tools .title-button{min-height:44px;min-width:0;font-size:11px;padding:7px 12px}
+.title-options .title-button{white-space:normal}
+.title-volume-label{gap:8px;flex-wrap:wrap}.title-option-row{flex-wrap:wrap}
+#mainMenu>.title-button{font-size:17px!important;height:auto!important}
+.title-options h2{font-size:23px}
+/* Dialogue choices use prominent pixel glyphs and the quest title only. */
+#screen .dlg-list .dlg-choice{display:flex;align-items:center;gap:10px;min-height:46px;padding:6px 10px;font-size:13px!important;line-height:1.35;text-align:left;white-space:normal}
+#screen .dlg-choice .choice-copy{display:flex;flex-direction:column;gap:3px;min-width:0;overflow-wrap:anywhere}
+#screen .dlg-choice .mk{display:flex;align-items:center;justify-content:center;flex:none;width:38px;height:38px;margin:0;border:2px solid #211306!important;background:#e8bc55!important;box-shadow:inset 2px 2px #fff3b8,inset -2px -2px #a46e24,0 2px #211306}
+#screen .dlg-choice.mk-turnin .mk{background:#f4df9b!important;box-shadow:inset 2px 2px #fff8d4,inset -2px -2px #bd8d35,0 2px #211306}
+#screen .dlg-choice .mk img{width:18px;height:30px;object-fit:contain;image-rendering:pixelated}
+#screen .dlg-choice.mk-active::before{content:'·';font-size:18px;color:#8b7b5d}
+#screen .dlg-choices{max-height:42%;padding:12px 10px 8px;gap:8px}
+#screen .dlg-list{gap:7px;padding:2px 3px 5px}
+/* Dialogue text can wrap and scroll even at maximum size on a short screen. */
+#dialogue.dialogue-panel{z-index:9;box-sizing:border-box;width:var(--bubble-width);max-width:var(--bubble-width);padding:8px 10px;background:#f2e6c6;border:2px solid #25190d;border-radius:3px;box-shadow:0 3px #0006;color:#291b10;pointer-events:auto}
+#dialogue .dlg-body{display:block;max-height:var(--bubble-body-height);overflow:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#927747 #e5d6ad}
+#dialogue .dlg-body strong{font-size:var(--bubble-name-font);line-height:1.3;letter-spacing:.3px;margin-bottom:4px;color:#875a27}
+#dialogue p{font-size:var(--bubble-font);line-height:1.45;margin:0;overflow-wrap:anywhere;white-space:pre-wrap;color:#291b10}
+#dialogue .dlg-side{display:none}
+#dialogue .tail{background:#f2e6c6;border-color:#25190d}
+.dlg-scrollhint{display:none;font-size:10px;line-height:1.3;margin-top:5px;color:#875a27;text-align:right}
+#dialogue.scrollable .dlg-scrollhint{display:block}
+.trk-list{--trk-height:var(--tracker-height,50px);height:calc(var(--trk-rows)*var(--tracker-step,56px) - 2px)}
+.qpanel .qp-box{min-height:0}.qp-obj,.qp-actions{flex-wrap:wrap}.qp-obj>span{min-width:0;overflow-wrap:anywhere}
+.qp-actions button{flex:1}.qp-head,.qp-box h3{flex:none}.qp-body{min-height:0}
+.notice-card{overflow-wrap:anywhere}.overlay-content{max-height:100%;overflow:auto}
+@media(max-height:360px){#menu .menu-rail{gap:8px;bottom:calc(env(safe-area-inset-bottom) + 10px)}#menu .menu-tabs button{min-height:44px;padding:3px;gap:2px}#menu #menuResume{min-height:44px}#menuTitle{font-size:19px}#screen .dlg-choices{max-height:44%}}
+
+@media(max-width:650px){#menu{--menu-rail-width:max(122px,calc(122px * var(--text-scale,1)));padding-right:calc(env(safe-area-inset-right) + var(--menu-rail-width) + 28px)}}
