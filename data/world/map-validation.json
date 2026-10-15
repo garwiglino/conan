@@ -1,0 +1,153 @@
+{
+  "territories": [
+    {
+      "name": "Igea",
+      "areaKm2": 135163,
+      "regions": 3,
+      "settlements": 7
+    },
+    {
+      "name": "Teremor",
+      "areaKm2": 210086,
+      "regions": 4,
+      "settlements": 44
+    },
+    {
+      "name": "Sarak",
+      "areaKm2": 137810,
+      "regions": 3,
+      "settlements": 17
+    },
+    {
+      "name": "Varan",
+      "areaKm2": 21053,
+      "regions": 2,
+      "settlements": 6
+    },
+    {
+      "name": "Tagon",
+      "areaKm2": 35286,
+      "regions": 2,
+      "settlements": 9
+    }
+  ],
+  "routes": {
+    "roads": 7,
+    "trails": 120,
+    "searoutes": 18
+  },
+  "walkingChecks": {
+    "Clairfoyer → Havre-du-Givre": {
+      "walkableConnection": true
+    },
+    "Clairfoyer → Port-Sarak": {
+      "walkableConnection": true
+    },
+    "Clairfoyer → Coralbourg": {
+      "walkableConnection": false
+    },
+    "Port-Sarak → Port-des-Veilleurs": {
+      "walkableConnection": false
+    }
+  },
+  "oceanPorts": 13,
+  "physicalLandmasses": 3,
+  "routeGraphComponents": 1,
+  "landRouteComponents": 3,
+  "unlinkedSettlements": [],
+  "regionsConnected": true,
+  "canonicalRouteCoordinates": true,
+  "seaRoutesRespectWater": true,
+  "landRoutesRespectLand": true,
+  "roundTripLoadedInAzgaar": true,
+  "distanceExamples": [
+    {
+      "from": "Port-Sarak",
+      "to": "Clairfoyer",
+      "foot": {
+        "distanceKm": 1109.5,
+        "requiresBoat": false,
+        "routeIds": [
+          14,
+          19,
+          82,
+          84,
+          118,
+          0,
+          17,
+          3,
+          0
+        ]
+      },
+      "multimodal": {
+        "distanceKm": 1109.5,
+        "requiresBoat": false,
+        "routeIds": [
+          14,
+          19,
+          82,
+          84,
+          118,
+          0,
+          17,
+          3,
+          0
+        ]
+      }
+    },
+    {
+      "from": "Clairfoyer",
+      "to": "Havre-du-Givre",
+      "foot": {
+        "distanceKm": 307.1,
+        "requiresBoat": false,
+        "routeIds": [
+          0,
+          3
+        ]
+      },
+      "multimodal": {
+        "distanceKm": 307.1,
+        "requiresBoat": false,
+        "routeIds": [
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "from": "Port-Sarak",
+      "to": "Port-des-Veilleurs",
+      "foot": null,
+      "multimodal": {
+        "distanceKm": 177.7,
+        "requiresBoat": true,
+        "routeIds": [
+          129
+        ]
+      }
+    },
+    {
+      "from": "Clairfoyer",
+      "to": "Coralbourg",
+      "foot": null,
+      "multimodal": {
+        "distanceKm": 630.9,
+        "requiresBoat": true,
+        "routeIds": [
+          0,
+          1,
+          86,
+          62,
+          44,
+          45,
+          24,
+          4,
+          126,
+          127,
+          8
+        ]
+      }
+    }
+  ]
+}

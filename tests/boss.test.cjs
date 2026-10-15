@@ -62,14 +62,14 @@ test('parry, transformation, planted guard and respawn cannot resume a canceled 
  g.dialogue=null;tick(g,e,1.15);assert.equal(e.motion,null);assert.equal(api.bossVisual(e,g.time).phase,1);
  g.respawn();assert.equal(e.motion,null);assert.equal(e.rage,false);assert.equal(g.bossActive,false);
 });
-test('victory waits for the full death animation, blocks attacks, and emits once',()=>{
+test('temple liberation waits for the full death animation and leaves the world open',()=>{
  const {g,e,p}=fixture();e.armor=1;g.damageEnemy(e,1000);assert.ok(e.dead&&g.won);assert.equal(g.events.filter(e=>e.type==='win').length,0);
  assert.equal(g.hazards.length,0);assert.equal(g.shots.length,0);const rem=g.remains.find(r=>r.kind==='boss');assert.ok(rem);
  const hp=p.hp;g.damagePlayer(10,e);assert.equal(p.hp,hp);const kills=p.kills;g.damageEnemy(e,1000);assert.equal(p.kills,kills);
  for(let i=0;i<189;i++)g.updateEffects(.01);assert.equal(g.events.filter(e=>e.type==='win').length,0);
- g.updateEffects(.01);assert.equal(g.events.filter(e=>e.type==='win').length,1);g.updateEffects(2);assert.equal(g.events.filter(e=>e.type==='win').length,1);assert.equal(rem.age,1.9);
+ g.updateEffects(.01);assert.equal(g.worldState.events.filter(e=>e.type==='victory').length,1);g.updateEffects(2);assert.equal(g.worldState.events.filter(e=>e.type==='victory').length,1);assert.equal(rem.age,1.9);assert.equal(g.won,false);assert.equal(g.story.templeFreed,true);
  assert.equal(api.bossFrame(api.bossClip(0,2,'death'),10),13);
- const restored=new api.Game();restored.restore(g.serialize());assert.ok(restored.won);assert.ok(restored.enemies.find(e=>e.kind==='boss').dead);
+ const restored=new api.Game(g.serialize());assert.equal(restored.won,false);assert.equal(restored.story.templeFreed,true);assert.ok(restored.enemies.find(e=>e.kind==='boss').dead);
 });
 test('the actual game loop completes multiple patterns without stale casts or invalid positions',()=>{
  const {g,e,p}=fixture();p.inv=1000;g.dialogue=null;g.arena=1;g.arenaLock=true;g.seals=[true,true,true];

@@ -30,6 +30,14 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   const restored=new a.Sound();assert.equal(restored.musicVolume,.37);assert.equal(restored.sfxVolume,.72);assert.equal(restored.musicOn,false);assert.equal(restored.sfxOn,false);
   click('musicToggle');click('sfxToggle');raf(250);click('optionsBack');assert.equal(a.state,'title');
   click('menuNew');assert.equal(a.state,'playing');assert.ok(a.game.player.spawnFX>0);assert.equal(a.musicMode(),'ambient');raf(300);assert.equal(a.sound.music.current.name,'ambient');assert.ok(a.sound.music.retiring.some(s=>s.name==='title'));
+  // The actual shipped world UI opens, paints, calculates, tracks and closes.
+  $('worldCanvas').getBoundingClientRect=()=>({x:0,y:0,left:0,top:0,right:640,bottom:420,width:640,height:420});
+  const prisonPos={x:a.game.player.x,y:a.game.player.y};Object.assign(a.game.player,{x:376,y:888});
+  click('btnWorld');assert.equal(a.state,'world');assert.equal($('worldPanel').hidden,false);assert.equal($('worldDestination').options.length,86);assert.match($('worldRoute').textContent,/Traversée maritime requise/);assert.equal($('worldGo').disabled,true);
+  $('worldDestination').value='town-1';$('worldDestination').dispatchEvent(new w.Event('change'));assert.match($('worldRoute').textContent,/km/);assert.match($('worldRoute').textContent,/Parcours terrestre/);click('worldZoomIn');click('worldLocate');click('worldFit');
+  fs.mkdirSync(require('node:path').join(__dirname,'../test-output'),{recursive:true});fs.writeFileSync(require('node:path').join(__dirname,'../test-output/world-atlas-ui.png'),map.get($('worldCanvas')).native.toBuffer('image/png'));
+  click('worldTrack');assert.equal(a.state,'playing');assert.equal(a.game.navigation,'town-1');assert.equal($('game').inert,false);
+  w.dispatchEvent(new w.KeyboardEvent('keydown',{code:'KeyG',bubbles:true}));assert.equal(a.state,'world');w.dispatchEvent(new w.KeyboardEvent('keydown',{code:'Escape',bubbles:true}));assert.equal(a.state,'playing');assert.equal($('worldPanel').hidden,true);a.game.navigation=null;Object.assign(a.game.player,prisonPos);
   for(const id of ['os','culte','steles','viperes','tresors'])a.game.acceptQuest(id);
   a.game.discover(['colosse'],true);a.game.toggleTrack('colosse');a.renderTracker();
   const list=$('trkList');assert.equal(list.children.length,2);assert.equal(list.style.getPropertyValue('--trk-rows'),'2');

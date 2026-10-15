@@ -53,3 +53,6 @@ fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace
 for(const size of [180,192,512])fs.copyFileSync(path.join(art,'icon-'+size+'.png'),path.join(root,'icon-'+size+'.png'));
 fs.copyFileSync(path.join(art,'icon-1024.png'),path.join(root,'ios/Hearthreaver/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png'));
 console.log('Embedded the Aseprite title, parallax layers, '+Object.keys(theme.tracks).length+'-track score and iOS fallback.');
+
+// Keep the independently editable world modules synchronized in both builds.
+if(fs.existsSync(path.join(root,'scripts/embed-world.cjs')))require('./embed-world.cjs');

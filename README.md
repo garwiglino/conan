@@ -1,8 +1,10 @@
-# Hearthreaver — Le Temple du Serpent
+# Hearthreaver — Le retour de Kaldor
 
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
 
-Le héros est **Kaldor « the Flamebearer »**. Son aventure traverse les terres arides de Sahrak, sous la menace du culte de Nharos.
+Le héros est **Kaldor « the Flamebearer »**. Capturé puis emmené loin de chez lui, il s’éveille dans une geôle gobeline. Une fée l’accompagne ; il doit protéger Elyne jusqu’au Refuge des Veilleurs avant de retrouver Clairfoyer. Le Temple du Serpent reste une étape de cette aventure.
+
+Le bouton **Monde** ou la touche **G** ouvre la carte : Igea, Teremor et Sarak constituent un seul continent, Varan et Tagon deux îles plus petites. Le terrain à une tuile par mètre est chargé autour du joueur ; les 83 localités sont pour cette première passe des relais de test. Itinéraires, voyages par cheval/charrette/bateau, provisions, lieux stables et chronique des nouvelles connues par chaque PNJ sont intégrés. [Fonctionnement, événements et limites de cette première passe](docs/world.md).
 
 Le menu utilise un logo rouge métallique bordé d'or, dessiné dans Aseprite, avec douze images de reflets de flammes. Six plans de ciel, reliefs et poussière composent un panorama qui défile lentement. L'option système de réduction des animations immobilise le décor et les reflets. Les quatre commandes sont **Nouvelle partie**, **Charger**, **Options** et **Quitter**. Charger est grisé sans sauvegarde valide. Les options mémorisent séparément l'activation et le volume de la musique et des bruitages. Quitter coupe la session et tente de fermer la fenêtre lorsque le navigateur l'autorise ; sinon un écran de fin permet de revenir au menu. Sur iOS, la fermeture de l'app reste un geste système.
 

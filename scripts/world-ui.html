@@ -1,0 +1,14 @@
+<section id="worldPanel" class="world-panel" role="dialog" aria-modal="true" aria-labelledby="worldTitle" hidden>
+ <header><div><small>CHRONIQUE DE KALDOR</small><h2 id="worldTitle">Les terres inconnues</h2></div><button id="worldClose" aria-label="Fermer la carte">Reprendre · Échap</button></header>
+ <div class="world-layout"><div class="world-map-wrap"><canvas id="worldCanvas" aria-label="Carte du monde, des localités et des routes"></canvas><div class="world-map-tools"><button id="worldZoomIn" aria-label="Agrandir la carte">+</button><button id="worldZoomOut" aria-label="Réduire la carte">−</button><button id="worldFit">Vue générale</button><button id="worldLocate">Kaldor</button></div><p class="world-legend">━━ Route · ┄ Piste · ┄ Voie maritime<br>1 case = 1 mètre · la marche reste libre</p></div>
+ <div class="world-side"><p id="worldObjective"></p><p id="worldHere" class="world-muted"></p>
+ <label>Destination<select id="worldDestination"></select></label>
+ <div class="world-fields"><label>Déplacement<select id="worldMode"><option value="horse">À cheval</option><option value="cart">En charrette</option><option value="foot">À pied</option></select></label><label>Itinéraire<select id="worldPreference"><option value="fast">Le plus rapide</option><option value="safe">Le plus prudent</option></select></label></div>
+ <label class="world-check"><input type="checkbox" id="worldBoat" checked> Autoriser les traversées en bateau</label>
+ <div id="worldRoute" aria-live="polite"></div><div class="world-actions"><button id="worldGo">Entreprendre le voyage</button><button id="worldTrack">Suivre cette destination</button></div>
+ <details open><summary>Le groupe et ses provisions</summary><p id="worldSupplies"></p><div class="world-actions"><button id="worldBuy">Acheter 3 jours de provisions</button><button id="worldRest">Se reposer 8 h</button><button id="worldFeed">Nourrir Elyne</button><button id="worldHeal">Soigner Elyne</button><button id="worldFairy">Parler à la fée</button></div></details>
+ <details><summary>Nouvelles recueillies</summary><div id="worldNews"></div><button id="worldExport">Exporter la chronique</button></details>
+ <details><summary>Ce qui peut arriver dans le monde</summary><div id="worldCatalog"></div></details>
+ </div></div>
+</section>
+<section id="worldJourney" class="world-journey" role="status" hidden><small>EN ROUTE</small><h2 id="worldJourneyTo"></h2><p id="worldJourneyStep"></p><progress id="worldProgress" max="1" value="0"></progress><p id="worldJourneyClock"></p><button id="worldStop">Faire halte dès que possible</button><p id="worldJourneyHint">Les distances, les provisions et les journées sont prises en compte.</p></section>
