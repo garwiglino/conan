@@ -915,6 +915,9 @@ const BODY={hero:[7,5],snake:[8,4.5],skeleton:[7,5],cultist:[8,5],guardian:[15,7
 // BEGIN WEATHER MODEL
 // One clock and one weather state drive colour, lamps, wildlife, rain and sound.
 const DAY_LEN=960,CLOCK_START=8*60,WEATHER_WIN=240;
+// New campaigns begin on day 73 at 08:00, at the cold peak of the 96-day year.
+// CLOCK_START remains the historical weather epoch and legacy-save fallback.
+const CAMPAIGN_START=72*1440+CLOCK_START;
 const SKY_KEYS=[[0,[78,92,156]],[5,[78,92,156]],[6,[128,112,166]],[7.2,[238,183,158]],
  [8.2,[255,225,194]],[9,[255,255,255]],[16,[255,255,255]],[17,[255,232,202]],
  [18,[248,207,164]],[19.5,[220,155,142]],[21,[142,119,166]],[23,[78,92,156]],[24,[78,92,156]]].map(([h,c])=>[h/24,c]);
@@ -1032,7 +1035,7 @@ class Game{
   this.world=makeWorld();for(const o of this.world.props)if(BREAKABLE[o.kind]){o.id='b'+o.x+'_'+o.y;o.hp=BREAKABLE[o.kind].hp;}this.debris=[];this.fxProps=new Set();this.player={x:START.x,y:START.y,hp:10,maxHp:10,dir:0,anim:0,attack:0,attackCD:0,dash:0,dashCD:0,inv:0,moving:false,attackHeld:false,attackBuffer:0,bufferX:0,bufferY:0,guard:false,guardHeld:false,parry:0,parryCD:0,guardFlash:0,riposte:0,hitPause:0,hurt:0,hurtDuration:.24,hitX:0,hitY:0,combo:0,comboWindow:0,coins:80,kills:0,lives:LIVES,spawnFX:SPAWN_T,xp:0,flasks:0,lvlFX:0};
   this.seals=[false,false,false];this.chests=CHEST_SPOTS.map(([x,y])=>({x:x*16+8,y:y*16+8,open:false}));
   this.enemies=ENEMY_SPOTS.map((v,i)=>enemy(v[0],v[1]*16+8,v[2]*16+8,'e'+i));SEALS.forEach((s,i)=>this.enemies.push(enemy('guardian',s.x,s.y+29,'g'+i)));
-  this.enemies.push(enemy('boss',25*16,6*16,'boss'));this.drops=[];this.particles=[];this.blood=[];this.bloodFX=[];this.remains=[];this.shots=[];this.hazards=[];this.events=[];this.time=0;this.elapsed=0;this.clock=CLOCK_START;this.weather=new StormSystem();this.sleeping=null;this.shake=0;this.gate=false;this.won=false;this.dead=false;this.bossActive=false;this.hits=new Set();this.swing=0;this.saveTimer=0;this.campCooldown=0;this.checkpoint={level:this.player.level||0,x:this.player.x,y:this.player.y};this.usedDash=false;this.targetId=null;
+  this.enemies.push(enemy('boss',25*16,6*16,'boss'));this.drops=[];this.particles=[];this.blood=[];this.bloodFX=[];this.remains=[];this.shots=[];this.hazards=[];this.events=[];this.time=0;this.elapsed=0;this.clock=CAMPAIGN_START;this.weather=new StormSystem();this.sleeping=null;this.shake=0;this.gate=false;this.won=false;this.dead=false;this.bossActive=false;this.hits=new Set();this.swing=0;this.saveTimer=0;this.campCooldown=0;this.checkpoint={level:this.player.level||0,x:this.player.x,y:this.player.y};this.usedDash=false;this.targetId=null;
   this.initMechanisms();
   this.steles=STELES.map((s,i)=>({...s,active:i===0,glow:0}));this.steleLast=0;this.checkpoint={level:0,x:STELES[0].x,y:STELES[0].y};this.floaters=[];this.dying=null;this.quests={known:new Set(['sceaux']),done:new Set(),tracked:new Set(['sceaux']),ready:new Set(),fresh:false};this.questTimer=0;
   RELICS.forEach((r,i)=>this.drops.push({level:0,x:r.x,y:r.y,kind:'flask',z:0,relic:'r'+i}));
