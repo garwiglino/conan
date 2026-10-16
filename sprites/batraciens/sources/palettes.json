@@ -1,0 +1,102 @@
+{
+  "male": {
+    "jade": {
+      "label": "Jade",
+      "palette": {
+        "s": "#3f6156",
+        "g": "#58897a",
+        "l": "#79af9a",
+        "h": "#9fd2ba",
+        "d": "#afa36e",
+        "b": "#d8ca8f",
+        "c": "#eee4ae"
+      }
+    },
+    "turquoise_sombre": {
+      "label": "Turquoise sombre",
+      "palette": {
+        "s": "#31535a",
+        "g": "#46717b",
+        "l": "#628f9c",
+        "h": "#87b2bf",
+        "d": "#a2a07a",
+        "b": "#cbc79e",
+        "c": "#e4dec0"
+      }
+    },
+    "ocre_mousse": {
+      "label": "Ocre mousse",
+      "palette": {
+        "s": "#66623a",
+        "g": "#8b854d",
+        "l": "#afa965",
+        "h": "#d0ca81",
+        "d": "#baa06a",
+        "b": "#dfc187",
+        "c": "#f0db9e"
+      }
+    },
+    "ardoise": {
+      "label": "Ardoise",
+      "palette": {
+        "s": "#4d5555",
+        "g": "#697272",
+        "l": "#8b9593",
+        "h": "#b1bab4",
+        "d": "#ab9f84",
+        "b": "#d0c4a8",
+        "c": "#e7dfc8"
+      }
+    }
+  },
+  "female": {
+    "rose_mauve": {
+      "label": "Rose mauve",
+      "palette": {
+        "s": "#5f4a60",
+        "g": "#816181",
+        "l": "#a27aa2",
+        "h": "#c599c4",
+        "d": "#c39a9d",
+        "b": "#dfb8be",
+        "c": "#f3d8df"
+      }
+    },
+    "lilas": {
+      "label": "Lilas",
+      "palette": {
+        "s": "#58556e",
+        "g": "#767396",
+        "l": "#9a96bf",
+        "h": "#c0bbe2",
+        "d": "#c2b2c7",
+        "b": "#ddd0e0",
+        "c": "#efe6f0"
+      }
+    },
+    "prune_rose": {
+      "label": "Prune rosée",
+      "palette": {
+        "s": "#654252",
+        "g": "#87576d",
+        "l": "#ad7489",
+        "h": "#d19ab0",
+        "d": "#c79a99",
+        "b": "#e1b7b6",
+        "c": "#f2d7d3"
+      }
+    },
+    "corail_doux": {
+      "label": "Corail doux",
+      "palette": {
+        "s": "#71524f",
+        "g": "#956865",
+        "l": "#bd8783",
+        "h": "#dcaba7",
+        "d": "#cea399",
+        "b": "#e5c1b8",
+        "c": "#f5dfd7"
+      }
+    }
+  }
+}

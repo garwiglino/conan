@@ -7,7 +7,7 @@ test('all approved human silhouettes and palettes have four-way civilian actions
  assert.equal(art.clips.death.loop,false);assert.ok(art.clips.flee.durations.reduce((a,b)=>a+b)<art.clips.walk.durations.reduce((a,b)=>a+b));
 });
 test('appearance is stable, old people are silver-haired, rags use only hirsute styles and hats follow outfits',()=>{
- const g=game();for(const n of g.npcs.filter(n=>n.civilian)){const a=n.civilian.appearance,o=api.CIVILIAN_ART.outfits[a.outfit];assert.equal(a.sex,o.sex);if(a.age==='age')assert.equal(a.color,'argente');assert.ok(a.hat===null||a.hat===o.hat);assert.deepEqual(JSON.parse(JSON.stringify(api.civilianAppearance(g,n,a))),JSON.parse(JSON.stringify(a)));}
+ const g=game();for(const n of g.npcs.filter(n=>n.civilian&&!n.batracien)){const a=n.civilian.appearance,o=api.CIVILIAN_ART.outfits[a.outfit];assert.equal(a.sex,o.sex);if(a.age==='age')assert.equal(a.color,'argente');assert.ok(a.hat===null||a.hat===o.hat);assert.deepEqual(JSON.parse(JSON.stringify(api.civilianAppearance(g,n,a))),JSON.parse(JSON.stringify(a)));}
  const e=g.escortActor.civilian.appearance;assert.equal(e.sex,'feminin');assert.ok(['07','08'].includes(e.hair));assert.ok(e.outfit.startsWith('E'));assert.equal(e.hat,null);
  const old=api.civilianAppearance(g,g.escortActor,{...e,age:'age',color:'roux',hair:'03',hat:'H12-bleu-port'});assert.equal(old.color,'argente');assert.ok(['07','08'].includes(old.hair));assert.equal(old.hat,null);
  const saved=JSON.parse(JSON.stringify(g.serialize())),copy=new api.Game(saved);for(const n of g.npcs.filter(n=>n.civilian)){const restored=copy.npcs.find(v=>v.id===n.id);if(restored)assert.deepEqual(JSON.parse(JSON.stringify(restored.civilian.appearance)),JSON.parse(JSON.stringify(n.civilian.appearance)));}

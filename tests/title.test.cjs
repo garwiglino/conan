@@ -51,7 +51,8 @@ test('title type-1 MIDI contains twelve independent tracks identical to the in-g
  assert.equal(markers,7);assert.equal(names.length,12);assert.equal(offset,b.length);
 });
 test('brand and hero are updated while legacy storage and iOS updater identifiers stay compatible',()=>{
- const code=html.replace(/data:[^"'\s]+/g,'').replace(/conan-(serpent-v1|sound|music|sfx|trk)/g,'legacy');
+ // Canonical art provenance references the historical repository, not visible branding.
+ const code=html.replace(/data:[^"'\s]+/g,'').replace(/conan-(serpent-v1|sound|music|sfx|trk)/g,'legacy').replaceAll('garwiglino/conan','source-repository');
  assert.ok(!/\bconan\b|cimm[eé]ri|stygie|\bcrom\b/i.test(code));assert.ok(code.includes('Kaldor « the Flamebearer »'));
  assert.equal(JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest'))).short_name,'Hearthreaver');
  const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');assert.equal(ios.slice(ios.indexOf('<script>')),html.slice(html.indexOf('<script>')));

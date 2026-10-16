@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "status": "runtime_population_extension",
+  "note": "Named sparse actors, not a new percentage denominator for the four-species world-bible census. Core enemies, transport operators, quest givers and existing residents are preserved.",
+  "maxCivilians": 28,
+  "maxWardens": 11,
+  "activeRadius": 700,
+  "enemyClearance": 220,
+  "allowedBiomes": [5, 7, 8, 12],
+  "columns": ["site", "civilianJobs", "wardenRole"],
+  "communities": [
+    ["town-10", ["net", "rope"], "boat_escort"],
+    ["town-73", ["rice", "weave"], "village_guard"],
+    ["town-74", ["pottery", "gather"], "channel_sentinel"],
+    ["town-75", ["weave", "stir"], "village_guard"],
+    ["town-76", ["net", "gather"], "channel_sentinel"],
+    ["town-77", ["gather", "stir"], "captain"],
+    ["town-27", ["craft", "net"], "boat_escort"],
+    ["town-40", ["ledger", "rope"], "boat_escort"],
+    ["town-50", ["net", "pottery"], "channel_sentinel"],
+    ["town-55", ["gather", "weave"], "scout"],
+    ["town-61", ["craft", "stir"], null],
+    ["town-1", ["ledger", "net"], "village_guard"],
+    ["town-25", ["net", "weave"], null],
+    ["town-38", ["weave", "pottery"], null]
+  ],
+  "malePalettes": ["original", "jade", "turquoise_sombre", "ocre_mousse", "ardoise"],
+  "femalePalettes": ["rose_mauve", "lilas", "prune_rose", "corail_doux"],
+  "hostileEvents": ["bandits"],
+  "combat": {
+    "village_guard": {"attack": "thrust", "range": 29, "damage": 1, "hp": 8, "cooldown": 1.5, "contact": 0.36, "shield": true},
+    "channel_sentinel": {"attack": "thrust", "range": 29, "damage": 1, "hp": 8, "cooldown": 1.5, "contact": 0.36, "shield": true},
+    "boat_escort": {"attack": "slash", "range": 24, "damage": 1, "hp": 8, "cooldown": 1.3, "contact": 0.36, "shield": true},
+    "scout": {"attack": "throw_javelin", "range": 100, "damage": 1, "hp": 6, "cooldown": 2.2, "contact": 0.54, "shield": false},
+    "raider": {"attack": "slash", "range": 25, "damage": 1, "hp": 3, "cooldown": 1.5, "contact": 0.36, "shield": false},
+    "captain": {"attack": "thrust", "range": 29, "damage": 1, "hp": 10, "cooldown": 1.4, "contact": 0.36, "shield": true}
+  }
+}

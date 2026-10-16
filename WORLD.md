@@ -53,3 +53,7 @@ Le moteur temps réel existant n'est pas remplacé par cette mise à jour de con
 ## Règles à préserver lors des prochaines modifications
 
 Sylverive reste un ensemble de cités à charte sous la souveraineté de Teremor. Les accords de commerce ne déclenchent pas une guerre automatique. Darg et Kesh ne représentent pas tous les orques ou tous les gobelins. Les enclaves ne constituent pas un empire secret. Les personnes ne figurent pas dans le catalogue des ressources. La traite et le travail sexuel adulte consenti restent distincts. Les crimes et leurs protections sont attribués à des acteurs identifiés ; un État n'est pas uniformément corrompu. Les villes connaissent aussi travail ordinaire, entraide, justice effective, fêtes et vie familiale.
+
+## Extension jouable : batraciens
+
+[Implantations, palettes, métiers et règles de combat des batraciens](docs/batraciens.md). Cette extension du moteur ajoute des acteurs à 14 localités compatibles, sans renommer les lieux ni remplacer les quêtes. Elle ne réécrit pas les pourcentages démographiques à quatre espèces de la bible ; leur extension doit faire l’objet d’une révision explicite des sources de conception.

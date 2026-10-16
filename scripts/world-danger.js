@@ -115,7 +115,7 @@ Game.prototype.stepEventGroups=function(dt=0){
    else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id];Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}
   }
  }
- for(const n of this.npcs.filter(n=>n.eventGuard&&active.has(n.eventId))){const foe=this.enemies.find(e=>e.world&&!e.dead&&!e.retiring&&(e.level||0)===(n.level||0)&&dist(e,n)<120);if(foe){this.walkNpc(n,foe,.5);if(dist(n,foe)<28&&this.lineClear(n,foe)&&this.time>(n.guardHit||0)){n.guardHit=this.time+2;this.guardStrike(n,foe);}}}
+ for(const n of this.npcs.filter(n=>n.eventGuard&&!n.batracien&&active.has(n.eventId))){const foe=this.enemies.find(e=>e.world&&!e.dead&&!e.retiring&&(e.level||0)===(n.level||0)&&dist(e,n)<120);if(foe){this.walkNpc(n,foe,.5);if(dist(n,foe)<28&&this.lineClear(n,foe)&&this.time>(n.guardHit||0)){n.guardHit=this.time+2;this.guardStrike(n,foe);}}}
 };
 const dangerBrain=Game.prototype.brain;
 Game.prototype.brain=function(e,p,d,dt,sz){if(e.retiring){e.ai='return';e.wind=e.attack=0;return {engage:false,tx:e.x+(e.x>=p.x?100:-100),ty:e.y+80,keep:0};}return dangerBrain.call(this,e,p,d,dt,sz);};

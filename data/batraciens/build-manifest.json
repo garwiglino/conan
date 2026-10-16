@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "cell": [
+    80,
+    80
+  ],
+  "anchor": [
+    40,
+    52
+  ],
+  "sources": {
+    "sprites/batraciens/base/batracien-v2.js": "d02aecb98bc34137808a9239d2166d293e950d75dd668e6822adf09adeb0d559",
+    "sprites/batraciens/base/batracienne-v2.js": "0435270c79ffb6b20bedc8e3cbdd8b1289040135db5eb273a264fd0b57b502e6",
+    "sprites/batraciens/sources/renderer.template.js": "7a41a3581b03680e826655b7a5b1dcb53ad27135656dcf87940401345e5cd33d",
+    "sprites/batraciens/sources/activities.cjs": "b6b4a871fc3cd796667d879ab6573a5749e7890b509c1ae88e3e3125fa0db12f",
+    "sprites/batraciens/sources/palettes.json": "7cc6c0fcf9cb5caa4f225d47ae3cc128be97b525aa69eb964f5d5c5ee8b80ee9",
+    "sprites/batraciens/batraciens-complet.js": "714abf7cc1ab3066e5529adae385a0cd25906fc01abfc8a4cd2959c941ce2b49",
+    "sprites/batraciens/batraciens-combattants.js": "816caef3da52a9edebdbe27abb21482038c0f3296089028d15caee502232201f",
+    "scripts/batraciens-runtime.js": "707c765d3f6044ff636b65feaa1341ab77f65f6dade7d85a9935dfa70cffd814",
+    "data/batraciens/communities.json": "60bce86eea28065d9a37588fb373283ab3b14c7d2db34411b10c7b9e2898fb90"
+  }
+}

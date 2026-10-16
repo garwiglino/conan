@@ -1,0 +1,146 @@
+# Batraciens — intégration jouable et palettes
+
+Les dessins approuvés sont conservés : les sources JavaScript des mâles et des
+femelles v2/v3, leurs animations civiles et les six rôles armés mâles. Aucun
+personnage n'est redessiné pour changer de couleur. Les empreintes de référence
+sont dans `data/batraciens/approved-art.json` et testées sur toutes les images
+80 × 80 des combattants, pour les cinq palettes mâles.
+
+## Contrat graphique
+
+- Case moteur **80 × 80**, pieds à **(40, 52)**, pixels natifs sans lissage.
+- Case de travail **48 × 48**, pieds à **(24, 36)**, translation de +16 seulement.
+- Directions moteur : **0 dos, 1 droite, 2 face, 3 gauche**.
+- Palette mâle : `original`, `jade`, `turquoise_sombre`, `ocre_mousse`, `ardoise`.
+- Palette femelle : `rose_mauve`, `lilas`, `prune_rose`, `corail_doux` ; la palette
+  `original` reste consultable dans l'atelier.
+- Les sept nuances de peau et ventre changent. Équipement, yeux, silhouettes,
+  poses et ancrages restent identiques. Pas de couleur « race ennemie ».
+- Le dessin de mort armé approuvé déborde la fenêtre native 48 × 48. **Son export
+  80 × 80 reste intact** ; demander le format natif pour cette pose lève une
+  erreur explicite plutôt que couper l'arme au sol.
+
+`art/batraciens-preview.html` permet d'examiner les deux sexes, toutes les
+palettes et activités civiles, et les six rôles armés mâles, avec pause et
+contrôle image par image. Les caches sont bornés ; les acteurs hors écran ne
+construisent pas de nouvelles images.
+
+## Implantations
+
+Le registre `data/batraciens/communities.json` ajoute **28 civils et 11 gardes**
+aux 14 localités existantes listées ci-dessous. Ce sont des habitants jouables
+additionnels, pas un remplacement des humains, des donneurs de quêtes ou des
+palefreniers. Les 83 points de localité et leurs noms ne sont pas déplacés.
+
+La répartition est une première implantation explicite, dérivée des milieux
+humides, des ressources et de la navigation de la bible. Elle **n'altère pas
+silencieusement ses tableaux démographiques à quatre espèces** : une future
+révision de ces recensements doit nommer les batraciens séparément et recalculer
+les totaux. Aucune faction, alliance ou guerre mondiale nouvelle n'est créée.
+
+| Territoire | Localité (ID stable) | Deux civils : métiers | Garde |
+|---|---|---|---|
+| Varan | Port-des-Veilleurs (`town-10`) | filets / pêche selon accès à l’eau ; cordages | Escorte de bateliers |
+| Varan | Bac-des-Roseaux (`town-73`) | riziculture ; vannerie | Garde de communauté |
+| Varan | Tourbeclaire (`town-74`) | poterie ; cueillette | Sentinelle |
+| Varan | Brume-aux-Saules (`town-75`) | vannerie ; préparations | Garde de communauté |
+| Varan | Pont-des-Joncs (`town-76`) | filets / pêche selon accès à l’eau ; cueillette | Sentinelle |
+| Varan | Refuge-des-Aulnes (`town-77`) | cueillette ; préparations | Chef de patrouille |
+| Tagon | Anse-des-Palmes (`town-27`) | artisanat ; filets / pêche selon accès à l’eau | Escorte de bateliers |
+| Tagon | Santalune (`town-40`) | registres ; cordages | Escorte de bateliers |
+| Tagon | Bourg-des-Coquilles (`town-50`) | filets / pêche selon accès à l’eau ; poterie | Sentinelle |
+| Tagon | Relais-des-Lianes (`town-55`) | cueillette ; vannerie | Éclaireur |
+| Tagon | Rive-de-Corail (`town-61`) | artisanat ; préparations | — |
+| Teremor | Clairfoyer (`town-1`) | registres ; filets / pêche selon accès à l’eau | Garde de communauté |
+| Teremor | Val-des-Mousses (`town-25`) | filets / pêche selon accès à l’eau ; vannerie | — |
+| Teremor | Bois-de-Lune (`town-38`) | vannerie ; poterie | — |
+
+Le placement cherche un sol praticable, sans ennemi immédiat dans une marge de
+220 pixels, sans danger territorial actif et sans obstruction d'un service,
+d'une entrée ou d'un mécanisme. Un second contrôle intervient après la création
+des chevaux, charrettes et autres accessoires du transport. Les travaux de terre
+utilisent une vraie surface de terre en périphérie, pas la place pavée. La pêche
+à la ligne n'est autorisée que face à une vraie case d'eau ; sinon le personnage
+répare un filet. Si aucune position sûre n'existe, l'habitant est différé, jamais
+posé de force dans une collision.
+
+## Vie civile et sauvegardes
+
+Les apparences sont déterministes par identifiant, puis conservées dans la
+sauvegarde. Travail, repas, dialogue, repos assis, déplacement, blessure, repli et
+retour utilisent les animations du pack. Les images de marche suivent la
+distance parcourue, pas le temps écoulé contre un mur. La nuit et les pauses de
+travail utilisent les poses de repos. Les outils et le mobilier ne produisent
+**pas** automatiquement des marchandises ou des récompenses : les métiers sont
+animés ; la simulation économique reste distincte.
+
+`world-danger.js` reste l'autorité de sécurité. Un danger interrompt le métier,
+déclenche la réaction puis le repli, le masquage dans un refuge et le retour quand
+le moteur le permet. Les morts civiles persistent et ne rapportent ni expérience
+ni compteur de victimes au joueur. Les civils batraciens peuvent être recrutés
+selon les règles existantes ; leur identité et couleur survivent au chargement
+et au voyage. Les gardes ne sont pas recrutables comme des civils.
+
+La sous-clé `atlas.batraciens` (version 1) conserve palettes, identifiants, santé,
+décès et état borné des combattants d'incident. Les sauvegardes antérieures sont
+acceptées. Identifiants et valeurs reçus sont filtrés, les positions et palettes
+invalides sont rejetées. Les quêtes, compagnons et services existants gardent
+leurs identifiants historiques.
+
+Changer seulement la couleur d'un acteur existant dans un scénario :
+
+```js
+game.setBatracienPalette('warden-batracien-town-73-0', 'jade');
+game.setBatracienPalette('resident-batracien-town-73-1', 'lilas');
+```
+
+Cette méthode conserve position, santé, animation et métier, vérifie la palette
+pour le sexe concerné et demande une sauvegarde via le mécanisme du jeu.
+
+## Gardes et groupes hostiles
+
+Les gardes de communauté, sentinelles, escortes, éclaireurs et chefs patrouillent
+près de leur poste et défendent les habitants contre les ennemis du monde
+présents. Les coups et projectiles peuvent les blesser ; leur mort n'est pas
+remplacée par une nouvelle copie au prochain chargement. La garde frontale et
+l'interruption sur blessure sont distinctes du simple repos armé.
+
+Les pillards et certains éclaireurs remplacent uniquement des membres de
+**groupes de brigands déjà générés** dans un habitat admissible. Certaines
+patrouilles existantes emploient également des gardes batraciens. Le temple,
+le boss, les squelettes, les manifestations maudites et les ennemis scénarisés
+ne sont pas convertis. Aucun incident supplémentaire n'est tiré pour justifier
+leur présence, et aucune espèce entière ne devient hostile.
+
+Les rôles n'utilisent que l'attaque de leur équipement : estoc pour la lance,
+taille pour l'arme courte/massue, lancer pour l'éclaireur. Direction fixée au
+départ du geste, contact unique, annulation par étourdissement/parade, cooldown
+et vérification de portée, niveau et ligne de vue. Les javelots utilisent une
+collision balayée avec obstacles et un nombre maximal de 12 projectiles actifs.
+Les gardes ne donnent pas au joueur l'expérience de leurs propres victimes.
+
+Les poses de sommation, ralliement et reddition restent disponibles dans le
+lecteur graphique pour les scénarios ; elles ne sont pas présentées comme un
+système de négociation ou de moral autonome déjà implémenté.
+
+## Construction et contrôles
+
+```sh
+npm install
+npm run build:batraciens
+node --test --test-concurrency=2 tests/*.test.cjs
+python3 scripts/test-world-bible.py
+npm run package:ios
+```
+
+Le constructeur vérifie ses points d'insertion, réincorpore les sources dans
+`index.html` et dans la copie iOS. Aucun téléchargement séparé de sprites n'est
+requis. `scripts/embed-world.cjs` conserve cette intégration lors des prochains
+builds du monde. Le bundle et les planches sont reproductibles à partir des
+sources, et `data/batraciens/build-manifest.json` en indique les empreintes.
+
+Les tests couvrent les pixels approuvés, les palettes, les corps de collision,
+les placements réels et différés, la sauvegarde, les compagnons, le repli, les
+règles d'hostilité, le contact unique, les murs, les décès et le rendu du moteur.
+Ce sont des tests Node/Canvas et d'assemblage de la version iOS, **pas une session
+sur un iPhone physique**.
