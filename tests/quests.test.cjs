@@ -20,7 +20,8 @@ test('a fulfilled objective immediately hands guidance to the next tracked quest
   assert.equal(g.trackedQuests().at(-1).id, 'steles');
   // Returning at night or loading an older save must never redirect guidance to a tent/NPC.
   const restored = new Game(g.serialize());restored.clock = 23*60;restored.stepNpcs(0);
-  assert.equal(restored.npcs.find(n => n.id === 'zahra').phase, 'away');
+  // A resident sheltering from a nearby enemy is unavailable just like a resident at home.
+  assert.equal(restored.npcPresent(restored.npcs.find(n => n.id === 'zahra')), false);
   assert.equal(restored.questTarget('tresors'), null);
   assert.equal(side(restored).quest.id, 'steles');
   restored.completeQuest('tresors');
@@ -91,6 +92,7 @@ test('NPC homes never offer or allow sleep, including at night and after save re
 test('the starting camp remains usable for rest, only at its entrance and on the ground floor', () => {
   const g = new Game(), tent = g.world.props.find(p => p.kind === 'tent' && p.rest);
   Object.assign(g.player, {x:tent.x,y:tent.y+16,hp:4});
+  g.stepParty(0,0); // Synchronize the fairy after this test's instantaneous player move.
   assert.equal(g.solid(g.player.x,g.player.y), false);
   assert.equal(g.context().kind, 'sleep');
   g.interact();assert.ok(g.events.some(e => e.type === 'sleepmenu'));

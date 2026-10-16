@@ -165,6 +165,16 @@ const createWorldAtlas = (raw) => {
   injury:{name:'Blessure',category:'Compagnons',private:true},exhaustion:{name:'Épuisement',category:'Compagnons',private:true},trust:{name:'Confiance',category:'Compagnons',private:true},
   rain:{name:'Pluie soutenue',category:'Météo'},snow:{name:'Chutes de neige',category:'Météo'},fog:{name:'Brouillard',category:'Météo'},drought:{name:'Sécheresse',category:'Météo'}
  };
+ // Declarative incident policy shared by travel, local encounters and civilians.
+ Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true});
+ Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'cultist',evacuate:true});
+ Object.assign(EVENT_TYPES.siege,{group:3,enemy:'cultist',risk:3,evacuate:true});
+ Object.assign(EVENT_TYPES.curse,{group:2,enemy:'skeleton',evacuate:true});
+ Object.assign(EVENT_TYPES.patrol,{group:2,guard:true});
+ Object.assign(EVENT_TYPES.purified,{risk:-2});
+ Object.assign(EVENT_TYPES.victory,{risk:-1});
+ for(const type of ['flood','landslide','avalanche','fire'])Object.assign(EVENT_TYPES[type],{hazard:2,evacuate:true});
+ for(const type of ['bridge','border','storm','relay'])Object.assign(EVENT_TYPES[type],{hazard:1});
  const eventTarget=id=>byId[id]||roadById[id];
  class WorldState{
   constructor(saved={}){this.schema=VERSION;this.campaign=typeof saved.campaign==='string'?saved.campaign:'world-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*1e6).toString(36);this.revision=Number.isInteger(saved.revision)?Math.max(0,saved.revision):0;this.clock=Number.isFinite(saved.clock)?saved.clock:480;
@@ -172,7 +182,9 @@ const createWorldAtlas = (raw) => {
    this.nextId=Math.max(Number.isInteger(saved.nextId)?saved.nextId:1,...this.events.map(e=>(Number(e.serial)||0)+1));this.lastHour=Number.isInteger(saved.lastHour)?saved.lastHour:Math.floor(this.clock/60);this.knowledge={};this.journal=Array.isArray(saved.journal)?saved.journal.filter(j=>j&&typeof j.text==='string').slice(-120):[];this.newsDistances=new Map();
    for(const [id,book]of Object.entries(saved.knowledge||{}).slice(0,180)){if(!book||typeof book!=='object')continue;this.knowledge[id]={};for(const [key,k]of Object.entries(book).slice(-512))if(this.events.some(e=>e.id===key)&&k&&Number.isFinite(k.heard))this.knowledge[id][key]={...k,at:Number.isFinite(k.at)?k.at:k.heard,resolved:Number.isFinite(k.resolved)?k.resolved:null,source:typeof k.source==='string'?k.source:'Voyageurs'};}
   }
-  add(type,target,at,duration=0,extra={}){if(!EVENT_TYPES[type]||!eventTarget(target)||!Number.isFinite(at))return null;const route=roadById[target],site=byId[target],p=extra.position|| (route?atDistance(route,route.length*.5):site),serial=this.nextId++;
+  add(type,target,at,duration=0,extra={}){if(!EVENT_TYPES[type]||!eventTarget(target)||!Number.isFinite(at))return null;
+   const settles={truce:['siege','occupation'],purified:['curse'],victory:['bandits','occupation','siege'],repair:['bridge','flood','landslide','avalanche','fire']};if(settles[type]&&!extra.expiry)for(const e of this.active(at))if(e.target===target&&settles[type].includes(e.type))this.resolve(e.id,at);
+   const duplicate=this.active(at).find(e=>e.type===type&&e.target===target);if(duplicate&&!EVENT_TYPES[type].private)return duplicate;const route=roadById[target],site=byId[target],p=extra.position|| (route?atDistance(route,route.length*.5):site),serial=this.nextId++;
    const e={id:'event-'+serial,serial,type,target,at,end:duration>0?at+duration:null,resolved:null,x:p.x,y:p.y,title:EVENT_TYPES[type].name,source:extra.source||'Voyageurs',detail:extra.detail||'',witnesses:Array.isArray(extra.witnesses)?extra.witnesses.slice(0,20):[]};this.events.push(e);if(this.events.length>512){const gone=this.events.shift();for(const b of Object.values(this.knowledge))delete b[gone.id];this.newsDistances.delete(gone.id);}this.revision++;return e;
   }
   resolve(id,at){const e=this.events.find(e=>e.id===id);if(e&&e.resolved===null&&Number.isFinite(at)&&at>=e.at){e.resolved=at;this.revision++;return true;}return false;}
@@ -192,10 +204,10 @@ const createWorldAtlas = (raw) => {
     if(phase===16&&day%7===2)this.add('caravan',town.id,at,720,{source:'Maître du relais'});
     if(phase===20&&day%4===2){const cursed=roads.filter(r=>r.pts.some(p=>curseCells.has(Number(p[2].slice(1)))));if(cursed.length)this.add('curse',pick(cursed,7).id,at,720,{source:'Veilleurs'});}
     const region=regions.get(town.region),territory=region?.territory,climateRoutes=biomes=>roads.filter(r=>r.type!=='searoutes'&&r.pts.some(p=>biomes.includes(cellById.get(Number(p[2].slice(1)))?.biome)));
-    if(phase===6&&sky.rain>.35)this.add(territory==='Igea'?'snow':'rain',town.id,at,360,{source:'Habitants de '+town.name});
+    if(phase===6&&Math.max(sky.rain||0,sky.snow||0)>.35)this.add((sky.snow||0)>(sky.rain||0)?'snow':'rain',town.id,at,360,{source:'Habitants de '+town.name});
     if(phase===5&&['Varan','Tagon'].includes(territory)&&day%3===0)this.add('fog',town.id,at,180,{source:'Bateliers'});
     if(phase===13&&day%17===7){const rs=climateRoutes([1,2]);if(rs.length)this.add('drought',pick(rs,11).id,at,4320,{source:'Nomades'});}
-    if(phase===11&&day%19===8){const rs=climateRoutes([9,10,11]);if(rs.length)this.add('avalanche',pick(rs,12).id,at,1440,{source:'Éclaireurs'});}
+    if(phase===11&&day%19===8){const rs=climateRoutes([9,10,11]);if(rs.length&&(()=>{const r=pick(rs,12),p=atDistance(r,r.length*.5),s=weather(at,p.x,p.y)||{};return (s.snow||0)>.2||(s.blizzard||0)>.1;})())this.add('avalanche',pick(rs,12).id,at,1440,{source:'Éclaireurs'});}
     if(phase===17&&day%23===10&&sky.rain<.1){const rs=climateRoutes([5,6,7,8]);if(rs.length)this.add('fire',pick(rs,13).id,at,2160,{source:'Forestiers'});}
     if(phase===8&&day%7===6)this.add('festival',town.id,at,720,{source:'Habitants de '+town.name});
     if(phase===10&&day%9===4)this.add('delay',town.id,at,360,{source:'Maître du relais'});
@@ -211,7 +223,7 @@ const createWorldAtlas = (raw) => {
     if(phase===8&&day%43===24)this.add('truce',conflictTown.id,at,1440,{source:'Messagers'});
     if(phase===11&&day%11===5&&crossings.length){const b=pick(crossings,8);this.add('bridge',b.road,at,2880,{position:b,source:'Garde du pont'});}
    }
-   this.lastHour=Math.max(this.lastHour,hour);this.clock=clock;const expired=this.events.filter(e=>e.resolved===null&&e.end!==null&&e.end<=clock);for(const e of expired){e.resolved=e.end;this.revision++;if(['bridge','flood','landslide','avalanche','fire'].includes(e.type))this.add('repair',e.target,e.end,1440,{position:e,source:'Garde des routes'});}
+   this.lastHour=Math.max(this.lastHour,hour);this.clock=clock;const expired=this.events.filter(e=>e.resolved===null&&e.end!==null&&e.end<=clock);for(const e of expired){e.resolved=e.end;this.revision++;if(['bridge','flood','landslide','avalanche','fire'].includes(e.type))this.add('repair',e.target,e.end,1440,{position:e,source:'Garde des routes',expiry:true});}
   }
   distances(e){if(this.newsDistances.has(e.id))return this.newsDistances.get(e.id);const start=nearestSite(e.x,e.y).vertex,best=new Map([[start,0]]),q=new Heap();q.push({id:start,cost:0});while(q.size){const u=q.pop();if(u.cost!==best.get(u.id))continue;for(const {to,edge}of adj.get(u.id)||[]){const cost=u.cost+edge.length/(edge.modes.includes('boat')?166.67:200);if(cost<(best.get(to)??Infinity)){best.set(to,cost);q.push({id:to,cost});}}}this.newsDistances.set(e.id,best);return best;}
   learn(id,x,y,clock,{role='resident',privateAccess=false}={}){const book=this.knowledge[id]||(this.knowledge[id]={}),site=nearestSite(x,y);let changed=false;
