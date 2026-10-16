@@ -1,28 +1,130 @@
 name: Batraciens integration
 on:
   push:
-    branches: [integration/batraciens-palettes]
+    branches: [integration/batraciens-palettes, main]
+    paths:
+      - '.github/workflows/batraciens-integration.yml'
+      - '.github/batraciens-import/**'
+      - 'scripts/**'
+      - 'sprites/batraciens/**'
+      - 'data/batraciens/**'
+      - 'tests/**'
+      - 'package.json'
+  workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
+concurrency:
+  group: batraciens-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  snapshot:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          fetch-depth: 1
+      - name: Receive verified source files on the isolated integration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, lzma
+          source = Path('.github/batraciens-import')
+          if not source.exists():
+              print('Source files already installed.')
+              raise SystemExit(0)
+          parts = sorted(source.glob('*.bin'))
+          assert [p.name for p in parts] == ['00.bin','01.bin','02.bin','03.bin','04.bin','05.bin']
+          payload = b''.join(p.read_bytes() for p in parts)
+          digest = lambda b: hashlib.sha256(b).hexdigest()
+          assert digest(payload) == 'd642f1d09e3b56e9db4df382fe19e01f5883aea9c354c289e96e471a78a88af3', 'Transfer checksum mismatch'
+          record = json.loads(lzma.decompress(payload))
+          assert record['schema'] == 2
+          allowed = set('''README.md WORLD.md art/batraciens-preview.html data/batraciens/approved-art.json data/batraciens/communities.json docs/batraciens.md package.json scripts/batraciens-runtime.js scripts/build-batraciens.cjs scripts/civilian-runtime.js scripts/embed-world.cjs scripts/world-danger.js sprites/batraciens/base/batracien-v2.js sprites/batraciens/base/batracienne-v2.js sprites/batraciens/batraciens-combattants.js sprites/batraciens/build-code.cjs sprites/batraciens/sources/activities.cjs sprites/batraciens/sources/palettes.json sprites/batraciens/sources/renderer.template.js tests/batraciens.test.cjs tests/civilians.test.cjs tests/title.test.cjs'''.split())
+          assert len(record['files']) == len(allowed)
+          assert {r['path'] for r in record['files']} == allowed
+          staged = {}
+          for r in record['files']:
+              p = Path(r['path'])
+              previous = p.read_bytes() if p.exists() else None
+              assert (digest(previous) if previous is not None else None) == r['previousSHA256'], 'Source changed: '+str(p)
+              if 'content' in r:
+                  data = r['content'].encode('utf-8')
+              else:
+                  base = staged[r['basePath']] if 'basePath' in r else previous
+                  if 'baseSHA256' in r:
+                      assert digest(base) == r['baseSHA256']
+                  lines = base.decode('utf-8').splitlines(keepends=True)
+                  end = len(lines)
+                  for start, stop, text in reversed(r['edits']):
+                      assert 0 <= start <= stop <= end
+                      lines[start:stop] = text.splitlines(keepends=True)
+                      end = start
+                  data = ''.join(lines).encode('utf-8')
+              assert digest(data) == r['sha256'], 'Invalid reconstruction: '+str(p)
+              staged[r['path']] = data
+          for name, data in staged.items():
+              p = Path(name)
+              p.parent.mkdir(parents=True, exist_ok=True)
+              p.write_bytes(data)
+          print('Verified and installed', len(staged), 'source files.')
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-package-lock --no-audit --no-fund
-      - name: Snapshot tracked sources and test dependencies
+      - name: Install pinned development dependencies
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Build self-contained web and iOS game
+        run: npm run build:batraciens
+      - name: Verify complete game regression suite
+        shell: bash
         run: |
-          git archive --format=tar HEAD > /tmp/conan-source.tar
-          tar -rf /tmp/conan-source.tar node_modules
-          gzip /tmp/conan-source.tar
-      - uses: actions/upload-artifact@v4
+          set -euo pipefail
+          node --test --test-concurrency=2 --test-reporter=tap tests/*.test.cjs | tee /tmp/batraciens-tests.log
+      - name: Validate world bible and native package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/test-world-bible.py 2>&1 | tee /tmp/batraciens-world-tests.log
+          python3 scripts/package-ios.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, subprocess, json, re, os
+          h = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          before = h('index.html')
+          subprocess.run(['node', 'scripts/build-batraciens.cjs'], check=True)
+          assert before == h('index.html'), 'Build is not idempotent'
+          text = Path('/tmp/batraciens-tests.log').read_text()
+          counts = {key: int(re.search(r'^# '+key+r' (\d+)$', text, re.M)[1]) for key in ['tests','pass','fail','cancelled']}
+          assert counts['fail'] == 0 and counts['cancelled'] == 0 and counts['tests'] == counts['pass']
+          result = {'inputCommit': os.environ['GITHUB_SHA'], 'node': counts, 'worldBible': 'passed', 'webSHA256': before, 'iosSHA256': h('ios/Hearthreaver/Game/index.html'), 'nativeArchiveSHA256': h('Hearthreaver-iOS.zip'), 'idempotentBuild': True, 'physicalIPhoneTest': False}
+          Path('data/batraciens/validation.json').write_text(json.dumps(result, indent=2)+'\n')
+          PY
+      - name: Publish validated source and generated game to integration branch only
+        if: github.ref == 'refs/heads/integration/batraciens-palettes'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -d .github/batraciens-import; then git rm -r .github/batraciens-import; fi
+          git add README.md WORLD.md package.json art/batraciens-preview.html docs/batraciens.md data/batraciens sprites/batraciens scripts/batraciens-runtime.js scripts/build-batraciens.cjs scripts/civilian-runtime.js scripts/embed-world.cjs scripts/world-danger.js tests/batraciens.test.cjs tests/civilians.test.cjs tests/title.test.cjs index.html ios/Hearthreaver/Game/index.html Hearthreaver-iOS.zip
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'feat: integrate palette-stable batracien communities and armed incidents'
+            git push origin HEAD:integration/batraciens-palettes
+          fi
+          git rev-parse HEAD > /tmp/batraciens-validated-commit.txt
+      - name: Keep validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: conan-integration-source
-          path: /tmp/conan-source.tar.gz
-          retention-days: 1
+          name: batraciens-validation
+          path: |
+            /tmp/batraciens-tests.log
+            /tmp/batraciens-world-tests.log
+            /tmp/batraciens-validated-commit.txt
+            data/batraciens/validation.json
+            data/batraciens/build-manifest.json
+          retention-days: 14
