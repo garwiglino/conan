@@ -13,7 +13,7 @@ info = plistlib.loads((root / 'ios/Hearthreaver/Info.plist').read_bytes())
 assert info['CFBundleDisplayName'] == 'Hearthreaver'
 assert info['CFBundleName'] == '$(PRODUCT_NAME)'
 for key in ['UISupportedInterfaceOrientations', 'UISupportedInterfaceOrientations~ipad']:
-    assert set(info[key]) == {'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight'}
+    assert set(info[key]) == {'UIInterfaceOrientationLandscapeRight'}
 assert 'name = Hearthreaver;' in pbx and 'path = Hearthreaver.app;' in pbx
 assert 'Conan' not in pbx
 assert pbx.count('PRODUCT_BUNDLE_IDENTIFIER = com.garwiglino.conan;') == 2

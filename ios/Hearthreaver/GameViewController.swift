@@ -20,10 +20,27 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { .all }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        .landscape
+        .landscapeRight
     }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation { .landscapeRight }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        enforceLandscape()
+    }
+
+    /// Keep the same landscape orientation regardless of the physical device pose.
+    func enforceLandscape() {
+        if #available(iOS 16.0, *) {
+            setNeedsUpdateOfSupportedInterfaceOrientations()
+            view.window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight)) { error in
+                NSLog("Landscape request: %@", error.localizedDescription)
+            }
+        } else {
+            UIViewController.attemptRotationToDeviceOrientation()
+        }
+    }
 
     override func loadView() {
         let saves = SaveMirror()
