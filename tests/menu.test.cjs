@@ -25,9 +25,9 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   let lock;w.screen.orientation={lock:async value=>{lock=value;throw new Error('Browser refuses lock');}};await a.lockLandscape();assert.equal(lock,'landscape');
   click('menuLoad');assert.equal(a.state,'title');
   click('menuOptions');raf(200);assert.equal(a.state,'options');assert.equal(a.sound.music.current.name,'title');
-  level('musicVolume',37);level('sfxVolume',72);assert.equal(a.sound.musicVolume,.37);assert.equal(a.sound.sfxVolume,.72);
+  level('musicVolume',37);level('sfxVolume',72);level('environmentVolume',33);assert.equal(a.sound.environmentVolume,.33);click('uiSoundsToggle');assert.equal(a.sound.uiSoundsOn,false);assert.equal(a.sound.musicVolume,.37);assert.equal(a.sound.sfxVolume,.72);
   click('musicToggle');assert.equal(a.sound.musicOn,false);click('sfxToggle');assert.equal(a.sound.sfxOn,false);
-  const restored=new a.Sound();assert.equal(restored.musicVolume,.37);assert.equal(restored.sfxVolume,.72);assert.equal(restored.musicOn,false);assert.equal(restored.sfxOn,false);
+  const restored=new a.Sound();assert.equal(restored.musicVolume,.37);assert.equal(restored.sfxVolume,.72);assert.equal(restored.environmentVolume,.33);assert.equal(restored.uiSoundsOn,false);assert.equal(restored.musicOn,false);assert.equal(restored.sfxOn,false);
   click('musicToggle');click('sfxToggle');raf(250);click('optionsBack');assert.equal(a.state,'title');
   click('menuNew');assert.equal(a.state,'playing');assert.ok(a.game.player.spawnFX>0);assert.equal(a.musicMode(),'biome_desert');raf(300);assert.equal(a.sound.music.current.name,'biome_desert');assert.ok(a.sound.music.retiring.some(s=>s.name==='title'));
   // The actual shipped world UI opens, paints, calculates, tracks and closes.

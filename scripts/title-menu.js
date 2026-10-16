@@ -15,9 +15,9 @@ function titleLoadGame(){
 }
 function syncTitleOptions(){
  syncTextSettings();
- for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
+ for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['uiSoundsToggle',sound.uiSoundsOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
  $('musicToggle').textContent=sound.musicOn?'Activée':'Désactivée';$('hapticsToggle').textContent=haptics.enabled?'Activées':'Désactivées';$('hapticsHint').textContent=haptics.available?'Retours discrets pour les actions importantes.':'Vibrations indisponibles dans cette version de l’app ou ce navigateur.';
- for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}
+ for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume],['environmentVolume',sound.environmentVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}
 }
 function openTitleOptions(){stashOptions();state='options';$('overlay').classList.add('options-open');$('titleOptions').hidden=false;syncTitleOptions();$('musicToggle').focus({preventScroll:true});}
 function closeTitleOptions(){if(state==='menu'){selectMenuTab(menuPrevious,true);return;}state='title';$('titleOptions').hidden=true;$('overlay').classList.remove('options-open');$('menuOptions').focus({preventScroll:true});}
@@ -56,3 +56,7 @@ $('sfxVolume').addEventListener('change',()=>sound.fx('ui_select'));
 $('textSize').addEventListener('input',e=>setTextSize(Number(e.target.value)));
 $('textSize').addEventListener('change',()=>sound.fx('ui_select'));
 $('textSizeReset').addEventListener('click',()=>setTextSize(100));
+
+$('environmentVolume').addEventListener('input',e=>{sound.setEnvironmentVolume(+e.target.value/100);syncTitleOptions();});
+
+$('uiSoundsToggle').addEventListener('click',()=>{sound.uiSoundsOn=!sound.uiSoundsOn;sound.saveAudio();syncTitleOptions();});

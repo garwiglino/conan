@@ -16,7 +16,8 @@
     "embed:world": "node scripts/embed-world.cjs",
     "package:ios": "python3 scripts/package-ios.py",
     "build:biomes": "node scripts/build-biome-audio.cjs && node scripts/embed-title.cjs",
-    "analyze:biomes": "node scripts/analyze-biome-audio.cjs"
+    "analyze:biomes": "node scripts/analyze-biome-audio.cjs",
+    "analyze:mix": "node scripts/analyze-audio-mix.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

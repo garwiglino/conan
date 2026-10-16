@@ -87,14 +87,14 @@ function midiTracks(file){const b=fs.readFileSync(file);assert.equal(b.toString(
 test('all five weather MIDI scores contain four complete instrument tracks identical to the runtime score',()=>{
  assert.equal(Object.keys(a.WEATHER_SCORES).length,5);for(const[name,score]of Object.entries(a.WEATHER_SCORES)){const parsed=midiTracks(path.join(root,'audio',name.replaceAll('_','-')+'.mid'));for(const[part,data]of Object.entries(score.tracks)){const notes=[];for(let i=0;i<data.length;i+=4)notes.push(Array.from(data.slice(i,i+4)));notes.sort((x,y)=>x[0]-y[0]||x[2]-y[2]);assert.deepEqual(parsed[part],notes);}}
 });
-test('weather synth renders increasing rain levels and thunder through SFX only, with fades and no clipping',async()=>{
+test('weather synth renders increasing rain levels and thunder through the independent environment bus, with fades and no clipping',async()=>{
  const c=new RenderingAudioContext({sampleRate:8000,numberOfChannels:2});Object.defineProperty(c,'state',{value:'running'});
  const sound=new a.Sound();sound.ctx=c;sound.enabled=true;sound.musicOn=false;sound.master=c.createGain();sound.master.gain.value=.3;sound.master.connect(c.destination);
  for(let t=0;t<26;t+=.1){const rain=t<5?.24:t<10?.52:t<15?.96:0;sound.rain(rain);if(t>=12&&t<12.1)sound.fx('thunder',{near:true,pan:.6,strength:1});c.processTo(t+.1);}
  const data=c.exportAsAudioData(),d=data.channelData[0],rms=(start,end)=>Math.sqrt(d.slice(start*8000,end*8000).reduce((s,v)=>s+v*v,0)/((end-start)*8000));
  let peak=0;for(const channel of data.channelData)for(const n of channel){assert.ok(Number.isFinite(n));peak=Math.max(peak,Math.abs(n));}assert.ok(peak<.95&&peak>.005);
  assert.ok(rms(7,9)>rms(2,4)*1.1);assert.ok(rms(11,12)>rms(7,9)*1.05);assert.ok(rms(24,25)<.00001);
- sound.sfxOn=false;sound.rain(1);// No extra cue when SFX are muted.
+ sound.sfxOn=false;sound.environmentVolume=0;sound.rain(1);// Environment is explicitly muted.
  const music=sound.music;let cues=0;music.cue=()=>cues++;sound.fx('thunder',{near:false});assert.equal(cues,0);
 });
 test('each rain texture stays stereo and continuous across three MIDI loops and noise-buffer wraps',()=>{

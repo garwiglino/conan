@@ -31,7 +31,7 @@ Les fichiers MIDI type 1 et les notes JSON jouées sont générés ensemble par 
 
 `node scripts/analyze-biome-audio.cjs` rend le synthétiseur réel, compare les anciens thèmes et les nouveaux, mesure crêtes/RMS/corrélation stéréo et énergie FFT par bandes. Les rendus couvrent une boucle entière et sa reprise. Les statistiques RMS incluent les silences intentionnels. L'analyse ne remplace pas une écoute sur téléphone. Aucun rendu analysé ne doit saturer ni produire de valeur audio non finie.
 
-Les appels de faune sont atténués par pluie, neige et combat. Musique et bruitages conservent leurs réglages séparés. Pendant un voyage : thème dédié, bus météo/faune coupés, même pour un tonnerre déjà lancé ; reprise de l'ambiance locale à l'arrivée. Aucun changement de sauvegarde requis.
+Les appels de faune sont atténués par pluie, neige et combat. Musique, bruitages d’action et environnement conservent leurs réglages séparés. Pendant un voyage : thème dédié, bus météo/faune coupés, même pour un tonnerre déjà lancé ; reprise de l'ambiance locale à l'arrivée. Aucun changement de sauvegarde requis.
 
 ## Références de conception
 
@@ -61,3 +61,11 @@ Les dix ambiances ont désormais neuf pistes, avec contrechant de flûte, nappe 
 Val-des-Neiges (Haut-Givre) se situe en taïga, et non dans une cellule de glacier. Taïga, toundra, forêts tempérées et déserts frais utilisent maintenant un couvert saisonnier, réduit dans les milieux secs. Les glaciers gardent leur neige permanente. Les décors tropicaux, marécageux chauds et désertiques chauds restent sans neige. La température de fond est partagée avec le modèle météo.
 
 Les conifères boréaux, feuillus dormants, rochers et installations des relais suivent le couvert. Aucun arbre généré sur les glaciers ou en toundra. Le pavage hors régions arides utilise la pierre grise ; les chemins utilisent l'humus, la boue ou le sol froid local. Les collisions, ponts et traversées d'eau restent identiques entre saisons. Les caches de terrain et les réponses du worker sont datés pour éviter le retour d'un ancien décor après voyage ou rechargement.
+
+## Mixage et pas
+
+Musique à 45 % par défaut pour les nouvelles préférences ; les niveaux déjà choisis restent mémorisés. Environnement (vent, faune, pluie, tonnerre) possède son propre bus, son propre curseur et reste audible même si les bruitages d'action sont coupés. Les sons d'interface peuvent être désactivés séparément. Les trois niveaux et l'interrupteur sont persistants dans les menus d'accueil et de pause.
+
+Les 41 échantillons d'action sont calibrés par leur crête et leur RMS maximal sur 50 ms, sans amplifier les enregistrements discrets. Les annonces MIDI d'interface, les musiques de combat, la pluie et le tonnerre sont atténués ; le vent est remonté et la faune espacée reste en retrait. Le script scripts/analyze-audio-mix.cjs mesure les sources et des scènes réellement synthétisées ; audio/mix-analysis.json contient les résultats en dBFS, pas une certification LUFS. Une écoute physique sur iPhone reste nécessaire.
+
+Pas du joueur, des PNJ à pied et des ennemis bipèdes : neuf surfaces (sable, terre, herbe, gravier, pierre, bois, boue, eau, neige), trois variantes chacune. La distance parcourue déclenche les pas ; proximité et panoramique règlent leur position. Aucun pas pour la fée, les serpents, les téléportations ou les voyages. Limites : seize acteurs proches suivis, trois déclenchements par image et huit voix simultanées. Les pas s'arrêtent en pause ; les ponts et étages utilisent le bois, le manteau neigeux suit le même motif que le sol visible.

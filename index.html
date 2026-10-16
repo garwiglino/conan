@@ -428,6 +428,10 @@ html,body{overflow:hidden;overscroll-behavior:none;touch-action:pan-x pan-y}body
  <div class="title-option-row"><span id="sfxLabel">Bruitages</span><button class="title-button" id="sfxToggle" type="button" aria-pressed="true" aria-labelledby="sfxLabel sfxToggle">Activés</button></div>
  <label class="title-volume-label" for="sfxVolume">Volume des bruitages <output id="sfxVolumeValue" for="sfxVolume">100 %</output></label>
  <input class="title-volume" id="sfxVolume" type="range" min="0" max="100" step="1" value="100">
+ <div class="title-option-row"><span id="uiSoundsLabel">Sons de l'interface</span><button class="title-button" id="uiSoundsToggle" type="button" aria-pressed="true" aria-labelledby="uiSoundsLabel uiSoundsToggle">Activés</button></div>
+ <label class="title-volume-label" for="environmentVolume">Environnement <output id="environmentVolumeValue" for="environmentVolume">100 %</output></label>
+ <input class="title-volume" id="environmentVolume" type="range" min="0" max="100" step="1" value="100" aria-describedby="environmentHint">
+ <p class="settings-note" id="environmentHint">Vent, faune et météo. Indépendant des pas, combats et sons d'interface.</p>
  <div class="title-option-row"><span id="hapticsLabel">Vibrations</span><button class="title-button" id="hapticsToggle" type="button" aria-pressed="true" aria-labelledby="hapticsLabel hapticsToggle">Activées</button></div>
  <p class="settings-note" id="hapticsHint"></p>
  <button class="title-button" id="full" type="button">Plein écran</button>
@@ -2508,7 +2512,7 @@ class Renderer{
 
 // sfx.js — bruitages 8-bit (WAV intégrés)
 const SFX_VOLUME=.3;
-const AMB_VOLUME=.2; // ambiance discrète : environ 12 dB(A) sous la musique
+const AMB_VOLUME=.45; // ambiance discrète : bus environnement indépendant
 // ambiance par région : vent, grillons, rapaces (canyon des Vautours, plateau des Os), grand-duc
 const AMB_REGION={canyon:{wind:1.1,crk:.5,hawk:1.6,owl:.8},plains:{wind:1,crk:.9,hawk:1,owl:.8},oasis:{wind:.8,crk:1.1,hawk:.8,owl:1.1},ruins:{wind:1,crk:.7,hawk:1,owl:1.2},
  temple:{wind:.5,crk:.3,hawk:.5,owl:.6},plateau:{wind:1.2,crk:.5,hawk:1.4,owl:.8},dunes:{wind:1.2,crk:.45,hawk:.8,owl:.6},citadel:{wind:.9,crk:.7,hawk:1,owl:1}};
@@ -2633,13 +2637,13 @@ const UI_CUES={"ui_open":{"bpm":120,"tpb":480,"bars":1,"dur":0.45,"style":"ui","
 const CUE_DATA={...UI_CUES,guardian_death:GUARDIAN_DEATH_CUE}; // Effondrement original en MIDI multipiste.
 // audio.js
 class Sound{
- constructor(){this.ctx=null;this.enabled=false;this.musicOn=true;this.sfxOn=true;this.musicVolume=1;this.sfxVolume=1;try{const L=localStorage,old=L.getItem('conan-sound')==='0';this.musicOn=(L.getItem('conan-music')??(old?'0':'1'))!=='0';this.sfxOn=(L.getItem('conan-sfx')??(old?'0':'1'))!=='0';const level=key=>{const n=Number(L.getItem(key)??1);return Number.isFinite(n)?clamp(n,0,1):1;};this.musicVolume=level('hearthreaver-music-volume');this.sfxVolume=level('hearthreaver-sfx-volume');}catch{}this.silent=null;this.step=0;this.next=0;this.buffers={};this.loading=null;this.master=null;this.lastPick={};this.lastHit=null;}
- get wanted(){return this.musicOn||this.sfxOn;}
+ constructor(){this.ctx=null;this.enabled=false;this.musicOn=true;this.sfxOn=true;this.uiSoundsOn=true;this.musicVolume=.45;this.sfxVolume=1;this.environmentVolume=1;try{const L=localStorage,old=L.getItem('conan-sound')==='0';this.musicOn=(L.getItem('conan-music')??(old?'0':'1'))!=='0';this.sfxOn=(L.getItem('conan-sfx')??(old?'0':'1'))!=='0';this.uiSoundsOn=L.getItem('hearthreaver-ui-sounds')!=='0';const level=(key,fallback=1)=>{const n=Number(L.getItem(key)??fallback);return Number.isFinite(n)?clamp(n,0,1):fallback;};this.musicVolume=level('hearthreaver-music-volume',.45);this.sfxVolume=level('hearthreaver-sfx-volume');this.environmentVolume=level('hearthreaver-environment-volume',old?0:1);}catch{}this.silent=null;this.step=0;this.next=0;this.buffers={};this.loading=null;this.master=null;this.lastPick={};this.lastHit=null;}
+ get wanted(){return this.musicOn||this.sfxOn||this.environmentVolume>0;}
  // musique et bruitages (ambiance comprise) se coupent séparément ; le moteur audio s'arrête seulement si les deux sont coupés
  toggleMusic(){this.musicOn=!this.musicOn;this.saveAudio();this.wake();return this.musicOn;}
  toggleSfx(){this.sfxOn=!this.sfxOn;this.saveAudio();this.wake();this.applyVolumes();return this.sfxOn;}
- saveAudio(){try{localStorage.setItem('conan-music',this.musicOn?'1':'0');localStorage.setItem('conan-sfx',this.sfxOn?'1':'0');localStorage.setItem('hearthreaver-music-volume',String(this.musicVolume));localStorage.setItem('hearthreaver-sfx-volume',String(this.sfxVolume));}catch{}}
- applyVolumes(){if(!this.ctx)return;const t=this.ctx.currentTime;this.music?.out.gain.setTargetAtTime(MUSIC_VOLUME*this.musicVolume,t,.04);this.master?.gain.setTargetAtTime(this.sfxOn?SFX_VOLUME*this.sfxVolume:0,t,.04);}
+ saveAudio(){try{localStorage.setItem('conan-music',this.musicOn?'1':'0');localStorage.setItem('conan-sfx',this.sfxOn?'1':'0');localStorage.setItem('hearthreaver-ui-sounds',this.uiSoundsOn?'1':'0');localStorage.setItem('hearthreaver-music-volume',String(this.musicVolume));localStorage.setItem('hearthreaver-sfx-volume',String(this.sfxVolume));localStorage.setItem('hearthreaver-environment-volume',String(this.environmentVolume));}catch{}}
+ applyVolumes(){if(!this.ctx)return;const t=this.ctx.currentTime;this.environmentBus?.gain.setTargetAtTime(SFX_VOLUME*this.environmentVolume,t,.04);this.music?.out.gain.setTargetAtTime(MUSIC_VOLUME*this.musicVolume,t,.04);this.master?.gain.setTargetAtTime(this.sfxOn?SFX_VOLUME*this.sfxVolume:0,t,.04);}
  setMusicVolume(value){if(!Number.isFinite(value))return;this.musicVolume=clamp(value,0,1);this.saveAudio();this.applyVolumes();}
  setSfxVolume(value){if(!Number.isFinite(value))return;this.sfxVolume=clamp(value,0,1);this.saveAudio();this.applyVolumes();}
  wake(){if(this.wanted&&!this.enabled){this.enabled=true;this.start();}else if(!this.wanted&&this.enabled){this.enabled=false;this.silent?.pause();this.music?.update(null);}}
@@ -2650,13 +2654,12 @@ class Sound{
   this.loading=Promise.all(Object.entries(SFX_DATA).map(([name,b64])=>new Promise(done=>{try{const bin=atob(b64),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);this.ctx.decodeAudioData(bytes.buffer,buf=>{this.buffers[name]=buf;done();},()=>done());}catch{done();}})));}
  has(...names){return names.every(n=>this.buffers[n]);}
  pick(group){const list=SFX_GROUPS[group].filter(n=>this.buffers[n]);if(!list.length)return null;let i=Math.floor(Math.random()*list.length);if(list.length>1&&list[i]===this.lastPick[group])i=(i+1)%list.length;return this.lastPick[group]=list[i];}
- play(name,{vol=1,rate=1,spread=0,delay=0}={}){const buf=name&&this.buffers[name];if(!this.enabled||!this.sfxOn||!this.ctx||!buf)return null;const src=this.ctx.createBufferSource(),g=this.ctx.createGain();src.buffer=buf;src.playbackRate.value=rate*(1+(Math.random()*2-1)*spread);g.gain.value=vol;src.connect(g);g.connect(this.master);src.start(this.ctx.currentTime+delay);return src;}
- tone(freq,duration=.1,type='square',vol=.035,delay=0,to=null){if(!this.enabled||!this.sfxOn||!this.ctx||this.sfxVolume===0)return;const t=this.ctx.currentTime+delay;const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);if(to)o.frequency.exponentialRampToValueAtTime(Math.max(20,to),t+duration);g.gain.setValueAtTime(vol*this.sfxVolume,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(this.ctx.destination);o.start(t);o.stop(t+duration+.01);}
+ play(name,{vol=1,rate=1,spread=0,delay=0}={}){const buf=name&&this.buffers[name];if(!this.enabled||!this.sfxOn||!this.ctx||!buf)return null;const src=this.ctx.createBufferSource(),g=this.ctx.createGain();src.buffer=buf;src.playbackRate.value=rate*(1+(Math.random()*2-1)*spread);g.gain.value=vol*this.sampleTrim(buf);src.connect(g);g.connect(this.master);src.start(this.ctx.currentTime+delay);return src;}
+ tone(freq,duration=.1,type='square',vol=.035,delay=0,to=null){if(!this.enabled||!this.sfxOn||!this.ctx||this.sfxVolume===0)return;const t=this.ctx.currentTime+delay;const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);if(to)o.frequency.exponentialRampToValueAtTime(Math.max(20,to),t+duration);g.gain.setValueAtTime(vol*.4,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+duration+.01);}
  rain(level){weatherRain(this,level);}
- fx(name,ev={}){if(!this.enabled||!this.sfxOn||!this.ctx)return;
-  if(name==='thunder'){weatherThunder(this,ev);return;}
-  if(name.startsWith('ui_')){const now=this.ctx.currentTime;if(now-(this.lastUI??-1)<.065)return;this.lastUI=now;this.music??=new Music(this.ctx,this.ctx.destination);this.music.cue(name,now+.006,this.master);return;}
-  if(name==='guardianfall'){this.music??=new Music(this.ctx,this.ctx.destination);this.music.cue('guardian_death',this.ctx.currentTime+.01,this.master,ev.vol??1);return;}
+ fx(name,ev={}){if(name==='thunder'){weatherThunder(this,ev);return;}if(!this.enabled||!this.sfxOn||!this.ctx)return;
+  if(name.startsWith('ui_')){if(!this.uiSoundsOn)return;const now=this.ctx.currentTime;if(now-(this.lastUI??-1)<.065)return;this.lastUI=now;this.music??=new Music(this.ctx,this.ctx.destination);this.music.cue(name,now+.006,this.master,.45);return;}
+  if(name==='guardianfall'){this.music??=new Music(this.ctx,this.ctx.destination);this.music.cue('guardian_death',this.ctx.currentTime+.01,this.master,(ev.vol??1)*.45);return;}
   // Bruitages échantillonnés (repli sur les bips d'origine tant qu'ils ne sont pas décodés)
   if(name==='sword'&&this.has('slash1','slash2','slash3')){const c=ev.combo??0,t=COMBO_TIMES[c]||ATTACK_TIMES;this.play(['slash1','slash3','slash1','slash2'][c]||'slash1',{spread:.04,delay:Math.max(0,t[0]+t[1]-.1)});return;}
   if(name==='crack'&&this.has('hit1')){this.play('hit1',{rate:ev.mat==='clay'?1.45:.78,spread:.06,vol:.85});return;}
@@ -2676,10 +2679,10 @@ class Sound{
   if(name==='parry'||name==='block'){const n=this.pick('clash');if(n){this.play(n,name==='parry'?{spread:.06}:{vol:.6,rate:.94,spread:.05});return;}}
   if(name==='dead')name='hurt';
   if(name==='parry'){this.tone(1200,.16,'triangle',.05,0,400);this.tone(750,.18,'square',.02);}if(name==='block')this.tone(420,.06,'triangle',.03,0,180);if(name==='sword')this.tone(210,.11,'sawtooth',.023,0,50);if(name==='hit'){this.tone(95,.08,'square',.05,0,35);this.tone(600,.05,'triangle',.045);}if(name==='hurt')this.tone(170,.3,'sawtooth',.035,0,32);if(name==='dodge')this.tone(300,.09,'triangle',.04,0,80);if(name==='loot')this.tone(880,.13,'square',.025,0,1320);if(name==='heal'||name==='seal'){[392,523,659,784].forEach((f,i)=>this.tone(f,.22,'square',.024,i*.12));}if(name==='kill')this.tone(160,.19,'triangle',.05,0,45);if(name==='win')[392,494,587,784,988,1175].forEach((f,i)=>this.tone(f,.4,'triangle',.06,i*.18));}
- voice(who,ch){const V={'LE VEILLEUR':{type:'square',f:250,vol:.11,d:.055,bend:.94},'LE PRÊTRE DU SERPENT':{type:'sawtooth',f:105,vol:.17,d:.07,bend:.86}}[who]||{type:'square',f:330,vol:.1,d:.05,bend:.95};const t=this.ctx.currentTime,o=this.ctx.createOscillator(),g=this.ctx.createGain(),f=V.f*(1+((ch*7)%5)*.045);o.type=V.type;o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*V.bend,t+V.d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(V.vol,t+.004);g.gain.setValueAtTime(V.vol,t+V.d*.55);g.gain.exponentialRampToValueAtTime(.0001,t+V.d);o.connect(g);g.connect(this.master||this.ctx.destination);o.start(t);o.stop(t+V.d+.02);}
+ voice(who,ch){let V={'LE VEILLEUR':{type:'square',f:250,vol:.11,d:.055,bend:.94},'LE PRÊTRE DU SERPENT':{type:'sawtooth',f:105,vol:.17,d:.07,bend:.86}}[who]||{type:'square',f:330,vol:.1,d:.05,bend:.95};V={...V,vol:V.vol*.4};const t=this.ctx.currentTime,o=this.ctx.createOscillator(),g=this.ctx.createGain(),f=V.f*(1+((ch*7)%5)*.045);o.type=V.type;o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*V.bend,t+V.d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(V.vol,t+.004);g.gain.setValueAtTime(V.vol,t+V.d*.55);g.gain.exponentialRampToValueAtTime(.0001,t+V.d);o.connect(g);g.connect(this.master||this.ctx.destination);o.start(t);o.stop(t+V.d+.02);}
   // ---- ambiance (bus des bruitages) : vent le jour, grillons la nuit, rapace lointain le jour, grand-duc la nuit.
  // Tout est synthétisé une fois au démarrage (boucles sans couture, appels en tampons) ; le mélange suit l'heure, la pluie, la région et le combat.
- ambBuild(){const c=this.ctx,sr=c.sampleRate,A=this.amb={next:0,call:c.currentTime+14};A.bus=c.createGain();A.bus.gain.value=0;A.bus.connect(this.master);
+ ambBuild(){const c=this.ctx,sr=c.sampleRate,A=this.amb={next:0,call:c.currentTime+14};A.bus=c.createGain();A.bus.gain.value=0;A.bus.connect(this.environmentOutput());
   const rng=seed=>{let s=seed%2147483646+1;return ()=>(s=s*16807%2147483647)/2147483647;};
   const loop=(sec,ch,fill)=>{const n=Math.floor(sr*sec),f=Math.floor(sr*.35),b=c.createBuffer(ch,n,sr);for(let k=0;k<ch;k++){const t=new Float32Array(n+f);fill(t,k);const d=b.getChannelData(k);for(let i=0;i<n;i++)d[i]=i<f?t[i]*(i/f)+t[n+i]*(1-i/f):t[i];}return b;};
   // vent : bruit rose filtré (passe-bande mobile), deux couches opposées en stéréo, rafales tirées au hasard
@@ -2891,9 +2894,9 @@ function weatherVoice(music,song,tr,t,dur,note,velocity){
 }
 function weatherRain(sound,level){
  const c=sound.ctx;if(!c)return;
- level=sound.enabled&&sound.sfxOn&&c.state==='running'?clamp(level,0,1):0;
+ level=sound.enabled&&sound.environmentVolume>0&&c.state==='running'?clamp(level,0,1):0;
  if(!sound.rainAudio){if(level<=0||!sound.master)return;sound.music??=new Music(c,c.destination);
-  if(!sound.weatherBus){sound.weatherBus=c.createGain();sound.weatherBus.connect(sound.master);}
+  if(!sound.weatherBus){sound.weatherBus=c.createGain();sound.weatherBus.connect(sound.environmentOutput());}
   const songs=['rain_light','rain_steady','rain_downpour'].map(name=>sound.music.start(name,c.currentTime+.025,WEATHER_SCORES[name],false,false,false,sound.weatherBus));
   for(const song of songs){song.bus.gain.cancelScheduledValues(c.currentTime);song.bus.gain.value=0;}
   sound.rainAudio={songs,lastWet:c.currentTime,scheduled:c.currentTime};
@@ -2906,7 +2909,7 @@ function weatherRain(sound,level){
   sound.rainAudio=null;return;
  }
  R.songs.forEach((song,i)=>{
-  song.bus.gain.setTargetAtTime(weights[i]*WEATHER_SCORES[song.name].gain*CUE_VOLUME,now,level>0?.65:.18);
+  song.bus.gain.setTargetAtTime(weights[i]*WEATHER_SCORES[song.name].gain*CUE_VOLUME*.22,now,level>0?.65:.18);
   // Skip missed note events after suspension; continuous sources keep their phase.
   if(now-R.scheduled>1)for(const tr of Object.values(song.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-song.t0)/song.loop));}
   sound.music.schedule(song,now+.3);
@@ -2914,11 +2917,11 @@ function weatherRain(sound,level){
  R.scheduled=now;
 }
 function weatherThunder(sound,event){
- if(sound.travelQuiet||!sound.enabled||!sound.sfxOn||!sound.ctx||!sound.master)return;
+ if(sound.travelQuiet||!sound.enabled||sound.environmentVolume===0||!sound.ctx||!sound.master)return;
  if(!sound.weatherBus){sound.weatherBus=sound.ctx.createGain();sound.weatherBus.connect(sound.master);}
  sound.music??=new Music(sound.ctx,sound.ctx.destination);
  const pan=sound.ctx.createStereoPanner();pan.pan.value=clamp(event.pan||0,-.85,.85);pan.connect(sound.weatherBus||sound.master);
- sound.music.cue(event.near?'thunder_near':'thunder_distant',sound.ctx.currentTime+.01,pan,.7+.3*(event.strength??1));
+ sound.music.cue(event.near?'thunder_near':'thunder_distant',sound.ctx.currentTime+.01,pan,(.7+.3*(event.strength??1))*.25);
  setTimeout(()=>{try{pan.disconnect();}catch{}},9000);
 }
 
@@ -3254,7 +3257,7 @@ Game.prototype.coreLocation=function(){const p=this.player,x=p.x/16,y=p.y/16;if(
 Game.prototype.updateLocation=function(dt=0){const w=Atlas.toWorld(this.player.x,this.player.y);return this.location.update(w.x,w.y,dt,{level:this.player.level||0,override:this.coreLocation()});};
 Game.prototype.atlasContext=function(){if(this.player.level)return null;const w=Atlas.toWorld(this.player.x,this.player.y);return Atlas.siteAt(w.x,w.y,7);};
 const atlasSolid=Game.prototype.solid;
-Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore(x/16,y/16)){const w=Atlas.toWorld(x,y);if([...this.atlasProps,...this.prisonProps||[]].some(o=>{if(Math.abs(x-o.x)>32+r||Math.abs(y-o.y)>40+r)return false;if(o.kind==='tent'||o.kind==='transport_inn')return Math.abs(x-o.x)<21+r&&y+r>o.y-24&&y-r<o.y+5;const radius={world_cart:16,column:6,column_b:6,barrel:6,crates:9,jar:5,world_sign:2,palm:5,world_oak_0:5,world_pine_0:5,world_pine_1:5,world_cypress:6}[o.kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-10&&y-r<o.y+2;}))return true;
+Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore(x/16,y/16)){const w=Atlas.toWorld(x,y);if([...this.atlasProps,...this.prisonProps||[]].some(o=>{if(Math.abs(x-o.x)>32+r||Math.abs(y-o.y)>40+r)return false;const kind=o.kind.replace(/^snow_/,'');if(kind==='tent'||kind==='transport_inn')return Math.abs(x-o.x)<21+r&&y+r>o.y-24&&y-r<o.y+5;const radius={world_cart:16,column:6,column_b:6,barrel:6,crates:9,jar:5,world_sign:2,palm:5,world_oak_0:5,world_pine_0:5,world_pine_1:5,world_cypress:6,world_oak_winter:5,world_boulder_0:7,world_boulder_1:7}[kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-10&&y-r<o.y+2;}))return true;
  for(const e of this.worldState.active(this.clock)){if(!Atlas.EVENT_TYPES[e.type].closed||!Atlas.roadById[e.target]||Atlas.roadById[e.target].type==='searoutes')continue;const route=Atlas.roadById[e.target];if(Math.hypot(w.x-e.x,w.y-e.y)<route.width/2+1+r/16)return true;}}
  return atlasSolid.call(this,x,y,r,level);};
 const atlasNpcMenu=Game.prototype.npcMenu;
@@ -3929,17 +3932,67 @@ MusicDirector.prototype.update=function(g,playing,dt){
  if((mode==='ambient'||mode==='night')&&g.sky){const family=g.sky().family;if(MUSIC_DATA['biome_'+family])return 'biome_'+family;}
  return mode;
 };
-Sound.prototype.ambience=function(o){const c=this.ctx;if(!c)return;const active=this.enabled&&this.sfxOn&&c.state==='running'&&o.active;
+Sound.prototype.ambience=function(o){const c=this.ctx;if(!c)return;const active=this.enabled&&this.environmentVolume>0&&c.state==='running'&&o.active;
  if(!active){if(this.amb)this.amb.bus.gain.setTargetAtTime(0,c.currentTime,.08);return;}
  if(!this.amb)this.ambBuild();this.music??=new Music(c,c.destination);const A=this.amb,now=c.currentTime,sky=o.sky||{},family=sky.family||'forest',night=(sky.night??o.night)>.65,key=family+'_'+(night?'night':'day'),score=BIOME_SCORES.fauna[key];
  const exposure=1-clamp((sky.rain||0)*.9+(sky.snow||0)*.8,0,.95);
  A.bus.gain.setTargetAtTime(AMB_VOLUME*(o.battle?.45:1),now,.6);A.crkG.gain.setTargetAtTime(0,now,.15);
- A.windG.gain.setTargetAtTime(.18+(sky.wind||0)*.7+(sky.blizzard||0)*.35,now,1.5);
+ A.windG.gain.setTargetAtTime(.6+(sky.wind||0)*1.15+(sky.blizzard||0)*.35,now,1.5);
  if(A.fauna?.name!==key){if(A.fauna){A.fauna.bus.gain.setTargetAtTime(0,now,.3);const old=A.fauna;setTimeout(()=>old.bus.disconnect(),2000);}A.fauna=score?this.music.start(key,now+.03,score,false,false,false,A.bus):null;}
- if(A.fauna){A.fauna.bus.gain.setTargetAtTime(score.gain*exposure*(o.battle?.2:1),now,.6);if(now-(A.faunaScheduled||now)>1)for(const tr of Object.values(A.fauna.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-A.fauna.t0)/A.fauna.loop));}this.music.schedule(A.fauna,now+.3);A.faunaScheduled=now;}
+ if(A.fauna){A.fauna.bus.gain.setTargetAtTime(score.gain*.6*exposure*(o.battle?.2:1),now,.6);if(now-(A.faunaScheduled||now)>1)for(const tr of Object.values(A.fauna.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-A.fauna.t0)/A.fauna.loop));}this.music.schedule(A.fauna,now+.3);A.faunaScheduled=now;}
 };
 
 Sound.prototype.setTravelQuiet=function(quiet){this.travelQuiet=quiet;if(this.weatherBus)this.weatherBus.gain.setTargetAtTime(quiet?0:1,this.ctx.currentTime,.04);if(quiet&&this.amb)this.amb.bus.gain.setTargetAtTime(0,this.ctx.currentTime,.04);};
+
+// Fixed headroom and source calibration; user music/SFX settings remain independent.
+for(const [name,trim]of Object.entries({title:.45,ambient:.4,night:.4,combat:.22,boss:.24,gameover:.5}))MUSIC_DATA[name].gain*=trim;
+Sound.prototype.sampleTrim=function(buffer){
+ this.sampleLevels??=new WeakMap();if(this.sampleLevels.has(buffer))return this.sampleLevels.get(buffer);
+ let peak=0,energy=0,maxRms=0;const size=Math.max(1,Math.floor(buffer.sampleRate*.05));
+ for(let ch=0;ch<buffer.numberOfChannels;ch++){const a=buffer.getChannelData(ch);energy=0;for(let i=0;i<a.length;i++){peak=Math.max(peak,Math.abs(a[i]));energy+=a[i]*a[i];if(i>=size)energy-=a[i-size]*a[i-size];if(i>=size-1)maxRms=Math.max(maxRms,Math.sqrt(Math.max(0,energy)/size));}}
+ const gain=Math.min(.65,.12/Math.max(peak,.001),.03/Math.max(maxRms,.001));this.sampleLevels.set(buffer,gain);return gain;
+};
+function footSurface(game,actor){
+ if(actor.level)return 'wood';const w=Atlas.toWorld(actor.x,actor.y),t=game.tile(actor.x,actor.y);
+ if(t===5)return 'wood';if(t===3)return 'water';
+ if(!atlasCore(actor.x/16,actor.y/16)){
+  const env=Atlas.environment(w.x,w.y),cell=Atlas.cellAt(w.x,w.y),np=WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),86,450);
+  const parts=env.mix.map(m=>({...m,family:WorldTerrainArt.family(m)})).sort((a,b)=>a.family.localeCompare(b.family)||a.biome-b.biome);
+  let part=parts[0],sum=0;for(const p of parts){sum+=p.weight;if(clamp((np-.18)/.64,0,.99999)<sum){part=p;break;}}
+  const b=part?.biome??cell?.biome??1,cover=Atlas.snowCover(b,cell?.height,game.clock);
+  if(cover>=.99||cover>0&&np<.18+cover*.64)return 'snow';
+  if(t===2||t===8)return 'stone';if([8,12].includes(b))return 'mud';
+  if(t===1)return [9,10,11].includes(b)?'gravel':'earth';
+  return [1,2].includes(b)?'sand':[10,11].includes(b)?'gravel':'grass';
+ }
+ return t===2||t===8?'stone':t===1?'earth':'sand';
+}
+const FOOT_MATERIALS={sand:[.16,900,.11,120],earth:[.12,1600,.08,160],grass:[.17,2600,.1,180],gravel:[.14,3800,.08,400],stone:[.09,4400,.045,750],wood:[.13,2100,.12,320],mud:[.19,1200,.08,110],water:[.2,3500,.02,190],snow:[.2,1900,.035,220]};
+Sound.prototype.footBuffer=function(material,variant){
+ this.footBuffers??=new Map();const key=material+':'+variant;if(this.footBuffers.has(key))return this.footBuffers.get(key);
+ const c=this.ctx,[duration,cut,body,freq]=FOOT_MATERIALS[material]||FOOT_MATERIALS.earth,n=Math.ceil(c.sampleRate*duration),buf=c.createBuffer(1,n,c.sampleRate),a=buf.getChannelData(0),alpha=1-Math.exp(-2*Math.PI*cut/c.sampleRate);
+ let seed=1237+variant*311+Object.keys(FOOT_MATERIALS).indexOf(material)*97,low=0,peak=0;
+ for(let i=0;i<n;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const noise=seed/2147483648-1,t=i/c.sampleRate,u=t/duration;low+=alpha*(noise-low);const crunch=material==='gravel'||material==='snow'?(.6+.4*Math.sin(t*730+variant)**2):1,env=Math.min(1,t/.004)*(1-u)**3;a[i]=env*(low*.7*crunch+body*Math.sin(2*Math.PI*freq*(1+variant*.018)*t)*Math.exp(-t*25));peak=Math.max(peak,Math.abs(a[i]));}
+ for(let i=0;i<n;i++)a[i]*=.11/Math.max(.001,peak);this.footBuffers.set(key,buf);return buf;
+};
+Sound.prototype.footstep=function(material,{gain=1,pan=0,variant=0}={}){
+ if(!this.enabled||!this.sfxOn||!this.ctx||!this.master||this.sfxVolume===0||this.travelQuiet)return;
+ const c=this.ctx,now=c.currentTime;this.footVoices=(this.footVoices||[]).filter(v=>v.end>now);if(this.footVoices.length>=8)return;
+ const src=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner();src.buffer=this.footBuffer(material,variant%3);g.gain.value=Math.min(1,gain)*.65;p.pan.value=clamp(pan,-.8,.8);src.connect(g);g.connect(p);p.connect(this.master);
+ const voice={end:now+src.buffer.duration,src,g,p};this.footVoices.push(voice);src.onended=()=>{src.disconnect();g.disconnect();p.disconnect();};src.start(now);
+};
+Sound.prototype.updateFootsteps=function(game,active,dt){
+ if(!active||game.journey||game.dead||game.dying||game.sleeping||!this.enabled||!this.sfxOn){this.footTracks=new WeakMap();for(const v of this.footVoices||[])try{v.src.stop();}catch{}this.footVoices=[];return;}
+ this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&game.npcPresent(n)),...game.enemies.filter(n=>!n.dead&&!['snake','serpent'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
+ let played=0;for(const n of actors){const prev=this.footTracks.get(n),now={x:n.x,y:n.y,distance:prev?.distance||0,variant:prev?.variant||0,at:game.time};this.footTracks.set(n,now);if(!prev||game.time-prev.at>.12)continue;const moved=Math.hypot(n.x-prev.x,n.y-prev.y);
+  if(moved>Math.max(8,dt*350)||n.dash||n.held||moved<.001){if(moved>8)now.distance=0;continue;}now.distance+=moved;
+  const stride=n.kind==='guardian'?23:13;if(now.distance<stride)continue;now.distance%=stride;now.variant++;if(played>=3)continue;
+  const distance=Math.hypot(n.x-player.x,n.y-player.y),gain=n===player?.85:.65*(1-distance/240)**2;this.footstep(footSurface(game,n),{gain,pan:(n.x-player.x)/220,variant:now.variant});played++;
+ }
+};
+
+Sound.prototype.environmentOutput=function(){if(!this.environmentBus){this.environmentBus=this.ctx.createGain();this.environmentBus.gain.value=SFX_VOLUME*this.environmentVolume;this.environmentBus.connect(this.ctx.destination);}return this.environmentBus;};
+Sound.prototype.setEnvironmentVolume=function(value){if(!Number.isFinite(value))return;this.environmentVolume=clamp(value,0,1);this.saveAudio();this.wake();this.applyVolumes();};
 
 // END WORLD ATLAS
 // BEGIN SNOW RENDER
@@ -4015,9 +4068,9 @@ function titleLoadGame(){
 }
 function syncTitleOptions(){
  syncTextSettings();
- for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
+ for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['uiSoundsToggle',sound.uiSoundsOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
  $('musicToggle').textContent=sound.musicOn?'Activée':'Désactivée';$('hapticsToggle').textContent=haptics.enabled?'Activées':'Désactivées';$('hapticsHint').textContent=haptics.available?'Retours discrets pour les actions importantes.':'Vibrations indisponibles dans cette version de l’app ou ce navigateur.';
- for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}
+ for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume],['environmentVolume',sound.environmentVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}
 }
 function openTitleOptions(){stashOptions();state='options';$('overlay').classList.add('options-open');$('titleOptions').hidden=false;syncTitleOptions();$('musicToggle').focus({preventScroll:true});}
 function closeTitleOptions(){if(state==='menu'){selectMenuTab(menuPrevious,true);return;}state='title';$('titleOptions').hidden=true;$('overlay').classList.remove('options-open');$('menuOptions').focus({preventScroll:true});}
@@ -4056,6 +4109,10 @@ $('sfxVolume').addEventListener('change',()=>sound.fx('ui_select'));
 $('textSize').addEventListener('input',e=>setTextSize(Number(e.target.value)));
 $('textSize').addEventListener('change',()=>sound.fx('ui_select'));
 $('textSizeReset').addEventListener('click',()=>setTextSize(100));
+
+$('environmentVolume').addEventListener('input',e=>{sound.setEnvironmentVolume(+e.target.value/100);syncTitleOptions();});
+
+$('uiSoundsToggle').addEventListener('click',()=>{sound.uiSoundsOn=!sound.uiSoundsOn;sound.saveAudio();syncTitleOptions();});
 
 // END TITLE MENU UI
 const musicDirector=new MusicDirector();let combatHold=0,lastMusicT=performance.now();
@@ -4358,7 +4415,7 @@ document.addEventListener('click',e=>{const b=e.target.closest?.('button');if(!b
 addEventListener('resize',()=>setTimeout(layoutStick,60));
 function handleEvents(){for(const ev of game.events.splice(0)){if(ev.type==='haptic'){haptics.pulse(ev.kind);continue;}if(['questdone','levelup','stele'].includes(ev.type))haptics.pulse('success');if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}if(ev.type==='dialogue'){syncDialogue();continue;}if(ev.type==='save')save();else if(ev.type==='message'){}else if(ev.type==='fallen'){resetTouch();noticeQueue.length=0;clearTimeout(noticeTimer);noticeTimer=0;$('notices').replaceChildren();if(ev.over){state='dead';try{localStorage.removeItem(KEY);}catch{}saved=null;overlay('PLUS AUCUNE VIE','Game over','Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.','RECOMMENCER','ENTREE POUR RECOMMENCER',true,{mode:'gameover',second:'QUITTER'});}else{state='deathscreen';overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.','CONTINUER','ENTREE POUR CONTINUER',true,{mode:'death',second:'QUITTER',html:true});}}else if(ev.type==='quests'){renderTracker(true);syncBadge();if(state==='menu')renderMenu();}else if(ev.type==='questpanel'){openQuestPanel(ev);}else if(ev.type==='sleepmenu'){openSleepPanel();}else if(ev.type==='win'){state='win';try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));}catch{}let m=Math.floor(game.elapsed/60),s=Math.floor(game.elapsed%60);overlay('L’ACIER A TRIOMPHE','Le serpent<br>est vaincu.','Tu as libéré le temple en '+m+' min '+String(s).padStart(2,'0')+' s. '+game.player.kills+' ennemis vaincus, '+game.player.coins+' pièces retrouvées.','REJOUER','PAR AVAR, QUELLE AVENTURE !');sound.fx('win');}else sound.fx(ev.type,ev);}}
 function frame(now){let dt=Math.max(0,Math.min((now-last)/1000||.016,.04));last=now;studioIntro.update(dt);if(landscapeBlocked){sound.tick(studioIntro.active&&!document.hidden,'title');requestAnimationFrame(frame);return;}if(state==='playing'){let x=(keys.has('arrowright')||keys.has('d')?1:0)-(keys.has('arrowleft')||keys.has('q')||keys.has('a')?1:0),y=(keys.has('arrowdown')||keys.has('s')?1:0)-(keys.has('arrowup')||keys.has('z')||keys.has('w')?1:0);x+=stick.x;y+=stick.y;game.update(dt,{x,y,attack:keys.has('attack')||touchHas('attack'),attackPressed:pending.attack,guard:keys.has('guard')||touchHas('guard'),dodge:pending.dodge,interact:pending.interact});pending.dodge=false;pending.interact=false;pending.attack=false;handleEvents();}else if(['title','options','deathscreen','menu','dead','sleep'].includes(state))game.time+=dt;
- syncDialogue();syncAct();if(['title','options','quit'].includes(state)){titleScene.draw(titleTime,reduceMotion.matches||state==='quit');if(!document.hidden&&state!=='quit')titleTime+=dt;}else renderer.frame();sound.tick(!document.hidden&&['title','options','playing','dead','deathscreen','menu','sleep'].includes(state),state==='dead'||state==='deathscreen'?'gameover':musicMode());{const on=!document.hidden&&(state==='playing'||state==='menu'||state==='sleep'),p=game.player;sound.setTravelQuiet(!!game.journey);sound.rain(on&&!game.journey?game.sky().rain:0);sound.ambience({active:on&&!game.journey,sky:game.sky(),night:renderer.nightK(),rain:game.sky().rain,battle:combatHold>0||(game.bossActive&&!game.won),region:regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).id});}if(now-uiTime>150){updateUI();uiTime=now;}if(now>toastUntil)$('toast').classList.remove('visible');requestAnimationFrame(frame);}
+ sound.updateFootsteps(game,state==='playing'&&!document.hidden,dt);syncDialogue();syncAct();if(['title','options','quit'].includes(state)){titleScene.draw(titleTime,reduceMotion.matches||state==='quit');if(!document.hidden&&state!=='quit')titleTime+=dt;}else renderer.frame();sound.tick(!document.hidden&&['title','options','playing','dead','deathscreen','menu','sleep'].includes(state),state==='dead'||state==='deathscreen'?'gameover':musicMode());{const on=!document.hidden&&(state==='playing'||state==='menu'||state==='sleep'),p=game.player;sound.setTravelQuiet(!!game.journey);sound.rain(on&&!game.journey?game.sky().rain:0);sound.ambience({active:on&&!game.journey,sky:game.sky(),night:renderer.nightK(),rain:game.sky().rain,battle:combatHold>0||(game.bossActive&&!game.won),region:regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).id});}if(now-uiTime>150){updateUI();uiTime=now;}if(now>toastUntil)$('toast').classList.remove('visible');requestAnimationFrame(frame);}
 if(saved&&!game.won)$('start').innerHTML='CONTINUER <span>↵</span>';
 if(saved&&!game.won)$('newGame').hidden=false;
 if(!storageWorks)$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';

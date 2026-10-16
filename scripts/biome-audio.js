@@ -12,14 +12,14 @@ MusicDirector.prototype.update=function(g,playing,dt){
  if((mode==='ambient'||mode==='night')&&g.sky){const family=g.sky().family;if(MUSIC_DATA['biome_'+family])return 'biome_'+family;}
  return mode;
 };
-Sound.prototype.ambience=function(o){const c=this.ctx;if(!c)return;const active=this.enabled&&this.sfxOn&&c.state==='running'&&o.active;
+Sound.prototype.ambience=function(o){const c=this.ctx;if(!c)return;const active=this.enabled&&this.environmentVolume>0&&c.state==='running'&&o.active;
  if(!active){if(this.amb)this.amb.bus.gain.setTargetAtTime(0,c.currentTime,.08);return;}
  if(!this.amb)this.ambBuild();this.music??=new Music(c,c.destination);const A=this.amb,now=c.currentTime,sky=o.sky||{},family=sky.family||'forest',night=(sky.night??o.night)>.65,key=family+'_'+(night?'night':'day'),score=BIOME_SCORES.fauna[key];
  const exposure=1-clamp((sky.rain||0)*.9+(sky.snow||0)*.8,0,.95);
  A.bus.gain.setTargetAtTime(AMB_VOLUME*(o.battle?.45:1),now,.6);A.crkG.gain.setTargetAtTime(0,now,.15);
- A.windG.gain.setTargetAtTime(.18+(sky.wind||0)*.7+(sky.blizzard||0)*.35,now,1.5);
+ A.windG.gain.setTargetAtTime(.6+(sky.wind||0)*1.15+(sky.blizzard||0)*.35,now,1.5);
  if(A.fauna?.name!==key){if(A.fauna){A.fauna.bus.gain.setTargetAtTime(0,now,.3);const old=A.fauna;setTimeout(()=>old.bus.disconnect(),2000);}A.fauna=score?this.music.start(key,now+.03,score,false,false,false,A.bus):null;}
- if(A.fauna){A.fauna.bus.gain.setTargetAtTime(score.gain*exposure*(o.battle?.2:1),now,.6);if(now-(A.faunaScheduled||now)>1)for(const tr of Object.values(A.fauna.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-A.fauna.t0)/A.fauna.loop));}this.music.schedule(A.fauna,now+.3);A.faunaScheduled=now;}
+ if(A.fauna){A.fauna.bus.gain.setTargetAtTime(score.gain*.6*exposure*(o.battle?.2:1),now,.6);if(now-(A.faunaScheduled||now)>1)for(const tr of Object.values(A.fauna.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-A.fauna.t0)/A.fauna.loop));}this.music.schedule(A.fauna,now+.3);A.faunaScheduled=now;}
 };
 
 Sound.prototype.setTravelQuiet=function(quiet){this.travelQuiet=quiet;if(this.weatherBus)this.weatherBus.gain.setTargetAtTime(quiet?0:1,this.ctx.currentTime,.04);if(quiet&&this.amb)this.amb.bus.gain.setTargetAtTime(0,this.ctx.currentTime,.04);};

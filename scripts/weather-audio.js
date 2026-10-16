@@ -47,9 +47,9 @@ function weatherVoice(music,song,tr,t,dur,note,velocity){
 }
 function weatherRain(sound,level){
  const c=sound.ctx;if(!c)return;
- level=sound.enabled&&sound.sfxOn&&c.state==='running'?clamp(level,0,1):0;
+ level=sound.enabled&&sound.environmentVolume>0&&c.state==='running'?clamp(level,0,1):0;
  if(!sound.rainAudio){if(level<=0||!sound.master)return;sound.music??=new Music(c,c.destination);
-  if(!sound.weatherBus){sound.weatherBus=c.createGain();sound.weatherBus.connect(sound.master);}
+  if(!sound.weatherBus){sound.weatherBus=c.createGain();sound.weatherBus.connect(sound.environmentOutput());}
   const songs=['rain_light','rain_steady','rain_downpour'].map(name=>sound.music.start(name,c.currentTime+.025,WEATHER_SCORES[name],false,false,false,sound.weatherBus));
   for(const song of songs){song.bus.gain.cancelScheduledValues(c.currentTime);song.bus.gain.value=0;}
   sound.rainAudio={songs,lastWet:c.currentTime,scheduled:c.currentTime};
@@ -62,7 +62,7 @@ function weatherRain(sound,level){
   sound.rainAudio=null;return;
  }
  R.songs.forEach((song,i)=>{
-  song.bus.gain.setTargetAtTime(weights[i]*WEATHER_SCORES[song.name].gain*CUE_VOLUME,now,level>0?.65:.18);
+  song.bus.gain.setTargetAtTime(weights[i]*WEATHER_SCORES[song.name].gain*CUE_VOLUME*.22,now,level>0?.65:.18);
   // Skip missed note events after suspension; continuous sources keep their phase.
   if(now-R.scheduled>1)for(const tr of Object.values(song.tracks)){tr.i=0;tr.iter=Math.max(0,Math.floor((now-song.t0)/song.loop));}
   sound.music.schedule(song,now+.3);
@@ -70,10 +70,10 @@ function weatherRain(sound,level){
  R.scheduled=now;
 }
 function weatherThunder(sound,event){
- if(sound.travelQuiet||!sound.enabled||!sound.sfxOn||!sound.ctx||!sound.master)return;
+ if(sound.travelQuiet||!sound.enabled||sound.environmentVolume===0||!sound.ctx||!sound.master)return;
  if(!sound.weatherBus){sound.weatherBus=sound.ctx.createGain();sound.weatherBus.connect(sound.master);}
  sound.music??=new Music(sound.ctx,sound.ctx.destination);
  const pan=sound.ctx.createStereoPanner();pan.pan.value=clamp(event.pan||0,-.85,.85);pan.connect(sound.weatherBus||sound.master);
- sound.music.cue(event.near?'thunder_near':'thunder_distant',sound.ctx.currentTime+.01,pan,.7+.3*(event.strength??1));
+ sound.music.cue(event.near?'thunder_near':'thunder_distant',sound.ctx.currentTime+.01,pan,(.7+.3*(event.strength??1))*.25);
  setTimeout(()=>{try{pan.disconnect();}catch{}},9000);
 }
