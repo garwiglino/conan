@@ -9,6 +9,13 @@ Game.prototype.revealFogRange=function(y,left,right){
 };
 Game.prototype.revealFogAt=function(x,y){const cx=Math.floor(x/FOG_METRES),cy=Math.floor(y/FOG_METRES);for(let dy=-1;dy<=1;dy++)this.revealFogRange(cy+dy,cx-1,cx+1);};
 Game.prototype.isPlaceVisited=function(place){return !!place&&(place.category==='places'?this.discovered.has(place.siteId):this.visitedPlaces.has(place.id));};
+Game.prototype.canTrackPlace=function(place){return this.isPlaceVisited(place)||!!place&&place.category==='transport'&&place.id===this.transportHint;};
+Game.prototype.markNearestTransport=function(){
+ const p=Atlas.toWorld(this.player.x,this.player.y),closed=this.worldState.active(this.clock).filter(e=>Atlas.EVENT_TYPES[e.type].closed);
+ const places=this.mapPlaces.filter(n=>n.category==='transport'&&!closed.some(e=>e.target===n.siteId||e.target===Atlas.byId[n.siteId]?.town));
+ places.sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y)||a.id.localeCompare(b.id));
+ const nearest=places[0];if(!nearest)return null;this.transportHint=nearest.id;this.navigation=nearest.id;return nearest;
+};
 Game.prototype.recordExploration=function(){
  const p=Atlas.toWorld(this.player.x,this.player.y),old=this.explorationLast;
  if(old&&Math.hypot(p.x-old.x,p.y-old.y)<1)return;
@@ -22,6 +29,7 @@ Game.prototype.recordExploration=function(){
 };
 const explorationInit=Game.prototype.initTravelParty;
 Game.prototype.initTravelParty=function(saved){explorationInit.call(this,saved);this.explorationRows=new Map();this.explorationLast=null;
+ this.transportHint=this.mapPlaces.find(n=>n.category==='transport'&&n.id===saved.exploration?.transportHint)?.id||null;
  this.visitedPlaces=new Set((Array.isArray(saved.exploration?.visited)?saved.exploration.visited:[]).filter(id=>this.mapPlaces.some(n=>n.id===id)));
  const rows=Array.isArray(saved.exploration?.rows)?saved.exploration.rows:[];
  for(const entry of rows){if(!Array.isArray(entry)||!Number.isInteger(entry[0])||entry[0]<0||entry[0]>=FOG_ROWS||!Array.isArray(entry[1]))continue;for(const pair of entry[1])if(Array.isArray(pair)&&pair.length===2&&pair.every(Number.isInteger)&&pair[0]>=0&&pair[1]<FOG_COLS&&pair[0]<=pair[1])this.revealFogRange(entry[0],pair[0],pair[1]);}
@@ -29,8 +37,8 @@ Game.prototype.initTravelParty=function(saved){explorationInit.call(this,saved);
  if(!saved.exploration)for(const id of this.discovered){const n=Atlas.byId[id];if(n)this.revealFogAt(n.x,n.y);}
 };
 const explorationRestore=Game.prototype.finishTravelRestore;
-Game.prototype.finishTravelRestore=function(saved){explorationRestore.call(this,saved);this.recordExploration();if(!this.isPlaceVisited(this.mapPlaces.find(n=>n.id===this.navigation)))this.navigation=null;};
+Game.prototype.finishTravelRestore=function(saved){explorationRestore.call(this,saved);this.recordExploration();if(!this.canTrackPlace(this.mapPlaces.find(n=>n.id===this.navigation)))this.navigation=null;};
 const explorationAdvance=Game.prototype.advanceAtlas;
 Game.prototype.advanceAtlas=function(dt=0){explorationAdvance.call(this,dt);this.recordExploration();};
 const explorationSerialize=Game.prototype.serialize;
-Game.prototype.serialize=function(){const data=explorationSerialize.call(this);data.atlas.exploration={version:1,visited:[...this.visitedPlaces],rows:[...this.explorationRows].map(([y,ranges])=>[y,ranges.map(r=>r.slice())])};return data;};
+Game.prototype.serialize=function(){const data=explorationSerialize.call(this);data.atlas.exploration={version:1,transportHint:this.transportHint,visited:[...this.visitedPlaces],rows:[...this.explorationRows].map(([y,ranges])=>[y,ranges.map(r=>r.slice())])};return data;};

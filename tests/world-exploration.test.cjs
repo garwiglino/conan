@@ -1,4 +1,11 @@
 const {test,before}=require('node:test'),assert=require('node:assert/strict');
+test('nearest transport can be marked before discovery and survives reload without revealing terrain',async()=>{
+ const {Game,Atlas}=await require('./game-harness.cjs').loadGame(),g=new Game();
+ const n=g.mapPlaces.find(n=>n.category==='transport'&&!g.isPlaceVisited(n));Object.assign(g.player,Atlas.toGame(n.x+20,n.y));
+ const fog=JSON.stringify([...g.explorationRows]);assert.equal(g.markNearestTransport().id,n.id);assert.equal(g.isPlaceVisited(n),false);assert.equal(g.navigationInfo().site.id,n.id);assert.equal(JSON.stringify([...g.explorationRows]),fog);
+ const restored=new Game(JSON.parse(JSON.stringify(g.serialize())));assert.equal(restored.navigationInfo().site.id,n.id);assert.equal(restored.isPlaceVisited(n),false);
+ const other=g.mapPlaces.find(p=>p.category==='transport'&&p.id!==n.id&&!g.isPlaceVisited(p));assert.equal(g.canTrackPlace(other),false);
+});
 let api;before(async()=>{api=await require('./game-harness.cjs').loadGame();});
 test('unknown places cannot be tracked and are revealed only by visiting, including services',()=>{
  const g=new api.Game(),A=api.Atlas,city=g.mapPlaces.find(n=>n.id===A.home.id),port=g.mapPlaces.find(n=>n.kind==='dock'&&n.category==='transport');
