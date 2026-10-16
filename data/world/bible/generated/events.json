@@ -1,0 +1,484 @@
+[
+  {
+    "actorPolicy": "local_band_only",
+    "cooldownDays": 3,
+    "durationHours": 24,
+    "id": "bandit_ambush",
+    "lambdaPerEligibleDay": 0.1,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "exposed_traffic",
+      "available_local_group",
+      "cover_or_escape",
+      "insufficient_patrol"
+    ],
+    "runtimeType": "bandits",
+    "targetPolicy": "cargo_or_ransom_not_species",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "documented_party_to_concession",
+    "cooldownDays": 5,
+    "durationHours": 24,
+    "id": "mining_interception",
+    "lambdaPerEligibleDay": 0.04,
+    "regions": [
+      1,
+      2,
+      3,
+      8,
+      11
+    ],
+    "requires": [
+      "active_concession_dispute",
+      "documented_violent_escalation",
+      "related_convoy",
+      "armed_group_available"
+    ],
+    "runtimeType": "bandits",
+    "targetPolicy": "related_convoy_only",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "affected_local_signatories",
+    "cooldownDays": 5,
+    "durationHours": 18,
+    "id": "pasture_retaliation",
+    "lambdaPerEligibleDay": 0.035,
+    "regions": [
+      3,
+      8,
+      10
+    ],
+    "requires": [
+      "active_passage_dispute",
+      "prior_damage_or_seizure",
+      "failed_mediation",
+      "armed_group_available"
+    ],
+    "runtimeType": "bandits",
+    "targetPolicy": "disputed_herd_or_post",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "kesh_raiders_not_kesh_population",
+    "cooldownDays": 7,
+    "durationHours": 24,
+    "id": "kesh_raid",
+    "lambdaPerEligibleDay": 0.025,
+    "regions": [
+      8,
+      9
+    ],
+    "requires": [
+      "kesh_raiders_active",
+      "known_motive",
+      "reachable_target",
+      "available_group"
+    ],
+    "runtimeType": "bandits",
+    "targetPolicy": "identified_raid_target",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "mandated_crown_or_city_agents",
+    "cooldownDays": 2,
+    "durationHours": 6,
+    "id": "fiscal_checkpoint",
+    "lambdaPerEligibleDay": 0.08,
+    "regions": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "requires": [
+      "active_contribution_dispute",
+      "dated_order",
+      "staff_available",
+      "selective_access_adapter"
+    ],
+    "runtimeType": "border",
+    "targetPolicy": "cargo_covered_by_order",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "specified_port_authority",
+    "cooldownDays": 5,
+    "durationHours": 12,
+    "id": "port_seizure",
+    "lambdaPerEligibleDay": 0.025,
+    "regions": [
+      6,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "ocean_port_or_valid_dock",
+      "active_port_dispute",
+      "named_ship_or_cargo",
+      "valid_seizure_order",
+      "selective_access_adapter"
+    ],
+    "runtimeType": "delay",
+    "targetPolicy": "named_ship_or_cargo",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "workers_employer_and_mediator",
+    "cooldownDays": 4,
+    "durationHours": 24,
+    "id": "labour_dispute",
+    "lambdaPerEligibleDay": 0.03,
+    "regions": [
+      1,
+      2,
+      3,
+      6,
+      8,
+      11,
+      12,
+      13
+    ],
+    "requires": [
+      "actual_wage_contract_or_safety_dispute",
+      "workplace_present"
+    ],
+    "runtimeType": "delay",
+    "targetPolicy": "affected_workplace_not_population",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "economic_state_no_enemy",
+    "cooldownDays": 2,
+    "durationHours": 48,
+    "id": "shortage",
+    "lambdaPerEligibleDay": 0.08,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "verified_stock_deficit",
+      "reserves_insufficient",
+      "no_timely_delivery"
+    ],
+    "runtimeType": "shortage",
+    "targetPolicy": "site_and_resource",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "contracted_merchant",
+    "cooldownDays": 1,
+    "durationHours": 12,
+    "id": "caravan",
+    "lambdaPerEligibleDay": 0.18,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "origin_surplus",
+      "destination_demand",
+      "cargo_reserved",
+      "transport_available",
+      "passable_route"
+    ],
+    "runtimeType": "caravan",
+    "targetPolicy": "existing_cargo_and_itinerary",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "competent_local_authority",
+    "cooldownDays": 1,
+    "durationHours": 24,
+    "id": "patrol",
+    "lambdaPerEligibleDay": 0.22,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "dated_local_mandate",
+      "staff_available",
+      "funding_and_provisions",
+      "passable_patrol_route"
+    ],
+    "runtimeType": "patrol",
+    "targetPolicy": "mandated_corridor_or_site",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "named_armed_party",
+    "cooldownDays": 7,
+    "durationHours": 48,
+    "id": "local_occupation",
+    "lambdaPerEligibleDay": 0,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "active_armed_dispute",
+      "limited_objective",
+      "force_available",
+      "supply_line",
+      "occupation_order"
+    ],
+    "runtimeType": "occupation",
+    "targetPolicy": "specified_post",
+    "transitionOnly": true
+  },
+  {
+    "actorPolicy": "named_besieger",
+    "cooldownDays": 14,
+    "durationHours": 72,
+    "id": "siege",
+    "lambdaPerEligibleDay": 0,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "active_local_war",
+      "fortified_target",
+      "siege_order",
+      "force_available",
+      "supply_line",
+      "civilian_response_ready"
+    ],
+    "runtimeType": "siege",
+    "targetPolicy": "specified_fortified_site",
+    "transitionOnly": true
+  },
+  {
+    "actorPolicy": "signatories_only",
+    "cooldownDays": 1,
+    "durationHours": 24,
+    "id": "truce",
+    "lambdaPerEligibleDay": 0,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "active_related_incident",
+      "agreement_or_withdrawal_decision",
+      "named_signatories"
+    ],
+    "runtimeType": "truce",
+    "targetPolicy": "related_incident_ids",
+    "transitionOnly": true
+  },
+  {
+    "actorPolicy": "local_control_and_specific_network",
+    "cooldownDays": 3,
+    "durationHours": 12,
+    "id": "smuggling_interception",
+    "lambdaPerEligibleDay": 0.04,
+    "regions": [
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "actual_illicit_cargo",
+      "competent_control",
+      "dated_order",
+      "selective_access_adapter"
+    ],
+    "runtimeType": "theft",
+    "targetPolicy": "identified_cargo",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "actual_cause_not_assumed_trafficker",
+    "cooldownDays": 7,
+    "durationHours": 72,
+    "id": "missing_person",
+    "lambdaPerEligibleDay": 0,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "existing_person",
+      "recorded_departure_accident_or_crime",
+      "persistent_person_id"
+    ],
+    "runtimeType": "missing",
+    "targetPolicy": "existing_person",
+    "transitionOnly": true
+  },
+  {
+    "actorPolicy": "local_manifestation_not_species",
+    "cooldownDays": 6,
+    "durationHours": 12,
+    "id": "curse_manifestation",
+    "lambdaPerEligibleDay": 0.02,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "existing_curse_site",
+      "site_specific_trigger",
+      "local_manifestation_budget"
+    ],
+    "runtimeType": "curse",
+    "targetPolicy": "existing_curse_perimeter",
+    "transitionOnly": false
+  },
+  {
+    "actorPolicy": "physical_hazard_no_faction",
+    "cooldownDays": 1,
+    "durationHours": 12,
+    "id": "weather_hazard",
+    "lambdaPerEligibleDay": 0,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "requires": [
+      "actual_weather",
+      "compatible_terrain",
+      "physical_threshold",
+      "valid_runtime_type"
+    ],
+    "runtimeType": "dynamic_weather_registry",
+    "targetPolicy": "measured_hazard_location",
+    "transitionOnly": true
+  }
+]

@@ -1,0 +1,691 @@
+[
+  {
+    "a": "teremor",
+    "aWants": "Contribution contrôlable à la défense commune",
+    "automaticMilitaryAssistance": false,
+    "b": "sylverive",
+    "bWants": "Respect des chartes et comptes de dépenses",
+    "dispute": "contribution",
+    "escalation": "Saisie contestée suivie de résistance armée",
+    "id": "sylverive--teremor",
+    "localMandateRequired": true,
+    "offramp": "Audit contradictoire et contribution bornée",
+    "speciesHostility": false,
+    "state": "fiscal_dispute",
+    "trade": [
+      "grain",
+      "cloth",
+      "tools"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Livraisons et passages sûrs",
+    "automaticMilitaryAssistance": false,
+    "b": "igea",
+    "bWants": "Prix garantis et départ des garnisons à terme",
+    "dispute": "garrison",
+    "escalation": "Garnison maintenue hors accord ou livraison saisie",
+    "id": "igea--teremor",
+    "localMandateRequired": true,
+    "offramp": "Renouvellement consenti ou relève locale",
+    "speciesHostility": false,
+    "state": "contracts_contested",
+    "trade": [
+      "iron",
+      "wool",
+      "grain"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Approvisionnement et contrats prévisibles",
+    "automaticMilitaryAssistance": false,
+    "b": "sarak",
+    "bWants": "Débouchés et égalité des taxes convenues",
+    "dispute": "none",
+    "escalation": "Rupture avérée d'un engagement important",
+    "id": "sarak--teremor",
+    "localMandateRequired": true,
+    "offramp": "Compensation et nouveau contrat",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "copper",
+      "salt",
+      "cloth",
+      "grain"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Accès à l'étain et au bois",
+    "automaticMilitaryAssistance": false,
+    "b": "varan",
+    "bWants": "Outils et marchés accessibles",
+    "dispute": "none",
+    "escalation": "Saisie ciblée non indemnisée",
+    "id": "teremor--varan",
+    "localMandateRequired": true,
+    "offramp": "Restitution et arbitrage marchand",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "tin",
+      "timber",
+      "tools"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Fret et approvisionnement réguliers",
+    "automaticMilitaryAssistance": false,
+    "b": "tagon",
+    "bWants": "Accès aux marchés sans taxes imprévues",
+    "dispute": "none",
+    "escalation": "Restriction visant un armateur sans recours",
+    "id": "tagon--teremor",
+    "localMandateRequired": true,
+    "offramp": "Garantie de marché et indemnité",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "fiber",
+      "tools",
+      "cloth"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Passage des voyageurs sous accord local",
+    "automaticMilitaryAssistance": false,
+    "b": "darg",
+    "bWants": "Reconnaissance de certains contrats d'escorte",
+    "dispute": "pasture",
+    "escalation": "Acte local contre un convoi protégé",
+    "id": "darg--teremor",
+    "localMandateRequired": true,
+    "offramp": "Restitution et médiation des signataires",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "wool",
+      "pack_animals",
+      "tools"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Protection des résidents et restitution après crimes établis",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Accès légal aux marchés pour membres non poursuivis",
+    "dispute": "kesh_restitution",
+    "escalation": "Punition collective ou raid attribué avec preuve",
+    "id": "kesh--teremor",
+    "localMandateRequired": true,
+    "offramp": "Distinguer suspects et communauté; restitution",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "tools",
+      "cloth"
+    ]
+  },
+  {
+    "a": "teremor",
+    "aWants": "Protection des voyageurs et commerce volontaire",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Respect de l'autonomie et des lieux de mémoire",
+    "dispute": "enclave_access",
+    "escalation": "Entrée coercitive dans une enclave concernée",
+    "id": "enclaves--teremor",
+    "localMandateRequired": true,
+    "offramp": "Retrait et accord avec cette enclave seulement",
+    "speciesHostility": false,
+    "state": "distant_contact",
+    "trade": [
+      "medicinal",
+      "tools"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Livraisons minières et matières navales",
+    "automaticMilitaryAssistance": false,
+    "b": "igea",
+    "bWants": "Avances raisonnables et comptes des concessions",
+    "dispute": "concessions",
+    "escalation": "Rupture d'accès ou saisie liée à une concession",
+    "id": "igea--sylverive",
+    "localMandateRequired": true,
+    "offramp": "Renégociation du contrat et des usages",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "iron",
+      "wool",
+      "timber",
+      "cloth"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Cuivre, teintures et tissus",
+    "automaticMilitaryAssistance": false,
+    "b": "sarak",
+    "bWants": "Marchés et transport sans exclusivité abusive",
+    "dispute": "none",
+    "escalation": "Non-exécution avérée d'un contrat",
+    "id": "sarak--sylverive",
+    "localMandateRequired": true,
+    "offramp": "Garantie et compensation",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "copper",
+      "dyes",
+      "cloth"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Accès aux produits et quais",
+    "automaticMilitaryAssistance": false,
+    "b": "varan",
+    "bWants": "Paiement des services et avances",
+    "dispute": "port_access",
+    "escalation": "Cargaison saisie au-delà d'un mandat",
+    "id": "sylverive--varan",
+    "localMandateRequired": true,
+    "offramp": "Arbitrage portuaire et restitution",
+    "speciesHostility": false,
+    "state": "commercial_competition",
+    "trade": [
+      "tin",
+      "resin",
+      "tools"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Fret, réparations et escorte financée",
+    "automaticMilitaryAssistance": false,
+    "b": "tagon",
+    "bWants": "Répartition des frais et créneaux de quai",
+    "dispute": "port_access",
+    "escalation": "Refus d'un secours explicitement contracté",
+    "id": "sylverive--tagon",
+    "localMandateRequired": true,
+    "offramp": "Partage des frais et délimitation de mission",
+    "speciesHostility": false,
+    "state": "limited_escort_pact",
+    "trade": [
+      "fiber",
+      "naval_timber",
+      "tools",
+      "cloth"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Fourniture de laine et respect des escortes",
+    "automaticMilitaryAssistance": false,
+    "b": "darg",
+    "bWants": "Prix et paiement des services",
+    "dispute": "none",
+    "escalation": "Dette contractuelle envers une escorte",
+    "id": "darg--sylverive",
+    "localMandateRequired": true,
+    "offramp": "Paiement et garantie d'un prochain contrat",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "wool",
+      "leather",
+      "tools"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Échanges réguliers et cargaisons non volées",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Accès des commerçants de Kesh aux marchés",
+    "dispute": "kesh_restitution",
+    "escalation": "Preuve de recel ou raid lié à un partenaire",
+    "id": "kesh--sylverive",
+    "localMandateRequired": true,
+    "offramp": "Poursuite de l'auteur; ne pas exclure une espèce",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "cloth",
+      "tools",
+      "pottery"
+    ]
+  },
+  {
+    "a": "sylverive",
+    "aWants": "Produits autorisés et savoir-faire volontaire",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Contrôle du prélèvement et de l'accès",
+    "dispute": "enclave_access",
+    "escalation": "Collecte non consentie par un partenaire",
+    "id": "enclaves--sylverive",
+    "localMandateRequired": true,
+    "offramp": "Restitution et limites de collecte",
+    "speciesHostility": false,
+    "state": "distant_contact",
+    "trade": [
+      "medicinal",
+      "dyes",
+      "tools"
+    ]
+  },
+  {
+    "a": "igea",
+    "aWants": "Sel, tissus et débouchés",
+    "automaticMilitaryAssistance": false,
+    "b": "sarak",
+    "bWants": "Métal, laine et fiabilité des parcours",
+    "dispute": "none",
+    "escalation": "Blocage documenté d'un parcours contracté",
+    "id": "igea--sarak",
+    "localMandateRequired": true,
+    "offramp": "Itinéraire alternatif et compensation",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "iron",
+      "wool",
+      "salt",
+      "cloth"
+    ]
+  },
+  {
+    "a": "igea",
+    "aWants": "Produits d'atelier et débouchés",
+    "automaticMilitaryAssistance": false,
+    "b": "varan",
+    "bWants": "Fer, laine et relations prévisibles",
+    "dispute": "none",
+    "escalation": "Litige de cargaison ou de statut impliquant un clan précis",
+    "id": "igea--varan",
+    "localMandateRequired": true,
+    "offramp": "Arbitrage entre les seuls intéressés",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "iron",
+      "tin",
+      "wool"
+    ]
+  },
+  {
+    "a": "igea",
+    "aWants": "Accès maritime et biens spécialisés",
+    "automaticMilitaryAssistance": false,
+    "b": "tagon",
+    "bWants": "Fer et produits forestiers sélectionnés",
+    "dispute": "none",
+    "escalation": "Défaillance d'un transport sous contrat",
+    "id": "igea--tagon",
+    "localMandateRequired": true,
+    "offramp": "Indemnisation ou autre transporteur",
+    "speciesHostility": false,
+    "state": "limited_trade",
+    "trade": [
+      "iron",
+      "resin",
+      "rope"
+    ]
+  },
+  {
+    "a": "igea",
+    "aWants": "Protection des concessions et cultures",
+    "automaticMilitaryAssistance": false,
+    "b": "darg",
+    "bWants": "Maintien des pâturages et passages anciens",
+    "dispute": "pasture",
+    "escalation": "Bétail retenu ou extension sans accord",
+    "id": "darg--igea",
+    "localMandateRequired": true,
+    "offramp": "Couloir saisonnier et indemnisation",
+    "speciesHostility": false,
+    "state": "seasonal_dispute",
+    "trade": [
+      "wool",
+      "pack_animals",
+      "grain",
+      "tools"
+    ]
+  },
+  {
+    "a": "igea",
+    "aWants": "Sécurité des voyageurs présents",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Droits des petites communautés expatriées",
+    "dispute": "none",
+    "escalation": "Acte individuel attribué avec preuve",
+    "id": "igea--kesh",
+    "localMandateRequired": true,
+    "offramp": "Justice locale sans représailles collectives",
+    "speciesHostility": false,
+    "state": "distant_contact",
+    "trade": [
+      "tools",
+      "cloth"
+    ]
+  },
+  {
+    "a": "igea",
+    "aWants": "Échanges rares par intermédiaire",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Pas d'ingérence dans les enclaves",
+    "dispute": "none",
+    "escalation": "Aucun déclencheur sans contact local vérifié",
+    "id": "enclaves--igea",
+    "localMandateRequired": true,
+    "offramp": "Médiation par intermédiaire accepté",
+    "speciesHostility": false,
+    "state": "distant_contact",
+    "trade": [
+      "medicinal",
+      "iron"
+    ]
+  },
+  {
+    "a": "sarak",
+    "aWants": "Étain, bois et accès aux quais convenus",
+    "automaticMilitaryAssistance": false,
+    "b": "varan",
+    "bWants": "Cuivre, tissus et débouchés stables",
+    "dispute": "port_access",
+    "escalation": "Hausse unilatérale d'un droit contracté",
+    "id": "sarak--varan",
+    "localMandateRequired": true,
+    "offramp": "Révision du contrat ou compensation",
+    "speciesHostility": false,
+    "state": "limited_trade_pact",
+    "trade": [
+      "copper",
+      "salt",
+      "cloth",
+      "tin",
+      "timber"
+    ]
+  },
+  {
+    "a": "sarak",
+    "aWants": "Fret et bois de qualité",
+    "automaticMilitaryAssistance": false,
+    "b": "tagon",
+    "bWants": "Métaux et marchés accessibles",
+    "dispute": "port_access",
+    "escalation": "Saisie ciblée ou refus d'accès promis",
+    "id": "sarak--tagon",
+    "localMandateRequired": true,
+    "offramp": "Arbitrage et solution de transport",
+    "speciesHostility": false,
+    "state": "ordinary_trade",
+    "trade": [
+      "copper",
+      "naval_timber",
+      "rope"
+    ]
+  },
+  {
+    "a": "sarak",
+    "aWants": "Protection des cultures et ouvrages",
+    "automaticMilitaryAssistance": false,
+    "b": "darg",
+    "bWants": "Eau et droits de passage des signataires",
+    "dispute": "pasture",
+    "escalation": "Saisie de bétail, dommage non réparé, passage fermé",
+    "id": "darg--sarak",
+    "localMandateRequired": true,
+    "offramp": "Calendrier, couloir et compensation",
+    "speciesHostility": false,
+    "state": "seasonal_dispute",
+    "trade": [
+      "pack_animals",
+      "wool",
+      "grain",
+      "tools"
+    ]
+  },
+  {
+    "a": "sarak",
+    "aWants": "Sécurité des marchés et restitution des captifs illégaux",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Terres et marchés reconnus pour communautés signataires",
+    "dispute": "kesh_restitution",
+    "escalation": "Raid documenté ou sanction collective",
+    "id": "kesh--sarak",
+    "localMandateRequired": true,
+    "offramp": "Restitution, poursuite ciblée, renouvellement du pacte",
+    "speciesHostility": false,
+    "state": "local_compacts",
+    "trade": [
+      "grain",
+      "tools",
+      "pottery"
+    ]
+  },
+  {
+    "a": "sarak",
+    "aWants": "Limites d'accès claires et marchés pacifiques",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Eau, chaleur et autonomie locale",
+    "dispute": "enclave_access",
+    "escalation": "Violation d'un accord de site ou captage",
+    "id": "enclaves--sarak",
+    "localMandateRequired": true,
+    "offramp": "Rétablissement de l'accès et arbitrage local",
+    "speciesHostility": false,
+    "state": "local_contact",
+    "trade": [
+      "medicinal",
+      "tools",
+      "grain"
+    ]
+  },
+  {
+    "a": "varan",
+    "aWants": "Paiement des services et contrats des marchés",
+    "automaticMilitaryAssistance": false,
+    "b": "tagon",
+    "bWants": "Achats directs et accès à des quais définis",
+    "dispute": "port_access",
+    "escalation": "Cargaison saisie puis refus d'indemnité",
+    "id": "tagon--varan",
+    "localMandateRequired": true,
+    "offramp": "Quai autorisé, indemnisation, inspection commune",
+    "speciesHostility": false,
+    "state": "port_access_dispute",
+    "trade": [
+      "tin",
+      "timber",
+      "resin",
+      "rope",
+      "tools"
+    ]
+  },
+  {
+    "a": "varan",
+    "aWants": "Contrats de transport et personnes de passage protégées",
+    "automaticMilitaryAssistance": false,
+    "b": "darg",
+    "bWants": "Traitement des personnes selon accords locaux",
+    "dispute": "none",
+    "escalation": "Abus de statut contre un ressortissant identifié",
+    "id": "darg--varan",
+    "localMandateRequired": true,
+    "offramp": "Recours et restitution sans guerre générale",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "wool",
+      "leather",
+      "tools"
+    ]
+  },
+  {
+    "a": "varan",
+    "aWants": "Contrats licites et responsabilité d'intermédiaires",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Marchés et respect des membres libres du clan",
+    "dispute": "kesh_restitution",
+    "escalation": "Crime d'un courtier ou d'une bande établi",
+    "id": "kesh--varan",
+    "localMandateRequired": true,
+    "offramp": "Poursuite du responsable et restitution",
+    "speciesHostility": false,
+    "state": "limited_trade",
+    "trade": [
+      "cloth",
+      "tools",
+      "pottery"
+    ]
+  },
+  {
+    "a": "varan",
+    "aWants": "Prélèvements et échanges consentis",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Territoires, eau et lieux de mémoire respectés",
+    "dispute": "enclave_access",
+    "escalation": "Collecte forcée ou extension non négociée",
+    "id": "enclaves--varan",
+    "localMandateRequired": true,
+    "offramp": "Droit de collecte limité et compensation",
+    "speciesHostility": false,
+    "state": "local_access_dispute",
+    "trade": [
+      "medicinal",
+      "resin",
+      "tools"
+    ]
+  },
+  {
+    "a": "tagon",
+    "aWants": "Équipages et voyageurs sous contrat",
+    "automaticMilitaryAssistance": false,
+    "b": "darg",
+    "bWants": "Paiement et statut des personnes engagées",
+    "dispute": "none",
+    "escalation": "Rupture d'un contrat individuel",
+    "id": "darg--tagon",
+    "localMandateRequired": true,
+    "offramp": "Justice du port et médiation des intéressés",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "wool",
+      "rope",
+      "tools"
+    ]
+  },
+  {
+    "a": "tagon",
+    "aWants": "Échanges licites et sûreté des quais",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Accès ordinaire des commerçants et marins",
+    "dispute": "none",
+    "escalation": "Acte individuel avéré",
+    "id": "kesh--tagon",
+    "localMandateRequired": true,
+    "offramp": "Justice locale sans hostilité d'espèce",
+    "speciesHostility": false,
+    "state": "limited_contact",
+    "trade": [
+      "cloth",
+      "tools",
+      "pottery"
+    ]
+  },
+  {
+    "a": "tagon",
+    "aWants": "Collecte et parcours autorisés",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Conservation des habitats et accès à l'eau",
+    "dispute": "enclave_access",
+    "escalation": "Coupe ou entrée hors consentement",
+    "id": "enclaves--tagon",
+    "localMandateRequired": true,
+    "offramp": "Retrait, restitution et accord local",
+    "speciesHostility": false,
+    "state": "local_access_dispute",
+    "trade": [
+      "medicinal",
+      "dyes",
+      "tools"
+    ]
+  },
+  {
+    "a": "darg",
+    "aWants": "Passage et bétail respectés",
+    "automaticMilitaryAssistance": false,
+    "b": "kesh",
+    "bWants": "Marchés et cultures protégés",
+    "dispute": "pasture",
+    "escalation": "Dommage ou vol constaté entre groupes présents",
+    "id": "darg--kesh",
+    "localMandateRequired": true,
+    "offramp": "Restitution et accord des chefs concernés",
+    "speciesHostility": false,
+    "state": "local_contact",
+    "trade": [
+      "wool",
+      "grain",
+      "tools"
+    ]
+  },
+  {
+    "a": "darg",
+    "aWants": "Voyageurs protégés lorsqu'ils sont présents",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Autonomie et absence d'ingérence",
+    "dispute": "none",
+    "escalation": "Aucune hostilité sans incident réel",
+    "id": "darg--enclaves",
+    "localMandateRequired": true,
+    "offramp": "Médiation locale",
+    "speciesHostility": false,
+    "state": "distant_contact",
+    "trade": [
+      "tools",
+      "medicinal"
+    ]
+  },
+  {
+    "a": "kesh",
+    "aWants": "Accès consenti aux échanges",
+    "automaticMilitaryAssistance": false,
+    "b": "enclaves",
+    "bWants": "Limites d'habitat et de collecte respectées",
+    "dispute": "enclave_access",
+    "escalation": "Collecte forcée ou acte contre des personnes",
+    "id": "enclaves--kesh",
+    "localMandateRequired": true,
+    "offramp": "Restitution et limites acceptées",
+    "speciesHostility": false,
+    "state": "local_contact",
+    "trade": [
+      "pottery",
+      "tools",
+      "medicinal"
+    ]
+  }
+]

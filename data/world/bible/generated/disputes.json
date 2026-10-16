@@ -1,0 +1,127 @@
+{
+  "concessions": {
+    "initial": "local_contract_review",
+    "offramp": "contract_and_land_use_agreement",
+    "parties": [
+      "igea",
+      "sylverive",
+      "teremor",
+      "sarak",
+      "varan"
+    ],
+    "requires": [
+      "actual_concession",
+      "conflicting_rights"
+    ]
+  },
+  "contribution": {
+    "initial": "negotiation",
+    "offramp": "audit_and_limited_contribution",
+    "parties": [
+      "teremor",
+      "sylverive"
+    ],
+    "requires": [
+      "contested_obligation",
+      "documented_claim"
+    ]
+  },
+  "enclave_access": {
+    "initial": "local_consent",
+    "offramp": "withdrawal_or_consented_local_access",
+    "parties": [
+      "enclaves",
+      "varan",
+      "tagon",
+      "sarak",
+      "sylverive",
+      "teremor",
+      "kesh"
+    ],
+    "requires": [
+      "specific_enclave",
+      "actual_access_or_collection"
+    ]
+  },
+  "forestry": {
+    "initial": "local_cutting_agreements",
+    "offramp": "consented_cutting_and_regeneration",
+    "parties": [
+      "teremor",
+      "tagon",
+      "enclaves"
+    ],
+    "requires": [
+      "actual_forest",
+      "rights_and_cutting_limit"
+    ]
+  },
+  "garrison": {
+    "initial": "term_review",
+    "offramp": "consented_renewal_or_withdrawal",
+    "parties": [
+      "igea",
+      "teremor"
+    ],
+    "requires": [
+      "invitation",
+      "term_or_debt_dispute"
+    ]
+  },
+  "kesh_restitution": {
+    "initial": "no_collective_war",
+    "offramp": "targeted_justice_and_restitution",
+    "parties": [
+      "kesh",
+      "sarak",
+      "varan",
+      "teremor",
+      "sylverive"
+    ],
+    "requires": [
+      "specific_crime",
+      "identified_responsible_group"
+    ]
+  },
+  "pasture": {
+    "initial": "seasonal_agreements",
+    "offramp": "corridor_calendar_and_restitution",
+    "parties": [
+      "igea",
+      "sarak",
+      "darg",
+      "kesh"
+    ],
+    "requires": [
+      "overlapping_use_rights",
+      "actual_herd_or_cultivation"
+    ]
+  },
+  "port_access": {
+    "initial": "specific_contract_disputes",
+    "offramp": "quay_access_and_indemnity",
+    "parties": [
+      "sylverive",
+      "varan",
+      "tagon",
+      "sarak"
+    ],
+    "requires": [
+      "actual_port",
+      "specific_access_or_fee_claim"
+    ]
+  },
+  "water": {
+    "initial": "seasonal_agreements",
+    "offramp": "measured_sharing_and_compensation",
+    "parties": [
+      "sarak",
+      "darg"
+    ],
+    "requires": [
+      "verified_shared_basin",
+      "measured_deficit",
+      "conflicting_allocations"
+    ]
+  }
+}

@@ -1,0 +1,665 @@
+[
+  {
+    "id": "water",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Eau potable",
+    "renewal": "renewable",
+    "season": "local_hydrology",
+    "storageDays": 0,
+    "territoryLevel": "34355"
+  },
+  {
+    "id": "grain",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Céréales",
+    "renewal": "annual",
+    "season": "harvest",
+    "storageDays": 180,
+    "territoryLevel": "25322"
+  },
+  {
+    "id": "legumes",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Légumineuses",
+    "renewal": "annual",
+    "season": "harvest",
+    "storageDays": 180,
+    "territoryLevel": "24322"
+  },
+  {
+    "id": "rice",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Riz",
+    "renewal": "annual",
+    "season": "local_wet_cycle",
+    "storageDays": 180,
+    "territoryLevel": "00145"
+  },
+  {
+    "id": "tubers",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Tubercules",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 60,
+    "territoryLevel": "24244"
+  },
+  {
+    "id": "dates",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Dattes",
+    "renewal": "annual",
+    "season": "oasis_harvest",
+    "storageDays": 120,
+    "territoryLevel": "00501"
+  },
+  {
+    "id": "fruit",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Fruits",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 7,
+    "territoryLevel": "13345"
+  },
+  {
+    "id": "vegetables",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Légumes",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 5,
+    "territoryLevel": "23333"
+  },
+  {
+    "id": "fish",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Poisson",
+    "renewal": "managed_stock",
+    "season": "stock_and_weather",
+    "storageDays": 1,
+    "territoryLevel": "43144"
+  },
+  {
+    "id": "meat",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Viande",
+    "renewal": "managed_stock",
+    "season": "herd_cycle",
+    "storageDays": 2,
+    "territoryLevel": "34322"
+  },
+  {
+    "id": "milk",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Produits laitiers",
+    "renewal": "managed_stock",
+    "season": "herd_cycle",
+    "storageDays": 2,
+    "territoryLevel": "34211"
+  },
+  {
+    "id": "oil",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Huiles",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 90,
+    "territoryLevel": "13334"
+  },
+  {
+    "id": "salt",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Sel",
+    "renewal": "site_capacity",
+    "season": "site_conditions",
+    "storageDays": 999,
+    "territoryLevel": "33533"
+  },
+  {
+    "id": "timber",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Bois de construction",
+    "renewal": "slow_forest",
+    "season": "logging_window",
+    "storageDays": 999,
+    "territoryLevel": "34145"
+  },
+  {
+    "id": "naval_timber",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Bois naval sélectionné",
+    "renewal": "very_slow_forest",
+    "season": "logging_and_seasoning",
+    "storageDays": 999,
+    "territoryLevel": "23145"
+  },
+  {
+    "id": "firewood",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Bois de chauffe",
+    "renewal": "slow_forest",
+    "season": "managed_cutting",
+    "storageDays": 999,
+    "territoryLevel": "34244"
+  },
+  {
+    "id": "charcoal",
+    "inputAlternatives": [
+      [
+        "firewood"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Charbon de bois",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "34232"
+  },
+  {
+    "id": "resin",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Résines et poix",
+    "renewal": "managed_stock",
+    "season": "collection_window",
+    "storageDays": 180,
+    "territoryLevel": "34144"
+  },
+  {
+    "id": "flax",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Lin",
+    "renewal": "annual",
+    "season": "harvest",
+    "storageDays": 180,
+    "territoryLevel": "25122"
+  },
+  {
+    "id": "wool",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Laine",
+    "renewal": "managed_stock",
+    "season": "shearing",
+    "storageDays": 999,
+    "territoryLevel": "54311"
+  },
+  {
+    "id": "cotton",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Coton",
+    "renewal": "annual",
+    "season": "irrigated_crop",
+    "storageDays": 180,
+    "territoryLevel": "01434"
+  },
+  {
+    "id": "fiber",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Fibres végétales",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 180,
+    "territoryLevel": "23345"
+  },
+  {
+    "id": "hides",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Peaux brutes",
+    "renewal": "managed_stock",
+    "season": "herd_cycle",
+    "storageDays": 3,
+    "territoryLevel": "44322"
+  },
+  {
+    "id": "leather",
+    "inputAlternatives": [
+      [
+        "hides",
+        "water"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Cuir",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "34422"
+  },
+  {
+    "id": "dyes",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Matières tinctoriales",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 90,
+    "territoryLevel": "23445"
+  },
+  {
+    "id": "medicinal",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Matières médicinales",
+    "renewal": "managed_stock",
+    "season": "local_collection",
+    "storageDays": 60,
+    "territoryLevel": "23245"
+  },
+  {
+    "id": "aromatics",
+    "inputAlternatives": [],
+    "kind": "agriculture",
+    "label": "Aromates",
+    "renewal": "annual",
+    "season": "local_crop_cycle",
+    "storageDays": 90,
+    "territoryLevel": "12345"
+  },
+  {
+    "id": "honey",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Miel",
+    "renewal": "managed_stock",
+    "season": "local_flowering",
+    "storageDays": 180,
+    "territoryLevel": "24233"
+  },
+  {
+    "id": "wax",
+    "inputAlternatives": [
+      [
+        "honey"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Cire",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "24233"
+  },
+  {
+    "id": "iron_ore",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Minerai de fer",
+    "renewal": "finite",
+    "season": "extraction_access",
+    "storageDays": 999,
+    "territoryLevel": "53221"
+  },
+  {
+    "id": "copper_ore",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Minerai de cuivre",
+    "renewal": "finite",
+    "season": "extraction_access",
+    "storageDays": 999,
+    "territoryLevel": "22512"
+  },
+  {
+    "id": "tin_ore",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Minerai d'étain",
+    "renewal": "finite",
+    "season": "extraction_access",
+    "storageDays": 999,
+    "territoryLevel": "11151"
+  },
+  {
+    "id": "lead_ore",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Minerai de plomb",
+    "renewal": "finite",
+    "season": "extraction_access",
+    "storageDays": 999,
+    "territoryLevel": "22211"
+  },
+  {
+    "id": "silver_ore",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Minerai d'argent",
+    "renewal": "finite",
+    "season": "extraction_access",
+    "storageDays": 999,
+    "territoryLevel": "22211"
+  },
+  {
+    "id": "gold",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Or",
+    "renewal": "finite",
+    "season": "extraction_access",
+    "storageDays": 999,
+    "territoryLevel": "11122"
+  },
+  {
+    "id": "clay",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Argile",
+    "renewal": "site_capacity",
+    "season": "site_conditions",
+    "storageDays": 999,
+    "territoryLevel": "23343"
+  },
+  {
+    "id": "building_stone",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Pierre à bâtir",
+    "renewal": "finite",
+    "season": "quarry_access",
+    "storageDays": 999,
+    "territoryLevel": "43323"
+  },
+  {
+    "id": "limestone",
+    "inputAlternatives": [],
+    "kind": "mineral",
+    "label": "Calcaire",
+    "renewal": "finite",
+    "season": "quarry_access",
+    "storageDays": 999,
+    "territoryLevel": "23322"
+  },
+  {
+    "id": "sand",
+    "inputAlternatives": [],
+    "kind": "natural",
+    "label": "Sable sélectionné",
+    "renewal": "site_capacity",
+    "season": "site_conditions",
+    "storageDays": 999,
+    "territoryLevel": "22333"
+  },
+  {
+    "id": "iron",
+    "inputAlternatives": [
+      [
+        "iron_ore",
+        "charcoal"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Fer travaillé",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "44222"
+  },
+  {
+    "id": "copper",
+    "inputAlternatives": [
+      [
+        "copper_ore",
+        "charcoal"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Cuivre travaillé",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "23522"
+  },
+  {
+    "id": "tin",
+    "inputAlternatives": [
+      [
+        "tin_ore",
+        "charcoal"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Étain travaillé",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "12142"
+  },
+  {
+    "id": "bronze",
+    "inputAlternatives": [
+      [
+        "copper",
+        "tin",
+        "charcoal"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Bronze",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "23332"
+  },
+  {
+    "id": "steel",
+    "inputAlternatives": [
+      [
+        "iron",
+        "charcoal"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Acier de qualité",
+    "renewal": "production",
+    "season": "specialist_workshop",
+    "storageDays": 999,
+    "territoryLevel": "33311"
+  },
+  {
+    "id": "pottery",
+    "inputAlternatives": [
+      [
+        "clay",
+        "firewood"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Poterie",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "23433"
+  },
+  {
+    "id": "cloth",
+    "inputAlternatives": [
+      [
+        "flax"
+      ],
+      [
+        "wool"
+      ],
+      [
+        "cotton"
+      ],
+      [
+        "fiber"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Étoffes",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "24433"
+  },
+  {
+    "id": "rope",
+    "inputAlternatives": [
+      [
+        "fiber"
+      ],
+      [
+        "flax"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Cordages",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "23135"
+  },
+  {
+    "id": "tools",
+    "inputAlternatives": [
+      [
+        "iron",
+        "timber"
+      ],
+      [
+        "bronze",
+        "timber"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Outils",
+    "renewal": "production",
+    "season": "workshop",
+    "storageDays": 999,
+    "territoryLevel": "34422"
+  },
+  {
+    "id": "arms",
+    "inputAlternatives": [
+      [
+        "iron",
+        "timber",
+        "leather"
+      ],
+      [
+        "steel",
+        "timber",
+        "leather"
+      ],
+      [
+        "bronze",
+        "timber",
+        "leather"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Armes et équipements militaires",
+    "renewal": "production",
+    "season": "specialist_workshop",
+    "storageDays": 999,
+    "territoryLevel": "34422"
+  },
+  {
+    "id": "provisions",
+    "inputAlternatives": [
+      [
+        "grain",
+        "legumes"
+      ],
+      [
+        "fish",
+        "salt"
+      ],
+      [
+        "meat",
+        "salt"
+      ],
+      [
+        "dates"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Provisions conservées",
+    "renewal": "production",
+    "season": "processing",
+    "storageDays": 60,
+    "territoryLevel": "34333"
+  },
+  {
+    "id": "boats",
+    "inputAlternatives": [
+      [
+        "naval_timber",
+        "resin",
+        "rope",
+        "cloth",
+        "iron"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Embarcations et navires",
+    "renewal": "production",
+    "season": "shipyard",
+    "storageDays": 999,
+    "territoryLevel": "23134"
+  },
+  {
+    "id": "pack_animals",
+    "inputAlternatives": [],
+    "kind": "animal",
+    "label": "Animaux de bât et montures",
+    "renewal": "managed_stock",
+    "season": "breeding_and_training",
+    "storageDays": 0,
+    "territoryLevel": "34411"
+  },
+  {
+    "id": "flour",
+    "inputAlternatives": [
+      [
+        "grain"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Farines",
+    "renewal": "production",
+    "season": "mill",
+    "storageDays": 30,
+    "territoryLevel": "24322"
+  },
+  {
+    "id": "glass",
+    "inputAlternatives": [
+      [
+        "sand",
+        "limestone",
+        "firewood"
+      ]
+    ],
+    "kind": "processed",
+    "label": "Verre",
+    "renewal": "production",
+    "season": "specialist_workshop",
+    "storageDays": 999,
+    "territoryLevel": "13322"
+  }
+]

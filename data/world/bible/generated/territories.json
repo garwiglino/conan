@@ -1,0 +1,106 @@
+[
+  {
+    "designPopulation": 510000,
+    "name": "Igea",
+    "regionIds": [
+      1,
+      2,
+      3
+    ],
+    "speciesCounts": {
+      "goblin": 45975,
+      "human": 397014,
+      "orc": 67011,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 9.01,
+      "human": 77.85,
+      "orc": 13.14,
+      "serpentfolk": 0.0
+    }
+  },
+  {
+    "designPopulation": 2880000,
+    "name": "Teremor",
+    "regionIds": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "speciesCounts": {
+      "goblin": 245811,
+      "human": 2593250,
+      "orc": 40939,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 8.54,
+      "human": 90.04,
+      "orc": 1.42,
+      "serpentfolk": 0.0
+    }
+  },
+  {
+    "designPopulation": 950000,
+    "name": "Sarak",
+    "regionIds": [
+      8,
+      9,
+      10
+    ],
+    "speciesCounts": {
+      "goblin": 113405,
+      "human": 782488,
+      "orc": 47721,
+      "serpentfolk": 6386
+    },
+    "speciesPct": {
+      "goblin": 11.94,
+      "human": 82.37,
+      "orc": 5.02,
+      "serpentfolk": 0.67
+    }
+  },
+  {
+    "designPopulation": 520000,
+    "name": "Varan",
+    "regionIds": [
+      11,
+      12
+    ],
+    "speciesCounts": {
+      "goblin": 53440,
+      "human": 389355,
+      "orc": 10507,
+      "serpentfolk": 66698
+    },
+    "speciesPct": {
+      "goblin": 10.28,
+      "human": 74.87,
+      "orc": 2.02,
+      "serpentfolk": 12.83
+    }
+  },
+  {
+    "designPopulation": 590000,
+    "name": "Tagon",
+    "regionIds": [
+      13,
+      14
+    ],
+    "speciesCounts": {
+      "goblin": 37450,
+      "human": 517982,
+      "orc": 12410,
+      "serpentfolk": 22158
+    },
+    "speciesPct": {
+      "goblin": 6.35,
+      "human": 87.79,
+      "orc": 2.1,
+      "serpentfolk": 3.76
+    }
+  }
+]

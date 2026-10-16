@@ -1,0 +1,138 @@
+[
+  {
+    "actorsConcerned": [
+      "teremor",
+      "sylverive"
+    ],
+    "goods": [
+      "provisions",
+      "cloth",
+      "tools"
+    ],
+    "id": "inland_bandits",
+    "protection": "none_by_default",
+    "regions": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "rule": "bandit_ambush"
+  },
+  {
+    "actorsConcerned": [
+      "igea",
+      "teremor",
+      "sylverive"
+    ],
+    "goods": [
+      "iron",
+      "provisions"
+    ],
+    "id": "mine_deserters",
+    "protection": "individual_contract_only_if_proven",
+    "regions": [
+      1,
+      2,
+      3
+    ],
+    "rule": "mining_interception"
+  },
+  {
+    "actorsConcerned": [
+      "teremor",
+      "sylverive",
+      "tagon"
+    ],
+    "goods": [
+      "arms",
+      "grain",
+      "cloth"
+    ],
+    "id": "customs_smugglers",
+    "protection": "individual_patron_only_if_proven",
+    "regions": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "rule": "smuggling_interception"
+  },
+  {
+    "actorsConcerned": [
+      "kesh",
+      "sarak",
+      "varan"
+    ],
+    "goods": [],
+    "id": "kesh_raiders",
+    "protection": "subset_of_clan_not_species_or_whole_clan",
+    "regions": [
+      8,
+      9
+    ],
+    "rule": "kesh_raid"
+  },
+  {
+    "actorsConcerned": [
+      "sarak",
+      "varan",
+      "kesh"
+    ],
+    "goods": [],
+    "id": "captive_brokers",
+    "peopleAreNotResources": true,
+    "protection": "named_individual_only_if_proven",
+    "regions": [
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "rule": "missing_person"
+  },
+  {
+    "actorsConcerned": [
+      "varan",
+      "tagon"
+    ],
+    "goods": [
+      "tin",
+      "cloth",
+      "tools"
+    ],
+    "id": "maritime_receivers",
+    "protection": "specific_port_patron_only_if_proven",
+    "regions": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "rule": "port_seizure"
+  },
+  {
+    "actorsConcerned": [
+      "teremor",
+      "varan",
+      "tagon",
+      "enclaves"
+    ],
+    "goods": [
+      "naval_timber",
+      "medicinal",
+      "resin"
+    ],
+    "id": "illicit_collectors",
+    "protection": "none_by_default",
+    "regions": [
+      4,
+      11,
+      12,
+      14
+    ],
+    "rule": "smuggling_interception"
+  }
+]

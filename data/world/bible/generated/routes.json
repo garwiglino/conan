@@ -1,0 +1,5175 @@
+[
+  {
+    "atlasRouteId": "0",
+    "authorities": [
+      "igea",
+      "sarak",
+      "teremor"
+    ],
+    "disputes": [
+      "concessions",
+      "contribution",
+      "forestry",
+      "garrison",
+      "kesh_restitution",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "fiscal_checkpoint",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 982290.9,
+    "mode": "land",
+    "name": "Route des Lisières",
+    "regions": [
+      2,
+      3,
+      4,
+      5,
+      8,
+      9
+    ],
+    "siteIds": [
+      "1",
+      "6",
+      "78"
+    ]
+  },
+  {
+    "atlasRouteId": "1",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 99031.8,
+    "mode": "land",
+    "name": "Sentier Clairfoyer — Hautes-Fougères",
+    "regions": [
+      4,
+      5
+    ],
+    "siteIds": [
+      "1",
+      "44"
+    ]
+  },
+  {
+    "atlasRouteId": "2",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 97133.6,
+    "mode": "land",
+    "name": "Sentier Clairfoyer — Ormerive",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "1",
+      "46"
+    ]
+  },
+  {
+    "atlasRouteId": "3",
+    "authorities": [
+      "igea",
+      "teremor"
+    ],
+    "disputes": [
+      "concessions",
+      "contribution",
+      "forestry",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "fiscal_checkpoint",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 307107.2,
+    "mode": "land",
+    "name": "Route du Dégel",
+    "regions": [
+      1,
+      4,
+      5
+    ],
+    "siteIds": [
+      "1",
+      "63"
+    ]
+  },
+  {
+    "atlasRouteId": "4",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 93887.3,
+    "mode": "land",
+    "name": "Sentier Aulneport — Gué-des-Pierres",
+    "regions": [
+      6,
+      7
+    ],
+    "siteIds": [
+      "2",
+      "29"
+    ]
+  },
+  {
+    "atlasRouteId": "5",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 76541.5,
+    "mode": "land",
+    "name": "Sentier Aulneport — Bois-de-Lune",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "2",
+      "38"
+    ]
+  },
+  {
+    "atlasRouteId": "6",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 39712.2,
+    "mode": "land",
+    "name": "Sentier Coralbourg — Anse-des-Palmes",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "27",
+      "3"
+    ]
+  },
+  {
+    "atlasRouteId": "7",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 84254.8,
+    "mode": "land",
+    "name": "Sentier Coralbourg — Santalune",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "3",
+      "40"
+    ]
+  },
+  {
+    "atlasRouteId": "8",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 73634.2,
+    "mode": "land",
+    "name": "Sentier Coralbourg — Bourg-des-Coquilles",
+    "regions": [
+      13,
+      14
+    ],
+    "siteIds": [
+      "3",
+      "50"
+    ]
+  },
+  {
+    "atlasRouteId": "9",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 77486.6,
+    "mode": "land",
+    "name": "Sentier Coralbourg — Plage-Dorée",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "3",
+      "54"
+    ]
+  },
+  {
+    "atlasRouteId": "10",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 85197.5,
+    "mode": "land",
+    "name": "Sentier Coralbourg — Palmehaute",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "3",
+      "62"
+    ]
+  },
+  {
+    "atlasRouteId": "11",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 92178.8,
+    "mode": "land",
+    "name": "Sentier Sylvehaute — Pont-des-Ormes",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "11",
+      "4"
+    ]
+  },
+  {
+    "atlasRouteId": "12",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 69307.5,
+    "mode": "land",
+    "name": "Sentier Sylvehaute — Fort-des-Ronces",
+    "regions": [
+      4,
+      6
+    ],
+    "siteIds": [
+      "19",
+      "4"
+    ]
+  },
+  {
+    "atlasRouteId": "13",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 91307.8,
+    "mode": "land",
+    "name": "Sentier Sylvehaute — Lac-des-Aulnes",
+    "regions": [
+      4,
+      6
+    ],
+    "siteIds": [
+      "37",
+      "4"
+    ]
+  },
+  {
+    "atlasRouteId": "14",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 170491.6,
+    "mode": "land",
+    "name": "Sentier Port-Sarak — Oasis-du-Safran",
+    "regions": [
+      8,
+      10
+    ],
+    "siteIds": [
+      "5",
+      "7"
+    ]
+  },
+  {
+    "atlasRouteId": "15",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "pasture_retaliation",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 86672.5,
+    "mode": "land",
+    "name": "Sentier Port-Sarak — Roche-du-Serpent",
+    "regions": [
+      10
+    ],
+    "siteIds": [
+      "34",
+      "5"
+    ]
+  },
+  {
+    "atlasRouteId": "16",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 129081.0,
+    "mode": "land",
+    "name": "Sentier Citadelle-de-Sarak — Oasis-des-Palmes",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "52",
+      "6"
+    ]
+  },
+  {
+    "atlasRouteId": "17",
+    "authorities": [
+      "igea",
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison",
+      "kesh_restitution",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 660879.4,
+    "mode": "land",
+    "name": "Route des Deux Saisons",
+    "regions": [
+      1,
+      2,
+      3,
+      8,
+      9
+    ],
+    "siteIds": [
+      "6",
+      "63",
+      "65",
+      "69"
+    ]
+  },
+  {
+    "atlasRouteId": "18",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "kesh_restitution",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 107479.2,
+    "mode": "land",
+    "name": "Sentier Citadelle-de-Sarak — Col-de-Verre",
+    "regions": [
+      8,
+      9
+    ],
+    "siteIds": [
+      "6",
+      "65"
+    ]
+  },
+  {
+    "atlasRouteId": "19",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 52510.1,
+    "mode": "land",
+    "name": "Sentier Oasis-du-Safran — Pas-du-Sel",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "35",
+      "7"
+    ]
+  },
+  {
+    "atlasRouteId": "20",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 25010.0,
+    "mode": "land",
+    "name": "Sentier Oasis-du-Safran — Relais-des-Trois-Pierres",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "60",
+      "7"
+    ]
+  },
+  {
+    "atlasRouteId": "21",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 71007.8,
+    "mode": "land",
+    "name": "Sentier Oasis-du-Safran — Bourg-des-Acacias",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "66",
+      "7"
+    ]
+  },
+  {
+    "atlasRouteId": "22",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 79550.4,
+    "mode": "land",
+    "name": "Sentier Oasis-du-Safran — Rive-Fauve",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "7",
+      "82"
+    ]
+  },
+  {
+    "atlasRouteId": "23",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 18130.8,
+    "mode": "land",
+    "name": "Sentier Clairval — Port-des-Aulnes",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "15",
+      "8"
+    ]
+  },
+  {
+    "atlasRouteId": "24",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 24220.4,
+    "mode": "land",
+    "name": "Sentier Clairval — Gué-des-Pierres",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "29",
+      "8"
+    ]
+  },
+  {
+    "atlasRouteId": "25",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 38846.9,
+    "mode": "land",
+    "name": "Sentier Clairval — Rive-du-Moulin",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "33",
+      "8"
+    ]
+  },
+  {
+    "atlasRouteId": "26",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "pasture_retaliation",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 120180.7,
+    "mode": "land",
+    "name": "Sentier Puits-des-Caravanes — Roche-du-Serpent",
+    "regions": [
+      10
+    ],
+    "siteIds": [
+      "34",
+      "9"
+    ]
+  },
+  {
+    "atlasRouteId": "27",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "pasture_retaliation",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 73194.4,
+    "mode": "land",
+    "name": "Sentier Puits-des-Caravanes — Havre-du-Cuivre",
+    "regions": [
+      10
+    ],
+    "siteIds": [
+      "58",
+      "9"
+    ]
+  },
+  {
+    "atlasRouteId": "28",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 142117.8,
+    "mode": "land",
+    "name": "Route Port-des-Veilleurs — Bac-des-Roseaux",
+    "regions": [
+      11,
+      12
+    ],
+    "siteIds": [
+      "10",
+      "73"
+    ]
+  },
+  {
+    "atlasRouteId": "29",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 71113.4,
+    "mode": "land",
+    "name": "Sentier Port-des-Veilleurs — Tourbeclaire",
+    "regions": [
+      11,
+      12
+    ],
+    "siteIds": [
+      "10",
+      "74"
+    ]
+  },
+  {
+    "atlasRouteId": "30",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 103124.6,
+    "mode": "land",
+    "name": "Sentier Port-des-Veilleurs — Brume-aux-Saules",
+    "regions": [
+      12
+    ],
+    "siteIds": [
+      "10",
+      "75"
+    ]
+  },
+  {
+    "atlasRouteId": "31",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 76181.7,
+    "mode": "land",
+    "name": "Sentier Pont-des-Ormes — Bosquet-du-Merle",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "11",
+      "31"
+    ]
+  },
+  {
+    "atlasRouteId": "32",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 97313.4,
+    "mode": "land",
+    "name": "Sentier Pont-des-Ormes — Vallombre",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "11",
+      "31",
+      "43"
+    ]
+  },
+  {
+    "atlasRouteId": "33",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 36685.9,
+    "mode": "land",
+    "name": "Sentier Rive-du-Cerf — Bourg-du-Pont",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "12",
+      "28"
+    ]
+  },
+  {
+    "atlasRouteId": "34",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 12891.9,
+    "mode": "land",
+    "name": "Sentier Rive-du-Cerf — Pont-des-Fougères",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "12",
+      "48"
+    ]
+  },
+  {
+    "atlasRouteId": "35",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 48067.4,
+    "mode": "land",
+    "name": "Sentier Rive-du-Cerf — Val-des-Pins",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "12",
+      "78"
+    ]
+  },
+  {
+    "atlasRouteId": "36",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 62505.9,
+    "mode": "land",
+    "name": "Sentier Bois-des-Fées — Auberge-du-Lac",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "13",
+      "24"
+    ]
+  },
+  {
+    "atlasRouteId": "37",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 32140.0,
+    "mode": "land",
+    "name": "Sentier Bois-des-Fées — Ronceraie",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "13",
+      "41"
+    ]
+  },
+  {
+    "atlasRouteId": "38",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 32615.1,
+    "mode": "land",
+    "name": "Sentier Bois-des-Fées — Branchebasse",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "13",
+      "42"
+    ]
+  },
+  {
+    "atlasRouteId": "39",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 31249.2,
+    "mode": "land",
+    "name": "Sentier Bois-des-Fées — Basse-Sylve",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "13",
+      "57"
+    ]
+  },
+  {
+    "atlasRouteId": "40",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 20833.2,
+    "mode": "land",
+    "name": "Sentier Gué-Clair — Mont-Vert",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "14",
+      "17"
+    ]
+  },
+  {
+    "atlasRouteId": "41",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 10943.7,
+    "mode": "land",
+    "name": "Sentier Gué-Clair — Lisière-Rousse",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "14",
+      "26"
+    ]
+  },
+  {
+    "atlasRouteId": "42",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 59666.0,
+    "mode": "land",
+    "name": "Sentier Gué-Clair — Bois-de-Lune",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "14",
+      "38",
+      "64"
+    ]
+  },
+  {
+    "atlasRouteId": "43",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 5906.6,
+    "mode": "land",
+    "name": "Sentier Gué-Clair — Lisière-des-Pins",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "14",
+      "64"
+    ]
+  },
+  {
+    "atlasRouteId": "44",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 9150.8,
+    "mode": "land",
+    "name": "Sentier Port-des-Aulnes — Val-Fleuri",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "15",
+      "21"
+    ]
+  },
+  {
+    "atlasRouteId": "45",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 26589.3,
+    "mode": "land",
+    "name": "Sentier Port-des-Aulnes — Gué-des-Pierres",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "15",
+      "29"
+    ]
+  },
+  {
+    "atlasRouteId": "46",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 20026.0,
+    "mode": "land",
+    "name": "Sentier Port-des-Aulnes — Val-Serein",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "15",
+      "21",
+      "53"
+    ]
+  },
+  {
+    "atlasRouteId": "47",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 92669.6,
+    "mode": "land",
+    "name": "Sentier Chêne-Creux — Mont-Vert",
+    "regions": [
+      5,
+      7
+    ],
+    "siteIds": [
+      "16",
+      "17"
+    ]
+  },
+  {
+    "atlasRouteId": "48",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 45227.5,
+    "mode": "land",
+    "name": "Sentier Chêne-Creux — Bourg-du-Pont",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "16",
+      "28"
+    ]
+  },
+  {
+    "atlasRouteId": "49",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 72332.9,
+    "mode": "land",
+    "name": "Sentier Chêne-Creux — Source-Claire",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "16",
+      "30"
+    ]
+  },
+  {
+    "atlasRouteId": "50",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 49445.7,
+    "mode": "land",
+    "name": "Sentier Chêne-Creux — Moulin-Vert",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "16",
+      "59"
+    ]
+  },
+  {
+    "atlasRouteId": "51",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 54995.1,
+    "mode": "land",
+    "name": "Sentier Chêne-Creux — Marchebrune",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "16",
+      "79"
+    ]
+  },
+  {
+    "atlasRouteId": "52",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 22130.1,
+    "mode": "land",
+    "name": "Sentier Mont-Vert — Lisière-Rousse",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "17",
+      "26"
+    ]
+  },
+  {
+    "atlasRouteId": "53",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 132279.9,
+    "mode": "land",
+    "name": "Sentier Mont-Vert — Hautes-Lisières",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "17",
+      "80"
+    ]
+  },
+  {
+    "atlasRouteId": "54",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 5638.0,
+    "mode": "land",
+    "name": "Sentier Rive-des-Saules — Roche-du-Cerf",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "18",
+      "49"
+    ]
+  },
+  {
+    "atlasRouteId": "55",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 57864.8,
+    "mode": "land",
+    "name": "Sentier Rive-des-Saules — Val-Serein",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "18",
+      "53"
+    ]
+  },
+  {
+    "atlasRouteId": "56",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 66856.4,
+    "mode": "land",
+    "name": "Sentier Fort-des-Ronces — Val-des-Mousses",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "19",
+      "25"
+    ]
+  },
+  {
+    "atlasRouteId": "57",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 27095.0,
+    "mode": "land",
+    "name": "Sentier Fort-des-Ronces — Lac-des-Aulnes",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "19",
+      "37"
+    ]
+  },
+  {
+    "atlasRouteId": "58",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 57774.7,
+    "mode": "land",
+    "name": "Sentier Fort-des-Ronces — Ruisselet",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "19",
+      "56"
+    ]
+  },
+  {
+    "atlasRouteId": "59",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 50906.2,
+    "mode": "land",
+    "name": "Sentier Relais-des-Dunes — Tour-des-Braises",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "20",
+      "22"
+    ]
+  },
+  {
+    "atlasRouteId": "60",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 34995.2,
+    "mode": "land",
+    "name": "Sentier Relais-des-Dunes — Puits-Rouge",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "20",
+      "23"
+    ]
+  },
+  {
+    "atlasRouteId": "61",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 49576.0,
+    "mode": "land",
+    "name": "Sentier Relais-des-Dunes — Oasis-des-Palmes",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "20",
+      "52"
+    ]
+  },
+  {
+    "atlasRouteId": "62",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 63083.7,
+    "mode": "land",
+    "name": "Sentier Val-Fleuri — Pré-des-Roches",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "21",
+      "36"
+    ]
+  },
+  {
+    "atlasRouteId": "63",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 10875.2,
+    "mode": "land",
+    "name": "Sentier Val-Fleuri — Val-Serein",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "21",
+      "53"
+    ]
+  },
+  {
+    "atlasRouteId": "64",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 62092.5,
+    "mode": "land",
+    "name": "Sentier Tour-des-Braises — Oasis-des-Palmes",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "22",
+      "52"
+    ]
+  },
+  {
+    "atlasRouteId": "65",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 31373.3,
+    "mode": "land",
+    "name": "Sentier Puits-Rouge — Oasis-des-Palmes",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "23",
+      "52"
+    ]
+  },
+  {
+    "atlasRouteId": "66",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 59155.8,
+    "mode": "land",
+    "name": "Sentier Auberge-du-Lac — Bosquet-du-Merle",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "24",
+      "31",
+      "43"
+    ]
+  },
+  {
+    "atlasRouteId": "67",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 38024.2,
+    "mode": "land",
+    "name": "Sentier Auberge-du-Lac — Vallombre",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "24",
+      "43"
+    ]
+  },
+  {
+    "atlasRouteId": "68",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 82352.4,
+    "mode": "land",
+    "name": "Sentier Val-des-Mousses — Lac-des-Aulnes",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "25",
+      "37"
+    ]
+  },
+  {
+    "atlasRouteId": "69",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 16850.3,
+    "mode": "land",
+    "name": "Sentier Lisière-Rousse — Lisière-des-Pins",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "14",
+      "26",
+      "64"
+    ]
+  },
+  {
+    "atlasRouteId": "70",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 81339.2,
+    "mode": "land",
+    "name": "Sentier Anse-des-Palmes — Bourg-des-Coquilles",
+    "regions": [
+      13,
+      14
+    ],
+    "siteIds": [
+      "27",
+      "50"
+    ]
+  },
+  {
+    "atlasRouteId": "71",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 73412.8,
+    "mode": "land",
+    "name": "Sentier Anse-des-Palmes — Plage-Dorée",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "27",
+      "54"
+    ]
+  },
+  {
+    "atlasRouteId": "72",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 12146.4,
+    "mode": "land",
+    "name": "Sentier Bourg-du-Pont — Moulin-Vert",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "28",
+      "59"
+    ]
+  },
+  {
+    "atlasRouteId": "73",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 38980.6,
+    "mode": "land",
+    "name": "Sentier Source-Claire — Marchebrune",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "30",
+      "79"
+    ]
+  },
+  {
+    "atlasRouteId": "74",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 123231.0,
+    "mode": "land",
+    "name": "Sentier Source-Claire — Hautes-Lisières",
+    "regions": [
+      5,
+      7
+    ],
+    "siteIds": [
+      "30",
+      "80"
+    ]
+  },
+  {
+    "atlasRouteId": "75",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 21131.6,
+    "mode": "land",
+    "name": "Sentier Bosquet-du-Merle — Vallombre",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "31",
+      "43"
+    ]
+  },
+  {
+    "atlasRouteId": "76",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 77632.3,
+    "mode": "land",
+    "name": "Sentier Col-des-Cèdres — Pré-des-Roches",
+    "regions": [
+      4,
+      6
+    ],
+    "siteIds": [
+      "32",
+      "36"
+    ]
+  },
+  {
+    "atlasRouteId": "77",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 79959.0,
+    "mode": "land",
+    "name": "Sentier Col-des-Cèdres — Ormerive",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "32",
+      "46"
+    ]
+  },
+  {
+    "atlasRouteId": "78",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 28950.2,
+    "mode": "land",
+    "name": "Sentier Rive-du-Moulin — Ronceraie",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "33",
+      "41"
+    ]
+  },
+  {
+    "atlasRouteId": "79",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 21348.9,
+    "mode": "land",
+    "name": "Sentier Rive-du-Moulin — Clairpré",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "33",
+      "45"
+    ]
+  },
+  {
+    "atlasRouteId": "80",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "pasture_retaliation",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 65142.5,
+    "mode": "land",
+    "name": "Sentier Roche-du-Serpent — Havre-du-Cuivre",
+    "regions": [
+      10
+    ],
+    "siteIds": [
+      "34",
+      "58"
+    ]
+  },
+  {
+    "atlasRouteId": "81",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 52317.9,
+    "mode": "land",
+    "name": "Sentier Pas-du-Sel — Relais-des-Trois-Pierres",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "35",
+      "60"
+    ]
+  },
+  {
+    "atlasRouteId": "82",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 176534.8,
+    "mode": "land",
+    "name": "Sentier Pas-du-Sel — Col-de-Verre",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "35",
+      "65"
+    ]
+  },
+  {
+    "atlasRouteId": "83",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 70258.6,
+    "mode": "land",
+    "name": "Sentier Pas-du-Sel — Bourg-des-Acacias",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "35",
+      "66"
+    ]
+  },
+  {
+    "atlasRouteId": "84",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 162243.5,
+    "mode": "land",
+    "name": "Sentier Pas-du-Sel — Griseborne",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "35",
+      "81"
+    ]
+  },
+  {
+    "atlasRouteId": "85",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 112845.0,
+    "mode": "land",
+    "name": "Sentier Pas-du-Sel — Col-des-Cendres",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "35",
+      "83"
+    ]
+  },
+  {
+    "atlasRouteId": "86",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 96795.9,
+    "mode": "land",
+    "name": "Sentier Pré-des-Roches — Hautes-Fougères",
+    "regions": [
+      5,
+      6
+    ],
+    "siteIds": [
+      "36",
+      "44"
+    ]
+  },
+  {
+    "atlasRouteId": "87",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 73169.6,
+    "mode": "land",
+    "name": "Sentier Pré-des-Roches — Val-Serein",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "36",
+      "53"
+    ]
+  },
+  {
+    "atlasRouteId": "88",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 43176.5,
+    "mode": "land",
+    "name": "Sentier Lac-des-Aulnes — Ruisselet",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "37",
+      "56"
+    ]
+  },
+  {
+    "atlasRouteId": "89",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 53759.5,
+    "mode": "land",
+    "name": "Sentier Bois-de-Lune — Lisière-des-Pins",
+    "regions": [
+      7
+    ],
+    "siteIds": [
+      "38",
+      "64"
+    ]
+  },
+  {
+    "atlasRouteId": "90",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 98623.1,
+    "mode": "land",
+    "name": "Sentier Vigie-Verte — Hautes-Fougères",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "39",
+      "44"
+    ]
+  },
+  {
+    "atlasRouteId": "91",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 81236.8,
+    "mode": "land",
+    "name": "Sentier Vigie-Verte — Pont-des-Fougères",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "39",
+      "48"
+    ]
+  },
+  {
+    "atlasRouteId": "92",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 81732.0,
+    "mode": "land",
+    "name": "Sentier Vigie-Verte — Moulin-Vert",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "39",
+      "59"
+    ]
+  },
+  {
+    "atlasRouteId": "93",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 92047.3,
+    "mode": "land",
+    "name": "Sentier Santalune — Plage-Dorée",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "40",
+      "54"
+    ]
+  },
+  {
+    "atlasRouteId": "94",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 23513.1,
+    "mode": "land",
+    "name": "Sentier Ronceraie — Vieux-Chêne",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "41",
+      "47"
+    ]
+  },
+  {
+    "atlasRouteId": "95",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 16261.9,
+    "mode": "land",
+    "name": "Sentier Branchebasse — Basse-Sylve",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "42",
+      "57"
+    ]
+  },
+  {
+    "atlasRouteId": "96",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 15707.3,
+    "mode": "land",
+    "name": "Sentier Clairpré — Vieux-Chêne",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "45",
+      "47"
+    ]
+  },
+  {
+    "atlasRouteId": "97",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 54113.3,
+    "mode": "land",
+    "name": "Sentier Clairpré — Roche-du-Cerf",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "45",
+      "49"
+    ]
+  },
+  {
+    "atlasRouteId": "98",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 36982.4,
+    "mode": "land",
+    "name": "Sentier Pont-des-Fougères — Moulin-Vert",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "48",
+      "59"
+    ]
+  },
+  {
+    "atlasRouteId": "99",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "fiscal_checkpoint",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 54147.4,
+    "mode": "land",
+    "name": "Sentier Pont-des-Fougères — Val-des-Pins",
+    "regions": [
+      5
+    ],
+    "siteIds": [
+      "48",
+      "78"
+    ]
+  },
+  {
+    "atlasRouteId": "100",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 138666.6,
+    "mode": "land",
+    "name": "Route Havre-des-Épices — Relais-des-Lianes",
+    "regions": [
+      13,
+      14
+    ],
+    "siteIds": [
+      "51",
+      "55"
+    ]
+  },
+  {
+    "atlasRouteId": "101",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 140807.4,
+    "mode": "land",
+    "name": "Sentier Havre-des-Épices — Rive-de-Corail",
+    "regions": [
+      13,
+      14
+    ],
+    "siteIds": [
+      "51",
+      "61"
+    ]
+  },
+  {
+    "atlasRouteId": "102",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 10981.2,
+    "mode": "land",
+    "name": "Sentier Relais-des-Lianes — Rive-de-Corail",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "55",
+      "61"
+    ]
+  },
+  {
+    "atlasRouteId": "103",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 70824.7,
+    "mode": "land",
+    "name": "Sentier Relais-des-Lianes — Palmehaute",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "55",
+      "61",
+      "62"
+    ]
+  },
+  {
+    "atlasRouteId": "104",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 158932.3,
+    "mode": "land",
+    "name": "Sentier Relais-des-Trois-Pierres — Col-de-Verre",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "60",
+      "65"
+    ]
+  },
+  {
+    "atlasRouteId": "105",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 59843.5,
+    "mode": "land",
+    "name": "Sentier Rive-de-Corail — Palmehaute",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "61",
+      "62"
+    ]
+  },
+  {
+    "atlasRouteId": "106",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 53814.9,
+    "mode": "land",
+    "name": "Sentier Havre-du-Givre — Fort-Écho",
+    "regions": [
+      1
+    ],
+    "siteIds": [
+      "63",
+      "68"
+    ]
+  },
+  {
+    "atlasRouteId": "107",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 102742.7,
+    "mode": "land",
+    "name": "Route Havre-du-Givre — Val-des-Neiges",
+    "regions": [
+      1,
+      2
+    ],
+    "siteIds": [
+      "63",
+      "69"
+    ]
+  },
+  {
+    "atlasRouteId": "108",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 88678.4,
+    "mode": "land",
+    "name": "Sentier Havre-du-Givre — Col-des-Loups",
+    "regions": [
+      1
+    ],
+    "siteIds": [
+      "63",
+      "72"
+    ]
+  },
+  {
+    "atlasRouteId": "109",
+    "authorities": [
+      "igea",
+      "teremor"
+    ],
+    "disputes": [
+      "concessions",
+      "contribution",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "fiscal_checkpoint",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 74756.3,
+    "mode": "land",
+    "name": "Sentier Havre-du-Givre — Val-des-Pins",
+    "regions": [
+      1,
+      5
+    ],
+    "siteIds": [
+      "63",
+      "78"
+    ]
+  },
+  {
+    "atlasRouteId": "110",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 89296.6,
+    "mode": "land",
+    "name": "Sentier Bourg-des-Acacias — Rive-Fauve",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "66",
+      "82"
+    ]
+  },
+  {
+    "atlasRouteId": "111",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 67519.2,
+    "mode": "land",
+    "name": "Sentier Bourg-des-Acacias — Col-des-Cendres",
+    "regions": [
+      8
+    ],
+    "siteIds": [
+      "66",
+      "83"
+    ]
+  },
+  {
+    "atlasRouteId": "112",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 122588.8,
+    "mode": "land",
+    "name": "Sentier Pâleval — Fort-Écho",
+    "regions": [
+      1
+    ],
+    "siteIds": [
+      "67",
+      "68"
+    ]
+  },
+  {
+    "atlasRouteId": "113",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 126313.3,
+    "mode": "land",
+    "name": "Sentier Pâleval — Col-des-Loups",
+    "regions": [
+      1
+    ],
+    "siteIds": [
+      "67",
+      "72"
+    ]
+  },
+  {
+    "atlasRouteId": "114",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 57933.9,
+    "mode": "land",
+    "name": "Sentier Fort-Écho — Col-des-Loups",
+    "regions": [
+      1
+    ],
+    "siteIds": [
+      "68",
+      "72"
+    ]
+  },
+  {
+    "atlasRouteId": "115",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "garrison",
+      "pasture"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 144287.2,
+    "mode": "land",
+    "name": "Route Val-des-Neiges — Roche-Blanche",
+    "regions": [
+      2,
+      3
+    ],
+    "siteIds": [
+      "69",
+      "70"
+    ]
+  },
+  {
+    "atlasRouteId": "116",
+    "authorities": [
+      "igea",
+      "teremor"
+    ],
+    "disputes": [
+      "concessions",
+      "contribution",
+      "garrison"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "fiscal_checkpoint",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 133298.4,
+    "mode": "land",
+    "name": "Sentier Val-des-Neiges — Val-des-Pins",
+    "regions": [
+      2,
+      5
+    ],
+    "siteIds": [
+      "69",
+      "78"
+    ]
+  },
+  {
+    "atlasRouteId": "117",
+    "authorities": [
+      "igea"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 151133.0,
+    "mode": "land",
+    "name": "Sentier Roche-Blanche — Veille-Boréale",
+    "regions": [
+      3
+    ],
+    "siteIds": [
+      "70",
+      "71"
+    ]
+  },
+  {
+    "atlasRouteId": "118",
+    "authorities": [
+      "igea",
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 181641.5,
+    "mode": "land",
+    "name": "Sentier Roche-Blanche — Griseborne",
+    "regions": [
+      3,
+      8
+    ],
+    "siteIds": [
+      "70",
+      "81"
+    ]
+  },
+  {
+    "atlasRouteId": "119",
+    "authorities": [
+      "igea",
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 135218.5,
+    "mode": "land",
+    "name": "Sentier Veille-Boréale — Griseborne",
+    "regions": [
+      3,
+      8
+    ],
+    "siteIds": [
+      "71",
+      "81"
+    ]
+  },
+  {
+    "atlasRouteId": "120",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 125465.2,
+    "mode": "land",
+    "name": "Sentier Bac-des-Roseaux — Tourbeclaire",
+    "regions": [
+      11
+    ],
+    "siteIds": [
+      "73",
+      "74"
+    ]
+  },
+  {
+    "atlasRouteId": "121",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 72504.8,
+    "mode": "land",
+    "name": "Sentier Tourbeclaire — Pont-des-Joncs",
+    "regions": [
+      11
+    ],
+    "siteIds": [
+      "74",
+      "76"
+    ]
+  },
+  {
+    "atlasRouteId": "122",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 45286.8,
+    "mode": "land",
+    "name": "Sentier Brume-aux-Saules — Refuge-des-Aulnes",
+    "regions": [
+      12
+    ],
+    "siteIds": [
+      "75",
+      "77"
+    ]
+  },
+  {
+    "atlasRouteId": "123",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 81033.3,
+    "mode": "land",
+    "name": "Sentier Pont-des-Joncs — Refuge-des-Aulnes",
+    "regions": [
+      11,
+      12
+    ],
+    "siteIds": [
+      "76",
+      "77"
+    ]
+  },
+  {
+    "atlasRouteId": "124",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 549087.6,
+    "mode": "boat",
+    "name": "Traversée Clairfoyer — Pont-des-Ormes",
+    "regions": [
+      4,
+      6
+    ],
+    "siteIds": [
+      "1",
+      "11"
+    ]
+  },
+  {
+    "atlasRouteId": "125",
+    "authorities": [
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 382122.2,
+    "mode": "boat",
+    "name": "Traversée Clairfoyer — Val-des-Mousses",
+    "regions": [
+      4
+    ],
+    "siteIds": [
+      "1",
+      "25"
+    ]
+  },
+  {
+    "atlasRouteId": "126",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 171651.8,
+    "mode": "boat",
+    "name": "Traversée Aulneport — Branchebasse",
+    "regions": [
+      6,
+      7
+    ],
+    "siteIds": [
+      "2",
+      "42"
+    ]
+  },
+  {
+    "atlasRouteId": "127",
+    "authorities": [
+      "tagon",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 168712.8,
+    "mode": "boat",
+    "name": "Traversée Aulneport — Bourg-des-Coquilles",
+    "regions": [
+      7,
+      13
+    ],
+    "siteIds": [
+      "2",
+      "50"
+    ]
+  },
+  {
+    "atlasRouteId": "128",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 155208.2,
+    "mode": "boat",
+    "name": "Traversée Aulneport — Basse-Sylve",
+    "regions": [
+      6,
+      7
+    ],
+    "siteIds": [
+      "2",
+      "57"
+    ]
+  },
+  {
+    "atlasRouteId": "129",
+    "authorities": [
+      "sarak",
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "pasture",
+      "port_access",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 177685.4,
+    "mode": "boat",
+    "name": "Traversée Port-Sarak — Port-des-Veilleurs",
+    "regions": [
+      10,
+      12
+    ],
+    "siteIds": [
+      "10",
+      "5"
+    ]
+  },
+  {
+    "atlasRouteId": "130",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 147640.3,
+    "mode": "boat",
+    "name": "Traversée Port-Sarak — Havre-du-Cuivre",
+    "regions": [
+      10
+    ],
+    "siteIds": [
+      "5",
+      "58"
+    ]
+  },
+  {
+    "atlasRouteId": "131",
+    "authorities": [
+      "tagon",
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 380108.9,
+    "mode": "boat",
+    "name": "Traversée Port-des-Veilleurs — Anse-des-Palmes",
+    "regions": [
+      12,
+      14
+    ],
+    "siteIds": [
+      "10",
+      "27"
+    ]
+  },
+  {
+    "atlasRouteId": "132",
+    "authorities": [
+      "sarak",
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "pasture",
+      "port_access",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 304617.6,
+    "mode": "boat",
+    "name": "Traversée Port-des-Veilleurs — Havre-du-Cuivre",
+    "regions": [
+      10,
+      12
+    ],
+    "siteIds": [
+      "10",
+      "58"
+    ]
+  },
+  {
+    "atlasRouteId": "133",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 189062.8,
+    "mode": "boat",
+    "name": "Traversée Pont-des-Ormes — Val-des-Mousses",
+    "regions": [
+      4,
+      6
+    ],
+    "siteIds": [
+      "11",
+      "25"
+    ]
+  },
+  {
+    "atlasRouteId": "134",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 189716.4,
+    "mode": "boat",
+    "name": "Traversée Pont-des-Ormes — Branchebasse",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "11",
+      "42"
+    ]
+  },
+  {
+    "atlasRouteId": "135",
+    "authorities": [
+      "sylverive",
+      "teremor"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 363785.9,
+    "mode": "boat",
+    "name": "Traversée Val-des-Mousses — Branchebasse",
+    "regions": [
+      4,
+      6
+    ],
+    "siteIds": [
+      "25",
+      "42"
+    ]
+  },
+  {
+    "atlasRouteId": "136",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 223756.8,
+    "mode": "boat",
+    "name": "Traversée Anse-des-Palmes — Santalune",
+    "regions": [
+      14
+    ],
+    "siteIds": [
+      "27",
+      "40"
+    ]
+  },
+  {
+    "atlasRouteId": "137",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 104598.6,
+    "mode": "boat",
+    "name": "Traversée Anse-des-Palmes — Bourg-des-Coquilles",
+    "regions": [
+      13,
+      14
+    ],
+    "siteIds": [
+      "27",
+      "50"
+    ]
+  },
+  {
+    "atlasRouteId": "138",
+    "authorities": [
+      "tagon"
+    ],
+    "disputes": [
+      "enclave_access",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 301450.9,
+    "mode": "boat",
+    "name": "Traversée Santalune — Havre-des-Épices",
+    "regions": [
+      13,
+      14
+    ],
+    "siteIds": [
+      "40",
+      "51"
+    ]
+  },
+  {
+    "atlasRouteId": "139",
+    "authorities": [
+      "sylverive",
+      "tagon"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 211894.5,
+    "mode": "boat",
+    "name": "Traversée Branchebasse — Havre-des-Épices",
+    "regions": [
+      6,
+      13
+    ],
+    "siteIds": [
+      "42",
+      "51"
+    ]
+  },
+  {
+    "atlasRouteId": "140",
+    "authorities": [
+      "sylverive"
+    ],
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 26273.0,
+    "mode": "boat",
+    "name": "Traversée Branchebasse — Basse-Sylve",
+    "regions": [
+      6
+    ],
+    "siteIds": [
+      "42",
+      "57"
+    ]
+  },
+  {
+    "atlasRouteId": "141",
+    "authorities": [
+      "sylverive",
+      "tagon"
+    ],
+    "disputes": [
+      "contribution",
+      "forestry",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "port_seizure",
+      "caravan",
+      "patrol",
+      "weather_hazard"
+    ],
+    "lengthM": 204628.7,
+    "mode": "boat",
+    "name": "Traversée Havre-des-Épices — Basse-Sylve",
+    "regions": [
+      6,
+      13
+    ],
+    "siteIds": [
+      "51",
+      "57"
+    ]
+  },
+  {
+    "atlasRouteId": "142",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "concessions",
+      "kesh_restitution",
+      "pasture",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "pasture_retaliation",
+      "kesh_raid",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 80708.5,
+    "mode": "land",
+    "name": "Sentier de Geôle de Grise-Gueule",
+    "regions": [
+      8,
+      9
+    ],
+    "siteIds": [
+      "6"
+    ]
+  },
+  {
+    "atlasRouteId": "143",
+    "authorities": [
+      "sarak"
+    ],
+    "disputes": [
+      "kesh_restitution",
+      "water"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "kesh_raid",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 73929.8,
+    "mode": "land",
+    "name": "Sentier de Temple du Serpent",
+    "regions": [
+      9
+    ],
+    "siteIds": [
+      "6"
+    ]
+  },
+  {
+    "atlasRouteId": "144",
+    "authorities": [
+      "varan"
+    ],
+    "disputes": [
+      "enclave_access",
+      "port_access"
+    ],
+    "eligibilityNotice": "Potential context only; every required causal signal and mandate must still be supplied.",
+    "eventRuleIds": [
+      "bandit_ambush",
+      "mining_interception",
+      "port_seizure",
+      "labour_dispute",
+      "shortage",
+      "caravan",
+      "patrol",
+      "local_occupation",
+      "siege",
+      "truce",
+      "smuggling_interception",
+      "missing_person",
+      "curse_manifestation",
+      "weather_hazard"
+    ],
+    "lengthM": 17695.7,
+    "mode": "land",
+    "name": "Sentier de Refuge des Veilleurs",
+    "regions": [
+      11
+    ],
+    "siteIds": [
+      "74"
+    ]
+  }
+]

@@ -1,0 +1,2181 @@
+[
+  {
+    "authority": "igea",
+    "designPopulation": 180000,
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "id": 1,
+    "name": "Pâlerive",
+    "namedPopulation": 14400,
+    "resourceLevels": {
+      "arms": 3,
+      "aromatics": 1,
+      "boats": 2,
+      "bronze": 2,
+      "building_stone": 4,
+      "charcoal": 3,
+      "clay": 2,
+      "cloth": 2,
+      "copper": 2,
+      "copper_ore": 2,
+      "cotton": 0,
+      "dates": 0,
+      "dyes": 2,
+      "fiber": 2,
+      "firewood": 3,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 1,
+      "glass": 1,
+      "gold": 1,
+      "grain": 2,
+      "hides": 4,
+      "honey": 2,
+      "iron": 4,
+      "iron_ore": 5,
+      "lead_ore": 2,
+      "leather": 3,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 3,
+      "medicinal": 2,
+      "milk": 3,
+      "naval_timber": 2,
+      "oil": 1,
+      "pack_animals": 3,
+      "pottery": 2,
+      "provisions": 3,
+      "resin": 4,
+      "rice": 0,
+      "rope": 2,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 4,
+      "tin": 1,
+      "tin_ore": 1,
+      "tools": 3,
+      "tubers": 2,
+      "vegetables": 2,
+      "water": 3,
+      "wax": 2,
+      "wool": 5
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 10764,
+            "human": 4613,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-1-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 931,
+            "orc": 3726,
+            "serpentfolk": 0
+          },
+          "id": "rural-1-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 19.99,
+            "orc": 80.01,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 5796,
+        "human": 138528,
+        "orc": 1242,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 165600,
+    "ruralSpeciesCounts": {
+      "goblin": 16560,
+      "human": 144072,
+      "orc": 4968,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 17424,
+      "human": 157464,
+      "orc": 5112,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 9.68,
+      "human": 87.48,
+      "orc": 2.84,
+      "serpentfolk": 0.0
+    },
+    "territory": "Igea"
+  },
+  {
+    "authority": "igea",
+    "designPopulation": 140000,
+    "disputes": [
+      "concessions",
+      "garrison"
+    ],
+    "id": 2,
+    "name": "Haut-Givre",
+    "namedPopulation": 8400,
+    "resourceLevels": {
+      "arms": 3,
+      "aromatics": 1,
+      "boats": 2,
+      "bronze": 2,
+      "building_stone": 4,
+      "charcoal": 3,
+      "clay": 2,
+      "cloth": 2,
+      "copper": 2,
+      "copper_ore": 2,
+      "cotton": 0,
+      "dates": 0,
+      "dyes": 2,
+      "fiber": 2,
+      "firewood": 3,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 0,
+      "glass": 1,
+      "gold": 1,
+      "grain": 1,
+      "hides": 4,
+      "honey": 2,
+      "iron": 4,
+      "iron_ore": 5,
+      "lead_ore": 2,
+      "leather": 3,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 3,
+      "medicinal": 2,
+      "milk": 3,
+      "naval_timber": 0,
+      "oil": 1,
+      "pack_animals": 3,
+      "pottery": 2,
+      "provisions": 3,
+      "resin": 3,
+      "rice": 0,
+      "rope": 2,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 1,
+      "tin": 1,
+      "tin_ore": 1,
+      "tools": 3,
+      "tubers": 2,
+      "vegetables": 1,
+      "water": 3,
+      "wax": 2,
+      "wool": 5
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 5987,
+            "human": 2566,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-2-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 2961,
+            "orc": 11844,
+            "serpentfolk": 0
+          },
+          "id": "rural-2-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 3225,
+        "human": 101069,
+        "orc": 3948,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 131600,
+    "ruralSpeciesCounts": {
+      "goblin": 9212,
+      "human": 106596,
+      "orc": 15792,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 9884,
+      "human": 113988,
+      "orc": 16128,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 7.06,
+      "human": 81.42,
+      "orc": 11.52,
+      "serpentfolk": 0.0
+    },
+    "territory": "Igea"
+  },
+  {
+    "authority": "igea",
+    "designPopulation": 190000,
+    "disputes": [
+      "concessions",
+      "pasture"
+    ],
+    "id": 3,
+    "name": "Givreval",
+    "namedPopulation": 13300,
+    "resourceLevels": {
+      "arms": 3,
+      "aromatics": 1,
+      "boats": 2,
+      "bronze": 2,
+      "building_stone": 4,
+      "charcoal": 3,
+      "clay": 2,
+      "cloth": 2,
+      "copper": 2,
+      "copper_ore": 2,
+      "cotton": 0,
+      "dates": 0,
+      "dyes": 2,
+      "fiber": 2,
+      "firewood": 3,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 1,
+      "glass": 1,
+      "gold": 1,
+      "grain": 2,
+      "hides": 4,
+      "honey": 2,
+      "iron": 4,
+      "iron_ore": 5,
+      "lead_ore": 2,
+      "leather": 3,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 3,
+      "medicinal": 2,
+      "milk": 3,
+      "naval_timber": 2,
+      "oil": 1,
+      "pack_animals": 4,
+      "pottery": 2,
+      "provisions": 3,
+      "resin": 3,
+      "rice": 0,
+      "rope": 2,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 3,
+      "tin": 1,
+      "tin_ore": 1,
+      "tools": 3,
+      "tubers": 2,
+      "vegetables": 2,
+      "water": 3,
+      "wax": 2,
+      "wool": 5
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 11485,
+            "human": 4922,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-3-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 8283,
+            "orc": 33131,
+            "serpentfolk": 0
+          },
+          "id": "rural-3-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 6185,
+        "human": 101650,
+        "orc": 11044,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 176700,
+    "ruralSpeciesCounts": {
+      "goblin": 17670,
+      "human": 114855,
+      "orc": 44175,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 18667,
+      "human": 125562,
+      "orc": 45771,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 9.82,
+      "human": 66.09,
+      "orc": 24.09,
+      "serpentfolk": 0.0
+    },
+    "territory": "Igea"
+  },
+  {
+    "authority": "teremor",
+    "designPopulation": 620000,
+    "disputes": [
+      "contribution",
+      "forestry"
+    ],
+    "id": 4,
+    "name": "Boisclair",
+    "namedPopulation": 74400,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 2,
+      "boats": 3,
+      "bronze": 3,
+      "building_stone": 3,
+      "charcoal": 4,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 3,
+      "copper_ore": 2,
+      "cotton": 1,
+      "dates": 0,
+      "dyes": 3,
+      "fiber": 3,
+      "firewood": 4,
+      "fish": 3,
+      "flax": 5,
+      "flour": 4,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 5,
+      "hides": 4,
+      "honey": 4,
+      "iron": 4,
+      "iron_ore": 3,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 4,
+      "limestone": 3,
+      "meat": 4,
+      "medicinal": 3,
+      "milk": 4,
+      "naval_timber": 3,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 3,
+      "provisions": 4,
+      "resin": 4,
+      "rice": 0,
+      "rope": 3,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 4,
+      "tin": 2,
+      "tin_ore": 1,
+      "tools": 4,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 4,
+      "wax": 4,
+      "wool": 4
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 39010,
+            "human": 16719,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-4-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1023,
+            "orc": 4092,
+            "serpentfolk": 0
+          },
+          "id": "rural-4-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 21006,
+        "human": 462386,
+        "orc": 1364,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 545600,
+    "ruralSpeciesCounts": {
+      "goblin": 60016,
+      "human": 480128,
+      "orc": 5456,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 65863,
+      "human": 547725,
+      "orc": 6412,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 10.62,
+      "human": 88.34,
+      "orc": 1.04,
+      "serpentfolk": 0.0
+    },
+    "territory": "Teremor"
+  },
+  {
+    "authority": "teremor",
+    "designPopulation": 900000,
+    "disputes": [
+      "contribution"
+    ],
+    "id": 5,
+    "name": "Valdorne",
+    "namedPopulation": 126000,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 2,
+      "boats": 3,
+      "bronze": 3,
+      "building_stone": 3,
+      "charcoal": 4,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 3,
+      "copper_ore": 2,
+      "cotton": 1,
+      "dates": 0,
+      "dyes": 3,
+      "fiber": 3,
+      "firewood": 4,
+      "fish": 3,
+      "flax": 5,
+      "flour": 4,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 5,
+      "hides": 4,
+      "honey": 4,
+      "iron": 4,
+      "iron_ore": 3,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 4,
+      "limestone": 3,
+      "meat": 4,
+      "medicinal": 3,
+      "milk": 4,
+      "naval_timber": 3,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 3,
+      "provisions": 4,
+      "resin": 4,
+      "rice": 0,
+      "rope": 3,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 4,
+      "tin": 2,
+      "tin_ore": 1,
+      "tools": 4,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 4,
+      "wax": 4,
+      "wool": 4
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 40248,
+            "human": 17249,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-5-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1451,
+            "orc": 5805,
+            "serpentfolk": 0
+          },
+          "id": "rural-5-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 21672,
+        "human": 685640,
+        "orc": 1935,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 774000,
+    "ruralSpeciesCounts": {
+      "goblin": 61920,
+      "human": 704340,
+      "orc": 7740,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 67968,
+      "human": 823032,
+      "orc": 9000,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 7.55,
+      "human": 91.45,
+      "orc": 1.0,
+      "serpentfolk": 0.0
+    },
+    "territory": "Teremor"
+  },
+  {
+    "authority": "sylverive",
+    "designPopulation": 580000,
+    "disputes": [
+      "contribution",
+      "port_access"
+    ],
+    "id": 6,
+    "name": "Sylverive",
+    "namedPopulation": 127600,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 2,
+      "boats": 4,
+      "bronze": 3,
+      "building_stone": 3,
+      "charcoal": 4,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 3,
+      "copper_ore": 2,
+      "cotton": 1,
+      "dates": 0,
+      "dyes": 3,
+      "fiber": 3,
+      "firewood": 4,
+      "fish": 3,
+      "flax": 5,
+      "flour": 4,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 5,
+      "hides": 4,
+      "honey": 4,
+      "iron": 4,
+      "iron_ore": 3,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 4,
+      "limestone": 3,
+      "meat": 4,
+      "medicinal": 3,
+      "milk": 4,
+      "naval_timber": 3,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 3,
+      "provisions": 4,
+      "resin": 4,
+      "rice": 0,
+      "rope": 4,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 4,
+      "tin": 2,
+      "tin_ore": 1,
+      "tools": 4,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 4,
+      "wax": 4,
+      "wool": 4
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 23524,
+            "human": 10082,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-6-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 2545,
+            "orc": 10179,
+            "serpentfolk": 0
+          },
+          "id": "rural-6-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 12668,
+        "human": 390009,
+        "orc": 3393,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 452400,
+    "ruralSpeciesCounts": {
+      "goblin": 36192,
+      "human": 402636,
+      "orc": 13572,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 45125,
+      "human": 517284,
+      "orc": 17591,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 7.78,
+      "human": 89.19,
+      "orc": 3.03,
+      "serpentfolk": 0.0
+    },
+    "territory": "Teremor"
+  },
+  {
+    "authority": "teremor",
+    "designPopulation": 780000,
+    "disputes": [
+      "contribution"
+    ],
+    "id": 7,
+    "name": "Aulneval",
+    "namedPopulation": 93600,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 2,
+      "boats": 3,
+      "bronze": 3,
+      "building_stone": 3,
+      "charcoal": 4,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 3,
+      "copper_ore": 2,
+      "cotton": 1,
+      "dates": 0,
+      "dyes": 3,
+      "fiber": 3,
+      "firewood": 4,
+      "fish": 3,
+      "flax": 5,
+      "flour": 4,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 5,
+      "hides": 4,
+      "honey": 4,
+      "iron": 4,
+      "iron_ore": 3,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 4,
+      "limestone": 3,
+      "meat": 4,
+      "medicinal": 3,
+      "milk": 4,
+      "naval_timber": 3,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 3,
+      "provisions": 4,
+      "resin": 4,
+      "rice": 0,
+      "rope": 3,
+      "salt": 3,
+      "sand": 2,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 4,
+      "tin": 2,
+      "tin_ore": 1,
+      "tools": 4,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 4,
+      "wax": 4,
+      "wool": 4
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 40154,
+            "human": 17209,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-7-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1287,
+            "orc": 5148,
+            "serpentfolk": 0
+          },
+          "id": "rural-7-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 21622,
+        "human": 599264,
+        "orc": 1716,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 686400,
+    "ruralSpeciesCounts": {
+      "goblin": 61776,
+      "human": 617760,
+      "orc": 6864,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 66855,
+      "human": 705209,
+      "orc": 7936,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 8.57,
+      "human": 90.41,
+      "orc": 1.02,
+      "serpentfolk": 0.0
+    },
+    "territory": "Teremor"
+  },
+  {
+    "authority": "sarak",
+    "designPopulation": 270000,
+    "disputes": [
+      "water",
+      "pasture",
+      "concessions"
+    ],
+    "id": 8,
+    "name": "Roche-Sèche",
+    "namedPopulation": 27000,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 3,
+      "boats": 1,
+      "bronze": 3,
+      "building_stone": 4,
+      "charcoal": 2,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 5,
+      "copper_ore": 5,
+      "cotton": 4,
+      "dates": 5,
+      "dyes": 4,
+      "fiber": 3,
+      "firewood": 2,
+      "fish": 1,
+      "flax": 1,
+      "flour": 3,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 1,
+      "hides": 3,
+      "honey": 2,
+      "iron": 2,
+      "iron_ore": 2,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 3,
+      "limestone": 3,
+      "meat": 3,
+      "medicinal": 2,
+      "milk": 2,
+      "naval_timber": 1,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 4,
+      "provisions": 3,
+      "resin": 1,
+      "rice": 1,
+      "rope": 1,
+      "salt": 5,
+      "sand": 3,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 1,
+      "tin": 1,
+      "tin_ore": 1,
+      "tools": 4,
+      "tubers": 2,
+      "vegetables": 3,
+      "water": 1,
+      "wax": 2,
+      "wool": 3
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 22113,
+            "human": 9477,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-8-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 5467,
+            "orc": 21870,
+            "serpentfolk": 0
+          },
+          "id": "rural-8-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 121,
+            "orc": 0,
+            "serpentfolk": 2308
+          },
+          "id": "rural-8-serpentfolk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "thermal_habitat"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 4.98,
+            "orc": 0.0,
+            "serpentfolk": 95.02
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 11907,
+        "human": 162325,
+        "orc": 7290,
+        "serpentfolk": 122
+      }
+    },
+    "ruralPopulation": 243000,
+    "ruralSpeciesCounts": {
+      "goblin": 34020,
+      "human": 177390,
+      "orc": 29160,
+      "serpentfolk": 2430
+    },
+    "speciesCounts": {
+      "goblin": 36246,
+      "human": 201084,
+      "orc": 30240,
+      "serpentfolk": 2430
+    },
+    "speciesPct": {
+      "goblin": 13.42,
+      "human": 74.48,
+      "orc": 11.2,
+      "serpentfolk": 0.9
+    },
+    "territory": "Sarak"
+  },
+  {
+    "authority": "sarak",
+    "designPopulation": 220000,
+    "disputes": [
+      "water",
+      "kesh_restitution"
+    ],
+    "id": 9,
+    "name": "Sables-Rouges",
+    "namedPopulation": 19800,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 3,
+      "boats": 1,
+      "bronze": 3,
+      "building_stone": 3,
+      "charcoal": 2,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 5,
+      "copper_ore": 5,
+      "cotton": 4,
+      "dates": 5,
+      "dyes": 4,
+      "fiber": 3,
+      "firewood": 2,
+      "fish": 1,
+      "flax": 1,
+      "flour": 3,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 3,
+      "hides": 3,
+      "honey": 2,
+      "iron": 2,
+      "iron_ore": 1,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 3,
+      "limestone": 3,
+      "meat": 3,
+      "medicinal": 2,
+      "milk": 2,
+      "naval_timber": 0,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 4,
+      "provisions": 3,
+      "resin": 1,
+      "rice": 1,
+      "rope": 1,
+      "salt": 5,
+      "sand": 3,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 0,
+      "tin": 1,
+      "tin_ore": 0,
+      "tools": 4,
+      "tubers": 2,
+      "vegetables": 3,
+      "water": 1,
+      "wax": 2,
+      "wool": 3
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 23423,
+            "human": 10038,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-9-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1501,
+            "orc": 6006,
+            "serpentfolk": 0
+          },
+          "id": "rural-9-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 19.99,
+            "orc": 80.01,
+            "serpentfolk": 0.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 12613,
+        "human": 144617,
+        "orc": 2002,
+        "serpentfolk": 0
+      }
+    },
+    "ruralPopulation": 200200,
+    "ruralSpeciesCounts": {
+      "goblin": 36036,
+      "human": 156156,
+      "orc": 8008,
+      "serpentfolk": 0
+    },
+    "speciesCounts": {
+      "goblin": 38174,
+      "human": 173223,
+      "orc": 8603,
+      "serpentfolk": 0
+    },
+    "speciesPct": {
+      "goblin": 17.35,
+      "human": 78.74,
+      "orc": 3.91,
+      "serpentfolk": 0.0
+    },
+    "territory": "Sarak"
+  },
+  {
+    "authority": "sarak",
+    "designPopulation": 460000,
+    "disputes": [
+      "water",
+      "pasture"
+    ],
+    "id": 10,
+    "name": "Safrane",
+    "namedPopulation": 64400,
+    "resourceLevels": {
+      "arms": 4,
+      "aromatics": 3,
+      "boats": 1,
+      "bronze": 3,
+      "building_stone": 3,
+      "charcoal": 2,
+      "clay": 3,
+      "cloth": 4,
+      "copper": 5,
+      "copper_ore": 5,
+      "cotton": 4,
+      "dates": 5,
+      "dyes": 4,
+      "fiber": 3,
+      "firewood": 2,
+      "fish": 1,
+      "flax": 1,
+      "flour": 3,
+      "fruit": 3,
+      "glass": 3,
+      "gold": 1,
+      "grain": 4,
+      "hides": 3,
+      "honey": 2,
+      "iron": 2,
+      "iron_ore": 2,
+      "lead_ore": 2,
+      "leather": 4,
+      "legumes": 3,
+      "limestone": 3,
+      "meat": 3,
+      "medicinal": 2,
+      "milk": 2,
+      "naval_timber": 1,
+      "oil": 3,
+      "pack_animals": 4,
+      "pottery": 4,
+      "provisions": 3,
+      "resin": 1,
+      "rice": 1,
+      "rope": 1,
+      "salt": 5,
+      "sand": 3,
+      "silver_ore": 2,
+      "steel": 3,
+      "timber": 1,
+      "tin": 1,
+      "tin_ore": 1,
+      "tools": 4,
+      "tubers": 2,
+      "vegetables": 3,
+      "water": 3,
+      "wax": 2,
+      "wool": 3
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 23142,
+            "human": 9918,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-10-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1483,
+            "orc": 5934,
+            "serpentfolk": 0
+          },
+          "id": "rural-10-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 19.99,
+            "orc": 80.01,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 198,
+            "orc": 0,
+            "serpentfolk": 3758
+          },
+          "id": "rural-10-serpentfolk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "thermal_habitat"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 5.01,
+            "orc": 0.0,
+            "serpentfolk": 94.99
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 12462,
+        "human": 336529,
+        "orc": 1978,
+        "serpentfolk": 198
+      }
+    },
+    "ruralPopulation": 395600,
+    "ruralSpeciesCounts": {
+      "goblin": 35604,
+      "human": 348128,
+      "orc": 7912,
+      "serpentfolk": 3956
+    },
+    "speciesCounts": {
+      "goblin": 38985,
+      "human": 408181,
+      "orc": 8878,
+      "serpentfolk": 3956
+    },
+    "speciesPct": {
+      "goblin": 8.47,
+      "human": 88.74,
+      "orc": 1.93,
+      "serpentfolk": 0.86
+    },
+    "territory": "Sarak"
+  },
+  {
+    "authority": "varan",
+    "designPopulation": 230000,
+    "disputes": [
+      "port_access",
+      "enclave_access"
+    ],
+    "id": 11,
+    "name": "Brumeraie",
+    "namedPopulation": 27600,
+    "resourceLevels": {
+      "arms": 2,
+      "aromatics": 4,
+      "boats": 3,
+      "bronze": 3,
+      "building_stone": 2,
+      "charcoal": 3,
+      "clay": 4,
+      "cloth": 3,
+      "copper": 2,
+      "copper_ore": 1,
+      "cotton": 3,
+      "dates": 0,
+      "dyes": 4,
+      "fiber": 4,
+      "firewood": 4,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 4,
+      "glass": 2,
+      "gold": 2,
+      "grain": 2,
+      "hides": 2,
+      "honey": 3,
+      "iron": 2,
+      "iron_ore": 2,
+      "lead_ore": 1,
+      "leather": 2,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 2,
+      "medicinal": 4,
+      "milk": 1,
+      "naval_timber": 4,
+      "oil": 3,
+      "pack_animals": 1,
+      "pottery": 3,
+      "provisions": 3,
+      "resin": 4,
+      "rice": 4,
+      "rope": 3,
+      "salt": 3,
+      "sand": 3,
+      "silver_ore": 1,
+      "steel": 1,
+      "timber": 4,
+      "tin": 4,
+      "tin_ore": 5,
+      "tools": 2,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 5,
+      "wax": 3,
+      "wool": 1
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 15787,
+            "human": 6766,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-11-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 759,
+            "orc": 3036,
+            "serpentfolk": 0
+          },
+          "id": "rural-11-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1012,
+            "orc": 0,
+            "serpentfolk": 19228
+          },
+          "id": "rural-11-serpentfolk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "thermal_habitat"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 5.0,
+            "orc": 0.0,
+            "serpentfolk": 95.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 8501,
+        "human": 145287,
+        "orc": 1012,
+        "serpentfolk": 1012
+      }
+    },
+    "ruralPopulation": 202400,
+    "ruralSpeciesCounts": {
+      "goblin": 24288,
+      "human": 153824,
+      "orc": 4048,
+      "serpentfolk": 20240
+    },
+    "speciesCounts": {
+      "goblin": 26036,
+      "human": 179124,
+      "orc": 4600,
+      "serpentfolk": 20240
+    },
+    "speciesPct": {
+      "goblin": 11.32,
+      "human": 77.88,
+      "orc": 2.0,
+      "serpentfolk": 8.8
+    },
+    "territory": "Varan"
+  },
+  {
+    "authority": "varan",
+    "designPopulation": 290000,
+    "disputes": [
+      "port_access",
+      "enclave_access"
+    ],
+    "id": 12,
+    "name": "Rosebrume",
+    "namedPopulation": 31900,
+    "resourceLevels": {
+      "arms": 2,
+      "aromatics": 4,
+      "boats": 3,
+      "bronze": 3,
+      "building_stone": 2,
+      "charcoal": 3,
+      "clay": 4,
+      "cloth": 3,
+      "copper": 2,
+      "copper_ore": 1,
+      "cotton": 3,
+      "dates": 0,
+      "dyes": 4,
+      "fiber": 4,
+      "firewood": 4,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 4,
+      "glass": 2,
+      "gold": 2,
+      "grain": 2,
+      "hides": 2,
+      "honey": 3,
+      "iron": 2,
+      "iron_ore": 2,
+      "lead_ore": 1,
+      "leather": 2,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 2,
+      "medicinal": 4,
+      "milk": 1,
+      "naval_timber": 4,
+      "oil": 3,
+      "pack_animals": 1,
+      "pottery": 3,
+      "provisions": 3,
+      "resin": 4,
+      "rice": 4,
+      "rope": 3,
+      "salt": 3,
+      "sand": 3,
+      "silver_ore": 1,
+      "steel": 1,
+      "timber": 4,
+      "tin": 4,
+      "tin_ore": 3,
+      "tools": 2,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 5,
+      "wax": 3,
+      "wool": 1
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 16776,
+            "human": 7190,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-12-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 968,
+            "orc": 3871,
+            "serpentfolk": 0
+          },
+          "id": "rural-12-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 2323,
+            "orc": 0,
+            "serpentfolk": 44135
+          },
+          "id": "rural-12-serpentfolk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "thermal_habitat"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 5.0,
+            "orc": 0.0,
+            "serpentfolk": 95.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 9034,
+        "human": 170189,
+        "orc": 1291,
+        "serpentfolk": 2323
+      }
+    },
+    "ruralPopulation": 258100,
+    "ruralSpeciesCounts": {
+      "goblin": 25810,
+      "human": 180670,
+      "orc": 5162,
+      "serpentfolk": 46458
+    },
+    "speciesCounts": {
+      "goblin": 27404,
+      "human": 210231,
+      "orc": 5907,
+      "serpentfolk": 46458
+    },
+    "speciesPct": {
+      "goblin": 9.45,
+      "human": 72.49,
+      "orc": 2.04,
+      "serpentfolk": 16.02
+    },
+    "territory": "Varan"
+  },
+  {
+    "authority": "tagon",
+    "designPopulation": 320000,
+    "disputes": [
+      "port_access",
+      "forestry"
+    ],
+    "id": 13,
+    "name": "Coralune",
+    "namedPopulation": 51200,
+    "resourceLevels": {
+      "arms": 2,
+      "aromatics": 5,
+      "boats": 4,
+      "bronze": 2,
+      "building_stone": 3,
+      "charcoal": 2,
+      "clay": 3,
+      "cloth": 3,
+      "copper": 2,
+      "copper_ore": 2,
+      "cotton": 4,
+      "dates": 1,
+      "dyes": 5,
+      "fiber": 5,
+      "firewood": 4,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 5,
+      "glass": 2,
+      "gold": 2,
+      "grain": 2,
+      "hides": 2,
+      "honey": 3,
+      "iron": 2,
+      "iron_ore": 1,
+      "lead_ore": 1,
+      "leather": 2,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 2,
+      "medicinal": 5,
+      "milk": 1,
+      "naval_timber": 5,
+      "oil": 4,
+      "pack_animals": 1,
+      "pottery": 3,
+      "provisions": 3,
+      "resin": 4,
+      "rice": 5,
+      "rope": 5,
+      "salt": 3,
+      "sand": 3,
+      "silver_ore": 1,
+      "steel": 1,
+      "timber": 5,
+      "tin": 2,
+      "tin_ore": 1,
+      "tools": 2,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 5,
+      "wax": 3,
+      "wool": 1
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 10483,
+            "human": 4493,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-13-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 1008,
+            "orc": 4032,
+            "serpentfolk": 0
+          },
+          "id": "rural-13-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 403,
+            "orc": 0,
+            "serpentfolk": 7660
+          },
+          "id": "rural-13-serpentfolk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "thermal_habitat"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 5.0,
+            "orc": 0.0,
+            "serpentfolk": 95.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 5645,
+        "human": 233328,
+        "orc": 1344,
+        "serpentfolk": 404
+      }
+    },
+    "ruralPopulation": 268800,
+    "ruralSpeciesCounts": {
+      "goblin": 16128,
+      "human": 239232,
+      "orc": 5376,
+      "serpentfolk": 8064
+    },
+    "speciesCounts": {
+      "goblin": 19200,
+      "human": 285824,
+      "orc": 6912,
+      "serpentfolk": 8064
+    },
+    "speciesPct": {
+      "goblin": 6.0,
+      "human": 89.32,
+      "orc": 2.16,
+      "serpentfolk": 2.52
+    },
+    "territory": "Tagon"
+  },
+  {
+    "authority": "tagon",
+    "designPopulation": 270000,
+    "disputes": [
+      "forestry",
+      "enclave_access"
+    ],
+    "id": 14,
+    "name": "Palmeraie",
+    "namedPopulation": 35100,
+    "resourceLevels": {
+      "arms": 2,
+      "aromatics": 5,
+      "boats": 4,
+      "bronze": 2,
+      "building_stone": 3,
+      "charcoal": 2,
+      "clay": 3,
+      "cloth": 3,
+      "copper": 2,
+      "copper_ore": 2,
+      "cotton": 4,
+      "dates": 1,
+      "dyes": 5,
+      "fiber": 5,
+      "firewood": 4,
+      "fish": 4,
+      "flax": 2,
+      "flour": 2,
+      "fruit": 5,
+      "glass": 2,
+      "gold": 2,
+      "grain": 2,
+      "hides": 2,
+      "honey": 3,
+      "iron": 2,
+      "iron_ore": 1,
+      "lead_ore": 1,
+      "leather": 2,
+      "legumes": 2,
+      "limestone": 2,
+      "meat": 2,
+      "medicinal": 5,
+      "milk": 1,
+      "naval_timber": 5,
+      "oil": 4,
+      "pack_animals": 1,
+      "pottery": 3,
+      "provisions": 3,
+      "resin": 4,
+      "rice": 5,
+      "rope": 5,
+      "salt": 3,
+      "sand": 3,
+      "silver_ore": 1,
+      "steel": 1,
+      "timber": 5,
+      "tin": 2,
+      "tin_ore": 1,
+      "tools": 2,
+      "tubers": 4,
+      "vegetables": 3,
+      "water": 5,
+      "wax": 3,
+      "wool": 1
+    },
+    "ruralDistribution": {
+      "concentratedHabitatGroups": [
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 10687,
+            "human": 4580,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-14-goblin",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 70.0,
+            "human": 30.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 881,
+            "orc": 3523,
+            "serpentfolk": 0
+          },
+          "id": "rural-14-orc",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 20.0,
+            "orc": 80.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "goblin": 0,
+            "human": 705,
+            "orc": 0,
+            "serpentfolk": 13389
+          },
+          "id": "rural-14-serpentfolk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "thermal_habitat"
+          ],
+          "speciesPct": {
+            "goblin": 0.0,
+            "human": 5.0,
+            "orc": 0.0,
+            "serpentfolk": 95.0
+          }
+        }
+      ],
+      "mixedAndDispersedCounts": {
+        "goblin": 5756,
+        "human": 193499,
+        "orc": 1175,
+        "serpentfolk": 705
+      }
+    },
+    "ruralPopulation": 234900,
+    "ruralSpeciesCounts": {
+      "goblin": 16443,
+      "human": 199665,
+      "orc": 4698,
+      "serpentfolk": 14094
+    },
+    "speciesCounts": {
+      "goblin": 18250,
+      "human": 232158,
+      "orc": 5498,
+      "serpentfolk": 14094
+    },
+    "speciesPct": {
+      "goblin": 6.76,
+      "human": 85.98,
+      "orc": 2.04,
+      "serpentfolk": 5.22
+    },
+    "territory": "Tagon"
+  }
+]
