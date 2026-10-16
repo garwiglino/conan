@@ -76,4 +76,6 @@ La musique du titre démarre dès l’introduction et continue sans redémarrer 
 
 ## Batraciens en jeu
 
-Les [batraciens civils et gardes](docs/batraciens.md) utilisent les dessins JavaScript approuvés et des palettes déterministes, sans redessin. Le registre ajoute 28 civils et 11 gardes dans 14 localités humides de Varan, Tagon et Teremor, sous les règles existantes de sécurité. Certains groupes de brigands et patrouilles déjà générés dans ces milieux utilisent les rôles armés ; aucun peuple ne devient hostile par défaut. Sources, apparences et animations sont intégrées au HTML web et iOS. [Atelier des palettes et animations](art/batraciens-preview.html).
+Les [batraciens civils et gardes](docs/batraciens.md) utilisent les dessins JavaScript approuvés et des palettes déterministes, sans redessin. Le registre ajoute 62 civils et 11 gardes dans 14 localités humides de Varan, Tagon et Teremor, sous les règles existantes de sécurité. Certains groupes de brigands et patrouilles déjà générés dans ces milieux utilisent les rôles armés ; aucun peuple ne devient hostile par défaut. Sources, apparences et animations sont intégrées au HTML web et iOS. [Atelier des palettes et animations](art/batraciens-preview.html).
+
+Les routines locales ajoutent des déplacements, des discussions entre habitants et six liaisons routières. Les gardes témoins répondent aux agressions du joueur, avec le ciblage et les effets de blessure communs au combat. Voir `docs/batraciens.md`.

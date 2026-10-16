@@ -20,12 +20,12 @@ test('all male armed role/palette/frame pixels remain identical to the approved 
   assert.equal(hash.digest('hex'),approved.armed[role+':'+pal],role+':'+pal);
  }
 });
-test('14 real wetland communities create 28 civilians and 11 separate male wardens',()=>{
+test('14 real wetland communities create 62 civilians and 11 separate male wardens',()=>{
  const g=game(),n=g.npcs.filter(n=>n.batracien),c=n.filter(B.isCivil),guards=n.filter(B.isArmed);
- assert.equal(n.length,39);assert.equal(c.length,28);assert.equal(guards.length,11);assert.equal(c.filter(n=>n.batracien.sex==='female').length,14);
+ assert.equal(n.length,73);assert.equal(c.length,62);assert.equal(guards.length,11);assert.equal(c.filter(n=>n.batracien.sex==='female').length,31);
  assert.equal(new Set(n.map(n=>n.id)).size,n.length);assert.ok(guards.every(n=>n.batracien.sex==='male'));
  const regions={};for(const a of n){const site=api.Atlas.byId[a.site];assert.ok(B.habitat(site));regions[site.territory]=(regions[site.territory]||0)+1;}
- assert.deepEqual(regions,{Varan:18,Tagon:14,Teremor:7});
+ assert.deepEqual(regions,{Varan:32,Tagon:26,Teremor:15});
 });
 test('placements clear real geometry, entrances and enemy safety margins after transport props exist',()=>{
  const g=game();for(const n of g.npcs.filter(n=>n.batracien)){

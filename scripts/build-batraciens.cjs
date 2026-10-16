@@ -10,10 +10,13 @@ edit('scripts/civilian-runtime.js',[
 edit('scripts/world-danger.js',[
  ['this.npcs.filter(n=>n.eventGuard&&active.has(n.eventId))','this.npcs.filter(n=>n.eventGuard&&!n.batracien&&active.has(n.eventId))']
 ]);
-edit('scripts/embed-world.cjs',[
- ["+'\\n// END WORLD ATLAS'", "+'\\n'+read('sprites/batraciens/batraciens-complet.js')+'\\n'+read('sprites/batraciens/batraciens-combattants.js')+'\\nconst BATRACIEN_CONFIG='+read('data/batraciens/communities.json').trim()+';\\n'+read('scripts/batraciens-runtime.js')+'\\n// END WORLD ATLAS'"]
-]);
 edit('index.html',[
+ ["target(){const e=this.enemies.find(e=>e.id===this.targetId);", "target(){const e=this.combatTargets().find(e=>e.id===this.targetId);"],
+ ["for(const e of this.enemies){if(e.dead||(e.kind==='boss'&&!this.bossActive))continue;const range=dist", "for(const e of this.combatTargets()){if(e.dead||!this.sameLevel(e,this.player)||(e.kind==='boss'&&!this.bossActive))continue;const range=dist"],
+ ["for(const e of this.enemies){if(e.dead||this.hits.has(e.id)", "for(const e of this.combatTargets()){if(e.dead||this.hits.has(e.id)"],
+ ["from.owner?this.enemies.find(e=>e.id===from.owner):from", "from.owner?this.combatTargets().find(e=>e.id===from.owner):from"],
+ ["if(fatal){this.remains.push({level:e.level||0,x:e.x,y:e.y,kind:e.kind,heavy,dir:e.dir,t0:this.time});", "if(fatal&&!e.civilian&&!e.batracien){this.remains.push({level:e.level||0,x:e.x,y:e.y,kind:e.kind,heavy,dir:e.dir,t0:this.time});"],
+
  ['for(const e of this.enemies){if(e.dead)continue;if(!this.sameLevel(e,p)){e.wind=0;', 'for(const e of this.enemies){if(e.dead)continue;if(e.batracien){this.stepBatracienEnemy(e,dt);continue;}if(!this.sameLevel(e,p)){e.wind=0;'],
  ["for(const r of g.remains.filter(r=>!r.level)){if(r.kind==='boss')continue;", "for(const r of g.remains.filter(r=>!r.level)){if(r.kind==='batracien'||r.kind==='boss')continue;"],
  ["...g.remains.filter(r=>r.level||r.kind==='boss'||(r.kind==='guardian'", "...g.remains.filter(r=>r.level||r.kind==='batracien'||r.kind==='boss'||(r.kind==='guardian'"],
@@ -21,6 +24,6 @@ edit('index.html',[
  ["for(const fx of g.bloodFX)if(g.sameLevel(fx,p))drawBloodFX(c,fx);","this.drawBatracienMissiles();for(const fx of g.bloodFX)if(g.sameLevel(fx,p))drawBloodFX(c,fx);"]
 ]);
 cp.execFileSync(process.execPath,['scripts/embed-world.cjs'],{cwd:root,stdio:'inherit'});
-const sources=['sprites/batraciens/base/batracien-v2.js','sprites/batraciens/base/batracienne-v2.js','sprites/batraciens/sources/renderer.template.js','sprites/batraciens/sources/activities.cjs','sprites/batraciens/sources/palettes.json','sprites/batraciens/batraciens-complet.js','sprites/batraciens/batraciens-combattants.js','scripts/batraciens-runtime.js','data/batraciens/communities.json'];
+const sources=['sprites/batraciens/base/batracien-v2.js','sprites/batraciens/base/batracienne-v2.js','sprites/batraciens/sources/renderer.template.js','sprites/batraciens/sources/activities.cjs','sprites/batraciens/sources/palettes.json','sprites/batraciens/batraciens-complet.js','sprites/batraciens/batraciens-combattants.js','scripts/batraciens-runtime.js','scripts/batraciens-society.js','data/batraciens/communities.json'];
 const hashes=Object.fromEntries(sources.map(f=>[f,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex')]));
 fs.writeFileSync(path.join(root,'data/batraciens/build-manifest.json'),JSON.stringify({version:1,cell:[80,80],anchor:[40,52],sources:hashes},null,2)+'\n');

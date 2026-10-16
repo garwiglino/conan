@@ -1108,9 +1108,9 @@ class Game{
    if(n1<1&&n1<((o.x-b.x)/ax)**2+((o.y-b.y)/ay)**2-1e-9)return true;}return false;}
  movePlayer(p,mx,my){const s=this.stairs,inX=x=>x>s.x-s.hw+2&&x<s.x+s.hw-2;if(!p.onStairs){if(!p.level&&my<0&&inX(p.x)&&p.y>=s.bottom-.5&&p.y+my<s.bottom)p.onStairs=true;else if(p.level===1&&my>0&&inX(p.x)&&p.y+my>s.top){p.onStairs=true;p.level=0;}}if(p.onStairs){p.x=clamp(p.x+mx,s.x-s.hw+4,s.x+s.hw-4);p.y+=my;this.stairState(p);return;}this.move(p,mx,my);}
  stairState(p){const s=this.stairs;if(!p.onStairs)return;if(p.y<=s.top){p.y=s.top;p.level=1;p.onStairs=false;delete p.elevation;}else if(p.y>=s.bottom){p.y=s.bottom;p.level=0;p.onStairs=false;delete p.elevation;}else p.elevation=12*(s.bottom-p.y)/(s.bottom-s.top);}
- target(){const e=this.enemies.find(e=>e.id===this.targetId);if(!e||e.dead||!this.sameLevel(e,this.player)||dist(e,this.player)>112){this.targetId=null;return null;}return e;}
+ target(){const e=this.combatTargets().find(e=>e.id===this.targetId);if(!e||e.dead||!this.sameLevel(e,this.player)||dist(e,this.player)>112){this.targetId=null;return null;}return e;}
  aimAttack(dx,dy){const length=Math.hypot(dx,dy);if(length<.1)return;let best=null,score=-Infinity;
-  for(const e of this.enemies){if(e.dead||(e.kind==='boss'&&!this.bossActive))continue;const range=dist(e,this.player);if(range<1||range>112||!this.lineClear(this.player,e))continue;const alignment=((e.x-this.player.x)*dx+(e.y-this.player.y)*dy)/(range*length);if(alignment<.65)continue;const rank=alignment*2-range/112*.35+(e.id===this.targetId?.06:0);if(rank>score){score=rank;best=e;}}
+  for(const e of this.combatTargets()){if(e.dead||!this.sameLevel(e,this.player)||(e.kind==='boss'&&!this.bossActive))continue;const range=dist(e,this.player);if(range<1||range>112||!this.lineClear(this.player,e))continue;const alignment=((e.x-this.player.x)*dx+(e.y-this.player.y)*dy)/(range*length);if(alignment<.65)continue;const rank=alignment*2-range/112*.35+(e.id===this.targetId?.06:0);if(rank>score){score=rank;best=e;}}
   if(best){this.targetId=best.id;this.player.dir=this.direction(best.x-this.player.x,best.y-this.player.y);}
  }
  faceTarget(){if(this.player.held||this.player.thrown)return null;const e=this.target();if(e&&this.player.attack<=0){const dx=e.x-this.player.x,dy=e.y-this.player.y;if(Math.hypot(dx,dy)>2)this.player.dir=this.direction(dx,dy);}return e;}
@@ -1120,7 +1120,7 @@ class Game{
  swingSword(){const p=this.player;if(p.attackCD>0||p.dash>0||this.dead||this.won)return;p.combo=p.comboWindow>0?(p.combo+1)%4:0;p.comboWindow=attackLength(p.combo)+.35;this.swing++;p.attackStep=false;this.hits.clear();p.attackBuffer=0;p.guard=false;p.attack=attackLength(p.combo);p.attackCD=p.attack+(p.combo===3?.08:.015);this.emit('sword',{combo:p.combo});}
  dodge(dx=0,dy=0){const p=this.player;if(p.dashCD>0||this.dead||this.won)return;if(!dx&&!dy)[dx,dy]=this.facing(p.dir);const l=Math.hypot(dx,dy);p.dashX=dx/l;p.dashY=dy/l;p.dash=.15;p.dashCD=.8;p.inv=Math.max(p.inv,.28);p.attack=0;p.attackBuffer=0;p.guard=false;p.parry=0;this.usedDash=true;this.emit('dodge');}
  defend(from){const p=this.player;if(!p.guard||!from||from.unblockable)return false;const [fx,fy]=this.facing(p.dir),vx=from.x-p.x,vy=from.y-p.y,d=Math.max(1,Math.hypot(vx,vy));if((fx*vx+fy*vy)/d<.25)return false;
-  const attacker=from.owner?this.enemies.find(e=>e.id===from.owner):from;
+  const attacker=from.owner?this.combatTargets().find(e=>e.id===from.owner):from;
   p.guardFlash=.18;this.burst(p.x+fx*9,p.y-12+fy*7,p.parry>0?'#faf2c1':'#9cafbd',p.parry>0?16:7);
   if(p.parry>0){p.parry=0;p.riposte=1.15;p.attackCD=0;this.emit('parry');this.emit('haptic',{kind:'parry'});if(attacker&&attacker.kind){attacker.stun=attacker.kind==='boss'?1.5:1.2;if(attacker.kind==='boss'){this.emit('bosscue',{cue:'stun'});bossPlay(attacker,'stun');}attacker.wind=0;attacker.attack=0;attacker.block=0;attacker.guardTime=0;attacker.mode='recover';attacker.modeTime=1.5;attacker.cooldown=1.6;this.targetId=attacker.id;}if(from.owner)from.life=0;}
   else{this.emit('block');this.move(p,-fx*3,-fy*3);}return true;
@@ -1161,7 +1161,7 @@ class Game{
   }
   const bone=e.kind==='skeleton',heavy=fatal&&this.player.combo===3;
   this.bloodFX.push({x:e.x,y:e.y,level:e.level||0,age:0,fatal,heavy,bone,a:Math.atan2(e.y-source.y,e.x-source.x),seed:(this.swing*7+Math.floor(this.time*60))|0});if(this.bloodFX.length>36)this.bloodFX.shift();
-  if(fatal){this.remains.push({level:e.level||0,x:e.x,y:e.y,kind:e.kind,heavy,dir:e.dir,t0:this.time});if(this.remains.length>75)this.remains.shift();}
+  if(fatal&&!e.civilian&&!e.batracien){this.remains.push({level:e.level||0,x:e.x,y:e.y,kind:e.kind,heavy,dir:e.dir,t0:this.time});if(this.remains.length>75)this.remains.shift();}
  }
  updateEffects(dt){
   for(const r of this.remains)if(r.kind==='boss'){r.age=Math.min(1.9,r.age+dt);if(r.age+1e-7>=1.9&&this.pendingBossWin){this.pendingBossWin=false;this.emit('win');}}
@@ -1217,7 +1217,7 @@ class Game{
   if(this.bossActive&&!this.arenaLock&&!this.won&&p.y<183&&p.x>340&&p.x<460){this.arenaLock=true;this.emit('door',{open:false});}
   this.arena=clamp((this.arena||0)+(this.arenaLock?dt*4:-dt*2),0,1);
   if(this.gate&&p.y>=0&&p.y<190&&p.x>320&&p.x<480&&!this.bossActive&&!this.story?.templeFreed){this.bossActive=true;{const b=this.enemies.find(e=>e.kind==='boss');if(b){b.appearAt=this.time;for(let i=0;i<28;i++){const a=i/28*Math.PI*2,s=14+i%4*9;this.particles.push({x:b.x+Math.cos(a)*4,y:b.y-8,vx:Math.cos(a)*s,vy:Math.sin(a)*s*.6-12,life:.6+i%3*.15,size:2,color:['#3c2a4a','#6a4c7a','#a7cda0','#241a2e'][i%4]});}this.emit('bosscue',{cue:'nova_wind'});}}if(!this.worldFlags.bossTalk){this.worldFlags.bossTalk=true;this.talk('LE PRÊTRE DU SERPENT',['Kaldor… Tu as osé briser les sceaux de Nharos.','Tu ne quitteras pas ce sanctuaire vivant.'],this.enemies.find(e=>e.kind==='boss'),50);}}
-  if(p.attack>0){const frame=attackFrame(p.attack,p.combo);if(frame===2&&!p.attackStep){p.attackStep=true;const [fx,fy]=this.facing(p.dir);this.move(p,fx*(p.combo===3?9:4),fy*(p.combo===3?9:4));}if(frame===2||frame===3)for(const e of this.enemies){if(e.dead||this.hits.has(e.id)||(e.kind==='boss'&&!this.bossActive))continue;if(bladeHits(p,e,frame)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,p.combo===3?2:1);}}if(frame===2||frame===3)this.hitProps(p,frame);}
+  if(p.attack>0){const frame=attackFrame(p.attack,p.combo);if(frame===2&&!p.attackStep){p.attackStep=true;const [fx,fy]=this.facing(p.dir);this.move(p,fx*(p.combo===3?9:4),fy*(p.combo===3?9:4));}if(frame===2||frame===3)for(const e of this.combatTargets()){if(e.dead||this.hits.has(e.id)||(e.kind==='boss'&&!this.bossActive))continue;if(bladeHits(p,e,frame)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,p.combo===3?2:1);}}if(frame===2||frame===3)this.hitProps(p,frame);}
   for(const e of this.enemies){if(e.dead)continue;if(e.batracien){this.stepBatracienEnemy(e,dt);continue;}if(!this.sameLevel(e,p)){e.wind=0;e.attack=0;e.anim=0;continue;}e.hurt=Math.max(0,(e.hurt||0)-dt);e.flash=Math.max(0,e.flash-dt);e.attack=Math.max(0,e.attack-dt);e.stun=Math.max(0,e.stun-dt);e.cooldown=Math.max(0,e.cooldown-dt);if(e.kind==='boss'){if(this.bossActive)this.bossStep(e,dt);continue;}if(e.stun>0)continue;let d=dist(e,p),hx=p.x-e.x,hy=p.y-e.y;
    e.defenseCD=Math.max(0,e.defenseCD-dt);e.guardRaise=Math.max(0,e.guardRaise-dt);const sz=this.safeZone(p),br=this.brain(e,p,d,dt,sz);if(sz&&e.wind>0)e.wind=0;
    if(e.guardTime>0){e.guardTime=Math.max(0,e.guardTime-dt);e.dir=this.direction(hx,hy);e.anim=0;continue;}
@@ -7750,38 +7750,290 @@ const BATRACIEN_CONFIG={
   "version": 1,
   "status": "runtime_population_extension",
   "note": "Named sparse actors, not a new percentage denominator for the four-species world-bible census. Core enemies, transport operators, quest givers and existing residents are preserved.",
-  "maxCivilians": 28,
+  "maxCivilians": 62,
   "maxWardens": 11,
   "activeRadius": 700,
   "enemyClearance": 220,
-  "allowedBiomes": [5, 7, 8, 12],
-  "columns": ["site", "civilianJobs", "wardenRole"],
-  "communities": [
-    ["town-10", ["net", "rope"], "boat_escort"],
-    ["town-73", ["rice", "weave"], "village_guard"],
-    ["town-74", ["pottery", "gather"], "channel_sentinel"],
-    ["town-75", ["weave", "stir"], "village_guard"],
-    ["town-76", ["net", "gather"], "channel_sentinel"],
-    ["town-77", ["gather", "stir"], "captain"],
-    ["town-27", ["craft", "net"], "boat_escort"],
-    ["town-40", ["ledger", "rope"], "boat_escort"],
-    ["town-50", ["net", "pottery"], "channel_sentinel"],
-    ["town-55", ["gather", "weave"], "scout"],
-    ["town-61", ["craft", "stir"], null],
-    ["town-1", ["ledger", "net"], "village_guard"],
-    ["town-25", ["net", "weave"], null],
-    ["town-38", ["weave", "pottery"], null]
+  "allowedBiomes": [
+    5,
+    7,
+    8,
+    12
   ],
-  "malePalettes": ["original", "jade", "turquoise_sombre", "ocre_mousse", "ardoise"],
-  "femalePalettes": ["rose_mauve", "lilas", "prune_rose", "corail_doux"],
-  "hostileEvents": ["bandits"],
+  "columns": [
+    "site",
+    "civilianJobs",
+    "wardenRole"
+  ],
+  "communities": [
+    [
+      "town-10",
+      [
+        "net",
+        "rope",
+        "rope",
+        "net",
+        "ledger"
+      ],
+      "boat_escort"
+    ],
+    [
+      "town-73",
+      [
+        "rice",
+        "weave",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      "village_guard"
+    ],
+    [
+      "town-74",
+      [
+        "pottery",
+        "gather",
+        "weave",
+        "pottery"
+      ],
+      "channel_sentinel"
+    ],
+    [
+      "town-75",
+      [
+        "weave",
+        "stir",
+        "weave",
+        "pottery"
+      ],
+      "village_guard"
+    ],
+    [
+      "town-76",
+      [
+        "net",
+        "gather",
+        "weave",
+        "pottery"
+      ],
+      "channel_sentinel"
+    ],
+    [
+      "town-77",
+      [
+        "gather",
+        "stir",
+        "weave",
+        "pottery"
+      ],
+      "captain"
+    ],
+    [
+      "town-27",
+      [
+        "craft",
+        "net",
+        "rope",
+        "net"
+      ],
+      "boat_escort"
+    ],
+    [
+      "town-40",
+      [
+        "ledger",
+        "rope",
+        "rope",
+        "net",
+        "ledger"
+      ],
+      "boat_escort"
+    ],
+    [
+      "town-50",
+      [
+        "net",
+        "pottery",
+        "rope",
+        "net"
+      ],
+      "channel_sentinel"
+    ],
+    [
+      "town-55",
+      [
+        "gather",
+        "weave",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      "scout"
+    ],
+    [
+      "town-61",
+      [
+        "craft",
+        "stir",
+        "weave",
+        "pottery"
+      ],
+      null
+    ],
+    [
+      "town-1",
+      [
+        "ledger",
+        "net",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      "village_guard"
+    ],
+    [
+      "town-25",
+      [
+        "net",
+        "weave",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      null
+    ],
+    [
+      "town-38",
+      [
+        "weave",
+        "pottery",
+        "weave",
+        "pottery"
+      ],
+      null
+    ]
+  ],
+  "malePalettes": [
+    "original",
+    "jade",
+    "turquoise_sombre",
+    "ocre_mousse",
+    "ardoise"
+  ],
+  "femalePalettes": [
+    "rose_mauve",
+    "lilas",
+    "prune_rose",
+    "corail_doux"
+  ],
+  "hostileEvents": [
+    "bandits"
+  ],
   "combat": {
-    "village_guard": {"attack": "thrust", "range": 29, "damage": 1, "hp": 8, "cooldown": 1.5, "contact": 0.36, "shield": true},
-    "channel_sentinel": {"attack": "thrust", "range": 29, "damage": 1, "hp": 8, "cooldown": 1.5, "contact": 0.36, "shield": true},
-    "boat_escort": {"attack": "slash", "range": 24, "damage": 1, "hp": 8, "cooldown": 1.3, "contact": 0.36, "shield": true},
-    "scout": {"attack": "throw_javelin", "range": 100, "damage": 1, "hp": 6, "cooldown": 2.2, "contact": 0.54, "shield": false},
-    "raider": {"attack": "slash", "range": 25, "damage": 1, "hp": 3, "cooldown": 1.5, "contact": 0.36, "shield": false},
-    "captain": {"attack": "thrust", "range": 29, "damage": 1, "hp": 10, "cooldown": 1.4, "contact": 0.36, "shield": true}
+    "village_guard": {
+      "attack": "thrust",
+      "range": 29,
+      "damage": 1,
+      "hp": 8,
+      "cooldown": 1.5,
+      "contact": 0.36,
+      "shield": true
+    },
+    "channel_sentinel": {
+      "attack": "thrust",
+      "range": 29,
+      "damage": 1,
+      "hp": 8,
+      "cooldown": 1.5,
+      "contact": 0.36,
+      "shield": true
+    },
+    "boat_escort": {
+      "attack": "slash",
+      "range": 24,
+      "damage": 1,
+      "hp": 8,
+      "cooldown": 1.3,
+      "contact": 0.36,
+      "shield": true
+    },
+    "scout": {
+      "attack": "throw_javelin",
+      "range": 100,
+      "damage": 1,
+      "hp": 6,
+      "cooldown": 2.2,
+      "contact": 0.54,
+      "shield": false
+    },
+    "raider": {
+      "attack": "slash",
+      "range": 25,
+      "damage": 1,
+      "hp": 3,
+      "cooldown": 1.5,
+      "contact": 0.36,
+      "shield": false
+    },
+    "captain": {
+      "attack": "thrust",
+      "range": 29,
+      "damage": 1,
+      "hp": 10,
+      "cooldown": 1.4,
+      "contact": 0.36,
+      "shield": true
+    }
+  },
+  "society": {
+    "version": 1,
+    "localSlots": [
+      2,
+      3
+    ],
+    "walkRadius": 176,
+    "talkRadius": 64,
+    "witnessRadius": 220,
+    "pursuitRadius": 380,
+    "angerMinutes": 180,
+    "roads": [
+      {
+        "site": "town-10",
+        "slot": 4,
+        "to": "town-74",
+        "sex": "male"
+      },
+      {
+        "site": "town-73",
+        "slot": 4,
+        "to": "town-74",
+        "sex": "female"
+      },
+      {
+        "site": "town-40",
+        "slot": 4,
+        "to": "town-27",
+        "sex": "male"
+      },
+      {
+        "site": "town-55",
+        "slot": 4,
+        "to": "town-61",
+        "sex": "female"
+      },
+      {
+        "site": "town-1",
+        "slot": 4,
+        "to": "town-38",
+        "sex": "female"
+      },
+      {
+        "site": "town-25",
+        "slot": 4,
+        "to": "town-38",
+        "sex": "male"
+      }
+    ]
   }
 };
 /* Batraciens: palette-only art reuse and bounded, save-stable world integration.
@@ -7822,7 +8074,7 @@ const Batraciens = (() => {
  function safePosition(g,site,id,job=null){
   const centre=Atlas.toGame(site.x,site.y),seed=hash(id),props=[...g.world.props,...g.atlasProps],mechanisms=[...g.levers,...g.steles,...g.chests];
   const field=['rice','gather','harvest','hoe','sow'].includes(job);
-  for(let j=0;j<96;j++){
+  for(let j=0;j<160;j++){
    const a=((seed%32)+j%32)*Math.PI/16,r=(field?(site.radius||12)*16+48:64)+Math.floor(j/32)*32,p={x:Math.round(centre.x+Math.cos(a)*r),y:Math.round(centre.y+Math.sin(a)*r)};
    if(field&&g.tile(p.x,p.y)!==0)continue;
    if(g.solid(p.x,p.y,8,0)||g.localThreatAt(p.x,p.y,0,C.enemyClearance)||g.dangerAt(p.x,p.y,0).unsafe)continue;
@@ -7863,10 +8115,10 @@ const Batraciens = (() => {
     const armed=slot===jobs.length,actorId=(armed?'warden-':'resident-')+'batracien-'+id+'-'+(armed?'0':slot);
     if(this.npcs.some(n=>n.id===actorId))continue;
     const rec=this.batracienRecords[actorId],civilRec=this.civilianRecords?.[actorId],partyRec=saved?.party?.find(p=>p.id===actorId),centre=Atlas.toGame(site.x,site.y);
-    const validSaved=validPoint(rec)&&dist(rec,centre)<2000;
+    const validSaved=validPoint(rec)&&(dist(rec,centre)<2000||this.validBatracienRoutePosition?.(actorId,rec));
     let pos=(validSaved&&(rec.dead||partyRec))?{x:rec.x,y:rec.y}:safePosition(this,site,actorId,armed?null:jobs[slot]);
     if(!pos)continue;
-    const sex=armed||slot%2===0?'male':'female',look=appearance(actorId,sex,rec);
+    const road=C.society?.roads.find(r=>r.site===id&&r.slot===slot);const sex=armed?'male':road?.sex||(slot%2===0?'male':'female'),look=appearance(actorId,sex,rec);
     const b={...look,site:id,role:armed?role:null,action:'idle',elapsed:0,distance:0,lastX:pos.x,lastY:pos.y,seed:hash(actorId),contactDone:false};
     const n={id:actorId,...pos,post:{...pos},dir:2,baseDir:2,level:0,alpha:1,world:true,site:id,resident:!armed,batracien:b,look:'batracien',head:24,name:'HABITANT',label:'HABITANT',title:'Habitant de '+site.name,
      greet:()=>armed?['Nous veillons sur les habitants et les accès de '+site.name+'.']:['Bienvenue à '+site.name+'. Les nouvelles voyagent avec les bateliers.'],topics:()=>[],bye:()=>['Bonne route.']};
@@ -7879,7 +8131,7 @@ const Batraciens = (() => {
     }else{if(this.npcs.filter(isCivil).length>=C.maxCivilians)continue;
      workPlan(this,n,jobs[slot]);initialiseCivil(this,n,civilRec||rec);n.name=n.label=JOB_LABELS[b.job]||'HABITANT';n.title=(sex==='female'?'Batracienne':'Batracien')+' de '+site.name;
     }
-    register(this,n);
+    register(this,n);this.restoreBatracienRoutine?.(n,rec);
    }
   }
  };
@@ -7931,6 +8183,7 @@ const Batraciens = (() => {
    syncCivil(n);return;
   }
   if(m){visual(n,'idle');syncCivil(n);return;}
+  if(this.stepBatracienRoutine?.(n,delta)){syncCivil(n);return;}
   if(b.action==='sit_down'){visual(n,'seated');syncCivil(n);return;}
   if(b.action==='stand_up'||b.action==='cower_exit'){visual(n,'idle');syncCivil(n);return;}
   c.restClock=(c.restClock+delta)%64;
@@ -7969,6 +8222,7 @@ const Batraciens = (() => {
    const rec=this.batracienCombatRecords[n.id],look=appearance(n.id,'male',rec),b=n.batracien={...look,role,site:site?.id||null,action:'idle',elapsed:0,distance:0,seed:hash(n.id),lastX:n.x,lastY:n.y,cooldown:1,contactDone:false,inv:0};
    if(n.eventGuard){b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=b.hp===0;n.post={x:n.x,y:n.y};n.name=n.label=({village_guard:'GARDE',channel_sentinel:'SENTINELLE',boat_escort:'ESCORTE',scout:'ÉCLAIREUR',captain:'CHEF'})[role]||'GARDE';n.look='batracien';}
    else {n.kind='batracien';n.originalKind='cultist';n.speed=24;n.reach=C.combat[role].range;n.r=6;n.damage=1;n.wind=n.attack=n.melee=0;n.homeX=n.x;n.homeY=n.y;if(finite(rec?.hp)&&rec.hp>0)n.hp=clampN(rec.hp,1,n.maxHp);}
+   if(n.eventGuard)this.restoreBatracienRoutine?.(n,rec);
    if(rec&&['thrust','slash','throw_javelin'].includes(rec.action)&&finite(rec.elapsed)&&rec.elapsed>=0&&rec.elapsed<.72){b.action=rec.action;b.elapsed=rec.elapsed;b.contactDone=rec.contactDone===true;b.lockedDir=[0,1,2,3].includes(rec.lockedDir)?rec.lockedDir:n.dir;b.targetId=typeof rec.targetId==='string'&&rec.targetId.length<128?rec.targetId:null;}
   }
  };
@@ -7982,13 +8236,13 @@ const Batraciens = (() => {
  function strike(g,n,t){if(!alive(t)||!g.sameLevel(n,t)||!g.lineClear(n,t))return;
   if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
  }
- function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;}
+ function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;n.wind=spec.contact;n.attack=.72;g.foeSound?.(n,'melee','cultist');}
  function stepAttack(g,n,t,dt){const b=n.batracien,spec=combatSpec(n),before=b.elapsed;b.elapsed+=dt;n.dir=b.lockedDir??n.dir;
   if(!b.contactDone&&before<spec.contact&&b.elapsed>=spec.contact){b.contactDone=true;
    if(spec.attack==='throw_javelin'){if(alive(t)&&g.sameLevel(n,t)&&g.lineClear(n,t))g.launchBatracienJavelin(n,t);}
    else if(alive(t)&&dist(n,t)<=spec.range&&front(g,n,t))strike(g,n,t);
   }
-  if(b.elapsed>=.72){visual(n,'idle');return false;}return true;
+  n.wind=Math.max(0,spec.contact-b.elapsed);n.attack=Math.max(0,.72-b.elapsed);if(b.elapsed>=.72){n.wind=n.attack=0;visual(n,'idle');return false;}return true;
  }
  Game.prototype.stepBatracienEnemy=function(e,dt){
   const b=e.batracien;if(!b||e.dead)return;const before={x:e.x,y:e.y};
@@ -8010,24 +8264,36 @@ const Batraciens = (() => {
   }else if(finite(br.tx)&&finite(br.ty)){const dx=br.tx-e.x,dy=br.ty-e.y,dd=Math.hypot(dx,dy);if(dd>5){e.dir=this.direction(dx,dy);this.move(e,dx/dd*e.speed*dt,dy/dd*e.speed*dt);}}
   const moved=dist(e,before);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
  };
+ const nativeEnemyDamage=Game.prototype.damageEnemy;
+ Game.prototype.damageEnemy=function(n,amount){if(n?.batracien?.role&&this.npcs.includes(n))return this.damageBatracienGuard(n,amount,this.player);return nativeEnemyDamage.call(this,n,amount);};
  Game.prototype.damageBatracienGuard=function(n,amount,source){
-  const b=n?.batracien;if(!b?.role||!alive(n)||b.inv>0||!finite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
-  if(combatSpec(n).shield&&source&&front(this,n,source)&&b.action==='guard'&&!(source===this.player&&source.combo===3)){visual(n,'block',true);b.inv=.45;this.emit('block');return true;}
-  b.hp=Math.max(0,b.hp-amount);b.dead=b.hp===0;b.inv=.9;b.cooldown=1;visual(n,b.dead?'death':'hit',true);n.path=[];
+  const b=n?.batracien;if(!b?.role||!alive(n)||!finite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
+  const playerHit=source===this.player;if(!playerHit&&b.inv>0)return false;
+  if(playerHit)this.reportBatracienAssault?.(n,source);
+  n.kind='batracien';n.r=6;n.maxHp=combatSpec(n).hp;n.hp=b.hp;n.stun=n.stun||0;
+  if(combatSpec(n).shield&&source&&front(this,n,source)&&b.action==='guard'&&n.stun<=0){
+   if(playerHit&&source.combo===3){n.stun=.85;this.emit('parry');}
+   else{visual(n,'block',true);b.inv=.45;n.wind=n.attack=0;this.burst(n.x,n.y-14,'#c9d4bc',6);if(playerHit)this.player.hitPause=.035;this.emit('block');return true;}
+  }
+  if(playerHit){nativeEnemyDamage.call(this,n,amount);b.hp=n.hp;b.dead=n.dead===true;}
+  else{b.hp=Math.max(0,b.hp-amount);b.dead=b.hp===0;n.hp=b.hp;n.dead=b.dead;n.flash=.075;n.hurt=.38;n.stun=Math.max(n.stun,.38);this.spill(n,source||n,false);this.emit('hit');if(b.dead)this.spill(n,source||n,true);}
+  b.inv=.9;b.cooldown=1;n.wind=n.attack=0;visual(n,b.dead?'death':'hit',true);n.path=[];
   if(b.dead){this.atlasDeaths[n.id]=true;if(this.dialogue?.who===n)this.dialogue=null;}
   this.emit('save');return true;
  };
  Game.prototype.stepBatracienWardens=function(dt){
   if(!active(this))return;
   for(const n of this.npcs.filter(isArmed)){
-   const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);
+   const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);for(const key of ['flash','hurt','stun'])n[key]=Math.max(0,(n[key]||0)-dt);
+   if(n.stun>0){n.wind=n.attack=0;visual(n,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);continue;}
    if(b.dead){b.elapsed=Math.min(.96,b.elapsed+dt);continue;}
    if(['hit','block'].includes(b.action)&&b.elapsed<duration(n,b.action)){b.elapsed+=dt;continue;}
-   const t=this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
-   if(['thrust','slash','throw_javelin'].includes(b.action)){const target=this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
-   if(t){n.dir=this.direction(t.x-n.x,t.y-n.y);const s=combatSpec(n);
+   const t=this.batracienWardenTarget?.(n)||this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
+   if(['thrust','slash','throw_javelin'].includes(b.action)){const target=b.targetId==='player'?(this.isHostileBatracien(n)?this.player:null):this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
+   if(t){n.ai='chase';n.dir=this.direction(t.x-n.x,t.y-n.y);const s=combatSpec(n);
     if(dist(n,t)<=s.range){if(b.cooldown<=0)startAttack(this,n,t);else{visual(n,s.shield?'guard':'idle');b.elapsed+=dt;}continue;}
     this.walkNpc(n,t,dt);
+   }else if(this.isHostileBatracien?.(n)){n.ai='return';if(dist(n,n.post)>3)this.walkNpc(n,n.post,dt);
    }else if(!n.eventId||this.worldState.active(this.clock).some(e=>e.id===n.eventId)){
     const post=n.post||n;const phase=Math.floor((this.time+(b.seed%12))/8)%4,offset=[[0,0],[24,0],[0,0],[-24,0]][phase],to={x:post.x+offset[0],y:post.y+offset[1]};
     if(dist(n,to)>2&&!this.solid(to.x,to.y,6,0))this.walkNpc(n,to,dt);
@@ -8037,14 +8303,14 @@ const Batraciens = (() => {
  };
  Game.prototype.launchBatracienJavelin=function(n,t){
   if((this.batracienMissiles||[]).length>=12)return;const b=n.batracien,[fx,fy]=this.facing(b.lockedDir??n.dir);
-  (this.batracienMissiles??=[]).push({x:n.x+fx*8,y:n.y+fy*8,vx:fx*112,vy:fy*112,life:1.4,level:n.level||0,owner:n.id,friendly:this.npcs.includes(n),damage:1,dir:b.lockedDir??n.dir});
+  (this.batracienMissiles??=[]).push({x:n.x+fx*8,y:n.y+fy*8,vx:fx*112,vy:fy*112,life:1.4,level:n.level||0,owner:n.id,friendly:this.npcs.includes(n)&&!this.isHostileBatracien?.(n),law:!!this.isHostileBatracien?.(n),damage:1,dir:b.lockedDir??n.dir});
  };
  function swept(s,t,dx,dy,r=7){const ll=dx*dx+dy*dy,u=ll?clampN(((t.x-s.x)*dx+(t.y-s.y)*dy)/ll,0,1):0;return Math.hypot(t.x-s.x-dx*u,t.y-s.y-dy*u)<r?u:null;}
  Game.prototype.stepBatracienMissiles=function(dt){
   if(!active(this)){if(this.journey||this.dead||this.dying||this.sleeping)this.batracienMissiles=[];return;}
   for(const s of this.batracienMissiles||[]){const dx=s.vx*dt,dy=s.vy*dt,parts=Math.max(1,Math.ceil(Math.hypot(dx,dy)/3));let wall=1.01;
    for(let j=1;j<=parts;j++)if(this.solid(s.x+dx*j/parts,s.y+dy*j/parts,1,s.level)){wall=j/parts;break;}
-   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
+   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
    for(const t of targets){if(!this.sameLevel(s,t))continue;const u=swept(s,t,dx,dy);if(u!==null&&u<wall&&(!first||u<first.u)&&this.lineClear(s,t))first={t,u};}
    if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
    else if(wall<=1)s.life=0;else{s.x+=dx;s.y+=dy;s.life-=dt;}
@@ -8066,15 +8332,15 @@ const Batraciens = (() => {
  };
  Game.prototype.batracienCorpse=function(e){if(e.batracienCorpseAdded)return;e.batracienCorpseAdded=true;this.remains.push({id:e.id,kind:'batracien',x:e.x,y:e.y,level:e.level||0,dir:e.dir,role:e.batracien.role,palette:e.batracien.palette,t0:this.time});if(this.remains.length>75)this.remains.shift();};
  const oldSpill=Game.prototype.spill;
- Game.prototype.spill=function(e,source,fatal){if(e.batracien&&fatal){this.batracienCorpse(e);return;}return oldSpill.call(this,e,source,fatal);};
+ Game.prototype.spill=function(e,source,fatal){if(e.batracien&&fatal){oldSpill.call(this,e,source,true);if(!this.npcs.includes(e))this.batracienCorpse(e);return;}return oldSpill.call(this,e,source,fatal);};
  const oldUpdate=Game.prototype.update;
  Game.prototype.update=function(dt,input){dt=clampN(Number(dt)||0,0,.04);const run=active(this);oldUpdate.call(this,dt,input);if(run&&active(this)){this.stepBatracienWardens(dt);this.stepBatracienMissiles(dt);}else if(this.journey||this.dying||this.dead||this.sleeping)this.batracienMissiles=[];};
  const oldRespawn=Game.prototype.respawn;
  Game.prototype.respawn=function(){oldRespawn.call(this);this.batracienMissiles=[];for(const e of this.enemies.filter(e=>e.batracien&&!e.dead)){visual(e,'idle',true);e.batracien.cooldown=1;e.batracien.contactDone=false;}};
  const oldSerialize=Game.prototype.serialize;
  Game.prototype.serialize=function(){const out=oldSerialize.call(this);if(!out.atlas)return out;const records={...this.batracienRecords};
-  for(const n of this.npcs.filter(n=>n.batracien&&!n.eventId)){const b=n.batracien;records[n.id]={id:n.id,site:n.site,sex:b.sex,palette:b.palette,role:b.role,job:b.job,x:n.x,y:n.y,dir:n.dir,post:n.post,hp:n.civilian?.hp??b.hp,dead:n.civilian?.dead??b.dead??false,distance:b.distance};}
-  const incident=[...this.npcs.filter(n=>n.eventId&&n.batracien),...this.enemies.filter(e=>e.eventId&&e.batracien&&!e.dead)].map(n=>({id:n.id,palette:n.batracien.palette,hp:n.batracien.hp??n.hp,action:n.batracien.action,elapsed:n.batracien.elapsed,contactDone:n.batracien.contactDone,lockedDir:n.batracien.lockedDir,targetId:n.batracien.targetId}));
+  for(const n of this.npcs.filter(n=>n.batracien&&!n.eventId)){const b=n.batracien;records[n.id]={id:n.id,site:n.site,sex:b.sex,palette:b.palette,role:b.role,job:b.job,x:n.x,y:n.y,dir:n.dir,post:n.post,hp:n.civilian?.hp??b.hp,dead:n.civilian?.dead??b.dead??false,distance:b.distance,routine:this.saveBatracienRoutine?.(n),hostileUntil:finite(b.hostileUntil)?b.hostileUntil:0};}
+  const incident=[...this.npcs.filter(n=>n.eventId&&n.batracien),...this.enemies.filter(e=>e.eventId&&e.batracien&&!e.dead)].map(n=>({id:n.id,palette:n.batracien.palette,hp:n.batracien.hp??n.hp,action:n.batracien.action,elapsed:n.batracien.elapsed,contactDone:n.batracien.contactDone,lockedDir:n.batracien.lockedDir,targetId:n.batracien.targetId,hostileUntil:n.batracien.hostileUntil||0}));
   out.atlas.batraciens={version:1,people:Object.values(records).slice(0,128),incidents:incident.slice(-64)};return out;
  };
  function atlasFor(renderer,n){
@@ -8084,7 +8350,7 @@ const Batraciens = (() => {
   while(bank.size>12){const oldest=bank.keys().next().value;bank.get(oldest).clear();bank.delete(oldest);}return a;
  }
  const oldNpcDraw=Renderer.prototype.npcDraw;
- Renderer.prototype.npcDraw=function(n){if(!n.batracien)return oldNpcDraw.call(this,n);const b=n.batracien,c=this.c;if((n.alpha??1)<=0||this.cam&&(n.x<this.cam.x-96||n.x>this.cam.x+this.W+96||n.y<this.cam.y-96||n.y>this.cam.y+this.H+96))return;
+ Renderer.prototype.npcDraw=function(n){if(!n.batracien)return oldNpcDraw.call(this,n);if(this.g.isHostileBatracien?.(n))return this.enemy(n);const b=n.batracien,c=this.c;if((n.alpha??1)<=0||this.cam&&(n.x<this.cam.x-96||n.x>this.cam.x+this.W+96||n.y<this.cam.y-96||n.y>this.cam.y+this.H+96))return;
   const api=b.role?Armed:Art,frame=api.frameAt(b.action,b.elapsed,b.distance),atlas=atlasFor(this,n),dead=b.dead||n.civilian?.dead;
   c.save();try{c.globalAlpha*=n.alpha??1;c.imageSmoothingEnabled=false;
    if(!b.role&&b.work&&!member(this.g,n)){const activeWork=b.action===b.job||b.job==='fish_cast'&&b.action.startsWith('fish_'),f=activeWork?frame:0,action=activeWork?b.action:b.job;
@@ -8109,6 +8375,195 @@ const Batraciens = (() => {
 })();
 // Public inspection surface for automated integration tests and authored scenarios.
 Game.batracienRuntime=Batraciens;
+
+/* Hearthreaver: local routines, shared conversations and witnessed assaults.
+ * Pure additions to the approved art. Coordinates and speed are game pixels.
+ * Roads are the real land graph; no new routes, war or global species hostility.
+ */
+const BatracienSociety = (() => {
+ 'use strict';
+ const C=BATRACIEN_CONFIG.society, B=Game.batracienRuntime;
+ const roadSpecs=new Map(C.roads.map(r=>['resident-batracien-'+r.site+'-'+r.slot,r]));
+ const routes=new Map(), finite=Number.isFinite;
+ const alive=n=>n&&!n.dead&&!n.civilian?.dead&&!n.batracien?.dead&&(n.alpha??1)>.5&&n.phase!=='away';
+ const member=(g,n)=>g.party?.some(c=>c.id===n.id);
+ const locked=n=>['hit','death','startle','sit_down','stand_up','cower','cower_enter','cower_exit'].includes(n.batracien?.action);
+ const point=p=>p&&finite(p.x)&&finite(p.y);
+ const clampNum=(v,lo,hi,d=lo)=>finite(v)?Math.max(lo,Math.min(hi,v)):d;
+ function route(id,reverse=false){
+  const key=id+':'+reverse;if(routes.has(key))return routes.get(key);const spec=roadSpecs.get(id);if(!spec)return null;
+  const from=reverse?spec.to:spec.site,to=reverse?spec.site:spec.to;
+  const path=Atlas.findPath(from,to,{mode:'foot',allowBoat:false});
+  if(!path?.length)return null;
+  const segments=path.map(leg=>{const a=Atlas.vertices.get(leg.from),b=Atlas.vertices.get(leg.to);return {edge:leg.edge,road:leg.road,a:Atlas.toGame(a[0],a[1]),b:Atlas.toGame(b[0],b[1]),length:leg.length*16};});
+  if(segments.some(s=>!point(s.a)||!point(s.b)||!finite(s.length)||s.length<=0||!Atlas.edgeById.get(s.edge)?.modes.includes('foot')))return null;
+  const result={from,to,segments};routes.set(key,result);return result;
+ }
+ function roadPoint(path,index,progress){const s=path?.segments[index];if(!s)return null;const t=clampNum(progress/s.length,0,1);return {x:s.a.x+(s.b.x-s.a.x)*t,y:s.a.y+(s.b.y-s.a.y)*t};}
+ function validRoad(g,id,record){
+  if(!point(record))return false;const r=record.routine,p=route(id,r?.reverse===true);
+  if(!p||!r||!Number.isInteger(r.edge)||r.edge<0||r.edge>=p.segments.length||!finite(r.progress)||r.progress<0||r.progress>p.segments[r.edge].length)return false;
+  const expected=roadPoint(p,r.edge,r.progress);return dist(record,expected)<=320&&!g.solid(record.x,record.y,6,0);
+ }
+ Game.prototype.validBatracienRoutePosition=function(id,r){return validRoad(this,id,r);};
+ Game.prototype.isHostileBatracien=function(n){return !!n?.batracien?.role&&alive(n)&&finite(n.batracien.hostileUntil)&&n.batracien.hostileUntil>this.clock;};
+ Game.prototype.combatTargets=function(){return [...this.enemies,...this.npcs.filter(n=>this.isHostileBatracien(n))];};
+ Game.prototype.restoreBatracienRoutine=function(n,record){
+  const b=n.batracien;if(!b)return;
+  if(b.role){n.kind='batracien';n.r=6;n.hp=b.hp;n.maxHp=BATRACIEN_CONFIG.combat[b.role].hp;n.dead=!!b.dead;n.stun=n.flash=n.hurt=0;
+   const clock=this.worldState?.clock??this.clock;b.hostileUntil=clampNum(record?.hostileUntil,0,clock+C.angerMinutes);n.ai=b.hostileUntil>clock?'alert':'idle';return;}
+  const slot=Number(n.id.split('-').at(-1)),kind=roadSpecs.has(n.id)?'road':C.localSlots.includes(slot)?'local':'worker';
+  const r=b.routine={kind,mode:'work',wait:2+b.seed%10,goal:null,cycle:0,partner:null,chatUntil:0,chatAfter:0,edge:0,progress:0,reverse:false,approach:true,blocked:0};
+  if(kind==='road'){n.name=n.label='VOYAGEUR';const spec=roadSpecs.get(n.id);n.title=(b.sex==='female'?'Voyageuse':'Voyageur')+' de '+Atlas.byId[spec.site].name;
+   n.greet=()=>['Je circule entre '+Atlas.byId[spec.site].name+' et '+Atlas.byId[spec.to].name+'.','Je reste sur les routes et j’attends quand un passage est menacé.'];}
+  const saved=record?.routine;if(saved?.kind!==kind)return;
+  r.cycle=Number.isInteger(saved.cycle)?clampNum(saved.cycle,0,100000):0;r.wait=clampNum(saved.wait,0,60,5);
+  if(kind==='road'&&validRoad(this,n.id,record)){r.reverse=saved.reverse===true;r.edge=saved.edge;r.progress=saved.progress;r.approach=saved.approach===true;
+   Object.assign(n,{x:record.x,y:record.y});n.post={x:n.x,y:n.y};r.mode='road';
+  }else if(kind!=='road'&&point(record)&&dist(record,n.post)<C.walkRadius+200&&!this.solid(record.x,record.y,6,0)){Object.assign(n,{x:record.x,y:record.y});}
+  b.lastX=n.x;b.lastY=n.y;n.civilian.lastX=n.x;n.civilian.lastY=n.y;
+ };
+ Game.prototype.saveBatracienRoutine=function(n){const r=n.batracien?.routine;return r?{kind:r.kind,cycle:r.cycle,wait:r.wait,edge:r.edge,progress:r.progress,reverse:r.reverse,approach:r.approach}:undefined;};
+ function safe(g,n,p,margin=18){
+  if(!point(p)||g.solid(p.x,p.y,6,n.level||0)||g.localThreatAt(p.x,p.y,n.level||0,100)||g.dangerAt(p.x,p.y,n.level||0).unsafe)return false;
+  if(g.stations?.some(s=>dist(p,s.actor)<32)||[...g.levers,...g.chests,...g.steles].some(s=>dist(s,p)<28))return false;
+  return !g.npcs.some(a=>a!==n&&alive(a)&&dist(a,p)<margin);
+ }
+ Game.prototype.cancelBatracienConversation=function(n){
+  const r=n?.batracien?.routine;if(!r)return;const partner=this.npcs.find(a=>a.id===r.partner);
+  for(const a of [n,partner]){const s=a?.batracien?.routine;if(!s||a!==n&&s.partner!==n.id)continue;s.partner=null;s.chatUntil=0;s.chatAfter=this.time+24;s.goal=null;s.wait=4;
+   if(a.batracien.action==='talk')this.civilianAction(a,'idle');}
+ };
+ Game.prototype.startBatracienConversation=function(a,b){
+  if(a===b||![a,b].every(n=>B.isCivil(n)&&alive(n)&&!member(this,n)&&!n.dangerState&&!locked(n)&&n.batracien.routine&&!n.batracien.routine.partner&&this.time>=n.batracien.routine.chatAfter)||this.dialogue||!this.sameLevel(a,b)||dist(a,b)>C.talkRadius||!this.lineClear(a,b))return false;
+  if(this.localThreatAt(a.x,a.y,a.level||0)||this.localThreatAt(b.x,b.y,b.level||0))return false;
+  const end=this.time+3+(civilianHash(a.id+b.id)%4);
+  for(const [n,other]of [[a,b],[b,a]]){const r=n.batracien.routine;r.partner=other.id;r.chatUntil=end;r.chatStarted=this.time;n.path=[];n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk',true);}
+  return true;
+ };
+ function chooseLocal(g,n){
+  const r=n.batracien.routine,others=g.npcs.filter(a=>a!==n&&B.isCivil(a)&&a.site===n.site&&alive(a)&&!a.dangerState&&!member(g,a)&&!a.batracien.routine?.partner&&dist(n,a)<360);
+  const other=others.length?others[(n.batracien.seed+r.cycle)%others.length]:null;
+  if(other)for(const [dx,dy]of [[26,0],[-26,0],[0,26],[0,-26]]){const p={x:other.x+dx,y:other.y+dy};if(safe(g,n,p)){r.goal=p;r.visit=other.id;return true;}}
+  const centre=Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y);
+  for(let i=0;i<16;i++){const angle=(r.cycle*5+i+n.batracien.seed%16)*Math.PI/8,rad=72+(i%3)*40,p={x:Math.round(centre.x+Math.cos(angle)*rad),y:Math.round(centre.y+Math.sin(angle)*rad)};
+   if(safe(g,n,p)){r.goal=p;r.visit=null;return true;}}
+  return false;
+ }
+ function roadOpen(g,s,p){const status=g.worldState.edgeStatus(Atlas.edgeById.get(s.edge),g.clock);return !status.closed&&!status.events?.some(e=>Atlas.EVENT_TYPES[e.type].evacuate)&&safe(g,nullActor,p,0);}
+ // `safe` also checks living bodies; this sentinel never aliases a real actor.
+ const nullActor={level:0};
+ function stepRoad(g,n,dt){
+  const b=n.batracien,r=b.routine,path=route(n.id,r.reverse),s=path?.segments[r.edge];if(!s){g.civilianAction(n,'idle');return true;}
+  if(r.wait>0){r.wait=Math.max(0,r.wait-dt);g.civilianAction(n,'idle');return true;}
+  const h=((g.clock/60)%24+24)%24;if(h<6||h>=22){g.civilianAction(n,'idle');return true;}
+  let dest=r.approach?s.a:roadPoint(path,r.edge,Math.min(s.length,r.progress+48));
+  if(!roadOpen(g,s,dest)){r.wait=3;g.civilianAction(n,'idle');return true;}
+  if(r.approach&&dist(n,s.a)<10){r.approach=false;r.progress=0;return true;}
+  const old={x:n.x,y:n.y};g.walkNpc(n,dest,dt);const moved=dist(old,n);g.civilianAction(n,moved>.001?'walk':'idle');
+  r.blocked=moved>.001?0:r.blocked+dt;if(r.blocked>2){n.path=[];r.wait=2;r.blocked=0;}
+  if(!r.approach){const dx=s.b.x-s.a.x,dy=s.b.y-s.a.y,L=dx*dx+dy*dy;r.progress=clampNum(((n.x-s.a.x)*dx+(n.y-s.a.y)*dy)/L*s.length,0,s.length);
+   // The return point during an alarm is the last position on this road, never a distant home.
+   n.post={x:n.x,y:n.y};
+   if(dist(n,s.b)<10){r.edge++;r.progress=0;if(r.edge>=path.segments.length){r.edge=0;r.reverse=!r.reverse;r.approach=true;r.wait=30;r.cycle++;}}}
+  return true;
+ }
+ Game.prototype.stepBatracienRoutine=function(n,dt){
+  const b=n.batracien,r=b.routine;if(!r)return false;
+  if(r.partner){const other=this.npcs.find(a=>a.id===r.partner);
+   if(!alive(other)||other.dangerState||member(this,other)||locked(other)||this.time>=r.chatUntil||other.batracien?.routine?.partner!==n.id||dist(n,other)>C.talkRadius||!this.lineClear(n,other)){this.cancelBatracienConversation(n);}
+   else{n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk');return true;}}
+  if(r.kind==='worker')return false;
+  if(r.kind==='road')return stepRoad(this,n,dt);
+  const h=((this.clock/60)%24+24)%24;if(h<6||h>=22){r.goal=null;return false;}
+  if(r.wait>0){r.wait=Math.max(0,r.wait-dt);return false;}
+  if(locked(n))return false;
+  if(!r.goal){r.cycle++;if(!chooseLocal(this,n)){r.wait=8;return false;}}
+  if(!safe(this,n,r.goal,10)){r.goal=null;r.wait=2;return false;}
+  if(dist(n,r.goal)<10){const other=this.npcs.find(a=>a.id===r.visit);r.goal=null;r.wait=8+b.seed%12;if(other)this.startBatracienConversation(n,other);return true;}
+  const old={x:n.x,y:n.y};this.walkNpc(n,r.goal,dt);const moved=dist(n,old);this.civilianAction(n,moved>.001?'walk':'idle');r.blocked=moved>.001?0:r.blocked+dt;
+  if(r.blocked>2){r.goal=null;n.path=[];r.wait=3;r.blocked=0;}return true;
+ };
+ // World-time progression of distant road travellers, sampled on the same graph.
+ // Stop before the visible area; near actors always use collision-checked local movement.
+ const advance=Game.prototype.advanceAtlas;
+ Game.prototype.advanceAtlas=function(dt=0){const previous=this.atlasLastClock??this.clock;advance.call(this,dt);const minutes=Math.max(0,this.clock-previous);
+  if(!minutes||this.dialogue||this.dead||this.dying)return;
+  for(const n of this.npcs){const r=n.batracien?.routine;if(r?.kind!=='road'||!alive(n)||n.dangerState||member(this,n)||r.partner||dist(n,this.player)<1100)continue;
+   if(r.wait>0){r.wait=Math.max(0,r.wait-minutes*DAY_LEN/1440);continue;}
+   if(r.approach){stepRoad(this,n,Math.min(2,minutes*DAY_LEN/1440));continue;}
+   const hour=((this.clock/60)%24+24)%24;if(hour<6||hour>=22)continue;
+   let budget=Math.min(6144,minutes*80*16),count=0;
+   while(budget>.01&&count++<128){const path=route(n.id,r.reverse),s=path?.segments[r.edge];if(!s)break;
+    const amount=Math.min(48,budget,s.length-r.progress),p=roadPoint(path,r.edge,r.progress+amount);
+    if(dist(p,this.player)<1000||!roadOpen(this,s,p))break;
+    n.dir=this.direction(p.x-n.x,p.y-n.y);Object.assign(n,p);r.progress+=amount;budget-=amount;n.post={...p};n.batracien.lastX=n.x;n.batracien.lastY=n.y;
+    if(r.progress>=s.length-.01){r.edge++;r.progress=0;if(r.edge>=path.segments.length){r.edge=0;r.reverse=!r.reverse;r.approach=true;r.wait=30;r.cycle++;break;}}
+   }
+  }
+ };
+ // Only a direct, witnessed assault creates anger. Hits from monsters never accuse Kaldor.
+ Game.prototype.reportBatracienAssault=function(victim,source){
+  if(source!==this.player||!victim||!this.npcs.includes(victim)||!this.sameLevel(victim,source))return false;
+  this.cancelBatracienConversation(victim);let alerted=false;
+  for(const n of this.npcs){if(!B.isArmed(n)||!alive(n)||!this.sameLevel(n,victim))continue;
+   if(n!==victim&&(dist(n,victim)>C.witnessRadius||!this.lineClear(n,victim)&&!this.lineClear(n,source)))continue;
+   const b=n.batracien,fresh=!this.isHostileBatracien(n);b.hostileUntil=this.clock+C.angerMinutes;b.lastSeen=this.time;b.lastPlayer={x:source.x,y:source.y};n.provoked=true;n.ai='chase';n.kind='batracien';n.hp=b.hp;n.maxHp=BATRACIEN_CONFIG.combat[b.role].hp;n.r=6;n.path=[];
+   if(fresh){b.cooldown=Math.min(b.cooldown||0,.5);alerted=true;}
+   if(this.dialogue?.who===n)this.dialogue=null;
+  }
+  if(alerted)this.emit('save');
+  if(alerted)this.emit('notice',{title:'Les gardes interviennent',text:'Une agression a été vue. Éloigne-toi et cesse le combat pour les semer.'});
+  return alerted;
+ };
+ Game.prototype.batracienWardenTarget=function(n){
+  if(!this.isHostileBatracien(n))return null;const p=this.player,b=n.batracien;
+  if(this.dead||this.dying||!this.sameLevel(n,p)||dist(n,n.post)>C.pursuitRadius)return null;
+  if(dist(n,p)<220&&this.lineClear(n,p)){b.lastSeen=this.time;b.lastPlayer={x:p.x,y:p.y};return p;}
+  return null; // Do not track the player's hidden live coordinates through walls.
+ };
+ const localThreat=Game.prototype.localThreatAt;
+ Game.prototype.localThreatAt=function(x,y,level=0,radius=CIVILIAN_THREAT_RADIUS){
+  return localThreat.call(this,x,y,level,radius)||this.npcs.find(n=>this.isHostileBatracien(n)&&(n.level||0)===level&&Math.hypot(n.x-x,n.y-y)<radius&&(radius<=48||this.lineClear({x,y,level},n)))||null;
+ };
+ const damageCivilian=Game.prototype.damageCivilian;
+ Game.prototype.damageCivilian=function(n,amount,source){
+  const c=this.ensureCivilian(n),before=c?.hp,wasDead=c?.dead;
+  const accepted=damageCivilian.call(this,n,amount,source);if(!accepted)return accepted;
+  if(source===this.player)this.reportBatracienAssault(n,source);
+  this.cancelBatracienConversation(n);
+  if(c.hp<before){n.flash=.075;this.spill(n,source||{x:n.x,y:n.y+10},false);this.emit('hit',{heavy:source===this.player&&source.combo===3});
+   if(source===this.player)this.player.hitPause=source.combo===3?.075:.04;
+   if(c.dead&&!wasDead){this.spill(n,source||n,true);this.emit('bodyfall');}}
+  return accepted;
+ };
+ const guardStrike=Game.prototype.guardStrike;
+ Game.prototype.guardStrike=function(n,e){const hp=e.hp;guardStrike.call(this,n,e);if(e.hp<hp){this.spill(e,n,false);if(e.dead)this.spill(e,n,true);this.emit('hit');}};
+ const talk=Game.prototype.talkTo;
+ Game.prototype.talkTo=function(n){if(this.isHostileBatracien(n))return false;this.cancelBatracienConversation(n);return talk.call(this,n);};
+ const present=Game.prototype.npcPresent;
+ Game.prototype.npcPresent=function(n){return !this.isHostileBatracien(n)&&present.call(this,n);};
+ const assess=Game.prototype.assessCivilians;
+ Game.prototype.assessCivilians=function(force=false){assess.call(this,force);for(const n of this.npcs)if(n.dangerState&&n.batracien?.routine?.partner)this.cancelBatracienConversation(n);};
+ const update=Game.prototype.update;
+ Game.prototype.update=function(dt,input){const running=!this.dialogue&&!this.journey&&!this.sleeping&&!this.dying&&!this.dead;update.call(this,dt,input);
+  if(running)for(const n of this.npcs)if(n.civilian)n.flash=Math.max(0,(n.flash||0)-clampNum(dt,0,.04));
+ };
+ // A saved travel quote or a bed is not an escape button during a witnessed fight.
+ const startJourney=Game.prototype.startJourney;
+ Game.prototype.startJourney=function(plan){if(this.npcs.some(n=>this.isHostileBatracien(n)&&this.sameLevel(n,this.player)&&dist(n,this.player)<220&&this.lineClear(n,this.player))){this.emit('notice',{title:'Combat en cours',text:'Sème les gardes avant de prendre un transport.'});return false;}return startJourney.call(this,plan);};
+ const sleep=Game.prototype.sleep;
+ Game.prototype.sleep=function(minutes){if(this.npcs.some(n=>this.isHostileBatracien(n)&&this.sameLevel(n,this.player)&&dist(n,this.player)<220&&this.lineClear(n,this.player)))return false;return sleep.call(this,minutes);};
+ const draw=Renderer.prototype.npcDraw;
+ Renderer.prototype.npcDraw=function(n){draw.call(this,n);if(!alive(n)||this.g.isHostileBatracien(n)||!n._img||this.cam&&(n.x<this.cam.x-80||n.x>this.cam.x+this.W+80||n.y<this.cam.y-80||n.y>this.cam.y+this.H+80))return;
+  const c=this.c;if(n.flash>0){c.save();c.globalAlpha=.35;c.globalCompositeOperation='lighter';c.drawImage(n._img,Math.round(n.x)-40,Math.round(n.y)-52);c.restore();}
+  const r=n.batracien?.routine;if(r?.partner&&this.g.time<r.chatUntil){const turn=Math.floor((this.g.time-(r.chatStarted||0))/1.5)%2,first=n.id<r.partner;
+   if(first===(turn===0)){const line=first?'Bonne route.':'Prends soin de toi.',w=textW(c,line)+8,x=Math.round(n.x-w/2),y=Math.round(n.y)-43;c.save();box(c,x,y-2,w,12,PAL.ink);text(c,line,x+4,y,'#fff0be');c.restore();}}
+
+ };
+ return Object.freeze({route,roadPoint,roadSpecs,safe,config:C});
+})();
+Game.batracienSociety=BatracienSociety;
 
 // END WORLD ATLAS
 // BEGIN SNOW RENDER

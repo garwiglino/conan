@@ -36,7 +36,7 @@ const Batraciens = (() => {
  function safePosition(g,site,id,job=null){
   const centre=Atlas.toGame(site.x,site.y),seed=hash(id),props=[...g.world.props,...g.atlasProps],mechanisms=[...g.levers,...g.steles,...g.chests];
   const field=['rice','gather','harvest','hoe','sow'].includes(job);
-  for(let j=0;j<96;j++){
+  for(let j=0;j<160;j++){
    const a=((seed%32)+j%32)*Math.PI/16,r=(field?(site.radius||12)*16+48:64)+Math.floor(j/32)*32,p={x:Math.round(centre.x+Math.cos(a)*r),y:Math.round(centre.y+Math.sin(a)*r)};
    if(field&&g.tile(p.x,p.y)!==0)continue;
    if(g.solid(p.x,p.y,8,0)||g.localThreatAt(p.x,p.y,0,C.enemyClearance)||g.dangerAt(p.x,p.y,0).unsafe)continue;
@@ -77,10 +77,10 @@ const Batraciens = (() => {
     const armed=slot===jobs.length,actorId=(armed?'warden-':'resident-')+'batracien-'+id+'-'+(armed?'0':slot);
     if(this.npcs.some(n=>n.id===actorId))continue;
     const rec=this.batracienRecords[actorId],civilRec=this.civilianRecords?.[actorId],partyRec=saved?.party?.find(p=>p.id===actorId),centre=Atlas.toGame(site.x,site.y);
-    const validSaved=validPoint(rec)&&dist(rec,centre)<2000;
+    const validSaved=validPoint(rec)&&(dist(rec,centre)<2000||this.validBatracienRoutePosition?.(actorId,rec));
     let pos=(validSaved&&(rec.dead||partyRec))?{x:rec.x,y:rec.y}:safePosition(this,site,actorId,armed?null:jobs[slot]);
     if(!pos)continue;
-    const sex=armed||slot%2===0?'male':'female',look=appearance(actorId,sex,rec);
+    const road=C.society?.roads.find(r=>r.site===id&&r.slot===slot);const sex=armed?'male':road?.sex||(slot%2===0?'male':'female'),look=appearance(actorId,sex,rec);
     const b={...look,site:id,role:armed?role:null,action:'idle',elapsed:0,distance:0,lastX:pos.x,lastY:pos.y,seed:hash(actorId),contactDone:false};
     const n={id:actorId,...pos,post:{...pos},dir:2,baseDir:2,level:0,alpha:1,world:true,site:id,resident:!armed,batracien:b,look:'batracien',head:24,name:'HABITANT',label:'HABITANT',title:'Habitant de '+site.name,
      greet:()=>armed?['Nous veillons sur les habitants et les accès de '+site.name+'.']:['Bienvenue à '+site.name+'. Les nouvelles voyagent avec les bateliers.'],topics:()=>[],bye:()=>['Bonne route.']};
@@ -93,7 +93,7 @@ const Batraciens = (() => {
     }else{if(this.npcs.filter(isCivil).length>=C.maxCivilians)continue;
      workPlan(this,n,jobs[slot]);initialiseCivil(this,n,civilRec||rec);n.name=n.label=JOB_LABELS[b.job]||'HABITANT';n.title=(sex==='female'?'Batracienne':'Batracien')+' de '+site.name;
     }
-    register(this,n);
+    register(this,n);this.restoreBatracienRoutine?.(n,rec);
    }
   }
  };
@@ -145,6 +145,7 @@ const Batraciens = (() => {
    syncCivil(n);return;
   }
   if(m){visual(n,'idle');syncCivil(n);return;}
+  if(this.stepBatracienRoutine?.(n,delta)){syncCivil(n);return;}
   if(b.action==='sit_down'){visual(n,'seated');syncCivil(n);return;}
   if(b.action==='stand_up'||b.action==='cower_exit'){visual(n,'idle');syncCivil(n);return;}
   c.restClock=(c.restClock+delta)%64;
@@ -183,6 +184,7 @@ const Batraciens = (() => {
    const rec=this.batracienCombatRecords[n.id],look=appearance(n.id,'male',rec),b=n.batracien={...look,role,site:site?.id||null,action:'idle',elapsed:0,distance:0,seed:hash(n.id),lastX:n.x,lastY:n.y,cooldown:1,contactDone:false,inv:0};
    if(n.eventGuard){b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=b.hp===0;n.post={x:n.x,y:n.y};n.name=n.label=({village_guard:'GARDE',channel_sentinel:'SENTINELLE',boat_escort:'ESCORTE',scout:'ÉCLAIREUR',captain:'CHEF'})[role]||'GARDE';n.look='batracien';}
    else {n.kind='batracien';n.originalKind='cultist';n.speed=24;n.reach=C.combat[role].range;n.r=6;n.damage=1;n.wind=n.attack=n.melee=0;n.homeX=n.x;n.homeY=n.y;if(finite(rec?.hp)&&rec.hp>0)n.hp=clampN(rec.hp,1,n.maxHp);}
+   if(n.eventGuard)this.restoreBatracienRoutine?.(n,rec);
    if(rec&&['thrust','slash','throw_javelin'].includes(rec.action)&&finite(rec.elapsed)&&rec.elapsed>=0&&rec.elapsed<.72){b.action=rec.action;b.elapsed=rec.elapsed;b.contactDone=rec.contactDone===true;b.lockedDir=[0,1,2,3].includes(rec.lockedDir)?rec.lockedDir:n.dir;b.targetId=typeof rec.targetId==='string'&&rec.targetId.length<128?rec.targetId:null;}
   }
  };
@@ -196,13 +198,13 @@ const Batraciens = (() => {
  function strike(g,n,t){if(!alive(t)||!g.sameLevel(n,t)||!g.lineClear(n,t))return;
   if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
  }
- function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;}
+ function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;n.wind=spec.contact;n.attack=.72;g.foeSound?.(n,'melee','cultist');}
  function stepAttack(g,n,t,dt){const b=n.batracien,spec=combatSpec(n),before=b.elapsed;b.elapsed+=dt;n.dir=b.lockedDir??n.dir;
   if(!b.contactDone&&before<spec.contact&&b.elapsed>=spec.contact){b.contactDone=true;
    if(spec.attack==='throw_javelin'){if(alive(t)&&g.sameLevel(n,t)&&g.lineClear(n,t))g.launchBatracienJavelin(n,t);}
    else if(alive(t)&&dist(n,t)<=spec.range&&front(g,n,t))strike(g,n,t);
   }
-  if(b.elapsed>=.72){visual(n,'idle');return false;}return true;
+  n.wind=Math.max(0,spec.contact-b.elapsed);n.attack=Math.max(0,.72-b.elapsed);if(b.elapsed>=.72){n.wind=n.attack=0;visual(n,'idle');return false;}return true;
  }
  Game.prototype.stepBatracienEnemy=function(e,dt){
   const b=e.batracien;if(!b||e.dead)return;const before={x:e.x,y:e.y};
@@ -224,24 +226,36 @@ const Batraciens = (() => {
   }else if(finite(br.tx)&&finite(br.ty)){const dx=br.tx-e.x,dy=br.ty-e.y,dd=Math.hypot(dx,dy);if(dd>5){e.dir=this.direction(dx,dy);this.move(e,dx/dd*e.speed*dt,dy/dd*e.speed*dt);}}
   const moved=dist(e,before);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
  };
+ const nativeEnemyDamage=Game.prototype.damageEnemy;
+ Game.prototype.damageEnemy=function(n,amount){if(n?.batracien?.role&&this.npcs.includes(n))return this.damageBatracienGuard(n,amount,this.player);return nativeEnemyDamage.call(this,n,amount);};
  Game.prototype.damageBatracienGuard=function(n,amount,source){
-  const b=n?.batracien;if(!b?.role||!alive(n)||b.inv>0||!finite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
-  if(combatSpec(n).shield&&source&&front(this,n,source)&&b.action==='guard'&&!(source===this.player&&source.combo===3)){visual(n,'block',true);b.inv=.45;this.emit('block');return true;}
-  b.hp=Math.max(0,b.hp-amount);b.dead=b.hp===0;b.inv=.9;b.cooldown=1;visual(n,b.dead?'death':'hit',true);n.path=[];
+  const b=n?.batracien;if(!b?.role||!alive(n)||!finite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
+  const playerHit=source===this.player;if(!playerHit&&b.inv>0)return false;
+  if(playerHit)this.reportBatracienAssault?.(n,source);
+  n.kind='batracien';n.r=6;n.maxHp=combatSpec(n).hp;n.hp=b.hp;n.stun=n.stun||0;
+  if(combatSpec(n).shield&&source&&front(this,n,source)&&b.action==='guard'&&n.stun<=0){
+   if(playerHit&&source.combo===3){n.stun=.85;this.emit('parry');}
+   else{visual(n,'block',true);b.inv=.45;n.wind=n.attack=0;this.burst(n.x,n.y-14,'#c9d4bc',6);if(playerHit)this.player.hitPause=.035;this.emit('block');return true;}
+  }
+  if(playerHit){nativeEnemyDamage.call(this,n,amount);b.hp=n.hp;b.dead=n.dead===true;}
+  else{b.hp=Math.max(0,b.hp-amount);b.dead=b.hp===0;n.hp=b.hp;n.dead=b.dead;n.flash=.075;n.hurt=.38;n.stun=Math.max(n.stun,.38);this.spill(n,source||n,false);this.emit('hit');if(b.dead)this.spill(n,source||n,true);}
+  b.inv=.9;b.cooldown=1;n.wind=n.attack=0;visual(n,b.dead?'death':'hit',true);n.path=[];
   if(b.dead){this.atlasDeaths[n.id]=true;if(this.dialogue?.who===n)this.dialogue=null;}
   this.emit('save');return true;
  };
  Game.prototype.stepBatracienWardens=function(dt){
   if(!active(this))return;
   for(const n of this.npcs.filter(isArmed)){
-   const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);
+   const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);for(const key of ['flash','hurt','stun'])n[key]=Math.max(0,(n[key]||0)-dt);
+   if(n.stun>0){n.wind=n.attack=0;visual(n,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);continue;}
    if(b.dead){b.elapsed=Math.min(.96,b.elapsed+dt);continue;}
    if(['hit','block'].includes(b.action)&&b.elapsed<duration(n,b.action)){b.elapsed+=dt;continue;}
-   const t=this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
-   if(['thrust','slash','throw_javelin'].includes(b.action)){const target=this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
-   if(t){n.dir=this.direction(t.x-n.x,t.y-n.y);const s=combatSpec(n);
+   const t=this.batracienWardenTarget?.(n)||this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
+   if(['thrust','slash','throw_javelin'].includes(b.action)){const target=b.targetId==='player'?(this.isHostileBatracien(n)?this.player:null):this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
+   if(t){n.ai='chase';n.dir=this.direction(t.x-n.x,t.y-n.y);const s=combatSpec(n);
     if(dist(n,t)<=s.range){if(b.cooldown<=0)startAttack(this,n,t);else{visual(n,s.shield?'guard':'idle');b.elapsed+=dt;}continue;}
     this.walkNpc(n,t,dt);
+   }else if(this.isHostileBatracien?.(n)){n.ai='return';if(dist(n,n.post)>3)this.walkNpc(n,n.post,dt);
    }else if(!n.eventId||this.worldState.active(this.clock).some(e=>e.id===n.eventId)){
     const post=n.post||n;const phase=Math.floor((this.time+(b.seed%12))/8)%4,offset=[[0,0],[24,0],[0,0],[-24,0]][phase],to={x:post.x+offset[0],y:post.y+offset[1]};
     if(dist(n,to)>2&&!this.solid(to.x,to.y,6,0))this.walkNpc(n,to,dt);
@@ -251,14 +265,14 @@ const Batraciens = (() => {
  };
  Game.prototype.launchBatracienJavelin=function(n,t){
   if((this.batracienMissiles||[]).length>=12)return;const b=n.batracien,[fx,fy]=this.facing(b.lockedDir??n.dir);
-  (this.batracienMissiles??=[]).push({x:n.x+fx*8,y:n.y+fy*8,vx:fx*112,vy:fy*112,life:1.4,level:n.level||0,owner:n.id,friendly:this.npcs.includes(n),damage:1,dir:b.lockedDir??n.dir});
+  (this.batracienMissiles??=[]).push({x:n.x+fx*8,y:n.y+fy*8,vx:fx*112,vy:fy*112,life:1.4,level:n.level||0,owner:n.id,friendly:this.npcs.includes(n)&&!this.isHostileBatracien?.(n),law:!!this.isHostileBatracien?.(n),damage:1,dir:b.lockedDir??n.dir});
  };
  function swept(s,t,dx,dy,r=7){const ll=dx*dx+dy*dy,u=ll?clampN(((t.x-s.x)*dx+(t.y-s.y)*dy)/ll,0,1):0;return Math.hypot(t.x-s.x-dx*u,t.y-s.y-dy*u)<r?u:null;}
  Game.prototype.stepBatracienMissiles=function(dt){
   if(!active(this)){if(this.journey||this.dead||this.dying||this.sleeping)this.batracienMissiles=[];return;}
   for(const s of this.batracienMissiles||[]){const dx=s.vx*dt,dy=s.vy*dt,parts=Math.max(1,Math.ceil(Math.hypot(dx,dy)/3));let wall=1.01;
    for(let j=1;j<=parts;j++)if(this.solid(s.x+dx*j/parts,s.y+dy*j/parts,1,s.level)){wall=j/parts;break;}
-   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
+   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
    for(const t of targets){if(!this.sameLevel(s,t))continue;const u=swept(s,t,dx,dy);if(u!==null&&u<wall&&(!first||u<first.u)&&this.lineClear(s,t))first={t,u};}
    if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
    else if(wall<=1)s.life=0;else{s.x+=dx;s.y+=dy;s.life-=dt;}
@@ -280,15 +294,15 @@ const Batraciens = (() => {
  };
  Game.prototype.batracienCorpse=function(e){if(e.batracienCorpseAdded)return;e.batracienCorpseAdded=true;this.remains.push({id:e.id,kind:'batracien',x:e.x,y:e.y,level:e.level||0,dir:e.dir,role:e.batracien.role,palette:e.batracien.palette,t0:this.time});if(this.remains.length>75)this.remains.shift();};
  const oldSpill=Game.prototype.spill;
- Game.prototype.spill=function(e,source,fatal){if(e.batracien&&fatal){this.batracienCorpse(e);return;}return oldSpill.call(this,e,source,fatal);};
+ Game.prototype.spill=function(e,source,fatal){if(e.batracien&&fatal){oldSpill.call(this,e,source,true);if(!this.npcs.includes(e))this.batracienCorpse(e);return;}return oldSpill.call(this,e,source,fatal);};
  const oldUpdate=Game.prototype.update;
  Game.prototype.update=function(dt,input){dt=clampN(Number(dt)||0,0,.04);const run=active(this);oldUpdate.call(this,dt,input);if(run&&active(this)){this.stepBatracienWardens(dt);this.stepBatracienMissiles(dt);}else if(this.journey||this.dying||this.dead||this.sleeping)this.batracienMissiles=[];};
  const oldRespawn=Game.prototype.respawn;
  Game.prototype.respawn=function(){oldRespawn.call(this);this.batracienMissiles=[];for(const e of this.enemies.filter(e=>e.batracien&&!e.dead)){visual(e,'idle',true);e.batracien.cooldown=1;e.batracien.contactDone=false;}};
  const oldSerialize=Game.prototype.serialize;
  Game.prototype.serialize=function(){const out=oldSerialize.call(this);if(!out.atlas)return out;const records={...this.batracienRecords};
-  for(const n of this.npcs.filter(n=>n.batracien&&!n.eventId)){const b=n.batracien;records[n.id]={id:n.id,site:n.site,sex:b.sex,palette:b.palette,role:b.role,job:b.job,x:n.x,y:n.y,dir:n.dir,post:n.post,hp:n.civilian?.hp??b.hp,dead:n.civilian?.dead??b.dead??false,distance:b.distance};}
-  const incident=[...this.npcs.filter(n=>n.eventId&&n.batracien),...this.enemies.filter(e=>e.eventId&&e.batracien&&!e.dead)].map(n=>({id:n.id,palette:n.batracien.palette,hp:n.batracien.hp??n.hp,action:n.batracien.action,elapsed:n.batracien.elapsed,contactDone:n.batracien.contactDone,lockedDir:n.batracien.lockedDir,targetId:n.batracien.targetId}));
+  for(const n of this.npcs.filter(n=>n.batracien&&!n.eventId)){const b=n.batracien;records[n.id]={id:n.id,site:n.site,sex:b.sex,palette:b.palette,role:b.role,job:b.job,x:n.x,y:n.y,dir:n.dir,post:n.post,hp:n.civilian?.hp??b.hp,dead:n.civilian?.dead??b.dead??false,distance:b.distance,routine:this.saveBatracienRoutine?.(n),hostileUntil:finite(b.hostileUntil)?b.hostileUntil:0};}
+  const incident=[...this.npcs.filter(n=>n.eventId&&n.batracien),...this.enemies.filter(e=>e.eventId&&e.batracien&&!e.dead)].map(n=>({id:n.id,palette:n.batracien.palette,hp:n.batracien.hp??n.hp,action:n.batracien.action,elapsed:n.batracien.elapsed,contactDone:n.batracien.contactDone,lockedDir:n.batracien.lockedDir,targetId:n.batracien.targetId,hostileUntil:n.batracien.hostileUntil||0}));
   out.atlas.batraciens={version:1,people:Object.values(records).slice(0,128),incidents:incident.slice(-64)};return out;
  };
  function atlasFor(renderer,n){
@@ -298,7 +312,7 @@ const Batraciens = (() => {
   while(bank.size>12){const oldest=bank.keys().next().value;bank.get(oldest).clear();bank.delete(oldest);}return a;
  }
  const oldNpcDraw=Renderer.prototype.npcDraw;
- Renderer.prototype.npcDraw=function(n){if(!n.batracien)return oldNpcDraw.call(this,n);const b=n.batracien,c=this.c;if((n.alpha??1)<=0||this.cam&&(n.x<this.cam.x-96||n.x>this.cam.x+this.W+96||n.y<this.cam.y-96||n.y>this.cam.y+this.H+96))return;
+ Renderer.prototype.npcDraw=function(n){if(!n.batracien)return oldNpcDraw.call(this,n);if(this.g.isHostileBatracien?.(n))return this.enemy(n);const b=n.batracien,c=this.c;if((n.alpha??1)<=0||this.cam&&(n.x<this.cam.x-96||n.x>this.cam.x+this.W+96||n.y<this.cam.y-96||n.y>this.cam.y+this.H+96))return;
   const api=b.role?Armed:Art,frame=api.frameAt(b.action,b.elapsed,b.distance),atlas=atlasFor(this,n),dead=b.dead||n.civilian?.dead;
   c.save();try{c.globalAlpha*=n.alpha??1;c.imageSmoothingEnabled=false;
    if(!b.role&&b.work&&!member(this.g,n)){const activeWork=b.action===b.job||b.job==='fish_cast'&&b.action.startsWith('fish_'),f=activeWork?frame:0,action=activeWork?b.action:b.job;

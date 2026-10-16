@@ -27,7 +27,7 @@ construisent pas de nouvelles images.
 
 ## Implantations
 
-Le registre `data/batraciens/communities.json` ajoute **28 civils et 11 gardes**
+Le registre `data/batraciens/communities.json` ajoute **62 civils et 11 gardes**
 aux 14 localités existantes listées ci-dessous. Ce sont des habitants jouables
 additionnels, pas un remplacement des humains, des donneurs de quêtes ou des
 palefreniers. Les 83 points de localité et leurs noms ne sont pas déplacés.
@@ -38,7 +38,7 @@ silencieusement ses tableaux démographiques à quatre espèces** : une future
 révision de ces recensements doit nommer les batraciens séparément et recalculer
 les totaux. Aucune faction, alliance ou guerre mondiale nouvelle n'est créée.
 
-| Territoire | Localité (ID stable) | Deux civils : métiers | Garde |
+| Territoire | Localité (ID stable) | Métiers des deux résidents historiques | Garde |
 |---|---|---|---|
 | Varan | Port-des-Veilleurs (`town-10`) | filets / pêche selon accès à l’eau ; cordages | Escorte de bateliers |
 | Varan | Bac-des-Roseaux (`town-73`) | riziculture ; vannerie | Garde de communauté |
@@ -144,3 +144,71 @@ les placements réels et différés, la sauvegarde, les compagnons, le repli, le
 règles d'hostilité, le contact unique, les murs, les décès et le rendu du moteur.
 Ce sont des tests Node/Canvas et d'assemblage de la version iOS, **pas une session
 sur un iPhone physique**.
+
+
+## Vie locale, déplacements et réponse aux agressions
+
+Le registre conserve les 28 résidents historiques et les 11 gardes, et ajoute
+28 habitants circulants (deux par localité) et six voyageurs de liaison :
+**73 batraciens au total, dont 62 civils**. Les civils sont 31 mâles et 31 femelles.
+Les habitants supplémentaires gardent les métiers de la communauté : cordages
+et filets dans les ports ; vannerie et poterie dans les autres implantations.
+Les emplois décrivent des routines, pas une production économique automatique.
+Un emplacement peut rester différé si les contraintes de sécurité l'exigent.
+
+Les habitants circulants alternent travail, déplacements locaux, visite d'un
+voisin, conversation et retour au poste. Les échanges sont réservés à une paire,
+les interlocuteurs se font face et emploient l'animation de parole existante.
+Deux courtes répliques ambiantes alternent sans ouvrir de dialogue modal.
+Une blessure, une alerte, un recrutement, une disparition ou une conversation
+avec le joueur libère la paire. Les conversations ne génèrent pas de rumeurs
+inventées et n'exposent aucune information privée des compagnons.
+
+Les six liaisons piétonnes sont Port-des-Veilleurs–Tourbeclaire,
+Bac-des-Roseaux–Tourbeclaire, Santalune–Anse-des-Palmes,
+Relais-des-Lianes–Rive-de-Corail, Clairfoyer–Bois-de-Lune et
+Val-des-Mousses–Bois-de-Lune. Elles suivent exclusivement le graphe routier
+existant, dans les deux sens. Aucune ligne droite inter-ville ne remplace une
+route, et aucun trajet maritime n'est converti en marche sur l'eau.
+Les voyageurs attendent aux passages fermés ou menacés et se reposent la nuit.
+Le parcours visible utilise les collisions et la marche native. Hors du champ,
+l'avancement est borné, échantillonné sur la route et arrêté avant d'entrer dans
+la zone visible. Les positions et la progression routière validées survivent
+au chargement ; les partenaires temporaires de conversation ne sont pas sauvés.
+
+### Agression et garde locale
+
+Un coup porté par Kaldor à un garde le rend hostile. L'agression d'un civil,
+humain ou batracien, alerte les gardes vivants qui la voient à proximité,
+y compris si le premier coup est mortel. Le contrôle utilise la distance
+(220 pixels), l'étage et la ligne de vue. Un coup donné par un monstre ne met
+pas Kaldor en cause. Il n'existe pas d'alerte instantanée à toutes les villes.
+La colère est enregistrée par garde, pour 180 minutes du calendrier du monde
+après la dernière agression constatée. Elle ne disparaît pas au rechargement.
+La poursuite reste locale (380 pixels autour du poste) et ne suit pas les
+coordonnées cachées du joueur à travers les murs. Un transport ou un lit ne
+permet pas d'annuler le combat alors qu'un garde hostile est encore proche.
+
+Un garde hostile rejoint l'ensemble commun des cibles de combat : verrouillage,
+orientation, collision de lame, parade du joueur et rendu ennemi (repère,
+barre de vie, flash). Il conserve son identité de PNJ et n'est ni cloné dans la
+liste des ennemis ni dessiné ou frappé deux fois. Les dégâts du joueur utilisent
+la fonction native des ennemis : puissance, riposte, pause d'impact, recul,
+récompense d'un adversaire armé et mort persistante. Les dégâts infligés par
+les gardes ne donnent toujours pas d'expérience à Kaldor. Les javelots d'un
+garde en colère ciblent l'agresseur, sans blesser ses propres civils.
+
+### Blessures et sang
+
+Les civils humains et batraciens, les gardes et les pillards utilisent maintenant
+le système de sang existant : gerbe directionnelle `bloodFX`, impacts et taches
+au sol, mêmes limites de durée et de nombre. Les morts animées des PNJ restent
+uniques : pas de second cadavre générique superposé. Les coups réellement
+bloqués ne saignent pas. Les personnages essentiels restent protégés de la mort,
+les civils ordinaires ne donnent ni expérience ni compteur de victimes.
+Les gardiens de pierre continuent de produire de la pierre, pas du sang.
+
+Sources : `scripts/batraciens-society.js`, `scripts/batraciens-runtime.js` et
+`data/batraciens/communities.json`. Les grilles et palettes des packs approuvés
+n'ont pas été modifiées. Les tests supplémentaires sont dans
+`tests/batraciens-society.test.cjs`.
