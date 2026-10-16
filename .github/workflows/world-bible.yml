@@ -1,0 +1,54 @@
+name: World bible
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/world/atlas.json
+      - data/world/bible/source.json
+      - data/world/bible/relations.json
+      - data/world/bible/events.json
+      - scripts/build-world-bible.py
+      - scripts/test-world-bible.py
+      - .github/workflows/world-bible.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: world-bible-main
+  cancel-in-progress: false
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Read the repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            /data/world/
+            /scripts/build-world-bible.py
+            /scripts/test-world-bible.py
+            /docs/world-bible/
+          sparse-checkout-cone-mode: false
+      - name: Validate authored rules and regression fixtures
+        run: python3 scripts/test-world-bible.py
+      - name: Compile against the actual atlas
+        run: python3 scripts/build-world-bible.py
+      - name: Verify deterministic generated files
+        run: python3 scripts/build-world-bible.py --check
+      - name: Publish derived ledgers without changing gameplay
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add data/world/bible/generated docs/world-bible/generated
+          if git diff --cached --quiet; then
+            echo 'Derived files already current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'docs(world): publish validated settlement and geopolitical ledgers'
+          # Ordinary fast-forward only. A concurrent change is never overwritten.
+          git push origin HEAD:main
