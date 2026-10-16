@@ -19,6 +19,8 @@ html=html.replaceAll('Remonte la piste au nord jusqu’au camp du Veilleur. Les 
 html=html.replace('Approche de la fée pour quitter la geôle. La carte du monde s’ouvre avec G.','Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');
 const hudStart=html.indexOf('hud(){const c=this.c,g=this.g,p=g.player'),hudEnd=html.indexOf('this.clockPill(g);',hudStart);
 if(hudStart>=0&&hudEnd>=0)html=html.slice(0,hudStart)+"hud(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,s=this.safe,T=this.top;this.travelHudBar();\n  "+html.slice(hudEnd);
+// Sleep and staffed rest obey the same starvation rule; settle clock before healing.
+html=html.replace("this.sleeping=null;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Réveil',text:'Il est '+this.hourText()+'. Tes forces sont revenues.'}","this.sleeping=null;this.advanceAtlas(0);if(this.needs.satiety>0)this.player.hp=this.player.maxHp;this.emit('notice',{title:'Réveil',text:'Il est '+this.hourText()+(this.needs.satiety>0?'. Tes forces sont revenues.':'. La faim empêche de récupérer ta santé.')}");
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
 console.log('Embedded world atlas, simulation, streaming terrain, map and travel UI.');

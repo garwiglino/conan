@@ -56,12 +56,13 @@ Game.prototype.healCompanion=function(id='elyne'){const c=this.party.find(n=>n.i
 Game.prototype.setCompanionWaiting=function(id,wait){const c=this.party.find(n=>n.id===id);if(!c||c.spirit||!this.nearCompanion(c)||this.journey)return false;c.status=wait?'waiting':'following';this.footprints=[];this.emit('save');return true;};
 Game.prototype.dismissCompanion=function(id){const c=this.party.find(n=>n.id===id);if(!c||c.permanent||!this.nearCompanion(c)||this.journey)return false;this.party=this.party.filter(n=>n!==c);if(id==='elyne')this.story.recruited=false;this.emit('save');return true;};
 Game.prototype.advanceNeeds=function(minutes){
+ if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;
  // Small deterministic slices preserve the same meal schedule through sleep/travel.
  for(let remaining=minutes;remaining>1e-7;){const step=Math.min(remaining,30);remaining-=step;
   const before=this.needs.satiety;this.needs.satiety=Math.max(0,before-step*100/FULL_MEAL_MINUTES);
   if((this.needs.autoEat||this.journey)&&this.needs.satiety<50)this.eatRation('kaldor',true);
   const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/100);
-  if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.max(1,this.player.hp-hungryMinutes/180);}else this.needs.starved=0;
+  if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hungryMinutes/180));}else this.needs.starved=0;
   for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger;c.hunger=Math.min(100,c.hunger+step*100/FULL_MEAL_MINUTES);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/100)/180);c.down=c.hp<=0;}}
  }
 };
