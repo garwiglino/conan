@@ -52,7 +52,7 @@ function createWorldTerrainArt(atlas, ramps) {
 
  function distanceField(mat,w,h,water){const D=new Uint16Array(w*h).fill(320);for(let i=0;i<D.length;i++)if((mat[i]===3)===water)D[i]=0;for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x;let d=D[i];if(x)d=Math.min(d,D[i-1]+10);if(y){d=Math.min(d,D[i-w]+10);if(x)d=Math.min(d,D[i-w-1]+14);if(x<w-1)d=Math.min(d,D[i-w+1]+14);}D[i]=d;}for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;let d=D[i];if(x<w-1)d=Math.min(d,D[i+1]+10);if(y<h-1){d=Math.min(d,D[i+w]+10);if(x)d=Math.min(d,D[i+w-1]+14);if(x<w-1)d=Math.min(d,D[i+w+1]+14);}D[i]=d;}return D;}
  // Public rectangular renderer also makes overlapping-chunk tests possible.
- function render(x0,y0,width=512,height=512){
+ function render(x0,y0,width=512,height=512,clock=480){
   const PAD=32,ox=x0-PAD,oy=y0-PAD,w=width+PAD*2,h=height+PAD*2,N=w*h;
   const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
   for(let y=0;y<th;y++)for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));
@@ -87,6 +87,7 @@ function createWorldTerrainArt(atlas, ramps) {
    let part=tile.parts[0],acc=0;const pick=clamp((np-.18)/.64,0,.99999);
    for(const p of tile.parts){acc+=p.weight;if(pick<acc){part=p;break;}}
    const name=part.family,profile=profiles[name],snow=name==='snow',desert=name==='desert',cursed=name==='cursed';let P=rgb[profile.ground],L=4+(n-.5)*2.2;
+   const cover=atlas.snowCover(part.biome,tile.cell?.height||20,clock),drift=cover>0&&(cover>=.99||np<.18+cover*.64);
    if(m===0){
     const exposed=!desert&&(snow?np<.18:np>.68||name==='marsh'&&np<.4);
     if(exposed){P=rgb[profile.bare];L=3.7+(n-.5)*1.5;}
@@ -112,14 +113,14 @@ function createWorldTerrainArt(atlas, ramps) {
     if(tile.cell?.land&&!cursed&&!snow&&(tile.shore+(mod(px,16)-7.5)/16*tile.shoreX+(mod(py,16)-7.5)/16*tile.shoreY)<6+(n-.5)*3){P=rgb.sand;L=4.5+(n-.5)*1.4-Math.max(0,4-dw)*.38;const r=mod(py+Math.round(Math.sin(px/24)*3),11);if(r===0&&ripple(px,py)>.6)L-=.6;}
     if(mat[i-w]===1)L+=.8;
    }else if(m===1){
-    P=rgb[cursed?'ash':snow?'tundra':name==='marsh'?'mud':'road'];L=4+(grain(px,py)-.5)*1.25;
+    P=rgb[cursed?'ash':snow||name==='tundra'||name==='taiga'?'tundra':name==='marsh'||name==='wetforest'?'mud':desert||name==='steppe'?'road':'humus'];L=4+(grain(px,py)-.5)*1.25;
     if(rand>.988)L=5.5;else if(up>.988)L=2.5;
     if(mat[i-w]===0||mat[i-w]===2)L-=1.4;else if(mat[i-w*2]===0)L-=.5;
     if(mat[i-1]===0)L-=.5;
     const rut=Math.abs(roadDistance[i]-roadWidth[i]*.48);if(rut<1.1&&ripple(px,py)>.33)L-=.65;else if(rut<2&&ripple(px,py)>.33)L+=.25;
     if(dw<4)L-=(4-dw)*.4;
    }else if(m===2){
-    P=rgb.pave;const row=Math.floor(py/11),shift=Math.floor(atlas.random(row,0,91)*11),xx=mod(px+shift,17),yy=mod(py,11),stone=atlas.random(Math.floor((px+shift)/17),row,92);L=4+(stone>.8?-1:stone<.12?1:0);
+    P=rgb[desert||name==='steppe'?'pave':'stone'];const row=Math.floor(py/11),shift=Math.floor(atlas.random(row,0,91)*11),xx=mod(px+shift,17),yy=mod(py,11),stone=atlas.random(Math.floor((px+shift)/17),row,92);L=4+(stone>.8?-1:stone<.12?1:0);
     if(xx===0||yy===0)L=1;else if(xx===1||yy===1)L+=1;else if(xx===16||yy===10)L-=1;
     if(rand>.98)L-=1;
    }else if(m===3){
@@ -132,6 +133,12 @@ function createWorldTerrainArt(atlas, ramps) {
     if(ds[i]<=F){const s=mod(py+Math.round(noise(px,0,13,48)*6+Math.sin(px*.21)),4);L=s===0?4:s===3?2:3;if(dl[i]<=3)L++;else if(dr[i]<=3)L--;if(dl[i]===1||dr[i]===1||ds[i]===1)L=0;if(ds[i]===F)L=1;}
     else if(dl[i]<4)L=dl[i]===1?0:5;else if(dr[i]<4)L=dr[i]===1?0:2;
     else{P=rgb[profile.top];L=4+(grain(px,py)-.5)*1.2;const crack=Math.abs(grain(px,py)-.5);if(crack<.018)L=2;else if(Math.abs(grain(px,py+1)-.5)<.018)L=5;if(ds[i]===F+1||dn[i]===2)L=6;else if(dn[i]===1)L=1;}
+   }
+   // Snow settles on land and cliff tops; routes stay readable, water stays water.
+   if(drift&&(m===0||m===1||m===2||m===8&&ds[i]>20)){
+    const compact=m===1||m===2;P=rgb.snow;L=(compact?3.4:4.8)+(n-.5)*1.4;
+    if(compact&&Math.abs(roadDistance[i]-roadWidth[i]*.48)<1.2)L-=.8;
+    if(!compact&&mod(py+Math.round(Math.sin(px/34)*4+n*7),19)===0&&f>.48)L-=.6;
    }
    // Bridges follow the actual road direction, including diagonal crossings.
    if(tile.t===5&&roadWidth[i]&&roadDistance[i]<=roadWidth[i]+1){

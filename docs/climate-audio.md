@@ -19,7 +19,7 @@ Le climat local remplace la météo universelle pour le joueur et les événemen
 | Marais | Humidité et brume fréquentes | Motifs graves, chœur / grenouilles et insectes |
 | Terres maudites | Climat du biome sous-jacent conservé | Harmonie plus tendue, corbeaux, silence nocturne |
 
-La neige et la pluie se partagent les précipitations selon une transition thermique de -1 à +2 °C. Le brouillard n'accompagne pas toutes les neiges ; le vent fort peut former un blizzard. Les couches de brouillard restent transparentes pour préserver la lisibilité. Pas d'accumulation dynamique au sol ni de simulation de fonte : les sols restent ceux de la carte.
+La neige et la pluie se partagent les précipitations selon une transition thermique de -1 à +2 °C. Le brouillard n'accompagne pas toutes les neiges ; le vent fort peut former un blizzard. Les couches de brouillard restent transparentes pour préserver la lisibilité. Le manteau neigeux du sol suit désormais la température saisonnière et l'altitude, avec un rafraîchissement quotidien. Il est indépendant du front météo : un ciel sec ne retire pas la neige. Ce modèle saisonnier ne simule pas une accumulation en centimètres après chaque averse.
 
 Les paramètres de probabilité sont des réglages de jeu, pas des statistiques terrestres. `audio/biome-audio-analysis.json` mesure leur fréquence effective sur un cycle complet (pas de 15 minutes), incluant les transitions entre fronts. La météo se mélange aussi aux frontières des biomes. Les orages restent des cellules brèves ; une pluie forte n'implique pas forcément du tonnerre.
 
@@ -55,3 +55,9 @@ Un voyage sauvegardé reste caché au menu initial et reprend avec Charger. En c
 Le viewport et WKWebView interdisent le zoom de page. Les listes gardent leur défilement interne et la carte ses commandes de navigation. Le réglage de taille du texte reste disponible.
 
 Les dix ambiances ont désormais neuf pistes, avec contrechant de flûte, nappe haute et ponctuations de cloche alternées. La basse est remontée d'une octave, moins soutenue et fortement atténuée ; les percussions sont discrètes. Le thème de titre conserve ses douze pistes avec basse, timbales et batterie réduites ; les anciens thèmes de jeu ont également une assise grave allégée. Les MIDI sont régénérés depuis la même partition que le moteur audio.
+
+## Cohérence des décors
+
+Val-des-Neiges (Haut-Givre) se situe en taïga, et non dans une cellule de glacier. Taïga, toundra, forêts tempérées et déserts frais utilisent maintenant un couvert saisonnier, réduit dans les milieux secs. Les glaciers gardent leur neige permanente. Les décors tropicaux, marécageux chauds et désertiques chauds restent sans neige. La température de fond est partagée avec le modèle météo.
+
+Les conifères boréaux, feuillus dormants, rochers et installations des relais suivent le couvert. Aucun arbre généré sur les glaciers ou en toundra. Le pavage hors régions arides utilise la pierre grise ; les chemins utilisent l'humus, la boue ou le sol froid local. Les collisions, ponts et traversées d'eau restent identiques entre saisons. Les caches de terrain et les réponses du worker sont datés pour éviter le retour d'un ancien décor après voyage ou rechargement.

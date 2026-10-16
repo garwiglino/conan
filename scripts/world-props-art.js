@@ -47,3 +47,8 @@ PROPS.world_log=b=>{b.shadow(34,57,15,3);for(let y=48;y<=55;y++)for(let x=18;x<=
 PROPS.world_dead_cursed=b=>{worldTrunk(b,1,WORLD_STONE);const M=new Uint8Array(4096);for(const pts of [[[22,32],[15,25],[14,14]],[[33,29],[32,14],[38,7]],[[41,28],[48,19],[47,10]]])strokeMask(M,64,64,pts,1.8,.6);b.shadeMask(M,WORLD_STONE,5,3,1,WORLD_STONE[0]);b.line(31,42,29,48,'#8b73a0');b.set(30,49,'#c2a5d2');for(const [x,y]of [[16,16],[43,22],[34,34]]){b.set(x,y,'#80a48b');b.set(x+1,y+1,'#b8d1a2');}};
 PROPS.world_gravel=b=>{for(const [x,y,rx]of [[27,55,2],[35,57,3],[39,54,1.5]]){b.shadow(x+1,y+1,rx+1,1);rockTier(b,x,y,rx,1,1,970+x,WORLD_STONE,false);}};
 PROPS.world_frostgrass=b=>{b.shadow(33,57,6,1.5);for(let j=0;j<6;j++){const x=27+j*2,y=55-(j%3);b.line(x,56,x-2,y-3,WORLD_FOLIAGE.cypress[3]);b.line(x,56,x+1,y-4,WORLD_SNOW[3]);b.set(x+1,y-4,WORLD_SNOW[5]);}};
+
+// Dormant broadleaf silhouette: no summer leaves protruding through winter snow.
+PROPS.world_oak_winter=b=>{worldTrunk(b,0,WORLD_STONE);for(const [x,y]of [[20,22],[23,31],[29,26],[41,29],[43,20],[30,42]]){b.line(x-2,y,x+2,y,WORLD_SNOW[4]);b.line(x-1,y-1,x+1,y-1,WORLD_SNOW[6]);}};
+
+for(const base of ['tent','world_cart','barrel','world_sign','column','column_b','rock_c'])PROPS['snow_'+base]=b=>{PROPS[base](b);for(let x=0;x<64;x++){for(let y=0;y<45;y++){if(!b.solid(x,y))continue;b.set(x,y,WORLD_SNOW[5]);if(b.solid(x,y+1))b.set(x,y+1,WORLD_SNOW[4]);break;}}};
