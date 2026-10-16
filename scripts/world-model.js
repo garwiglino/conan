@@ -19,8 +19,17 @@ const createWorldAtlas = (raw) => {
  {temp:18,range:7,wet:.48,fog:.55,family:'wetland'}
 ];
  function climateTemperature(clock,biome=6,height=20){const p=climateProfiles[biome]||climateProfiles[6];return p.temp+p.range*Math.sin(clock/1440/96*Math.PI*2)-Math.max(0,height-65)*.18;}
- // Seasonal ground cover, independent from a passing precipitation front.
- function snowCover(biome,height=20,clock=480){if(biome===11)return 1;if([0,1,3,5,7,12].includes(biome))return 0;const t=climateTemperature(Math.floor(clock/1440)*1440+480,biome,height),v=clamp((6-t)/10,0,1),wet=climateProfiles[biome]?.wet||0;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
+ function airTemperature(clock,biome=6,height=20){return climateTemperature(clock,biome,height)+2*Math.sin((clock/60-8)/24*Math.PI*2);}
+ // Continuous thermal cover, independent from a passing precipitation front.
+ function snowCover(biome,height=20,clock=480){if(biome===11)return 1;if([0,1,3,5,7,12].includes(biome))return 0;const t=airTemperature(clock,biome,height),v=clamp((6-t)/10,0,1),wet=climateProfiles[biome]?.wet||0;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
+ // 32 native-pixel coverage levels; cache descriptors only for nearby chunks.
+ const visualSnowCover=(b,h,t)=>Math.round(snowCover(b,h,t)*32)/32;
+ const snowRegions=new Map();
+ function chunkSnowKey(cx,cy,clock,propsOnly=false){
+  const key=cx+','+cy;let entry=snowRegions.get(key);
+  if(!entry){const pairs=new Map();for(let y=-3;y<35;y++)for(let x=-3;x<35;x++){const wx=cx*32+x+.5,wy=cy*32+y+.5,h=cellAt(wx,wy)?.height||20;for(const p of environment(wx,wy).mix)pairs.set(p.biome+':'+h,[p.biome,h]);}entry={pairs:[...pairs.values()]};snowRegions.set(key,entry);while(snowRegions.size>64)snowRegions.delete(snowRegions.keys().next().value);}
+  if(entry.clock!==clock){entry.clock=clock;const values=entry.pairs.map(([b,h])=>snowCover(b,h,clock));entry.value=values.map(v=>Math.round(v*32)).join(',');entry.props=values.map(v=>v>.3?1:0).join(',');}return propsOnly?entry.props:entry.value;
+ }
  const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
  const random=(x,y,s=1)=>{let n=Math.imul(x|0,374761393)^Math.imul(y|0,668265263)^Math.imul(s,1442695041);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967296;};
  const project=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],q=dx*dx+dy*dy,t=q?clamp(((x-a[0])*dx+(y-a[1])*dy)/q,0,1):0;return {x:a[0]+dx*t,y:a[1]+dy*t,t,d:Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)};};
@@ -226,8 +235,8 @@ const createWorldAtlas = (raw) => {
  }
  class ChunkStore{
   constructor(max=48){this.max=max;this.cache=new Map();this.clock=480;}
-  setClock(clock){const next=Math.floor(clock/1440)*1440+480;if(next!==this.clock){this.clock=next;this.cache.clear();}}
-  get(cx,cy){const key=cx+','+cy;let c=this.cache.get(key);if(c){this.cache.delete(key);this.cache.set(key,c);return c;}const tiles=new Uint8Array(CHUNK*CHUNK),props=[];for(let y=0;y<CHUNK;y++)for(let x=0;x<CHUNK;x++){const wx=cx*CHUNK+x,wy=cy*CHUNK+y,t=terrain(wx,wy);tiles[y*CHUNK+x]=t;if(!core(wx,wy)){const p=propAt(wx,wy,t,this.clock);if(p)props.push(p);}}c={key,cx,cy,tiles,props};this.cache.set(key,c);while(this.cache.size>this.max)this.cache.delete(this.cache.keys().next().value);return c;}
+  setClock(clock){if(Number.isFinite(clock))this.clock=clock;}
+  get(cx,cy){const key=cx+','+cy,snowKey=chunkSnowKey(cx,cy,this.clock,true);let c=this.cache.get(key);if(c&&c.snowKey===snowKey){this.cache.delete(key);this.cache.set(key,c);return c;}const tiles=c?.tiles||new Uint8Array(CHUNK*CHUNK),props=[];for(let y=0;y<CHUNK;y++)for(let x=0;x<CHUNK;x++){const wx=cx*CHUNK+x,wy=cy*CHUNK+y,t=c?tiles[y*CHUNK+x]:terrain(wx,wy);tiles[y*CHUNK+x]=t;if(!core(wx,wy)){const p=propAt(wx,wy,t,this.clock);if(p)props.push(p);}}c={key,cx,cy,tiles,props,snowKey,glints:c?.glints};this.cache.set(key,c);while(this.cache.size>this.max)this.cache.delete(this.cache.keys().next().value);return c;}
   tile(x,y){x=Math.floor(x);y=Math.floor(y);const cx=Math.floor(x/CHUNK),cy=Math.floor(y/CHUNK);return this.get(cx,cy).tiles[(y-cy*CHUNK)*CHUNK+x-cx*CHUNK];}
  }
  function localPath(start,end,free,max=2200){const sx=Math.floor(start.x/16),sy=Math.floor(start.y/16),tx=Math.floor(end.x/16),ty=Math.floor(end.y/16),key=(x,y)=>x+','+y,q=new Heap(),best=new Map([[key(sx,sy),0]]),prev=new Map();q.push({x:sx,y:sy,g:0,cost:0});let count=0;
@@ -235,6 +244,6 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36||!free(x*16+8,y*16+8))continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;

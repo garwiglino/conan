@@ -47,11 +47,11 @@ test('all biomes have bounded seasonal cover, tropical lands stay clear and glac
  for(const b of [10,11]){const c=A.cells.find(c=>c.land&&c.biome===b&&!A.curseCells.has(c.id));for(let i=0;i<100;i++){const p=A.propAt(c.x+i,c.y,4);assert.ok(!/pine|oak|palm|jungle|cypress/.test(p?.kind||''),p?.kind);}}
 });
 test('seasonal chunk invalidation replaces snowy foliage without changing solid tiles',()=>{
- const c=A.cellAt(A.byId['town-69'].x,A.byId['town-69'].y),store=new A.ChunkStore(2),cx=Math.floor(c.x/32),cy=Math.floor(c.y/32),winter=store.get(cx,cy);store.setClock(800);assert.equal(store.get(cx,cy),winter);store.setClock(24*1440+480);const summer=store.get(cx,cy);assert.notEqual(summer,winter);assert.deepEqual(summer.tiles,winter.tiles);assert.ok(!summer.props.some(p=>p.kind==='world_pine_1'));
+ const c=A.cellAt(A.byId['town-69'].x,A.byId['town-69'].y),store=new A.ChunkStore(2),cx=Math.floor(c.x/32),cy=Math.floor(c.y/32),winter=store.get(cx,cy);store.setClock(480.001);assert.equal(store.get(cx,cy),winter);store.setClock(800);assert.notEqual(store.get(cx,cy),winter);assert.equal(store.get(cx,cy).tiles,winter.tiles);store.setClock(24*1440+480);const summer=store.get(cx,cy);assert.notEqual(summer,winter);assert.deepEqual(summer.tiles,winter.tiles);assert.ok(!summer.props.some(p=>p.kind==='world_pine_1'));
 });
 test('late worker results cannot overwrite a newer season',()=>{
  class W{postMessage(){}terminate(){}}const cache=new Map(),stream=new api.WorldArtStream(cache,()=>canvas.createCanvas(1,1),{Worker:W,Blob:class{},URL:{createObjectURL:()=> 'blob:x',revokeObjectURL(){}}});
  stream.prefetch(1,1);stream.setClock(35040);stream.prefetch(1,1);const pending=stream.pending.size;
- stream.worker.onmessage({data:{key:'1,1',clock:480,width:1,height:1,data:new Uint8ClampedArray([1,2,3,255])}});assert.equal(cache.size,0);assert.equal(stream.pending.size,pending);
+ stream.worker.onmessage({data:{key:'1,1',clock:480,width:1,height:1,data:new Uint8ClampedArray([1,2,3,255])}});assert.equal(cache.size,0);assert.equal(stream.pending.size,pending-1);
  stream.worker.onmessage({data:{key:'1,1',clock:35040,width:1,height:1,data:new Uint8ClampedArray([1,2,3,255])}});assert.equal(cache.size,1);
 });

@@ -3,7 +3,7 @@ const BIOME_CLIMATE=Atlas.climateProfiles;
 function climateAt(clock,biome=6,height=20){
  const p=BIOME_CLIMATE[biome]||BIOME_CLIMATE[6],day=clock/1440,season=(day%96+96)%96/96;
  const summer=Math.sin(season*Math.PI*2),wetSeason=skySmooth(.0,.65,summer),cycle=dayCycle(clock);
- const temperature=Atlas.climateTemperature(clock,biome,height)+2*Math.sin((cycle.hour-8)/24*Math.PI*2);
+ const temperature=Atlas.airTemperature(clock,biome,height);
  const probability=clamp(p.wet+(p.monsoon||0)*wetSeason,.01,.9),k=Math.floor((clock-CLOCK_START)/WEATHER_WIN),u=(clock-CLOCK_START)/WEATHER_WIN-k;
  const front=n=>{const r=n===0?0:hash(n,biome+41,2081),wet=r>1-probability;
   const strength=wet?(.18+.78*hash(n,biome+19,805))*(p.monsoon&&wetSeason>.4?1.18:1):0;

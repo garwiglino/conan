@@ -13,7 +13,7 @@ function footSurface(game,actor){
   const env=Atlas.environment(w.x,w.y),cell=Atlas.cellAt(w.x,w.y),np=WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),86,450);
   const parts=env.mix.map(m=>({...m,family:WorldTerrainArt.family(m)})).sort((a,b)=>a.family.localeCompare(b.family)||a.biome-b.biome);
   let part=parts[0],sum=0;for(const p of parts){sum+=p.weight;if(clamp((np-.18)/.64,0,.99999)<sum){part=p;break;}}
-  const b=part?.biome??cell?.biome??1,cover=Atlas.snowCover(b,cell?.height,game.clock);
+  const b=part?.biome??cell?.biome??1,cover=Atlas.visualSnowCover(b,cell?.height,Math.floor(game.clock));
   if(cover>=.99||cover>0&&np<.18+cover*.64)return 'snow';
   if(t===2||t===8)return 'stone';if(t!==1&&!part?.cursed&&Atlas.coastDistance(w.x,w.y)<6+(WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),40,41)-.5)*3)return 'sand';if([8,12].includes(b))return 'mud';
   if(t===1)return [9,10,11].includes(b)?'gravel':'earth';

@@ -17,7 +17,7 @@ Renderer.prototype.travelHudBar=function(){
 };
 const travelHud=Renderer.prototype.hud;
 Renderer.prototype.hud=function(){travelHud.call(this);const g=this.g;if(!g.location?.current||g.dialogue||g.journey)return;const c=this.c,L=g.location.current,x=(this.safe.l||0)+5,y=this.top+5,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80));
- c.save();c.globalAlpha=.88;box(c,x-2,y-2,max+5,18,'#1b1715');c.globalAlpha=1;box(c,x-2,y-2,1,18,'#b79c66');c.font='6px PixelUI, monospace';travelText(c,travelFit(c,L.title,max-4),x+2,y,'#e9d8b6');travelText(c,travelFit(c,L.detail||'Terres Sauvages',max-4),x+2,y+8,'#b8baa1');c.restore();this.navigationMarker();
+ c.save();c.globalAlpha=.88;box(c,x-2,y-2,max+5,18,'#1b1715');c.globalAlpha=1;box(c,x-2,y-2,1,18,'#b79c66');c.font='6px PixelUI, monospace';const temperature=Math.round(g.sky().temperature),label=temperature+'°C',tw=c.measureText(label).width;travelText(c,travelFit(c,L.title,max-tw-10),x+2,y,'#e9d8b6');travelText(c,label,x+max-tw,y,temperature<=0?'#b7d0d4':'#c5bea7');this.temperatureReadout={temperature,label,width:tw};travelText(c,travelFit(c,L.detail||'Terres Sauvages',max-4),x+2,y+8,'#b8baa1');c.restore();this.navigationMarker();
 };
 // A native-pixel cloth pennant: bronze staff, sage cloth, cream stitching.
 function drawTravelPin(c,x,y){pixels(c,['.11........','.14333331..','.142222231.','.14222231..','.1433331...','.14........','.14........','.14........','.14........','11111......'],Math.round(x),Math.round(y),{'1':'#24180f','2':'#8eaa76','3':'#d4d7a6','4':'#ba8a4a'});}

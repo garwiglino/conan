@@ -19,7 +19,7 @@ Le climat local remplace la météo universelle pour le joueur et les événemen
 | Marais | Humidité et brume fréquentes | Motifs graves, chœur / grenouilles et insectes |
 | Terres maudites | Climat du biome sous-jacent conservé | Harmonie plus tendue, corbeaux, silence nocturne |
 
-La neige et la pluie se partagent les précipitations selon une transition thermique de -1 à +2 °C. Le brouillard n'accompagne pas toutes les neiges ; le vent fort peut former un blizzard. Les couches de brouillard restent transparentes pour préserver la lisibilité. Le manteau neigeux du sol suit désormais la température saisonnière et l'altitude, avec un rafraîchissement quotidien. Il est indépendant du front météo : un ciel sec ne retire pas la neige. Ce modèle saisonnier ne simule pas une accumulation en centimètres après chaque averse.
+La neige et la pluie se partagent les précipitations selon une transition thermique de -1 à +2 °C. Le brouillard n'accompagne pas toutes les neiges ; le vent fort peut former un blizzard. Les couches de brouillard restent transparentes pour préserver la lisibilité. Le manteau neigeux du sol suit désormais la température saisonnière et l'altitude, avec un suivi continu de la température diurne et saisonnière. Il est indépendant du front météo : un ciel sec ne retire pas la neige. Ce modèle saisonnier ne simule pas une accumulation en centimètres après chaque averse.
 
 Les paramètres de probabilité sont des réglages de jeu, pas des statistiques terrestres. `audio/biome-audio-analysis.json` mesure leur fréquence effective sur un cycle complet (pas de 15 minutes), incluant les transitions entre fronts. La météo se mélange aussi aux frontières des biomes. Les orages restent des cellules brèves ; une pluie forte n'implique pas forcément du tonnerre.
 
@@ -69,3 +69,12 @@ Musique à 45 % par défaut pour les nouvelles préférences ; les niveaux déj�
 Les 41 échantillons d'action sont calibrés par leur crête et leur RMS maximal sur 50 ms, sans amplifier les enregistrements discrets. Les annonces MIDI d'interface, les musiques de combat, la pluie et le tonnerre sont atténués ; le vent est remonté et la faune espacée reste en retrait. Le script scripts/analyze-audio-mix.cjs mesure les sources et des scènes réellement synthétisées ; audio/mix-analysis.json contient les résultats en dBFS, pas une certification LUFS. Une écoute physique sur iPhone reste nécessaire.
 
 Pas du joueur, des PNJ à pied et des ennemis bipèdes : neuf surfaces (sable, terre, herbe, gravier, pierre, bois, boue, eau, neige), trois variantes chacune. La distance parcourue déclenche les pas ; proximité et panoramique règlent leur position. Aucun pas pour la fée, les serpents, les téléportations ou les voyages. Limites : seize acteurs proches suivis, trois déclenchements par image et huit voix simultanées. Les pas s'arrêtent en pause ; les ponts et étages utilisent le bois, le manteau neigeux suit le même motif que le sol visible.
+
+
+### Neige continue, température et respiration
+
+Le couvert thermique ne saute plus à minuit. Le rendu vérifie la date chaque minute de jeu (environ 0,67 seconde hors voyage) et utilise 32 niveaux de couverture pixel art. Seuls les secteurs dont la couverture visible change sont recalculés. Les collisions sont conservées ; les variantes de végétation changent seulement au franchissement de leur seuil. La température est échantillonnée une fois par tuile et biome pendant la fabrication du terrain, jamais par pixel.
+
+Le worker conserve au plus huit tâches et le cache trente-deux images. Une ancienne image reste visible pendant sa mise à jour ; une réponse périmée ne peut remplacer une révision climatique plus récente. Sans worker, une seule image de terrain déjà chargée est renouvelée par frame. Les accessoires de transport et auberges sont préservés.
+
+La température locale arrondie apparaît à droite du nom de lieu, sur la ligne existante. Sous 5 °C, les humanoïdes vivants et chevaux émettent de petites expirations désynchronisées, pendant environ une seconde toutes les trois à quatre secondes. Les cinq groupes de pixels maximum partent de la bouche, restent ancrés dans le monde, se dispersent et disparaissent. Les esprits, morts-vivants et reptiles sont exclus ; les futurs acteurs peuvent préciser breathes, warmBlooded, coldBlooded et breathMouth. Aucun effet hors écran ni pendant le voyage.

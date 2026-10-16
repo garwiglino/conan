@@ -3013,8 +3013,17 @@ const createWorldAtlas = (raw) => {
  {temp:18,range:7,wet:.48,fog:.55,family:'wetland'}
 ];
  function climateTemperature(clock,biome=6,height=20){const p=climateProfiles[biome]||climateProfiles[6];return p.temp+p.range*Math.sin(clock/1440/96*Math.PI*2)-Math.max(0,height-65)*.18;}
- // Seasonal ground cover, independent from a passing precipitation front.
- function snowCover(biome,height=20,clock=480){if(biome===11)return 1;if([0,1,3,5,7,12].includes(biome))return 0;const t=climateTemperature(Math.floor(clock/1440)*1440+480,biome,height),v=clamp((6-t)/10,0,1),wet=climateProfiles[biome]?.wet||0;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
+ function airTemperature(clock,biome=6,height=20){return climateTemperature(clock,biome,height)+2*Math.sin((clock/60-8)/24*Math.PI*2);}
+ // Continuous thermal cover, independent from a passing precipitation front.
+ function snowCover(biome,height=20,clock=480){if(biome===11)return 1;if([0,1,3,5,7,12].includes(biome))return 0;const t=airTemperature(clock,biome,height),v=clamp((6-t)/10,0,1),wet=climateProfiles[biome]?.wet||0;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
+ // 32 native-pixel coverage levels; cache descriptors only for nearby chunks.
+ const visualSnowCover=(b,h,t)=>Math.round(snowCover(b,h,t)*32)/32;
+ const snowRegions=new Map();
+ function chunkSnowKey(cx,cy,clock,propsOnly=false){
+  const key=cx+','+cy;let entry=snowRegions.get(key);
+  if(!entry){const pairs=new Map();for(let y=-3;y<35;y++)for(let x=-3;x<35;x++){const wx=cx*32+x+.5,wy=cy*32+y+.5,h=cellAt(wx,wy)?.height||20;for(const p of environment(wx,wy).mix)pairs.set(p.biome+':'+h,[p.biome,h]);}entry={pairs:[...pairs.values()]};snowRegions.set(key,entry);while(snowRegions.size>64)snowRegions.delete(snowRegions.keys().next().value);}
+  if(entry.clock!==clock){entry.clock=clock;const values=entry.pairs.map(([b,h])=>snowCover(b,h,clock));entry.value=values.map(v=>Math.round(v*32)).join(',');entry.props=values.map(v=>v>.3?1:0).join(',');}return propsOnly?entry.props:entry.value;
+ }
  const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
  const random=(x,y,s=1)=>{let n=Math.imul(x|0,374761393)^Math.imul(y|0,668265263)^Math.imul(s,1442695041);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967296;};
  const project=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],q=dx*dx+dy*dy,t=q?clamp(((x-a[0])*dx+(y-a[1])*dy)/q,0,1):0;return {x:a[0]+dx*t,y:a[1]+dy*t,t,d:Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)};};
@@ -3220,8 +3229,8 @@ const createWorldAtlas = (raw) => {
  }
  class ChunkStore{
   constructor(max=48){this.max=max;this.cache=new Map();this.clock=480;}
-  setClock(clock){const next=Math.floor(clock/1440)*1440+480;if(next!==this.clock){this.clock=next;this.cache.clear();}}
-  get(cx,cy){const key=cx+','+cy;let c=this.cache.get(key);if(c){this.cache.delete(key);this.cache.set(key,c);return c;}const tiles=new Uint8Array(CHUNK*CHUNK),props=[];for(let y=0;y<CHUNK;y++)for(let x=0;x<CHUNK;x++){const wx=cx*CHUNK+x,wy=cy*CHUNK+y,t=terrain(wx,wy);tiles[y*CHUNK+x]=t;if(!core(wx,wy)){const p=propAt(wx,wy,t,this.clock);if(p)props.push(p);}}c={key,cx,cy,tiles,props};this.cache.set(key,c);while(this.cache.size>this.max)this.cache.delete(this.cache.keys().next().value);return c;}
+  setClock(clock){if(Number.isFinite(clock))this.clock=clock;}
+  get(cx,cy){const key=cx+','+cy,snowKey=chunkSnowKey(cx,cy,this.clock,true);let c=this.cache.get(key);if(c&&c.snowKey===snowKey){this.cache.delete(key);this.cache.set(key,c);return c;}const tiles=c?.tiles||new Uint8Array(CHUNK*CHUNK),props=[];for(let y=0;y<CHUNK;y++)for(let x=0;x<CHUNK;x++){const wx=cx*CHUNK+x,wy=cy*CHUNK+y,t=c?tiles[y*CHUNK+x]:terrain(wx,wy);tiles[y*CHUNK+x]=t;if(!core(wx,wy)){const p=propAt(wx,wy,t,this.clock);if(p)props.push(p);}}c={key,cx,cy,tiles,props,snowKey,glints:c?.glints};this.cache.set(key,c);while(this.cache.size>this.max)this.cache.delete(this.cache.keys().next().value);return c;}
   tile(x,y){x=Math.floor(x);y=Math.floor(y);const cx=Math.floor(x/CHUNK),cy=Math.floor(y/CHUNK);return this.get(cx,cy).tiles[(y-cy*CHUNK)*CHUNK+x-cx*CHUNK];}
  }
  function localPath(start,end,free,max=2200){const sx=Math.floor(start.x/16),sy=Math.floor(start.y/16),tx=Math.floor(end.x/16),ty=Math.floor(end.y/16),key=(x,y)=>x+','+y,q=new Heap(),best=new Map([[key(sx,sy),0]]),prev=new Map();q.push({x:sx,y:sy,g:0,cost:0});let count=0;
@@ -3229,7 +3238,7 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36||!free(x*16+8,y*16+8))continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;
 
@@ -3539,6 +3548,8 @@ function createWorldTerrainArt(atlas, ramps) {
   const PAD=32,ox=x0-PAD,oy=y0-PAD,w=width+PAD*2,h=height+PAD*2,N=w*h;
   const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
   for(let y=0;y<th;y++)for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));
+  // Sample thermal cover once per tile/biome, never once per pixel.
+  for(const tile of meta)for(const p of tile.parts)p.cover=atlas.visualSnowCover(p.biome,tile.cell?.height||20,clock);
   const info=(x,y)=>meta[(Math.floor(y/16)-ty0)*tw+Math.floor(x/16)-tx0];
   const category=t=>t===4?0:t===5?3:t;
   const edge=field(ox,oy,w,h,9,31),edge2=field(ox,oy,w,h,4,32),broad=field(ox,oy,w,h,40,41),grain=field(ox,oy,w,h,24,45),dunes=field(ox,oy,w,h,56,42),ripple=field(ox,oy,w,h,11,43),patch=field(ox,oy,w,h,86,450),fine=field(ox,oy,w,h,7,451);
@@ -3570,7 +3581,7 @@ function createWorldTerrainArt(atlas, ramps) {
    let part=tile.parts[0],acc=0;const pick=clamp((np-.18)/.64,0,.99999);
    for(const p of tile.parts){acc+=p.weight;if(pick<acc){part=p;break;}}
    const name=part.family,profile=profiles[name],snow=name==='snow',desert=name==='desert',cursed=name==='cursed';let P=rgb[profile.ground],L=4+(n-.5)*2.2;
-   const cover=atlas.snowCover(part.biome,tile.cell?.height||20,clock),drift=cover>0&&(cover>=.99||np<.18+cover*.64);
+   const cover=part.cover,drift=cover>0&&(cover>=.99||np<.18+cover*.64);
    if(m===0){
     const exposed=!desert&&(snow?np<.18:np>.68||name==='marsh'&&np<.4);
     if(exposed){P=rgb[profile.bare];L=3.7+(n-.5)*1.5;}
@@ -3691,21 +3702,24 @@ PROPS.world_oak_winter=b=>{worldTrunk(b,0,WORLD_STONE);for(const [x,y]of [[20,22
 
 for(const base of ['tent','world_cart','barrel','world_sign','column','column_b','rock_c'])PROPS['snow_'+base]=b=>{PROPS[base](b);for(let x=0;x<64;x++){for(let y=0;y<45;y++){if(!b.solid(x,y))continue;b.set(x,y,WORLD_SNOW[5]);if(b.solid(x,y+1))b.set(x,y+1,WORLD_SNOW[4]);break;}}};
 
-/* Prefetch native terrain off the main thread. The exact same renderer is used
- * for the first visible sector and the worker, so completion never repaints a
- * different quality level. 32 images + at most 8 pending jobs, at any distance.
- */
+/* Bounded streaming cache: keep old art visible until its replacement is ready. */
 function worldArtWorkerSource(){return '"use strict";const createWorldAtlas='+createWorldAtlas.toString()+';const createWorldTerrainArt='+createWorldTerrainArt.toString()+`;let art=null;
- onmessage=function(e){const m=e.data;if(m.kind==='init'){art=createWorldTerrainArt(createWorldAtlas(m.raw),m.ramps);postMessage({kind:'ready'});return;}if(!art||m.kind!=='render')return;const image=art.render(m.cx*512,m.cy*512,512,512,m.clock??480);postMessage({key:m.key,clock:m.clock??480,width:image.width,height:image.height,data:image.data},[image.data.buffer]);};`;}
+ onmessage=function(e){const m=e.data;if(m.kind==='init'){art=createWorldTerrainArt(createWorldAtlas(m.raw),m.ramps);postMessage({kind:'ready'});return;}if(!art||m.kind!=='render')return;const image=art.render(m.cx*512,m.cy*512,512,512,m.clock??480);postMessage({key:m.key,clock:m.clock??480,snowKey:m.snowKey,cx:m.cx,cy:m.cy,width:image.width,height:image.height,data:image.data},[image.data.buffer]);};`;}
 function WorldArtStream(cache,makeCanvas,environment=globalThis){
- this.clock=480;this.setClock=clock=>{if(clock!==this.clock){this.clock=clock;cache.clear();this.pending.clear();}};this.cache=cache;this.pending=new Set();this.worker=null;this.failed=false;
- const put=(key,data,width,height)=>{if(this.cache.has(key))return;const cv=makeCanvas();cv.width=width;cv.height=height;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);this.cache.set(key,cv);while(this.cache.size>32)this.cache.delete(this.cache.keys().next().value);};
+ this.clock=480;this.cache=cache;this.pending=new Set();this.jobs=new Map();this.worker=null;this.failed=false;
+ this.setClock=clock=>{this.clock=clock;};
+ this.current=(key,cx,cy)=>{const cv=cache.get(key);return cv&&cv.snowKey===Atlas.chunkSnowKey(cx,cy,this.clock);};
+ const put=(key,data,width,height,snowKey)=>{const cv=makeCanvas();cv.width=width;cv.height=height;cv.snowKey=snowKey;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);cache.set(key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);};
  if(typeof environment.Worker!=='function'||typeof environment.Blob!=='function'||!environment.URL?.createObjectURL)return;
- let url;
- const release=()=>{if(url){environment.URL.revokeObjectURL(url);url=null;}};
- try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}if((m.clock??480)!==this.clock)return;this.pending.delete(m.key);put(m.key,m.data,m.width,m.height);};this.worker.onerror=()=>{release();this.failed=true;this.pending.clear();this.worker?.terminate();this.worker=null;};this.worker.postMessage({kind:'init',raw:Atlas.raw,ramps:RAMP});}
+ let url;const release=()=>{if(url){environment.URL.revokeObjectURL(url);url=null;}};
+ try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}
+ const job=this.jobs.get(m.key);if(job&&job.clock===(m.clock??480)){this.pending.delete(m.key);this.jobs.delete(m.key);}
+ const valid=m.snowKey!==undefined?m.snowKey===Atlas.chunkSnowKey(m.cx,m.cy,this.clock):(m.clock??480)===this.clock;
+ if(!valid)return;put(m.key,m.data,m.width,m.height,m.snowKey);
+ };this.worker.onerror=()=>{release();this.failed=true;this.pending.clear();this.jobs.clear();this.worker?.terminate();this.worker=null;};this.worker.postMessage({kind:'init',raw:Atlas.raw,ramps:RAMP});}
  catch(e){release();this.failed=true;this.worker?.terminate();this.worker=null;}
- this.prefetch=(cx,cy)=>{if(!this.worker)return;const jobs=[];for(let y=cy-1;y<=cy+1;y++)for(let x=cx-1;x<=cx+1;x++){const key=x+','+y;if(!cache.has(key)&&!this.pending.has(key))jobs.push({kind:'render',key,clock:this.clock,cx:x,cy:y,d:Math.hypot(x-cx,y-cy)});}jobs.sort((a,b)=>a.d-b.d);for(const job of jobs){if(this.pending.size>=8)break;this.pending.add(job.key);this.worker.postMessage(job);}};
+ this.request=(cx,cy)=>{const key=cx+','+cy;if(!this.worker||this.pending.size>=8||this.pending.has(key)||this.current(key,cx,cy))return;const job={kind:'render',key,clock:this.clock,snowKey:Atlas.chunkSnowKey(cx,cy,this.clock),cx,cy};this.pending.add(key);this.jobs.set(key,job);this.worker.postMessage(job);};
+ this.prefetch=(cx,cy)=>{if(!this.worker)return;const jobs=[];for(let y=cy-1;y<=cy+1;y++)for(let x=cx-1;x<=cx+1;x++)jobs.push({x,y,d:Math.hypot(x-cx,y-cy)});jobs.sort((a,b)=>a.d-b.d);for(const j of jobs){if(this.pending.size>=8)break;this.request(j.x,j.y);}};
 }
 
 /* All new game artwork uses the game's native pixel buffer and shared ramps. */
@@ -3715,10 +3729,11 @@ PROPS.world_cursed=function(b){const P=['#24232f','#383744','#51515d','#686975',
 const atlasNpcDraw=Renderer.prototype.npcDraw;
 Renderer.prototype.npcDraw=function(n){if(n.id!=='fairy'){atlasNpcDraw.call(this,n);if(n.id==='elyne'&&this.g.story.recruited&&!this.g.story.delivered&&this.g.companion.hp<10){box(this.c,n.x-10,n.y-45,20,2,'#34252c');box(this.c,n.x-10,n.y-45,2*this.g.companion.hp,2,'#be807b');}return;}const c=this.c,x=Math.round(n.x),y=Math.round(n.y-12+Math.sin(this.g.time*4)*2),wing=Math.sin(this.g.time*18)>0;c.save();c.globalAlpha=.8;pixels(c,wing?['11.....11','122...221','.122.221.','..12221..']:['.........','..1...1..','.122.221.','112222211'],x-4,y-5,{'1':'#b4c5c9','2':'#dee8d0'});c.globalAlpha=1;pixels(c,['..11..','.1221.','..33..','..44..','.4554.','..44..','..66..'],x-3,y-6,{'1':'#745b8d','2':'#f3dfb4','3':'#f5edce','4':'#799b95','5':'#d3e4bb','6':'#aaa5c4'});for(let i=0;i<3;i++){const t=this.g.time+i*2;box(c,x-8-Math.sin(t)*6,y+5+i*3,1,1,i%2?'#b2d1a1':'#b6a1ca');}c.restore();};
 const WorldTerrainArt=createWorldTerrainArt(Atlas,RAMP);
-Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;this.atlasGround=this.atlasGround||new Map();this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));const groundClock=Math.floor(g.clock/1440)*1440+480;if(this.atlasGroundClock!==groundClock){this.atlasGroundClock=groundClock;this.atlasGround.clear();g.atlas.setClock(g.clock);g.atlasProps=Atlas.nodes.flatMap(n=>atlasSiteProps(n,g.clock));this.atlasArtStream?.setClock(groundClock);}const a=Atlas.toWorld(this.cam.x-64,this.cam.y-64),b=Atlas.toWorld(this.cam.x+this.W+64,this.cam.y+this.H+64);this.atlasVisible=[];
+Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;this.atlasGround=this.atlasGround||new Map();this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));const groundClock=Math.floor(g.clock);this.atlasGroundClock=groundClock;g.atlas.setClock(groundClock);this.atlasArtStream.setClock(groundClock);let refreshed=0;this.refreshColdSiteProps?.(groundClock);const a=Atlas.toWorld(this.cam.x-64,this.cam.y-64),b=Atlas.toWorld(this.cam.x+this.W+64,this.cam.y+this.H+64);this.atlasVisible=[];
  for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++){
   const chunk=g.atlas.get(cx,cy),p=Atlas.toGame(cx*32,cy*32);this.atlasVisible.push(chunk);let cv=this.atlasGround.get(chunk.key);
-  if(!cv){cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d'),art=WorldTerrainArt.render(cx*512,cy*512,512,512,groundClock),im=c.createImageData(512,512);im.data.set(art.data);c.putImageData(im,0,0);this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}
+  const stale=cv&&!this.atlasArtStream.current(chunk.key,cx,cy);if(stale&&this.atlasArtStream.worker)this.atlasArtStream.request(cx,cy);
+  if(!cv||(stale&&!this.atlasArtStream.worker&&refreshed<1)){refreshed++;cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d'),art=WorldTerrainArt.render(cx*512,cy*512,512,512,groundClock),im=c.createImageData(512,512);im.data.set(art.data);c.putImageData(im,0,0);cv.snowKey=Atlas.chunkSnowKey(cx,cy,groundClock);this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}
   this.c.drawImage(cv,Math.round(p.x),Math.round(p.y));
   // Four sparse native-pixel glint phases, only on genuinely open water.
   if(!chunk.glints){chunk.glints=[];for(let y=1;y<31;y++)for(let x=1;x<31;x++){const i=y*32+x,wx=cx*32+x,wy=cy*32+y;if(chunk.tiles[i]!==3||chunk.tiles[i-1]!==3||chunk.tiles[i+1]!==3||chunk.tiles[i-32]!==3||chunk.tiles[i+32]!==3||Atlas.random(wx,wy,475)<.8)continue;chunk.glints.push({x:p.x+x*16+4+Math.floor(Atlas.random(wx,wy,476)*7),y:p.y+y*16+4+Math.floor(Atlas.random(wx,wy,477)*7),phase:Math.floor(Atlas.random(wx,wy,478)*4)});}}
@@ -3808,7 +3823,7 @@ Renderer.prototype.travelHudBar=function(){
 };
 const travelHud=Renderer.prototype.hud;
 Renderer.prototype.hud=function(){travelHud.call(this);const g=this.g;if(!g.location?.current||g.dialogue||g.journey)return;const c=this.c,L=g.location.current,x=(this.safe.l||0)+5,y=this.top+5,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80));
- c.save();c.globalAlpha=.88;box(c,x-2,y-2,max+5,18,'#1b1715');c.globalAlpha=1;box(c,x-2,y-2,1,18,'#b79c66');c.font='6px PixelUI, monospace';travelText(c,travelFit(c,L.title,max-4),x+2,y,'#e9d8b6');travelText(c,travelFit(c,L.detail||'Terres Sauvages',max-4),x+2,y+8,'#b8baa1');c.restore();this.navigationMarker();
+ c.save();c.globalAlpha=.88;box(c,x-2,y-2,max+5,18,'#1b1715');c.globalAlpha=1;box(c,x-2,y-2,1,18,'#b79c66');c.font='6px PixelUI, monospace';const temperature=Math.round(g.sky().temperature),label=temperature+'°C',tw=c.measureText(label).width;travelText(c,travelFit(c,L.title,max-tw-10),x+2,y,'#e9d8b6');travelText(c,label,x+max-tw,y,temperature<=0?'#b7d0d4':'#c5bea7');this.temperatureReadout={temperature,label,width:tw};travelText(c,travelFit(c,L.detail||'Terres Sauvages',max-4),x+2,y+8,'#b8baa1');c.restore();this.navigationMarker();
 };
 // A native-pixel cloth pennant: bronze staff, sage cloth, cream stitching.
 function drawTravelPin(c,x,y){pixels(c,['.11........','.14333331..','.142222231.','.14222231..','.1433331...','.14........','.14........','.14........','.14........','11111......'],Math.round(x),Math.round(y),{'1':'#24180f','2':'#8eaa76','3':'#d4d7a6','4':'#ba8a4a'});}
@@ -3949,7 +3964,7 @@ const BIOME_CLIMATE=Atlas.climateProfiles;
 function climateAt(clock,biome=6,height=20){
  const p=BIOME_CLIMATE[biome]||BIOME_CLIMATE[6],day=clock/1440,season=(day%96+96)%96/96;
  const summer=Math.sin(season*Math.PI*2),wetSeason=skySmooth(.0,.65,summer),cycle=dayCycle(clock);
- const temperature=Atlas.climateTemperature(clock,biome,height)+2*Math.sin((cycle.hour-8)/24*Math.PI*2);
+ const temperature=Atlas.airTemperature(clock,biome,height);
  const probability=clamp(p.wet+(p.monsoon||0)*wetSeason,.01,.9),k=Math.floor((clock-CLOCK_START)/WEATHER_WIN),u=(clock-CLOCK_START)/WEATHER_WIN-k;
  const front=n=>{const r=n===0?0:hash(n,biome+41,2081),wet=r>1-probability;
   const strength=wet?(.18+.78*hash(n,biome+19,805))*(p.monsoon&&wetSeason>.4?1.18:1):0;
@@ -3970,6 +3985,42 @@ function worldClimateAt(clock,x,y){
 Game.prototype.sky=function(){
  const p=Atlas.toWorld(this.player.x,this.player.y),key=[this.clock,p.x,p.y].join(':');
  if(this._localSkyKey!==key){this._localSkyKey=key;this._sky=worldClimateAt(this.clock,p.x,p.y);}return this._sky;
+};
+
+/* Small deterministic breath puffs. No global particles, sprite assets or timers. */
+function coldBreathProfile(n){
+ const species=String(n.race||n.species||n.kind||n.look||'').toLowerCase(),body=[n.race,n.species,n.kind,n.look].join(' ').toLowerCase();
+ if(n.breathes===false||n.spirit||n.undead||n.coldBlooded||n.dead||n.hp<=0||n.id==='fairy'||/skeleton|undead|ghost|spirit|fairy|snake|reptile|golem|guardian|boss/.test(body))return null;
+ if(species.startsWith('transport_horse'))return {mouth:[21,-30],dir:1,strength:1.1};
+ if(n.warmBlooded||/^(human|elf|dwarf|orc|goblin|nomade|cultist|hero)$/.test(species))return {mouth:n.breathMouth||[0,n.look==='cultist'?-10:n.look==='hero'?-11:-14],strength:1};
+ return null;
+}
+Renderer.prototype.coldBreath=function(n){
+ const g=this.g,cam=this.cam||{x:0,y:0};if(g.journey||n.hidden||(n.alpha??1)<=0||n.x<cam.x-12||n.x>cam.x+(this.W||320)+12||n.y<cam.y-12||n.y>cam.y+(this.H||180)+40)return;
+ const profile=coldBreathProfile(n);if(!profile)return;
+ if(this.breathGame!==g){this.breathGame=g;this.breathActors=new WeakMap();}
+ let s=this.breathActors.get(n);if(!s){let seed=17;for(const ch of String(n.id||n.kind||n.look))seed=(seed*31+ch.charCodeAt(0))>>>0;seed=(seed+(n.x*13+n.y*7|0))>>>0;s={seed,cycle:-1,born:-100};this.breathActors.set(n,s);}
+ if(s.sample!==Math.floor(g.clock)||Math.abs((s.x??Infinity)-n.x)>8||Math.abs((s.y??Infinity)-n.y)>8){const w=Atlas.toWorld(n.x,n.y);s.temperature=worldClimateAt(g.clock,w.x,w.y).temperature;s.sample=Math.floor(g.clock);s.x=n.x;s.y=n.y;}
+ const cold=clamp((5-s.temperature)/13,0,1);if(!cold){s.born=-100;return;}
+ const period=3.2+(s.seed%110)/100,phase=g.time+(s.seed%251)/100,cycle=Math.floor(phase/period),dir=profile.dir??n.dir??2;
+ if(cycle!==s.cycle){s.cycle=cycle;if(phase%period<.25&&dir!==0){s.born=g.time;s.dx=dir===1?1:dir===3?-1:0;s.dy=dir===2?.8:0;const bob=n.moving||n.anim>0?(n.look==='cultist'?[1,0,0,1,0,0][Math.floor(n.anim||0)%6]:(Math.floor(n.anim||0)%6)%3===1?1:0):0;s.ox=n.x+profile.mouth[0]+(profile.dir===undefined?s.dx*4:0);s.oy=n.y+profile.mouth[1]+bob;}}
+ const age=g.time-s.born,life=.85+cold*.25;if(age<0||age>=life)return;const t=age/life,c=this.c;
+ c.save();c.fillStyle='#d4dfdc';const opacity=.32*cold*profile.strength*(n.alpha??1)*Math.min(1,t*8)*(1-t)*(dir===0?.3:1);
+ // Each group separates, rises, loses pixels and fades; the emitted origin stays in world space.
+ for(let i=0;i<5;i++){if(t>.65&&i%2===0)continue;const spread=t*(1+i*.28),x=Math.round(s.ox+s.dx*(1+t*7)+(i%3-1)*spread),y=Math.round(s.oy+s.dy*t*5-t*t*5+(i%2?1:-1)*spread);c.globalAlpha=opacity*(i%2?.65:1);c.fillRect(x,y,i<2&&t<.55?2:1,1);}
+ c.restore();
+};
+const coldNpcDraw=Renderer.prototype.npcDraw;
+Renderer.prototype.npcDraw=function(n){coldNpcDraw.call(this,n);this.coldBreath(n);};
+const coldProp=Renderer.prototype.prop;
+Renderer.prototype.prop=function(n){coldProp.call(this,n);if(n.kind?.startsWith('transport_horse'))this.coldBreath(n);};
+// Refresh existing visible site props in place: transport, inns and collisions survive.
+Renderer.prototype.refreshColdSiteProps=function(clock){
+ const g=this.g,cellKey=Math.floor(clock),position=Math.floor(this.cam.x/256)+','+Math.floor(this.cam.y/256);
+ if(this.coldSiteGame===g&&this.coldSiteClock===cellKey&&this.coldSitePosition===position)return;
+ if(this.coldSiteGame!==g){this.coldSites=new Map();this.coldSiteGame=g;}this.coldSiteClock=cellKey;this.coldSitePosition=position;
+ const sites=new Set();for(const o of g.atlasProps){if(o.id&&o.site&&Math.abs(o.x-this.cam.x-this.W/2)<this.W/2+96&&Math.abs(o.y-this.cam.y-this.H/2)<this.H/2+96)sites.add(o.site);}
+ for(const id of sites){const n=Atlas.byId[id],cell=Atlas.cellAt(n.x,n.y),key=Atlas.snowCover(cell?.biome,cell?.height,clock)>.3;if(this.coldSites.get(id)===key)continue;this.coldSites.set(id,key);const kinds=new Map(atlasSiteProps(n,clock).map(o=>[o.id,o.kind]));for(const o of g.atlasProps)if(o.site===id&&kinds.has(o.id)&&!o.kind.startsWith('transport_'))o.kind=kinds.get(o.id);}
 };
 
 // Ecological cues use MIDI timing but custom animal synthesis, not GM bird patches.
@@ -4013,7 +4064,7 @@ function footSurface(game,actor){
   const env=Atlas.environment(w.x,w.y),cell=Atlas.cellAt(w.x,w.y),np=WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),86,450);
   const parts=env.mix.map(m=>({...m,family:WorldTerrainArt.family(m)})).sort((a,b)=>a.family.localeCompare(b.family)||a.biome-b.biome);
   let part=parts[0],sum=0;for(const p of parts){sum+=p.weight;if(clamp((np-.18)/.64,0,.99999)<sum){part=p;break;}}
-  const b=part?.biome??cell?.biome??1,cover=Atlas.snowCover(b,cell?.height,game.clock);
+  const b=part?.biome??cell?.biome??1,cover=Atlas.visualSnowCover(b,cell?.height,Math.floor(game.clock));
   if(cover>=.99||cover>0&&np<.18+cover*.64)return 'snow';
   if(t===2||t===8)return 'stone';if(t!==1&&!part?.cursed&&Atlas.coastDistance(w.x,w.y)<6+(WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),40,41)-.5)*3)return 'sand';if([8,12].includes(b))return 'mud';
   if(t===1)return [9,10,11].includes(b)?'gravel':'earth';

@@ -56,6 +56,8 @@ function createWorldTerrainArt(atlas, ramps) {
   const PAD=32,ox=x0-PAD,oy=y0-PAD,w=width+PAD*2,h=height+PAD*2,N=w*h;
   const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
   for(let y=0;y<th;y++)for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));
+  // Sample thermal cover once per tile/biome, never once per pixel.
+  for(const tile of meta)for(const p of tile.parts)p.cover=atlas.visualSnowCover(p.biome,tile.cell?.height||20,clock);
   const info=(x,y)=>meta[(Math.floor(y/16)-ty0)*tw+Math.floor(x/16)-tx0];
   const category=t=>t===4?0:t===5?3:t;
   const edge=field(ox,oy,w,h,9,31),edge2=field(ox,oy,w,h,4,32),broad=field(ox,oy,w,h,40,41),grain=field(ox,oy,w,h,24,45),dunes=field(ox,oy,w,h,56,42),ripple=field(ox,oy,w,h,11,43),patch=field(ox,oy,w,h,86,450),fine=field(ox,oy,w,h,7,451);
@@ -87,7 +89,7 @@ function createWorldTerrainArt(atlas, ramps) {
    let part=tile.parts[0],acc=0;const pick=clamp((np-.18)/.64,0,.99999);
    for(const p of tile.parts){acc+=p.weight;if(pick<acc){part=p;break;}}
    const name=part.family,profile=profiles[name],snow=name==='snow',desert=name==='desert',cursed=name==='cursed';let P=rgb[profile.ground],L=4+(n-.5)*2.2;
-   const cover=atlas.snowCover(part.biome,tile.cell?.height||20,clock),drift=cover>0&&(cover>=.99||np<.18+cover*.64);
+   const cover=part.cover,drift=cover>0&&(cover>=.99||np<.18+cover*.64);
    if(m===0){
     const exposed=!desert&&(snow?np<.18:np>.68||name==='marsh'&&np<.4);
     if(exposed){P=rgb[profile.bare];L=3.7+(n-.5)*1.5;}
