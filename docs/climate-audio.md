@@ -77,4 +77,13 @@ Le couvert thermique ne saute plus à minuit. Le rendu vérifie la date chaque m
 
 Le worker conserve au plus huit tâches et le cache trente-deux images. Une ancienne image reste visible pendant sa mise à jour ; une réponse périmée ne peut remplacer une révision climatique plus récente. Sans worker, une seule image de terrain déjà chargée est renouvelée par frame. Les accessoires de transport et auberges sont préservés.
 
-La température locale arrondie apparaît à droite du nom de lieu, sur la ligne existante. Sous 5 °C, les humanoïdes vivants et chevaux émettent de petites expirations désynchronisées, pendant environ une seconde toutes les trois à quatre secondes. Les cinq groupes de pixels maximum partent de la bouche, restent ancrés dans le monde, se dispersent et disparaissent. Les esprits, morts-vivants et reptiles sont exclus ; les futurs acteurs peuvent préciser breathes, warmBlooded, coldBlooded et breathMouth. Aucun effet hors écran ni pendant le voyage.
+La température locale arrondie apparaît à droite du nom de lieu, sur la ligne existante. Sous 5 °C, le joueur, les humanoïdes vivants et chevaux émettent de petites expirations désynchronisées, pendant environ une seconde toutes les trois secondes. Les sept groupes de pixels maximum partent de la bouche, restent ancrés dans le monde, se dispersent et disparaissent. Les esprits, morts-vivants et reptiles sont exclus ; les futurs acteurs peuvent préciser breathes, warmBlooded, coldBlooded et breathMouth. Aucun effet hors écran ni pendant le voyage.
+
+
+### Direction de la neige et empreintes
+
+La neige se dessine directement dans le repère écran après sauvegarde de la transformation du canvas : aucune grande coordonnée du monde, direction du joueur, translation ou secousse de caméra ne participe à sa trajectoire. La vitesse est intégrée, toujours vers le bas et la gauche ; la diagonale évolue progressivement avec le vent et le blizzard.
+
+Les empreintes visuelles utilisent un état GroundTracks distinct du chemin Game.footprints suivi par Elyne. Les contacts animés des pieds produisent des marques alternées sur neige par tout temps, ou sur sable, terre, herbe, gravier et boue pendant la pluie. Ni bois, pierre ou eau, ni déplacements instantanés ou vols. Durée de vingt secondes sur neige et huit secondes sur sol mouillé, avec fondu doux et retrait lors du dégel.
+
+La teinte provient du terrain mis en cache, assombrie sans changer de famille de couleur. Une petite grille RGB échantillonnée tous les quatre pixels accompagne les secteurs ; aucun getImageData pendant les pas. Au maximum seize acteurs proches, quatre nouvelles empreintes par frame et cent soixante empreintes conservées. Les traces hors de la zone proche sont retirées.

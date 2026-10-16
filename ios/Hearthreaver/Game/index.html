@@ -3709,7 +3709,7 @@ function WorldArtStream(cache,makeCanvas,environment=globalThis){
  this.clock=480;this.cache=cache;this.pending=new Set();this.jobs=new Map();this.worker=null;this.failed=false;
  this.setClock=clock=>{this.clock=clock;};
  this.current=(key,cx,cy)=>{const cv=cache.get(key);return cv&&cv.snowKey===Atlas.chunkSnowKey(cx,cy,this.clock);};
- const put=(key,data,width,height,snowKey)=>{const cv=makeCanvas();cv.width=width;cv.height=height;cv.snowKey=snowKey;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);cache.set(key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);};
+ const put=(key,data,width,height,snowKey)=>{const cv=makeCanvas();cv.width=width;cv.height=height;cv.snowKey=snowKey;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);cv.trackColors=terrainTrackColors(data,width,height);cache.set(key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);};
  if(typeof environment.Worker!=='function'||typeof environment.Blob!=='function'||!environment.URL?.createObjectURL)return;
  let url;const release=()=>{if(url){environment.URL.revokeObjectURL(url);url=null;}};
  try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}
@@ -3733,7 +3733,7 @@ Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;
  for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++){
   const chunk=g.atlas.get(cx,cy),p=Atlas.toGame(cx*32,cy*32);this.atlasVisible.push(chunk);let cv=this.atlasGround.get(chunk.key);
   const stale=cv&&!this.atlasArtStream.current(chunk.key,cx,cy);if(stale&&this.atlasArtStream.worker)this.atlasArtStream.request(cx,cy);
-  if(!cv||(stale&&!this.atlasArtStream.worker&&refreshed<1)){refreshed++;cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d'),art=WorldTerrainArt.render(cx*512,cy*512,512,512,groundClock),im=c.createImageData(512,512);im.data.set(art.data);c.putImageData(im,0,0);cv.snowKey=Atlas.chunkSnowKey(cx,cy,groundClock);this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}
+  if(!cv||(stale&&!this.atlasArtStream.worker&&refreshed<1)){refreshed++;cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d'),art=WorldTerrainArt.render(cx*512,cy*512,512,512,groundClock),im=c.createImageData(512,512);im.data.set(art.data);c.putImageData(im,0,0);cv.trackColors=terrainTrackColors(art.data,512,512);cv.snowKey=Atlas.chunkSnowKey(cx,cy,groundClock);this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}
   this.c.drawImage(cv,Math.round(p.x),Math.round(p.y));
   // Four sparse native-pixel glint phases, only on genuinely open water.
   if(!chunk.glints){chunk.glints=[];for(let y=1;y<31;y++)for(let x=1;x<31;x++){const i=y*32+x,wx=cx*32+x,wy=cy*32+y;if(chunk.tiles[i]!==3||chunk.tiles[i-1]!==3||chunk.tiles[i+1]!==3||chunk.tiles[i-32]!==3||chunk.tiles[i+32]!==3||Atlas.random(wx,wy,475)<.8)continue;chunk.glints.push({x:p.x+x*16+4+Math.floor(Atlas.random(wx,wy,476)*7),y:p.y+y*16+4+Math.floor(Atlas.random(wx,wy,477)*7),phase:Math.floor(Atlas.random(wx,wy,478)*4)});}}
@@ -3995,25 +3995,31 @@ function coldBreathProfile(n){
  if(n.warmBlooded||/^(human|elf|dwarf|orc|goblin|nomade|cultist|hero)$/.test(species))return {mouth:n.breathMouth||[0,n.look==='cultist'?-10:n.look==='hero'?-11:-14],strength:1};
  return null;
 }
-Renderer.prototype.coldBreath=function(n){
+Renderer.prototype.coldBreath=function(n,bodyProfile=null){
  const g=this.g,cam=this.cam||{x:0,y:0};if(g.journey||n.hidden||(n.alpha??1)<=0||n.x<cam.x-12||n.x>cam.x+(this.W||320)+12||n.y<cam.y-12||n.y>cam.y+(this.H||180)+40)return;
- const profile=coldBreathProfile(n);if(!profile)return;
+ const profile=bodyProfile||coldBreathProfile(n);if(!profile)return;
  if(this.breathGame!==g){this.breathGame=g;this.breathActors=new WeakMap();}
- let s=this.breathActors.get(n);if(!s){let seed=17;for(const ch of String(n.id||n.kind||n.look))seed=(seed*31+ch.charCodeAt(0))>>>0;seed=(seed+(n.x*13+n.y*7|0))>>>0;s={seed,cycle:-1,born:-100};this.breathActors.set(n,s);}
+ let s=this.breathActors.get(n);if(!s){let seed=17;for(const ch of String(n.id||n.kind||n.look))seed=(seed*31+ch.charCodeAt(0))>>>0;seed=(seed+(n.x*13+n.y*7|0))>>>0;s={seed,next:g.time+.15+(seed%80)/100,born:-100};this.breathActors.set(n,s);}
  if(s.sample!==Math.floor(g.clock)||Math.abs((s.x??Infinity)-n.x)>8||Math.abs((s.y??Infinity)-n.y)>8){const w=Atlas.toWorld(n.x,n.y);s.temperature=worldClimateAt(g.clock,w.x,w.y).temperature;s.sample=Math.floor(g.clock);s.x=n.x;s.y=n.y;}
- const cold=clamp((5-s.temperature)/13,0,1);if(!cold){s.born=-100;return;}
- const period=3.2+(s.seed%110)/100,phase=g.time+(s.seed%251)/100,cycle=Math.floor(phase/period),dir=profile.dir??n.dir??2;
- if(cycle!==s.cycle){s.cycle=cycle;if(phase%period<.25&&dir!==0){s.born=g.time;s.dx=dir===1?1:dir===3?-1:0;s.dy=dir===2?.8:0;const bob=n.moving||n.anim>0?(n.look==='cultist'?[1,0,0,1,0,0][Math.floor(n.anim||0)%6]:(Math.floor(n.anim||0)%6)%3===1?1:0):0;s.ox=n.x+profile.mouth[0]+(profile.dir===undefined?s.dx*4:0);s.oy=n.y+profile.mouth[1]+bob;}}
- const age=g.time-s.born,life=.85+cold*.25;if(age<0||age>=life)return;const t=age/life,c=this.c;
- c.save();c.fillStyle='#d4dfdc';const opacity=.32*cold*profile.strength*(n.alpha??1)*Math.min(1,t*8)*(1-t)*(dir===0?.3:1);
+ const cold=clamp((5-s.temperature)/13,0,1);if(!cold){s.born=-100;s.next=g.time+.2;return;}
+ const dir=profile.dir??n.dir??2,period=2.6+(s.seed%80)/100;
+ if(g.time<s.born||Math.hypot(n.x-(s.lastX??n.x),n.y-(s.lastY??n.y))>64){s.born=-100;s.next=g.time+.2;}s.lastX=n.x;s.lastY=n.y;
+ if(g.time>=s.next){s.next=g.time+period;s.born=g.time;s.back=dir===0;s.dx=dir===1?1:dir===3?-1:dir===0?-.75:0;s.dy=dir===2?.8:0;const frame=Math.floor(n.anim||0)%6,bob=n.moving||n.anim>0?(n.look==='cultist'?[1,0,0,1,0,0][frame]:frame%3===1?1:0):0;s.ox=n.x+profile.mouth[0]+(profile.dir===undefined?s.dx*(s.back?7:4):0);s.oy=n.y+profile.mouth[1]+bob;}
+ const age=g.time-s.born,life=1.05+cold*.25;if(age<0||age>=life)return;const t=age/life,c=this.c;
+ c.save();c.fillStyle='#d4dfdc';const opacity=.57*cold*profile.strength*(n.alpha??1)*Math.min(1,t*8)*(1-t)*(s.back?.68:1);
  // Each group separates, rises, loses pixels and fades; the emitted origin stays in world space.
- for(let i=0;i<5;i++){if(t>.65&&i%2===0)continue;const spread=t*(1+i*.28),x=Math.round(s.ox+s.dx*(1+t*7)+(i%3-1)*spread),y=Math.round(s.oy+s.dy*t*5-t*t*5+(i%2?1:-1)*spread);c.globalAlpha=opacity*(i%2?.65:1);c.fillRect(x,y,i<2&&t<.55?2:1,1);}
+ for(let i=0;i<7;i++){if(t>.65&&i%2===0)continue;const spread=t*(1+i*.28),x=Math.round(s.ox+s.dx*(1+t*9)+(i%3-1)*spread),y=Math.round(s.oy+s.dy*t*5-t*t*5+(i%2?1:-1)*spread);c.globalAlpha=opacity*(i%2?.65:1);c.fillRect(x,y,i<3&&t<.6?2:1,1);}
  c.restore();
 };
 const coldNpcDraw=Renderer.prototype.npcDraw;
 Renderer.prototype.npcDraw=function(n){coldNpcDraw.call(this,n);this.coldBreath(n);};
 const coldProp=Renderer.prototype.prop;
 Renderer.prototype.prop=function(n){coldProp.call(this,n);if(n.kind?.startsWith('transport_horse'))this.coldBreath(n);};
+// The hero has no NPC look field; keep its smaller mouth socket explicit.
+const coldHero=Renderer.prototype.hero;
+Renderer.prototype.hero=function(n){coldHero.call(this,n);if(!this.g.dead&&!this.g.dying)this.coldBreath(n,{mouth:[0,-11],strength:1});};
+const coldEnemy=Renderer.prototype.enemy;
+Renderer.prototype.enemy=function(n){coldEnemy.call(this,n);this.coldBreath(n);};
 // Refresh existing visible site props in place: transport, inns and collisions survive.
 Renderer.prototype.refreshColdSiteProps=function(clock){
  const g=this.g,cellKey=Math.floor(clock),position=Math.floor(this.cam.x/256)+','+Math.floor(this.cam.y/256);
@@ -4101,18 +4107,61 @@ Sound.prototype.updateFootsteps=function(game,active,dt){
 Sound.prototype.environmentOutput=function(){if(!this.environmentBus){this.environmentBus=this.ctx.createGain();this.environmentBus.gain.value=SFX_VOLUME*this.environmentVolume;this.environmentBus.connect(this.ctx.destination);}return this.environmentBus;};
 Sound.prototype.setEnvironmentVolume=function(value){if(!Number.isFinite(value))return;this.environmentVolume=clamp(value,0,1);this.saveAudio();this.wake();this.applyVolumes();};
 
+/* Visual tracks are separate from Game.footprints (Elyne's navigation trail). */
+function terrainTrackColors(data,width,height){const w=Math.ceil(width/4),h=Math.ceil(height/4),rgb=new Uint8Array(w*h*3);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=(Math.min(height-1,y*4+2)*width+Math.min(width-1,x*4+2))*4,j=(y*w+x)*3;rgb[j]=data[i];rgb[j+1]=data[i+1];rgb[j+2]=data[i+2];}return {rgb,w,h};}
+function trackBody(n,game){return !n.dead&&!n.down&&!n.spirit&&!n.flying&&!n.held&&!n.dash&&!n.elevation&&!n.onStairs&&!n.level&&n.id!=='fairy'&&!['snake','serpent','boss'].includes(n.kind)&&!(n===game.player&&(game.mounted||game.dead||game.dying||game.sleeping));}
+function trackSurface(game,n){
+ const material=footSurface(game,n);if(material==='snow')return {material,life:20,alpha:.62};
+ if(!['sand','earth','grass','gravel','mud'].includes(material)||game.tentAt?.(n.x,n.y,1))return null;
+ const w=Atlas.toWorld(n.x,n.y);if(worldClimateAt(game.clock,w.x,w.y).rain<=.04)return null;
+ return {material,life:8,alpha:material==='grass'?.30:material==='gravel'?.36:.48};
+}
+function trackColor(renderer,x,y,material){
+ const w=Atlas.toWorld(x,y),cx=Math.floor(w.x/32),cy=Math.floor(w.y/32),colors=renderer.atlasGround?.get(cx+','+cy)?.trackColors;let rgb;
+ if(colors&&!atlasCore(x/16,y/16)){const ix=clamp(Math.floor((w.x*16-cx*512)/4),0,colors.w-1),iy=clamp(Math.floor((w.y*16-cy*512)/4),0,colors.h-1),j=(iy*colors.w+ix)*3;rgb=[colors.rgb[j],colors.rgb[j+1],colors.rgb[j+2]];}
+ else {const palettes=WorldTerrainArt.colors,palette=palettes[material==='earth'?'humus':material==='gravel'?'stone':material]||palettes.sand;rgb=[1,3,5].map(i=>parseInt(palette[4].slice(i,i+2),16));}
+ // Same hue as the underlying ground; only value changes, no black decal.
+ return 'rgb('+rgb.map(v=>Math.round(v*.48)).join(',')+')';
+}
+class GroundTracks{
+ constructor(game){this.game=game;this.actors=new WeakMap();this.marks=[];this.time=game.time;}
+ step(renderer){const g=this.game,dt=g.time-this.time;this.time=g.time;const cam=renderer.cam,W=renderer.W,H=renderer.H;
+  this.marks=this.marks.filter(m=>g.time>=m.born&&g.time-m.born<m.life&&m.x>cam.x-96&&m.x<cam.x+W+96&&m.y>cam.y-96&&m.y<cam.y+H+96);
+  if(g.journey||dt<0||dt>.2){this.actors=new WeakMap();return;}if(dt===0)return;
+  const actors=[g.player,...g.npcs.filter(n=>(n.alpha??1)>.1&&g.npcPresent(n)),...g.enemies].filter(n=>trackBody(n,g)&&n.x>cam.x-12&&n.x<cam.x+W+12&&n.y>cam.y-12&&n.y<cam.y+H+20).sort((a,b)=>Math.hypot(a.x-g.player.x,a.y-g.player.y)-Math.hypot(b.x-g.player.x,b.y-g.player.y)).slice(0,16);
+  let added=0;for(const n of actors){const old=this.actors.get(n),now={x:n.x,y:n.y,anim:n.anim||0,at:g.time,foot:old?.foot||0};this.actors.set(n,now);if(!old||g.time-old.at>.15)continue;
+   const dx=n.x-old.x,dy=n.y-old.y,moved=Math.hypot(dx,dy);if(moved<.01||moved>Math.max(8,dt*350)||now.anim<=old.anim||Math.floor(now.anim/3)===Math.floor(old.anim/3))continue;
+   now.foot++;if(added>=4)continue;const angle=Math.round(Math.atan2(dy,dx)/(Math.PI/4))*Math.PI/4,ux=Math.cos(angle),uy=Math.sin(angle),side=now.foot%2?1:-1,x=Math.round(n.x-uy*side*2),y=Math.round(n.y+ux*side*2),position={x,y,level:n.level||0};
+   const surface=trackSurface(g,position);if(!surface)continue;this.marks.push({...surface,x,y,ux,uy,side,born:g.time,color:trackColor(renderer,x,y,surface.material),check:Math.floor(g.clock)});added++;
+  }
+  if(this.marks.length>160)this.marks.splice(0,this.marks.length-160);
+ }
+ draw(renderer,c){const g=this.game;c.save();for(const m of this.marks){
+  if(m.material==='snow'&&m.check!==Math.floor(g.clock)){m.check=Math.floor(g.clock);if(footSurface(g,m)!=='snow')m.life=Math.min(m.life,g.time-m.born+1);}
+  const age=(g.time-m.born)/m.life;if(age<0||age>=1)continue;c.fillStyle=m.color;c.globalAlpha=m.alpha*(1-skySmooth(.12,1,age));
+  for(const [across,along]of [[0,-1],[0,0],[0,1],[1,1]])c.fillRect(Math.round(m.x+m.ux*along-m.uy*across*m.side),Math.round(m.y+m.uy*along+m.ux*across*m.side),1,1);
+ }c.restore();}
+}
+const tracksRainGround=renderRainGround;
+renderRainGround=function(renderer,c,W,H){let tracks=renderer.groundTracks;if(!tracks||tracks.game!==renderer.g)tracks=renderer.groundTracks=new GroundTracks(renderer.g);tracks.step(renderer);tracks.draw(renderer,c);tracksRainGround(renderer,c,W,H);};
+
 // END WORLD ATLAS
 // BEGIN SNOW RENDER
+// Screen-space flakes: neither camera translation nor actor facing affects velocity.
 class SnowVisuals{
- constructor(game,W,H){this.game=game;this.W=W;this.H=H;this.time=game.time;this.flakes=[];}
- step(sky){const dt=clamp(this.game.time-this.time,0,.08);this.time=this.game.time;this.count=Math.min(300,Math.round(this.W*this.H/64000*220*sky.snow));
-  while(this.flakes.length<this.count){const i=this.flakes.length;this.flakes.push({x:hash(i,7,51)*this.W,y:hash(i,4,87)*this.H,size:i%5===0?2:1,phase:hash(i,9,55)*6.28});}
-  for(const f of this.flakes){f.x-=dt*(12+sky.wind*95+Math.sin(this.time*.6+f.phase)*5);f.y+=dt*(12+f.size*8+sky.blizzard*50);if(f.y>this.H+4)f.y=-4;if(f.x< -4)f.x=this.W+4;}
+ constructor(game,W,H){this.game=game;this.W=W;this.H=H;this.time=game.time;this.flakes=[];this.slant=.12;}
+ step(sky){const dt=clamp(this.game.time-this.time,0,.08);this.time=this.game.time;const snow=clamp(sky.snow||0,0,1),wind=clamp(sky.wind||0,0,1),blizzard=clamp(sky.blizzard||0,0,1),margin=12;
+  this.slant+=(.08+wind*1.1+blizzard*.22-this.slant)*(1-Math.exp(-dt*1.4));this.count=Math.min(300,Math.round(this.W*this.H/64000*220*snow));
+  while(this.flakes.length<this.count){const i=this.flakes.length;this.flakes.push({x:hash(i,7,51)*this.W,y:hash(i,4,87)*this.H,size:i%5===0?2:1,lap:0});}
+  for(let i=0;i<this.flakes.length;i++){const f=this.flakes[i],fall=dt*(18+f.size*7+snow*10+blizzard*28);f.x-=fall*this.slant;f.y+=fall;
+   if(f.y>this.H+margin){f.y-=this.H+margin*2;f.x=hash(i,++f.lap,53)*(this.W+margin*2)-margin;}if(f.x< -margin)f.x+=this.W+margin*2;
+  }
  }
 }
-function renderSnowFog(renderer,c,W,H){const g=renderer.g,s=g.sky(),cx=renderer.cam.x,cy=renderer.cam.y;
- c.save();if(s.snow>.005){let fx=renderer.snowVisuals;if(!fx||fx.game!==g||fx.W!==W||fx.H!==H||g.time<fx.time)fx=renderer.snowVisuals=new SnowVisuals(g,W,H);fx.step(s);c.fillStyle='#e3e9ed';for(let i=0;i<fx.count;i++){const f=fx.flakes[i];c.globalAlpha=f.size===2?.8:.48;c.fillRect(Math.round(cx+f.x),Math.round(cy+f.y),f.size,f.size);}}else renderer.snowVisuals=null;
- if(s.fog>.005){c.fillStyle='#bfccd2';c.globalAlpha=s.fog*.20;c.fillRect(cx,cy,W,H);for(let i=0;i<5;i++){const y=((i*H/4+g.time*(2+s.wind*4))%(H+48))-24;c.globalAlpha=s.fog*.045;c.fillRect(cx,cy+y,W,24);}}
+function renderSnowFog(renderer,c,W,H){const g=renderer.g,s=g.sky(),K=renderer.k||1;
+ c.save();c.setTransform?.(K,0,0,K,0,(renderer.top||0)*K);
+ if(s.snow>.005){let fx=renderer.snowVisuals;if(!fx||fx.game!==g||fx.W!==W||fx.H!==H||g.time<fx.time)fx=renderer.snowVisuals=new SnowVisuals(g,W,H);fx.step(s);c.fillStyle='#e3e9ed';for(let i=0;i<fx.count;i++){const f=fx.flakes[i];c.globalAlpha=f.size===2?.8:.48;c.fillRect(Math.round(f.x),Math.round(f.y),f.size,f.size);}}else renderer.snowVisuals=null;
+ if(s.fog>.005){c.fillStyle='#bfccd2';c.globalAlpha=s.fog*.20;c.fillRect(0,0,W,H);for(let i=0;i<5;i++){const y=((i*H/4+g.time*(2+s.wind*4))%(H+48))-24;c.globalAlpha=s.fog*.045;c.fillRect(0,y,W,24);}}
  c.restore();
 }
 

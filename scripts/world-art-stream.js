@@ -5,7 +5,7 @@ function WorldArtStream(cache,makeCanvas,environment=globalThis){
  this.clock=480;this.cache=cache;this.pending=new Set();this.jobs=new Map();this.worker=null;this.failed=false;
  this.setClock=clock=>{this.clock=clock;};
  this.current=(key,cx,cy)=>{const cv=cache.get(key);return cv&&cv.snowKey===Atlas.chunkSnowKey(cx,cy,this.clock);};
- const put=(key,data,width,height,snowKey)=>{const cv=makeCanvas();cv.width=width;cv.height=height;cv.snowKey=snowKey;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);cache.set(key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);};
+ const put=(key,data,width,height,snowKey)=>{const cv=makeCanvas();cv.width=width;cv.height=height;cv.snowKey=snowKey;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);cv.trackColors=terrainTrackColors(data,width,height);cache.set(key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);};
  if(typeof environment.Worker!=='function'||typeof environment.Blob!=='function'||!environment.URL?.createObjectURL)return;
  let url;const release=()=>{if(url){environment.URL.revokeObjectURL(url);url=null;}};
  try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}

@@ -22,11 +22,11 @@ test('breathing respects body type, small world-anchored pixel puffs fade and wa
  assert.ok(a.coldBreathProfile({look:'nomade'}));assert.ok(a.coldBreathProfile({race:'goblin'}));assert.ok(a.coldBreathProfile({kind:'transport_horse'}));
  const g=new a.Game(),town=a.Atlas.byId['town-69'],pos=a.Atlas.toGame(town.x,town.y),n={id:'breath-test',...pos,look:'nomade',dir:1},calls=[];
  const r=Object.create(a.Renderer.prototype);Object.assign(r,{g,W:320,H:180,cam:{x:n.x-100,y:n.y-100},c:{save(){},restore(){},fillRect(x,y,w,h){calls.push({x,y,w,h,alpha:this.globalAlpha});}}});
- let peak=0,emitted=false;for(let i=0;i<400;i++){g.time=i/60;calls.length=0;r.coldBreath(n);peak=Math.max(peak,calls.length);if(calls.length){emitted=true;for(const p of calls){assert.equal(p.x,Math.round(p.x));assert.equal(p.y,Math.round(p.y));assert.ok(p.alpha<=.34);assert.ok(Math.abs(p.x-n.x)<20);assert.ok(p.y<n.y-6);}}}
- assert.ok(emitted);assert.ok(peak<=5);g.clock=24*1440+800;g.time+=.1;calls.length=0;r.coldBreath(n);assert.equal(calls.length,0);
+ let peak=0,emitted=false;for(let i=0;i<400;i++){g.time=i/60;calls.length=0;r.coldBreath(n);peak=Math.max(peak,calls.length);if(calls.length){emitted=true;for(const p of calls){assert.equal(p.x,Math.round(p.x));assert.equal(p.y,Math.round(p.y));assert.ok(p.alpha<=.58);assert.ok(Math.abs(p.x-n.x)<20);assert.ok(p.y<n.y-6);}}}
+ assert.ok(emitted);assert.ok(peak<=7);g.clock=24*1440+800;g.time+=.1;calls.length=0;r.coldBreath(n);assert.equal(calls.length,0);
 });
 test('site snow refresh preserves transport props and compact HUD shows temperature without a new row',()=>{
  const g=new a.Game(),town=a.Atlas.byId['town-69'],p=a.Atlas.toGame(town.x,town.y),cv=canvas.createCanvas(640,400),r=new a.Renderer(cv,canvas.createCanvas(1,1),g);r.resize(320,200,{t:0,b:0,l:0,r:0},2);
  Object.assign(g.player,p);g.dialogue=null;g.updateLocation(0);const props=g.atlasProps,transport=props.filter(o=>o.kind.startsWith('transport_')),before=transport.map(o=>o.kind);
- r.frame();g.clock=24*1440+480;r.frame();assert.equal(g.atlasProps,props);assert.deepEqual(transport.map(o=>o.kind),before);assert.equal(r.hudRows,1);assert.equal(r.top,22);assert.equal(r.temperatureReadout.temperature,Math.round(g.sky().temperature));
+ r.frame();assert.ok(r.breathActors.has(g.player));g.clock=24*1440+480;r.frame();assert.equal(g.atlasProps,props);assert.deepEqual(transport.map(o=>o.kind),before);assert.equal(r.hudRows,1);assert.equal(r.top,22);assert.equal(r.temperatureReadout.temperature,Math.round(g.sky().temperature));
 });
