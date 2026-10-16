@@ -1,0 +1,42 @@
+{
+"schema":1,
+"eventColumns":["id","runtimeType","lambdaPerEligibleDay","cooldownDays","durationHours","regions","requires","actorPolicy","targetPolicy","transitionOnly"],
+"eventRules":[
+["bandit_ambush","bandits",0.10,3,24,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["exposed_traffic","available_local_group","cover_or_escape","insufficient_patrol"],"local_band_only","cargo_or_ransom_not_species",false],
+["mining_interception","bandits",0.04,5,24,[1,2,3,8,11],["active_concession_dispute","documented_violent_escalation","related_convoy","armed_group_available"],"documented_party_to_concession","related_convoy_only",false],
+["pasture_retaliation","bandits",0.035,5,18,[3,8,10],["active_passage_dispute","prior_damage_or_seizure","failed_mediation","armed_group_available"],"affected_local_signatories","disputed_herd_or_post",false],
+["kesh_raid","bandits",0.025,7,24,[8,9],["kesh_raiders_active","known_motive","reachable_target","available_group"],"kesh_raiders_not_kesh_population","identified_raid_target",false],
+["fiscal_checkpoint","border",0.08,2,6,[4,5,6,7],["active_contribution_dispute","dated_order","staff_available","selective_access_adapter"],"mandated_crown_or_city_agents","cargo_covered_by_order",false],
+["port_seizure","delay",0.025,5,12,[6,11,12,13,14],["ocean_port_or_valid_dock","active_port_dispute","named_ship_or_cargo","valid_seizure_order","selective_access_adapter"],"specified_port_authority","named_ship_or_cargo",false],
+["labour_dispute","delay",0.03,4,24,[1,2,3,6,8,11,12,13],["actual_wage_contract_or_safety_dispute","workplace_present"],"workers_employer_and_mediator","affected_workplace_not_population",false],
+["shortage","shortage",0.08,2,48,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["verified_stock_deficit","reserves_insufficient","no_timely_delivery"],"economic_state_no_enemy","site_and_resource",false],
+["caravan","caravan",0.18,1,12,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["origin_surplus","destination_demand","cargo_reserved","transport_available","passable_route"],"contracted_merchant","existing_cargo_and_itinerary",false],
+["patrol","patrol",0.22,1,24,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["dated_local_mandate","staff_available","funding_and_provisions","passable_patrol_route"],"competent_local_authority","mandated_corridor_or_site",false],
+["local_occupation","occupation",0,7,48,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["active_armed_dispute","limited_objective","force_available","supply_line","occupation_order"],"named_armed_party","specified_post",true],
+["siege","siege",0,14,72,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["active_local_war","fortified_target","siege_order","force_available","supply_line","civilian_response_ready"],"named_besieger","specified_fortified_site",true],
+["truce","truce",0,1,24,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["active_related_incident","agreement_or_withdrawal_decision","named_signatories"],"signatories_only","related_incident_ids",true],
+["smuggling_interception","theft",0.04,3,12,[4,5,6,8,9,10,11,12,13,14],["actual_illicit_cargo","competent_control","dated_order","selective_access_adapter"],"local_control_and_specific_network","identified_cargo",false],
+["missing_person","missing",0,7,72,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["existing_person","recorded_departure_accident_or_crime","persistent_person_id"],"actual_cause_not_assumed_trafficker","existing_person",true],
+["curse_manifestation","curse",0.02,6,12,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["existing_curse_site","site_specific_trigger","local_manifestation_budget"],"local_manifestation_not_species","existing_curse_perimeter",false],
+["weather_hazard","dynamic_weather_registry",0,1,12,[1,2,3,4,5,6,7,8,9,10,11,12,13,14],["actual_weather","compatible_terrain","physical_threshold","valid_runtime_type"],"physical_hazard_no_faction","measured_hazard_location",true]
+],
+"networks":[
+{"id":"inland_bandits","regions":[4,5,6,7],"actorsConcerned":["teremor","sylverive"],"goods":["provisions","cloth","tools"],"rule":"bandit_ambush","protection":"none_by_default"},
+{"id":"mine_deserters","regions":[1,2,3],"actorsConcerned":["igea","teremor","sylverive"],"goods":["iron","provisions"],"rule":"mining_interception","protection":"individual_contract_only_if_proven"},
+{"id":"customs_smugglers","regions":[4,5,6,7],"actorsConcerned":["teremor","sylverive","tagon"],"goods":["arms","grain","cloth"],"rule":"smuggling_interception","protection":"individual_patron_only_if_proven"},
+{"id":"kesh_raiders","regions":[8,9],"actorsConcerned":["kesh","sarak","varan"],"goods":[],"rule":"kesh_raid","protection":"subset_of_clan_not_species_or_whole_clan"},
+{"id":"captive_brokers","regions":[8,9,10,11,12],"actorsConcerned":["sarak","varan","kesh"],"goods":[],"rule":"missing_person","protection":"named_individual_only_if_proven","peopleAreNotResources":true},
+{"id":"maritime_receivers","regions":[11,12,13,14],"actorsConcerned":["varan","tagon"],"goods":["tin","cloth","tools"],"rule":"port_seizure","protection":"specific_port_patron_only_if_proven"},
+{"id":"illicit_collectors","regions":[4,11,12,14],"actorsConcerned":["teremor","varan","tagon","enclaves"],"goods":["naval_timber","medicinal","resin"],"rule":"smuggling_interception","protection":"none_by_default"}
+],
+"runtimeNotes":{
+"activation":"Requires an explicit adapter; no HTML or save mutation by the bible compiler.",
+"typeMapping":"Check actual EVENT_TYPES. A legacy label alone does not implement the correct actor, legal status or selective target.",
+"smuggling_interception":"The legacy theft label is only a compatibility candidate. A legal seizure must receive its own correct title and consequences, never be silently described as theft.",
+"selectiveAccess":"Do not convert a named cargo/ship mandate into a route closure for all travelers.",
+"combatArt":"Do not render all human/orc/goblin troops as the legacy cultist enemy. Require actor-specific compatible combat assets before activation.",
+"transitionOnly":"Zero stochastic rate. The causal state machine must create an explicit transition, not a modulo-date trigger.",
+"eligibility":"All requires flags must be true in the actual campaign; a missing input disables the proposal.",
+"preserveSafety":"Physical enemies, visibility, floors, refuges, services and actor caps remain governed by the existing danger system."
+}
+}
