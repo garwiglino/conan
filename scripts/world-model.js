@@ -106,7 +106,7 @@ const createWorldAtlas = (raw) => {
    }
    distanceTotal+=leg.length;cost+=leg.length/1000*modes[leg.mode].costPerKm;lastMode=leg.mode;lastRoad=r.id;
   }
-  return {from,to,mode:options.mode||'horse',preference:options.preference||'fast',allowBoat:options.allowBoat!==false,stages,distance:distanceTotal,minutes:time-clock,cost:Math.ceil(cost),boat:path.some(l=>l.mode==='boat'),maxDanger:Math.max(...path.map(l=>edgeById.get(l.edge).danger+(options.state?.edgeStatus(edgeById.get(l.edge),clock).risk||0))),screenSeconds:clamp(3+Math.log1p(distanceTotal/5000)*2,3,18),plannedAt:clock};
+  return {from,to,mode:options.mode||'horse',preference:options.preference||'fast',allowBoat:options.allowBoat!==false,stages,distance:distanceTotal,minutes:time-clock,cost:Math.ceil(cost),boat:path.some(l=>l.mode==='boat'),maxDanger:Math.max(...path.map(l=>edgeById.get(l.edge).danger+(options.state?.edgeStatus(edgeById.get(l.edge),clock).risk||0))),screenSeconds:clamp(6+Math.log1p(distanceTotal/5000)*2.5,6,24),plannedAt:clock};
  }
  const crossings=[];
  function intersection(a,b,c,d){const ux=b[0]-a[0],uy=b[1]-a[1],vx=d[0]-c[0],vy=d[1]-c[1],det=ux*vy-uy*vx;if(Math.abs(det)<1e-7)return null;const t=((c[0]-a[0])*vy-(c[1]-a[1])*vx)/det,u=((c[0]-a[0])*uy-(c[1]-a[1])*ux)/det;return t>=0&&t<=1&&u>=0&&u<=1?{x:a[0]+t*ux,y:a[1]+t*uy}:null;}
