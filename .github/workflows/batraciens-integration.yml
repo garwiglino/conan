@@ -1,0 +1,28 @@
+name: Batraciens integration
+on:
+  push:
+    branches: [integration/batraciens-palettes]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-package-lock --no-audit --no-fund
+      - name: Snapshot tracked sources and test dependencies
+        run: |
+          git archive --format=tar HEAD > /tmp/conan-source.tar
+          tar -rf /tmp/conan-source.tar node_modules
+          gzip /tmp/conan-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: conan-integration-source
+          path: /tmp/conan-source.tar.gz
+          retention-days: 1
