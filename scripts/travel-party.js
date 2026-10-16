@@ -16,10 +16,13 @@ Game.prototype.initTravelParty=function(saved){
  // Every departure has a local person, visible equipment and a graph endpoint.
  for(const site of Atlas.nodes.filter(n=>n.rest)){
   const p=Atlas.toGame(site.x,site.y),dock=site.kind==='dock';
+  // A staffed village entrance on its access road; docks stay on the real coast.
+  const edge=(Atlas.adj.get(site.vertex)||[]).find(e=>e.edge.modes.includes('horse')),v=edge&&Atlas.vertices.get(edge.to),length=v?Math.hypot(v[0]-site.x,v[1]-site.y):0;
+  if(!dock&&site.id!=='camp'&&length){p.x+=(v[0]-site.x)/length*80;p.y+=(v[1]-site.y)/length*80;}
   const modes=dock?['boat']:['horse',...((Atlas.adj.get(site.vertex)||[]).some(e=>e.edge.modes.includes('cart'))?['cart']:[])];
   let actor=this.npcs.find(n=>n.id==='relay-'+site.id);
   if(!actor){actor={id:'relay-'+site.id,...p,dir:2,look:'nomade',head:40,world:true,site:site.id,topics:()=>[],bye:()=>['Bonne route.']};this.npcs.push(actor);this.atlasNpcs.push(actor);}
-  Object.assign(actor,{x:p.x+(site.id==='camp'?-36:dock?-12:28),y:p.y+(site.id==='camp'?-25:dock?4:24),name:dock?'LE BATELIER':'LE PALEFRENIER',label:dock?'BATELIER':'TRANSPORT',title:site.name,greet:()=>[dock?'Le bateau est au quai. Où souhaites-tu aller ?':'Les chevaux sont prêts. Je peux organiser les relais et les traversées de ton voyage.']});
+  Object.assign(actor,{x:p.x+(site.id==='camp'?-36:dock?-12:0),y:p.y+(site.id==='camp'?-25:dock?4:0),name:dock?'LE BATELIER':'LE PALEFRENIER',label:dock?'BATELIER':'TRANSPORT',title:site.name,greet:()=>[dock?'Le bateau est au quai. Où souhaites-tu aller ?':'Les chevaux sont prêts. Je peux organiser les relais et les traversées de ton voyage.']});
   const station={id:actor.id,site:site.id,actor,modes};this.stations.push(station);this.mapPlaces.push({id:'transport-'+site.id,name:(dock?'Port · ':'Transport · ')+site.name,...Atlas.toWorld(actor.x,actor.y),siteId:site.id,category:'transport',kind:dock?'dock':'stable',radius:3});
   if(dock){const boat=Atlas.toGame(site.boat.x,site.boat.y);this.atlasProps=this.atlasProps.filter(o=>o.site!==site.id);this.atlasProps.push({kind:Math.abs(site.shore.x)>Math.abs(site.shore.y)?'transport_boat_side':'transport_boat_front',...boat,world:true,site:site.id});for(let i=0;i<4;i++)this.atlasProps.push({kind:'transport_quay',x:p.x+site.shore.x*i*12,y:p.y+site.shore.y*i*12,world:true,site:site.id});}
   else {const camp=site.id==='camp',hx=p.x+(camp?-72:-36),hy=p.y+(camp?-52:30);this.atlasProps.push({kind:'transport_horse',x:hx,y:hy,world:true,site:site.id},{kind:'transport_hitch',x:hx-1,y:hy+12,world:true,site:site.id});if(modes.includes('cart'))this.atlasProps.push({kind:'transport_cart',x:p.x+(camp?-24:63),y:p.y+(camp?-52:34),world:true,site:site.id});}
@@ -87,3 +90,6 @@ const travelNpcPresent=Game.prototype.npcPresent;
 Game.prototype.npcPresent=function(n){return this.party?.some(c=>c.id===n.id)||travelNpcPresent.call(this,n);};
 const travelSolid=Game.prototype.solid;
 Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&this.atlasProps.some(o=>{const radius={transport_horse:16,transport_cart:22,transport_hitch:18,transport_inn:24}[o.kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-(o.kind==='transport_inn'?24:10)&&y-r<o.y+1;}))return true;return travelSolid.call(this,x,y,r,level);};
+
+Game.prototype.travelDestinations=function(){return this.stations.filter(s=>Atlas.byId[s.site].kind!=='dock').map(s=>Atlas.byId[s.site]);};
+Game.prototype.stationLanding=function(id){const station=this.stations.find(s=>s.site===id);if(!station)return null;const a=station.actor;for(const [dx,dy]of [[0,18],[18,0],[-18,0],[0,-18],[24,24],[-24,24],[24,-24],[-24,-24]]){const p={x:a.x+dx,y:a.y+dy};if(!this.solid(p.x,p.y,5,0)&&this.lineClear(p,a))return p;}return null;};

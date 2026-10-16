@@ -52,7 +52,7 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   assert.equal(a.game.startJourney({to:'town-1',mode:'horse'}),false);
   const station=a.game.stations.find(s=>s.site==='camp');Object.assign(a.game.player,{x:station.actor.x,y:station.actor.y+16});Object.assign(a.game.escortActor,{x:station.actor.x+16,y:station.actor.y+16});
   a.game.talkTo(station.actor);const option=a.game.npcMenu(station.actor).find(o=>o.label.includes('acheter'));option.act();raf(500);assert.equal(a.state,'transport');assert.ok($('transportDestination').options.length>80);
-  assert.equal($('transportDestination').hidden,true);assert.ok($('transportDestination').querySelectorAll('optgroup').length>=4);
+  click('transportHelpOpen');assert.equal($('transportHelp').hidden,false);assert.equal($('transportPanel').inert,true);w.document.activeElement.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',code:'Escape',bubbles:true,cancelable:true}));assert.equal($('transportHelp').hidden,true);assert.equal(a.state,'transport');assert.equal(w.document.activeElement.id,'transportHelpOpen');assert.equal($('transportDestination').hidden,true);assert.ok($('transportDestination').querySelectorAll('optgroup').length>=4);
   click('transportDestinationTrigger');assert.equal($('transportDestinationList').hidden,false);
   const destination=$('transportDestinationList').querySelectorAll('[role="option"]')[1];
   destination.click();assert.equal($('transportDestination').value,destination.dataset.value);assert.equal($('transportDestinationList').hidden,true);
