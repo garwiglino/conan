@@ -38,7 +38,7 @@ Sound.prototype.footstep=function(material,{gain=1,pan=0,variant=0}={}){
 };
 Sound.prototype.updateFootsteps=function(game,active,dt){
  if(!active||game.journey||game.dead||game.dying||game.sleeping||!this.enabled||!this.sfxOn){this.footTracks=new WeakMap();for(const v of this.footVoices||[])try{v.src.stop();}catch{}this.footVoices=[];return;}
- this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&game.npcPresent(n)),...game.enemies.filter(n=>!n.dead&&!['snake','serpent','boss'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
+ this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&(n.civilian?!n.civilian.dead&&(n.alpha??1)>.5:game.npcPresent(n))),...game.enemies.filter(n=>!n.dead&&!['snake','serpent','boss'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
  let played=0;for(const n of actors){const prev=this.footTracks.get(n),now={x:n.x,y:n.y,anim:n.anim||0,variant:prev?.variant||0,at:game.time};this.footTracks.set(n,now);if(!prev||game.time-prev.at>.12)continue;const moved=Math.hypot(n.x-prev.x,n.y-prev.y);
   if(moved>Math.max(8,dt*350)||n.dash||n.held||n.hurt||n.attack||n.wind||n.useTime||n.melee||n.move||moved<.001)continue;
   // The six-frame walk has two foot contacts. Never catch up missed sounds.

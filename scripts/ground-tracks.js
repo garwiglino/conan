@@ -19,7 +19,7 @@ class GroundTracks{
  step(renderer){const g=this.game,dt=g.time-this.time;this.time=g.time;const cam=renderer.cam,W=renderer.W,H=renderer.H;
   this.marks=this.marks.filter(m=>g.time>=m.born&&g.time-m.born<m.life&&m.x>cam.x-96&&m.x<cam.x+W+96&&m.y>cam.y-96&&m.y<cam.y+H+96);
   if(g.journey||dt<0||dt>.2){this.actors=new WeakMap();return;}if(dt===0)return;
-  const actors=[g.player,...g.npcs.filter(n=>(n.alpha??1)>.1&&g.npcPresent(n)),...g.enemies].filter(n=>trackBody(n,g)&&n.x>cam.x-12&&n.x<cam.x+W+12&&n.y>cam.y-12&&n.y<cam.y+H+20).sort((a,b)=>Math.hypot(a.x-g.player.x,a.y-g.player.y)-Math.hypot(b.x-g.player.x,b.y-g.player.y)).slice(0,16);
+  const actors=[g.player,...g.npcs.filter(n=>(n.alpha??1)>.1&&(n.civilian?!n.civilian.dead:g.npcPresent(n))),...g.enemies].filter(n=>trackBody(n,g)&&n.x>cam.x-12&&n.x<cam.x+W+12&&n.y>cam.y-12&&n.y<cam.y+H+20).sort((a,b)=>Math.hypot(a.x-g.player.x,a.y-g.player.y)-Math.hypot(b.x-g.player.x,b.y-g.player.y)).slice(0,16);
   let added=0;for(const n of actors){const old=this.actors.get(n),now={x:n.x,y:n.y,anim:n.anim||0,at:g.time,foot:old?.foot||0};this.actors.set(n,now);if(!old||g.time-old.at>.15)continue;
    const dx=n.x-old.x,dy=n.y-old.y,moved=Math.hypot(dx,dy);if(moved<.01||moved>Math.max(8,dt*350)||now.anim<=old.anim||Math.floor(now.anim/3)===Math.floor(old.anim/3))continue;
    now.foot++;if(added>=4)continue;const angle=Math.round(Math.atan2(dy,dx)/(Math.PI/4))*Math.PI/4,ux=Math.cos(angle),uy=Math.sin(angle),side=now.foot%2?1:-1,x=Math.round(n.x-uy*side*2),y=Math.round(n.y+ux*side*2),position={x,y,level:n.level||0};

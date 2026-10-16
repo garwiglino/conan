@@ -1,0 +1,31 @@
+{
+  "outfits": 144,
+  "modules": 72,
+  "actions": [
+    "carry",
+    "cower",
+    "craft",
+    "death",
+    "flee",
+    "groom",
+    "hit",
+    "hoe",
+    "idle",
+    "ledger",
+    "load",
+    "net",
+    "pottery",
+    "rope",
+    "seated",
+    "sit_down",
+    "sow",
+    "stand_up",
+    "startle",
+    "stir",
+    "talk",
+    "walk",
+    "weave"
+  ],
+  "nativeFrames": 87456,
+  "pngBytes": 2990734
+}
