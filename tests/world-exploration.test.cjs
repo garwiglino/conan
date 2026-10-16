@@ -17,13 +17,13 @@ test('walking reveals a persistent corridor, while a distant respawn reveals no 
  const loaded=new api.Game(JSON.parse(JSON.stringify(g.serialize())));
  assert.equal(JSON.stringify([...loaded.explorationRows]),JSON.stringify([...g.explorationRows]));
 });
-test('nearest transport skips closed stations and does not fabricate a target when all are closed',()=>{
+test('nearest transport keeps the physically closest station even when closed',()=>{
  const g=new api.Game(),n=g.mapPlaces.find(n=>n.category==='transport');
  Object.assign(g.player,api.Atlas.toGame(n.x,n.y));
  g.worldState.active=()=>[{type:'relay',target:n.siteId}];
- const next=g.markNearestTransport();assert.ok(next);assert.notEqual(next.siteId,n.siteId);
+ const next=g.markNearestTransport();assert.ok(next);assert.equal(next.siteId,n.siteId);
  g.worldState.active=()=>g.mapPlaces.filter(n=>n.category==='transport').map(n=>({type:'relay',target:n.siteId}));
- assert.equal(g.markNearestTransport(),null);assert.equal(g.navigation,next.id);
+ assert.equal(g.markNearestTransport().id,n.id);assert.equal(g.navigation,next.id);
 });
 test('unknown places cannot be tracked and are revealed only by visiting, including services',()=>{
  const g=new api.Game(),A=api.Atlas,city=g.mapPlaces.find(n=>n.id===A.home.id),port=g.mapPlaces.find(n=>n.kind==='dock'&&n.category==='transport');

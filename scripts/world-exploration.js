@@ -12,9 +12,9 @@ Game.prototype.isPlaceVisited=function(place){return !!place&&(place.category===
 Game.prototype.canTrackPlace=function(place){return this.isPlaceVisited(place)||!!place&&place.category==='transport'&&place.id===this.transportHint;};
 Game.prototype.markNearestTransport=function(){
  const p=Atlas.toWorld(this.player.x,this.player.y),closed=this.worldState.active(this.clock).filter(e=>Atlas.EVENT_TYPES[e.type].closed);
- const places=this.mapPlaces.filter(n=>n.category==='transport'&&!closed.some(e=>e.target===n.siteId||e.target===Atlas.byId[n.siteId]?.town));
+ const places=this.mapPlaces.filter(n=>n.category==='transport');
  places.sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y)||a.id.localeCompare(b.id));
- const nearest=places[0];if(!nearest)return null;this.transportHint=nearest.id;this.navigation=nearest.id;return nearest;
+ const nearest=places[0];if(!nearest)return null;const unavailable=closed.some(e=>e.target===nearest.siteId||e.target===Atlas.byId[nearest.siteId]?.town);this.emit('notice',{title:unavailable?'Transport le plus proche — fermé':'Transport le plus proche',text:nearest.name+(unavailable?' · Service temporairement indisponible.':'')});this.transportHint=nearest.id;this.navigation=nearest.id;return nearest;
 };
 Game.prototype.recordExploration=function(){
  const p=Atlas.toWorld(this.player.x,this.player.y),old=this.explorationLast;
