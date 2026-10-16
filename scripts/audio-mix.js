@@ -15,8 +15,9 @@ function footSurface(game,actor){
   let part=parts[0],sum=0;for(const p of parts){sum+=p.weight;if(clamp((np-.18)/.64,0,.99999)<sum){part=p;break;}}
   const b=part?.biome??cell?.biome??1,cover=Atlas.snowCover(b,cell?.height,game.clock);
   if(cover>=.99||cover>0&&np<.18+cover*.64)return 'snow';
-  if(t===2||t===8)return 'stone';if([8,12].includes(b))return 'mud';
+  if(t===2||t===8)return 'stone';if(t!==1&&!part?.cursed&&Atlas.coastDistance(w.x,w.y)<6+(WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),40,41)-.5)*3)return 'sand';if([8,12].includes(b))return 'mud';
   if(t===1)return [9,10,11].includes(b)?'gravel':'earth';
+  if(np>.68)return [1,2,3].includes(b)?'sand':[9,10,11].includes(b)?'gravel':'earth';
   return [1,2].includes(b)?'sand':[10,11].includes(b)?'gravel':'grass';
  }
  return t===2||t===8?'stone':t===1?'earth':'sand';
@@ -32,16 +33,17 @@ Sound.prototype.footBuffer=function(material,variant){
 Sound.prototype.footstep=function(material,{gain=1,pan=0,variant=0}={}){
  if(!this.enabled||!this.sfxOn||!this.ctx||!this.master||this.sfxVolume===0||this.travelQuiet)return;
  const c=this.ctx,now=c.currentTime;this.footVoices=(this.footVoices||[]).filter(v=>v.end>now);if(this.footVoices.length>=8)return;
- const src=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner();src.buffer=this.footBuffer(material,variant%3);g.gain.value=Math.min(1,gain)*.65;p.pan.value=clamp(pan,-.8,.8);src.connect(g);g.connect(p);p.connect(this.master);
+ const src=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner();src.buffer=this.footBuffer(material,variant%3);g.gain.value=Math.min(1,gain)*.22;p.pan.value=clamp(pan,-.8,.8);src.connect(g);g.connect(p);p.connect(this.master);
  const voice={end:now+src.buffer.duration,src,g,p};this.footVoices.push(voice);src.onended=()=>{src.disconnect();g.disconnect();p.disconnect();};src.start(now);
 };
 Sound.prototype.updateFootsteps=function(game,active,dt){
  if(!active||game.journey||game.dead||game.dying||game.sleeping||!this.enabled||!this.sfxOn){this.footTracks=new WeakMap();for(const v of this.footVoices||[])try{v.src.stop();}catch{}this.footVoices=[];return;}
- this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&game.npcPresent(n)),...game.enemies.filter(n=>!n.dead&&!['snake','serpent'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
- let played=0;for(const n of actors){const prev=this.footTracks.get(n),now={x:n.x,y:n.y,distance:prev?.distance||0,variant:prev?.variant||0,at:game.time};this.footTracks.set(n,now);if(!prev||game.time-prev.at>.12)continue;const moved=Math.hypot(n.x-prev.x,n.y-prev.y);
-  if(moved>Math.max(8,dt*350)||n.dash||n.held||moved<.001){if(moved>8)now.distance=0;continue;}now.distance+=moved;
-  const stride=n.kind==='guardian'?23:13;if(now.distance<stride)continue;now.distance%=stride;now.variant++;if(played>=3)continue;
-  const distance=Math.hypot(n.x-player.x,n.y-player.y),gain=n===player?.85:.65*(1-distance/240)**2;this.footstep(footSurface(game,n),{gain,pan:(n.x-player.x)/220,variant:now.variant});played++;
+ this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&game.npcPresent(n)),...game.enemies.filter(n=>!n.dead&&!['snake','serpent','boss'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
+ let played=0;for(const n of actors){const prev=this.footTracks.get(n),now={x:n.x,y:n.y,anim:n.anim||0,variant:prev?.variant||0,at:game.time};this.footTracks.set(n,now);if(!prev||game.time-prev.at>.12)continue;const moved=Math.hypot(n.x-prev.x,n.y-prev.y);
+  if(moved>Math.max(8,dt*350)||n.dash||n.held||n.hurt||n.attack||n.wind||n.useTime||n.melee||n.move||moved<.001)continue;
+  // The six-frame walk has two foot contacts. Never catch up missed sounds.
+  if(now.anim<=prev.anim||Math.floor(now.anim/3)===Math.floor(prev.anim/3))continue;now.variant++;if(played>=3)continue;
+  const distance=Math.hypot(n.x-player.x,n.y-player.y),gain=n===player?.85:.4*(1-distance/240)**2;this.footstep(footSurface(game,n),{gain,pan:(n.x-player.x)/220,variant:now.variant});played++;
  }
 };
 

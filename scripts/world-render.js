@@ -23,6 +23,36 @@ Renderer.prototype.visibleAtlasProps=function(){const g=this.g;const result=[...
 const atlasMap=Renderer.prototype.map;
 Renderer.prototype.map=function(){const p=this.g.player;if(atlasCore(p.x/16,p.y/16))return atlasMap.call(this);const c=this.m,W=c.canvas.width,H=c.canvas.height,w=Atlas.toWorld(p.x,p.y);c.fillStyle='#292b26';c.fillRect(0,0,W,H);const scale=2,range=W/scale/2;c.save();c.translate(W/2,H/2);c.strokeStyle='#a99b70';c.lineWidth=2;const roads=new Set();for(let y=w.y-range;y<w.y+range;y+=100)for(let x=w.x-range;x<w.x+range;x+=100){const r=Atlas.closestRoad(x,y);if(r)roads.add(r.road);}for(const r of roads){c.beginPath();r.pts.forEach((p,i)=>{const x=(p[0]-w.x)*scale,y=(p[1]-w.y)*scale;i?c.lineTo(x,y):c.moveTo(x,y);});c.stroke();}for(const n of Atlas.nodes)if(this.g.discovered.has(n.id)&&Math.abs(n.x-w.x)<range&&Math.abs(n.y-w.y)<range){box(c,(n.x-w.x)*scale-2,(n.y-w.y)*scale-2,4,4,'#d6bf87');}box(c,-2,-2,5,5,'#f0e6be');c.restore();};
 const atlasFrame=Renderer.prototype.frame;
-Renderer.prototype.frame=function(){if(this.g.journey){const c=this.c;c.save();c.setTransform(1,0,0,1,0,0);c.fillStyle='#1c2725';c.fillRect(0,0,c.canvas.width,c.canvas.height);c.restore();return;}return atlasFrame.call(this);};
+Renderer.prototype.frame=function(){
+ const g=this.g,p=g.player;
+ if(g.journey){this.arriving=true;const c=this.c;c.save();c.setTransform(1,0,0,1,0,0);c.fillStyle='#1c2725';c.fillRect(0,0,c.canvas.width,c.canvas.height);c.restore();return;}
+ if(this.arriving||this.cameraGame!==g||this.cameraPosition&&Math.hypot(p.x-this.cameraPosition.x,p.y-this.cameraPosition.y)>Math.max(this.W,this.H)){
+  this.focus=null;this.easeT=0;this.lastT=g.time;this.atlasVisible=[];this.arriving=false;
+ }
+ this.cameraGame=g;this.cameraPosition={x:p.x,y:p.y};installLocalRaster(this.c);
+ return atlasFrame.call(this);
+};
+// Rasterize large world coordinates after cancellation in double precision.
+// Otherwise the canvas backend can round sprites and terrain differently far from origin.
+function installLocalRaster(c){
+ if(c.localRaster)return;c.localRaster=true;
+ for(const name of ['drawImage','fillRect','strokeRect','clearRect']){const original=c[name];c[name]=function(...args){
+  const i=name==='drawImage'?(args.length===9?5:1):0,x=args[i],y=args[i+1];
+  if(Math.abs(x)<32768&&Math.abs(y)<32768)return original.apply(this,args);
+  const m=this.getTransform();this.save();this.setTransform(m.a,m.b,m.c,m.d,m.a*x+m.c*y+m.e,m.b*x+m.d*y+m.f);args[i]=args[i+1]=0;
+  try{return original.apply(this,args);}finally{this.restore();}
+ };}
+}
+function biomeAtmosphere(mix){
+ const tones={1:[202,130,65,.055],2:[202,130,65,.045],5:[202,143,75,.035],7:[202,143,75,.035],8:[83,140,99,.045],12:[83,140,99,.05],9:[84,137,202,.055],10:[84,137,202,.06],11:[84,137,202,.065]};
+ let alpha=0,r=0,g=0,b=0;for(const part of mix){const t=tones[part.biome];if(!t)continue;const a=t[3]*part.weight;alpha+=a;r+=t[0]*a;g+=t[1]*a;b+=t[2]*a;}
+ return alpha?`rgba(${Math.round(r/alpha)},${Math.round(g/alpha)},${Math.round(b/alpha)},${alpha})`:null;
+}
+const atmosphereWeather=Renderer.prototype.weatherFX;
+Renderer.prototype.weatherFX=function(c,W,VH){
+ const p=Atlas.toWorld(this.g.player.x,this.g.player.y),color=biomeAtmosphere(Atlas.environment(p.x,p.y).mix);
+ if(color){c.save();const k=this.k||1;c.setTransform(k,0,0,k,0,0);c.fillStyle=color;c.fillRect(0,this.top,W,VH);c.restore();}
+ return atmosphereWeather.call(this,c,W,VH);
+};
 const atlasMagic=Renderer.prototype.magic;
 Renderer.prototype.magic=function(){const result=atlasMagic.call(this),g=this.g;for(const o of (this.atlasVisible||[]).flatMap(c=>c.props)){if(o.kind!=='world_cursed'||Math.abs(o.x-g.player.x)>this.W||Math.abs(o.y-g.player.y)>this.H)continue;const pulse=.7+.15*Math.sin(g.time*2+o.x),col=[153,120,199];result.L.push([o.x,o.y-5,23,col,.25*pulse]);result.G.push([o.x,o.y-19,9,col,.35*pulse],[o.x-2,o.y-8,7,[124,207,153],.3*pulse]);}const f=g.fairyActor,fy=f.y-12+Math.sin(g.time*4)*2,pulse=.88+.12*Math.sin(g.time*3);result.L.push([f.x,fy,28,[173,210,198],.55*pulse]);result.G.push([f.x,fy,13,[190,180,235],.7*pulse],[f.x,fy,5,[228,247,205],.65]);for(const o of g.prisonProps||[])if(o.kind==='torch')result.L.push([o.x,o.y-10,45,[255,171,95],.6]);return result;};

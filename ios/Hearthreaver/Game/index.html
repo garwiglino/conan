@@ -388,6 +388,27 @@ html{font-size:16px}body{font-size:14px}
 #transportPanel{font-size:12px;max-width:680px}#transportPanel header{gap:8px;padding:8px 12px}#transportPanel header>div{flex:1;min-width:0}#transportPanel h2{font-size:21px}#transportPanel header small{font-size:9px;letter-spacing:1px}#transportPanel button{font-size:12px}#transportPanel header button{font-size:11px;min-height:36px}#transportPanel .transport-body{padding:10px 14px}#transportPanel .world-stats{font-size:13px;line-height:1.6}#transportPanel .travel-select-trigger,#transportPanel .travel-select-option{font-size:12px;padding:7px 10px;min-height:40px}#transportPanel .travel-select-heading{font-size:16px;padding:6px 10px}#transportPanel p{margin:7px 0;font-size:11px}#transportPanel .world-actions{gap:8px}#transportGo{flex:1.4;min-height:42px}#transportAdvice:empty,#transportPurchaseHint:empty,#transportMessage:empty{display:none}#transportAdvice{color:#d6bb8a}#transportHelp{z-index:660;max-width:650px}#transportHelp h2{font-size:22px}.transport-help-body{overflow:auto;padding:12px 18px;font-size:12px;line-height:1.6}.transport-help-body h3{font:18px Medieval,serif;color:#dfc58d;margin:12px 0 4px}.transport-help-body p{margin:5px 0 10px}
 .world-journey{overflow:auto;display:flex;align-items:center;justify-content:safe center;padding:12px;font-size:12px}.journey-shell{width:min(700px,100%);margin:auto}.journey-shell header small{font-size:9px;letter-spacing:2px}.journey-shell h2{font-size:24px;margin:4px 0 10px;overflow-wrap:anywhere}.journey-route{padding:8px 12px;border:1px solid #665a3e;background:#1b211b}.journey-route p{margin:3px 0}#worldJourneyStep{font-size:13px;min-height:1.5em}#worldJourneyClock{font-size:11px;color:#bbb59d}.journey-progress{display:flex;align-items:center;gap:10px;margin:7px 0}.world-journey .journey-progress progress{width:100%;flex:1;height:9px;margin:0;accent-color:#d2b876}#worldProgressText{width:38px;font-size:11px;text-align:right}.journey-vitals{display:flex;flex-direction:column;gap:5px;margin:10px 0;max-height:34dvh;overflow:auto}.journey-member{display:grid;grid-template-columns:minmax(70px,.7fr) minmax(130px,1fr) minmax(125px,1fr);gap:12px;align-items:center;background:#211d18;border:1px solid #615238;padding:8px 10px;font-size:11px;text-align:left}.journey-member strong{color:#ecdab2;overflow-wrap:anywhere}.journey-member label{display:grid;grid-template-columns:26px 1fr auto;gap:6px;align-items:center;margin:0;min-width:0}.world-journey .journey-member progress{width:100%;height:8px;margin:0;accent-color:#aaba76;min-width:30px}.world-journey .journey-health{accent-color:#bc7e6a}.journey-member span{font-size:10px}.journey-member .empty{outline:1px solid #bb7458}.journey-resources p{margin:3px 0;font-size:11px}#journeyStocks{color:#bcb69d}#journeyMeal{color:#dcc38b;min-height:1.5em}.journey-shell footer{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px}.journey-shell footer button{font-size:11px;min-height:38px}#worldJourneyHint{font-size:10px;color:#c8af85}.world-journey progress::-webkit-progress-bar{background:#34372b;border:1px solid #5c6046}.world-journey progress::-webkit-progress-value{background:#bba468}.world-journey .journey-member progress::-webkit-progress-value{background:#9aaa6b}.world-journey .journey-member .journey-health::-webkit-progress-value{background:#b87763}
 @media(max-height:430px){.world-journey{padding:8px}.journey-shell h2{font-size:20px;margin:2px 0 6px}.journey-vitals{margin:6px 0;max-height:27dvh}.journey-member{padding:5px 8px}.journey-route{padding:5px 10px}.journey-shell footer{margin-top:5px}}@media(max-width:480px){.journey-member{grid-template-columns:70px 1fr;gap:5px 10px}.journey-member strong{grid-row:span 2}#transportPanel header{flex-wrap:wrap}#transportPanel header>div{flex-basis:45%}.journey-shell h2{font-size:21px}}
+/* Shared hierarchy: title 21, section 16, reading/actions 12, secondary 11. */
+/* Shared hierarchy, including transport menus and the journey overlay. */
+.world-panel,.world-journey{--travel-body:calc(12px * var(--text-scale,1));--travel-note:calc(11px * var(--text-scale,1));--travel-title:calc(21px * var(--text-scale,1));--travel-section:calc(16px * var(--text-scale,1));font-size:var(--travel-body);line-height:1.5}
+.world-panel h2,#transportPanel h2,#transportHelp h2,.journey-shell h2{font-size:var(--travel-title)}
+.world-panel h3,.world-panel .travel-select-heading,#transportPanel .travel-select-heading{font-size:var(--travel-section)}
+.world-panel p,.world-panel label,.world-panel button,.world-panel select,.world-panel ol,.world-panel .world-stats,#transportPanel p,#transportPanel button,#transportPanel .world-stats,#transportPanel .travel-select-trigger,#transportPanel .travel-select-option,.journey-member,#worldJourneyStep,.journey-shell footer button,.transport-help-body{font-size:var(--travel-body)}
+.world-panel small,#transportPanel header small,.world-muted,.party-list small,#worldNews p,#worldCatalog p,.journey-shell header small,.journey-member span,.journey-resources p,#worldJourneyHint,#worldJourneyClock,#worldProgressText{font-size:var(--travel-note);letter-spacing:.3px}
+.world-journey{background:#130f0c var(--ui-wall) 0 0/64px 64px repeat;padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.journey-shell{padding:16px;border:8px solid transparent;border-image:var(--ui-dark) var(--ui-dark-s) fill/12px/0 stretch;color:#e5d2a5;image-rendering:pixelated}
+.journey-shell header{border-bottom:1px solid #775731;margin-bottom:10px}.journey-shell h2{color:#f0d99e}
+.journey-route,.journey-member{background:#17120f;border-color:#775731;box-shadow:inset 0 0 0 1px #100c09}
+.world-journey button{border:3px solid transparent;border-image:var(--ui-dark) var(--ui-dark-s) fill/6px/1px stretch;background:none;border-radius:0;color:#f1e3bd;min-height:44px}
+.world-journey progress{appearance:none;-webkit-appearance:none;border:1px solid #775731;border-radius:0;background:#17120f;overflow:hidden}
+.world-journey progress::-webkit-progress-bar{background:#17120f;border:0}.world-journey progress::-moz-progress-bar{background:#bba468}.world-journey .journey-health::-moz-progress-bar{background:#b87763}
+.journey-shell footer{flex-wrap:wrap}.journey-shell footer span{flex:1;min-width:160px}
+/* Anchor controls to the same gutters that fitScreen assigns to the canvas. */
+#screen.panels-x .console-bar{left:auto!important;right:calc(var(--gr) - var(--pc) + (var(--pc) - 116px)/2)!important;width:116px}
+#screen.panels-x .tracker{left:calc(var(--gl) - var(--pc) + 8px)!important;right:auto!important;width:calc(var(--pc) - 16px)!important;max-width:calc(var(--pc) - 16px)}
+#screen.panels-x .joystick{left:calc(var(--gl) - var(--pc) + (var(--pc) - var(--joy-size))/2)!important}
+#screen.panels-x .action-pad{right:calc(var(--gr) - var(--pc) + 4px)!important;bottom:calc(env(safe-area-inset-bottom) + 8px)!important}
+@media(max-height:430px){.journey-shell{padding:8px}.journey-shell header{margin-bottom:6px}#screen.panels-x .console-bar{top:calc(env(safe-area-inset-top) + 6px)}#screen.panels-x .tools{gap:3px!important}}
 
 /* END WORLD CSS */
 html,body{overflow:hidden;overscroll-behavior:none;touch-action:pan-x pan-y}body{position:fixed;inset:0}
@@ -3287,7 +3308,7 @@ Game.prototype.restoreJourney=function(){const j=this.pendingJourney;this.pendin
 Game.prototype.journeyPosition=function(){const j=this.journey,s=j?.plan.stages[j.index];if(!s)return;const u=clamp(j.progress/s.minutes,0,1),w=s.kind==='move'?{x:s.from[0]+(s.to[0]-s.from[0])*u,y:s.from[1]+(s.to[1]-s.from[1])*u}:s,p=Atlas.toGame(w.x,w.y);this.player.dir=this.direction(p.x-this.player.x,p.y-this.player.y);this.player.moving=s.kind==='move';this.player.x=p.x;this.player.y=p.y;this.player.level=0;};
 // Interrupted travel always returns to a staffed stop already reached.
 Game.prototype.journeySafeStation=function(j){for(const id of [j.lastSafe,j.plan?.from,'camp'])if(this.stationLanding(id))return Atlas.byId[id];return Atlas.byId[this.stations.find(s=>this.stationLanding(s.site)).site];};
-Game.prototype.finishJourney=function(reason='Arrivée à destination'){const j=this.journey;if(!j)return;const completed=j.index>=j.plan.stages.length,target=completed&&this.stationLanding(j.plan.to)?Atlas.byId[j.plan.to]:this.journeySafeStation(j),landing=this.stationLanding(target.id);if(landing)Object.assign(this.player,landing,{level:0});const w=Atlas.toWorld(this.player.x,this.player.y),at=target||Atlas.siteAt(w.x,w.y,15);this.journey=null;this.player.moving=false;this.player.inv=2;this.placeSafely(this.player.x,this.player.y);if(this.story.recruited&&!this.story.delivered){this.escortActor.x=this.player.x+16;this.escortActor.y=this.player.y+16;this.companion.x=this.escortActor.x;this.companion.y=this.escortActor.y;}for(const c of this.party){if(c.spirit)continue;const actor=this.partyActor(c.id);if(actor){Object.assign(actor,{x:this.player.x+16,y:this.player.y+16});c.x=actor.x;c.y=actor.y;}}this.footprints=[];if(at?.rest){this.worldCheckpoint={x:this.player.x,y:this.player.y,level:0};this.checkpoint={...this.worldCheckpoint};}this.updateLocation(0);this.emit('notice',{title:reason,text:at?.name||'Une halte sur le chemin. Le reste du voyage peut se faire à pied.'});this.emit('save');};
+Game.prototype.finishJourney=function(reason='Arrivée à destination'){const j=this.journey;if(!j)return;const completed=j.index>=j.plan.stages.length,target=completed&&this.stationLanding(j.plan.to)?Atlas.byId[j.plan.to]:this.journeySafeStation(j),landing=this.stationLanding(target.id);if(landing)Object.assign(this.player,landing,{level:0});const w=Atlas.toWorld(this.player.x,this.player.y),at=target||Atlas.siteAt(w.x,w.y,15);this.journey=null;this.player.moving=false;this.player.anim=0;this.player.inv=2;this.placeSafely(this.player.x,this.player.y);if(this.story.recruited&&!this.story.delivered){this.escortActor.x=this.player.x+16;this.escortActor.y=this.player.y+16;this.companion.x=this.escortActor.x;this.companion.y=this.escortActor.y;}for(const c of this.party){if(c.spirit)continue;const actor=this.partyActor(c.id);if(actor){Object.assign(actor,{x:this.player.x+16,y:this.player.y+16});c.x=actor.x;c.y=actor.y;}}this.footprints=[];if(at?.rest){this.worldCheckpoint={x:this.player.x,y:this.player.y,level:0};this.checkpoint={...this.worldCheckpoint};}this.updateLocation(0);this.emit('notice',{title:reason,text:at?.name||'Une halte sur le chemin. Le reste du voyage peut se faire à pied.'});this.emit('save');};
 Game.prototype.stepJourney=function(dt){const j=this.journey;if(!j)return;this.time+=dt;this.elapsed+=dt;j.elapsed=(j.elapsed||0)+dt;if((j.mealPause||0)>0){j.mealPause=Math.max(0,j.mealPause-dt);return;}
  const current=j.plan.stages[j.index];if(!current){this.finishJourney();return;}
  if(j.readLabel!==current.label){j.readLabel=current.label;j.readTime=0;}j.readTime=(j.readTime||0)+dt;
@@ -3709,7 +3730,37 @@ Renderer.prototype.visibleAtlasProps=function(){const g=this.g;const result=[...
 const atlasMap=Renderer.prototype.map;
 Renderer.prototype.map=function(){const p=this.g.player;if(atlasCore(p.x/16,p.y/16))return atlasMap.call(this);const c=this.m,W=c.canvas.width,H=c.canvas.height,w=Atlas.toWorld(p.x,p.y);c.fillStyle='#292b26';c.fillRect(0,0,W,H);const scale=2,range=W/scale/2;c.save();c.translate(W/2,H/2);c.strokeStyle='#a99b70';c.lineWidth=2;const roads=new Set();for(let y=w.y-range;y<w.y+range;y+=100)for(let x=w.x-range;x<w.x+range;x+=100){const r=Atlas.closestRoad(x,y);if(r)roads.add(r.road);}for(const r of roads){c.beginPath();r.pts.forEach((p,i)=>{const x=(p[0]-w.x)*scale,y=(p[1]-w.y)*scale;i?c.lineTo(x,y):c.moveTo(x,y);});c.stroke();}for(const n of Atlas.nodes)if(this.g.discovered.has(n.id)&&Math.abs(n.x-w.x)<range&&Math.abs(n.y-w.y)<range){box(c,(n.x-w.x)*scale-2,(n.y-w.y)*scale-2,4,4,'#d6bf87');}box(c,-2,-2,5,5,'#f0e6be');c.restore();};
 const atlasFrame=Renderer.prototype.frame;
-Renderer.prototype.frame=function(){if(this.g.journey){const c=this.c;c.save();c.setTransform(1,0,0,1,0,0);c.fillStyle='#1c2725';c.fillRect(0,0,c.canvas.width,c.canvas.height);c.restore();return;}return atlasFrame.call(this);};
+Renderer.prototype.frame=function(){
+ const g=this.g,p=g.player;
+ if(g.journey){this.arriving=true;const c=this.c;c.save();c.setTransform(1,0,0,1,0,0);c.fillStyle='#1c2725';c.fillRect(0,0,c.canvas.width,c.canvas.height);c.restore();return;}
+ if(this.arriving||this.cameraGame!==g||this.cameraPosition&&Math.hypot(p.x-this.cameraPosition.x,p.y-this.cameraPosition.y)>Math.max(this.W,this.H)){
+  this.focus=null;this.easeT=0;this.lastT=g.time;this.atlasVisible=[];this.arriving=false;
+ }
+ this.cameraGame=g;this.cameraPosition={x:p.x,y:p.y};installLocalRaster(this.c);
+ return atlasFrame.call(this);
+};
+// Rasterize large world coordinates after cancellation in double precision.
+// Otherwise the canvas backend can round sprites and terrain differently far from origin.
+function installLocalRaster(c){
+ if(c.localRaster)return;c.localRaster=true;
+ for(const name of ['drawImage','fillRect','strokeRect','clearRect']){const original=c[name];c[name]=function(...args){
+  const i=name==='drawImage'?(args.length===9?5:1):0,x=args[i],y=args[i+1];
+  if(Math.abs(x)<32768&&Math.abs(y)<32768)return original.apply(this,args);
+  const m=this.getTransform();this.save();this.setTransform(m.a,m.b,m.c,m.d,m.a*x+m.c*y+m.e,m.b*x+m.d*y+m.f);args[i]=args[i+1]=0;
+  try{return original.apply(this,args);}finally{this.restore();}
+ };}
+}
+function biomeAtmosphere(mix){
+ const tones={1:[202,130,65,.055],2:[202,130,65,.045],5:[202,143,75,.035],7:[202,143,75,.035],8:[83,140,99,.045],12:[83,140,99,.05],9:[84,137,202,.055],10:[84,137,202,.06],11:[84,137,202,.065]};
+ let alpha=0,r=0,g=0,b=0;for(const part of mix){const t=tones[part.biome];if(!t)continue;const a=t[3]*part.weight;alpha+=a;r+=t[0]*a;g+=t[1]*a;b+=t[2]*a;}
+ return alpha?`rgba(${Math.round(r/alpha)},${Math.round(g/alpha)},${Math.round(b/alpha)},${alpha})`:null;
+}
+const atmosphereWeather=Renderer.prototype.weatherFX;
+Renderer.prototype.weatherFX=function(c,W,VH){
+ const p=Atlas.toWorld(this.g.player.x,this.g.player.y),color=biomeAtmosphere(Atlas.environment(p.x,p.y).mix);
+ if(color){c.save();const k=this.k||1;c.setTransform(k,0,0,k,0,0);c.fillStyle=color;c.fillRect(0,this.top,W,VH);c.restore();}
+ return atmosphereWeather.call(this,c,W,VH);
+};
 const atlasMagic=Renderer.prototype.magic;
 Renderer.prototype.magic=function(){const result=atlasMagic.call(this),g=this.g;for(const o of (this.atlasVisible||[]).flatMap(c=>c.props)){if(o.kind!=='world_cursed'||Math.abs(o.x-g.player.x)>this.W||Math.abs(o.y-g.player.y)>this.H)continue;const pulse=.7+.15*Math.sin(g.time*2+o.x),col=[153,120,199];result.L.push([o.x,o.y-5,23,col,.25*pulse]);result.G.push([o.x,o.y-19,9,col,.35*pulse],[o.x-2,o.y-8,7,[124,207,153],.3*pulse]);}const f=g.fairyActor,fy=f.y-12+Math.sin(g.time*4)*2,pulse=.88+.12*Math.sin(g.time*3);result.L.push([f.x,fy,28,[173,210,198],.55*pulse]);result.G.push([f.x,fy,13,[190,180,235],.7*pulse],[f.x,fy,5,[228,247,205],.65]);for(const o of g.prisonProps||[])if(o.kind==='torch')result.L.push([o.x,o.y-10,45,[255,171,95],.6]);return result;};
 
@@ -3961,8 +4012,9 @@ function footSurface(game,actor){
   let part=parts[0],sum=0;for(const p of parts){sum+=p.weight;if(clamp((np-.18)/.64,0,.99999)<sum){part=p;break;}}
   const b=part?.biome??cell?.biome??1,cover=Atlas.snowCover(b,cell?.height,game.clock);
   if(cover>=.99||cover>0&&np<.18+cover*.64)return 'snow';
-  if(t===2||t===8)return 'stone';if([8,12].includes(b))return 'mud';
+  if(t===2||t===8)return 'stone';if(t!==1&&!part?.cursed&&Atlas.coastDistance(w.x,w.y)<6+(WorldTerrainArt.noise(Math.floor(w.x*16),Math.floor(w.y*16),40,41)-.5)*3)return 'sand';if([8,12].includes(b))return 'mud';
   if(t===1)return [9,10,11].includes(b)?'gravel':'earth';
+  if(np>.68)return [1,2,3].includes(b)?'sand':[9,10,11].includes(b)?'gravel':'earth';
   return [1,2].includes(b)?'sand':[10,11].includes(b)?'gravel':'grass';
  }
  return t===2||t===8?'stone':t===1?'earth':'sand';
@@ -3978,16 +4030,17 @@ Sound.prototype.footBuffer=function(material,variant){
 Sound.prototype.footstep=function(material,{gain=1,pan=0,variant=0}={}){
  if(!this.enabled||!this.sfxOn||!this.ctx||!this.master||this.sfxVolume===0||this.travelQuiet)return;
  const c=this.ctx,now=c.currentTime;this.footVoices=(this.footVoices||[]).filter(v=>v.end>now);if(this.footVoices.length>=8)return;
- const src=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner();src.buffer=this.footBuffer(material,variant%3);g.gain.value=Math.min(1,gain)*.65;p.pan.value=clamp(pan,-.8,.8);src.connect(g);g.connect(p);p.connect(this.master);
+ const src=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner();src.buffer=this.footBuffer(material,variant%3);g.gain.value=Math.min(1,gain)*.22;p.pan.value=clamp(pan,-.8,.8);src.connect(g);g.connect(p);p.connect(this.master);
  const voice={end:now+src.buffer.duration,src,g,p};this.footVoices.push(voice);src.onended=()=>{src.disconnect();g.disconnect();p.disconnect();};src.start(now);
 };
 Sound.prototype.updateFootsteps=function(game,active,dt){
  if(!active||game.journey||game.dead||game.dying||game.sleeping||!this.enabled||!this.sfxOn){this.footTracks=new WeakMap();for(const v of this.footVoices||[])try{v.src.stop();}catch{}this.footVoices=[];return;}
- this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&game.npcPresent(n)),...game.enemies.filter(n=>!n.dead&&!['snake','serpent'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
- let played=0;for(const n of actors){const prev=this.footTracks.get(n),now={x:n.x,y:n.y,distance:prev?.distance||0,variant:prev?.variant||0,at:game.time};this.footTracks.set(n,now);if(!prev||game.time-prev.at>.12)continue;const moved=Math.hypot(n.x-prev.x,n.y-prev.y);
-  if(moved>Math.max(8,dt*350)||n.dash||n.held||moved<.001){if(moved>8)now.distance=0;continue;}now.distance+=moved;
-  const stride=n.kind==='guardian'?23:13;if(now.distance<stride)continue;now.distance%=stride;now.variant++;if(played>=3)continue;
-  const distance=Math.hypot(n.x-player.x,n.y-player.y),gain=n===player?.85:.65*(1-distance/240)**2;this.footstep(footSurface(game,n),{gain,pan:(n.x-player.x)/220,variant:now.variant});played++;
+ this.footTracks??=new WeakMap();const player=game.player,actors=[player,...game.npcs.filter(n=>n.id!=='fairy'&&game.npcPresent(n)),...game.enemies.filter(n=>!n.dead&&!['snake','serpent','boss'].includes(n.kind))].filter(n=>!n.down&&(n.level||0)===(player.level||0)&&Math.hypot(n.x-player.x,n.y-player.y)<240).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,16);
+ let played=0;for(const n of actors){const prev=this.footTracks.get(n),now={x:n.x,y:n.y,anim:n.anim||0,variant:prev?.variant||0,at:game.time};this.footTracks.set(n,now);if(!prev||game.time-prev.at>.12)continue;const moved=Math.hypot(n.x-prev.x,n.y-prev.y);
+  if(moved>Math.max(8,dt*350)||n.dash||n.held||n.hurt||n.attack||n.wind||n.useTime||n.melee||n.move||moved<.001)continue;
+  // The six-frame walk has two foot contacts. Never catch up missed sounds.
+  if(now.anim<=prev.anim||Math.floor(now.anim/3)===Math.floor(prev.anim/3))continue;now.variant++;if(played>=3)continue;
+  const distance=Math.hypot(n.x-player.x,n.y-player.y),gain=n===player?.85:.4*(1-distance/240)**2;this.footstep(footSurface(game,n),{gain,pan:(n.x-player.x)/220,variant:now.variant});played++;
  }
 };
 
