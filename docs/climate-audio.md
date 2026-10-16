@@ -47,3 +47,11 @@ Le calcul utilise les tronçons du graphe : base du type de voie, relief et cell
 L'écran sépare la moyenne pondérée par les distances du pic local. Les détails donnent la route du pic et les facteurs présents. Le trajet prudent minimise la durée estimée plus l'exposition au danger, avec la même fonction que l'affichage et les rencontres à pied près des routes. Il ne promet pas systématiquement une moyenne plus basse si le détour est beaucoup plus long.
 
 Toutes les notes sont bornées entre 0 et 5. L'estimation est un instantané du monde au départ, recalculé à l'achat effectif du trajet : elle ne prédit pas les futurs incidents et ne représente pas un pourcentage d'embuscade. Les fermetures sont contrôlées pendant le voyage. Les morts ennemies sauvegardées restent respectées par le générateur de rencontres ; la note caractérise le parcours, pas un décompte des ennemis visibles.
+
+## Reprise et mixage révisés
+
+Un voyage sauvegardé reste caché au menu initial et reprend avec Charger. En cas de perte de focus, page masquée ou suspension native, les commandes sont relâchées, le jeu sauvegardé et mis en pause ; les notifications répétées ne relancent pas le jeu. Les sauvegardes périodiques du voyage restent nécessaires : un arrêt forcé du processus ne garantit pas la livraison du dernier événement de fermeture.
+
+Le viewport et WKWebView interdisent le zoom de page. Les listes gardent leur défilement interne et la carte ses commandes de navigation. Le réglage de taille du texte reste disponible.
+
+Les dix ambiances ont désormais neuf pistes, avec contrechant de flûte, nappe haute et ponctuations de cloche alternées. La basse est remontée d'une octave, moins soutenue et fortement atténuée ; les percussions sont discrètes. Le thème de titre conserve ses douze pistes avec basse, timbales et batterie réduites ; les anciens thèmes de jeu ont également une assise grave allégée. Les MIDI sont régénérés depuis la même partition que le moteur audio.

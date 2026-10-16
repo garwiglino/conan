@@ -14,17 +14,21 @@ const profiles={
 };
 const scores={},fauna={};const add=(a,t,d,n,v)=>a.push(Math.round(t*tpb),Math.round(d*tpb),n,v);
 for(const [family,p]of Object.entries(profiles)){
- const tracks={lead:[],harm:[],arp:[],saw:[],bass:[],drums:[]},note=i=>p.root+12+p.scale[(i+p.scale.length)%p.scale.length];
+ const tracks={lead:[],harm:[],arp:[],saw:[],bass:[],drums:[],counter:[],strings:[],shimmer:[]},note=i=>p.root+12+p.scale[(i+p.scale.length)%p.scale.length];
  for(let bar=0;bar<32;bar++){
   const phrase=Math.floor(bar/4),degree=[0,3,0,4,0,2,4,0][phrase],base=p.root+p.scale[degree%p.scale.length],t=bar*4;
-  if(bar%2===0){add(tracks.bass,t,7.7,base-12,37);add(tracks.saw,t+.1,7.6,base,28);add(tracks.harm,t+.3,7.4,base+7,25);}
+  if(bar%2===0){add(tracks.bass,t,5.8,base,24);add(tracks.saw,t+.1,6.8,base+12,23);add(tracks.harm,t+.3,6.5,base+19,23);}
+  // Three complementary voices enter in alternating phrases, leaving breath and space.
+  if(bar%4===1){add(tracks.counter,t+1,1.8,note(p.mel[phrase%8]+2),27);add(tracks.counter,t+3,.7,note(p.mel[phrase%8]+1),22);}
+  if(bar%4===2)add(tracks.strings,t+.35,5.2,base+12+p.scale[2],22);
+  if(bar%8===7){add(tracks.shimmer,t+.75,1.4,note(p.mel[phrase%8])+12,18);add(tracks.shimmer,t+2.75,.8,note(0)+12,15);}
   // Silence between melodic answers keeps exploration and dialogue in front.
   if(bar%4===0||bar%4===2){const index=p.mel[(phrase+(bar%4===2?3:0))%8];add(tracks.lead,t+.5,1.6,note(index),family==='travel'?49:39);if(bar%4===0)add(tracks.lead,t+2.75,.8,note(index+1),32);}
   if(bar%2===1||family==='travel')for(let beat=0;beat<4;beat+=family==='travel'?1:2)add(tracks.arp,t+beat+.03,.65,base+12+[0,7,12,7][beat],29+(beat===0?6:0));
-  if(['desert','steppe','tropical','travel'].includes(family)&&bar%2===0){add(tracks.drums,t,.4,41,30);if(family==='travel'||family==='tropical')add(tracks.drums,t+2.5,.25,45,23);}
+  if(['desert','steppe','tropical','travel'].includes(family)&&bar%2===0){add(tracks.drums,t,.3,45,18);if(family==='travel'||family==='tropical')add(tracks.drums,t+2.5,.2,43,14);}
  }
- const timbres={lead:{kind:['steppe','boreal','travel'].includes(family)?'brass':family==='polar'?'bell':'flute',g:.19,pan:-.12,a:.12,rel:.45,filter:1300},harm:{kind:'choir',g:.09,pan:.25,a:.6,rel:.8},arp:{kind:'bell',g:family==='tropical'?.12:.075,pan:.3,a:.005,rel:.5},saw:{w:'tri',g:.1,pan:-.3,a:.5,tau:1,sus:.8,rel:.65},bass:{w:'tri',g:.22,pan:0,a:.08,flat:true,rel:.3},drums:{g:.15,pan:-.1}};
- scores['biome_'+family]={bpm:p.bpm,tpb,bars:32,dur:32*240/p.bpm,style:'biome',gain:family==='travel'?2.6:family==='polar'?2.5:2,tracks,timbres,programs:{lead:p.program,harm:52,arp:46,saw:48,bass:43,drums:0}};
+ const timbres={lead:{kind:['steppe','boreal','travel'].includes(family)?'brass':family==='polar'?'bell':'flute',g:.15,pan:-.12,a:.12,rel:.45,filter:1300},harm:{kind:'choir',g:.09,pan:.25,a:.6,rel:.8},arp:{kind:'bell',g:family==='tropical'?.12:.075,pan:.3,a:.005,rel:.5},saw:{w:'tri',g:.065,pan:-.3,a:.5,tau:1,sus:.8,rel:.65},bass:{w:'tri',g:.035,pan:0,a:.35,tau:.8,sus:.45,rel:.6},drums:{g:.07,pan:-.1},counter:{kind:'flute',g:.11,pan:.28},strings:{kind:'choir',g:.065,pan:-.25,a:.8,rel:.9},shimmer:{kind:'bell',g:.045,pan:.4,a:.02,rel:.7}};
+ scores['biome_'+family]={bpm:p.bpm,tpb,bars:32,dur:32*240/p.bpm,style:'biome',gain:family==='travel'?2.6:family==='polar'?2.5:2,tracks,timbres,programs:{lead:p.program,harm:52,arp:46,saw:48,bass:42,drums:0,counter:74,strings:48,shimmer:8}};
 }
 const habitats={coast:['gull','gull'],desert:['hawk','owl'],steppe:['lark','cricket'],forest:['songbird','owl'],tropical:['parrot','frog'],wetland:['frog','frog'],boreal:['raven','wolf'],polar:['raven','wind'],cursed:['raven','wind']};
 for(const [family,calls]of Object.entries(habitats))for(const [phase,voice]of [['day',calls[0]],['night',calls[1]]]){
@@ -37,9 +41,9 @@ for(const [family,calls]of Object.entries(habitats))for(const [phase,voice]of [[
 function midi(name,s){const vlq=n=>{let b=[n&127];while(n>>=7)b.unshift((n&127)|128);return Buffer.from(b);},chunk=(id,b)=>{const l=Buffer.alloc(4);l.writeUInt32BE(b.length);return Buffer.concat([Buffer.from(id),l,b]);},meta=(type,text)=>Buffer.concat([Buffer.from([255,type]),vlq(Buffer.byteLength(text)),Buffer.from(text)]),end=s.bars*4*tpb;
  const track=ev=>{ev.sort((a,b)=>a.t-b.t||a.o-b.o);let prev=0,out=[];for(const e of ev){out.push(vlq(e.t-prev),e.b);prev=e.t;}out.push(vlq(end-prev),Buffer.from([255,47,0]));return chunk('MTrk',Buffer.concat(out));};
  const tempo=Math.round(60000000/s.bpm),tracks=[track([{t:0,o:0,b:meta(3,name)},{t:0,o:1,b:Buffer.from([255,81,3,tempo>>16,tempo>>8&255,tempo&255])}])];let i=0;
- for(const [part,notes]of Object.entries(s.tracks)){const ch=part==='drums'?9:i++,pan=Math.round(64+(s.timbres[part].pan||0)*63),ev=[{t:0,o:0,b:meta(3,part)},{t:0,o:1,b:Buffer.from([192|ch,s.programs[part]])},{t:0,o:1,b:Buffer.from([176|ch,10,pan])},{t:0,o:1,b:Buffer.from([176|ch,7,85])},{t:0,o:1,b:Buffer.from([176|ch,91,24])}];for(let j=0;j<notes.length;j+=4){const[t,d,n,v]=notes.slice(j,j+4);ev.push({t,o:3,b:Buffer.from([144|ch,n,v])},{t:t+d,o:2,b:Buffer.from([128|ch,n,0])});}tracks.push(track(ev));}
+ for(const [part,notes]of Object.entries(s.tracks)){const ch=part==='drums'?9:i++,pan=Math.round(64+(s.timbres[part].pan||0)*63),ev=[{t:0,o:0,b:meta(3,part)},{t:0,o:1,b:Buffer.from([192|ch,s.programs[part]])},{t:0,o:1,b:Buffer.from([176|ch,10,pan])},{t:0,o:1,b:Buffer.from([176|ch,7,s.style==='biome'?Math.min(110,Math.round(85*Math.sqrt(s.timbres[part].g/.15))):85])},{t:0,o:1,b:Buffer.from([176|ch,91,24])}];for(let j=0;j<notes.length;j+=4){const[t,d,n,v]=notes.slice(j,j+4);ev.push({t,o:3,b:Buffer.from([144|ch,n,v])},{t:t+d,o:2,b:Buffer.from([128|ch,n,0])});}tracks.push(track(ev));}
  const h=Buffer.alloc(6);h.writeUInt16BE(1);h.writeUInt16BE(tracks.length,2);h.writeUInt16BE(tpb,4);fs.writeFileSync(path.join(dir,name+'.mid'),Buffer.concat([chunk('MThd',h),...tracks]));
 }
 for(const [n,s]of Object.entries(scores))midi(n,s);for(const [n,s]of Object.entries(fauna))midi('fauna_'+n,s);
 fs.writeFileSync(path.join(dir,'biome-scores.json'),JSON.stringify({music:scores,fauna},null,2)+'\n');
-console.log('Built 10 original six-part music scores and 18 four-part fauna scores, MIDI type 1.');
+console.log('Built 10 original nine-part music scores and 18 four-part fauna scores, MIDI type 1.');

@@ -18,7 +18,7 @@ html=html.includes('// BEGIN STUDIO INTRO')?html.replace(/\/\/ BEGIN STUDIO INTR
 if(html.includes('// BEGIN LANDSCAPE UI'))html=html.replace(/\/\/ BEGIN LANDSCAPE UI[\s\S]*?\/\/ END LANDSCAPE UI/,()=>landscape);
 else html=html.replace('const PANEL=150;',()=>landscape+'\nconst PANEL=150;');
 if(!html.includes('id="landscapeGate"'))html=html.replace('<body>','<body>\n<section id="landscapeGate" role="dialog" aria-modal="true" aria-labelledby="landscapeHeading" tabindex="-1" hidden><span class="landscape-device" aria-hidden="true"></span><h2 id="landscapeHeading">Tourne ton appareil</h2><p>Hearthreaver se joue en paysage.</p></section>');
-if(html.includes('// BEGIN HEARTHREAVER TITLE'))html=html.replace(/\/\/ BEGIN HEARTHREAVER TITLE\n[\s\S]*?\/\/ END HEARTHREAVER TITLE/,()=>block);
+if(html.includes('// BEGIN HEARTHREAVER TITLE'))html=html.replace(/\/\/ BEGIN HEARTHREAVER TITLE\r?\n[\s\S]*?\/\/ END HEARTHREAVER TITLE/,()=>block);
 else html=html.replace('// END BOSS ASSETS','// END BOSS ASSETS\n'+block);
 const css=fs.readFileSync(path.join(root,'scripts/title.css'),'utf8').replace(/__TITLE_BUTTON_(\w+)__/g,(_,state)=>png('button-'+state.toLowerCase()+'.png')),style='/* BEGIN HEARTHREAVER TITLE */\n'+css+'\n/* END HEARTHREAVER TITLE */';
 if(html.includes('/* BEGIN HEARTHREAVER TITLE */'))html=html.replace(/\/\* BEGIN HEARTHREAVER TITLE \*\/[\s\S]*?\/\* END HEARTHREAVER TITLE \*\//,()=>style);

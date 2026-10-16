@@ -49,6 +49,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         let config = WKWebViewConfiguration()
         // Les fichiers du jeu sont servis depuis l'app par conan://localhost/… (hors ligne, origine stable pour la sauvegarde).
         config.setURLSchemeHandler(GameSchemeHandler(), forURLScheme: GameSchemeHandler.scheme)
+        config.ignoresViewportScaleLimits = false
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
         config.websiteDataStore = .default()
@@ -63,6 +64,8 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         web.scrollView.backgroundColor = .hearthreaverInk
         web.scrollView.isScrollEnabled = false
         web.scrollView.bounces = false
+        web.scrollView.bouncesZoom = false
+        web.scrollView.pinchGestureRecognizer?.isEnabled = false
         // Les marges de sécurité (encoche, barre d'accueil) restent gérées par le jeu via env(safe-area-inset-*).
         web.scrollView.contentInsetAdjustmentBehavior = .never
         web.allowsLinkPreview = false
@@ -112,7 +115,11 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
 
     /// Déclenche l'enregistrement de la partie par le jeu lui-même (même fonction que lors de la fermeture d'une page web).
     func saveNow() {
-        webView?.evaluateJavaScript("window.dispatchEvent(new Event('pagehide'));true", completionHandler: nil)
+        webView?.evaluateJavaScript("window.dispatchEvent(new Event('hearthreaver-suspend'));true", completionHandler: nil)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.scrollView.pinchGestureRecognizer?.isEnabled = false
     }
 
     // Si iOS ferme le moteur web en arrière-plan (mémoire), on recharge le jeu : la sauvegarde est reprise.

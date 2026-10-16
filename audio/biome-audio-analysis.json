@@ -8,145 +8,145 @@
   ],
   "music": {
     "ambient": {
-      "peakDb": -16.044442883102075,
-      "rmsDb": -39.12737918449683,
-      "stereoCorrelation": 0.9626371969969145,
+      "peakDb": -16.418352258593647,
+      "rmsDb": -39.25092579122776,
+      "stereoCorrelation": 0.9629139640556699,
       "bandsPercent": [
-        14.85,
-        78.39,
-        6.31,
-        0.45
+        13.32,
+        80.19,
+        6.12,
+        0.37
       ]
     },
     "night": {
-      "peakDb": -18.93869243593137,
-      "rmsDb": -36.091091880650076,
-      "stereoCorrelation": 0.9759830039252326,
+      "peakDb": -18.52787114412631,
+      "rmsDb": -36.10361583189639,
+      "stereoCorrelation": 0.9759563972196756,
       "bandsPercent": [
-        0.97,
-        86.73,
-        10.27,
-        2.03
+        0.78,
+        86.99,
+        10.23,
+        1.99
       ]
     },
     "title": {
-      "peakDb": -15.937427537117228,
-      "rmsDb": -35.32900056802697,
-      "stereoCorrelation": 0.966710038748157,
+      "peakDb": -20.119503420973736,
+      "rmsDb": -37.06202641774243,
+      "stereoCorrelation": 0.9557262049429749,
       "bandsPercent": [
-        46.81,
-        48.65,
-        4.49,
-        0.05
+        23.69,
+        70.11,
+        6.17,
+        0.03
       ]
     },
     "biome_coast": {
-      "peakDb": -29.8795021607897,
-      "rmsDb": -43.17001998429116,
-      "stereoCorrelation": 0.9729359521239987,
+      "peakDb": -32.117722075665476,
+      "rmsDb": -45.75744786239692,
+      "stereoCorrelation": 0.9593057756970291,
       "bandsPercent": [
-        33.15,
-        66.84,
-        0.01,
-        0
-      ]
-    },
-    "biome_desert": {
-      "peakDb": -29.933247141779084,
-      "rmsDb": -43.193090499900336,
-      "stereoCorrelation": 0.9729125480536872,
-      "bandsPercent": [
-        40.25,
-        59.74,
-        0.01,
-        0
-      ]
-    },
-    "biome_steppe": {
-      "peakDb": -28.53916594499863,
-      "rmsDb": -44.33355912976747,
-      "stereoCorrelation": 0.9705317047518391,
-      "bandsPercent": [
-        52.83,
-        47.12,
-        0.05,
-        0
-      ]
-    },
-    "biome_forest": {
-      "peakDb": -29.823985762700215,
-      "rmsDb": -43.003249790289274,
-      "stereoCorrelation": 0.9736138459288072,
-      "bandsPercent": [
-        36.41,
-        63.58,
-        0.01,
-        0
-      ]
-    },
-    "biome_tropical": {
-      "peakDb": -30.13015233767636,
-      "rmsDb": -43.250108493647126,
-      "stereoCorrelation": 0.970911674304337,
-      "bandsPercent": [
-        28.74,
-        71.22,
+        1.17,
+        98.79,
         0.04,
         0
       ]
     },
-    "biome_wetland": {
-      "peakDb": -29.882895537518298,
-      "rmsDb": -43.21707395565199,
-      "stereoCorrelation": 0.9728541211989973,
+    "biome_desert": {
+      "peakDb": -32.482503313495016,
+      "rmsDb": -46.143270149489894,
+      "stereoCorrelation": 0.9543872934752096,
       "bandsPercent": [
-        58.11,
-        41.89,
-        0,
+        1.75,
+        98.21,
+        0.04,
         0
       ]
     },
-    "biome_boreal": {
-      "peakDb": -29.19898889659543,
-      "rmsDb": -44.66642793750707,
-      "stereoCorrelation": 0.9699440786642533,
+    "biome_steppe": {
+      "peakDb": -30.922153833075015,
+      "rmsDb": -47.35966866693851,
+      "stereoCorrelation": 0.9473214141046562,
       "bandsPercent": [
-        51.68,
-        48.26,
-        0.05,
-        0
-      ]
-    },
-    "biome_polar": {
-      "peakDb": -27.928423781193242,
-      "rmsDb": -45.51442857492053,
-      "stereoCorrelation": 0.9727739190689223,
-      "bandsPercent": [
-        64.19,
-        35.72,
+        2.46,
+        97.44,
         0.09,
         0
       ]
     },
-    "biome_cursed": {
-      "peakDb": -29.854684657049045,
-      "rmsDb": -43.445493804209285,
-      "stereoCorrelation": 0.9724049037927254,
+    "biome_forest": {
+      "peakDb": -32.186186022009295,
+      "rmsDb": -45.76858430053882,
+      "stereoCorrelation": 0.9578960667307141,
       "bandsPercent": [
-        67.44,
-        32.56,
-        0,
+        1.38,
+        98.59,
+        0.04,
+        0
+      ]
+    },
+    "biome_tropical": {
+      "peakDb": -32.37827588382014,
+      "rmsDb": -45.67054402569858,
+      "stereoCorrelation": 0.9537633866759114,
+      "bandsPercent": [
+        1.27,
+        98.66,
+        0.07,
+        0
+      ]
+    },
+    "biome_wetland": {
+      "peakDb": -32.33064300187835,
+      "rmsDb": -46.027199612579835,
+      "stereoCorrelation": 0.9583533003000503,
+      "bandsPercent": [
+        28.32,
+        71.67,
+        0.01,
+        0
+      ]
+    },
+    "biome_boreal": {
+      "peakDb": -31.02518941664247,
+      "rmsDb": -47.350298893581744,
+      "stereoCorrelation": 0.9496622324464394,
+      "bandsPercent": [
+        1.96,
+        97.94,
+        0.1,
+        0
+      ]
+    },
+    "biome_polar": {
+      "peakDb": -31.13631151263317,
+      "rmsDb": -49.05932845810108,
+      "stereoCorrelation": 0.9116472288561989,
+      "bandsPercent": [
+        3.15,
+        96.6,
+        0.24,
+        0.01
+      ]
+    },
+    "biome_cursed": {
+      "peakDb": -32.35693066112945,
+      "rmsDb": -46.37859562072854,
+      "stereoCorrelation": 0.9555899899332856,
+      "bandsPercent": [
+        45.2,
+        54.79,
+        0.01,
         0
       ]
     },
     "biome_travel": {
-      "peakDb": -25.47672315919341,
-      "rmsDb": -41.09907659906686,
-      "stereoCorrelation": 0.9696612068909455,
+      "peakDb": -27.769511118591765,
+      "rmsDb": -43.80707241773443,
+      "stereoCorrelation": 0.9492036443201799,
       "bandsPercent": [
-        45.47,
-        54.45,
-        0.08,
+        2.13,
+        97.73,
+        0.14,
         0
       ]
     }

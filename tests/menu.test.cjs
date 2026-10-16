@@ -101,3 +101,40 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   assert.deepEqual(errors,[]);
  }finally{destroy();}
 });
+
+test('cold restart and repeated background events preserve a paid journey without hiding the menu',async()=>{
+ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,studioIntro,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics,textSettings,setTextSize};})();');
+ const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
+ const destroy=w.close.bind(w);w.close=()=>{closes++;};
+ w.HTMLElement.prototype.scrollTo=function(options){this.scrollTop=options.top||0;};
+ const proto=w.HTMLCanvasElement.prototype;
+ for(const key of ['width','height']){const d=Object.getOwnPropertyDescriptor(proto,key);Object.defineProperty(proto,key,{get:d.get,set(v){d.set.call(this,v);if(map.has(this))map.get(this).native[key]=v;},configurable:true});}
+ proto.getContext=function(){if(!map.has(this)){const native=canvas.createCanvas(this.width||1,this.height||1),ctx=native.getContext('2d');const proxy=new Proxy(ctx,{get(target,k){if(k==='drawImage'||k==='createPattern')return (im,...args)=>target[k](map.get(im)?.native||im,...args);const v=target[k];return typeof v==='function'?v.bind(target):v;},set(t,k,v){t[k]=v;return true;}});map.set(this,{native,proxy});}return map.get(this).proxy;};
+ proto.toDataURL=function(){this.getContext('2d');return map.get(this).native.toDataURL();};
+ w.Image=canvas.Image;w.Path2D=canvas.Path2D;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});w.requestAnimationFrame=cb=>{raf=cb;return 1;};
+ w.AudioContext=class extends RenderingAudioContext{constructor(){super({sampleRate:8000});Object.defineProperty(this,'state',{value:'running'});}resume(){return Promise.resolve();}suspend(){return Promise.resolve();}decodeAudioData(b,ok){ok(this.createBuffer(1,1,8000));}};
+ w.HTMLMediaElement.prototype.play=()=>Promise.resolve();w.HTMLMediaElement.prototype.pause=()=>{};
+ const errors=[];w.addEventListener('error',e=>{errors.push(e.error?.stack||e.message);e.preventDefault();});
+ const $=id=>w.document.getElementById(id),click=id=>$(id).click(),level=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event('input',{bubbles:true}));};
+
+ try{
+  const {Game,Atlas}=await require('./game-harness.cjs').loadGame(),g=new Game(),station=g.stations.find(s=>s.site==='camp');
+  Object.assign(g.player,{x:station.actor.x,y:station.actor.y+14,coins:9999});g.prepareTransport(station.id);
+  assert.ok(g.startJourney(g.planJourney(Atlas.home.id)));g.stepJourney(.5);const coins=g.player.coins;
+  w.localStorage.setItem('conan-serpent-v1',JSON.stringify(g.serialize()));
+  w.eval(script);const a=w.testAPI;await a.BITMAPS.promise;await a.titleScene.promise;
+  a.studioIntro.skip();a.studioIntro.update(1);await new Promise(r=>setTimeout(r,450));raf(100);
+  assert.equal(a.state,'title');assert.ok(a.game.journey);assert.equal($('worldJourney').hidden,true);assert.equal($('menuLoad').disabled,false);
+  click('menuLoad');raf(130);assert.equal(a.state,'playing');assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
+  const elapsed=a.game.journey.elapsed;
+  for(let i=0;i<3;i++)w.dispatchEvent(new w.Event('hearthreaver-suspend'));
+  assert.equal(a.state,'paused');assert.equal($('worldJourney').hidden,true);raf(5000);assert.equal(a.game.journey.elapsed,elapsed);
+  const saved=JSON.parse(w.localStorage.getItem('conan-serpent-v1'));assert.ok(saved.atlas.journey);assert.equal(saved.player.coins,coins);
+  click('start');raf(w.performance.now()+40);assert.equal(a.state,'playing');assert.ok(a.game.journey.elapsed>elapsed);
+  w.dispatchEvent(new w.Event('pagehide'));assert.equal(a.state,'paused');assert.equal($('worldJourney').hidden,true);
+  a.showTitle();raf(5100);assert.equal($('worldJourney').hidden,true);click('menuLoad');raf(5130);assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
+  const pinch=new w.Event('gesturestart',{cancelable:true});w.document.dispatchEvent(pinch);assert.equal(pinch.defaultPrevented,true);
+  const wheel=new w.WheelEvent('wheel',{ctrlKey:true,cancelable:true});w.document.dispatchEvent(wheel);assert.equal(wheel.defaultPrevented,true);
+  assert.deepEqual(errors,[]);
+ }finally{destroy();}
+});

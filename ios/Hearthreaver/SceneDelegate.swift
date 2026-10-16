@@ -22,6 +22,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // L'app passe en arrière-plan : le jeu se met en pause tout seul (comme dans Safari)
     // et on lui demande en plus d'enregistrer la partie tout de suite.
+    func sceneWillResignActive(_ scene: UIScene) {
+        (window?.rootViewController as? GameViewController)?.saveNow()
+    }
+
     func sceneDidEnterBackground(_ scene: UIScene) {
         (window?.rootViewController as? GameViewController)?.saveNow()
     }
