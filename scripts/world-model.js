@@ -44,12 +44,29 @@ const createWorldAtlas = (raw) => {
   roads.push({id:'access-'+id,name:'Chemin du port de '+town.name,type:'roads',width:4.6,modes:['foot','horse','cart'],danger:1,interval:0,pts:[...pts.slice(0,q.i),point]});
   const sea=[point,...pts.slice(q.i)];r.pts=reverse?sea.reverse():sea;
  }
- for(const r of roads){const cs=r.pts.map(p=>cellById.get(Number(p[2].slice(1)))).filter(Boolean);if(r.type==='trails'&&r.id!=='prison-road'&&cs.every(c=>c.height<58&&c.biome!==12))r.modes.push('cart');r.danger=Math.min(5,r.danger+(cs.some(c=>c.height>60)?1:0)+(cs.some(c=>raw.zones.some(z=>z.cells.includes(c.id)))?2:0));}
+ for(const r of roads){const cs=r.pts.map(p=>cellById.get(Number(p[2].slice(1)))).filter(Boolean);if(r.type==='trails'&&r.id!=='prison-road'&&cs.every(c=>c.height<58&&c.biome!==12))r.modes.push('cart');}
  const roadById=Object.fromEntries(roads.map(r=>[r.id,r])),segments=[],roadIndex=new Index(2048),riverIndex=new Index(2048),vertices=new Map(),adj=new Map();
  const curseCells=new Set(raw.zones.flatMap(z=>z.cells));
  function addEdge(a,b,r,len){const key=[a[2],b[2]].sort().join('|');let e=edgeById.get(key);if(!e){e={id:key,a:a[2],b:b[2],length:len,roads:[],modes:[],danger:1};edgeById.set(key,e);for(const [u,v]of [[a[2],b[2]],[b[2],a[2]]]){if(!adj.has(u))adj.set(u,[]);adj.get(u).push({to:v,edge:e});}}e.roads.push(r.id);e.modes=[...new Set([...e.modes,...r.modes])];e.danger=Math.max(e.danger,r.danger);}
  const edgeById=new Map();
  for(const r of roads){r.cumulative=[0];r.length=0;r.segments=[];for(const p of r.pts)vertices.set(p[2],p);for(let i=1;i<r.pts.length;i++){const a=r.pts[i-1],b=r.pts[i],len=distance(a,b),s={r,a,b,length:len,start:r.length,i};r.length+=len;r.cumulative.push(r.length);r.segments.push(s);segments.push(s);roadIndex.put(s,Math.min(a[0],b[0])-25,Math.min(a[1],b[1])-25,Math.max(a[0],b[0])+25,Math.max(a[1],b[1])+25);addEdge(a,b,r,len);}}
+ // Evaluate only the cells traversed by each graph edge, never the whole road.
+ for(const e of edgeById.values()){
+  const a=vertices.get(e.a),b=vertices.get(e.b),base=Math.min(...e.roads.map(id=>roadById[id].danger)),count=Math.max(1,Math.min(24,Math.ceil(e.length/250))),values=[],reasons=new Set();
+  e.x=(a[0]+b[0])/2;e.y=(a[1]+b[1])/2;
+  for(let i=0;i<count;i++){const u=(i+.5)/count,c=cellAt(a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u);let v=base;
+   if(c?.land&&c.height>60){v+=1;reasons.add('Relief montagneux');}
+   if(c&&curseCells.has(c.id)){v+=2;reasons.add('Terres maudites');}
+   values.push(clamp(v,0,5));
+  }e.danger=values.reduce((a,b)=>a+b,0)/values.length;e.peakDanger=Math.max(...values);e.terrainReasons=[...reasons];
+ }
+ // NPC road summaries remain averages; local encounters use the actual edge.
+ for(const r of roads)r.danger=r.segments.reduce((sum,s)=>sum+edgeById.get([s.a[2],s.b[2]].sort().join('|')).danger*s.length,0)/(r.length||1);
+ function edgeRisk(edge,clock=480,state=null){
+  const status=state?.edgeStatus(edge,clock)||{closed:false,risk:0,events:[]},sky=state?.weatherAt?.(clock,edge.x,edge.y),sea=edge.modes.includes('boat')&&!edge.modes.includes('horse');
+  const weather=sky?(sea?Math.max(sky.storm||0,(sky.wind||0)*.6)*(sky.rain>.5?1.5:1):(sky.blizzard||0)+(sky.rain||0)*(edge.terrainReasons.includes('Relief montagneux')?.5:.15)):0;
+  const delta=status.risk+weather;return {value:clamp(edge.danger+delta,0,5),peak:clamp(edge.peakDanger+delta,0,5),closed:status.closed,reasons:[...edge.terrainReasons,...(weather>.15?['Intempéries locales']:[]),...(status.events||[]).filter(e=>EVENT_TYPES[e.type].risk).map(e=>EVENT_TYPES[e.type].name)]};
+ }
  for(const r of raw.rivers)for(let i=1;i<r.points.length;i++){const a=r.points[i-1],b=r.points[i],s={r,a,b};riverIndex.put(s,Math.min(a[0],b[0])-r.width,Math.min(a[1],b[1])-r.width,Math.max(a[0],b[0])+r.width,Math.max(a[1],b[1])+r.width);}
  for(const n of nodes){const v=vertices.get(n.vertex);if(v){n.x=v[0];n.y=v[1];}}
  const siteIndex=new Index(2048);for(const n of nodes)siteIndex.put(n,n.x-150,n.y-150,n.x+150,n.y+150);
@@ -89,13 +106,13 @@ const createWorldAtlas = (raw) => {
     const m=e.modes.includes(mode)?mode:allowBoat&&e.modes.includes('boat')?'boat':null;if(!m)continue;
     const choices=e.roads.map(id=>roadById[id]).filter(r=>r.modes.includes(m)&&(!knownRoutes||knownRoutes.has(r.id)));if(!choices.length)continue;
     const r=choices.sort((a,b)=>(a.type==='roads'?0:1)-(b.type==='roads'?0:1)||a.id.localeCompare(b.id))[0];
-    const cost=u.cost+e.length/modes[m].metresPerMinute+(preference==='safe'?Math.max(0,e.danger+status.risk)*e.length/160:0);
+    const cost=u.cost+e.length/modes[m].metresPerMinute+(preference==='safe'?edgeRisk(e,clock,state).value*e.length/160:0);
     if(cost<(best.get(v)??Infinity)){best.set(v,cost);prev.set(v,{from:u.id,to:v,edge:e.id,road:r.id,mode:m,length:e.length});q.push({id:v,cost});}
    }
   }
   if(!best.has(goal))return null;const result=[];let v=goal;while(v!==start){const e=prev.get(v);if(!e)return null;result.unshift(e);v=e.from;}return result;
  }
- function routePlan(from,to,options={}){const path=findPath(from,to,options);if(!path||!path.length)return null;const clock=options.clock??480,stages=[];let time=clock,effort=0,distanceTotal=0,cost=0,lastMode=null,lastRoad=null;
+ function routePlan(from,to,options={}){const path=findPath(from,to,options);if(!path||!path.length)return null;const clock=options.clock??480,stages=[],dangerLegs=path.map(l=>{const e=edgeById.get(l.edge),risk=edgeRisk(e,clock,options.state);return {...risk,road:l.road,length:l.length};});let time=clock,effort=0,distanceTotal=0,cost=0,lastMode=null,lastRoad=null;
   for(const leg of path){const r=roadById[leg.road],a=vertices.get(leg.from),b=vertices.get(leg.to),rate=modes[leg.mode].metresPerMinute;
    if(leg.mode==='boat'&&lastMode!=='boat'){const wait=(r.interval-time%r.interval)%r.interval;if(wait){stages.push({kind:'wait',minutes:wait,x:a[0],y:a[1],label:'Attend l’embarquement à '+nearestSite(a[0],a[1]).name});time+=wait;}}
    const delay=options.state?.edgeStatus(edgeById.get(leg.edge),time).delay||0;if(delay&&lastRoad!==r.id){stages.push({kind:'wait',minutes:delay,x:a[0],y:a[1],label:'Départ retardé sur '+r.name});time+=delay;}
@@ -106,7 +123,7 @@ const createWorldAtlas = (raw) => {
    }
    distanceTotal+=leg.length;cost+=leg.length/1000*modes[leg.mode].costPerKm;lastMode=leg.mode;lastRoad=r.id;
   }
-  return {from,to,mode:options.mode||'horse',preference:options.preference||'fast',allowBoat:options.allowBoat!==false,stages,distance:distanceTotal,minutes:time-clock,cost:Math.ceil(cost),boat:path.some(l=>l.mode==='boat'),maxDanger:Math.max(...path.map(l=>edgeById.get(l.edge).danger+(options.state?.edgeStatus(edgeById.get(l.edge),clock).risk||0))),screenSeconds:clamp(6+Math.log1p(distanceTotal/5000)*2.5,6,24),plannedAt:clock};
+  return {from,to,mode:options.mode||'horse',preference:options.preference||'fast',allowBoat:options.allowBoat!==false,stages,distance:distanceTotal,minutes:time-clock,cost:Math.ceil(cost),boat:path.some(l=>l.mode==='boat'),danger:clamp(dangerLegs.reduce((sum,l)=>sum+l.value*l.length,0)/distanceTotal,0,Math.max(...dangerLegs.map(l=>l.peak))),maxDanger:Math.max(...dangerLegs.map(l=>l.peak)),dangerLegs,dangerAt:clock,screenSeconds:clamp(6+Math.log1p(distanceTotal/5000)*2.5,6,24),plannedAt:clock};
  }
  const crossings=[];
  function intersection(a,b,c,d){const ux=b[0]-a[0],uy=b[1]-a[1],vx=d[0]-c[0],vy=d[1]-c[1],det=ux*vy-uy*vx;if(Math.abs(det)<1e-7)return null;const t=((c[0]-a[0])*vy-(c[1]-a[1])*vx)/det,u=((c[0]-a[0])*uy-(c[1]-a[1])*ux)/det;return t>=0&&t<=1&&u>=0&&u<=1?{x:a[0]+t*ux,y:a[1]+t*uy}:null;}
@@ -199,6 +216,6 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36||!free(x*16+8,y*16+8))continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;

@@ -39,3 +39,11 @@ Les appels de faune sont atténués par pluie, neige et combat. Musique et bruit
 - NOAA, mécanisme et saisonnalité des moussons : https://www.nesdis.noaa.gov/about/k-12-education/severe-weather/what-monsoon
 
 Vérifications : climat des 13 biomes, continuité des fronts, saisons humides/sèches, sauvegarde, rendu réel d'un blizzard, correspondance MIDI/JSON des 28 partitions, bus audio en voyage, tests existants météo/musique/menus/voyages. Xcode et iPhone physique non disponibles dans cet environnement Windows.
+
+## Danger des itinéraires
+
+Le calcul utilise les tronçons du graphe : base du type de voie, relief et cellules maudites réellement traversées, puis événements actifs (brigands, patrouilles, occupation, malédiction) et météo locale. Une portion partagée avec une route aménagée conserve la base de la voie aménagée ; les événements qui ferment ce passage restent bloquants.
+
+L'écran sépare la moyenne pondérée par les distances du pic local. Les détails donnent la route du pic et les facteurs présents. Le trajet prudent minimise la durée estimée plus l'exposition au danger, avec la même fonction que l'affichage et les rencontres à pied près des routes. Il ne promet pas systématiquement une moyenne plus basse si le détour est beaucoup plus long.
+
+Toutes les notes sont bornées entre 0 et 5. L'estimation est un instantané du monde au départ, recalculé à l'achat effectif du trajet : elle ne prédit pas les futurs incidents et ne représente pas un pourcentage d'embuscade. Les fermetures sont contrôlées pendant le voyage. Les morts ennemies sauvegardées restent respectées par le générateur de rencontres ; la note caractérise le parcours, pas un décompte des ennemis visibles.
