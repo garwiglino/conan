@@ -29,7 +29,7 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   click('musicToggle');assert.equal(a.sound.musicOn,false);click('sfxToggle');assert.equal(a.sound.sfxOn,false);
   const restored=new a.Sound();assert.equal(restored.musicVolume,.37);assert.equal(restored.sfxVolume,.72);assert.equal(restored.musicOn,false);assert.equal(restored.sfxOn,false);
   click('musicToggle');click('sfxToggle');raf(250);click('optionsBack');assert.equal(a.state,'title');
-  click('menuNew');assert.equal(a.state,'playing');assert.ok(a.game.player.spawnFX>0);assert.equal(a.musicMode(),'ambient');raf(300);assert.equal(a.sound.music.current.name,'ambient');assert.ok(a.sound.music.retiring.some(s=>s.name==='title'));
+  click('menuNew');assert.equal(a.state,'playing');assert.ok(a.game.player.spawnFX>0);assert.equal(a.musicMode(),'biome_desert');raf(300);assert.equal(a.sound.music.current.name,'biome_desert');assert.ok(a.sound.music.retiring.some(s=>s.name==='title'));
   // The actual shipped world UI opens, paints, calculates, tracks and closes.
   $('worldCanvas').getBoundingClientRect=()=>({x:0,y:0,left:0,top:0,right:640,bottom:420,width:640,height:420});
   const prisonPos={x:a.game.player.x,y:a.game.player.y};Object.assign(a.game.player,{x:376,y:888});

@@ -1,0 +1,434 @@
+{
+  "sampleRate": 16000,
+  "bandsHz": [
+    "0–250",
+    "250–2000",
+    "2000–6000",
+    "6000–8000"
+  ],
+  "music": {
+    "ambient": {
+      "peakDb": -16.044442883102075,
+      "rmsDb": -39.12737918449683,
+      "stereoCorrelation": 0.9626371969969145,
+      "bandsPercent": [
+        14.85,
+        78.39,
+        6.31,
+        0.45
+      ]
+    },
+    "night": {
+      "peakDb": -18.93869243593137,
+      "rmsDb": -36.091091880650076,
+      "stereoCorrelation": 0.9759830039252326,
+      "bandsPercent": [
+        0.97,
+        86.73,
+        10.27,
+        2.03
+      ]
+    },
+    "title": {
+      "peakDb": -15.937427537117228,
+      "rmsDb": -35.32900056802697,
+      "stereoCorrelation": 0.966710038748157,
+      "bandsPercent": [
+        46.81,
+        48.65,
+        4.49,
+        0.05
+      ]
+    },
+    "biome_coast": {
+      "peakDb": -29.8795021607897,
+      "rmsDb": -43.17001998429116,
+      "stereoCorrelation": 0.9729359521239987,
+      "bandsPercent": [
+        33.15,
+        66.84,
+        0.01,
+        0
+      ]
+    },
+    "biome_desert": {
+      "peakDb": -29.933247141779084,
+      "rmsDb": -43.193090499900336,
+      "stereoCorrelation": 0.9729125480536872,
+      "bandsPercent": [
+        40.25,
+        59.74,
+        0.01,
+        0
+      ]
+    },
+    "biome_steppe": {
+      "peakDb": -28.53916594499863,
+      "rmsDb": -44.33355912976747,
+      "stereoCorrelation": 0.9705317047518391,
+      "bandsPercent": [
+        52.83,
+        47.12,
+        0.05,
+        0
+      ]
+    },
+    "biome_forest": {
+      "peakDb": -29.823985762700215,
+      "rmsDb": -43.003249790289274,
+      "stereoCorrelation": 0.9736138459288072,
+      "bandsPercent": [
+        36.41,
+        63.58,
+        0.01,
+        0
+      ]
+    },
+    "biome_tropical": {
+      "peakDb": -30.13015233767636,
+      "rmsDb": -43.250108493647126,
+      "stereoCorrelation": 0.970911674304337,
+      "bandsPercent": [
+        28.74,
+        71.22,
+        0.04,
+        0
+      ]
+    },
+    "biome_wetland": {
+      "peakDb": -29.882895537518298,
+      "rmsDb": -43.21707395565199,
+      "stereoCorrelation": 0.9728541211989973,
+      "bandsPercent": [
+        58.11,
+        41.89,
+        0,
+        0
+      ]
+    },
+    "biome_boreal": {
+      "peakDb": -29.19898889659543,
+      "rmsDb": -44.66642793750707,
+      "stereoCorrelation": 0.9699440786642533,
+      "bandsPercent": [
+        51.68,
+        48.26,
+        0.05,
+        0
+      ]
+    },
+    "biome_polar": {
+      "peakDb": -27.928423781193242,
+      "rmsDb": -45.51442857492053,
+      "stereoCorrelation": 0.9727739190689223,
+      "bandsPercent": [
+        64.19,
+        35.72,
+        0.09,
+        0
+      ]
+    },
+    "biome_cursed": {
+      "peakDb": -29.854684657049045,
+      "rmsDb": -43.445493804209285,
+      "stereoCorrelation": 0.9724049037927254,
+      "bandsPercent": [
+        67.44,
+        32.56,
+        0,
+        0
+      ]
+    },
+    "biome_travel": {
+      "peakDb": -25.47672315919341,
+      "rmsDb": -41.09907659906686,
+      "stereoCorrelation": 0.9696612068909455,
+      "bandsPercent": [
+        45.47,
+        54.45,
+        0.08,
+        0
+      ]
+    }
+  },
+  "fauna": {
+    "coast_day": {
+      "peakDb": -43.32781137520218,
+      "rmsDb": -68.64359800454037,
+      "stereoCorrelation": 0.9311429461513063,
+      "bandsPercent": [
+        0,
+        100,
+        0,
+        0
+      ]
+    },
+    "coast_night": {
+      "peakDb": -43.32781137520218,
+      "rmsDb": -68.64359800454037,
+      "stereoCorrelation": 0.9311429461513063,
+      "bandsPercent": [
+        0,
+        100,
+        0,
+        0
+      ]
+    },
+    "desert_day": {
+      "peakDb": -42.51672975096202,
+      "rmsDb": -68.2270953699587,
+      "stereoCorrelation": 0.9443744982463894,
+      "bandsPercent": [
+        0,
+        1.39,
+        98.61,
+        0
+      ]
+    },
+    "desert_night": {
+      "peakDb": -43.49944890574815,
+      "rmsDb": -69.41068235211648,
+      "stereoCorrelation": 0.9398281857810217,
+      "bandsPercent": [
+        0,
+        100,
+        0,
+        0
+      ]
+    },
+    "steppe_day": {
+      "peakDb": -42.63394399136067,
+      "rmsDb": -70.2469099080142,
+      "stereoCorrelation": 0.9343901877446111,
+      "bandsPercent": [
+        0,
+        0,
+        100,
+        0
+      ]
+    },
+    "steppe_night": {
+      "peakDb": -42.884298801951566,
+      "rmsDb": -73.73005033378755,
+      "stereoCorrelation": 0.9212615989197873,
+      "bandsPercent": [
+        0,
+        0,
+        97.89,
+        2.11
+      ]
+    },
+    "forest_day": {
+      "peakDb": -43.00050561381744,
+      "rmsDb": -70.94775919621787,
+      "stereoCorrelation": 0.9336407558459688,
+      "bandsPercent": [
+        0,
+        71.87,
+        28.13,
+        0
+      ]
+    },
+    "forest_night": {
+      "peakDb": -43.49944890574815,
+      "rmsDb": -69.3412772257218,
+      "stereoCorrelation": 0.9341345499158185,
+      "bandsPercent": [
+        0,
+        99.24,
+        0,
+        0.76
+      ]
+    },
+    "tropical_day": {
+      "peakDb": -44.39355743488386,
+      "rmsDb": -73.89091271468584,
+      "stereoCorrelation": 0.9403392956076944,
+      "bandsPercent": [
+        1.38,
+        96.88,
+        1.74,
+        0
+      ]
+    },
+    "tropical_night": {
+      "peakDb": -44.35934274986919,
+      "rmsDb": -74.19768265953661,
+      "stereoCorrelation": 0.918665885300015,
+      "bandsPercent": [
+        96.13,
+        1.55,
+        0.02,
+        2.31
+      ]
+    },
+    "wetland_day": {
+      "peakDb": -44.35934274986919,
+      "rmsDb": -74.41361561056901,
+      "stereoCorrelation": 0.9338817772713117,
+      "bandsPercent": [
+        98.4,
+        1.58,
+        0.01,
+        0
+      ]
+    },
+    "wetland_night": {
+      "peakDb": -44.35934274986919,
+      "rmsDb": -74.19768265953661,
+      "stereoCorrelation": 0.918665885300015,
+      "bandsPercent": [
+        96.13,
+        1.55,
+        0.02,
+        2.31
+      ]
+    },
+    "boreal_day": {
+      "peakDb": -44.23058057276794,
+      "rmsDb": -74.60450073192109,
+      "stereoCorrelation": 0.9331452912166138,
+      "bandsPercent": [
+        0,
+        99.67,
+        0.33,
+        0
+      ]
+    },
+    "boreal_night": {
+      "peakDb": -43.48796365647634,
+      "rmsDb": -69.28558256069361,
+      "stereoCorrelation": 0.9684499220059977,
+      "bandsPercent": [
+        0,
+        100,
+        0,
+        0
+      ]
+    },
+    "polar_day": {
+      "peakDb": -44.23058057276794,
+      "rmsDb": -74.60450073192109,
+      "stereoCorrelation": 0.9331452912166138,
+      "bandsPercent": [
+        0,
+        99.67,
+        0.33,
+        0
+      ]
+    },
+    "polar_night": {
+      "peakDb": -240,
+      "rmsDb": -240,
+      "stereoCorrelation": 0,
+      "bandsPercent": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "cursed_day": {
+      "peakDb": -44.23058057276794,
+      "rmsDb": -74.60450073192109,
+      "stereoCorrelation": 0.9331452912166138,
+      "bandsPercent": [
+        0,
+        99.67,
+        0.33,
+        0
+      ]
+    },
+    "cursed_night": {
+      "peakDb": -240,
+      "rmsDb": -240,
+      "stereoCorrelation": 0,
+      "bandsPercent": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "climate": {
+    "0": {
+      "rainPercent": 34.08101045296167,
+      "snowPercent": 0,
+      "fogPercent": 27.77656794425087,
+      "thunderPercent": 0.7839721254355401
+    },
+    "1": {
+      "rainPercent": 3.6912020905923346,
+      "snowPercent": 0,
+      "fogPercent": 0,
+      "thunderPercent": 0.17421602787456447
+    },
+    "2": {
+      "rainPercent": 5.683797909407666,
+      "snowPercent": 3.702090592334495,
+      "fogPercent": 1.2630662020905923,
+      "thunderPercent": 0.18510452961672474
+    },
+    "3": {
+      "rainPercent": 36.0191637630662,
+      "snowPercent": 0,
+      "fogPercent": 0,
+      "thunderPercent": 1.3175087108013936
+    },
+    "4": {
+      "rainPercent": 24.760452961672474,
+      "snowPercent": 7.621951219512195,
+      "fogPercent": 20.459494773519165,
+      "thunderPercent": 0.6315331010452961
+    },
+    "5": {
+      "rainPercent": 39.80836236933798,
+      "snowPercent": 0,
+      "fogPercent": 27.929006968641115,
+      "thunderPercent": 1.5788327526132404
+    },
+    "6": {
+      "rainPercent": 41.04965156794425,
+      "snowPercent": 9.211672473867596,
+      "fogPercent": 34.66898954703833,
+      "thunderPercent": 0.8275261324041812
+    },
+    "7": {
+      "rainPercent": 71.75522648083624,
+      "snowPercent": 0,
+      "fogPercent": 36.498257839721255,
+      "thunderPercent": 2.8636759581881535
+    },
+    "8": {
+      "rainPercent": 60.56184668989547,
+      "snowPercent": 1.1432926829268293,
+      "fogPercent": 44.305313588850176,
+      "thunderPercent": 1.3828397212543555
+    },
+    "9": {
+      "rainPercent": 19.588414634146343,
+      "snowPercent": 19.784407665505228,
+      "fogPercent": 24.22691637630662,
+      "thunderPercent": 0.5770905923344948
+    },
+    "10": {
+      "rainPercent": 6.3915505226480835,
+      "snowPercent": 20.023954703832754,
+      "fogPercent": 20.938588850174217,
+      "thunderPercent": 0
+    },
+    "11": {
+      "rainPercent": 0,
+      "snowPercent": 17.67203832752613,
+      "fogPercent": 3.157665505226481,
+      "thunderPercent": 0
+    },
+    "12": {
+      "rainPercent": 52.78745644599303,
+      "snowPercent": 0,
+      "fogPercent": 49.499128919860624,
+      "thunderPercent": 1.7639372822299653
+    }
+  }
+}

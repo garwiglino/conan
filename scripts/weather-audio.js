@@ -70,7 +70,8 @@ function weatherRain(sound,level){
  R.scheduled=now;
 }
 function weatherThunder(sound,event){
- if(!sound.enabled||!sound.sfxOn||!sound.ctx||!sound.master)return;
+ if(sound.travelQuiet||!sound.enabled||!sound.sfxOn||!sound.ctx||!sound.master)return;
+ if(!sound.weatherBus){sound.weatherBus=sound.ctx.createGain();sound.weatherBus.connect(sound.master);}
  sound.music??=new Music(sound.ctx,sound.ctx.destination);
  const pan=sound.ctx.createStereoPanner();pan.pan.value=clamp(event.pan||0,-.85,.85);pan.connect(sound.weatherBus||sound.master);
  sound.music.cue(event.near?'thunder_near':'thunder_distant',sound.ctx.currentTime+.01,pan,.7+.3*(event.strength??1));

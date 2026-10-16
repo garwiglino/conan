@@ -86,5 +86,6 @@ function renderWeather(renderer,c,W,VH){
   if(rain>.65){c.globalAlpha=(rain-.65)*.12;c.fillStyle='#9fb3c7';c.fillRect(cx,cy,W,VH);}
   c.restore();
  }
+ renderSnowFog(renderer,c,W,VH);
  renderer.glowFX(c,dark);
 }

@@ -137,12 +137,12 @@ const createWorldAtlas = (raw) => {
   edgeStatus(edge,clock=this.clock){const es=this.active(clock).filter(e=>edge.roads.includes(e.target)||byId[e.target]&&[edge.a,edge.b].includes(byId[e.target].vertex));return {closed:es.some(e=>EVENT_TYPES[e.type].closed),risk:es.reduce((n,e)=>n+(EVENT_TYPES[e.type].risk||0),0),delay:es.reduce((n,e)=>n+(EVENT_TYPES[e.type].delay||0),0),events:es};}
   price(site,clock=this.clock){return this.active(clock).filter(e=>e.target===site).reduce((n,e)=>n*(EVENT_TYPES[e.type].price||1),1);}
   advance(clock,weather=()=>({})){if(!Number.isFinite(clock)||clock<this.clock)return;const hour=Math.floor(clock/60),begin=Math.max(this.lastHour+1,hour-24*90);for(let h=begin;h<=hour;h++){
-    const day=Math.floor(h/24),phase=h%24,at=h*60,pick=(list,s)=>list[Math.floor(random(day,s,91)*list.length)],town=pick(nodes.filter(n=>n.rest&&n.id!=='camp'),2),route=pick(roads.filter(r=>r.type!=='searoutes'&&r.id!=='prison-road'),3),sea=pick(roads.filter(r=>r.type==='searoutes'),4),sky=weather(at)||{};
+    const day=Math.floor(h/24),phase=h%24,at=h*60,pick=(list,s)=>list[Math.floor(random(day,s,91)*list.length)],town=pick(nodes.filter(n=>n.rest&&n.id!=='camp'),2),route=pick(roads.filter(r=>r.type!=='searoutes'&&r.id!=='prison-road'),3),sea=pick(roads.filter(r=>r.type==='searoutes'),4),sky=weather(at,town.x,town.y)||{};
     if(phase===9&&day%3===0)this.add('market',town.id,at,480,{source:'Marchands de '+town.name});
     if(phase===14&&day%2===1)this.add('bandits',route.id,at,1440,{source:'Caravaniers'});
     if(phase===7&&day%3===1)this.add('patrol',route.id,at,1440,{source:'Garde des relais'});
-    if(phase===12&&sky.rain>.7&&crossings.length){const b=pick(crossings,5);this.add('flood',b.road,at,720,{position:b,source:'Bateliers'});}
-    if(phase===18&&sky.storm>.3)this.add('storm',sea.id,at,180,{source:'Capitainerie'});
+    if(phase===12&&crossings.length){const b=pick(crossings,5);if((weather(at,b.x,b.y)||{}).rain>.7)this.add('flood',b.road,at,720,{position:b,source:'Bateliers'});}
+    if(phase===18&&(weather(at,sea.pts[0][0],sea.pts[0][1])||{}).storm>.3)this.add('storm',sea.id,at,180,{source:'Capitainerie'});
     if(phase===10&&day%5===3){const mountain=roads.filter(r=>r.pts.some(p=>cellById.get(Number(p[2].slice(1)))?.height>58));if(mountain.length)this.add('landslide',pick(mountain,6).id,at,1440,{source:'Éclaireurs'});}
     if(phase===15&&day%6===4)this.add('shortage',town.id,at,2880,{source:'Intendant de '+town.name});
     if(phase===16&&day%7===2)this.add('caravan',town.id,at,720,{source:'Maître du relais'});

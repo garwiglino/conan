@@ -14,7 +14,9 @@
     "build:weather": "node scripts/build-weather-midi.cjs && node scripts/embed-title.cjs",
     "build:world": "node scripts/build-world.cjs && node scripts/embed-world.cjs",
     "embed:world": "node scripts/embed-world.cjs",
-    "package:ios": "python3 scripts/package-ios.py"
+    "package:ios": "python3 scripts/package-ios.py",
+    "build:biomes": "node scripts/build-biome-audio.cjs && node scripts/embed-title.cjs",
+    "analyze:biomes": "node scripts/analyze-biome-audio.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",
