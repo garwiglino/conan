@@ -7,6 +7,24 @@ test('nearest transport can be marked before discovery and survives reload witho
  const other=g.mapPlaces.find(p=>p.category==='transport'&&p.id!==n.id&&!g.isPlaceVisited(p));assert.equal(g.canTrackPlace(other),false);
 });
 let api;before(async()=>{api=await require('./game-harness.cjs').loadGame();});
+test('walking reveals a persistent corridor, while a distant respawn reveals no imaginary path',()=>{
+ const g=new api.Game(),A=api.Atlas;g.explorationRows.clear();g.explorationLast=null;
+ const move=(x,y)=>{Object.assign(g.player,A.toGame(x,y));g.recordExploration();};
+ const revealed=(x,y)=>(g.explorationRows.get(Math.floor(y/256))||[]).some(([a,b])=>Math.floor(x/256)>=a&&Math.floor(x/256)<=b);
+ for(let x=1024;x<=3072;x+=32)move(x,1024);
+ assert.ok(revealed(2048,1024));assert.equal(revealed(2048,4096),false);
+ move(8192,1024);assert.equal(revealed(5632,1024),false);assert.ok(revealed(8192,1024));
+ const loaded=new api.Game(JSON.parse(JSON.stringify(g.serialize())));
+ assert.equal(JSON.stringify([...loaded.explorationRows]),JSON.stringify([...g.explorationRows]));
+});
+test('nearest transport skips closed stations and does not fabricate a target when all are closed',()=>{
+ const g=new api.Game(),n=g.mapPlaces.find(n=>n.category==='transport');
+ Object.assign(g.player,api.Atlas.toGame(n.x,n.y));
+ g.worldState.active=()=>[{type:'relay',target:n.siteId}];
+ const next=g.markNearestTransport();assert.ok(next);assert.notEqual(next.siteId,n.siteId);
+ g.worldState.active=()=>g.mapPlaces.filter(n=>n.category==='transport').map(n=>({type:'relay',target:n.siteId}));
+ assert.equal(g.markNearestTransport(),null);assert.equal(g.navigation,next.id);
+});
 test('unknown places cannot be tracked and are revealed only by visiting, including services',()=>{
  const g=new api.Game(),A=api.Atlas,city=g.mapPlaces.find(n=>n.id===A.home.id),port=g.mapPlaces.find(n=>n.kind==='dock'&&n.category==='transport');
  assert.equal(g.isPlaceVisited(city),false);assert.equal(g.isPlaceVisited(port),false);g.navigation=city.id;assert.equal(g.navigationInfo(),null);

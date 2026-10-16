@@ -37,6 +37,14 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   a.game.discovered.add('town-1');click('worldClose');click('btnWorld');$('worldDestination').value='town-1';$('worldDestination').dispatchEvent(new w.Event('change'));assert.match($('worldRoute').textContent,/km/);assert.match($('worldRoute').textContent,/vol d’oiseau/);click('worldZoomIn');click('worldLocate');click('worldFit');
   fs.mkdirSync(require('node:path').join(__dirname,'../test-output'),{recursive:true});fs.writeFileSync(require('node:path').join(__dirname,'../test-output/world-atlas-ui.png'),map.get($('worldCanvas')).native.toBuffer('image/png'));
   click('worldTrack');assert.equal(a.state,'playing');assert.equal(a.game.navigation,'town-1');assert.equal($('game').inert,false);
+  click('btnWorld');const visitedBefore=JSON.stringify([...a.game.visitedPlaces]);
+  click('worldNearestTransport');assert.equal(a.state,'playing');
+  const hinted=a.game.navigationInfo().site;assert.equal(hinted.category,'transport');
+  assert.equal(JSON.stringify([...a.game.visitedPlaces]),visitedBefore);
+  assert.equal(JSON.parse(w.localStorage.getItem('conan-serpent-v1')).atlas.exploration.transportHint,hinted.id);
+  click('btnWorld');assert.equal($('worldDestination').value,hinted.id);
+  assert.ok([...$('worldDestination').options].some(o=>o.value===hinted.id));
+  click('worldUntrack');assert.equal(a.game.navigation,null);click('worldClose');
   w.dispatchEvent(new w.KeyboardEvent('keydown',{code:'KeyG',bubbles:true}));assert.equal(a.state,'world');w.dispatchEvent(new w.KeyboardEvent('keydown',{code:'Escape',bubbles:true}));assert.equal(a.state,'playing');assert.equal($('worldPanel').hidden,true);a.game.navigation=null;Object.assign(a.game.player,prisonPos);
   click('btnParty');assert.equal(a.state,'party');assert.equal($('partyList').children.length,2);click('partyClose');
   a.game.talkTo(a.game.escortActor);a.game.dialogue=null;click('btnParty');assert.equal($('partyList').children.length,3);$('partyList').querySelector('[data-member="elyne"]').click();assert.match($('partyDetail').textContent,/Réserve de nourriture/);click('partyClose');
