@@ -13,7 +13,7 @@
  'use strict';
  const appearance=Object.freeze({
   sex:'masculin',outfit:'E01-masculin-terre',age:'adulte',
-  hair:'14',color:'noir',hat:null,beard:null,moustache:null
+  hair:'14',color:'brun',hat:null,beard:null,moustache:null
  });
  const foot=Object.freeze({x:40,y:52});
  const cache=new Map(),strides=new WeakMap();
@@ -122,6 +122,83 @@
   const t=state.startsWith('draw')?1-f:f;
   return start.map((v,i)=>v+((i<2?end.w[i]:end.v[i-2])-v)*t);
  }
+
+ // Keep the native NPC adult head, hands and eight-step body atlas untouched.
+ // Kaldor alone receives a pixel-authored chest and longer hair extensions.
+ // The shades are read from his original head, rather than guessed for his hands.
+ const HAIR_COLORS=Object.freeze(['#2e2029','#523a34','#927052']);
+ const HAIR_KEYS=new Set([0x2e2029,0x523a34,0x927052]);
+ const rgb=(d,i)=>(d[i]<<16)|(d[i+1]<<8)|d[i+2];
+ const flesh=(r,g,b)=>r>=125&&g>=74&&r>g+17&&g>b+12&&r>b*1.35;
+ function pixels(image){return image.getContext('2d',{willReadFrequently:true}).getImageData(0,0,80,80).data;}
+ function skinSample(d){
+  const colors=new Map();
+  for(let y=29;y<=40;y++)for(let x=33;x<=46;x++){
+   const i=(y*80+x)*4;
+   if(!d[i+3]||!flesh(d[i],d[i+1],d[i+2])||HAIR_KEYS.has(rgb(d,i)))continue;
+   const key=rgb(d,i);colors.set(key,(colors.get(key)||0)+1);
+  }
+  const n=[...colors].filter(([,count])=>count>=2).map(([k])=>k).sort((a,b)=>
+   ((a>>16)*3+((a>>8)&255)*4+(a&255))-((b>>16)*3+((b>>8)&255)*4+(b&255)));
+  const hex=k=>'#'+k.toString(16).padStart(6,'0');
+  return n.length>=2?[hex(n[0]),hex(n[Math.floor(n.length/2)]),hex(n[n.length-1])]:
+   ['#ac663d','#d28b56','#e8ab71'];
+ }
+ function skinAt(d,x,y){
+  if(x<0||x>=80||y<0||y>=80)return false;
+  const i=(y*80+x)*4;return !!d[i+3]&&flesh(d[i],d[i+1],d[i+2]);
+ }
+ function swordAtHand(d,dir){
+  const fallback=handPose(dir),cx=40+fallback[0],cy=52+fallback[1];
+  let point=null,best=Infinity;
+  for(let y=Math.max(41,cy-4);y<=Math.min(51,cy+5);y++)
+   for(let x=Math.max(22,cx-5);x<=Math.min(58,cx+5);x++){
+    if(!skinAt(d,x,y))continue;
+    if((dir===2&&x<44)||(dir===0&&x<43)||(dir===1&&x<41)||(dir===3&&x>39))continue;
+    const dx=x-cx,dy=y-cy,score=dx*dx+dy*dy*.7+(y<43?4:0);
+    if(score<best){best=score;point=[x,y];}
+   }
+  return point&&best<=16?[point[0]-40,point[1]-52,fallback[2],fallback[3]]:fallback;
+ }
+ const HAIR_SWAY=[0,0,1,1,0,-1,-1,0];
+ function hairTips(c,d,dir,state,frame,under){
+  // The visible roots come from the real Aseprite three-plane hair module.
+  const sway=/walk|dash/.test(state)?HAIR_SWAY[frame%8]:0;
+  for(const side of dir===1?[-1]:dir===3?[1]:[-1,1]){
+   let x0=side<0?80:-1,y0=-1;
+   for(let y=34;y<=42;y++)for(let x=28;x<=52;x++){
+    const i=(y*80+x)*4;
+    if(!d[i+3]||!HAIR_KEYS.has(rgb(d,i)))continue;
+    if((side<0&&x<=x0)||(side>0&&x>=x0)){
+     if(y>=y0-1){x0=x;y0=y;}
+    }
+   }
+   if(y0<36||x0<26||x0>54)continue;
+   if(under===false&&dir!==0||under===true&&dir===0)continue;
+   const x=x0+side*(under?0:1)+sway,y=y0+1+(under?1:0);
+   if(y>48)continue;
+   c.fillStyle=HAIR_COLORS[0];c.fillRect(x,y,2,3);
+   c.fillStyle=HAIR_COLORS[1];c.fillRect(x+(side<0?1:0),y,1,2);
+  }
+ }
+ function bareChest(c,d,dir){
+  // Recolour only shirt pixels inside the real human torso silhouette;
+  // never paint over the modular adult male head, hands, boots or rear hair.
+  if(dir===0)return;
+  const [dark,mid,light]=skinSample(d);
+  const rows=dir===2?[[40,35,45],[41,34,46],[42,35,45],[43,35,45],[44,36,44]]:
+   [[40,37,44],[41,37,44],[42,38,44],[43,38,43],[44,39,43]];
+  for(const [y,left,right] of rows)for(let x=left;x<=right;x++){
+   const i=(y*80+x)*4;
+   if(!d[i+3]||HAIR_KEYS.has(rgb(d,i))||skinAt(d,x,y))continue;
+   c.fillStyle=x===left||y===44?dark:(x>right-2||y===40)?light:mid;
+   c.fillRect(x,y,1,1);
+  }
+  c.fillStyle=dark;
+  if(dir===2){c.fillRect(38,41,2,1);c.fillRect(42,41,2,1);c.fillRect(40,43,1,1);}
+  else c.fillRect(dir===1?42:37,42,2,1);
+ }
+
  function gear(c,dir,state,frame){
   // Minimal hero-only leather strap on top of the actual NPC outfit. Human
   // head, hands and walk shapes are never redrawn or replaced.
@@ -155,7 +232,11 @@
   if(sheathed&&dir!==0){c.save();c.translate(40,52);scabbard(c,dir);c.restore();}
   // Reuse original Aseprite outfit, ADULT MALE HEAD, real NPC hands and
   // all three hair planes, with frame-accurate body/leg animation.
+  const npcPixels=pixels(human);
+  hairTips(c,npcPixels,dir,state,frame,true);
   c.drawImage(human,0,0);
+  bareChest(c,npcPixels,dir);
+  hairTips(c,npcPixels,dir,state,frame,false);
   gear(c,dir,state,frame);
   if(sheathed){
    if(dir===0){c.save();c.translate(40,52);scabbard(c,dir);c.restore();}
@@ -163,7 +244,7 @@
    let sword;
    if(state==='attack'&&typeof swordPose==='function')sword=swordPose(dir,Math.max(0,Math.min(5,frame)),combo);
    else if(['sheathe','sheathe_walk','draw','draw_walk'].includes(state))sword=weaponBlend(dir,state,frame);
-   else sword=handPose(dir);
+   else sword=swordAtHand(npcPixels,dir);
    c.save();c.translate(40,52);weapon(c,sword,swordPainter);c.restore();
   }
   if(flash){
@@ -174,7 +255,7 @@
   return out;
  }
  function clear(){cache.clear();}
- return Object.freeze({version:1,appearance,anchor:foot,
+ return Object.freeze({version:2,appearance,anchor:foot,
   preload,ready,frameAt,gaitFrame,remap,pose,nativeFrame,clear,
   stats:()=>({ready:loaded,failed,loading:!!loading,frames:cache.size})
  });
