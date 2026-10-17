@@ -1,10 +1,14 @@
 name: Batraciens integration
 on:
   push:
-    branches: [integration/batraciens-palettes, main]
+    branches: [integration/batraciens-palettes, integration/kaldor-art-v2, main]
     paths:
       - '.github/workflows/batraciens-integration.yml'
       - '.github/batraciens-import/**'
+      - '.github/kaldor-import/**'
+      - 'sprites/kaldor/**'
+      - 'art/kaldor-preview*'
+      - 'docs/kaldor-art.md'
       - 'scripts/**'
       - 'sprites/batraciens/**'
       - 'data/batraciens/**'
@@ -71,6 +75,37 @@ jobs:
               p.write_bytes(data)
           print('Verified and installed', len(staged), 'source files.')
           PY
+      - name: Receive verified Kaldor graphics patch on integration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, lzma, hashlib
+          source=Path('.github/kaldor-import/payload.bin')
+          if not source.exists():
+              print('Kaldor source already installed')
+          else:
+              payload=source.read_bytes()
+              h=lambda data:hashlib.sha256(data).hexdigest()
+              assert h(payload)=='b127a23f9cb2d3c7397867bb3e7cf94659288027fe7d66a279da2e37a4c2b2b8','Invalid Kaldor transfer'
+              record=json.loads(lzma.decompress(payload))
+              assert record['version']==1 and record['base']=='3e4c888b6c36631fff7f56d73293a76d21cb388e'
+              allowed=set('sprites/kaldor/kaldor-art.js scripts/embed-kaldor.cjs art/kaldor-preview-template.html tests/kaldor-art.test.cjs docs/kaldor-art.md scripts/build-batraciens.cjs package.json'.split())
+              assert len(record['files'])==len(allowed) and {r['path'] for r in record['files']}==allowed
+              staged={}
+              for row in record['files']:
+                  file=Path(row['path'])
+                  current=file.read_bytes() if file.exists() else None
+                  assert (h(current) if current is not None else None)==row['previousSHA256'],'Original source changed: '+str(file)
+                  data=row['content'].encode('utf8')
+                  assert h(data)==row['sha256'],'Invalid source content: '+str(file)
+                  staged[file]=data
+              for file,data in staged.items():
+                  file.parent.mkdir(parents=True,exist_ok=True)
+                  file.write_bytes(data)
+              print('Installed verified Kaldor sources:',len(staged))
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -103,17 +138,19 @@ jobs:
           Path('data/batraciens/validation.json').write_text(json.dumps(result, indent=2)+'\n')
           PY
       - name: Publish validated source and generated game to integration branch only
-        if: github.ref == 'refs/heads/integration/batraciens-palettes'
+        if: github.ref == 'refs/heads/integration/batraciens-palettes' || github.ref == 'refs/heads/integration/kaldor-art-v2'
         shell: bash
         run: |
           set -euo pipefail
           if test -d .github/batraciens-import; then git rm -r .github/batraciens-import; fi
+          if test -d .github/kaldor-import; then git rm -r .github/kaldor-import; fi
           git add README.md WORLD.md package.json art/batraciens-preview.html docs/batraciens.md data/batraciens sprites/batraciens scripts/batraciens-runtime.js scripts/build-batraciens.cjs scripts/civilian-runtime.js scripts/embed-world.cjs scripts/world-danger.js tests/batraciens.test.cjs tests/civilians.test.cjs tests/title.test.cjs index.html ios/Hearthreaver/Game/index.html Hearthreaver-iOS.zip
+          if test -f sprites/kaldor/kaldor-art.js; then git add sprites/kaldor scripts/embed-kaldor.cjs docs/kaldor-art.md art/kaldor-preview-template.html art/kaldor-preview.html tests/kaldor-art.test.cjs; fi
           if ! git diff --cached --quiet; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git commit -m 'feat: integrate palette-stable batracien communities and armed incidents'
-            git push origin HEAD:integration/batraciens-palettes
+            git commit -m 'feat: rebuild Kaldor barbarian pixel art in JavaScript with matching combo smears'
+            git push origin HEAD:${GITHUB_REF_NAME}
           fi
           git rev-parse HEAD > /tmp/batraciens-validated-commit.txt
       - name: Keep validation evidence
