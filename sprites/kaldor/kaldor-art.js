@@ -31,13 +31,13 @@
   u:'#50342f',v:'#754b37',w:'#a16a44',t:'#bb8051',
   G:'#a8803a',Y:'#ecd189',
   1:'#3b4551',2:'#728396',3:'#b4c0c8',4:'#eef0ea',
-  e:'#66899e',E:'#c8dce5',W:'#f4fbff'
+  e:'#c49a5c',E:'#f2dc9c',W:'#fff5da'
  });
  // Quatre dessins indépendants, 22 lignes ; la dernière ligne est celle des pieds (y = 0).
  // Le profil gauche n'est pas une image retournée : la lumière reste en haut à gauche.
  const VIEWS={
   face:[
-   '.....OOO.OOOO......',
+   '.....OOO.OOOOO.....',
    '...OOkqjOjkkjhOO...',
    '..OjqkjhkqkjhjhhO..',
    '.OjkjhkjjhkjhjjHhO.',
@@ -85,7 +85,7 @@
    '..OOOOOOOOOOO.....'
   ],
   dos:[
-   '.....OOO.OOOO......',
+   '.....OOO.OOOOO.....',
    '...OOkqjOjkkjhOO...',
    '..OjqkjhkqkjhjhhO..',
    '.OjkjhkjjhkjhjjHhO.',
@@ -182,8 +182,10 @@
  }
  const PARTS={};
  for(const [view,rows] of Object.entries(VIEWS)){
-  const part={head:new Map(),body:new Map(),armL:new Map(),armR:new Map(),arm:new Map(),legL:new Map(),legR:new Map(),legs:new Map()};
-  rows.forEach((row,r)=>{for(let c=0;c<row.length;c++){const key=row[c];if(key==='.')continue;part[region(view,c,r)].set(K(c-ORIGIN[view],r-TOP),key);}});
+  const part={head:new Map(),body:new Map(),collar:new Map(),armL:new Map(),armR:new Map(),arm:new Map(),legL:new Map(),legR:new Map(),legs:new Map()};
+  rows.forEach((row,r)=>{for(let c=0;c<row.length;c++){const key=row[c];if(key==='.')continue;const where=region(view,c,r);part[where].set(K(c-ORIGIN[view],r-TOP),key);
+   // Col de fourrure autour de la tête : repeint par-dessus quand la tête s'abaisse d'un pixel.
+   if(where==='body'&&r<=12)part.collar.set(K(c-ORIGIN[view],r-TOP),key);}});
   PARTS[view]=part;
  }
  // Bras de profil sans son contour : cisaillé puis recerné, pour éviter les contours en escalier.
@@ -289,29 +291,35 @@
  }
 
  // --- Poses ---
- const WALK={bob:[0,1,0,0,1,0],liftL:[0,0,0,0,1,1],liftR:[0,1,1,0,0,0],swing:[1,1,0,-1,-1,0]};
+ // La tête suit le buste avec une image de retard (1 px) : léger bobbing sans trou au cou.
+ const WALK={bob:[0,1,0,0,1,0],head:[0,0,1,0,0,1],liftL:[0,0,0,0,1,1],liftR:[0,1,1,0,0,0],swing:[1,1,0,-1,-1,0]};
  // Profil : petits pas de chibi, les deux pieds restent sous le corps (écart maximal de 3 px).
  // Décalages par rapport à la pose debout ; la jambe qui passe devant se lève d'un pixel.
  const SIDE_WALK={near:[1,0,-1,-2,-1,0],far:[0,1,2,3,2,1],nearLift:[0,0,0,0,1,1],farLift:[0,1,1,0,0,0],arm:[-1,-1,1,1,1,-1]};
- const IDLE=[{bob:0},{bob:1},{bob:1,relax:1},{bob:0,blink:true}];
+ // Repos : respiration d'un pixel ; en remontant, la tête et les mains restent un instant en bas.
+ const IDLE=[{bob:0},{bob:1},{bob:1,relax:1},{bob:0,head:1,relax:1,blink:true}];
  function bodyPose(view,loc,f,combo){
   const side=!FRONTAL(view),fwd=view==='droite'?1:view==='gauche'?-1:0;
-  const P={dx:0,dy:0,hx:0,hy:0,liftL:0,liftR:0,swingL:0,swingR:0,near:0,far:0,nearLift:0,farLift:0,arm:0,blink:false,relax:0};
-  if(loc==='idle'){const I=IDLE[f%4];P.dy=I.bob;P.blink=!!I.blink;P.relax=I.relax||0;}
-  else if(loc==='walk'||loc==='guard'){const w=f%6;P.dy=WALK.bob[w];P.liftL=WALK.liftL[w];P.liftR=WALK.liftR[w];
-   P.swingL=WALK.swing[w];P.swingR=-WALK.swing[w];
-   if(side){P.near=SIDE_WALK.near[w];P.far=SIDE_WALK.far[w];P.nearLift=SIDE_WALK.nearLift[w];P.farLift=SIDE_WALK.farLift[w];P.arm=SIDE_WALK.arm[w];}
-   if(loc==='guard'){P.dy=1;P.swingL=P.swingR=0;}}
+  // head : retard de la tête (0 ou 1 px, toujours vers le bas). legIn : pieds joints de face
+  // et de dos en marche. spread : appuis écartés (fente d'attaque, garde).
+  const P={dx:0,dy:0,hx:0,hy:0,head:0,liftL:0,liftR:0,swingL:0,swingR:0,near:0,far:0,nearLift:0,farLift:0,arm:0,blink:false,relax:0,legIn:0,spread:0};
+  if(loc==='idle'){const I=IDLE[f%4];P.dy=I.bob;P.head=I.head||0;P.blink=!!I.blink;P.relax=I.relax||0;}
+  else if(loc==='walk'||loc==='guard'){const w=f%6;P.dy=WALK.bob[w];P.head=WALK.head[w];P.liftL=WALK.liftL[w];P.liftR=WALK.liftR[w];
+   P.swingL=WALK.swing[w];P.swingR=-WALK.swing[w];P.legIn=1;
+   if(side){P.near=SIDE_WALK.near[w];P.far=SIDE_WALK.far[w];P.nearLift=SIDE_WALK.nearLift[w];P.farLift=SIDE_WALK.farLift[w];P.arm=SIDE_WALK.arm[w];P.relax=P.head;}
+   if(loc==='guard'){P.dy=1;P.head=0;P.relax=0;P.swingL=P.swingR=0;if(side){P.near+=1;P.far-=1;}else{P.legIn=0;P.spread=1;}}}
   else if(loc==='attack'){
-   const lean=[0,-1,1,1,1,0][f],crouch=[0,0,1,1,combo===3?1:0,0][f];
-   P.dx=side?lean*fwd:0;P.dy=crouch;P.near=side?[0,-1,1,1,1,0][f]:0;P.far=side?[0,1,-1,-1,-1,0][f]:0;
-   if(!side){P.liftL=f===1?1:0;}
+   // Fente comme sur la planche : appuis écartés, buste abaissé d'un pixel qui recule à
+   // l'armé puis plonge vers l'avant ; la tête suit le coup avec un pixel de retard.
+   const lean=[0,-1,1,2,1,0][f],spread=[2,2,3,3,2,1][f];
+   P.dx=side?lean*fwd:0;P.dy=f<5?1:0;P.head=f===3?1:0;
+   if(side){P.near=spread;P.far=-spread;}else P.spread=spread>2?2:1;
   }
   else if(loc==='dash'){const w=f%4;P.dx=side?fwd*2:0;P.dy=1;P.near=side?[2,1,2,1][w]:0;P.far=side?-1:0;P.nearLift=side?1:0;
    P.liftL=!side&&w%2===0?1:0;P.liftR=!side&&w%2===1?1:0;P.swingL=!side?-1:0;P.swingR=!side?-1:0;}
   else if(loc==='hurt'){const back=[-1,-2,-1,0][f];P.dx=side?back*fwd:0;P.dy=[1,1,0,0][f];P.hx=side?[-1,-1,0,0][f]*fwd:0;P.blink=f<3;P.swingL=P.swingR=-1;}
   else if(loc==='use'||loc==='melee'){P.dx=side?[0,0,1,1,0,0][f]*fwd:0;P.dy=[0,0,1,1,0,0][f];}
-  P.hx+=P.dx;P.hy+=P.dy;return P;
+  P.hx+=P.dx;P.hy+=P.dy+P.head;return P;
  }
  // Épaules, prise et visée de la lame. Le poignet moteur est ramené vers le torse
  // (bras courts de chibi) ; la lame garde l'angle et la longueur de la lame moteur.
@@ -336,10 +344,10 @@
    for(const arm of [a0,a1]){const h=H[arm],s=shoulderOf(view,arm,h,P),dx=h[0]-s[0],dy=h[1]-s[1],d=Math.hypot(dx,dy);
     if(d>R){mx-=dx*(1-R/d);my-=dy*(1-R/d);}}
    if(!mx&&!my)break;gx+=mx*.5;gy+=my*.5;}
-  // Poings et pommeau ne montent jamais devant le visage ni dans les cheveux : ils
-  // s'arrêtent sous la bouche, devant le torse (de profil : lame posée sur l'épaule).
+  // Poings et pommeau ne montent jamais devant le visage ni dans la barbe : ils restent
+  // devant le torse (lame levée : posée sur l'épaule, derrière la tête).
   const F=FACE[view];
-  if(F){const fwd=view==='droite'?1:view==='gauche'?-1:0,top=-10+P.dy+Math.max(0,Math.round(4*uy));
+  if(F){const fwd=view==='droite'?1:view==='gauche'?-1:0,top=-8+P.dy+Math.max(0,Math.round(4*uy));
    if(fwd&&gy<top&&(gx-P.dx)*fwd<F[fwd>0?1:0]*fwd+2)gx=fwd>0?Math.max(gx,1+P.dx):Math.min(gx,-1+P.dx);
    if(gy<top&&(fwd||(gx-P.dx>=F[0]-1&&gx-P.dx<=F[1]+1)))gy=top;}
   const g=[Math.round(gx),Math.round(gy)];
@@ -389,7 +397,7 @@
  }
  function legsLayer(view,P){
   const part=PARTS[view];
-  if(FRONTAL(view)){const out=new Map();over(out,shift(part.legL,0,-P.liftL));over(out,shift(part.legR,0,-P.liftR));return out;}
+  if(FRONTAL(view)){const s=P.spread-P.legIn,out=new Map();over(out,shift(part.legL,-s,-P.liftL));over(out,shift(part.legR,s,-P.liftR));return out;}
   const east=view==='droite',out=new Map();
   // jambe éloignée puis proche ; chacune reçoit son propre contour
   const farX=east?-5:1,nearX=east?-1:-3,fwd=east?1:-1;
@@ -489,7 +497,8 @@
   // Ordre de dessin : fourreau/lame arrière, bras arrière, jambes, tronc, tête, bras avant, lame avant.
   const S=shift(scabbard(new Map(),view,sheathed),P.dx,P.dy);
   const swordLayer=blade?sword(new Map(),blade.g,blade.tip):null;
-  if(view!=='dos')over(img,S,true);
+  // De face, fourreau et poignée sont entièrement cachés par le corps et la tête.
+  if(side)over(img,S,true);
   if(blade&&behindBlade){if(smearLayer)over(img,smearLayer);over(img,swordLayer,true);}
   over(img,back);
   over(img,legsLayer(view,P));
@@ -498,10 +507,35 @@
   over(img,body);
   const head=shift(part.head,P.hx,P.hy);
   if(P.blink)lids(view,head,P.hx,P.hy);
-  if(view==='dos'){over(img,head);over(img,S,true);}
-  else over(img,head);
+  over(img,head);
+  if(P.head)over(img,shift(part.collar,P.dx,P.dy));
+  if(view==='dos')over(img,S,true);
   if(blade&&!behindBlade){if(smearLayer)over(img,smearLayer);over(img,swordLayer,true);}
   over(img,grip);over(img,front);
+  return finish(img);
+ }
+ /** Finition de silhouette : tout bord reçoit son contour d'un pixel (même quand une pièce
+  *  bouge et découvre un bord) et les petits trous fermés se bouchent. Les traînées tramées
+  *  (smears) restent ajourées. */
+ const SMEAR_KEYS=new Set(['e','E','W']);
+ function finish(img){
+  const add=[];
+  for(const [k,c] of img){if(c==='O'||c==='x'||SMEAR_KEYS.has(c))continue;const x=KX(k),y=KY(k);
+   for(const [dx,dy] of AROUND){const n=K(x+dx,y+dy);if(!img.has(n))add.push(n);}}
+  for(const n of add)img.set(n,'O');
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  for(const k of img.keys()){const x=KX(k),y=KY(k);if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+  const out=new Set(),stack=[];
+  for(let x=x0-1;x<=x1+1;x++)stack.push(K(x,y0-1),K(x,y1+1));
+  for(let y=y0-1;y<=y1+1;y++)stack.push(K(x0-1,y),K(x1+1,y));
+  while(stack.length){const k=stack.pop();if(out.has(k)||img.has(k))continue;const x=KX(k),y=KY(k);if(x<x0-1||x>x1+1||y<y0-1||y>y1+1)continue;
+   out.add(k);for(const [dx,dy] of AROUND)stack.push(K(x+dx,y+dy));}
+  const seen=new Set();
+  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const k=K(x,y);if(img.has(k)||out.has(k)||seen.has(k))continue;
+   const hole=[],q=[k];let smear=false;seen.add(k);
+   while(q.length){const h=q.pop();hole.push(h);for(const [dx,dy] of AROUND){const n=K(KX(h)+dx,KY(h)+dy),c=img.get(n);
+    if(c===undefined){if(!seen.has(n)){seen.add(n);q.push(n);}}else if(SMEAR_KEYS.has(c))smear=true;}}
+   if(!smear&&hole.length<=4)for(const h of hole)img.set(h,'O');}
   return img;
  }
  function draw(context,dir=2,state='idle',frame=0,combo=0,poseFn){
@@ -519,7 +553,7 @@
   return {width:CELL,height:CELL,anchor:ANCHOR,data};
  }
  // Respiration lente et clignement, comme le repos des batraciens (boucle de 4,3 s).
- const IDLE_TIMELINE=[[0,1.30],[1,.22],[2,.70],[1,.32],[0,.65],[3,.10],[0,1.01]];
+ const IDLE_TIMELINE=[[0,1.30],[1,.22],[2,.70],[1,.30],[3,.16],[0,1.62]];
  const IDLE_LOOP=IDLE_TIMELINE.reduce((a,[,d])=>a+d,0);
  function idleFrame(seconds){let t=(Math.max(0,Number.isFinite(seconds)?seconds:0))%IDLE_LOOP;for(const [f,d] of IDLE_TIMELINE){if(t<d)return f;t-=d;}return 0;}
  function weaponVisual(actor,time,state='idle',frame=0){

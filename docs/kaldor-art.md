@@ -24,14 +24,19 @@ reste en haut à gauche.
 
 Les grilles sources sont découpées en pièces (tête, tronc, bras, jambes). Les
 poses déplacent ces pièces d'un pixel ; seuls l'épée, les bras d'action, les
-jambes de profil et les smears sont tracés à la volée.
+jambes de profil et les smears sont tracés à la volée. Une finition vérifie la
+silhouette de chaque image : tout bord découvert par une pièce qui bouge reçoit
+son contour et les petits trous se bouchent (les smears tramés restent ajourés).
 
 ## Animations
 
 - **Repos :** respiration d'un pixel et clignement (boucle de 4,3 s comme les
-  batraciens).
-- **Marche (6 images) :** rebond d'un pixel du haut du corps, pied levé à tour
-  de rôle de face et de dos, bras en balancier. De profil, petits pas de chibi :
+  batraciens). En remontant, la tête et les mains restent un instant en bas :
+  léger bobbing d'un pixel, sans trou au cou (le col de fourrure est repeint
+  par-dessus la tête abaissée).
+- **Marche (6 images) :** rebond d'un pixel du haut du corps, la tête suivant
+  avec une image de retard, bras en balancier. De face et de dos, les pieds
+  sont joints et se lèvent à tour de rôle. De profil, petits pas de chibi :
   les deux pieds restent sous le corps et la jambe qui passe devant se lève
   d'un pixel.
 - **Épée à deux mains :** dès qu'elle est sortie (repos, marche, garde, dash,
@@ -43,10 +48,15 @@ jambes de profil et les smears sont tracés à la volée.
 - **Combos (4 × 6 images) :** la lame garde l'angle et la longueur de la pose
   moteur `swordPose()`, les mains restant devant le torse. Poings et pommeau ne
   montent jamais devant le visage ; une lame levée passe derrière la tête (lame
-  sur l'épaule). Smear en croissant plein (bord blanc, cœur bleuté, départ
+  sur l'épaule). Smear en croissant plein (bord clair, cœur doré, départ
   tramé) sur les images 2 et 3, traîne tramée plus légère sur l'image 4, retour
-  en garde haute sur l'image 5.
-- **Garde :** lame tenue à deux mains en travers du corps, accroupi d'un pixel.
+  en garde haute sur l'image 5. Le smear est crème et doré comme sur la planche.
+  Les appuis s'écartent en fente : de profil, pied avant devant, pied arrière
+  derrière, buste abaissé d'un pixel qui recule à l'armé puis plonge vers
+  l'avant ; de face et de dos, appuis élargis. La tête plonge d'un pixel à
+  l'impact.
+- **Garde :** lame tenue à deux mains en travers du corps, appuis écartés,
+  accroupi d'un pixel.
 - **Dash, blessure, utiliser, mêlée :** penché, recul avec yeux fermés, main
   levée vers le torse, coup de poing armé puis lancé.
 - Hors combat, l'épée en main reste **à côté de la tête, jamais devant le

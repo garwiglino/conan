@@ -62,7 +62,7 @@ test('all four attacks show multiple poses with a smear on contact frames',()=>{
    hashes.push(crypto.createHash('sha256').update(data).digest('hex'));
    if(frame>=2&&frame<=3)for(let i=0;i<data.length;i+=4){
      const r=data[i],g=data[i+1],b=data[i+2];
-     if(data[i+3]&&(r===102&&g===137&&b===158 || r===200&&g===220&&b===229))haveSmear=true;
+     if(data[i+3]&&(r===196&&g===154&&b===92 || r===242&&g===220&&b===156))haveSmear=true;
    }
   }
   assert.ok(new Set(hashes).size>=4,`combination ${dir}:${combo} lacks unique frame changes`);
