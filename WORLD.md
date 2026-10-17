@@ -13,7 +13,7 @@ Point d'entrée de la bible de production. Direction retenue : heroic fantasy ad
 
 ## Registres calculés sur la carte du dépôt
 
-- [Les 83 fiches de localité](docs/world-bible/generated/settlements.md) : identifiant et position conservés, rôle, population, composition, ressources, besoins, voies existantes, fournisseurs possibles, autorité, patrouille, litiges, incidents admissibles et kit artistique.
+- [Les 83 fiches de localité](docs/world-bible/generated/settlements.md) : identifiant conservé, position sur la carte resserrée, rôle, population, composition, ressources, besoins, voies existantes, fournisseurs possibles, autorité, patrouille, litiges, incidents admissibles et kit artistique.
 - [Démographie pondérée](docs/world-bible/generated/demography.md) : chaque région, chaque territoire et le monde ; les groupes ruraux concentrés restent distincts des habitants dispersés.
 - [Matrice de 54 ressources × 14 régions](docs/world-bible/generated/resources.md).
 - [Les 36 relations entre les neuf acteurs de coordination](docs/world-bible/generated/relations.md).

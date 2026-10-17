@@ -14,15 +14,15 @@
     "regions": 14,
     "relations": 36,
     "resources": 54,
-    "routes": 145,
+    "routes": 133,
     "sites": 83
   },
   "inputSHA256": {
-    "data/world/atlas.json": "405fe21da911a4aa8a2346d8b90213191f39ca40811b1dd453784f9e6f7d1a31",
+    "data/world/atlas.json": "2a51f857b9981f04eb5c242a25f3c7aa7a64be2cdb5bcf5ef12c0d4759294be6",
     "data/world/bible/events.json": "c3aaf7b87bdd0110f019a10704576ed44c1dd1c3b655736582f1f5faf149098f",
     "data/world/bible/relations.json": "2cf44abe5e9de6b76b61c1fff9930a5b1ad549a09fb8d9bb5a0346d0f58d0995",
     "data/world/bible/source.json": "0c52f03b43c05a2a29555d258f2703a80ee09a52845e1fd8d189654bc1cd8cb6",
-    "scripts/build-world-bible.py": "58830a36994afc143c796bbfa7e699ee77971229d2c998d07729ad6691270929"
+    "scripts/build-world-bible.py": "0c908a69b7fbeaaa58fc0318b07b03e805269f8b8568833a9c061b41e98fdc1c"
   },
   "preserved": [
     "atlas_coordinates",

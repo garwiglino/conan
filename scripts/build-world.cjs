@@ -2,12 +2,15 @@ const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const world=JSON.parse(fs.readFileSync(path.join(root,'data/world/atlas-source.json')));
 const source=JSON.parse(fs.readFileSync(path.join(root,'data/world/azgaar-source.json')));
-const cells=source.pack.cells;
-const data={version:1,seed:546366735,width:1440000,height:960000,territories:world.territories,regions:world.regions,
- cells:world.macroCells.map(c=>[c.id,...c.center,+c.land,c.heightIndex,c.biome,c.region,c.feature,c.river,c.polygon.flat()]),
- sites:world.settlements,story:world.storySites,zones:world.cursedZones,biomes:world.biomes,
- routes:world.routes.map(r=>({...r,risk:undefined})),
- rivers:source.pack.rivers.map(r=>({id:r.i,name:r.name,width:Math.max(3,Math.min(55,r.width*1000)),points:r.cells.filter(c=>c>=0&&cells[c]).map(id=>{const c=cells[id];return [Math.round(c.p[0]*1000)+(c.h>=20?60:0),Math.round(c.p[1]*1000)-(c.h>=20?80:0)];})})).filter(r=>r.points.length>1)};
+// The playable world is the compact layout: Azgaar distances divided by `scale`,
+// settlements gathered into one pays per region, natural borders elsewhere.
+const spec=JSON.parse(fs.readFileSync(path.join(root,'data/world/layout.json')));
+const compact=require('./world-layout.cjs')(world,source,spec);
+const geole=world.storySites.find(s=>s.name.startsWith('Geôle')),legacyAnchor=world.routes.flatMap(r=>r.points).find(p=>p[2]===geole.cell)||[geole.x,geole.y];
+const data={version:2,seed:546366735,width:compact.width,height:compact.height,territories:world.territories,regions:world.regions,
+ cells:compact.cells,sites:compact.sites,story:compact.story,zones:world.cursedZones,biomes:world.biomes,routes:compact.routes,rivers:compact.rivers,
+ layout:{id:spec.id,scale:spec.scale,pays:compact.pays,wilds:compact.wilds,links:compact.links,shapes:compact.shapes,border:{wavelength:spec.border.wavelength},blend:spec.blend,
+  legacy:{width:world.coordinateSystem.width,height:world.coordinateSystem.height,origin:[legacyAnchor[0]-23.5,legacyAnchor[1]-55.5]}}};
 // Fine coastal detours keep a land road on land at metre scale. Azgaar centres
 // can graze a bay when joined by a straight segment; the graph and drawing use
 // the same added vertices. The native source remains an editable macro map.
@@ -19,6 +22,9 @@ const boundaryEdges=new Map();
 for(const cell of data.cells){if(!cell[3])continue;const poly=cell[9];for(let i=0;i<poly.length;i+=2){const j=(i+2)%poly.length,a=[poly[i],poly[i+1]],b=[poly[j],poly[j+1]],key=[a.join(','),b.join(',')].sort().join('|'),edge=boundaryEdges.get(key);if(edge){edge.other=cell[6];edge.shared=true;}else boundaryEdges.set(key,{a,b,region:cell[6],other:null,shared:false});}}
 const regionById=Object.fromEntries(data.regions.map(r=>[r.id,r]));data.boundaries=[...boundaryEdges.values()].filter(e=>!e.shared||e.region!==e.other).map(e=>[...e.a,...e.b,!e.shared?'coast':regionById[e.region]?.territory===regionById[e.other]?.territory?'region':'territory']);
 
+// Land behind the natural borders, sampled for the atlas map: run lengths per row,
+// alternating open and closed and starting with open.
+{const step=spec.maskStep,cols=Math.ceil(data.width/step),rows=[];for(let j=0;j*step<data.height;j++){const runs=[];let closed=false,run=0;for(let i=0;i<cols;i++){const x=(i+.5)*step,y=(j+.5)*step,v=!!atlas.cellAt(x,y)?.land&&!atlas.passable(x,y);if(v===closed)run++;else{runs.push(run);closed=v;run=1;}}runs.push(run);rows.push(runs);}data.layout.closed={step,cols,rows};}
 fs.writeFileSync(path.join(root,'data/world/atlas.json'),JSON.stringify(data));
 console.log(refinements.length+' coastal segments refined');
-console.log(`${data.cells.length} macro cells, ${data.sites.length} settlements, ${data.routes.length} routes; metre coordinates`);
+console.log(`${data.cells.length} macro cells, ${data.sites.length} settlements, ${data.routes.length} routes; compact layout ${spec.id}, ${data.width/1000} × ${data.height/1000} km`);

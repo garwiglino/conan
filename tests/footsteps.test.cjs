@@ -1,7 +1,8 @@
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),{RenderingAudioContext}=require('web-audio-engine'),{loadGame}=require('./game-harness.cjs');let a;before(async()=>{a=await loadGame();});
 test('surface lookup follows bridges, upper floors, cold ground and dry tropical land',()=>{
  const game={clock:480,tile:()=>5},actor={x:1,y:1};assert.equal(a.footSurface(game,actor),'wood');game.tile=()=>3;assert.equal(a.footSurface(game,actor),'water');actor.level=1;assert.equal(a.footSurface(game,actor),'wood');actor.level=0;
- for(const b of [1,7,11]){const c=a.Atlas.cells.find(c=>c.land&&c.biome===b);Object.assign(actor,a.Atlas.toGame(c.x,c.y));game.tile=()=>0;assert.equal(a.footSurface(game,actor),b===1?'sand':b===7?'earth':'snow');}
+ // Tropical ground shows bare earth on its dry patches; pick a cell centre on one.
+ for(const b of [1,7,11]){const c=a.Atlas.cells.find(c=>c.land&&c.biome===b&&(b!==7||a.WorldTerrainArt.noise(Math.floor(c.x*16),Math.floor(c.y*16),86,450)>.68));Object.assign(actor,a.Atlas.toGame(c.x,c.y));game.tile=()=>0;assert.equal(a.footSurface(game,actor),b===1?'sand':b===7?'earth':'snow');}
  game.tile=()=>2;const c=a.Atlas.cells.find(c=>c.land&&c.biome===7);Object.assign(actor,a.Atlas.toGame(c.x,c.y));assert.equal(a.footSurface(game,actor),'stone');
 });
 test('NPC steps follow moved distance and proximity, never idle, flight, warps, pause or travel',()=>{
