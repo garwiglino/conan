@@ -165,6 +165,10 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git commit -m 'build: sync modular Kaldor web and iOS art [skip ci]'
+            # Other generated sidecars may be dirty. They are not part of this
+            # publication and must not block a clean rebase after a parallel CI
+            # pipeline has already pushed the validated hero build.
+            git stash push --include-untracked -m 'ci: preserve generated sidecars before rebase' || true
             git fetch origin main
             git rebase origin/main
             git push origin HEAD:main
