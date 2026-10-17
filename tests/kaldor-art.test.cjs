@@ -70,14 +70,40 @@ test('all four attacks show multiple poses with a smear on contact frames',()=>{
  }
 });
 
-test('CharacterAtlas actually uses replacement art and preserves hero hit flash',()=>{
+test('CharacterAtlas now composes Kaldor from actual NPC male head, body, hands, hair and walk poses',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(human.appearance.sex,'masculin');
+ assert.equal(human.appearance.outfit,'E01-masculin-terre');
+ assert.equal(human.appearance.age,'adulte');
+ assert.equal(human.appearance.beard,null);
+ assert.equal(human.appearance.moustache,null);
+ assert.deepEqual(api.CIVILIAN_ART.clips.walk.durations.length,8);
+ assert.equal(await human.preload(),true);
+ assert.equal(human.ready(),true);
  const atlas=new api.CharacterAtlas();
  for(let dir=0;dir<4;dir++){
-  const hero=atlas.get('hero',dir,'walk',2,false,0),body=Art.raster({dir,state:'walk',frame:2,swordPose:pose});
-  assert.deepEqual(shot(hero.getContext('2d')),Buffer.from(body.data));
-  const hit=atlas.get('hero',dir,'walk',2,true,0);
-  assert.notDeepEqual(shot(hero.getContext('2d')),shot(hit.getContext('2d')));
+  const npc=api.CIVILIAN_BITMAPS.get(human.appearance,'walk',dir,2);
+  assert.ok(npc,'Missing native NPC frame '+dir);
+  const hero=atlas.get('hero',dir,'sheathed_walk',2,false,0);
+  assert.ok(hero);
+  const a=shot(hero.getContext('2d')),b=shot(npc.getContext('2d'));
+  let exactHair=0;
+  for(let y=25;y<=35;y++)for(let x=34;x<=44;x++){
+   const i=(y*80+x)*4;
+   if(b[i+3]===255&&a.slice(i,i+4).equals(b.slice(i,i+4)))exactHair++;
+  }
+  assert.ok(exactHair>=8,'real NPC head/hair pixels are not reused at direction '+dir);
+  const legacy=Art.raster({dir,state:'sheathed_walk',frame:2,swordPose:pose});
+  assert.notDeepEqual(a,Buffer.from(legacy.data),'old Kaldor painter still active');
+  const flash=atlas.get('hero',dir,'sheathed_walk',2,true,0);
+  assert.notDeepEqual(a,shot(flash.getContext('2d')));
  }
+ const standing={x:100,y:100,moving:true};
+ human.gaitFrame(standing);
+ standing.x+=3;
+ const step=human.gaitFrame(standing);
+ for(let k=0;k<10;k++)assert.equal(human.gaitFrame(standing),step,'animation advances against a wall');
+ assert.equal(human.frameAt('walk',0,24),human.frameAt('walk',0,0),'full gait stride repeats');
 });
 
 test('world renderer and iOS carry identical source with same save contract',()=>{
@@ -86,6 +112,10 @@ test('world renderer and iOS carry identical source with same save contract',()=
  assert.ok(html.includes("HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose)"));
  assert.ok(html.includes("HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)"));
  assert.ok(ios.includes("HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose)"));
+ assert.ok(html.includes('HearthreaverKaldorCivilianArt.nativeFrame'));
+ assert.ok(ios.includes('HearthreaverKaldorCivilianArt.nativeFrame'));
+ assert.ok(html.includes('E01-masculin-terre'));
+ assert.ok(ios.includes('E01-masculin-terre'));
  const game=new api.Game();const saved=game.serialize();assert.equal(saved.version,1);
  const ctx=canvas.createCanvas(80,80).getContext('2d');
  const p=game.player;game.player.x=40;game.player.y=52;game.player.dir=2;new api.CharacterAtlas().draw(ctx,'hero',p,0);
