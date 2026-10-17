@@ -197,20 +197,36 @@ test('guard draws from the back without changing input state, old saves and deat
  assert.equal(response.state,'idle');
 });
 
-test('Kaldor overlay is deterministic, rebuilds without duplication and keeps web/iOS in sync',()=>{
- const cp=require('node:child_process');const main=path.join(root,'index.html');
- const sha=x=>crypto.createHash('sha256').update(fs.readFileSync(x)).digest('hex');
- const before=sha(main),first=sha(path.join(root,'art/kaldor-preview.html'));
- cp.execFileSync(process.execPath,['scripts/embed-kaldor.cjs'],{cwd:root,stdio:'pipe'});
- assert.equal(sha(main),before);
- assert.equal(sha(path.join(root,'art/kaldor-preview.html')),first);
- const current=fs.readFileSync(main,'utf8');
- assert.equal(current.split('// BEGIN KALDOR JAVASCRIPT PIXEL ART').length,2);
- assert.equal(current.split('HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)').length,2);
- const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');
- assert.ok(ios.includes('Kaldor, long-haired barbarian'));
+test('Kaldor overlay build is deterministic in isolation and never races world renderer tests',()=>{
+ const cp=require('node:child_process'),os=require('node:os');
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'kaldor-build-'));
+ const toCopy=[
+  'index.html','ios/Hearthreaver/Game/index.html',
+  'scripts/embed-kaldor.cjs','scripts/kaldor-civilian-bridge.js',
+  'sprites/kaldor/kaldor-art.js',
+  'art/kaldor-preview-template.html','art/kaldor-preview.html',
+  'data/kaldor-manifest.json'
+ ];
+ const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+ try {
+  for(const rel of toCopy){
+   const dest=path.join(tmp,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});
+   fs.copyFileSync(path.join(root,rel),dest);
+  }
+  const a=hash(path.join(tmp,'index.html')),b=hash(path.join(tmp,'art/kaldor-preview.html'));
+  for(let round=0;round<2;round++){
+   cp.execFileSync(process.execPath,['scripts/embed-kaldor.cjs'],{cwd:tmp,stdio:'pipe'});
+   assert.equal(hash(path.join(tmp,'index.html')),a,'non-idempotent HTML in pass '+round);
+   assert.equal(hash(path.join(tmp,'art/kaldor-preview.html')),b,'non-idempotent preview in pass '+round);
+  }
+  const built=fs.readFileSync(path.join(tmp,'index.html'),'utf8');
+  assert.equal(built.split('// BEGIN KALDOR JAVASCRIPT PIXEL ART').length,2);
+  assert.equal(built.split('HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)').length,2);
+  assert.ok(built.includes('HearthreaverKaldorCivilianArt.nativeFrame'));
+  const ios=fs.readFileSync(path.join(tmp,'ios/Hearthreaver/Game/index.html'),'utf8');
+  assert.equal(ios.slice(ios.indexOf('<script>')),built.slice(built.indexOf('<script>')));
+ } finally {fs.rmSync(tmp,{recursive:true,force:true});}
 });
-
 
 test('sword holsters after 3.7 seconds idle or moving and draws on renewed attack',()=>{
  const a={attack:0,moving:true,anim:0,dir:2};
@@ -252,7 +268,9 @@ test('hurt, melee and object use keep a holstered sword on the back without chan
  }
 });
 
-test('the real CharacterAtlas draws the sheathed hero after timeout, even without player movement',()=>{
+test('the real CharacterAtlas draws modular human head, hands and sheathed sword with stable gait',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
  const atlas=new api.CharacterAtlas(),cv=canvas.createCanvas(80,80),ctx=cv.getContext('2d');
  const actor={x:40,y:52,dir:2,attack:0,attackCD:0,guard:false,moving:false,anim:0,flash:0,hurt:0,dash:0,combo:0};
  atlas.draw(ctx,'hero',actor,0);
@@ -261,10 +279,19 @@ test('the real CharacterAtlas draws the sheathed hero after timeout, even withou
  assert.equal(actor.kaldorWeapon.mode,'stowing');
  ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.2);
  assert.equal(actor.kaldorWeapon.mode,'sheathed');
- assert.deepEqual(shot(ctx),Buffer.from(Art.raster({dir:2,state:'sheathed_idle',frame:Art.idleFrame(4.2),swordPose:pose}).data));
+ const expectedIdle=human.nativeFrame(2,'sheathed_idle',human.frameAt('idle',4.2));
+ assert.deepEqual(shot(ctx),shot(expectedIdle.getContext('2d')));
  actor.anim=2;actor.moving=true;
  ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.35);
- assert.deepEqual(shot(ctx),Buffer.from(Art.raster({dir:2,state:'sheathed_walk',frame:2,swordPose:pose}).data));
- actor.attack=.18;actor.combo=2;ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.4);
+ // Animation driven by real distance, not an arbitrary actor.anim counter.
+ const expectedWalk=human.nativeFrame(2,'sheathed_walk',0);
+ assert.deepEqual(shot(ctx),shot(expectedWalk.getContext('2d')));
+ actor.x+=3;
+ ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.40);
+ const nextStep=human.gaitFrame(actor);
+ const expectedStep=human.nativeFrame(2,'sheathed_walk',nextStep);
+ assert.deepEqual(shot(ctx),shot(expectedStep.getContext('2d')));
+ actor.attack=.18;actor.combo=2;ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.5);
  assert.equal(actor.kaldorWeapon.mode,'drawn');assert.ok(actor._img);
 });
+
