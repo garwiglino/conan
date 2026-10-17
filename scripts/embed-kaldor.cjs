@@ -29,7 +29,7 @@ const write=(rel,bytes)=>fs.writeFileSync(path.join(root,rel),bytes,'utf8');
 write('index.html',html);
 const ios=html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,'');
 write('ios/Hearthreaver/Game/index.html',ios);
-const poseStart=html.indexOf('const SWORD_POSES='),poseEnd=html.indexOf('function greatsword(',poseStart);
+const poseStart=html.indexOf('const ATTACK_TIMES='),poseEnd=html.indexOf('function greatsword(',poseStart);
 if(poseStart<0||poseEnd<0)throw Error('Kaldor: authored sword pose source missing');
 const marker='/*__KALDOR_POSE_CODE__*/',template=fs.readFileSync(path.join(root,'art/kaldor-preview-template.html'),'utf8');
 if(template.split(marker).length!==2)throw Error('Kaldor: preview marker not unique');
