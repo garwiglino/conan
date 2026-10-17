@@ -1,0 +1,104 @@
+name: Kaldor v3 integration
+on:
+  push:
+    branches: [integration/kaldor-v3]
+    paths:
+      - '.github/kaldor-v3-transfer/**'
+permissions:
+  contents: write
+concurrency:
+  group: kaldor-v3-publish
+  cancel-in-progress: false
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Kaldor source payload and apply only authorized files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import lzma, base64, json, hashlib, re, subprocess
+          src=Path('.github/kaldor-v3-transfer/import.b64')
+          assert src.exists(), 'Missing patch transfer'
+          payload=lzma.decompress(base64.b64decode(src.read_text().strip(),validate=True))
+          obj=json.loads(payload)
+          assert obj['schema']==3
+          assert obj['baseCommit']=='2156bb4211ee7072f691fe29efef99a7a66bca83'
+          allowed={'README.md','sprites/kaldor/kaldor-art.js','scripts/embed-kaldor.cjs','art/kaldor-preview-template.html','docs/kaldor-art.md','tests/kaldor-art.test.cjs'}
+          files=obj['files']
+          assert len(files)==len(allowed) and {f['path'] for f in files}==allowed
+          data={}
+          for record in files:
+              p=Path(record['path'])
+              assert p.is_file()
+              observed=subprocess.check_output(['git','hash-object',str(p)],text=True).strip()
+              assert observed==record['currentBlob'], f'Outdated source: {p}: {observed} != {record["currentBlob"]}'
+              content=record['content'].encode('utf-8')
+              assert hashlib.sha256(content).hexdigest()==record['sha256'], f'Invalid payload: {p}'
+              data[p]=content
+          for p,b in data.items():
+              p.write_bytes(b)
+          print('Authenticated Kaldor v3 source upgrade:',len(data),'files')
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Rebuild game web and iOS with the new hero
+        run: |
+          npm run build:batraciens
+          npm run build:kaldor
+      - name: Run full gameplay regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test --test-concurrency=2 --test-reporter=tap tests/*.test.cjs | tee /tmp/kaldor-v3-tests.log
+      - name: World, rendering reproducibility and native archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/test-world-bible.py 2>&1 | tee /tmp/kaldor-world-tests.log
+          python3 scripts/package-ios.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,subprocess,json,re,os
+          sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          web=sha('index.html')
+          ios=sha('ios/Hearthreaver/Game/index.html')
+          subprocess.run(['npm','run','build:batraciens'],check=True)
+          subprocess.run(['npm','run','build:kaldor'],check=True)
+          assert web==sha('index.html') and ios==sha('ios/Hearthreaver/Game/index.html'),'Non-idempotent build'
+          content=Path('/tmp/kaldor-v3-tests.log').read_text()
+          n={key:int(re.search(r'^# '+key+r' (\d+)$',content,re.M)[1]) for key in ['tests','pass','fail','cancelled']}
+          assert n['tests']==n['pass'] and n['fail']==n['cancelled']==0
+          info={'sourceCommit':os.environ.get('GITHUB_SHA'),'node':n,'worldBible':'passed','webSHA256':web,'iosSHA256':ios,'archiveSHA256':sha('Hearthreaver-iOS.zip'),'rebuildIdempotent':True,'testedOnPhysicalIPhone':False}
+          Path('data/kaldor-validation.json').write_text(json.dumps(info,indent=2)+'\n')
+          print(json.dumps(info,indent=2))
+          PY
+      - name: Publish only if all tests passed
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm -r .github/kaldor-v3-transfer
+          git rm .github/workflows/kaldor-v3-integrate.yml
+          git add README.md sprites/kaldor/kaldor-art.js scripts/embed-kaldor.cjs art/kaldor-preview-template.html art/kaldor-preview.html docs/kaldor-art.md tests/kaldor-art.test.cjs data/kaldor-manifest.json data/kaldor-validation.json index.html ios/Hearthreaver/Game/index.html Hearthreaver-iOS.zip
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --cached --check
+          git commit -m 'feat: Kaldor long hair stable gait and automatic sword sheathing'
+          git push origin HEAD:integration/kaldor-v3
+      - name: Keep test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaldor-v3-tests
+          path: |
+            /tmp/kaldor-v3-tests.log
+            /tmp/kaldor-world-tests.log
+            data/kaldor-validation.json
+          retention-days: 14
