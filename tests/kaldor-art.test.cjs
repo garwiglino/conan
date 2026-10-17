@@ -34,7 +34,7 @@ test('every state and combo paints only opaque crisp pixels within the 80px cell
   assert.ok(minX>=1&&minY>=1&&maxX<=78&&maxY<=78,'clipped '+dir+':'+state+':'+frame+':'+combo);
   count++;
  }
- assert.equal(count,240);
+ assert.equal(count,4*Object.entries(Art.states).reduce((sum,[state,n])=>sum+n*(state==='attack'?4:1),0));
 });
 
 test('engine painter and exported raster are pixel-identical in each direction and attack frame',()=>{
@@ -46,8 +46,9 @@ test('engine painter and exported raster are pixel-identical in each direction a
 });
 
 test('authoritative attack timings, sword vectors and actual collision sweep were not edited',()=>{
- const checks={'const ATTACK_TIMES=':['function greatsword(','d86682d8042a3652852dadea3276ecd85aae91e903ad654616ca29089a6a59da'],'function bladeHits(':['// engine.js','07f5661a9d7e57208ad25fcfb2965702a6e746659c1ce8ebc78098ff0751e4fc']};
+ const checks={'const ATTACK_TIMES=':['function swordPose(','42f283a2c61b7fcac55a67531db06c679267a79097e0434ec906a112e59ae3e2'],'function bladeHits(':['// engine.js','07f5661a9d7e57208ad25fcfb2965702a6e746659c1ce8ebc78098ff0751e4fc']};
  for(const [a,[b,hash]] of Object.entries(checks)){assert.equal(crypto.createHash('sha256').update(snippet(html,a,b)).digest('hex'),hash,a);}
+ assert.match(snippet(html,'function swordPose(','function greatsword('),/p\[2\]\*1\.02,p\[3\]\*1\.02/);
  for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++)for(let frame=0;frame<6;frame++){
   const p=pose(dir,frame,combo);assert.equal(p.length,4);assert.ok(p.every(Number.isFinite));
  }
@@ -83,10 +84,157 @@ test('world renderer and iOS carry identical source with same save contract',()=
  const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');
  assert.ok(ios.includes('// BEGIN KALDOR JAVASCRIPT PIXEL ART'));
  assert.ok(html.includes("HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose)"));
+ assert.ok(html.includes("HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)"));
  assert.ok(ios.includes("HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose)"));
  const game=new api.Game();const saved=game.serialize();assert.equal(saved.version,1);
  const ctx=canvas.createCanvas(80,80).getContext('2d');
  const p=game.player;game.player.x=40;game.player.y=52;game.player.dir=2;new api.CharacterAtlas().draw(ctx,'hero',p,0);
  const pixels=ctx.getImageData(0,0,80,80).data;
  assert.ok(pixels.some((value,i)=>i%4===3&&value===255));
+});
+
+
+test('long hair remains rooted to a stable head, while 6-frame walk steps visibly move boots',()=>{
+ const d=2,imgs=Array.from({length:6},(_,frame)=>Art.raster({dir:d,state:'sheathed_walk',frame,swordPose:pose}));
+ const slice=(im,x0,y0,x1,y1)=>{const bytes=[];for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)bytes.push(...im.data.slice((y*80+x)*4,(y*80+x)*4+4));return Buffer.from(bytes);};
+ for(const im of imgs.slice(1))assert.deepEqual(slice(im,36,31,44,37),slice(imgs[0],36,31,44,37),'head wobble detected');
+ assert.ok(new Set(imgs.map(im=>crypto.createHash('sha256').update(slice(im,30,47,50,55)).digest('hex'))).size>=4,'legs are not animated');
+ // The rear hair strands visibly extend to the waist with varied highlights.
+ const withHair=Art.raster({dir:0,state:'sheathed_idle',swordPose:pose}).data;
+ const region=new Set();for(let y=41;y<=47;y++)for(let x=34;x<=46;x++){const i=(y*80+x)*4;if(withHair[i+3]===255)region.add([withHair[i],withHair[i+1],withHair[i+2]].join(','));}
+ assert.ok(region.size>=3,'rear long hair lacks depth and highlights');
+});
+
+test('sheathing transitions are independent of gait, no teleport of feet and all four views render',()=>{
+ for(let dir=0;dir<4;dir++){
+  const h=[];
+  for(let phase=0;phase<6;phase++)for(let gait=0;gait<6;gait++){
+   const im=Art.raster({dir,state:'sheathe_walk',frame:phase*6+gait,swordPose:pose});
+   assert.equal(im.anchor.x,40);assert.equal(im.anchor.y,52);
+   if(gait===0)h.push(crypto.createHash('sha256').update(im.data).digest('hex'));
+  }
+  assert.ok(new Set(h).size>=4,dir+' sheath moves in steps');
+ }
+});
+
+test('sword holsters automatically after a short absence of attacks, even while walking',()=>{
+ for(const moving of [false,true]){
+  const a={attack:0,guard:false,moving,anim:2.4};
+  const state=moving?'walk':'idle',frame=2;
+  assert.equal(Art.weaponVisual(a,0,state,frame).state,state);
+  assert.equal(Art.weaponVisual(a,3.69,state,frame).state,state);
+  const active=Art.weaponVisual(a,3.71,state,frame);
+  assert.equal(active.state,moving?'sheathe_walk':'sheathe');
+  const done=Art.weaponVisual(a,4.06,state,frame);
+  assert.equal(done.state,moving?'sheathed_walk':'sheathed_idle');
+  assert.equal(a.kaldorWeapon.mode,'sheathed');
+ }
+});
+
+test('attacking interrupts holstering immediately, stays responsive, and restarts delay after the combo',()=>{
+ const a={moving:true,attack:0,attackCD:0,dash:0,comboWindow:0,guard:false};
+ Art.weaponVisual(a,0,'walk',0);
+ Art.weaponVisual(a,3.85,'walk',4);
+ assert.equal(a.kaldorWeapon.mode,'stowing');
+ a.attack=.25;a.combo=2;
+ assert.equal(Art.weaponVisual(a,3.9,'attack',2).state,'attack');
+ assert.equal(a.kaldorWeapon.mode,'drawn');
+ const originalAttack=a.attack;
+ Art.weaponVisual(a,3.99,'attack',3);
+ assert.equal(a.attack,originalAttack,'visual state changed gameplay attack timer');
+ a.attack=0;
+ Art.weaponVisual(a,5,'walk',0);
+ assert.equal(a.kaldorWeapon.mode,'drawn');
+ Art.weaponVisual(a,7.61,'walk',2);
+ assert.equal(a.kaldorWeapon.mode,'stowing');
+});
+
+test('guard draws from the back without changing input state, old saves and death keep working',()=>{
+ const a={attack:0,guard:false,guardTime:0,moving:false};
+ Art.weaponVisual(a,0,'idle',0);
+ Art.weaponVisual(a,3.8,'idle',0);
+ Art.weaponVisual(a,4.3,'idle',0);
+ assert.equal(a.kaldorWeapon.mode,'sheathed');
+ a.guard=true;
+ const draw=Art.weaponVisual(a,4.31,'guard',2);
+ assert.equal(draw.state,'draw');
+ assert.equal(a.guard,true);
+ const armed=Art.weaponVisual(a,4.6,'guard',2);
+ assert.equal(armed.state,'guard');
+ assert.equal(a.kaldorWeapon.mode,'drawn');
+ a.guard=false;
+ const response=Art.weaponVisual(a,4.9,'idle',0);
+ assert.equal(response.state,'idle');
+});
+
+test('Kaldor overlay is deterministic, rebuilds without duplication and keeps web/iOS in sync',()=>{
+ const cp=require('node:child_process');const main=path.join(root,'index.html');
+ const sha=x=>crypto.createHash('sha256').update(fs.readFileSync(x)).digest('hex');
+ const before=sha(main),first=sha(path.join(root,'art/kaldor-preview.html'));
+ cp.execFileSync(process.execPath,['scripts/embed-kaldor.cjs'],{cwd:root,stdio:'pipe'});
+ assert.equal(sha(main),before);
+ assert.equal(sha(path.join(root,'art/kaldor-preview.html')),first);
+ const current=fs.readFileSync(main,'utf8');
+ assert.equal(current.split('// BEGIN KALDOR JAVASCRIPT PIXEL ART').length,2);
+ assert.equal(current.split('HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)').length,2);
+ const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');
+ assert.ok(ios.includes('Kaldor, long-haired barbarian'));
+});
+
+
+test('sword holsters after 3.7 seconds idle or moving and draws on renewed attack',()=>{
+ const a={attack:0,moving:true,anim:0,dir:2};
+ const visual=(t,s='walk',f=0)=>Art.weaponVisual(a,t,s,f);
+ assert.equal(visual(0).state,'walk');
+ assert.equal(visual(3.69).state,'walk');
+ assert.equal(visual(3.71).state,'sheathe_walk');
+ assert.equal(visual(3.89).state,'sheathe_walk');
+ assert.equal(visual(4.05).state,'sheathed_walk');
+ a.moving=false;assert.equal(visual(4.1,'idle').state,'sheathed_idle');
+ a.moving=true;assert.equal(visual(4.15,'walk',3).state,'sheathed_walk');
+ a.attack=.6;assert.equal(visual(4.16,'attack',0).state,'attack');
+ a.attack=0;assert.equal(visual(4.8,'idle').state,'idle');
+ assert.equal(visual(7.90,'idle').state,'sheathe');
+ assert.equal(visual(8.25,'idle').state,'sheathed_idle');
+ a.guard=true;visual(8.3,'guard',2);assert.equal(a.kaldorWeapon.mode,'drawing');
+ assert.equal(visual(8.53,'guard',2).mode,'drawn');
+});
+
+test('sword reduction is shared by visual pose and gameplay sweep, not frame timings',()=>{
+ assert.ok(html.includes('return [p[0],p[1],p[2]*1.02,p[3]*1.02];'));
+ assert.equal(html.match(/const ATTACK_TIMES=/g)?.length,1);
+ for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++)for(let f=0;f<6;f++){
+  const [x,y,vx,vy]=pose(dir,f,combo);assert.ok(Number.isFinite(x+y+vx+vy));
+ }
+});
+
+
+test('hurt, melee and object use keep a holstered sword on the back without changing game status',()=>{
+ for(let dir=0;dir<4;dir++){
+  const a={dir,attack:0,guard:false,moving:false};
+  Art.weaponVisual(a,0,'idle',0);Art.weaponVisual(a,3.9,'idle',0);Art.weaponVisual(a,4.3,'idle',0);
+  assert.equal(a.kaldorWeapon.mode,'sheathed');
+  for(const [state,field]of [['hurt','hurt'],['melee','melee'],['use','useTime']]){
+   a[field]=.25;const look=Art.weaponVisual(a,4.35,state,0);assert.equal(look.state,'sheathed_'+state);
+   const img=Art.raster({dir,state:look.state,frame:0,swordPose:pose});assert.equal(img.anchor.x,40);a[field]=0;
+  }
+  assert.equal(Art.weaponVisual(a,4.5,'idle',0).state,'sheathed_idle');
+ }
+});
+
+test('the real CharacterAtlas draws the sheathed hero after timeout, even without player movement',()=>{
+ const atlas=new api.CharacterAtlas(),cv=canvas.createCanvas(80,80),ctx=cv.getContext('2d');
+ const actor={x:40,y:52,dir:2,attack:0,attackCD:0,guard:false,moving:false,anim:0,flash:0,hurt:0,dash:0,combo:0};
+ atlas.draw(ctx,'hero',actor,0);
+ assert.equal(actor.kaldorWeapon.mode,'drawn');
+ ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,3.8);
+ assert.equal(actor.kaldorWeapon.mode,'stowing');
+ ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.2);
+ assert.equal(actor.kaldorWeapon.mode,'sheathed');
+ assert.deepEqual(shot(ctx),Buffer.from(Art.raster({dir:2,state:'sheathed_idle',frame:Art.idleFrame(4.2),swordPose:pose}).data));
+ actor.anim=2;actor.moving=true;
+ ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.35);
+ assert.deepEqual(shot(ctx),Buffer.from(Art.raster({dir:2,state:'sheathed_walk',frame:2,swordPose:pose}).data));
+ actor.attack=.18;actor.combo=2;ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.4);
+ assert.equal(actor.kaldorWeapon.mode,'drawn');assert.ok(actor._img);
 });

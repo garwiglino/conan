@@ -1,9 +1,9 @@
-/* Hearthreaver — Kaldor, barbarian hero, authored pixel art v2.
+/* Hearthreaver — Kaldor, long-haired barbarian hero, authored pixel art v3.
  * All pixels are drawn in JavaScript, without a bitmap dependency.
  * Drop-in for CharacterAtlas(kind='hero'); four independent facing silhouettes,
  * head/torso/leg/arm posing, four attack combos and world-aligned blade smears.
- * Visuals ONLY: the game's combo windows, range, collisions, physics, and
- * stun/guard/dash timing remain under the original combat engine.
+ * Player combat timing, hit/stun/guard/dash rules and animation momentum are
+ * unchanged. Rendered blade and its actual collision sweep share one swordPose.
  * Native engine cell 80×80; feet at (40,52); no pixel rescaling or smoothing.
  */
 (function(root,factory){
@@ -15,7 +15,9 @@
  'use strict';
  const CELL=80, ANCHOR=Object.freeze({x:40,y:52});
  const DIRECTIONS=Object.freeze(['dos','droite','face','gauche']);
- const STATES=Object.freeze({idle:4,walk:6,attack:6,guard:6,dash:4,hurt:4,use:6,melee:6});
+ const STATES=Object.freeze({idle:4,walk:6,attack:6,guard:6,dash:4,hurt:4,use:6,melee:6,
+   sheathe:6,sheathe_walk:36,sheathed_idle:4,sheathed_walk:6,sheathed_dash:4,sheathed_hurt:4,sheathed_use:6,sheathed_melee:6,draw:5,draw_walk:30});
+ const HOLSTER=Object.freeze({delay:3.7,stow:0.33,draw:0.21});
  const PALETTE=Object.freeze({
   '.':null, O:'#100e20',K:'#282431',n:'#383649',H:'#53566d',L:'#74768b',
   s:'#75452d',m:'#ac663d',a:'#d28b56',h:'#e8ab71',i:'#f3c994',
@@ -167,41 +169,85 @@
  function limb(target,a,b,shade){const layer=new Map();pixelLine(layer,a,b,shade,2);merge(target,layer,true);}
  function fist(target,at,shade){const layer=new Map(),x=Math.round(at[0]),y=Math.round(at[1]);for(let yy=0;yy<2;yy++)for(let xx=0;xx<3;xx++)put(layer,x+xx-1,y+yy-1,xx===2||yy===1?'m':shade);merge(target,layer,true);}
  function shift(map,dx,dy){if(!dx&&!dy)return map;const next=new Map();for(const [p,c]of map){const [x,y]=p.split(',').map(Number);next.set(coord(x+dx,y+dy),c);}return next;}
- function feet(target,dir,state,f){const move=state==='walk',dash=state==='dash',guard=state==='guard',atk=state==='attack',lunge=atk&&f>=2&&f<=4;
+ function feet(target,dir,state,f){
+   const move=state==='walk',dash=state==='dash',guard=state==='guard',atk=state==='attack',lunge=atk&&f>=2&&f<=4;
    const facing=dir===1?1:dir===3?-1:0;
-   const stride=move?[0,1,1,0,-1,-1][f%6]:dash?2:lunge?1:0;
-   const feet=FEET[DIRECTIONS[dir]],layer=new Map();
-   feet.forEach(([bx,by],i)=>{
-     const x=bx+stride*(i===0?1:-1)*(facing||1), lift=move?[0,1,0,0,1,0][(f+i*3)%6]:0, y=by-lift;
-     // calves, fur-wrap and defined leather boots
-     const jointX=dir===1?x-1:dir===3?x+1:x+(i===0?1:-1);
-     pixelLine(layer,[jointX,-6],[x,-3+y],i===0?'u':'t',2);
+   const stride=move?[0,2,3,0,-2,-3][f%6]:dash?2:lunge?1:0;
+   const bases=FEET[DIRECTIONS[dir]],layer=new Map();
+   bases.forEach(([bx,by],i)=>{
+     const x=bx+stride*(i===0?1:-1)*(facing||1),lift=move?[0,0,2,0,0,2][(f+(i?3:0))%6]:0;
+     const y=by-lift;
+     // Knee articulation carries the gait. Head/torso heights never oscillate.
+     const kneeX=Math.round((x+bx)/2)+(dir===1?-1:dir===3?1:i===0?1:-1),kneeY=-5+(move&&lift?1:0);
+     pixelLine(layer,[i?2:-2,-5],[kneeX,kneeY],i===0?'u':'t',2);
+     pixelLine(layer,[kneeX,kneeY],[x,-2+y],i===0?'u':'t',2);
      for(let k=-1;k<=1;k++)put(layer,x+k,-3+y,k===-1?'u':'f');
      for(let k=-2;k<=2;k++)put(layer,x+k,y,k===-2?'O':k>=1?'t':'u');
      put(layer,x-2,y,'O');put(layer,x+2,y,'O');
    });
    merge(target,layer,true);
  }
- // Frame-specific shoulder/head spacing: a few pixels, no elastic scale effects.
+ // Weight shifts at the hips, never by bouncing the neck/skull. Shoulder recovery
+ // is tiny; foot lift and hair tips communicate motion instead of bobbing eyes.
  function offsets(state,f,combo,dir){
-   const walk=state==='walk',attack=state==='attack';
-   const step=walk?[0,1,0,0,1,0][f%6]:0;
-   const anticipation=attack?[0,-1,-1,0,0,0][f%6]:0;
-   const impact=attack&&combo===3&&[3,4].includes(f)?1:0;
+   const attack=state==='attack',anticipation=attack?[0,-1,-1,0,0,0][f%6]:0;
    const hurt=state==='hurt'&&f<2?1:0;
-   const breathing=state==='idle'&&f===1?-1:0;
+   const impact=attack&&combo===3&&[3,4].includes(f)?1:0;
    const lunge=attack&&f>=2&&f<=4;
    const push=(dir===1?1:dir===3?-1:0)*(lunge?1:0);
-   return {torsoX:push,torsoY:step+impact+hurt+breathing,
-    headX:push+(state==='walk'?[-1,0,1,0,-1,0][f%6]:0)+(state==='hurt'&&f===1?(dir===3?-1:1):0),
-    headY:step+impact+hurt+breathing+anticipation+(attack&&f>=3&&f<=4?1:0)};
+   const twist=state==='walk'?[0,0,1,0,0,-1][f%6]:0;
+   return {torsoX:push+twist,torsoY:impact+hurt,
+    headX:push+(state==='hurt'&&f===1?(dir===3?-1:1):0),
+    headY:impact+hurt+anticipation+(attack&&f>=3&&f<=4?1:0)};
  }
  function drawTorso(target,dir,o,state,f){const part=PARTS[DIRECTIONS[dir]],tmp=new Map();stamp(tmp,part.chest,-Math.floor(part.chest[0].length/2)+o.torsoX,-12+o.torsoY);stamp(tmp,part.waist,-Math.floor(part.waist[0].length/2)+o.torsoX,-5+o.torsoY);
    if(state==='walk'&&f===3)put(tmp,-3+o.torsoX,-9+o.torsoY,'h');
    merge(target,tmp,false);
  }
- function drawHead(target,dir,o,state,f){const rows=PARTS[DIRECTIONS[dir]].head; const tmp=new Map();stamp(tmp,rows,-Math.floor(rows[0].length/2)+o.headX,-21+o.headY);
-   if(state==='idle'&&f===3&&dir===2){ // blink, no eyelash styling
+ // Thick, irregular, shoulder-length hair designed individually for each view.
+ // Animated ends lag behind the stride and the blow while skull pixels stay put.
+ const HAIR={
+  face:[
+   [[-7,-17],[-8,-12],[-8,-7]],[[-5,-16],[-7,-10],[-6,-6]],
+   [[7,-17],[8,-12],[8,-8]],[[5,-16],[7,-10],[6,-6]]
+  ],
+  dos:[
+   [[-6,-18],[-7,-13],[-7,-7]],[[-4,-18],[-5,-11],[-5,-5]],
+   [[-1,-18],[-2,-11],[-1,-6]],[[2,-18],[3,-11],[2,-5]],
+   [[5,-18],[6,-12],[7,-7]]
+  ],
+  droite:[
+   [[-7,-18],[-8,-13],[-7,-7]],[[-5,-17],[-6,-11],[-5,-5]],
+   [[-3,-17],[-4,-12],[-4,-7]],[[5,-15],[6,-12],[6,-10]]
+  ],
+  gauche:[
+   [[7,-18],[8,-13],[8,-7]],[[5,-17],[6,-11],[5,-5]],
+   [[3,-17],[4,-12],[4,-7]],[[-5,-15],[-6,-12],[-6,-10]]
+  ]
+ };
+ function drawLongHair(target,dir,o,state,f){
+   const rear=DIRECTIONS[dir]==='dos',move=state==='walk',att=state==='attack';
+   const tipMotion=move?[0,0,1,1,0,-1][f%6]:att?[0,-1,-1,0,1,1][f%6]:state==='idle'?[0,1,0,-1][f%4]:0;
+   const leftLit=dir===2||dir===0||dir===3;
+   const layer=new Map();
+   for(let i=0;i<HAIR[DIRECTIONS[dir]].length;i++){
+     const [a,b,c]=HAIR[DIRECTIONS[dir]][i];
+     const sway=tipMotion*(i%2?1:-1),x=o.headX,y=o.headY;
+     const start=[a[0]+x,a[1]+y],mid=[b[0]+x,b[1]+y],end=[c[0]+x+sway,c[1]+y];
+     pixelLine(layer,start,mid,i%2?'n':'K',2);
+     pixelLine(layer,mid,end,i%2?'n':'K',2);
+     // Controlled one-pixel glints: never add non-palette anti-aliasing.
+     const shade=rear?(i%2?'H':'n'):(leftLit&&i%2===0?'H':'n');
+     pixelLine(layer,[start[0],start[1]+1],[mid[0],mid[1]],shade,1);
+     if(i%2===0)put(layer,end[0],end[1]-1,'K');
+   }
+   merge(target,layer,true);
+ }
+ function drawHead(target,dir,o,state,f){
+   const rows=PARTS[DIRECTIONS[dir]].head, tmp=new Map();
+   drawLongHair(tmp,dir,o,state,f);
+   stamp(tmp,rows,-Math.floor(rows[0].length/2)+o.headX,-21+o.headY);
+   if(state==='idle'&&f===3&&dir===2){
      for(const [x,y] of [[-3,-17],[3,-17]])put(tmp,x+o.headX,y+o.headY,'s');
    }
    merge(target,tmp,false);
@@ -272,29 +318,105 @@
      }
    }
  }
+ const SHEATH={
+  0:{w:[8,-20],v:[-11,14]},1:{w:[-8,-20],v:[3,15]},
+  2:{w:[8,-20],v:[-10,15]},3:{w:[8,-20],v:[-3,15]}
+ };
+ function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);}
+ function weaponBlend(a,b,t){
+  const w=[a.w[0]+(b.w[0]-a.w[0])*t,a.w[1]+(b.w[1]-a.w[1])*t];
+  const aa=Math.atan2(a.v[1],a.v[0]),bb=Math.atan2(b.v[1],b.v[0]);
+  let da=bb-aa;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;
+  const angle=aa+da*t,len=Math.hypot(...a.v)*(1-t)+Math.hypot(...b.v)*t;
+  return {w,v:[Math.cos(angle)*len,Math.sin(angle)*len]};
+ }
+ function storedSword(target,dir,f=0,walk=false){
+   const p=SHEATH[dir],layer=new Map(),shift=walk?[0,0,1,1,0,-1][f%6]:[0,0,0,0,0,0][f%6];
+   const w=[p.w[0]+(dir===0?shift:0),p.w[1]],v=p.v;
+   const len=Math.hypot(...v),u=[v[0]/len,v[1]/len],normal=[-u[1],u[0]];
+   const point=(r,side=0)=>[w[0]+u[0]*r+normal[0]*side,w[1]+u[1]*r+normal[1]*side];
+   // Scabbard has a dark leather core, bright rim, brass throat and tip.
+   const a=point(3),tip=point(len);
+   pixelLine(layer,a,tip,'O',3);
+   const mid0=point(4,-1),mid1=point(len-2,-1);pixelLine(layer,mid0,mid1,'u',1);
+   const rim0=point(4,1),rim1=point(len-3,1);pixelLine(layer,rim0,rim1,'t',1);
+   for(let side=-3;side<=3;side++){const [x,y]=point(3,side);put(layer,x,y,Math.abs(side)===3?'F':'Y');}
+   const h0=point(2),h1=point(-4);pixelLine(layer,h0,h1,'u',2);
+   const [pomX,pomY]=point(-5);put(layer,pomX,pomY,'Z');put(layer,pomX+1,pomY,'O');
+   put(layer,...point(len),'Y');
+   merge(target,layer,true);
+ }
+ function relaxedArms(dir,state,f,o){
+   const gait=state==='walk'?[0,1,2,0,-1,-2][f%6]:[0,0,0,0,0,0][f%6];
+   const front=new Map(),back=new Map(),r=dir===3?-1:1;
+   const arms=dir===2?[
+     {a:[-5+o.torsoX,-10+o.torsoY],b:[-7-gait,-6],shade:'m'},
+     {a:[5+o.torsoX,-10+o.torsoY],b:[7+gait,-6],shade:'a'}
+   ]:dir===0?[
+     {a:[-5+o.torsoX,-10+o.torsoY],b:[-6+gait,-6],shade:'s'},
+     {a:[5+o.torsoX,-10+o.torsoY],b:[6-gait,-6],shade:'m'}
+   ]:[
+     {a:[-3*r+o.torsoX,-10+o.torsoY],b:[-5*r-gait*r,-6],shade:'m'},
+     {a:[3*r+o.torsoX,-10+o.torsoY],b:[5*r+gait*r,-6],shade:'a'}
+   ];
+   arms.forEach((el,i)=>{const layer=i?front:back;const elbow=[Math.round((el.a[0]+el.b[0])/2)+(i?r:-r),Math.round((el.a[1]+el.b[1])/2)];
+     limb(layer,el.a,elbow,el.shade);limb(layer,elbow,el.b,el.shade);fist(layer,el.b,el.shade);});
+   return {front,back};
+ }
+ function normalizeState(state,frame){
+   if(state==='sheathed_idle')return {loc:'idle',f:frame,mode:'sheathed',phase:0};
+   if(state==='sheathed_walk')return {loc:'walk',f:frame,mode:'sheathed',phase:0};
+   if(state==='sheathed_dash')return {loc:'dash',f:frame,mode:'sheathed',phase:0};
+   if(state==='sheathed_hurt')return {loc:'hurt',f:frame,mode:'sheathed',phase:0};
+   if(state==='sheathed_use')return {loc:'use',f:frame,mode:'sheathed',phase:0};
+   if(state==='sheathed_melee')return {loc:'melee',f:frame,mode:'sheathed',phase:0};
+   if(state==='sheathe_walk'||state==='draw_walk')return {loc:'walk',f:frame%6,mode:state.startsWith('sheathe')?'stowing':'drawing',phase:Math.floor(frame/6)};
+   if(state==='sheathe'||state==='draw')return {loc:'idle',f:frame,mode:state==='sheathe'?'stowing':'drawing',phase:frame};
+   return {loc:state,f:frame,mode:'drawn',phase:0};
+ }
  function renderPixelMap(dir,state,frame,combo,poseFn){
    assert(Number.isInteger(dir)&&dir>=0&&dir<4,'direction must be 0..3');
    assert(Object.hasOwn(STATES,state),'unknown animation '+state);
    assert(Number.isInteger(frame)&&frame>=0&&frame<STATES[state],'invalid frame '+frame);
    assert(Number.isInteger(combo)&&combo>=0&&combo<=3,'combo must be 0..3');
-   const pose=simplePoseGuard(poseFn,dir,state,frame,combo),
-    offs=offsets(state,frame,combo,dir),arms=actionArms(null,dir,state,frame,combo,pose,offs),
-    body=new Map(),img=new Map();
-   feet(body,dir,state,frame);
-   drawTorso(body,dir,offs,state,frame);
-   drawHead(body,dir,offs,state,frame);
-   // Rear-facing : blade and hands behind the hair and back; other directions use geometry for occlusion.
-   const behind=dir===0 || (dir===1&&pose.v[0]<-5) || (dir===3&&pose.v[0]>5) || (state==='attack'&&pose.v[1]<-16);
-   // Let trailing sword smear live behind main body. Do not shade other actors or move the hitbox.
-   if(state==='attack'&&(frame===2||frame===3)){
-     const p=poseFn(dir,frame,combo),prev=poseFn(dir,frame-1,combo);
-     smear(img,prev,p,dir,frame,combo);
+   const v=normalizeState(state,frame),base=v.loc,frameWalk=v.f,
+    pose=simplePoseGuard(poseFn,dir,base,frameWalk,combo),
+    offs=offsets(base,frameWalk,combo,dir),img=new Map(),body=new Map();
+   feet(body,dir,base,frameWalk);
+   drawTorso(body,dir,offs,base,frameWalk);
+   drawHead(body,dir,offs,base,frameWalk);
+   if(v.mode==='drawn'){
+     const arms=actionArms(null,dir,base,frameWalk,combo,pose,offs);
+     const behind=dir===0 || (dir===1&&pose.v[0]<-5) || (dir===3&&pose.v[0]>5) || (base==='attack'&&pose.v[1]<-16);
+     if(base==='attack'&&(frameWalk===2||frameWalk===3)){
+       const p=poseFn(dir,frameWalk,combo),prev=poseFn(dir,frameWalk-1,combo);
+       smear(img,prev,p,dir,frameWalk,combo);
+     }
+     merge(img,arms.back);
+     if(behind)sword(img,pose);
+     merge(img,body);merge(img,arms.front);
+     if(!behind)sword(img,pose);
+   }else if(v.mode==='sheathed'){
+     const arms=relaxedArms(dir,base,frameWalk,offs);
+     merge(img,arms.back);
+     if(dir!==0)storedSword(img,dir,frameWalk,base==='walk');
+     merge(img,body);
+     if(dir===0)storedSword(img,dir,frameWalk,base==='walk');
+     merge(img,arms.front);
+   }else{
+     const count=v.mode==='stowing'?6:5;
+     const phase=v.phase, t=ease((phase+1)/count),store=SHEATH[dir],
+      now=v.mode==='stowing'?weaponBlend(pose,store,t):weaponBlend(store,pose,t),
+      arms=actionArms(null,dir,base,frameWalk,combo,now,offs);
+     merge(img,arms.back);
+     if(dir!==0&&v.mode==='drawing'&&phase<2)storedSword(img,dir,frameWalk,base==='walk');
+     merge(img,body);
+     if(dir===0&&v.mode==='drawing'&&phase<2)storedSword(img,dir,frameWalk,base==='walk');
+     merge(img,arms.front);
+     if(v.mode==='stowing'&&phase===5 || v.mode==='drawing'&&phase===0){
+       storedSword(img,dir,frameWalk,base==='walk');
+     }else sword(img,now);
    }
-   merge(img,arms.back);
-   if(behind)sword(img,pose);
-   merge(img,body);
-   merge(img,arms.front);
-   if(!behind)sword(img,pose);
    return img;
  }
  function simplePoseGuard(fn,dir,state,frame,combo){
@@ -323,5 +445,56 @@
    return {width:CELL,height:CELL,anchor:ANCHOR,data};
  }
  function idleFrame(seconds){return [0,0,1,0,0,3,0,0][Math.floor(Math.max(0,seconds)*2)%8];}
- return Object.freeze({version:2,cell:CELL,anchor:ANCHOR,palette:PALETTE,parts:PARTS,directions:DIRECTIONS,states:STATES,draw,raster,idleFrame});
+ function weaponVisual(actor,time,state='idle',frame=0){
+  // A strictly visual state machine. No swing duration, stamina, hitbox or
+  // movement delay is introduced. Clock is game-time, never wall-clock.
+  const t=Number.isFinite(time)?time:0;
+  let b=actor.kaldorWeapon;
+  if(!b||!Number.isFinite(b.lastTime)||t<b.lastTime-0.001){
+   b={mode:'drawn',lastAttack:t,lastTime:t,phaseAt:t,wasAttacking:false};actor.kaldorWeapon=b;
+  }
+  const attacking=(actor.attack||0)>0,guarding=!!(actor.guard||(actor.guardTime||0)>0),
+   forced=(actor.hurt||0)>0||(actor.useTime||0)>0||(actor.melee||0)>0||!!actor.held||!!actor.thrown;
+  if(attacking){
+   if(!b.wasAttacking){b.lastAttack=t;b.mode='drawn';b.phaseAt=t;}
+   b.wasAttacking=true;
+  }else b.wasAttacking=false;
+  b.lastTime=t;
+  if(guarding){
+   if(b.mode==='sheathed'||b.mode==='stowing'){
+    b.mode='drawing';b.phaseAt=t;
+   }
+   b.lastAttack=t;
+  }
+  if(b.mode==='drawing'&&t-b.phaseAt>=HOLSTER.draw)b.mode='drawn';
+  if(b.mode==='stowing'&&t-b.phaseAt>=HOLSTER.stow)b.mode='sheathed';
+  if(!attacking&&!guarding&&!forced&&b.mode==='drawn'&&t-b.lastAttack>=HOLSTER.delay){
+   b.mode='stowing';b.phaseAt=t;
+  }
+  if(attacking)return {state,frame,mode:'drawn'};
+  if(forced){ // visual only: impact/use never summons a sheathed sword into the hand.
+    if(b.mode==='stowing'){b.mode='drawn';b.lastAttack=t;}
+    if(b.mode==='sheathed'&&['hurt','use','melee'].includes(state))
+      return {state:'sheathed_'+state,frame,mode:b.mode};
+    return {state,frame,mode:b.mode};
+  }
+  const walking=state==='walk'&&!!actor.moving;
+  if(b.mode==='stowing'){
+   const phase=Math.min(5,Math.floor((t-b.phaseAt)/HOLSTER.stow*6));
+   return walking?{state:'sheathe_walk',frame:phase*6+(frame%6),mode:b.mode}:
+      {state:'sheathe',frame:phase,mode:b.mode};
+  }
+  if(b.mode==='drawing'){
+   const phase=Math.min(4,Math.floor((t-b.phaseAt)/HOLSTER.draw*5));
+   return walking?{state:'draw_walk',frame:phase*6+(frame%6),mode:b.mode}:
+      {state:'draw',frame:phase,mode:b.mode};
+  }
+  if(b.mode==='sheathed'){
+   if(walking)return {state:'sheathed_walk',frame:frame%6,mode:b.mode};
+   if(state==='dash')return {state:'sheathed_dash',frame:frame%4,mode:b.mode};
+   if(state==='idle')return {state:'sheathed_idle',frame:frame%4,mode:b.mode};
+  }
+  return {state,frame,mode:b.mode};
+ }
+ return Object.freeze({version:3,cell:CELL,anchor:ANCHOR,palette:PALETTE,parts:PARTS,directions:DIRECTIONS,states:STATES,holster:HOLSTER,draw,raster,idleFrame,weaponVisual});
 });

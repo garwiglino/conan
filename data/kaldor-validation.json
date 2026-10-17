@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "aac5d3e374ef7bda0be1ce01929a8cc30645d385",
+  "node": {
+    "tests": 245,
+    "pass": 245,
+    "fail": 0,
+    "cancelled": 0
+  },
+  "worldBible": "passed",
+  "webSHA256": "396eeb18aebdd4cbaed5185819c1b246b65d73c86f4f92abc008277d32ec6f80",
+  "iosSHA256": "6d3da2e1f2d7e9747fcf6c153d34b34c73fc5dc2707fd36e686c0e221688b639",
+  "archiveSHA256": "51749a558505ed80af812066e0056a726a6e54ed9b33a0c6d4ba66524b9d0e24",
+  "rebuildIdempotent": true,
+  "testedOnPhysicalIPhone": false
+}

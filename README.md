@@ -24,6 +24,16 @@ Le Prêtre du Serpent utilise maintenant son [pack Aseprite](sprites/personnages
 
 Après publication, fermer complètement l'app iOS native puis la rouvrir avec une connexion pour recevoir le jeu actualisé. La sauvegarde existante est conservée. Le nouveau nom sous l'icône et l'icône native sont inclus dans les sources Xcode ; leur installation nécessite une reconstruction de l'app. Voir [les instructions iOS](ios/LISEZMOI.md).
 
+## Kaldor v3 — cheveux longs et épée dans le dos
+
+Le barbare a maintenant une chevelure longue et une marche en six poses sans
+balancement excessif de la tête. Après 3,7 secondes sans attaquer, il range son
+épée raccourcie dans le dos, **même pendant un déplacement**. Reprendre l'attaque
+interrompt le rangement immédiatement, sans perdre le momentum des quatre
+combos et de leurs smears. Les quatre directions et le rendu en JavaScript
+préservent les mêmes dimensions que les batraciens. Voir [la réalisation et
+ses tests](docs/kaldor-art.md) et [l'atelier interactif](art/kaldor-preview.html).
+
 ## Quêtes et repos
 
 Le suivi conserve une flèche or pour la quête principale et une seule quête secondaire suivie, indiquée en bleu. Accepter une autre quête ne remplace pas celle suivie. Dès que son objectif est rempli, la quête sort du petit encart et le suivi passe à la prochaine quête inachevée dans l’ordre d’acceptation (puis revient aux plus anciennes s’il n’en reste aucune après). Le joueur peut choisir une autre quête dans le journal ou arrêter le suivi. Les anciennes sauvegardes avec plusieurs quêtes suivies sont normalisées sans perte de progression.
