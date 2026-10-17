@@ -1,0 +1,81 @@
+name: Kaldor V3 visual integration
+on:
+  push:
+    branches: [integration/kaldor-longhair-holster]
+    paths:
+      - '.github/kaldor-transfer/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  validate:
+    if: github.event.head_commit.message != 'feat: integrate Kaldor v3 long hair and holster'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unpack verified JS source update
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,json,lzma
+          path=Path('.github/kaldor-transfer/patch.b64')
+          assert path.is_file(), 'Missing staging payload'
+          packed=base64.b64decode(path.read_text().strip())
+          assert hashlib.sha256(packed).hexdigest()=='fa797389adb25807413716dfe152cb91705c421d372d40293b82fbfe300038ec'
+          data=json.loads(lzma.decompress(packed))
+          assert data['schema']==1 and data['parent']=='3e4c888b6c36631fff7f56d73293a76d21cb388e'
+          allowed=set('README.md package.json docs/kaldor-art.md sprites/kaldor/kaldor-art.js scripts/embed-kaldor.cjs scripts/build-batraciens.cjs art/kaldor-preview-template.html tests/kaldor-art.test.cjs tests/civilians.test.cjs tests/title.test.cjs'.split())
+          assert {f['path'] for f in data['files']}==allowed and len(data['files'])==len(allowed)
+          for f in data['files']:
+            b=f['content'].encode('utf-8')
+            assert hashlib.sha256(b).hexdigest()==f['sha256'],f['path']
+            p=Path(f['path']);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+          print('Restored',len(data['files']),'source files')
+          PY
+      - name: Install dependencies
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Build web and iOS Kaldor
+        run: npm run build:batraciens
+      - name: Run complete regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test --test-concurrency=2 --test-reporter=tap tests/*.test.cjs | tee /tmp/kaldor-regression.log
+      - name: Validate world and native package
+        run: |
+          python3 scripts/test-world-bible.py
+          python3 scripts/package-ios.py
+      - name: Confirm idempotence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,subprocess
+          f=Path('index.html')
+          before=hashlib.sha256(f.read_bytes()).hexdigest()
+          subprocess.run(['node','scripts/embed-kaldor.cjs'],check=True)
+          assert hashlib.sha256(f.read_bytes()).hexdigest()==before
+          print('Idempotent Kaldor integration')
+          PY
+      - name: Publish validated game on integration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/kaldor-transfer/patch.b64
+          git add README.md package.json docs/kaldor-art.md sprites/kaldor scripts/embed-kaldor.cjs scripts/build-batraciens.cjs art/kaldor-preview-template.html art/kaldor-preview.html tests/kaldor-art.test.cjs tests/civilians.test.cjs tests/title.test.cjs data/kaldor-manifest.json index.html ios/Hearthreaver/Game/index.html Hearthreaver-iOS.zip
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: integrate Kaldor v3 long hair and holster'
+          git push origin HEAD:integration/kaldor-longhair-holster
+      - name: Archive validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaldor-v3-validation
+          path: /tmp/kaldor-regression.log
+          retention-days: 14
