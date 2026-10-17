@@ -24,15 +24,14 @@ Le Prêtre du Serpent utilise maintenant son [pack Aseprite](sprites/personnages
 
 Après publication, fermer complètement l'app iOS native puis la rouvrir avec une connexion pour recevoir le jeu actualisé. La sauvegarde existante est conservée. Le nouveau nom sous l'icône et l'icône native sont inclus dans les sources Xcode ; leur installation nécessite une reconstruction de l'app. Voir [les instructions iOS](ios/LISEZMOI.md).
 
-## Kaldor v4 — chibi Game Boy
+## Kaldor v5 — chibi Game Boy
 
 Kaldor est redessiné en JavaScript dans le style chibi Game Boy des batraciens,
-d'après la planche de référence : grosse tête à crinière brune, visage orangé
-et barbe sombre, grandes épaulières de fourrure, bras nus et gros poings,
-ceinture à boucle dorée, quatre vues de 24 pixels de haut dessinées pixel par
-pixel et animation minimaliste par décalages d'un pixel.
-L'épée à deux mains est toujours tenue à deux mains, avec des bras courts
-qui ne s'étirent jamais. Les quatre combos gardent leurs smears et leurs zones de coup ; hors combat,
+d'après les grilles de référence validées : quatre vues de 28 pixels de haut
+dessinées pixel par pixel, profils sans nez, animation minimaliste par
+décalages d'un pixel. L'épée à deux mains est tenue à deux mains, reste droite
+et garde la même longueur pendant toutes les attaques ; les quatre combos
+laissent un smear en éventail et gardent leurs zones de coup. Hors combat,
 après 3,7 secondes, l'épée retourne dans le fourreau dans le dos, même en
 marchant. Voir [la réalisation et ses tests](docs/kaldor-art.md) et
 [l'atelier interactif](art/kaldor-preview.html).
