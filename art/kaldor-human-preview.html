@@ -31,6 +31,25 @@ a{color:#e9c57f}small{color:#a9b5b9}
 </main>
 <script src="../scripts/kaldor-civilian-bridge.js"></script>
 <script>
+const SWORD_POSES=[
+ [[7,-13,17,3],[7,-17,12,-9],[3,-19,5,-20],[-5,-17,-14,-14],[-7,-13,-17,-3],[6,-13,5,-16]],
+ [[0,-14,-8,-15],[4,-16,3,-20],[9,-13,21,-5],[9,-9,20,8],[6,-7,9,14],[6,-12,7,-15]],
+ [[-6,-14,-15,-9],[-7,-10,-15,2],[-4,-5,-9,18],[5,-5,10,18],[8,-9,16,4],[6,-12,7,-15]],
+ [[0,-14,8,-15],[-4,-16,-3,-20],[-9,-13,-21,-5],[-9,-9,-20,8],[-6,-7,-9,14],[-6,-12,-7,-15]]
+];
+// Coups 3 et 4 du héros, image par image, vues haut / droite / bas (gauche = droite en miroir) [poignet x, y, lame x, y] :
+// coup 3 = taille en diagonale descendante, de l'épaule droite vers le bas à gauche (suit le revers du coup 2) ;
+// coup 4 = coup lourd par-dessus la tête, de l'épée levée jusqu'au sol devant lui.
+const HERO_SWINGS={
+ 2:{0:[[7,-18,12,-16],[7,-18,12,-16],[3,-18,4,-22],[-4,-16,-16,-14],[-7,-12,-18,-2],[6,-13,5,-16]],
+    1:[[-2,-16,-12,-19],[-2,-16,-12,-19],[6,-14,16,-16],[9,-11,22,4],[7,-8,14,16],[6,-12,7,-15]],
+    2:[[8,-16,12,-19],[8,-16,12,-19],[9,-9,19,10],[2,-5,4,22],[-5,-6,-16,14],[6,-12,7,-15]]},
+ 3:{0:[[0,-22,2,-20],[0,-22,2,-20],[0,-16,0,-23],[0,-12,0,-26],[2,-11,6,-20],[6,-13,5,-16]],
+    1:[[-3,-18,-10,-20],[-3,-18,-10,-20],[6,-16,18,-12],[10,-10,20,10],[8,-7,12,18],[6,-12,7,-15]],
+    2:[[0,-20,-3,-22],[0,-20,-3,-22],[0,-12,0,23],[0,-7,0,26],[3,-8,8,18],[6,-12,7,-15]]}};
+function authoredSwordPose(dir,f,combo=0){if(combo===0)return SWORD_POSES[dir][f];if(combo===1)return SWORD_POSES[dir][[4,3,2,1,0,5][f]];const T=HERO_SWINGS[combo];if(dir===3){const p=T[1][f];return [-p[0],p[1],-p[2],p[3]];}return T[dir][f];}
+function swordPose(dir,f,combo=0){const p=authoredSwordPose(dir,f,combo);return [p[0],p[1],p[2]*1.02,p[3]*1.02];}
+
 (async()=>{
  'use strict';
  const $=s=>document.getElementById(s);
@@ -69,7 +88,7 @@ a{color:#e9c57f}small{color:#a9b5b9}
   ctx.fillStyle='#283845';ctx.fillRect(0,0,cv.width,cv.height);
   ctx.imageSmoothingEnabled=false;
   for(let k=0;k<4;k++){
-   const hero=K.nativeFrame(dirs[k],state,frame,0);
+   const hero=K.nativeFrame(dirs[k],state,frame,0,swordPose);
    const x=120+k*240,ground=255;
    ctx.fillStyle='#1b2931';ctx.beginPath();ctx.ellipse(x,ground,30,6,0,0,2*Math.PI);ctx.fill();
    if(hero)ctx.drawImage(hero,x-40*5,ground-52*5,80*5,80*5);
