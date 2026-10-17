@@ -1,7 +1,7 @@
 'use strict';
-/* Kaldor v3: approved barbare animation + long hair / holstering. Only hero art
- * and shared blade length ratio are patched. AI, hit time, dash and combo
- * authored poses are not overwritten. Idempotent on repeated builds. */
+/* Kaldor v4: chibi Game Boy pixel art in the batraciens' style + holstering.
+ * Only hero art and the shared blade length ratio are patched. AI, hit time,
+ * dash and combo authored poses are not overwritten. Idempotent on repeated builds. */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'..');
 const source=fs.readFileSync(path.join(root,'sprites/kaldor/kaldor-art.js'),'utf8');
@@ -14,7 +14,7 @@ replaceOnce(oldIdle,oldIdle+"if(kind==='hero'&&state==='idle')frame=Hearthreaver
 const anchor="if(kind==='hero'&&state==='idle')frame=HearthreaverKaldorArt.idleFrame(time);";
 replaceOnce(anchor,anchor+"if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;}");
 // Slightly shorter sword from the ONE authoritative pose used by both hit sweep
-// and v3 art. The authored four combo trajectories remain entirely unchanged.
+// and the hero art. The authored four combo trajectories remain entirely unchanged.
 replaceOnce('return [p[0],p[1],p[2]*1.1,p[3]*1.1];','return [p[0],p[1],p[2]*1.02,p[3]*1.02];');
 const block=begin+'\n'+source+'\n'+end;
 if(html.includes(begin)){
@@ -34,5 +34,5 @@ if(poseStart<0||poseEnd<0)throw Error('Kaldor: authored sword pose source missin
 const marker='/*__KALDOR_POSE_CODE__*/',template=fs.readFileSync(path.join(root,'art/kaldor-preview-template.html'),'utf8');
 if(template.split(marker).length!==2)throw Error('Kaldor: preview marker not unique');
 write('art/kaldor-preview.html',template.replace(marker,html.slice(poseStart,poseEnd)));
-write('data/kaldor-manifest.json',JSON.stringify({version:3,authored:'JavaScript',cell:[80,80],anchor:[40,52],bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{art:crypto.createHash('sha256').update(source).digest('hex')}},null,2)+'\n');
-console.log('Kaldor v3 rebuilt — long hair, anchored gait, smaller shared sword, auto-sheath while moving.');
+write('data/kaldor-manifest.json',JSON.stringify({version:4,authored:'JavaScript',style:'chibi Game Boy, batraciens grammar',cell:[80,80],anchor:[40,52],bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{art:crypto.createHash('sha256').update(source).digest('hex')}},null,2)+'\n');
+console.log('Kaldor v4 rebuilt — chibi Game Boy art, 1 px bounce gait, smeared combos, sword sheathed on the back.');

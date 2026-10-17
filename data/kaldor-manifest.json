@@ -1,6 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "authored": "JavaScript",
+  "style": "chibi Game Boy, batraciens grammar",
   "cell": [
     80,
     80
@@ -33,6 +34,6 @@
     "draw_walk"
   ],
   "fingerprints": {
-    "art": "07f32600b7c662b64b623f24e73f0adc24fd2404b74562663c42251b73074ef7"
+    "art": "c4458535955508563d7eb1f0a926dbd9c44f6e66ec4c269fe1945f8566f377e4"
   }
 }
