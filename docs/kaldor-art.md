@@ -1,4 +1,43 @@
-# Kaldor v3 — barbare à cheveux longs, locomotion stable, épée dans le dos
+# Kaldor v4 — vrai personnage humain modulaire
+
+**Rendu courant :** le joueur utilise désormais les mêmes morceaux de personnage
+que les PNJ humains (atlas **Aseprite Lua**, et non une imitation JavaScript du
+corps). L’assemblage passe directement par `CIVILIAN_BITMAPS.get()` de
+`scripts/civilian-art.js` : corps et mains du costume `E01-masculin-terre`
+(*Pagne noué*), tête `masculin-adulte`, cheveux hirsutes
+`masculin-hair-14` dans leurs **trois plans de profondeur**, teinte `noir`,
+sans barbe ni moustache. Baudrier et garnitures de Kaldor sont une petite couche
+spécifique, sans remplacer les pixels des mains/têtes du pack.
+
+- **Résolution réelle :** tuile humaine 48×48, affichée par le moteur dans la
+  case 80×80, pieds (40,52). Aucun format artificiel 60×68.
+- **Idle / walk :** reprise des clips du vrai atlas humain, soit 4 poses
+  au repos et **8 poses de marche** par direction (0 dos, 1 droite,
+  2 face, 3 gauche). La marche progresse selon les pixels réellement
+  parcourus ; collisions et immobilité ne font pas avancer les jambes.
+- **Combats :** les animations humaines `carry`, `hit`, `startle` et
+  `flee` servent de poses corporelles, et le rendu de grande épée continue
+  d’appeler **`greatsword(swordPose())`**, fonction et trajectoires déjà
+  utilisées par les collisions de `bladeHits()`. Les quatre combos, les
+  durées des coups et les règles de gameplay ne changent pas.
+- **Rengainage :** conservation de `HearthreaverKaldorArt.weaponVisual()`.
+  Les transitions de rangement gardent leurs étapes, tout en échantillonnant
+  les **8** véritables frames de marche. Le fourreau est une surcouche.
+- **Chargement :** les modules PNG existants restent dans l'atlas intégré au
+  HTML du jeu ; aucun téléchargement supplémentaire. Tant que le décodeur
+  d'images prépare le module du héros, l'ancien Kaldor JavaScript sert de
+  secours sans être enregistré en cache à la place de l'image définitive.
+- **Codes :** `scripts/kaldor-civilian-bridge.js` (compositeur du héros)
+  et `scripts/embed-kaldor.cjs` (injection web/iOS, reproductible).
+  `sprites/kaldor/kaldor-art.js` est conservé uniquement pour les transitions
+  d'arme et en secours pendant le chargement.
+
+Construire avec `npm run build:batraciens`, puis `npm test` et
+`npm run package:ios`.
+
+---
+
+# Archives : Kaldor v3 — barbare à cheveux longs, locomotion stable, épée dans le dos
 
 Les sprites du joueur sont **entièrement construits en JavaScript** dans
 `sprites/kaldor/kaldor-art.js`. Chaque dessin est un assemblage de pixels RGBA
