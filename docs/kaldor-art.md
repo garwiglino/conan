@@ -10,15 +10,22 @@ minimaliste par décalages entiers d'un pixel. Case moteur **80 × 80**, pieds e
 
 ## Le personnage
 
-Quatre dessins indépendants d'après la planche de référence : dos (0), droite
-(1), face (2), gauche (3). Le profil gauche n'est pas un miroir : la lumière
-reste en haut à gauche.
+Quatre dessins indépendants de 24 lignes, relevés case par case sur la planche
+de référence : dos (0), droite (1), face (2), gauche (3). Le profil gauche
+n'est pas un miroir : la lumière reste en haut à gauche.
 
-- Grosse tête chibi aux cheveux longs bruns, regard dur, barbe.
-- Fourrure crème sur les épaules, brassards de cuir, ceinture à boucle dorée,
-  bottes à revers de fourrure.
-- Fourreau en diagonale dans le dos ; la poignée dépasse derrière l'épaule de
-  profil et de dos, et reste cachée par la tête de face, comme sur la planche.
+- Grosse tête chibi (plus de la moitié de la hauteur) : crinière brune en
+  mèches, large visage orangé, yeux carrés sous des sourcils froncés,
+  oreilles, moustache et barbe sombres, bouche claire.
+- Grandes épaulières de fourrure crème en pointes, plus larges que la tête ;
+  de profil, une épaulière en dôme sur l'épaule proche.
+- Gilet de cuir ouvert sur le torse (sangles en V), grosse ceinture à boucle
+  dorée, bras nus aux brassards de cuir et gros poings, cuisses nues, bottes
+  à semelle claire.
+- De dos, la crinière tombe entre les épaulières sur un col de fourrure
+  continu ; le fourreau traverse le dos en diagonale comme le baudrier de la
+  planche. La poignée dépasse derrière l'épaule de profil et de dos, et reste
+  cachée par la tête de face.
 - De profil, la tête est posée au-dessus du corps et le dos reste droit (aucune
   bosse) : les cheveux tombent dans le dos jusqu'aux épaules.
 
@@ -44,7 +51,9 @@ son contour et les petits trous se bouchent (les smears tramés restent ajourés
   l'autre en dessous. Chaque poing reste à portée de son épaule (8 px de face,
   7 px de profil) : si un bras devait s'étirer, toute la poignée glisse vers le
   torse. Seuls le rangement, le dégainage et une main occupée (utiliser, mêlée :
-  l'épée pend alors dans l'autre main, pointe au sol) se font à une main.
+  l'épée pend alors dans l'autre main, pointe au sol) se font à une main. Les
+  bras d'action partent sous les épaulières : la fourrure est repeinte
+  par-dessus le haut du bras, jamais sur un poing.
 - **Combos (4 × 6 images) :** la lame garde l'angle et la longueur de la pose
   moteur `swordPose()`, les mains restant devant le torse. Poings et pommeau ne
   montent jamais devant le visage ; une lame levée passe derrière la tête (lame

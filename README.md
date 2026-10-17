@@ -26,9 +26,11 @@ Après publication, fermer complètement l'app iOS native puis la rouvrir avec u
 
 ## Kaldor v4 — chibi Game Boy
 
-Kaldor est redessiné en JavaScript dans le style chibi Game Boy des batraciens :
-grosse tête aux cheveux longs, barbe, fourrure sur les épaules, quatre vues
-dessinées pixel par pixel et animation minimaliste par décalages d'un pixel.
+Kaldor est redessiné en JavaScript dans le style chibi Game Boy des batraciens,
+d'après la planche de référence : grosse tête à crinière brune, visage orangé
+et barbe sombre, grandes épaulières de fourrure, bras nus et gros poings,
+ceinture à boucle dorée, quatre vues de 24 pixels de haut dessinées pixel par
+pixel et animation minimaliste par décalages d'un pixel.
 L'épée à deux mains est toujours tenue à deux mains, avec des bras courts
 qui ne s'étirent jamais. Les quatre combos gardent leurs smears et leurs zones de coup ; hors combat,
 après 3,7 secondes, l'épée retourne dans le fourreau dans le dos, même en

@@ -26,119 +26,128 @@
  const PALETTE=Object.freeze({
   O:'#100e20',x:'#100e20',
   H:'#2a1c22',h:'#3d2a2c',j:'#563a33',k:'#74503d',q:'#946746',
-  s:'#7d4a34',m:'#a56b48',a:'#c98f5e',p:'#e8b47c',i:'#f6d29c',r:'#9a5a42',
+  s:'#86452f',m:'#b4643f',a:'#d9844f',p:'#f4a866',i:'#fbc98e',r:'#9a5a42',
   d:'#b9a16b',b:'#e1c58a',c:'#f3dfa4',
   u:'#50342f',v:'#754b37',w:'#a16a44',t:'#bb8051',
   G:'#a8803a',Y:'#ecd189',
   1:'#3b4551',2:'#728396',3:'#b4c0c8',4:'#eef0ea',
   e:'#c49a5c',E:'#f2dc9c',W:'#fff5da'
  });
- // Quatre dessins indépendants, 22 lignes ; la dernière ligne est celle des pieds (y = 0).
- // Le profil gauche n'est pas une image retournée : la lumière reste en haut à gauche.
+ // Quatre dessins indépendants, 24 lignes d'après la planche de référence ; la dernière
+ // ligne est celle des pieds (y = 0). Le profil gauche n'est pas une image retournée :
+ // la lumière reste en haut à gauche.
  const VIEWS={
   face:[
-   '.....OOO.OOOOO.....',
-   '...OOkqjOjkkjhOO...',
-   '..OjqkjhkqkjhjhhO..',
-   '.OjkjhkjjhkjhjjHhO.',
-   '.OkjhjhkjhkjhjhHhO.',
-   '.OjhHjhapppahjhHhO.',
-   '.OjhhxxxpppxxxhHhO.',
-   '.OjhapxxpipxxpmhHO.',
-   '.OjhmapppmppaamhHO.',
-   '.OjhkajkkkkjamhHhO.',
-   'ObchjhjkrrrkjhjhcbO',
-   'ObccbhjjkjkjjhbccbO',
-   'OdbccdOjjkjjOdccbdO',
-   'OpamOwvuapauvuOamsO',
-   'OvvuOvwvuauvvuOvvuO',
-   'OwvuOuuOGYGOuuOwvuO',
-   'OpamOwvwvuvwvuOamsO',
-   '.OOOOuvwvuvwvuOOOO.',
-   '...OOpamO.OpamOO...',
-   '...ObcbdO.ObcbdO...',
-   '..OuvwwtO.OvwwtuO..',
+   '.......OOOOO.......',
+   '.....OOhkHkhOO.....',
+   '....OhjkkHkkjhO....',
+   '...OHhkjHhHjkhHO...',
+   '..OhHhkHhjhHkhHhO..',
+   '..OhjHhHapaHhHjhO..',
+   '.OhkhHampipmaHhjhO.',
+   '.OjhHaxxpppxxaHhjO.',
+   '.OHphpxxpipxxahaHO.',
+   '..OahppppappaahmO..',
+   '.OcbHppaHhHpaaHbdO.',
+   'ObccbHhHapaHhHbcbdO',
+   'ObcccbdHhjhHbccbbdO',
+   '.OadbbduHhHudbbdaO.',
+   'OpamOppaubupamOpamO',
+   'OwvuOamuvuvuamOwvuO',
+   'OppaOuvvYYYvvuOppaO',
+   'OpamOvwvYuGvwuOpamO',
+   'OammOuvuGGGuvuOammO',
+   '.OOOOppaOOOpamOOOO.',
+   '...OOaamO.OammOO...',
+   '..OvwtwuO.OuwtwvO..',
+   '..OtbttwO.OwttbtO..',
    '..OOOOOOO.OOOOOOO..'
   ],
   droite:[
-   '......OOO.OO......',
-   '....OOkqjOjOO.....',
-   '...OjqkjhkqkjO....',
-   '..OjkjhkjjhkkjO...',
-   '..OkjhjhkjjhjjjO..',
-   '..OjhjHjhkjppppO..',
-   '..OjhjhjappxxpaO..',
-   '..OhjhjhpapxxppO..',
-   '..OHjhjhmappppaO..',
-   '..OhHjhjhkjkkrkO..',
-   '..OhhjHjhkjkkkO...',
-   '..OhjhObccbkjkO...',
-   '..OhjbcccbbdkO....',
-   '..OuvOpaamOwtO....',
-   '..OuvOpiamOvwtO...',
-   '..OuuOwvvuOuYGO...',
-   '..OvwOpaamOwtO....',
-   '..OvwtOOOOwvO.....',
-   '...OmaOpaamO......',
-   '...OdbObcbbO......',
-   '..OuvOuvwwttO.....',
-   '..OOOOOOOOOOO.....'
+   '.......OOOOO......',
+   '.....OOhkkjhOO....',
+   '....OhjkqkjkjhO...',
+   '...OhkjkkHkjkjhO..',
+   '..OhjkHjkjhkjkhHO.',
+   '.OhjhkjHjkhjHajhO.',
+   '.OhkjhjHjhjHappHO.',
+   '.OjhkjhHjHhaxxpO..',
+   '.OhjkhHpHapppxpaO.',
+   'OhjkhjHahappppaO..',
+   'OhkhjhHmhHpaHhhO..',
+   'OhHhHbccbHhjhahO..',
+   'OhhHbcccbdHhjhHO..',
+   '.OwdOpamOdvHhHO...',
+   'OtwvOpamOvuO......',
+   'OtwvvOwvuOvO......',
+   'OuuuuuOpppaO......',
+   'OtwwvvOpaamO......',
+   'OwwvvuuOOOOO......',
+   '.OOamsOpamO.......',
+   '..OmssOaamO.......',
+   '.OuvvuvwttO.......',
+   '.OvttwtbttO.......',
+   '.OOOOOOOOOO.......'
   ],
   dos:[
-   '.....OOO.OOOOO.....',
-   '...OOkqjOjkkjhOO...',
-   '..OjqkjhkqkjhjhhO..',
-   '.OjkjhkjjhkjhjjHhO.',
-   '.OkjhjhkjhkjhjhHhO.',
-   '.OjhHjhkjhjhkjhHhO.',
-   '.OjhjHjhkjjhkjHjhO.',
-   '.OjhjhHjhkjhjHjhHO.',
-   '.OHjhjhHjhjjHjhjHO.',
-   '.OhHjhjhHjhHjhjHhO.',
-   'ObchHjhjhHjhjhHhcbO',
-   'ObccbhHjhjhjHhbccbO',
-   'OdbccdOhHhHhOdccbdO',
-   'OmamOvwtvwvtvuOamsO',
-   'OvvuOwtvwvwvvuOvvuO',
-   'OwvuOuuuuuuuuuOwvuO',
-   'OmamOwvwvuvwvuOamsO',
-   '.OOOOuvwvuvwvuOOOO.',
-   '...OOmamO.OmamOO...',
-   '...ObcbdO.ObcbdO...',
-   '..OuvwwtO.OvwwtuO..',
+   '.......OOOOO.......',
+   '.....OOjkkjhOO.....',
+   '....OjkqkjkkjhO....',
+   '...OhjkqkHkkjHhO...',
+   '..OhjkkHjkHjkHjhO..',
+   '..OHkjHkjHkjHkhHO..',
+   '.OhjkHjkHjkHjkHhhO.',
+   '.OjhkjHkjHkjHjhHhO.',
+   '.OHhjkHjkHjkHjhhHO.',
+   '..OhHjkHjkHjhHhHO..',
+   '.OcbHhjHjkjHjhHbdO.',
+   'ObccbcbHhkhHbcbcbdO',
+   'ObcccbccbHbccbccbdO',
+   '.OadbbcbbcbbcbbdaO.',
+   'OpamOtwtwvwvwuOpamO',
+   'OwvuOwtwvwvwvuOwvuO',
+   'OppaOwvwvwvwvuOppaO',
+   'OpamOuvuvuvuvuOpamO',
+   'OammOvwvwvwvwuOammO',
+   '.OOOOammOOOammOOOO.',
+   '...OOmmsO.OmmsOO...',
+   '..OuvvvuO.OuvvvuO..',
+   '..OwttwvO.OwttwvO..',
    '..OOOOOOO.OOOOOOO..'
   ],
   gauche:[
-   '......OO.OOO......',
-   '.....OOjOjqkOO....',
-   '....OjkqkhjkqjO...',
-   '...OjkkhjjkhjkjO..',
-   '..OjjjhjjkhjhjkO..',
-   '..OppppjkhjHjhjO..',
-   '..OpaxxppajhjhjO..',
-   '..OipxxpaphjhjhO..',
-   '..OappppamhjhjHO..',
-   '..OkrkkjkhjhjHhO..',
-   '...OkkkjkhjHjhhO..',
-   '...OkjkbccbOhjhO..',
-   '....OkbcccbbdjhO..',
-   '....OtwOpaamOvuO..',
-   '...OtwvOpiamOvuO..',
-   '...OGYuOwvvuOuuO..',
-   '....OtwOpaamOwvO..',
-   '.....OvwOOOOtwvO..',
-   '......OpaamOamO...',
-   '......ObcbbObdO...',
-   '.....OttwwvuOvuO..',
-   '.....OOOOOOOOOOO..'
+   '......OOOOO.......',
+   '....OOhjkkhOO.....',
+   '...OhjkjkqkjhO....',
+   '..OhjkjkHkkjkhO...',
+   '.OHhkjkhjkjHkjhO..',
+   '.OhjaHjhkjHjkhjhO.',
+   '.OHppaHjhjHjhjkhO.',
+   '..OpxxahHjHhjkhjO.',
+   '.OppxpppaHpHhkjhO.',
+   '..OppppaahaHjhkjhO',
+   '..OhhpapHhmHhjhkhO',
+   '..OhahjhHbccbHhHhO',
+   '..OHhjhHbcccbdHhhO',
+   '...OHhHwdOpamOdvO.',
+   '......OtwOpamOwvuO',
+   '......OwOwvuOvwvuO',
+   '......OpppaOuuuuuO',
+   '......OpaamOtwwvuO',
+   '......OOOOOwwvvuuO',
+   '.......OmapOsmaOO.',
+   '.......OmaaOssmO..',
+   '.......OttwvuvvuO.',
+   '.......OttbtwttvO.',
+   '.......OOOOOOOOOO.'
   ]
  };
  // Colonne de l'axe du corps (x = 0) dans chaque grille.
- const ORIGIN=Object.freeze({face:9,dos:9,droite:8,gauche:9});
- const TOP=21;
+ const ORIGIN=Object.freeze({face:9,dos:9,droite:7,gauche:10});
+ const TOP=23;
  function assert(cond,msg){if(!cond)throw new Error('Kaldor Art: '+msg);}
  for(const [view,rows] of Object.entries(VIEWS)){
-  assert(rows.length===22,view+' doit compter 22 lignes');
+  assert(rows.length===24,view+' doit compter 24 lignes');
   const width=rows[0].length;
   for(const row of rows){assert(row.length===width,view+' ligne '+row.length+' ≠ '+width);
    for(const key of row)assert(key==='.'||Object.hasOwn(PALETTE,key),view+' pixel inconnu '+key);
@@ -162,42 +171,52 @@
  const FRONTAL=v=>v==='face'||v==='dos';
  function region(view,col,row){
   if(FRONTAL(view)){
+   // Tête : cheveux, visage et barbe (de dos : la masse de cheveux qui tombe entre les épaulières).
    if(row<=9)return 'head';
-   if(row===10&&col>=3&&col<=15)return 'head';
-   if(row===11&&col>=5&&col<=13)return 'head';
-   if(row===12&&col>=6&&col<=12)return 'head';
-   if(row>=13&&row<=17&&col<=3)return 'armL';
-   if(row>=13&&row<=17&&col>=15)return 'armR';
-   if(row>=18)return col<=8?'legL':'legR';
+   if(row===10&&col>=4&&col<=14)return 'head';
+   if(row===11&&(view==='face'?col>=5&&col<=13:col>=7&&col<=11))return 'head';
+   if(row===12&&(view==='face'?col>=7&&col<=11:col===9))return 'head';
+   if(view==='face'&&row===13&&col>=8&&col<=10)return 'head';
+   if(row===13&&(col<=2||col>=16))return col<=2?'armL':'armR';
+   if(row>=14&&row<=19&&col<=3)return 'armL';
+   if(row>=14&&row<=19&&col>=15)return 'armR';
+   if(row>=19)return col<=8?'legL':col>=10?'legR':'body';
    return 'body';
   }
   const east=view==='droite',c=east?col:17-col;
-  if(row<=10)return 'head';
-  if(row===11&&((c>=3&&c<=6)||(c>=11&&c<=15)))return 'head';
-  if(row===12&&c>=12&&c<=15)return 'head';
-  if(row>=13&&row<=16&&c>=5&&c<=10)return 'arm';
-  if(row===17&&c>=6&&c<=9)return 'arm';
-  if(row>=18)return 'legs';
+  if(row<=9)return 'head';
+  if(row===10)return 'head';
+  if(row===11&&(c<=4||c>=9))return 'head';
+  if(row===12&&(c<=3||c>=10))return 'head';
+  if(row===13&&c>=11)return 'head';
+  if(row===13&&c>=5&&c<=7)return 'arm';
+  if(row===14&&c>=4&&c<=8)return 'arm';
+  if(row===15&&c>=5&&c<=9)return 'arm';
+  if((row===16||row===17)&&c>=6&&c<=11)return 'arm';
+  if(row===18&&c>=7&&c<=11)return 'arm';
+  if(row>=19)return 'legs';
   return 'body';
  }
  const PARTS={};
  for(const [view,rows] of Object.entries(VIEWS)){
-  const part={head:new Map(),body:new Map(),collar:new Map(),armL:new Map(),armR:new Map(),arm:new Map(),legL:new Map(),legR:new Map(),legs:new Map()};
+  const part={head:new Map(),body:new Map(),collar:new Map(),fur:new Map(),armL:new Map(),armR:new Map(),arm:new Map(),legL:new Map(),legR:new Map(),legs:new Map()};
   rows.forEach((row,r)=>{for(let c=0;c<row.length;c++){const key=row[c];if(key==='.')continue;const where=region(view,c,r);part[where].set(K(c-ORIGIN[view],r-TOP),key);
    // Col de fourrure autour de la tête : repeint par-dessus quand la tête s'abaisse d'un pixel.
-   if(where==='body'&&r<=12)part.collar.set(K(c-ORIGIN[view],r-TOP),key);}});
+   if(where==='body'&&r<=13)part.collar.set(K(c-ORIGIN[view],r-TOP),key);
+   // Épaulières : elles recouvrent le haut d'un bras d'action.
+   if(where==='body'&&r<=13&&'cbd'.includes(key))part.fur.set(K(c-ORIGIN[view],r-TOP),key);}});
   PARTS[view]=part;
  }
  // Bras de profil sans son contour : cisaillé puis recerné, pour éviter les contours en escalier.
  const ARM_FILL={};for(const view of ['droite','gauche'])ARM_FILL[view]=new Map([...PARTS[view].arm].filter(([,c])=>c!=='O'));
  // Tronc peint sous le bras de profil : invisible au repos, révélé quand le bras bouge.
- const UNDER_ARM={droite:['vwvwtw','vwvwvt','uuuuuY','vwvwvt','wvwvwv'],gauche:['wtwvwv','twvwvv','Yuuuuu','twvwvv','vwvwvw']};
+ const UNDER_ARM={droite:['ttwwwvu','twwwvvu','uuuuuuY','twwvvuG','wwvvvuu'],gauche:['twwwvvu','ttwwvvu','Yuuuuuu','Gtwwvvu','wwwvvuu']};
  // Jambes de profil (pied vers l'avant). La jambe éloignée est assombrie, pas redessinée.
- const SIDE_LEG={droite:['.pa..','.bcb.','uvwtt'],gauche:['..pa.','.bcb.','ttwvu']};
+ const SIDE_LEG={droite:['.pam.','.aam.','uvwtt','vttbt'],gauche:['.pam.','.aam.','ttwvu','tbttv']};
  const SHADE=Object.freeze({i:'p',p:'a',a:'m',m:'s',s:'s',c:'b',b:'d',d:'v',t:'w',w:'v',v:'u',u:'u'});
  // Yeux fermés (clignement, douleur) : les sourcils restent, la pupille devient peau.
- const LIDS={face:[[-3,-14,'p'],[-2,-14,'a'],[2,-14,'a'],[3,-14,'p']],dos:[],
-  droite:[[3,-14,'a'],[4,-14,'p']],gauche:[[-3,-14,'a'],[-4,-14,'p']]};
+ const LIDS={face:[[-3,-15,'p'],[-2,-15,'p'],[2,-15,'p'],[3,-15,'a']],dos:[],
+  droite:[[6,-15,'p']],gauche:[[-6,-15,'p']]};
 
  // --- Tracés : lignes nettes et membres épais ---
  function linePoints(ax,ay,bx,by){ax=Math.round(ax);ay=Math.round(ay);bx=Math.round(bx);by=Math.round(by);
@@ -246,10 +265,10 @@
  }
  /** Fourreau en cuir sur le dos ; la poignée n'apparaît que si l'épée est rangée. */
  const SHEATH=Object.freeze({
-  dos:{hilt:[7,-15],throat:[4,-11],tip:[-5,-3]},
-  face:{hilt:[-7,-15],throat:[-4,-11],tip:[5,-3]},
-  droite:{hilt:[-8,-15],throat:[-6,-12],tip:[1,-3]},
-  gauche:{hilt:[8,-15],throat:[6,-12],tip:[-1,-3]}
+  dos:{hilt:[7,-16],throat:[4,-12],tip:[-2,-6]},
+  face:{hilt:[-7,-16],throat:[-4,-12],tip:[5,-4]},
+  droite:{hilt:[-9,-16],throat:[-5,-12],tip:[-1,-4]},
+  gauche:{hilt:[9,-16],throat:[5,-12],tip:[1,-4]}
  });
  function scabbard(layer,view,withHilt){
   const S=SHEATH[view],a=S.throat,b=S.tip,vx=b[0]-a[0],vy=b[1]-a[1],len=Math.hypot(vx,vy),ux=vx/len,uy=vy/len;
@@ -258,6 +277,8 @@
   for(const [x,y] of pts)put(layer,x,y,'v');
   for(const n of [-1,0,1])put(layer,a[0]+n,a[1],n?'G':'Y');
   put(layer,b[0],b[1],'G');
+  // De dos, le baudrier finit sur une sacoche à fermoir doré, comme sur la planche.
+  if(view==='dos')['wtv','vYu','uvu'].forEach((row,j)=>{for(let i=0;i<3;i++)put(layer,b[0]-2+i,b[1]-1+j,row[i]);});
   if(withHilt){
    const h=S.hilt,grip=linePoints(...h,...a).slice(0,-1);
    for(const [x,y] of grip){put(layer,x,y,'u');put(layer,x+lit,y,'v');}
@@ -323,7 +344,7 @@
  }
  // Épaules, prise et visée de la lame. Le poignet moteur est ramené vers le torse
  // (bras courts de chibi) ; la lame garde l'angle et la longueur de la lame moteur.
- const SHOULDER={face:{L:[-7,-8],R:[7,-8]},dos:{L:[-7,-8],R:[7,-8]},droite:{near:[0,-8],far:[-3,-9]},gauche:{near:[0,-8],far:[3,-9]}};
+ const SHOULDER={face:{L:[-7,-9],R:[7,-9]},dos:{L:[-7,-9],R:[7,-9]},droite:{near:[-1,-10],far:[-3,-10]},gauche:{near:[1,-10],far:[3,-10]}};
  // Portée maximale d'un bras, de l'épaule au poing : un bras ne s'étire jamais au-delà.
  const REACH={face:8,dos:8,droite:7,gauche:7};
  const ARMS=view=>FRONTAL(view)?['L','R']:['near','far'];
@@ -347,14 +368,14 @@
   // Poings et pommeau ne montent jamais devant le visage ni dans la barbe : ils restent
   // devant le torse (lame levée : posée sur l'épaule, derrière la tête).
   const F=FACE[view];
-  if(F){const fwd=view==='droite'?1:view==='gauche'?-1:0,top=-8+P.dy+Math.max(0,Math.round(4*uy));
+  if(F){const fwd=view==='droite'?1:view==='gauche'?-1:0,top=-9+P.dy+Math.max(0,Math.round(4*uy));
    if(fwd&&gy<top&&(gx-P.dx)*fwd<F[fwd>0?1:0]*fwd+2)gx=fwd>0?Math.max(gx,1+P.dx):Math.min(gx,-1+P.dx);
    if(gy<top&&(fwd||(gx-P.dx>=F[0]-1&&gx-P.dx<=F[1]+1)))gy=top;}
   const g=[Math.round(gx),Math.round(gy)];
   return {blade:{...blade,g,tip:[g[0]+vx,g[1]+vy]},hands:layout()};
  }
  // Zone du visage (x min, x max, y min, y max) ; dos : aucune.
- const FACE={face:[-5,5,-19,-10],droite:[1,7,-18,-10],gauche:[-7,-1,-18,-10]};
+ const FACE={face:[-5,5,-18,-10],droite:[2,8,-18,-10],gauche:[-8,-2,-18,-10]};
  /** Une lame qui traverserait le visage passe derrière la tête (lame levée vers l'arrière). */
  function crossesFace(view,blade,P){const F=FACE[view];if(!F)return false;
   const vx=blade.tip[0]-blade.g[0],vy=blade.tip[1]-blade.g[1],l=Math.hypot(vx,vy)||1;
@@ -392,7 +413,7 @@
  }
  function sideLeg(view,x,lift,far){
   const rows=SIDE_LEG[view],layer=new Map(),w=rows[0].length;
-  rows.forEach((row,j)=>{for(let i=0;i<w;i++){const c=row[i];if(c==='.')continue;put(layer,x+i,-3+j-lift,far?SHADE[c]||c:c);}});
+  rows.forEach((row,j)=>{for(let i=0;i<w;i++){const c=row[i];if(c==='.')continue;put(layer,x+i,-4+j-lift,far?SHADE[c]||c:c);}});
   return layer;
  }
  function legsLayer(view,P){
@@ -406,8 +427,8 @@
   return over(new Map(),out,true);
  }
  function underArm(view,dx,dy){
-  const rows=UNDER_ARM[view],layer=new Map(),c0=view==='droite'?5:7;
-  rows.forEach((row,j)=>{for(let i=0;i<row.length;i++)put(layer,c0+i-ORIGIN[view]+dx,13+j-TOP+dy,row[i]);});
+  const rows=UNDER_ARM[view],layer=new Map(),c0=view==='droite'?4:7;
+  rows.forEach((row,j)=>{for(let i=0;i<row.length;i++)put(layer,c0+i-ORIGIN[view]+dx,14+j-TOP+dy,row[i]);});
   return layer;
  }
  function lids(view,layer,dx,dy){for(const [x,y,c] of LIDS[view])put(layer,x+dx,y+dy,c);}
@@ -472,7 +493,7 @@
   // Bras libre : lever un objet ou frapper du poing (main droite de face, main proche de profil).
   if(!reach&&!two){const free=blade?ARMS(view).find(a=>!held[a]):FRONTAL(view)?'R':'near',h=freeHand(view,loc,v.f,P,free);if(h)held[free]=h;}
   // Bras : pièces sources (repos/marche) ou bras d'action tracés de l'épaule au poing.
-  const front=new Map(),back=new Map(),grip=new Map();
+  const front=new Map(),back=new Map(),grip=new Map(),fists=[];
   const behindBlade=blade&&(blade.sliding?view!=='dos':blade.low&&side||view==='dos'||(view==='droite'&&blade.tip[0]<blade.g[0]-4)||(view==='gauche'&&blade.tip[0]>blade.g[0]+4)||(FRONTAL(view)&&blade.tip[1]<-24&&Math.abs(blade.tip[0])<6)||crossesFace(view,blade,P));
   if(FRONTAL(view)){
    for(const s of ['L','R']){
@@ -480,13 +501,13 @@
     if(hand){
      // De dos, les bras sont devant le corps donc cachés, sauf la main qui va au fourreau.
      const hidden=view==='dos'&&!stage,layer=new Map();
-     limb(layer,shoulderOf(view,s,hand,P),hand,{dark:hidden});fist(layer,hand,hidden);over(hidden?back:front,layer,true);
+     limb(layer,shoulderOf(view,s,hand,P),hand,{dark:hidden});fist(layer,hand,hidden);over(hidden?back:front,layer,true);if(!hidden)fists.push(hand);
     }
     else{const src=s==='L'?part.armL:part.armR,sw=s==='L'?P.swingL:P.swingR;over(front,shift(shearArm(src,0,sw+P.relax),P.dx,P.dy));}
    }
   }else{
    const fwd=view==='droite'?1:-1;
-   if(held.near){const layer=new Map();limb(layer,shoulderOf(view,'near',held.near,P),held.near);fist(layer,held.near);over(front,layer,true);}
+   if(held.near){const layer=new Map();limb(layer,shoulderOf(view,'near',held.near,P),held.near);fist(layer,held.near);over(front,layer,true);fists.push(held.near);}
    else{const swing=loc==='walk'?P.arm*fwd:loc==='hurt'?-fwd:loc==='dash'?-2*fwd:0;
     if(!swing&&!P.relax)over(front,shift(part.arm,P.dx,P.dy));
     else over(front,shift(shearArm(ARM_FILL[view],swing,P.relax),P.dx,P.dy),HANGING);}
@@ -512,6 +533,10 @@
   if(view==='dos')over(img,S,true);
   if(blade&&!behindBlade){if(smearLayer)over(img,smearLayer);over(img,swordLayer,true);}
   over(img,grip);over(img,front);
+  // Les épaulières de fourrure restent par-dessus le haut d'un bras d'action, jamais sur un poing.
+  if(view!=='dos'&&fists.length)for(const [k,c] of shift(part.fur,P.dx,P.dy)){
+   if(!front.has(k))continue;const x=KX(k),y=KY(k);
+   if(fists.some(h=>Math.abs(x-h[0])<=2&&Math.abs(y-h[1])<=2))continue;img.set(k,c);}
   return finish(img);
  }
  /** Finition de silhouette : tout bord reçoit son contour d'un pixel (même quand une pièce
