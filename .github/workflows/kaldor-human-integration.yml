@@ -1,0 +1,47 @@
+name: Kaldor modular human integration
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/kaldor-human-integration.yml'
+      - 'scripts/kaldor-civilian-bridge.js'
+      - 'scripts/embed-kaldor.cjs'
+      - 'sprites/kaldor/**'
+      - 'tests/kaldor-art.test.cjs'
+      - 'tests/game-harness.cjs'
+      - 'docs/kaldor-art.md'
+      - 'art/kaldor-human-preview.html'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: kaldor-human-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install fixed development dependencies
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Rebuild web and iOS from the authored source
+        run: npm run build:batraciens
+      - name: Verify Kaldor, human body modules and compatible guardian
+        run: node --test --test-concurrency=1 tests/kaldor-art.test.cjs tests/civilians.test.cjs tests/guardian.test.cjs
+      - name: Publish generated HTML and reusable preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add index.html ios/Hearthreaver/Game/index.html art/kaldor-preview.html data/kaldor-manifest.json
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'build: validated Kaldor uses native human NPC body, hair and gait [skip ci]'
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
