@@ -165,6 +165,8 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git commit -m 'build: sync modular Kaldor web and iOS art [skip ci]'
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
           fi
       - name: Keep validation evidence
