@@ -7,9 +7,9 @@
     "cancelled": 0
   },
   "worldBible": "passed",
-  "webSHA256": "51b36f6b22684ea3ebed769a4b080f3f55ed484dffe309327ff948cbc7a75aea",
-  "iosSHA256": "25f35bd66c7433a12d7c9d78b7abb718dd76548d867bb7452ee0553e48d83eaa",
-  "archiveSHA256": "e7d9555ffb8a2771e46bc5d1501449d65515ea86a3e31ffd55b21ad7601d2490",
+  "webSHA256": "ed4bb048a2828561b5c95a9e82d578865e750e3eaaa0abc0c219deaa6ded1988",
+  "iosSHA256": "367e7db50dc6fd819faec022f6fd00d01e43e25298657e33cb1ed727eafe559f",
+  "archiveSHA256": "5449d60490d4044b92489be12e13d8d7a7e50338b62f3c5bbd314416c90923bc",
   "rebuildIdempotent": true,
   "testedOnPhysicalIPhone": false
 }

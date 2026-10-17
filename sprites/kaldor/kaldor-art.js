@@ -3,7 +3,8 @@
  * contour sombre, lumière en haut à gauche, animation minimaliste par décalages
  * entiers d'un pixel. Quatre vues indépendantes (dos, droite, face, gauche).
  * L'épée, les bras d'action et les smears sont tracés en JavaScript à partir de
- * la pose moteur swordPose() : la pointe dessinée suit la vraie zone de coup.
+ * la pose moteur swordPose() : la lame en garde l'angle et la longueur. Épée à
+ * deux mains, tenue à deux mains dès qu'elle est sortie ; bras courts jamais étirés.
  * Case moteur 80 × 80, pieds en (40,52) ; aucun lissage, aucune image chargée.
  * Les durées de combo, le dash, la garde, les parades et les dégâts ne changent pas.
  */
@@ -60,19 +61,19 @@
    '..OOOOOOO.OOOOOOO..'
   ],
   droite:[
-   '........OOO.OO....',
-   '......OOkqjOjOO...',
-   '.....OjqkjhkqkjO..',
-   '....OjkjhkjjhkkjO.',
-   '....OkjhjhkjjhjjjO',
-   '....OjhjHjhkjppppO',
-   '....OjhjhjappxxpaO',
-   '....OhjhjhpapxxppO',
-   '....OHjhjhmappppaO',
-   '....OhHjhjhkjkkrkO',
-   '....OhhjHjhkjkkkO.',
-   '...OhjObccbOkjkO..',
-   '..OuvbcccbbdOkO...',
+   '......OOO.OO......',
+   '....OOkqjOjOO.....',
+   '...OjqkjhkqkjO....',
+   '..OjkjhkjjhkkjO...',
+   '..OkjhjhkjjhjjjO..',
+   '..OjhjHjhkjppppO..',
+   '..OjhjhjappxxpaO..',
+   '..OhjhjhpapxxppO..',
+   '..OHjhjhmappppaO..',
+   '..OhHjhjhkjkkrkO..',
+   '..OhhjHjhkjkkkO...',
+   '..OhjhObccbkjkO...',
+   '..OhjbcccbbdkO....',
    '..OuvOpaamOwtO....',
    '..OuvOpiamOvwtO...',
    '..OuuOwvvuOuYGO...',
@@ -108,19 +109,19 @@
    '..OOOOOOO.OOOOOOO..'
   ],
   gauche:[
-   '....OO.OOO........',
-   '...OOjOjqkOO......',
-   '..OjkqkhjkqjO.....',
-   '.OjkkhjjkhjkjO....',
-   'OjjjhjjkhjhjkO....',
-   'OppppjkhjHjhjO....',
-   'OpaxxppajhjhjO....',
-   'OipxxpaphjhjhO....',
-   'OappppamhjhjHO....',
-   'OkrkkjkhjhjHhO....',
-   '.OkkkjkhjHjhhO....',
-   '..OkjkObccbOjhO...',
-   '...OkObcccbbbvuO..',
+   '......OO.OOO......',
+   '.....OOjOjqkOO....',
+   '....OjkqkhjkqjO...',
+   '...OjkkhjjkhjkjO..',
+   '..OjjjhjjkhjhjkO..',
+   '..OppppjkhjHjhjO..',
+   '..OpaxxppajhjhjO..',
+   '..OipxxpaphjhjhO..',
+   '..OappppamhjhjHO..',
+   '..OkrkkjkhjhjHhO..',
+   '...OkkkjkhjHjhhO..',
+   '...OkjkbccbOhjhO..',
+   '....OkbcccbbdjhO..',
    '....OtwOpaamOvuO..',
    '...OtwvOpiamOvuO..',
    '...OGYuOwvvuOuuO..',
@@ -190,11 +191,11 @@
  // Tronc peint sous le bras de profil : invisible au repos, révélé quand le bras bouge.
  const UNDER_ARM={droite:['vwvwtw','vwvwvt','uuuuuY','vwvwvt','wvwvwv'],gauche:['wtwvwv','twvwvv','Yuuuuu','twvwvv','vwvwvw']};
  // Jambes de profil (pied vers l'avant). La jambe éloignée est assombrie, pas redessinée.
- const SIDE_LEG={droite:['.paam.','.bcbb.','uvwwtt'],gauche:['.paam.','.bbcb.','ttwwvu']};
+ const SIDE_LEG={droite:['.pa..','.bcb.','uvwtt'],gauche:['..pa.','.bcb.','ttwvu']};
  const SHADE=Object.freeze({i:'p',p:'a',a:'m',m:'s',s:'s',c:'b',b:'d',d:'v',t:'w',w:'v',v:'u',u:'u'});
  // Yeux fermés (clignement, douleur) : les sourcils restent, la pupille devient peau.
  const LIDS={face:[[-3,-14,'p'],[-2,-14,'a'],[2,-14,'a'],[3,-14,'p']],dos:[],
-  droite:[[5,-14,'a'],[6,-14,'p']],gauche:[[-5,-14,'a'],[-6,-14,'p']]};
+  droite:[[3,-14,'a'],[4,-14,'p']],gauche:[[-3,-14,'a'],[-4,-14,'p']]};
 
  // --- Tracés : lignes nettes et membres épais ---
  function linePoints(ax,ay,bx,by){ax=Math.round(ax);ay=Math.round(ay);bx=Math.round(bx);by=Math.round(by);
@@ -288,44 +289,84 @@
  }
 
  // --- Poses ---
- const WALK={bob:[0,1,0,0,1,0],liftL:[0,0,0,0,1,1],liftR:[0,1,1,0,0,0],swing:[1,1,0,-1,-1,0],
-   near:[2,1,-1,-2,-1,1],nearLift:[0,0,0,0,1,1],farLift:[0,1,1,0,0,0]};
+ const WALK={bob:[0,1,0,0,1,0],liftL:[0,0,0,0,1,1],liftR:[0,1,1,0,0,0],swing:[1,1,0,-1,-1,0]};
+ // Profil : petits pas de chibi, les deux pieds restent sous le corps (écart maximal de 3 px).
+ // Décalages par rapport à la pose debout ; la jambe qui passe devant se lève d'un pixel.
+ const SIDE_WALK={near:[1,0,-1,-2,-1,0],far:[0,1,2,3,2,1],nearLift:[0,0,0,0,1,1],farLift:[0,1,1,0,0,0],arm:[-1,-1,1,1,1,-1]};
  const IDLE=[{bob:0},{bob:1},{bob:1,relax:1},{bob:0,blink:true}];
  function bodyPose(view,loc,f,combo){
   const side=!FRONTAL(view),fwd=view==='droite'?1:view==='gauche'?-1:0;
-  const P={dx:0,dy:0,hx:0,hy:0,liftL:0,liftR:0,swingL:0,swingR:0,near:0,far:0,nearLift:0,farLift:0,blink:false,relax:0};
+  const P={dx:0,dy:0,hx:0,hy:0,liftL:0,liftR:0,swingL:0,swingR:0,near:0,far:0,nearLift:0,farLift:0,arm:0,blink:false,relax:0};
   if(loc==='idle'){const I=IDLE[f%4];P.dy=I.bob;P.blink=!!I.blink;P.relax=I.relax||0;}
   else if(loc==='walk'||loc==='guard'){const w=f%6;P.dy=WALK.bob[w];P.liftL=WALK.liftL[w];P.liftR=WALK.liftR[w];
-   P.swingL=WALK.swing[w];P.swingR=-WALK.swing[w];P.near=WALK.near[w];P.far=-WALK.near[w];P.nearLift=WALK.nearLift[w];P.farLift=WALK.farLift[w];
+   P.swingL=WALK.swing[w];P.swingR=-WALK.swing[w];
+   if(side){P.near=SIDE_WALK.near[w];P.far=SIDE_WALK.far[w];P.nearLift=SIDE_WALK.nearLift[w];P.farLift=SIDE_WALK.farLift[w];P.arm=SIDE_WALK.arm[w];}
    if(loc==='guard'){P.dy=1;P.swingL=P.swingR=0;}}
   else if(loc==='attack'){
    const lean=[0,-1,1,1,1,0][f],crouch=[0,0,1,1,combo===3?1:0,0][f];
-   P.dx=side?lean*fwd:0;P.dy=crouch;P.near=side?[0,-1,2,2,2,1][f]:0;P.far=side?[0,1,-1,-1,-1,0][f]:0;
+   P.dx=side?lean*fwd:0;P.dy=crouch;P.near=side?[0,-1,1,1,1,0][f]:0;P.far=side?[0,1,-1,-1,-1,0][f]:0;
    if(!side){P.liftL=f===1?1:0;}
   }
-  else if(loc==='dash'){const w=f%4;P.dx=side?fwd*2:0;P.dy=1;P.near=side?[3,2,3,2][w]:0;P.far=side?-3:0;P.nearLift=side?1:0;
+  else if(loc==='dash'){const w=f%4;P.dx=side?fwd*2:0;P.dy=1;P.near=side?[2,1,2,1][w]:0;P.far=side?-1:0;P.nearLift=side?1:0;
    P.liftL=!side&&w%2===0?1:0;P.liftR=!side&&w%2===1?1:0;P.swingL=!side?-1:0;P.swingR=!side?-1:0;}
   else if(loc==='hurt'){const back=[-1,-2,-1,0][f];P.dx=side?back*fwd:0;P.dy=[1,1,0,0][f];P.hx=side?[-1,-1,0,0][f]*fwd:0;P.blink=f<3;P.swingL=P.swingR=-1;}
   else if(loc==='use'||loc==='melee'){P.dx=side?[0,0,1,1,0,0][f]*fwd:0;P.dy=[0,0,1,1,0,0][f];}
   P.hx+=P.dx;P.hy+=P.dy;return P;
  }
- // Main d'appui, épaule et visée de la vraie lame. Le poignet moteur est ramené
- // vers le torse (bras courts de chibi) ; la pointe reste celle de la zone de coup.
+ // Épaules, prise et visée de la lame. Le poignet moteur est ramené vers le torse
+ // (bras courts de chibi) ; la lame garde l'angle et la longueur de la lame moteur.
  const SHOULDER={face:{L:[-7,-8],R:[7,-8]},dos:{L:[-7,-8],R:[7,-8]},droite:{near:[0,-8],far:[-3,-9]},gauche:{near:[0,-8],far:[3,-9]}};
+ // Portée maximale d'un bras, de l'épaule au poing : un bras ne s'étire jamais au-delà.
+ const REACH={face:8,dos:8,droite:7,gauche:7};
+ const ARMS=view=>FRONTAL(view)?['L','R']:['near','far'];
+ /** Épaule d'un bras ; elle monte d'un ou deux pixels quand la main passe au-dessus. */
+ function shoulderOf(view,arm,hand,P){const s=SHOULDER[view][arm],x=s[0]+P.dx,y=s[1]+P.dy;
+  return [x,y-Math.max(0,Math.min(2,Math.round((y-hand[1]-3)/2)))];}
+ function span(view,arm,hand,P){const s=shoulderOf(view,arm,hand,P);return Math.hypot(hand[0]-s[0],hand[1]-s[1]);}
+ /** Épée à deux mains : main haute contre la garde, main basse sur la fusée, chaque poing
+  *  à portée de son épaule. Si un bras devait s'étirer, toute la poignée glisse vers le
+  *  torse et la lame suit sans changer d'angle ni de longueur. */
+ function twoHands(view,blade,P){
+  const vx=blade.tip[0]-blade.g[0],vy=blade.tip[1]-blade.g[1],l=Math.hypot(vx,vy)||1,ux=vx/l,uy=vy/l,[a0,a1]=ARMS(view),R=REACH[view];
+  let gx=blade.g[0],gy=blade.g[1];
+  const layout=()=>{const hi=[Math.round(gx),Math.round(gy)],lo=[Math.round(gx-2*ux),Math.round(gy-2*uy)];
+   const A={[a0]:hi,[a1]:lo},B={[a0]:lo,[a1]:hi},cost=H=>Math.max(span(view,a0,H[a0],P),span(view,a1,H[a1],P));
+   return cost(A)<=cost(B)?A:B;};
+  for(let it=0;it<20;it++){const H=layout();let mx=0,my=0;
+   for(const arm of [a0,a1]){const h=H[arm],s=shoulderOf(view,arm,h,P),dx=h[0]-s[0],dy=h[1]-s[1],d=Math.hypot(dx,dy);
+    if(d>R){mx-=dx*(1-R/d);my-=dy*(1-R/d);}}
+   if(!mx&&!my)break;gx+=mx*.5;gy+=my*.5;}
+  // Poings et pommeau ne montent jamais devant le visage ni dans les cheveux : ils
+  // s'arrêtent sous la bouche, devant le torse (de profil : lame posée sur l'épaule).
+  const F=FACE[view];
+  if(F){const fwd=view==='droite'?1:view==='gauche'?-1:0,top=-10+P.dy+Math.max(0,Math.round(4*uy));
+   if(fwd&&gy<top&&(gx-P.dx)*fwd<F[fwd>0?1:0]*fwd+2)gx=fwd>0?Math.max(gx,1+P.dx):Math.min(gx,-1+P.dx);
+   if(gy<top&&(fwd||(gx-P.dx>=F[0]-1&&gx-P.dx<=F[1]+1)))gy=top;}
+  const g=[Math.round(gx),Math.round(gy)];
+  return {blade:{...blade,g,tip:[g[0]+vx,g[1]+vy]},hands:layout()};
+ }
+ // Zone du visage (x min, x max, y min, y max) ; dos : aucune.
+ const FACE={face:[-5,5,-19,-10],droite:[1,7,-18,-10],gauche:[-7,-1,-18,-10]};
+ /** Une lame qui traverserait le visage passe derrière la tête (lame levée vers l'arrière). */
+ function crossesFace(view,blade,P){const F=FACE[view];if(!F)return false;
+  const vx=blade.tip[0]-blade.g[0],vy=blade.tip[1]-blade.g[1],l=Math.hypot(vx,vy)||1;
+  for(let t=3;t<=l;t+=.5){const x=blade.g[0]+vx*t/l-P.dx,y=blade.g[1]+vy*t/l-P.dy;if(x>=F[0]&&x<=F[1]&&y>=F[2]&&y<=F[3])return true;}return false;}
  function visualHand(w,P){return [Math.round(w[0]*.7)+P.dx,Math.round(-8+(w[1]+8)*.72)+P.dy];}
- function bladeOf(p,P){const w=[p[0],p[1]],tip=[p[0]+p[2]+P.dx,p[1]+p[3]+P.dy];return {g:visualHand(w,P),tip};}
- // Poses visuelles de repos et de garde (aucune zone de coup) : la lame reste hors du visage.
- const READY={face:{g:[-8,-5],tip:[-15,-20]},dos:{g:[8,-5],tip:[15,-20]},droite:{g:[3,-5],tip:[15,-17]},gauche:{g:[-3,-5],tip:[-15,-17]}};
+ function bladeOf(p,P){const g=visualHand([p[0],p[1]],P);return {g,tip:[g[0]+p[2],g[1]+p[3]]};}
+ // Poses visuelles (aucune zone de coup), à deux mains : la lame reste hors du visage.
+ const READY={face:{g:[-1,-6],tip:[-14,-16]},dos:{g:[1,-6],tip:[14,-16]},droite:{g:[3,-6],tip:[15,-17]},gauche:{g:[-3,-6],tip:[-15,-17]}};
  const GUARD={face:{g:[-2,-7],tip:[15,-11]},dos:{g:[2,-7],tip:[-15,-11]},droite:{g:[4,-8],tip:[19,-11]},gauche:{g:[-4,-8],tip:[-19,-11]}};
+ // Une main occupée (utiliser, mêlée) : l'épée lourde pend dans l'autre main, pointe au sol.
+ const LOW={face:{g:[-8,-5],tip:[-12,6]},dos:{g:[8,-5],tip:[12,6]},droite:{g:[2,-5],tip:[12,2]},gauche:{g:[-2,-5],tip:[-12,2]}};
  function restBlade(table,view,P){const b=table[view];return {g:[b.g[0]+P.dx,b.g[1]+P.dy],tip:[b.tip[0]+P.dx,b.tip[1]+P.dy]};}
  // Rangement / dégainage : lever la lame, la glisser par-dessus l'épaule, lâcher la poignée.
- const RAISE={face:{g:[-9,-11],tip:[-12,-27]},dos:{g:[9,-11],tip:[12,-27]},droite:{g:[1,-12],tip:[-2,-29]},gauche:{g:[-1,-12],tip:[2,-29]}};
+ const RAISE={face:{g:[-9,-11],tip:[-12,-27]},dos:{g:[9,-11],tip:[12,-27]},droite:{g:[-1,-11],tip:[-6,-28]},gauche:{g:[1,-11],tip:[6,-28]}};
  const STOW=Object.freeze(['ready','raise','slide','seat','release','rest']),DRAW=Object.freeze(['release','seat','slide','raise','ready']);
  const IN_SHEATH=new Set(['seat','release','rest']);
  function sheathAxis(view){const S=SHEATH[view],dx=S.tip[0]-S.throat[0],dy=S.tip[1]-S.throat[1],l=Math.hypot(dx,dy);return [dx/l,dy/l];}
  /** Lame à moitié sortie du fourreau, alignée sur lui ; la main tient la fusée au-dessus de l'épaule. */
- function slideBlade(view,P){const S=SHEATH[view],[ux,uy]=sheathAxis(view),g=[Math.round(S.hilt[0]-ux)+P.dx,Math.round(S.hilt[1]-uy)+P.dy];
-  return {g,tip:[g[0]+ux*17,g[1]+uy*17],sliding:true};}
+ function slideBlade(view,P){const S=SHEATH[view],[ux,uy]=sheathAxis(view),g=[S.hilt[0]+P.dx,S.hilt[1]+P.dy];
+  return {g,tip:[g[0]+ux*15,g[1]+uy*15],sliding:true};}
  function hiltHand(view,P){const S=SHEATH[view],[ux,uy]=sheathAxis(view);return [Math.round(S.hilt[0]+ux)+P.dx,Math.round(S.hilt[1]+uy)+P.dy];}
 
  // --- Pièces statiques animées par décalage entier ---
@@ -351,7 +392,7 @@
   if(FRONTAL(view)){const out=new Map();over(out,shift(part.legL,0,-P.liftL));over(out,shift(part.legR,0,-P.liftR));return out;}
   const east=view==='droite',out=new Map();
   // jambe éloignée puis proche ; chacune reçoit son propre contour
-  const farX=east?-5:0,nearX=east?-2:-3,fwd=east?1:-1;
+  const farX=east?-5:1,nearX=east?-1:-3,fwd=east?1:-1;
   over(out,sideLeg(view,farX+P.far*fwd,P.farLift,true));
   over(out,sideLeg(view,nearX+P.near*fwd,P.nearLift,false));
   return over(new Map(),out,true);
@@ -379,10 +420,10 @@
   // Bras libre d'action : lever un objet ou frapper du poing. null = bras dessiné au repos.
   const side=!FRONTAL(view),fwd=view==='droite'?1:view==='gauche'?-1:0,sx=which==='L'?-1:1;
   if(loc==='use'){const e=[0,.5,1,1,.6,.2][f];if(e<.3)return null;
-   if(side)return [Math.round(fwd*(2+5*e))+P.dx,Math.round(-6-3*e)+P.dy];
+   if(side)return [Math.round(fwd*(2+4*e))+P.dx,Math.round(-6-3*e)+P.dy];
    return [sx*Math.round(7-4*e)+P.dx,Math.round(-5-(view==='dos'?7:5)*e)+P.dy];}
   if(loc==='melee'){const e=[-.4,-.6,.6,1,.7,.2][f];if(Math.abs(e)<.3)return null;
-   if(side)return [Math.round(fwd*(2+6*e))+P.dx,-8+P.dy];
+   if(side)return [Math.round(fwd*(2+4*e))+P.dx,-8+P.dy];
    if(e<0)return [sx*9+P.dx,-9+P.dy];
    return [sx*Math.round(7-5*e)+P.dx,Math.round(-6+(view==='dos'?-3:1)*e)+P.dy];}
   return null;
@@ -399,54 +440,51 @@
   // Lame : pose moteur, pose de repos/garde, ou étape du rangement dans le fourreau.
   const stage=v.mode==='stowing'?STOW[v.phase]:v.mode==='drawing'?DRAW[v.phase]:null;
   const sheathed=v.mode==='sheathed'||IN_SHEATH.has(stage);
-  let blade=null,two=false,smearLayer=null,reach=null;
+  let blade=null,two=false,smearLayer=null,reach=null;const held={};
   if(!sheathed){
    if(stage==='raise')blade=restBlade(RAISE,view,P);
    else if(stage==='slide')blade=slideBlade(view,P);
-   // Frappe : pose moteur (pointe = vraie zone de coup). Dernière image : retour au repos.
+   // Frappe : angle et longueur de la lame moteur. Dernière image : retour au repos.
    else if(loc==='attack'&&v.f<5){const raw=poseFn(dir,v.f,combo);assert(raw.length===4&&raw.every(Number.isFinite),'nonfinite sword pose');blade=bladeOf(raw,P);}
+   else if(loc==='use'||loc==='melee')blade={...restBlade(LOW,view,P),low:true};
    else blade=restBlade(loc==='guard'?GUARD:READY,view,P);
-   two=!stage&&((loc==='attack'&&v.f<5)||loc==='guard');
+   // Épée à deux mains : deux poings sur la fusée, sauf pour la ranger ou libérer une main.
+   two=!stage&&!blade.low;
+   if(two){const T=twoHands(view,blade,P);blade=T.blade;Object.assign(held,T.hands);}
+   else held[FRONTAL(view)?(blade.g[0]<0?'L':'R'):(blade.sliding||blade.low||stage==='raise'?'far':'near')]=blade.g;
    if(!stage&&loc==='attack'&&v.f>=2&&v.f<=4){
-    const prev=bladeOf(poseFn(dir,v.f-1,combo),bodyPose(view,loc,v.f-1,combo));
+    const pP=bodyPose(view,loc,v.f-1,combo),prev=twoHands(view,bladeOf(poseFn(dir,v.f-1,combo),pP),pP).blade;
     smearLayer=smear(new Map(),prev,blade,v.f===4?.5:1);
    }
   }
   if(stage==='seat')reach=hiltHand(view,P);
   if(stage==='release'){const h=hiltHand(view,P),sh=FRONTAL(view)?SHOULDER[view][SHEATH[view].hilt[0]<0?'L':'R']:SHOULDER[view].far;
    reach=[Math.round((h[0]+sh[0]+P.dx)/2),Math.round((h[1]+sh[1]+P.dy)/2)];}
-  // Bras : pièces sources (repos/marche) ou bras d'action tracés vers la poignée.
-  const front=new Map(),back=new Map();
-  const behindBlade=blade&&(blade.sliding?view!=='dos':view==='dos'||(view==='droite'&&blade.tip[0]<blade.g[0]-4)||(view==='gauche'&&blade.tip[0]>blade.g[0]+4)||(FRONTAL(view)&&blade.tip[1]<-24&&Math.abs(blade.tip[0])<6));
+  if(reach)held[FRONTAL(view)?(SHEATH[view].hilt[0]<0?'L':'R'):'far']=reach;
+  // Bras libre : lever un objet ou frapper du poing (main droite de face, main proche de profil).
+  if(!reach&&!two){const free=blade?ARMS(view).find(a=>!held[a]):FRONTAL(view)?'R':'near',h=freeHand(view,loc,v.f,P,free);if(h)held[free]=h;}
+  // Bras : pièces sources (repos/marche) ou bras d'action tracés de l'épaule au poing.
+  const front=new Map(),back=new Map(),grip=new Map();
+  const behindBlade=blade&&(blade.sliding?view!=='dos':blade.low&&side||view==='dos'||(view==='droite'&&blade.tip[0]<blade.g[0]-4)||(view==='gauche'&&blade.tip[0]>blade.g[0]+4)||(FRONTAL(view)&&blade.tip[1]<-24&&Math.abs(blade.tip[0])<6)||crossesFace(view,blade,P));
   if(FRONTAL(view)){
-   const sh=SHOULDER[view],mainSide=blade?(blade.g[0]<0?'L':'R'):reach?(SHEATH[view].hilt[0]<0?'L':'R'):'R',offSide=mainSide==='L'?'R':'L';
    for(const s of ['L','R']){
-    const shoulder=[sh[s][0]+P.dx,sh[s][1]+P.dy];
-    let hand=null;
-    if(blade&&s===mainSide)hand=blade.g;
-    else if(blade&&two)hand=[blade.g[0]+(s==='L'?-1:1),blade.g[1]+1];
-    else if(reach&&s===mainSide)hand=reach;
-    else if(!reach&&(blade?s===offSide:s==='R'))hand=freeHand(view,loc,v.f,P,s);
+    const hand=held[s];
     if(hand){
      // De dos, les bras sont devant le corps donc cachés, sauf la main qui va au fourreau.
      const hidden=view==='dos'&&!stage,layer=new Map();
-     limb(layer,shoulder,hand,{dark:hidden});fist(layer,hand,hidden);over(hidden?back:front,layer,true);
+     limb(layer,shoulderOf(view,s,hand,P),hand,{dark:hidden});fist(layer,hand,hidden);over(hidden?back:front,layer,true);
     }
     else{const src=s==='L'?part.armL:part.armR,sw=s==='L'?P.swingL:P.swingR;over(front,shift(shearArm(src,0,sw+P.relax),P.dx,P.dy));}
    }
   }else{
-   const sh=SHOULDER[view],fwd=view==='droite'?1:-1,near=[sh.near[0]+P.dx,sh.near[1]+P.dy],far=[sh.far[0]+P.dx,sh.far[1]+P.dy];
-   let nearHand=null,farHand=null;
-   // De profil, la main éloignée glisse la lame dans le fourreau, derrière la tête.
-   if(blade&&blade.sliding)farHand=blade.g;
-   else if(blade){nearHand=blade.g;if(two)farHand=[blade.g[0]-fwd,blade.g[1]+1];farHand=farHand||freeHand(view,loc,v.f,P,'far');}
-   else if(reach)farHand=reach;
-   else nearHand=freeHand(view,loc,v.f,P,'near');
-   if(nearHand){const layer=new Map();limb(layer,near,nearHand);fist(layer,nearHand);over(front,layer,true);}
-   else{const swing=loc==='walk'||loc==='guard'?-Math.sign(P.near)*fwd:loc==='hurt'?-fwd:loc==='dash'?-2*fwd:0;
+   const fwd=view==='droite'?1:-1;
+   if(held.near){const layer=new Map();limb(layer,shoulderOf(view,'near',held.near,P),held.near);fist(layer,held.near);over(front,layer,true);}
+   else{const swing=loc==='walk'?P.arm*fwd:loc==='hurt'?-fwd:loc==='dash'?-2*fwd:0;
     if(!swing&&!P.relax)over(front,shift(part.arm,P.dx,P.dy));
     else over(front,shift(shearArm(ARM_FILL[view],swing,P.relax),P.dx,P.dy),HANGING);}
-   if(farHand){const layer=new Map();limb(layer,far,farHand,{dark:true});fist(layer,farHand,true);over(back,layer,true);}
+   if(held.far){const layer=new Map();limb(layer,shoulderOf(view,'far',held.far,P),held.far,{dark:true});fist(layer,held.far,true);over(back,layer,true);
+    // À deux mains, le poing éloigné serre la fusée près du poing proche : il reste visible.
+    if(two)over(grip,fist(new Map(),held.far,true),true);}
   }
   // Ordre de dessin : fourreau/lame arrière, bras arrière, jambes, tronc, tête, bras avant, lame avant.
   const S=shift(scabbard(new Map(),view,sheathed),P.dx,P.dy);
@@ -463,7 +501,7 @@
   if(view==='dos'){over(img,head);over(img,S,true);}
   else over(img,head);
   if(blade&&!behindBlade){if(smearLayer)over(img,smearLayer);over(img,swordLayer,true);}
-  over(img,front);
+  over(img,grip);over(img,front);
   return img;
  }
  function draw(context,dir=2,state='idle',frame=0,combo=0,poseFn){

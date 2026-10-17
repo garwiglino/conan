@@ -29,7 +29,8 @@ Après publication, fermer complètement l'app iOS native puis la rouvrir avec u
 Kaldor est redessiné en JavaScript dans le style chibi Game Boy des batraciens :
 grosse tête aux cheveux longs, barbe, fourrure sur les épaules, quatre vues
 dessinées pixel par pixel et animation minimaliste par décalages d'un pixel.
-Les quatre combos gardent leurs smears et leurs zones de coup ; hors combat,
+L'épée à deux mains est toujours tenue à deux mains, avec des bras courts
+qui ne s'étirent jamais. Les quatre combos gardent leurs smears et leurs zones de coup ; hors combat,
 après 3,7 secondes, l'épée retourne dans le fourreau dans le dos, même en
 marchant. Voir [la réalisation et ses tests](docs/kaldor-art.md) et
 [l'atelier interactif](art/kaldor-preview.html).

@@ -19,6 +19,8 @@ reste en haut à gauche.
   bottes à revers de fourrure.
 - Fourreau en diagonale dans le dos ; la poignée dépasse derrière l'épaule de
   profil et de dos, et reste cachée par la tête de face, comme sur la planche.
+- De profil, la tête est posée au-dessus du corps et le dos reste droit (aucune
+  bosse) : les cheveux tombent dans le dos jusqu'aux épaules.
 
 Les grilles sources sont découpées en pièces (tête, tronc, bras, jambes). Les
 poses déplacent ces pièces d'un pixel ; seuls l'épée, les bras d'action, les
@@ -29,12 +31,21 @@ jambes de profil et les smears sont tracés à la volée.
 - **Repos :** respiration d'un pixel et clignement (boucle de 4,3 s comme les
   batraciens).
 - **Marche (6 images) :** rebond d'un pixel du haut du corps, pied levé à tour
-  de rôle de face et de dos, foulée alternée de profil, bras en balancier.
-- **Combos (4 × 6 images) :** les mains suivent la pose moteur `swordPose()`
-  ramenée vers le torse (bras courts de chibi), deux mains sur la poignée. La
-  **pointe dessinée est la vraie pointe de la zone de coup**. Smear en
-  croissant plein (bord blanc, cœur bleuté, départ tramé) sur les images 2 et 3,
-  traîne tramée plus légère sur l'image 4, retour au repos sur l'image 5.
+  de rôle de face et de dos, bras en balancier. De profil, petits pas de chibi :
+  les deux pieds restent sous le corps et la jambe qui passe devant se lève
+  d'un pixel.
+- **Épée à deux mains :** dès qu'elle est sortie (repos, marche, garde, dash,
+  blessure, combos), les deux poings serrent la fusée, l'un contre la garde,
+  l'autre en dessous. Chaque poing reste à portée de son épaule (8 px de face,
+  7 px de profil) : si un bras devait s'étirer, toute la poignée glisse vers le
+  torse. Seuls le rangement, le dégainage et une main occupée (utiliser, mêlée :
+  l'épée pend alors dans l'autre main, pointe au sol) se font à une main.
+- **Combos (4 × 6 images) :** la lame garde l'angle et la longueur de la pose
+  moteur `swordPose()`, les mains restant devant le torse. Poings et pommeau ne
+  montent jamais devant le visage ; une lame levée passe derrière la tête (lame
+  sur l'épaule). Smear en croissant plein (bord blanc, cœur bleuté, départ
+  tramé) sur les images 2 et 3, traîne tramée plus légère sur l'image 4, retour
+  en garde haute sur l'image 5.
 - **Garde :** lame tenue à deux mains en travers du corps, accroupi d'un pixel.
 - **Dash, blessure, utiliser, mêlée :** penché, recul avec yeux fermés, main
   levée vers le torse, coup de poing armé puis lancé.
