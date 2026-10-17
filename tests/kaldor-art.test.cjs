@@ -295,3 +295,54 @@ test('the real CharacterAtlas draws modular human head, hands and sheathed sword
  assert.equal(actor.kaldorWeapon.mode,'drawn');assert.ok(actor._img);
 });
 
+
+test('profile gait plays the human strides forwards, face and back views keep atlas order',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ // Atlas profile strides are stored backwards (planted foot sliding forward).
+ for(const dir of [1,3]){
+  assert.deepEqual([0,1,2,7].map(f=>human.pose('walk',f,dir).frame),[0,7,6,1]);
+  assert.deepEqual([0,1].map(f=>human.pose('sheathed_walk',f,dir).frame),[0,7]);
+ }
+ for(const dir of [0,2])assert.deepEqual([0,1,2,7].map(f=>human.pose('walk',f,dir).frame),[0,1,2,7]);
+});
+
+test('attacks hold the sword in both hands, along the exact gameplay blade direction',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ const steel=new Set(['154,166,171','214,220,220','251,251,239']),skin=new Set(['248,176,122','200,116,62']);
+ for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
+  const hashes=new Set();
+  for(let frame=1;frame<=5;frame++){
+   const im=human.nativeFrame(dir,'attack',frame,combo,pose);
+   assert.ok(im,`${dir}:${combo}:${frame}`);
+   const d=shot(im.getContext('2d'));hashes.add(crypto.createHash('sha256').update(d).digest('hex'));
+   const at=(x,y)=>{const i=(Math.round(y+52)*80+Math.round(x+40))*4;return d[i+3]?[d[i],d[i+1],d[i+2]].join(','):'';};
+   const p=human.attackPose(dir,frame,combo,pose);
+   // Strike, contact and follow-through keep the swept gameplay direction;
+   // wind-up and recovery are free drawings (the back-view chop lays the blade down).
+   if(frame>=2&&frame<=4){
+    const [x,y,vx,vy]=pose(dir,frame,combo),l=Math.hypot(vx,vy);
+    assert.ok(Math.abs(p.blade[0]-vx/l)<1e-9&&Math.abs(p.blade[1]-vy/l)<1e-9,'blade follows swordPose '+dir+':'+combo+':'+frame);
+   }
+   if(!p.front)continue;
+   let blade=0;for(let r=5;r<=11;r++)if(steel.has(at(p.hand[0]+p.blade[0]*r,p.hand[1]+p.blade[1]*r)))blade++;
+   assert.ok(blade>=4,`blade not drawn from the grip ${dir}:${combo}:${frame}`);
+   let hands=0;for(let y=-1;y<=1;y++)for(let x=-1;x<=1;x++)if(skin.has(at(p.hand[0]+x,p.hand[1]+y)))hands++;
+   assert.ok(hands>=2,`no hand on the grip ${dir}:${combo}:${frame}`);
+  }
+  assert.equal(hashes.size,5,`attack ${dir}:${combo} repeats a drawing`);
+ }
+});
+
+test('sword, harness and scabbard never paint over the NPC eyes, nose and mouth',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ for(const state of ['idle','sheathed_idle','walk','sheathed_walk']){
+  const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,state.replace('sheathed_',''),2,0).getContext('2d'));
+  const hero=shot(human.nativeFrame(2,state,0,0,pose).getContext('2d'));
+  for(let y=36;y<=42;y++)for(let x=36;x<=44;x++){
+   const i=(y*80+x)*4;assert.deepEqual([...hero.slice(i,i+4)],[...npc.slice(i,i+4)],`${state} face pixel ${x},${y}`);
+  }
+ }
+});
