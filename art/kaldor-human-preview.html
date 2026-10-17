@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hearthreaver — Kaldor, modules humains d'origine</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}
+body{margin:0;background:#17212a;color:#eee0c8;font:15px system-ui,sans-serif}
+main{max-width:1100px;margin:auto;padding:19px}
+h1{font-size:21px;margin:0 0 8px}
+p{line-height:1.45;color:#c2c6c3}
+.controls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:15px 0}
+label{display:grid;gap:4px;font-size:13px;color:#e2c898}
+select,button,input{background:#273744;border:1px solid #6c7978;color:white;padding:10px;font:inherit;border-radius:5px}
+button{cursor:pointer}button:disabled{opacity:.5}
+canvas{display:block;width:100%;height:auto;background:#283845;image-rendering:pixelated;image-rendering:crisp-edges;border:1px solid #556776}
+#status{color:#e1c992;min-height:22px;margin:12px 0}
+a{color:#e9c57f}small{color:#a9b5b9}
+</style></head>
+<body><main>
+<h1>Kaldor — mêmes pièces que les humains de Hearthreaver</h1>
+<p>Corps et mains : <strong>Pagne noué (E01 masculin)</strong>. Tête : <strong>masculin-adulte</strong>. Coiffure : <strong>masculin-hair-14</strong>. Les quatre directions, les cycles de repos et les 8 poses de marche proviennent de l'atlas Aseprite déjà intégré au jeu ; la grande épée est une surcouche.</p>
+<div class="controls">
+<label>Animation<select id="action"><option value="sheathed_idle">Repos, épée au dos</option><option value="sheathed_walk" selected>Marche, épée au dos</option><option value="idle">Repos, épée en main</option><option value="walk">Marche, épée en main</option><option value="attack">Attaque</option><option value="guard">Garde</option><option value="hurt">Blessure</option><option value="dash">Course / dash</option><option value="use">Interaction</option><option value="sheathe">Rengainer</option><option value="draw">Dégainer</option></select></label>
+<label>Vitesse<select id="speed"><option value=".5">×0,5</option><option value="1" selected>×1</option><option value="1.5">×1,5</option></select></label>
+<label>Image<input id="frame" type="range" min="0" max="7" value="0"></label>
+<button id="pause">Pause</button><button id="next">Image suivante</button>
+</div>
+<canvas id="view" width="960" height="330"></canvas>
+<p id="status">Chargement des modules humains…</p>
+<small>Case moteur 80×80, ancre des pieds (40, 52), pixels nets, quatre dessins non-miroirs. La vitesse de marche du jeu est basée sur la distance parcourue.</small>
+<p><a href="civilians-preview.html">Ouvrir aussi l'atelier des PNJ humains pour comparer</a></p>
+</main>
+<script src="../scripts/kaldor-civilian-bridge.js"></script>
+<script>
+(async()=>{
+ 'use strict';
+ const $=s=>document.getElementById(s);
+ const cv=$('view'),ctx=cv.getContext('2d'),K=window.HearthreaverKaldorCivilianArt;
+ window.CIVILIAN_ART=await(await fetch('../data/civilians/atlas.json')).json();
+ window.Renderer=function(){};
+ Renderer.prototype.npcDraw=()=>{};
+ (0,eval)((await(await fetch('../scripts/civilian-art.js')).text())+';window.CIVILIAN_BITMAPS=CIVILIAN_BITMAPS;');
+ if(!await K.preload())throw Error('Le navigateur n’a pas décodé les modules Aseprite du héros.');
+ let clock=0,frame=0,playing=true,last=0;
+ const dirs=[2,1,0,3],labels=['FACE','DROITE','DOS','GAUCHE'];
+ const durations={attack:[110,100,85,105,115,165],guard:[160,160,160,160],hurt:[70,90,120,160],dash:[65,65,65,85],use:[120,120,160,120,120,160],sheathe:[60,60,60,60,60,60],draw:[50,50,50,50,50]};
+ function count(state){
+  if(state.endsWith('walk')||state==='walk')return 8;
+  if(state==='sheathed_idle'||state==='idle')return CIVILIAN_ART.clips.idle.durations.length;
+  return durations[state]?.length||8;
+ }
+ function next(){
+  const action=$('action').value;
+  frame=(frame+1)%count(action);clock=0;
+ }
+ function paint(now){
+  if(!last)last=now;
+  const dt=Math.min(.08,(now-last)/1000);last=now;
+  const state=$('action').value,n=count(state);
+  if(playing){
+   clock+=dt*+$('speed').value;
+   const d=(state==='sheathed_idle'||state==='idle')?CIVILIAN_ART.clips.idle.durations:
+       state.endsWith('walk')?CIVILIAN_ART.clips.walk.durations:
+       durations[state]||CIVILIAN_ART.clips.walk.durations;
+   const total=d.reduce((a,b)=>a+b,0);
+   let phase=clock*1000%total;
+   for(frame=0;frame<d.length-1;frame++){if(phase<d[frame])break;phase-=d[frame];}
+  }
+  $('frame').max=n-1;$('frame').value=frame;
+  ctx.fillStyle='#283845';ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.imageSmoothingEnabled=false;
+  for(let k=0;k<4;k++){
+   const hero=K.nativeFrame(dirs[k],state,frame,0);
+   const x=120+k*240,ground=255;
+   ctx.fillStyle='#1b2931';ctx.beginPath();ctx.ellipse(x,ground,30,6,0,0,2*Math.PI);ctx.fill();
+   if(hero)ctx.drawImage(hero,x-40*5,ground-52*5,80*5,80*5);
+   ctx.fillStyle='#e7cb97';ctx.font='14px system-ui';ctx.textAlign='center';ctx.fillText(labels[k],x,305);
+  }
+  $('status').textContent='Modules PNJ chargés · '+$('action').value+' · image '+(frame+1)+' / '+n;
+  requestAnimationFrame(paint);
+ }
+ $('pause').onclick=()=>{playing=!playing;$('pause').textContent=playing?'Pause':'Lecture'};
+ $('next').onclick=()=>{playing=false;$('pause').textContent='Lecture';next();};
+ $('frame').oninput=()=>{playing=false;$('pause').textContent='Lecture';frame=+$('frame').value;clock=0;};
+ $('action').onchange=()=>{frame=0;clock=0;K.clear();};
+ requestAnimationFrame(paint);
+})().catch(e=>{document.getElementById('status').textContent='Erreur : '+e.message;});
+</script>
+</body></html>
