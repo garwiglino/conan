@@ -102,14 +102,14 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
  }finally{destroy();}
 });
 
-test('cold restart and repeated background events preserve a paid journey without hiding the menu',async()=>{
+test('cold restart preserves a paid journey, which keeps going while the app is hidden and pauses on arrival',async()=>{
  const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,studioIntro,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics,textSettings,setTextSize};})();');
  const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
  const destroy=w.close.bind(w);w.close=()=>{closes++;};
  w.HTMLElement.prototype.scrollTo=function(options){this.scrollTop=options.top||0;};
  const proto=w.HTMLCanvasElement.prototype;
  for(const key of ['width','height']){const d=Object.getOwnPropertyDescriptor(proto,key);Object.defineProperty(proto,key,{get:d.get,set(v){d.set.call(this,v);if(map.has(this))map.get(this).native[key]=v;},configurable:true});}
- proto.getContext=function(){if(!map.has(this)){const native=canvas.createCanvas(this.width||1,this.height||1),ctx=native.getContext('2d');const proxy=new Proxy(ctx,{get(target,k){if(k==='drawImage'||k==='createPattern')return (im,...args)=>target[k](map.get(im)?.native||im,...args);const v=target[k];return typeof v==='function'?v.bind(target):v;},set(t,k,v){t[k]=v;return true;}});map.set(this,{native,proxy});}return map.get(this).proxy;};
+ proto.getContext=function(){if(!map.has(this)){const native=canvas.createCanvas(this.width||1,this.height||1),ctx=native.getContext('2d');const proxy=new Proxy(ctx,{get(target,k){if(k==='drawImage'||k==='createPattern'){const method=target[k].bind(target);return (im,...args)=>method(map.get(im)?.native||im,...args);}const v=target[k];return typeof v==='function'?v.bind(target):v;},set(t,k,v){t[k]=v;return true;}});map.set(this,{native,proxy});}return map.get(this).proxy;};
  proto.toDataURL=function(){this.getContext('2d');return map.get(this).native.toDataURL();};
  w.Image=canvas.Image;w.Path2D=canvas.Path2D;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});w.requestAnimationFrame=cb=>{raf=cb;return 1;};
  w.AudioContext=class extends RenderingAudioContext{constructor(){super({sampleRate:8000});Object.defineProperty(this,'state',{value:'running'});}resume(){return Promise.resolve();}suspend(){return Promise.resolve();}decodeAudioData(b,ok){ok(this.createBuffer(1,1,8000));}};
@@ -122,17 +122,27 @@ test('cold restart and repeated background events preserve a paid journey withou
   Object.assign(g.player,{x:station.actor.x,y:station.actor.y+14,coins:9999});g.prepareTransport(station.id);
   assert.ok(g.startJourney(g.planJourney(Atlas.home.id)));g.stepJourney(.5);const coins=g.player.coins;
   w.localStorage.setItem('conan-serpent-v1',JSON.stringify(g.serialize()));
+  const posts=[];w.webkit={messageHandlers:{hearthreaverTravel:{postMessage:message=>posts.push(message)}}};
   w.eval(script);const a=w.testAPI;await a.BITMAPS.promise;await a.titleScene.promise;
   a.studioIntro.skip();a.studioIntro.update(1);await new Promise(r=>setTimeout(r,450));raf(100);
   assert.equal(a.state,'title');assert.ok(a.game.journey);assert.equal($('worldJourney').hidden,true);assert.equal($('menuLoad').disabled,false);
   click('menuLoad');raf(130);assert.equal(a.state,'playing');assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
-  const elapsed=a.game.journey.elapsed;
-  for(let i=0;i<3;i++)w.dispatchEvent(new w.Event('hearthreaver-suspend'));
-  assert.equal(a.state,'paused');assert.equal($('worldJourney').hidden,true);raf(5000);assert.equal(a.game.journey.elapsed,elapsed);
-  const saved=JSON.parse(w.localStorage.getItem('conan-serpent-v1'));assert.ok(saved.atlas.journey);assert.equal(saved.player.coins,coins);
-  click('start');raf(w.performance.now()+40);assert.equal(a.state,'playing');assert.ok(a.game.journey.elapsed>elapsed);
-  w.dispatchEvent(new w.Event('pagehide'));assert.equal(a.state,'paused');assert.equal($('worldJourney').hidden,true);
-  a.showTitle();raf(5100);assert.equal($('worldJourney').hidden,true);click('menuLoad');raf(5130);assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
+  const elapsed=a.game.journey.elapsed,hidden=value=>Object.defineProperty(w.document,'hidden',{value,configurable:true}),last=()=>posts.at(-1);
+  // Leaving the app no longer pauses a journey: its arrival is announced and the trip waits for the real time spent away.
+  hidden(true);for(let i=0;i<3;i++)w.dispatchEvent(new w.Event('hearthreaver-suspend'));
+  assert.equal(a.state,'playing');const {away,arrival,outcome}=a.game.journey;assert.ok(arrival>away);assert.equal(last().action,'schedule');assert.equal(last().title,outcome.arrived?'Arrivé à destination':'Voyage interrompu');assert.ok(last().body.includes(outcome.place));assert.match(last().body,/Le jeu est en pause/);assert.ok(Math.abs(last().delay-(arrival-Date.now())/1000)<2);
+  raf(5000);assert.equal(a.game.journey.elapsed,elapsed);assert.equal(a.game.journey.arrival,arrival);
+  const saved=JSON.parse(w.localStorage.getItem('conan-serpent-v1'));assert.equal(saved.atlas.journey.arrival,arrival);assert.equal(saved.player.coins,coins);
+  // Back before the arrival: the time away is replayed, the alert is withdrawn and the trip goes on.
+  a.game.journey.away-=1500;a.game.journey.arrival-=1500;hidden(false);raf(5040);
+  assert.equal(a.state,'playing');assert.equal(a.game.journey.away,undefined);assert.ok(a.game.journey.elapsed>=elapsed+1.5);assert.equal(last().action,'cancel');assert.equal($('worldJourney').hidden,false);
+  // A journey saved while hidden resumes from a cold restart.
+  w.dispatchEvent(new w.Event('pagehide'));assert.equal(a.state,'playing');assert.ok(Number.isFinite(a.game.journey.away));
+  a.showTitle();raf(5100);assert.equal($('worldJourney').hidden,true);click('menuLoad');assert.equal(a.game.journey.away,undefined);raf(5130);assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
+  // Away past the announced arrival: the trip ends and the game waits paused.
+  hidden(true);w.document.dispatchEvent(new w.Event('visibilitychange'));assert.equal(last().action,'schedule');const trip=a.game.journey,final={...trip.outcome};trip.away-=3600000;trip.arrival-=3600000;hidden(false);raf(5170);
+  assert.equal(a.game.journey,null);assert.equal(a.state,'paused');assert.equal($('worldJourney').hidden,true);assert.match($('overlayText').textContent,/pendant ton absence/);assert.ok($('overlayText').textContent.includes(final.place));assert.equal($('overlayLabel').textContent,final.arrived?'ARRIVÉ À DESTINATION':'VOYAGE INTERROMPU');assert.equal(last().action,'cancel');
+  assert.equal(JSON.parse(w.localStorage.getItem('conan-serpent-v1')).atlas.journey,null);click('start');raf(5210);assert.equal(a.state,'playing');
   const pinch=new w.Event('gesturestart',{cancelable:true});w.document.dispatchEvent(pinch);assert.equal(pinch.defaultPrevented,true);
   const wheel=new w.WheelEvent('wheel',{ctrlKey:true,cancelable:true});w.document.dispatchEvent(wheel);assert.equal(wheel.defaultPrevented,true);
   assert.deepEqual(errors,[]);

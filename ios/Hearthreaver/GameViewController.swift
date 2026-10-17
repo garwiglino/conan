@@ -57,6 +57,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
             WKUserScript(source: saves.bootstrapScript(), injectionTime: .atDocumentStart, forMainFrameOnly: true))
         config.userContentController.add(saves, name: SaveMirror.channel)
         config.userContentController.add(GameHaptics(), name: "hearthreaverHaptics")
+        config.userContentController.add(TravelNotifications(), name: TravelNotifications.channel)
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.isOpaque = false
@@ -114,8 +115,17 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     }
 
     /// Déclenche l'enregistrement de la partie par le jeu lui-même (même fonction que lors de la fermeture d'une page web).
+    /// Pendant un voyage, le jeu programme aussi la notification d'arrivée : un court sursis en arrière-plan lui en laisse le temps.
     func saveNow() {
-        webView?.evaluateJavaScript("window.dispatchEvent(new Event('hearthreaver-suspend'));true", completionHandler: nil)
+        guard let webView else { return }
+        var task = UIBackgroundTaskIdentifier.invalid
+        let finish = {
+            guard task != .invalid else { return }
+            UIApplication.shared.endBackgroundTask(task)
+            task = .invalid
+        }
+        task = UIApplication.shared.beginBackgroundTask(withName: "hearthreaver-suspend", expirationHandler: finish)
+        webView.evaluateJavaScript("window.dispatchEvent(new Event('hearthreaver-suspend'));true") { _, _ in finish() }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

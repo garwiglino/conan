@@ -10,6 +10,7 @@ Une app iOS native en Swift qui contient **le jeu exact** : le fichier HTML du d
 - La sauvegarde est copiée dans un fichier de l'app, en plus du stockage web.
 - Des vibrations natives discrètes, désactivables dans Options, pour les validations, dégâts, parades réussies et récompenses.
 - Le jeu enregistre la partie quand l'app passe en arrière-plan.
+- Un voyage continue en arrière-plan ; une notification « Arrivé à destination » prévient de l'arrivée, et le jeu attend en pause.
 - Si iOS libère la mémoire, le jeu se recharge tout seul.
 
 ## Installer sur ton iPhone
@@ -35,8 +36,10 @@ Xcode n'est nécessaire que pour réinstaller l'app (tous les 7 jours avec un co
 
 Le nouveau menu et le nom Hearthreaver dans le jeu arrivent par cette mise à jour après publication. Le nom sous l'icône iOS et l'icône elle-même appartiennent à l'app native : reconstruis-la depuis les sources fournies pour les changer, en conservant le même identifiant pour retrouver ta sauvegarde.
 
-Le projet, la cible, le schéma partagé et le produit s'appellent **Hearthreaver** (version 1.3, build 4). L'icône H/R rouge et or avec son épée est incluse dans `Hearthreaver/Assets.xcassets`. Ouvre le nouveau projet et sélectionne le schéma **Hearthreaver**. Conserve exactement le Bundle Identifier et la Team de ta précédente installation si tu les avais personnalisés ; installe cette version par-dessus, sans désinstaller l'app.
+Le projet, la cible, le schéma partagé et le produit s'appellent **Hearthreaver** (version 1.4, build 5). L'icône H/R rouge et or avec son épée est incluse dans `Hearthreaver/Assets.xcassets`. Ouvre le nouveau projet et sélectionne le schéma **Hearthreaver**. Conserve exactement le Bundle Identifier et la Team de ta précédente installation si tu les avais personnalisés ; installe cette version par-dessus, sans désinstaller l'app.
 
 Le verrouillage natif en paysage nécessite lui aussi cette réinstallation depuis Xcode. Une ancienne installation reçoit immédiatement le menu adapté et la protection contre le jeu en portrait via la mise à jour web, mais ses orientations système restent celles de son ancien binaire.
 
 Les vibrations natives sont nouvelles dans la version 1.3 (build 4). Réinstalle cette version depuis Xcode par-dessus l’app existante, avec le même Bundle Identifier et la même Team. Le menu, le suivi des quêtes et les sons MIDI arrivent par la mise à jour automatique ; le relais haptique Swift nécessite cette réinstallation. Le simulateur permet de vérifier la compilation et les menus, mais seul un iPhone compatible permet de sentir les vibrations.
+
+Les notifications de voyage sont nouvelles dans la version 1.4 (build 5). Réinstalle cette version depuis Xcode par-dessus l'app existante, avec le même Bundle Identifier et la même Team. Au premier départ en voyage, iOS demande l'autorisation d'envoyer des notifications. Ensuite, quitter l'app pendant un voyage programme une notification locale à l'heure d'arrivée prévue : « Arrivé à destination », ou « Voyage interrompu » si le transport s'arrête avant (passage menacé ou fermé). Revenir dans l'app avant l'heure annule la notification et le voyage reprend là où il en est. Aucune capacité supplémentaire n'est à activer dans Xcode : les notifications locales n'utilisent pas le service Push. Le rattrapage du voyage et la pause à l'arrivée arrivent aussi par la mise à jour automatique, mais sans cette réinstallation l'ancienne app ne peut pas afficher la notification. Pour tester dans le simulateur, pars en voyage, reviens à l'écran d'accueil et attends la bannière.

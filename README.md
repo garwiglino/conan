@@ -34,6 +34,10 @@ combos et de leurs smears. Les quatre directions et le rendu en JavaScript
 préservent les mêmes dimensions que les batraciens. Voir [la réalisation et
 ses tests](docs/kaldor-art.md) et [l'atelier interactif](art/kaldor-preview.html).
 
+## Voyages en arrière-plan
+
+Un voyage en cheval, charrette ou bateau continue quand on change d'app ou d'onglet. Il suit l'heure réelle : au retour, le temps passé ailleurs est rattrapé. Si le voyage s'est terminé pendant l'absence, Kaldor est à destination et **le jeu est en pause**, avec la raison de l'arrêt. Sur iPhone, l'app programme une notification **« Arrivé à destination »** à l'heure prévue ; un voyage stoppé en route (passage menacé ou fermé) annonce « Voyage interrompu » et l'étape où Kaldor attend. L'autorisation est demandée au premier départ. Dans un navigateur, le premier départ propose aussi les notifications du site ; sans autorisation (ou depuis l'écran d'accueil d'un iPhone), seule la pause au retour s'applique. **Les notifications iOS demandent une réinstallation depuis Xcode (version 1.4, build 5)** ; sans elle, le voyage continue tout de même et le jeu se met en pause au retour.
+
 ## Quêtes et repos
 
 Le suivi conserve une flèche or pour la quête principale et une seule quête secondaire suivie, indiquée en bleu. Accepter une autre quête ne remplace pas celle suivie. Dès que son objectif est rempli, la quête sort du petit encart et le suivi passe à la prochaine quête inachevée dans l’ordre d’acceptation (puis revient aux plus anciennes s’il n’en reste aucune après). Le joueur peut choisir une autre quête dans le journal ou arrêter le suivi. Les anciennes sauvegardes avec plusieurs quêtes suivies sont normalisées sans perte de progression.
@@ -79,7 +83,7 @@ La musique du titre démarre dès l’introduction et continue sans redémarrer 
 - `scripts/title-art.lua` reconstruit les dessins dans Aseprite ; `npm run build:title-theme` reconstruit le MIDI et sa partition JSON ; `npm run embed:title` intègre le tout dans les versions web et iOS hors ligne.
 - Les identifiants techniques historiques de stockage, d'origine iOS et de dépôt restent stables pour préserver les sauvegardes et les mises à jour des installations existantes.
 - [Archive iOS](Hearthreaver-iOS.zip) : sources natives, nouvelles icônes et jeu hors ligne synchronisé.
-- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.3 (build 4). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
+- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.4 (build 5). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
 
 ## Crédits
 - Polices : [Alagard](https://www.dafont.com/alagard.font) (Hewett Tsoi) · [Pixel Operator](https://www.dafont.com/pixel-operator.font) (Jayvee Enaguas, CC0)
