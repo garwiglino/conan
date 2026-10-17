@@ -24,6 +24,7 @@ edit('index.html',[
  ["for(const fx of g.bloodFX)if(g.sameLevel(fx,p))drawBloodFX(c,fx);","this.drawBatracienMissiles();for(const fx of g.bloodFX)if(g.sameLevel(fx,p))drawBloodFX(c,fx);"]
 ]);
 cp.execFileSync(process.execPath,['scripts/embed-world.cjs'],{cwd:root,stdio:'inherit'});
+cp.execFileSync(process.execPath,['scripts/embed-kaldor.cjs'],{cwd:root,stdio:'inherit'});
 const sources=['sprites/batraciens/base/batracien-v2.js','sprites/batraciens/base/batracienne-v2.js','sprites/batraciens/sources/renderer.template.js','sprites/batraciens/sources/activities.cjs','sprites/batraciens/sources/palettes.json','sprites/batraciens/batraciens-complet.js','sprites/batraciens/batraciens-combattants.js','scripts/batraciens-runtime.js','scripts/batraciens-society.js','data/batraciens/communities.json'];
 const hashes=Object.fromEntries(sources.map(f=>[f,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex')]));
 fs.writeFileSync(path.join(root,'data/batraciens/build-manifest.json'),JSON.stringify({version:1,cell:[80,80],anchor:[40,52],sources:hashes},null,2)+'\n');
