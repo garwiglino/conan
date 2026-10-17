@@ -1,69 +1,93 @@
-# Kaldor v3 — barbare à cheveux longs, locomotion stable, épée dans le dos
+# Kaldor v5 — barbare chibi au style Game Boy des batraciens
 
 Les sprites du joueur sont **entièrement construits en JavaScript** dans
-`sprites/kaldor/kaldor-art.js`. Chaque dessin est un assemblage de pixels RGBA
-opaques dans un cadre **80 × 80**, avec ancre des pieds **(40, 52)**, contour
-sombre et éclairage supérieur gauche, cohérent avec les personnages batraciens.
+`sprites/kaldor/kaldor-art.js`. Kaldor suit la même grammaire que les
+batraciens : de petites grilles où **un caractère vaut un pixel**, un contour
+sombre, la lumière en haut à gauche, une palette courte et une animation
+minimaliste par décalages entiers d'un pixel. Case moteur **80 × 80**, pieds en
+**(40, 52)**, alpha binaire, aucun lissage, aucune image chargée.
 
-## Personnage et animations
+## Le personnage
 
-- Kaldor conserve son apparence humaine adulte, sa peau bronzée, ses tenues de
-  cuir et sa grosse épée à deux mains. Sa chevelure noire descend désormais sur
-  les épaules et les omoplates, avec des mèches et des reflets distincts selon
-  les directions : dos (0), droite (1), face (2), gauche (3).
-- **Locomotion :** six positions de jambes avec pas alternés et genoux fléchis,
-  bras en contre-mouvement lorsque la lame est rangée. La tête reste fixe par
-  rapport au sol pendant la marche, tandis que les extrémités des cheveux
-  suivent une petite inertie ; les pieds conservent leur ancrage moteur.
-- **Attaques :** quatre combos avec six poses chacun, mêmes trajectoires
-  dessinées, interpolation de smear entre les poses et les deux mains à la
-  garde. Aucun changement des durées `COMBO_TIMES`, de la pause d'impact, du
-  dash, du verrouillage, des parades et de l'enchaînement des coups.
-- **Lame raccourcie** d'environ 7,3 % par rapport au rendu précédent : facteur
-  partagé `1.02` au lieu de `1.10` dans la fonction moteur `swordPose()` ; le
-  balayage physique `bladeHits()` et la projection des smears restent alignés.
+Quatre dessins de **28 lignes**, relevés case par case sur les grilles de
+référence et validés vue par vue : dos (0), droite (1), face (2), gauche (3).
+L'image de repos épée rangée reproduit ces planches pixel pour pixel (seuls
+quelques pixels de contour sont ajoutés là où une pièce mobile découvre un bord).
 
-## Rengainage automatique dans le dos
+- Grosse tête chibi : crinière brune en mèches, visage orangé, yeux carrés
+  sous des sourcils froncés, moustache et barbe sombres.
+- De profil, **aucun nez** : la ligne du front descend droit jusqu'à la barbe
+  et rien ne dépasse cette limite, des deux côtés. Ventre plat, sourcil
+  visible, oreille simple, pieds étroits.
+- Épaulières de fourrure crème, gilet de cuir, ceinture à boucle dorée, bras
+  nus aux brassards de cuir et gros poings, bottes à semelle claire.
+- Épée rangée : la poignée dépasse derrière l'épaule de profil et de dos, et
+  reste cachée par la tête de face.
 
-Le lecteur du héros suit un **état visuel éphémère** `kaldorWeapon` utilisant
-le temps simulé du jeu, sans modifier les sauvegardes ni retarder les attaques :
+Les grilles sont découpées en pièces (tête, tronc, bras, jambes). Les poses
+déplacent ces pièces d'un pixel ; seuls l'épée, les bras d'action, les jambes
+de profil et les smears sont tracés à la volée. Une finition repose le contour
+de chaque bord découvert et bouche les petits trous (les smears tramés restent
+ajourés).
 
-1. Après **3,7 s sans nouvelle attaque ni posture de garde**, l'épée commence
-   une transition de **0,33 s** vers le dos.
-2. Si le héros est en mouvement, sa marche conserve sa propre phase ; les six
-   étapes de rangement sont croisées avec les six images de marche (36 variantes
-   mises en cache), sans arrêter ni glisser les pieds.
-3. À l'arrêt, l'épée reste en diagonale dans un fourreau dans le dos et les
-   mains retombent au repos ; en mouvement, les bras balancent naturellement.
-4. Une attaque, y compris pendant le rangement, remet **immédiatement** l'épée
-   en main sans toucher aux délais de combo. La garde la dégaine visuellement
-   en 0,21 s ; le mécanisme défensif existant n'est pas retardé.
-5. Les blessures, interactions, saisies et situations où le héros est jeté
-   conservent la priorité de leur animation. Le timer repart après une attaque.
+## Animations
 
-Le dessin de l'épée au dos et son fourreau sont faits en pixels JavaScript. Aucun
-atlas PNG pré-calculé n'est nécessaire au fonctionnement du jeu ; des captures
-sont fournies seulement pour vérification graphique.
+- **Repos :** respiration d'un pixel et clignement. La tête suit le corps avec
+  une image de retard (léger bobbing), sans trou au cou.
+- **Marche (6 images) :** rebond d'un pixel, bras en balancier. De face et de
+  dos, pieds joints qui se lèvent à tour de rôle ; de profil, petits pas de
+  chibi sous le corps, la jambe qui passe devant se lève d'un pixel.
+- **Épée droite à longueur fixe :** la lame visible mesure toujours
+  **16 pixels** de la main à la pointe, quel que soit l'angle. Elle est tracée
+  d'un seul segment pommeau → pointe, garde perpendiculaire : elle ne se plie
+  jamais et ne grandit pas pendant les attaques. Seul l'angle vient de
+  `swordPose()`.
+- **Deux mains :** dès qu'elle est sortie, les deux poings serrent la fusée.
+  Les bras sont à deux segments (épaule, coude, poing) et ne s'étirent jamais :
+  si un poing sort de portée, toute la poignée glisse vers le torse. Une lame
+  levée passe derrière la tête (mains derrière la nuque, pointe au-dessus du
+  crâne) ; de profil, une lame qui croiserait le visage recule ou descend.
+- **Combos (4 × 6 images) :** armé, frappe, suivi, retour en garde. Smear en
+  **éventail** entre la lame précédente et la lame actuelle, sur les images 2
+  et 3 seulement : bord clair, cœur doré, départ tramé, couvrant la moitié
+  extérieure de la lame. Un coup presque vertical (taille de dos) laisse deux
+  traits de vitesse. Les appuis s'écartent en fente et le buste plonge d'un
+  pixel à l'impact.
+- **Garde :** lame à deux mains en travers du corps, appuis écartés,
+  accroupi d'un pixel.
+- **Dash, blessure, utiliser, mêlée :** penché, recul avec yeux fermés, main
+  levée vers le torse, coup de poing armé puis lancé (l'épée pend alors dans
+  l'autre main).
 
-## Construction, isolation et tests
+Aucune durée `COMBO_TIMES`, pause d'impact, dash, verrouillage, parade ni
+balayage `bladeHits()` n'est modifié.
+
+## Rangement automatique dans le dos
+
+L'état visuel `kaldorWeapon` est inchangé (temps de jeu, sans effet sur les
+sauvegardes ni sur les attaques) :
+
+1. Après **3,7 s sans attaque ni garde**, l'épée se range en **0,33 s**
+   par-dessus l'épaule, même en marchant.
+2. Une attaque remet **immédiatement** l'épée en main ; la garde la dégaine en
+   **0,21 s**.
+3. Blessure, utilisation d'objet et mêlée gardent l'épée dans le dos si elle
+   y était déjà.
+
+## Construction et tests
 
 ```sh
 npm install
-npm run build:batraciens
-npm run build:kaldor
+npm run build:batraciens   # reconstruit aussi Kaldor
 node --test --test-concurrency=2 tests/*.test.cjs
 npm run package:ios
 ```
 
-Le constructeur Kaldor est idempotent et remplace uniquement le bloc de code
-`// BEGIN KALDOR JAVASCRIPT PIXEL ART` du HTML web, plus la sélection du type
-visuel `hero` dans `CharacterAtlas`. Les copies HTML web et iOS sont
-synchronisées. La source du moteur d'attaque reste inchangée, à l'exception du
-facteur d'échelle commun de l'épée. Aucune population, quête, faction ni
-apparence des autres PNJ n'est changée.
-
-L'atelier `art/kaldor-preview.html` donne accès aux quatre vues, aux poses
-individuelles, aux combos et à une démonstration du rangement debout/en marche.
-Les tests automatisés assurent le rendu, l'absence de rognage, le maintien des
-timings, les smears, le rengainage, la sauvegarde et la construction répétable.
+Le constructeur Kaldor est idempotent : il remplace seulement le bloc
+`// BEGIN KALDOR JAVASCRIPT PIXEL ART` du HTML web et iOS, l'aperçu
+`art/kaldor-preview.html` et `data/kaldor-manifest.json`. L'atelier donne les
+quatre vues, chaque pose, les combos et la démonstration du rangement.
+Les tests vérifient le rendu de chaque état (pixels opaques, aucun rognage),
+l'identité entre le peintre du jeu et le raster exporté, les smears, la marche
+avec rebond d'un pixel, le rangement et la reconstruction répétable.
 **Aucun test sur iPhone physique n'a été effectué.**

@@ -1,10 +1,16 @@
-/* Hearthreaver — Kaldor, long-haired barbarian hero, authored pixel art v3.
- * All pixels are drawn in JavaScript, without a bitmap dependency.
- * Drop-in for CharacterAtlas(kind='hero'); four independent facing silhouettes,
- * head/torso/leg/arm posing, four attack combos and world-aligned blade smears.
- * Player combat timing, hit/stun/guard/dash rules and animation momentum are
- * unchanged. Rendered blade and its actual collision sweep share one swordPose.
- * Native engine cell 80×80; feet at (40,52); no pixel rescaling or smoothing.
+/* Hearthreaver — Kaldor, long-haired barbarian hero, chibi pixel art v5.
+ * Même grammaire que les batraciens : petites grilles dessinées pixel par pixel,
+ * contour sombre, animation minimaliste par décalages entiers d'un pixel.
+ * Quatre vues de 28 lignes reprises des planches à grille validées (face, profil,
+ * dos ; le profil gauche est le profil droit retourné). Repères de hauteur communs :
+ * sourcils 9, yeux 10, épaulières 13, menton 16, bras 17, brassards 19, ceinture 20,
+ * poings 21, cuisses 23, bottes 25, semelle 27.
+ * L'épée, les bras d'action et les smears sont tracés en JavaScript à partir de la
+ * pose moteur swordPose() : la lame en garde l'angle, mais sa longueur visible reste
+ * fixe et elle est tracée d'un seul segment, donc toujours droite. Épée à deux mains,
+ * tenue à deux mains dès qu'elle est sortie ; bras courts jamais étirés.
+ * Case moteur 80 × 80, pieds en (40,52) ; aucun lissage, aucune image chargée.
+ * Les durées de combo, le dash, la garde, les parades et les dégâts ne changent pas.
  */
 (function(root,factory){
  'use strict';
@@ -18,351 +24,446 @@
  const STATES=Object.freeze({idle:4,walk:6,attack:6,guard:6,dash:4,hurt:4,use:6,melee:6,
    sheathe:6,sheathe_walk:36,sheathed_idle:4,sheathed_walk:6,sheathed_dash:4,sheathed_hurt:4,sheathed_use:6,sheathed_melee:6,draw:5,draw_walk:30});
  const HOLSTER=Object.freeze({delay:3.7,stow:0.33,draw:0.21});
+ /** O contour et yeux ; k j h H q Q s cheveux, barbe et cuir ; S m a p peau ;
+  *  g f F G fourrure et laiton ; 1 2 3 4 acier ; e E W traînée (smear). */
  const PALETTE=Object.freeze({
-  '.':null, O:'#100e20',K:'#282431',n:'#383649',H:'#53566d',L:'#74768b',
-  s:'#75452d',m:'#ac663d',a:'#d28b56',h:'#e8ab71',i:'#f3c994',
-  t:'#4e332a',u:'#785038',U:'#a27550',
-  v:'#652f30',r:'#93463a',R:'#bd6751',
-  f:'#8b612f',F:'#bb8d45',Y:'#e2b55f',Z:'#f4d287',
-  1:'#3b4551',2:'#728396',3:'#aab9c8',4:'#e8edf0',
-  e:'#66899e',E:'#c8dce5'
+  O:'#0b0a17',
+  k:'#251920',j:'#3a272d',h:'#4d3030',H:'#5e3933',q:'#7b4d3c',Q:'#8f5a3f',s:'#a66947',
+  S:'#c96f40',m:'#dc864f',a:'#f0a868',p:'#fec17f',
+  g:'#dfaf70',f:'#fcda9c',F:'#feeebe',G:'#eec27c',
+  1:'#3b4551',2:'#728396',3:'#b4c0c8',4:'#eef0ea',
+  e:'#c49a5c',E:'#f2dc9c',W:'#fff5da'
  });
- // Carefully painted 16/18-pixel silhouettes; each view has its own lighting.
- // Head is at -21..-12; torso -12..-6; legs -6..0.
- const PARTS={
-  face:{
-   head:[
-    '.....OOOOOO.....',
-    '...OOKKKKKKOO...',
-    '..OKKHKKKKKKKO..',
-    '.OKHnnnKnnnnKO..',
-    'OKnKOhOOOOhOKKO.',
-    'OKnOmhOaOhaOnKO.',
-    'OKKmahmmhmmhKKO.',
-    '.OKmahhimhaaKO..',
-    '..OKmaaaaamKO...',
-    '...OOKOOOOOKO...'
-   
-   ],
-   chest:[
-    '....OaahiiaO....',
-    '..OmahhiihhaamO.',
-    '.OmahhhaUahhhaO.',
-    '.OmahmmuUhhhaaO.',
-    '..OmmhmaRamahmO.',
-    '...OaamrrmaO....',
-    '....OuuUUuO.....'
-   ],
-   waist:[
-    '.....OtUtO......',
-    '....OYYFYFO.....',
-    '....OFRRfO......'
-   ]
-  },
-  dos:{
-   head:[
-    '.....OOOOOO.....',
-    '...OOKKKKKKOO...',
-    '..OKKHKKKKKKKO..',
-    '.OKHnnnnnKKKHO..',
-    'OKnKKKKKKKKKnnO.',
-    'OKnKKKHHKKKKnnO.',
-    'OKnKKKnnKKKKnnO.',
-    '.OKnKKKnnKKKnO..',
-    '..OKnKKKnnKKO...',
-    '...OOKOOOOOKO...'
-   
-   ],
-   chest:[
-    '....OaahmhaO....',
-    '..OmmhaaUhhammO.',
-    '.OmmhaaUhhammO..',
-    '.OmmhaaUhhammO..',
-    '..OmmmaUammmO...',
-    '...OummrmmmO....',
-    '....OuuUuuO.....'
-   ],
-   waist:[
-    '.....OtUtO......',
-    '....OffffFO.....',
-    '....OFRRfO......'
-   ]
-  },
-  droite:{
-   head:[
-    '....OOOOOO......',
-    '..OOKKKKKKOO....',
-    '.OKHnKKKKKKKO...',
-    'OKHnnnKKKKKKO...',
-    'OKnKKKKKOOhhKO..',
-    'OKnKKKKOahhKO...',
-    'OKnKKKmahhiOO...',
-    '.OKnnmahhaaaO...',
-    '..OKnmaaaaO.....',
-    '...OOKOOOOO.....'
-   
-   ],
-   chest:[
-    '.....OaahhO.....',
-    '...OmaahhhaO....',
-    '...OmahUhhhO....',
-    '....OmhUahhO....',
-    '....OmmRhmO.....',
-    '.....OmrrmO.....',
-    '.....OuUUuO.....'
-   ],
-   waist:[
-    '.....OtUtO......',
-    '.....OYFfO......',
-    '.....OFRfO......'
-   ]
-  },
-  gauche:{
-   head:[
-    '......OOOOOO....',
-    '....OOKKKKKKOO..',
-    '...OKKKKKKKnKO..',
-    '...OKKKKKKnnnHO.',
-    '..OKhhOOKKKKKnO.',
-    '...OKhmOaOKKKnO.',
-    '..OOihhamKKKKnO.',
-    '...OaaahmmKKnO..',
-    '.....OaaaamKnO..',
-    '.....OOOOOKOO...'
-   
-   ],
-   chest:[
-    '.....OahhmO.....',
-    '....OahhhamO....',
-    '....OahhUhmO....',
-    '....OhhaUhmO....',
-    '.....OmmRmmO....',
-    '.....OmrrmO.....',
-    '.....OuUUuO.....'
-   ],
-   waist:[
-    '......OtUtO.....',
-    '......OfFYO.....',
-    '......OfRFO.....'
-   ]
-  }
- };
- // Sprite-painted boots/legs, at offsets relative to foot (0,0), not a moving anchor.
- const FEET={
-  face:[[-5,0],[5,-1]],dos:[[-4,0],[4,-1]],
-  droite:[[0,0],[3,-1]],gauche:[[-3,-1],[0,0]]
- };
- function assert(cond,msg){if(!cond)throw new Error('Kaldor Art: '+msg);}
- for(const [view,groups] of Object.entries(PARTS))for(const [part,rows]of Object.entries(groups)){
-  const width=rows[0].length;
-  for(const row of rows){assert(row.length===width,view+'/'+part+' row '+row.length+' ≠ '+width);
-   for(const key of row)assert(Object.hasOwn(PALETTE,key),view+'/'+part+' invalid pixel '+key);
-  }
- }
- const coord=(x,y)=>Math.round(x)+','+Math.round(y);
- function put(map,x,y,key){if(key!=='.'&&Object.hasOwn(PALETTE,key))map.set(coord(x,y),key);}
- function stamp(map,rows,x,y){rows.forEach((r,j)=>{for(let i=0;i<r.length;i++)put(map,x+i,y+j,r[i]);});}
- function border(layer){const outline=new Map();for(const [at,k] of layer){const [x,y]=at.split(',').map(Number); for(const [dx,dy]of [[-1,0],[0,-1],[1,0],[0,1]]){const n=coord(x+dx,y+dy);if(!layer.has(n))outline.set(n,'O');}}
-  return outline;}
- function merge(target,layer,outline=false){if(outline)for(const [p,k]of border(layer))target.set(p,k);for(const [p,k]of layer)target.set(p,k);}
- function pixelLine(map,a,b,key,thickness=1){const steps=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*3);for(let i=0;i<=steps;i++){const t=i/Math.max(steps,1),x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t);for(let j=0;j<thickness;j++)put(map,x+(j===0?0:1),y+(j===2?1:0),key);}}
- function limb(target,a,b,shade){const layer=new Map();pixelLine(layer,a,b,shade,2);merge(target,layer,true);}
- function fist(target,at,shade){const layer=new Map(),x=Math.round(at[0]),y=Math.round(at[1]);for(let yy=0;yy<2;yy++)for(let xx=0;xx<3;xx++)put(layer,x+xx-1,y+yy-1,xx===2||yy===1?'m':shade);merge(target,layer,true);}
- function shift(map,dx,dy){if(!dx&&!dy)return map;const next=new Map();for(const [p,c]of map){const [x,y]=p.split(',').map(Number);next.set(coord(x+dx,y+dy),c);}return next;}
- function feet(target,dir,state,f){
-   const move=state==='walk',dash=state==='dash',guard=state==='guard',atk=state==='attack',lunge=atk&&f>=2&&f<=4;
-   const facing=dir===1?1:dir===3?-1:0;
-   const stride=move?[0,2,3,0,-2,-3][f%6]:dash?2:lunge?1:0;
-   const bases=FEET[DIRECTIONS[dir]],layer=new Map();
-   bases.forEach(([bx,by],i)=>{
-     const x=bx+stride*(i===0?1:-1)*(facing||1),lift=move?[0,0,2,0,0,2][(f+(i?3:0))%6]:0;
-     const y=by-lift;
-     // Knee articulation carries the gait. Head/torso heights never oscillate.
-     const kneeX=Math.round((x+bx)/2)+(dir===1?-1:dir===3?1:i===0?1:-1),kneeY=-5+(move&&lift?1:0);
-     pixelLine(layer,[i?2:-2,-5],[kneeX,kneeY],i===0?'u':'t',2);
-     pixelLine(layer,[kneeX,kneeY],[x,-2+y],i===0?'u':'t',2);
-     for(let k=-1;k<=1;k++)put(layer,x+k,-3+y,k===-1?'u':'f');
-     for(let k=-2;k<=2;k++)put(layer,x+k,y,k===-2?'O':k>=1?'t':'u');
-     put(layer,x-2,y,'O');put(layer,x+2,y,'O');
-   });
-   merge(target,layer,true);
- }
- // Weight shifts at the hips, never by bouncing the neck/skull. Shoulder recovery
- // is tiny; foot lift and hair tips communicate motion instead of bobbing eyes.
- function offsets(state,f,combo,dir){
-   const attack=state==='attack',anticipation=attack?[0,-1,-1,0,0,0][f%6]:0;
-   const hurt=state==='hurt'&&f<2?1:0;
-   const impact=attack&&combo===3&&[3,4].includes(f)?1:0;
-   const lunge=attack&&f>=2&&f<=4;
-   const push=(dir===1?1:dir===3?-1:0)*(lunge?1:0);
-   const twist=state==='walk'?[0,0,1,0,0,-1][f%6]:0;
-   return {torsoX:push+twist,torsoY:impact+hurt,
-    headX:push+(state==='hurt'&&f===1?(dir===3?-1:1):0),
-    headY:impact+hurt+anticipation+(attack&&f>=3&&f<=4?1:0)};
- }
- function drawTorso(target,dir,o,state,f){const part=PARTS[DIRECTIONS[dir]],tmp=new Map();stamp(tmp,part.chest,-Math.floor(part.chest[0].length/2)+o.torsoX,-12+o.torsoY);stamp(tmp,part.waist,-Math.floor(part.waist[0].length/2)+o.torsoX,-5+o.torsoY);
-   if(state==='walk'&&f===3)put(tmp,-3+o.torsoX,-9+o.torsoY,'h');
-   merge(target,tmp,false);
- }
- // Thick, irregular, shoulder-length hair designed individually for each view.
- // Animated ends lag behind the stride and the blow while skull pixels stay put.
- const HAIR={
+ const mirror=rows=>rows.map(r=>[...r].reverse().join(''));
+ // Planches validées, sans la poignée de l'épée rangée (elle est posée par-dessus quand
+ // l'épée est au fourreau). Dernière ligne = semelle (y = 0).
+ const DROITE=[
+  '.........OOOOOO......',
+  '.......OOhqQQqHOO....',
+  '......OhqQssQqqHqO...',
+  '.....OhqQqsQqHqqHqO..',
+  '....OjhqqHqQqHqQqHqO.',
+  '....OjhHqhqqHqqHqqhO.',
+  '....OjhHqhHqHhqHqhHO.',
+  '....OjhHhqHhqHhqkSmO.',
+  '....OjhHqhHqHhmmappO.',
+  '.....OhHqhHqhmajjjpO.',
+  '....OjhHqhpajmappOpO.',
+  '....OjhHqhaSjSmapOpO.',
+  '.....OhHhjmjjHmahHjO.',
+  '.....OgFFFgOjHqhHjaO.',
+  '.....OgFFFgOjhHqjqHO.',
+  '.....OgFfFFgOkjjjjjO.',
+  '....OgfFFgOOOOOOOOO..',
+  '.....OhOSmmaOmSO.....',
+  '.....OhOSppaOpSO.....',
+  '.....OhOjHHqOSSO.....',
+  '.....OOOhHqHOOFO.....',
+  '.....OqOSpppOqFO.....',
+  '.....OOOSmpSOOGO.....',
+  '......OOOOOOSqO......',
+  '........OmppOO.......',
+  '........OHqHqO.......',
+  '........OSSpSaO......',
+  '........OOOOOOO......'
+ ];
+ const VIEWS={
   face:[
-   [[-7,-17],[-8,-12],[-8,-7]],[[-5,-16],[-7,-10],[-6,-6]],
-   [[7,-17],[8,-12],[8,-8]],[[5,-16],[7,-10],[6,-6]]
+   '........OOOOOO.......',
+   '......OOHqOqqhOO.....',
+   '.....OjHqqhqQqHHO....',
+   '....OqqHsqhHqsqqjO...',
+   '...OjqqsQqhqHQqqjO...',
+   '..OHsqHqjqhHjqhqsHO..',
+   '..OhhqjqOOhOOHkHHhO..',
+   '...OhjOhOmmmmhOjhhO..',
+   '.OOjhkmmapppammOhjhO.',
+   '.OhhOmjjjpppjjjmhOhO.',
+   '..OmOmpOOpppOOpmOmO..',
+   '.OOakmpOOpppOOpmkaOO.',
+   '..OSjkpaHjjjHapkjSO..',
+   '.OFgOjHqjaaajqHjOgFFO',
+   '.OFFgOjhHqjqHhjOgFFO.',
+   'OFfFFfOkjjjjjOOgFFfFO',
+   'OFHFFFfkOOOOOHfFFgOgO',
+   '.OmSOFgHjHmmjHgFfSmO.',
+   '.OppSOSpSjHFgHSHOSppO',
+   'OqHHjOSmSkHkSmSOjHHqO',
+   'OHqHjOOOOFFFOOOOjHqHO',
+   'OSpppOhqQFqFQqhOpppSO',
+   'OSmpSOOOOGGGOOOOSpmSO',
+   '.OOOOSmmSqqqSmmSOOOO.',
+   '....OpppSOOOSpppO....',
+   '...OHqHpSO.OSpHqHO...',
+   '..OqSSpSHO.OHSSpSqO..',
+   '..OOOOOOOO.OOOOOOOO..'
   ],
+  droite:DROITE,
   dos:[
-   [[-6,-18],[-7,-13],[-7,-7]],[[-4,-18],[-5,-11],[-5,-5]],
-   [[-1,-18],[-2,-11],[-1,-6]],[[2,-18],[3,-11],[2,-5]],
-   [[5,-18],[6,-12],[7,-7]]
+   '........OOOOOO........',
+   '......OOHqhHqHOO......',
+   '.....OjHqQHhqQHhO.....',
+   '....OhHqQsHqQsqHjO....',
+   '...OjHqQsqHqQsqHhO....',
+   '..OjHqHqhqHqhqHqHjO...',
+   '..OhHqhHqjHqjHqhHhO...',
+   '...OjhHqjHqhHqjHhjO...',
+   '.OOjhHjqHhjqHjqHhjhO..',
+   '.OhhjHjqHjhqHjqHjOhO..',
+   '..OmOjHjqHjhqHjhOmO...',
+   '.OOakjHjqHjqHjqjkaOO..',
+   '..OSjkHjqHjqHjhkjSO...',
+   '.OFgOjHjqHjqHjhjOgFFO.',
+   '.OFFgOjHjqHjqHjOgFFO..',
+   'OFfFFfOjHjqHjOOgFFfFO.',
+   'OFHFFFfOjOjOjOfFFgOgO.',
+   '.OmSOFgFfFfFfFSsqSmO..',
+   '.OppSOqHqHqHSsqHOSppO.',
+   'OqHHjOHqHqHSsqHOjHHqO.',
+   'OHqHjOOOOSsqOOOOjHqHO.',
+   'OSpppOhqSsqqQqhOpppSO.',
+   'OSmpSOSsqOOOOOOOSpmSO.',
+   '.OOOOSmmSqQqSmmSOOOO..',
+   '....OmppSOOOSppmO.....',
+   '...OHqHqHO.OHqHqHO....',
+   '..OqSSpSHO.OHSpSSqO...',
+   '..OOOOOOOO.OOOOOOOO...'
   ],
-  droite:[
-   [[-7,-18],[-8,-13],[-7,-7]],[[-5,-17],[-6,-11],[-5,-5]],
-   [[-3,-17],[-4,-12],[-4,-7]],[[5,-15],[6,-12],[6,-10]]
-  ],
-  gauche:[
-   [[7,-18],[8,-13],[8,-7]],[[5,-17],[6,-11],[5,-5]],
-   [[3,-17],[4,-12],[4,-7]],[[-5,-15],[-6,-12],[-6,-10]]
-  ]
+  gauche:mirror(DROITE)
  };
- function drawLongHair(target,dir,o,state,f){
-   const rear=DIRECTIONS[dir]==='dos',move=state==='walk',att=state==='attack';
-   const tipMotion=move?[0,0,1,1,0,-1][f%6]:att?[0,-1,-1,0,1,1][f%6]:state==='idle'?[0,1,0,-1][f%4]:0;
-   const leftLit=dir===2||dir===0||dir===3;
-   const layer=new Map();
-   for(let i=0;i<HAIR[DIRECTIONS[dir]].length;i++){
-     const [a,b,c]=HAIR[DIRECTIONS[dir]][i];
-     const sway=tipMotion*(i%2?1:-1),x=o.headX,y=o.headY;
-     const start=[a[0]+x,a[1]+y],mid=[b[0]+x,b[1]+y],end=[c[0]+x+sway,c[1]+y];
-     pixelLine(layer,start,mid,i%2?'n':'K',2);
-     pixelLine(layer,mid,end,i%2?'n':'K',2);
-     // Controlled one-pixel glints: never add non-palette anti-aliasing.
-     const shade=rear?(i%2?'H':'n'):(leftLit&&i%2===0?'H':'n');
-     pixelLine(layer,[start[0],start[1]+1],[mid[0],mid[1]],shade,1);
-     if(i%2===0)put(layer,end[0],end[1]-1,'K');
+ // Poignée de l'épée rangée sur le dos : [colonne, ligne, motif] dans la grille de la vue.
+ const HILT_DROITE=['..OO...','.OgF...','.OFg...','.Ogqs..','..Oqs..','...OkgO','..Ogg..','...Oq..'];
+ const HILT={droite:[0,9,HILT_DROITE],gauche:[14,9,mirror(HILT_DROITE)],
+  dos:[17,9,['...O.','..FgO','..gFO','OsqgO','OsqO.','gk...','Ogg..']],face:null};
+ // Colonne de l'axe du corps (x = 0) dans chaque grille ; dernière ligne = pieds.
+ const ORIGIN=Object.freeze({face:10,dos:10,droite:10,gauche:10});
+ const TOP=27;
+ function assert(cond,msg){if(!cond)throw new Error('Kaldor Art: '+msg);}
+ for(const [view,rows] of Object.entries(VIEWS)){
+  assert(rows.length===28,view+' doit compter 28 lignes');
+  const width=rows[0].length;
+  for(const row of rows){assert(row.length===width,view+' ligne '+row.length+' ≠ '+width);
+   for(const key of row)assert(key==='.'||Object.hasOwn(PALETTE,key),view+' pixel inconnu '+key);
+  }
+  Object.freeze(rows);
+ }
+ Object.freeze(VIEWS);
+
+ // --- Calques : Map clé entière -> couleur, coordonnées relatives aux pieds ---
+ const K=(x,y)=>((y+128)<<8)|(x+128), KX=k=>(k&255)-128, KY=k=>(k>>8)-128;
+ function put(layer,x,y,key){x=Math.round(x);y=Math.round(y);if(key&&key!=='.')layer.set(K(x,y),key);}
+ // Toujours une copie : les pièces sources ne sont jamais modifiées par un rendu.
+ function shift(layer,dx,dy){if(!dx&&!dy)return new Map(layer);const out=new Map();for(const [k,c] of layer)out.set(K(KX(k)+dx,KY(k)+dy),c);return out;}
+ const AROUND=[[1,0],[-1,0],[0,1],[0,-1]],HANGING=[[1,0],[-1,0],[0,1]],SOLE=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1]];
+ function border(layer,dirs=AROUND){const out=new Map();for(const k of layer.keys()){const x=KX(k),y=KY(k);
+   for(const [dx,dy] of dirs){const n=K(x+dx,y+dy);if(!layer.has(n))out.set(n,'O');}}return out;}
+ /** Pose un calque ; outline=true ajoute un contour d'un pixel, posé avant les couleurs. */
+ function over(target,layer,outline=false){if(outline)for(const [k,c] of border(layer,outline===true?AROUND:outline))target.set(k,c);for(const [k,c] of layer)target.set(k,c);return target;}
+ function sprite(view,[col,row,rows]){const layer=new Map();
+  rows.forEach((line,j)=>{for(let i=0;i<line.length;i++)put(layer,col+i-ORIGIN[view],row+j-TOP,line[i]);});return layer;}
+
+ // --- Découpage des vues en pièces articulées (sources inchangées) ---
+ const FRONTAL=v=>v==='face'||v==='dos';
+ function region(view,col,row){
+  if(FRONTAL(view)){
+   // Tête : cheveux, visage et barbe (de dos : les pointes de cheveux entre les épaulières).
+   if(row<=12)return 'head';
+   if(row===13&&col>=5&&col<=15)return 'head';
+   if(row===14&&col>=6&&col<=14)return 'head';
+   if(row===15&&col>=7&&col<=12)return 'head';
+   if(row===16&&col>=8&&col<=12)return 'head';
+   if(row===17&&col<=4)return 'armL';
+   if(row===17&&col>=17)return 'armR';
+   if(row>=18&&row<=22&&col<=5)return 'armL';
+   if(row===18&&col>=16)return 'armR';
+   if(row>=19&&row<=22&&col>=15)return 'armR';
+   if(row===23&&col<=4)return 'armL';
+   if(row===23&&col>=16)return 'armR';
+   if(row>=24)return col<=9?'legL':col>=11?'legR':'body';
+   return 'body';
+  }
+  const c=view==='droite'?col:20-col;
+  if(row<=12)return 'head';
+  if((row===13||row===14)&&c>=12)return 'head';
+  if(row===15&&c>=13)return 'head';
+  if(row===16&&c>=11)return 'head';
+  if(row>=17&&row<=22&&c>=7&&c<=12)return 'arm';
+  if(row===23&&c>=7&&c<=11)return 'arm';
+  if(row>=24)return 'legs';
+  return 'body';
+ }
+ const PARTS={};
+ for(const [view,rows] of Object.entries(VIEWS)){
+  const part={head:new Map(),body:new Map(),collar:new Map(),fur:new Map(),armL:new Map(),armR:new Map(),arm:new Map(),legL:new Map(),legR:new Map(),legs:new Map()};
+  rows.forEach((row,r)=>{for(let c=0;c<row.length;c++){const key=row[c];if(key==='.')continue;const where=region(view,c,r),k=K(c-ORIGIN[view],r-TOP);part[where].set(k,key);
+   // Col de fourrure autour de la tête : repeint par-dessus quand la tête s'abaisse d'un pixel.
+   if(where==='body'&&r<=16)part.collar.set(k,key);
+   // Épaulières : elles recouvrent le haut d'un bras d'action.
+   if(where==='body'&&r>=13&&r<=17&&'FfgG'.includes(key))part.fur.set(k,key);}});
+  PARTS[view]=part;
+ }
+ // Bras de profil sans son contour : cisaillé puis recerné, pour éviter les contours en escalier.
+ const ARM_FILL={};for(const view of ['droite','gauche'])ARM_FILL[view]=new Map([...PARTS[view].arm].filter(([,c])=>c!=='O'));
+ // Tronc peint sous le bras de profil (lignes 17 à 23) : invisible au repos, révélé quand le bras bouge.
+ const UNDER_DROITE=['jSSmma','hjSmap','SHjmaa','OOOOOO','hqQqqh','OOOOOO','SmmaaS'];
+ const UNDER_ARM={droite:[7,17,UNDER_DROITE],gauche:[8,17,mirror(UNDER_DROITE)]};
+ // Jambe de profil (botte vers l'avant), lignes 24 à 26 ; la jambe éloignée est assombrie.
+ const LEG_DROITE=['mpp..','HqHq.','SSpSa'];
+ const SIDE_LEG={droite:{x:-1,rows:LEG_DROITE},gauche:{x:-3,rows:mirror(LEG_DROITE)}};
+ const SHADE=Object.freeze({p:'a',a:'m',m:'S',S:'s',s:'q',Q:'q',q:'H',H:'h',h:'j',j:'k',k:'k',F:'f',f:'g',g:'Q',G:'g'});
+ // Yeux fermés (clignement, douleur) : le haut de l'œil devient peau, il reste un trait.
+ const LIDS={face:[[-3,-17,'p'],[-2,-17,'p'],[2,-17,'p'],[3,-17,'p']],dos:[],
+  droite:[[7,-17,'p']],gauche:[[-7,-17,'p']]};
+
+ // --- Tracés : lignes nettes et membres épais ---
+ function linePoints(ax,ay,bx,by){ax=Math.round(ax);ay=Math.round(ay);bx=Math.round(bx);by=Math.round(by);
+  const pts=[],dx=Math.abs(bx-ax),sx=ax<bx?1:-1,dy=-Math.abs(by-ay),sy=ay<by?1:-1;let err=dx+dy;
+  for(;;){pts.push([ax,ay]);if(ax===bx&&ay===by)break;const e=2*err;if(e>=dy){err+=dy;ax+=sx;}if(e<=dx){err+=dx;ay+=sy;}}
+  // « Pixel perfect » : supprime les coins en L qui épaississent les diagonales.
+  const out=[];for(let i=0;i<pts.length;i++){const a=out[out.length-1],b=pts[i],c=pts[i+1];
+   if(a&&c&&(a[0]===b[0]||a[1]===b[1])&&(c[0]===b[0]||c[1]===b[1])&&a[0]!==c[0]&&a[1]!==c[1])continue;out.push(b);}
+  return out;
+ }
+ const LIGHT=[-Math.SQRT1_2,-Math.SQRT1_2];
+ /** Membre de 3 pixels : bord éclairé, milieu, ombre ; brassard de cuir près du poing. */
+ function limb(layer,a,b,{bracer=true,dark=false}={}){
+  const vx=b[0]-a[0],vy=b[1]-a[1],len=Math.hypot(vx,vy);
+  const ux=len?vx/len:0,uy=len?vy/len:1,nx=-uy,ny=ux,lit=(nx*LIGHT[0]+ny*LIGHT[1])>=0?1:-1;
+  const minX=Math.floor(Math.min(a[0],b[0])-2),maxX=Math.ceil(Math.max(a[0],b[0])+2),minY=Math.floor(Math.min(a[1],b[1])-2),maxY=Math.ceil(Math.max(a[1],b[1])+2);
+  for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++){
+   const px=x-a[0],py=y-a[1],t=Math.max(0,Math.min(len,px*ux+py*uy)),cx=a[0]+ux*t,cy=a[1]+uy*t,d=(x-cx)*nx+(y-cy)*ny;
+   if(Math.hypot(x-cx,y-cy)>1.25)continue;
+   const side=d*lit,skin=side>.45?'p':side<-.45?'m':'a',leather=side>.45?'q':side<-.45?'j':'H';
+   let key=bracer&&t>len-3.6&&t<len-.9&&len>3?leather:skin;
+   if(dark)key=SHADE[key]||key;
+   put(layer,x,y,key);
+  }
+  return layer;
+ }
+ /** Bras d'action en deux segments : l'épaule, le coude (plié vers l'extérieur et vers le bas,
+ *  de profil vers l'arrière), puis l'avant-bras avec son brassard jusqu'au poing. */
+const BONES={face:[4,5],dos:[4,5],droite:[4,4],gauche:[4,4]};
+function arm(layer,view,which,s,h,dark=false){
+ const [U,F]=BONES[view],dx=h[0]-s[0],dy=h[1]-s[1],d=Math.hypot(dx,dy);
+ const out=FRONTAL(view)?(which==='L'?-1:1):(view==='droite'?-1:1);
+ let e;
+ if(d>=U+F-.01||d<.5)e=[s[0]+dx*U/(U+F),s[1]+dy*U/(U+F)];
+ else{const a=Math.acos(Math.max(-1,Math.min(1,(U*U+d*d-F*F)/(2*U*d)))),t=Math.atan2(dy,dx);
+  const c=[t+a,t-a].map(r=>[s[0]+Math.cos(r)*U,s[1]+Math.sin(r)*U]);
+  const score=p=>(p[0]-s[0])*out+(p[1]-s[1])*.6;
+  e=score(c[0])>=score(c[1])?c[0]:c[1];}
+ e=[Math.round(e[0]),Math.round(e[1])];
+ limb(layer,s,e,{bracer:false,dark});limb(layer,e,h,{dark});
+ return layer;
+}
+function fist(layer,at,dark=false){const x=Math.round(at[0]),y=Math.round(at[1]);
+  const keys=[['p','a'],['a','m']];
+  for(let j=0;j<2;j++)for(let i=0;i<2;i++){let k=keys[j][i];if(dark)k=SHADE[k];put(layer,x-1+i,y-1+j,k);}
+  return layer;
+ }
+ // Longueur visible de la lame, de la main à la pointe : identique au repos et en attaque.
+ const BLADE=16;
+ /** Épée : un seul segment du pommeau à la pointe (jamais coudé), garde perpendiculaire,
+  *  lame à biseau éclairé. g = main sur la fusée ; seule la direction de tip compte. */
+ function sword(layer,g,tip){
+  const vx=tip[0]-g[0],vy=tip[1]-g[1],l=Math.hypot(vx,vy)||1,ux=vx/l,uy=vy/l,nx=-uy,ny=ux;
+  const end=[g[0]+ux*BLADE,g[1]+uy*BLADE],line=linePoints(g[0]-ux*4,g[1]-uy*4,...end);
+  const along=([x,y])=>(x-g[0])*ux+(y-g[1])*uy;
+  const litN=(nx*LIGHT[0]+ny*LIGHT[1])>=0?1:-1;
+  const edge=Math.abs(nx)>Math.abs(ny)?[Math.sign(nx*litN),0]:[0,Math.sign(ny*litN)];
+  const blade=line.filter(p=>along(p)>=2.5);
+  for(const [x,y] of blade.slice(0,-1))put(layer,x+edge[0],y+edge[1],'4');
+  for(const p of line){const t=along(p);put(layer,p[0],p[1],t<-3.2?'G':t<1.5?((p[0]+p[1])&1?'h':'H'):t<2.5?'G':'3');}
+  const [tx,ty]=line[line.length-1];put(layer,tx,ty,'4');
+  // Garde : centrée sur le point du segment le plus proche de t = 2.
+  const gc=line.reduce((best,p)=>Math.abs(along(p)-2)<Math.abs(along(best)-2)?p:best,line[0]);
+  for(const n of [-2,-1,1,2])put(layer,gc[0]+nx*n,gc[1]+ny*n,Math.abs(n)===2?'g':'G');
+  return layer;
+ }
+ /** Contour de l'épée : autour de la lame et de la garde seulement ; la fusée tenue en main
+  *  n'en reçoit pas, pour ne pas noircir les poings. */
+ function drawSword(target,layer){const steel=new Map([...layer].filter(([,c])=>'34Gg'.includes(c)));
+  for(const [k,c] of border(steel))if(!layer.has(k))target.set(k,c);for(const [k,c] of layer)target.set(k,c);}
+ /** Traînée de lame : bande en arc entre deux poses, sous la pointe, jamais plus longue que
+  *  la lame. Bord extérieur clair, intérieur doré, départ tramé. */
+ function smear(layer,A,B){
+  const a0=Math.atan2(A.tip[1]-A.g[1],A.tip[0]-A.g[0]),a1=Math.atan2(B.tip[1]-B.g[1],B.tip[0]-B.g[0]);
+  let da=a1-a0;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;
+  const len=BLADE-.5,steps=Math.max(10,Math.ceil(Math.abs(da)*len*1.6)+Math.ceil(Math.hypot(B.g[0]-A.g[0],B.g[1]-A.g[1])*2));
+  const cells=new Map();
+  for(let i=0;i<=steps;i++){
+   const t=i/steps,ang=a0+da*t,gx=A.g[0]+(B.g[0]-A.g[0])*t,gy=A.g[1]+(B.g[1]-A.g[1])*t;
+   const width=len*(.3+.2*t);
+   for(let r=len-width;r<=len+.01;r+=.35){
+    const x=Math.round(gx+Math.cos(ang)*r),y=Math.round(gy+Math.sin(ang)*r),depth=len-r,k=K(x,y);
+    const prev=cells.get(k);if(prev===undefined||depth<prev.depth)cells.set(k,{depth,t});
    }
-   merge(target,layer,true);
+  }
+  // Lame qui glisse sans tourner (coup vertical vu de dos) : traits de vitesse sur le chemin
+  // de la pointe, au-delà de la lame, à la place de l'éventail.
+  if(Math.abs(da)<.2){cells.clear();const ux=Math.cos(a1),uy=Math.sin(a1),n=Math.max(4,Math.ceil(Math.hypot(B.tip[0]-A.tip[0],B.tip[1]-A.tip[1])*2));
+   for(let i=0;i<=n;i++){const t=i/n,x0=A.tip[0]+(B.tip[0]-A.tip[0])*t+ux*(2-2*t),y0=A.tip[1]+(B.tip[1]-A.tip[1])*t+uy*(2-2*t);
+    for(const w of [-1,1]){const k=K(Math.round(x0-uy*w),Math.round(y0+ux*w));if(!cells.has(k))cells.set(k,{depth:2,t:.5+t/2});}}}
+  for(const [k,{depth,t}] of cells){
+   const x=KX(k),y=KY(k);
+   if(t<.3&&((x+y)&1))continue;
+   layer.set(k,depth<1.1?'W':depth<2.6?'E':'e');
+  }
+  return layer;
  }
- function drawHead(target,dir,o,state,f){
-   const rows=PARTS[DIRECTIONS[dir]].head, tmp=new Map();
-   drawLongHair(tmp,dir,o,state,f);
-   stamp(tmp,rows,-Math.floor(rows[0].length/2)+o.headX,-21+o.headY);
-   if(state==='idle'&&f===3&&dir===2){
-     for(const [x,y] of [[-3,-17],[3,-17]])put(tmp,x+o.headX,y+o.headY,'s');
-   }
-   merge(target,tmp,false);
+
+ // --- Poses ---
+ // La tête suit le buste avec une image de retard (1 px) : léger bobbing sans trou au cou.
+ const WALK={bob:[0,1,0,0,1,0],head:[0,0,1,0,0,1],liftL:[0,0,0,0,1,1],liftR:[0,1,1,0,0,0],swing:[1,1,0,-1,-1,0]};
+ // Profil : petits pas de chibi autour d'une seule botte au repos ; la jambe qui passe
+ // devant se lève d'un pixel, le bras balance à l'opposé de la jambe proche.
+ const SIDE_WALK={near:[2,1,0,-2,-1,0],far:[-2,-1,0,2,1,0],nearLift:[0,0,0,0,1,1],farLift:[0,1,1,0,0,0],arm:[-1,-1,0,1,1,0]};
+ // Repos : respiration d'un pixel ; en remontant, la tête et les mains restent un instant en bas.
+ const IDLE=[{bob:0},{bob:1},{bob:1,relax:1},{bob:0,head:1,relax:1,blink:true}];
+ function bodyPose(view,loc,f,combo){
+  const side=!FRONTAL(view),fwd=view==='droite'?1:view==='gauche'?-1:0;
+  // head : retard de la tête (0 ou 1 px, toujours vers le bas). legIn : pieds joints de face
+  // et de dos en marche. spread : appuis écartés (fente d'attaque, garde).
+  const P={dx:0,dy:0,hx:0,hy:0,head:0,liftL:0,liftR:0,swingL:0,swingR:0,near:0,far:0,nearLift:0,farLift:0,arm:0,blink:false,relax:0,legIn:0,spread:0};
+  if(loc==='idle'){const I=IDLE[f%4];P.dy=I.bob;P.head=I.head||0;P.blink=!!I.blink;P.relax=I.relax||0;}
+  else if(loc==='walk'||loc==='guard'){const w=f%6;P.dy=WALK.bob[w];P.head=WALK.head[w];P.liftL=WALK.liftL[w];P.liftR=WALK.liftR[w];
+   P.swingL=WALK.swing[w];P.swingR=-WALK.swing[w];P.legIn=1;
+   if(side){P.near=SIDE_WALK.near[w];P.far=SIDE_WALK.far[w];P.nearLift=SIDE_WALK.nearLift[w];P.farLift=SIDE_WALK.farLift[w];P.arm=SIDE_WALK.arm[w];P.relax=P.head;}
+   if(loc==='guard'){P.dy=1;P.head=0;P.relax=0;P.swingL=P.swingR=0;if(side){P.near=1;P.far=-2;P.nearLift=P.farLift=0;}else{P.legIn=0;P.spread=1;}}}
+  else if(loc==='attack'){
+   // Fente : appuis écartés, buste abaissé d'un pixel qui recule à l'armé puis plonge vers
+   // l'avant ; la tête suit le coup avec un pixel de retard.
+   const lean=[0,-1,1,2,1,0][f],spread=[1,1,2,2,2,1][f];
+   P.dx=side?lean*fwd:0;P.dy=f>=1&&f<5?1:0;P.head=f===3?1:0;
+   if(side){P.near=spread;P.far=-spread;}else P.spread=spread>1?2:1;
+  }
+  else if(loc==='dash'){const w=f%4;P.dx=side?fwd*2:0;P.dy=1;P.near=side?[2,1,2,1][w]:0;P.far=side?-2:0;P.nearLift=side?1:0;
+   P.liftL=!side&&w%2===0?1:0;P.liftR=!side&&w%2===1?1:0;P.swingL=!side?-1:0;P.swingR=!side?-1:0;}
+  else if(loc==='hurt'){const back=[-1,-2,-1,0][f];P.dx=side?back*fwd:0;P.dy=[1,1,0,0][f];P.hx=side?[-1,-1,0,0][f]*fwd:0;P.blink=f<3;P.swingL=P.swingR=-1;}
+  else if(loc==='use'||loc==='melee'){P.dx=side?[0,0,1,1,0,0][f]*fwd:0;P.dy=[0,0,1,1,0,0][f];}
+  P.hx+=P.dx;P.hy+=P.dy+P.head;return P;
  }
- function posesFor(dir,state,f,combo,swordPose){const d=dir,front=d===2,back=d===0,east=d===1,west=d===3;
-   const facing=west?-1:1;
-   // The attack pose comes from the game's EXACT hurt-box source (no retiming).
-   if(state==='attack'){
-     const a=swordPose(d,Math.min(f,5),combo),v=[a[2],a[3]];
-     return {w:[a[0],a[1]],v,attack:true};
-   }
-   if(state==='guard'){const w=front?[-3,-13]:back?[3,-15]:[facing*8,-13],v=front?[13,-8]:back?[-12,-8]:[facing*15,-6];return {w,v};}
-   if(state==='use'){const w=front?[4,-7]:back?[4,-10]:[facing*6,-8];return {w,v:[facing*12,-12]};}
-   const walking=state==='walk';
-   const jog=walking?[0,-1,-2,0,1,2][f%6]:0;
-   const hurt=state==='hurt'&&f<2?-2:0;
-   // sword is held off the right shoulder or out from side profile; elbows share the hilt
-   if(front) return {w:[6+jog/2,-11+jog/3+hurt],v:[14,-11]};
-   if(back) return {w:[5+jog/2,-13+jog/3+hurt],v:[13,-12]};
-   return {w:[facing*(7+jog/3),-11+jog/3+hurt],v:[facing*16,-11]};
+ // Épaules, prise et visée de la lame. Le poignet moteur est ramené vers le torse
+ // (bras courts de chibi) ; la lame garde l'angle de la lame moteur.
+ const SHOULDER={face:{L:[-7,-10],R:[7,-10]},dos:{L:[-7,-10],R:[7,-10]},droite:{near:[-1,-10],far:[-3,-10]},gauche:{near:[1,-10],far:[3,-10]}};
+ // Portée maximale d'un bras, de l'épaule au poing : un bras ne s'étire jamais au-delà.
+ const REACH={face:8,dos:8,droite:7,gauche:7};
+ const ARMS=view=>FRONTAL(view)?['L','R']:['near','far'];
+ /** Épaule d'un bras ; elle monte d'un ou deux pixels quand la main passe au-dessus. */
+ function shoulderOf(view,arm,hand,P){const s=SHOULDER[view][arm],x=s[0]+P.dx,y=s[1]+P.dy;
+  return [x,y-Math.max(0,Math.min(2,Math.round((y-hand[1]-3)/2)))];}
+ function span(view,arm,hand,P){const s=shoulderOf(view,arm,hand,P);return Math.hypot(hand[0]-s[0],hand[1]-s[1]);}
+ // Zone du visage et de la barbe (x min, x max, y min, y max) ; dos : aucune.
+ const FACE={face:[-6,6,-20,-11],droite:[2,9,-20,-11],gauche:[-9,-2,-20,-11]};
+ /** Épée à deux mains : main haute contre la garde, main basse sur la fusée, chaque poing
+  *  à portée de son épaule. Si un bras devait s'étirer, toute la poignée glisse vers le
+  *  torse et la lame suit sans changer d'angle ni de longueur. */
+ function twoHands(view,blade,P){
+  const vx=blade.tip[0]-blade.g[0],vy=blade.tip[1]-blade.g[1],l=Math.hypot(vx,vy)||1,ux=vx/l,uy=vy/l,[a0,a1]=ARMS(view),R=REACH[view];
+  let gx=blade.g[0],gy=blade.g[1];
+  const layout=()=>{const hi=[Math.round(gx),Math.round(gy)],lo=[Math.round(gx-2*ux),Math.round(gy-2*uy)];
+   const A={[a0]:hi,[a1]:lo},B={[a0]:lo,[a1]:hi},cost=H=>Math.max(span(view,a0,H[a0],P),span(view,a1,H[a1],P));
+   return cost(A)<=cost(B)?A:B;};
+  for(let it=0;it<20;it++){const H=layout();let mx=0,my=0;
+   for(const arm of [a0,a1]){const h=H[arm],s=shoulderOf(view,arm,h,P),dx=h[0]-s[0],dy=h[1]-s[1],d=Math.hypot(dx,dy);
+    if(d>R){mx-=dx*(1-R/d);my-=dy*(1-R/d);}}
+   if(!mx&&!my)break;gx+=mx*.5;gy+=my*.5;}
+  // Poings et pommeau ne montent jamais devant le visage ni dans la barbe : ils restent
+  // devant le torse (lame levée : posée sur l'épaule, derrière la tête).
+  const F=FACE[view];
+  if(F){const fwd=view==='droite'?1:view==='gauche'?-1:0,top=-9+P.dy+Math.max(0,Math.round(4*uy));
+   if(fwd&&gy<top&&(gx-P.dx)*fwd<F[fwd>0?1:0]*fwd+2)gx=fwd>0?Math.max(gx,1+P.dx):Math.min(gx,-1+P.dx);
+   if(gy<top&&(fwd||(gx-P.dx>=F[0]-1&&gx-P.dx<=F[1]+1)))gy=top;}
+  const g=[Math.round(gx),Math.round(gy)],fwd=view==='droite'?1:view==='gauche'?-1:0;
+  // De profil, une lame qui couvrirait le visage recule vers la nuque : elle passe devant les
+  // cheveux, jamais devant les yeux.
+  if(fwd&&crossesFace(view,{g,tip:[g[0]+ux*BLADE,g[1]+uy*BLADE]},P)){
+   // Plus petit déplacement de la prise (vers la nuque ou vers le bas) qui dégage le visage.
+   let best=null;
+   for(let b=0;b<=6&&!best;b++)for(let d=0;d<=4&&!best;d++){if(b+d===0||b+d>6)continue;
+    const c=[g[0]-fwd*b,g[1]+d];if(!crossesFace(view,{g:c,tip:[c[0]+ux*BLADE,c[1]+uy*BLADE]},P))best=c;}
+   if(best){gx+=best[0]-g[0];gy+=best[1]-g[1];g[0]=best[0];g[1]=best[1];}}
+  return {blade:{...blade,g,tip:[g[0]+ux*BLADE,g[1]+uy*BLADE]},hands:layout()};
  }
- function actionArms(target,dir,state,f,combo,pose,o){
-   const side=dir===1||dir===3,west=dir===3,back=dir===0;
-   const shoulderR=side?[west?-4:4,-10+o.torsoY]:[4+o.torsoX,-10+o.torsoY];
-   const shoulderL=side?[west?1:-1,-10+o.torsoY]:[-4+o.torsoX,-10+o.torsoY];
-   const len=Math.max(1,Math.hypot(...pose.v)),unit=[pose.v[0]/len,pose.v[1]/len];
-   const w=pose.w,off=[w[0]-unit[0]*3,w[1]-unit[1]*3];
-   // Support hand and blade hand both grip same handle for every attack frame.
-   const backLayer=new Map(),frontLayer=new Map();
-   limb(backLayer,shoulderL,off,back?'s':'m');fist(backLayer,off,back?'s':'a');
-   limb(frontLayer,shoulderR,w,back?'m':'a');fist(frontLayer,w,back?'m':'h');
-   return {back:backLayer,front:frontLayer};
+ /** Lame levée vers le ciel : de face et de dos dès qu'elle monte franchement, de profil
+  *  seulement presque verticale (sinon elle passe par-dessus l'épaule, devant les cheveux). */
+ function raised(view,b){const vx=b.tip[0]-b.g[0],vy=b.tip[1]-b.g[1],l=Math.hypot(vx,vy)||1;
+  return FRONTAL(view)?vy/l<-.6:vy/l<-.75&&Math.abs(vx/l)<.35;}
+ /** Lame brandie au-dessus de la tête : les mains passent derrière la tête et
+  *  seule la lame dépasse au-dessus des cheveux. */
+ function overhead(view,blade,P){
+  const vx=blade.tip[0]-blade.g[0],vy=blade.tip[1]-blade.g[1],l=Math.hypot(vx,vy)||1,ux=vx/l,uy=vy/l;
+  const fwd=view==='droite'?1:view==='gauche'?-1:0,x0=fwd?fwd*1-1:-4,x1=fwd?fwd*1+1:4;
+  const g=[Math.round(Math.max(Math.min(x0,x1+0),Math.min(Math.max(x0,x1),blade.g[0]-P.dx)))+P.dx,Math.round(Math.max(-21,Math.min(view==='dos'?-11:-15,blade.g[1]-P.dy)))+P.dy];
+  const lo=[Math.round(g[0]-2*ux),Math.round(g[1]-2*uy)],L=lo[0]<=g[0];
+  const hands=fwd?{near:g,far:lo}:{L:L?lo:g,R:L?g:lo};
+  return {blade:{...blade,g,tip:[g[0]+ux*BLADE,g[1]+uy*BLADE],overhead:true},hands};
  }
- function sword(target,pose){const {w,v}=pose,layer=new Map(),len=Math.max(1,Math.hypot(...v)),ux=v[0]/len,uy=v[1]/len,nx=-uy,ny=ux;
-   const pt=(t,side=0)=>[w[0]+ux*t+nx*side,w[1]+uy*t+ny*side];
-   // pommel, binding, hilt, two-pixel thick crossguard
-   for(let t=-5;t<=2;t+=.75){const [x,y]=pt(t);put(layer,x,y,t<-4?'Z':'u');}
-   for(let i=-4;i<=1;i+=2){const [x,y]=pt(i,1);put(layer,x,y,'U');}
-   for(let side=-3;side<=3;side++){const [x,y]=pt(3,side);put(layer,x,y,Math.abs(side)===3?'Y':side<0?'F':'f');}
-   // continuous blade (not hard-snapped to 8 angles), base with blue-gray shadow and bright screen-left highlight.
-   for(let t=4;t<len;t+=.5){const [x,y]=pt(t);put(layer,x,y,t>len-3?'4':'3');if(t<len-1){const [sx,sy]=pt(t,1);put(layer,sx,sy,'2');}}
-   const [px,py]=pt(len);put(layer,px,py,'4');
-   merge(target,layer,true);
+ /** Une lame qui traverserait le visage passe derrière la tête (lame levée vers l'arrière). */
+ function inFace(view,x,y){
+  if(view==='face')return y>=-20&&y<=-14&&Math.abs(x)<=6||y>=-13&&y<=-11&&Math.abs(x)<=3;
+  if(view==='droite'||view==='gauche'){const c=view==='droite'?x:-x;return y>=-20&&y<=-12&&c>=3&&c<=9;}
+  return false;}
+ function crossesFace(view,blade,P){
+  const vx=blade.tip[0]-blade.g[0],vy=blade.tip[1]-blade.g[1],l=Math.hypot(vx,vy)||1;
+  for(let t=3;t<=BLADE;t+=.5)if(inFace(view,Math.round(blade.g[0]+vx*t/l-P.dx),Math.round(blade.g[1]+vy*t/l-P.dy)))return true;return false;}
+ function visualHand(w,P){return [Math.round(w[0]*.7)+P.dx,Math.round(-8+(w[1]+8)*.72)+P.dy];}
+ /** Lame d'une pose moteur : même angle, longueur visible fixe (BLADE). */
+ function aim(g,v){const l=Math.hypot(v[0],v[1])||1;return {g,tip:[g[0]+v[0]/l*BLADE,g[1]+v[1]/l*BLADE]};}
+ function bladeOf(p,P){return aim(visualHand([p[0],p[1]],P),[p[2],p[3]]);}
+ // Poses visuelles (aucune zone de coup) : main sur la fusée, direction de la lame.
+ const READY={face:{g:[-1,-8],v:[-14,-9]},dos:{g:[1,-8],v:[14,-9]},droite:{g:[0,-6],v:[14,-6]},gauche:{g:[0,-6],v:[-14,-6]}};
+ const GUARD={face:{g:[-2,-7],v:[17,-4]},dos:{g:[2,-7],v:[-17,-4]},droite:{g:[4,-8],v:[15,-3]},gauche:{g:[-4,-8],v:[-15,-3]}};
+ // Une main occupée (utiliser, mêlée) : l'épée lourde pend dans l'autre main, pointe au sol.
+ const LOW={face:{g:[-8,-5],v:[-4,10]},dos:{g:[8,-5],v:[4,10]},droite:{g:[2,-5],v:[10,7]},gauche:{g:[-2,-5],v:[-10,7]}};
+ function restBlade(table,view,P){const b=table[view];return aim([b.g[0]+P.dx,b.g[1]+P.dy],b.v);}
+ // Rangement / dégainage : lever la lame, la glisser par-dessus l'épaule, lâcher la poignée.
+ const RAISE={face:{g:[-10,-11],v:[-3,-16]},dos:{g:[10,-11],v:[3,-16]},droite:{g:[-1,-11],v:[-5,-17]},gauche:{g:[1,-11],v:[5,-17]}};
+ const STOW=Object.freeze(['ready','raise','slide','seat','release','rest']),DRAW=Object.freeze(['release','seat','slide','raise','ready']);
+ const IN_SHEATH=new Set(['seat','release','rest']);
+ // Fourreau sur le dos : poignée (main), gorge et bout, d'après les planches.
+ const SHEATH=Object.freeze({
+  dos:{hilt:[9,-16],throat:[7,-13],tip:[-3,-4]},
+  face:{hilt:[-9,-15],throat:[-5,-12],tip:[5,-4]},
+  droite:{hilt:[-7,-16],throat:[-5,-13],tip:[1,-4]},
+  gauche:{hilt:[7,-16],throat:[5,-13],tip:[-1,-4]}
+ });
+ function sheathAxis(view){const S=SHEATH[view],dx=S.tip[0]-S.throat[0],dy=S.tip[1]-S.throat[1],l=Math.hypot(dx,dy);return [dx/l,dy/l];}
+ /** Lame à moitié sortie du fourreau, alignée sur lui ; la main tient la fusée au-dessus de l'épaule. */
+ function slideBlade(view,P){const S=SHEATH[view],[ux,uy]=sheathAxis(view),g=[S.hilt[0]+P.dx,S.hilt[1]+P.dy];
+  return {...aim(g,[ux,uy]),sliding:true};}
+ function hiltHand(view,P){const S=SHEATH[view],[ux,uy]=sheathAxis(view);return [Math.round(S.hilt[0]+ux)+P.dx,Math.round(S.hilt[1]+uy)+P.dy];}
+
+ // --- Pièces statiques animées par décalage entier ---
+ /** Bras source cisaillé : l'épaule reste fixe, la main se déplace de (hx, hy). */
+ function shearArm(part,hx,hy){
+  if(!hx&&!hy)return part;
+  const ys=[...part.keys()].map(KY),minY=Math.min(...ys),maxY=Math.max(...ys),out=new Map();
+  const rows=new Map();for(const [k,c] of part){const y=KY(k);if(!rows.has(y))rows.set(y,[]);rows.get(y).push([KX(k),c]);}
+  let prev=null;
+  for(let y=minY;y<=maxY;y++){const row=rows.get(y)||[],t=Math.min(1,(y-minY)/Math.max(1,maxY-minY-1));
+   const dx=Math.round(hx*t),dy=Math.round(hy*t),yy=y+dy;
+   if(prev&&yy>prev.yy+1)for(let fill=prev.yy+1;fill<yy;fill++)for(const [x,c] of prev.row)out.set(K(x+prev.dx,fill),c);
+   for(const [x,c] of row)out.set(K(x+dx,yy),c);prev={yy,dx,row};}
+  return out;
  }
- function smear(target,a,b,dir,f,combo){
-   const A={w:[a[0],a[1]],v:[a[2],a[3]]},B={w:[b[0],b[1]],v:[b[2],b[3]]};
-   const A0=Math.atan2(A.v[1],A.v[0]),A1=Math.atan2(B.v[1],B.v[0]);let delta=A1-A0;while(delta>Math.PI)delta-=Math.PI*2;while(delta<-Math.PI)delta+=Math.PI*2;
-   const lenA=Math.hypot(...A.v),lenB=Math.hypot(...B.v),dense=combo===3?32:25;
-   for(let i=0;i<=dense;i++){
-     const t=i/dense,phi=A0+delta*t,len=lenA+(lenB-lenA)*t;
-     const mx=A.w[0]+(B.w[0]-A.w[0])*t,my=A.w[1]+(B.w[1]-A.w[1])*t;
-     for(let r=len*.65;r<=len;r+=.8){
-       const x=Math.round(mx+Math.cos(phi)*r),y=Math.round(my+Math.sin(phi)*r);
-       if(i<dense*.18&&((x+y)&1))continue;
-       if((r/len)<.78&&((x+y+f)&1))continue;
-       const shade=r>len*.92?'E':t>.5?'e':'2';
-       put(target,x,y,shade);
-     }
-   }
-   // A near-straight heavy overhead strike has little angular change:
-   // keep a narrow parallel afterimage rather than a fictitious wide fan.
-   if(Math.abs(delta)<.24){
-     const vx=B.v[0]/Math.max(.001,lenB),vy=B.v[1]/Math.max(.001,lenB);
-     const side=(dir===0||dir===1)?1:-1;
-     for(let r=lenB*.72;r<=lenB;r+=1.2){
-       const x=B.w[0]+vx*r-vy*side*3,y=B.w[1]+vy*r+vx*side*3;
-       put(target,x,y,r>lenB*.88?'E':'e');
-     }
-   }
+ function sideLeg(view,x,lift,far){
+  const L=SIDE_LEG[view],layer=new Map();
+  L.rows.forEach((row,j)=>{for(let i=0;i<row.length;i++){const c=row[i];if(c==='.')continue;put(layer,L.x+x+i,-3+j-lift,far?SHADE[c]||c:c);}});
+  return layer;
  }
- const SHEATH={
-  0:{w:[8,-20],v:[-11,14]},1:{w:[-8,-20],v:[3,15]},
-  2:{w:[8,-20],v:[-10,15]},3:{w:[8,-20],v:[-3,15]}
- };
- function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);}
- function weaponBlend(a,b,t){
-  const w=[a.w[0]+(b.w[0]-a.w[0])*t,a.w[1]+(b.w[1]-a.w[1])*t];
-  const aa=Math.atan2(a.v[1],a.v[0]),bb=Math.atan2(b.v[1],b.v[0]);
-  let da=bb-aa;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;
-  const angle=aa+da*t,len=Math.hypot(...a.v)*(1-t)+Math.hypot(...b.v)*t;
-  return {w,v:[Math.cos(angle)*len,Math.sin(angle)*len]};
+ function legsLayer(view,P){
+  const part=PARTS[view];
+  if(FRONTAL(view)){const s=P.spread-P.legIn,out=new Map();over(out,shift(part.legL,-s,-P.liftL));over(out,shift(part.legR,s,-P.liftR));return out;}
+  const fwd=view==='droite'?1:-1,out=new Map();
+  // jambe éloignée puis proche ; chacune reçoit son propre contour (semelle à angles nets)
+  over(out,sideLeg(view,P.far*fwd+P.dx,P.farLift,true),SOLE);
+  over(out,sideLeg(view,P.near*fwd+P.dx,P.nearLift,false),SOLE);
+  return out;
  }
- function storedSword(target,dir,f=0,walk=false){
-   const p=SHEATH[dir],layer=new Map(),shift=walk?[0,0,1,1,0,-1][f%6]:[0,0,0,0,0,0][f%6];
-   const w=[p.w[0]+(dir===0?shift:0),p.w[1]],v=p.v;
-   const len=Math.hypot(...v),u=[v[0]/len,v[1]/len],normal=[-u[1],u[0]];
-   const point=(r,side=0)=>[w[0]+u[0]*r+normal[0]*side,w[1]+u[1]*r+normal[1]*side];
-   // Scabbard has a dark leather core, bright rim, brass throat and tip.
-   const a=point(3),tip=point(len);
-   pixelLine(layer,a,tip,'O',3);
-   const mid0=point(4,-1),mid1=point(len-2,-1);pixelLine(layer,mid0,mid1,'u',1);
-   const rim0=point(4,1),rim1=point(len-3,1);pixelLine(layer,rim0,rim1,'t',1);
-   for(let side=-3;side<=3;side++){const [x,y]=point(3,side);put(layer,x,y,Math.abs(side)===3?'F':'Y');}
-   const h0=point(2),h1=point(-4);pixelLine(layer,h0,h1,'u',2);
-   const [pomX,pomY]=point(-5);put(layer,pomX,pomY,'Z');put(layer,pomX+1,pomY,'O');
-   put(layer,...point(len),'Y');
-   merge(target,layer,true);
- }
- function relaxedArms(dir,state,f,o){
-   const gait=state==='walk'?[0,1,2,0,-1,-2][f%6]:[0,0,0,0,0,0][f%6];
-   const front=new Map(),back=new Map(),r=dir===3?-1:1;
-   const arms=dir===2?[
-     {a:[-5+o.torsoX,-10+o.torsoY],b:[-7-gait,-6],shade:'m'},
-     {a:[5+o.torsoX,-10+o.torsoY],b:[7+gait,-6],shade:'a'}
-   ]:dir===0?[
-     {a:[-5+o.torsoX,-10+o.torsoY],b:[-6+gait,-6],shade:'s'},
-     {a:[5+o.torsoX,-10+o.torsoY],b:[6-gait,-6],shade:'m'}
-   ]:[
-     {a:[-3*r+o.torsoX,-10+o.torsoY],b:[-5*r-gait*r,-6],shade:'m'},
-     {a:[3*r+o.torsoX,-10+o.torsoY],b:[5*r+gait*r,-6],shade:'a'}
-   ];
-   arms.forEach((el,i)=>{const layer=i?front:back;const elbow=[Math.round((el.a[0]+el.b[0])/2)+(i?r:-r),Math.round((el.a[1]+el.b[1])/2)];
-     limb(layer,el.a,elbow,el.shade);limb(layer,elbow,el.b,el.shade);fist(layer,el.b,el.shade);});
-   return {front,back};
- }
+ function lids(view,layer,dx,dy){for(const [x,y,c] of LIDS[view])put(layer,x+dx,y+dy,c);}
+
+ // --- Composition d'une image ---
  function normalizeState(state,frame){
    if(state==='sheathed_idle')return {loc:'idle',f:frame,mode:'sheathed',phase:0};
    if(state==='sheathed_walk')return {loc:'walk',f:frame,mode:'sheathed',phase:0};
@@ -371,80 +472,158 @@
    if(state==='sheathed_use')return {loc:'use',f:frame,mode:'sheathed',phase:0};
    if(state==='sheathed_melee')return {loc:'melee',f:frame,mode:'sheathed',phase:0};
    if(state==='sheathe_walk'||state==='draw_walk')return {loc:'walk',f:frame%6,mode:state.startsWith('sheathe')?'stowing':'drawing',phase:Math.floor(frame/6)};
-   if(state==='sheathe'||state==='draw')return {loc:'idle',f:frame,mode:state==='sheathe'?'stowing':'drawing',phase:frame};
+   if(state==='sheathe'||state==='draw')return {loc:'idle',f:0,mode:state==='sheathe'?'stowing':'drawing',phase:frame};
    return {loc:state,f:frame,mode:'drawn',phase:0};
  }
- function renderPixelMap(dir,state,frame,combo,poseFn){
-   assert(Number.isInteger(dir)&&dir>=0&&dir<4,'direction must be 0..3');
-   assert(Object.hasOwn(STATES,state),'unknown animation '+state);
-   assert(Number.isInteger(frame)&&frame>=0&&frame<STATES[state],'invalid frame '+frame);
-   assert(Number.isInteger(combo)&&combo>=0&&combo<=3,'combo must be 0..3');
-   const v=normalizeState(state,frame),base=v.loc,frameWalk=v.f,
-    pose=simplePoseGuard(poseFn,dir,base,frameWalk,combo),
-    offs=offsets(base,frameWalk,combo,dir),img=new Map(),body=new Map();
-   feet(body,dir,base,frameWalk);
-   drawTorso(body,dir,offs,base,frameWalk);
-   drawHead(body,dir,offs,base,frameWalk);
-   if(v.mode==='drawn'){
-     const arms=actionArms(null,dir,base,frameWalk,combo,pose,offs);
-     const behind=dir===0 || (dir===1&&pose.v[0]<-5) || (dir===3&&pose.v[0]>5) || (base==='attack'&&pose.v[1]<-16);
-     if(base==='attack'&&(frameWalk===2||frameWalk===3)){
-       const p=poseFn(dir,frameWalk,combo),prev=poseFn(dir,frameWalk-1,combo);
-       smear(img,prev,p,dir,frameWalk,combo);
-     }
-     merge(img,arms.back);
-     if(behind)sword(img,pose);
-     merge(img,body);merge(img,arms.front);
-     if(!behind)sword(img,pose);
-   }else if(v.mode==='sheathed'){
-     const arms=relaxedArms(dir,base,frameWalk,offs);
-     merge(img,arms.back);
-     if(dir!==0)storedSword(img,dir,frameWalk,base==='walk');
-     merge(img,body);
-     if(dir===0)storedSword(img,dir,frameWalk,base==='walk');
-     merge(img,arms.front);
-   }else{
-     const count=v.mode==='stowing'?6:5;
-     const phase=v.phase, t=ease((phase+1)/count),store=SHEATH[dir],
-      now=v.mode==='stowing'?weaponBlend(pose,store,t):weaponBlend(store,pose,t),
-      arms=actionArms(null,dir,base,frameWalk,combo,now,offs);
-     merge(img,arms.back);
-     if(dir!==0&&v.mode==='drawing'&&phase<2)storedSword(img,dir,frameWalk,base==='walk');
-     merge(img,body);
-     if(dir===0&&v.mode==='drawing'&&phase<2)storedSword(img,dir,frameWalk,base==='walk');
-     merge(img,arms.front);
-     if(v.mode==='stowing'&&phase===5 || v.mode==='drawing'&&phase===0){
-       storedSword(img,dir,frameWalk,base==='walk');
-     }else sword(img,now);
-   }
-   return img;
+ function freeHand(view,loc,f,P,which){
+  // Bras libre d'action : lever un objet ou frapper du poing. null = bras dessiné au repos.
+  const side=!FRONTAL(view),fwd=view==='droite'?1:view==='gauche'?-1:0,sx=which==='L'?-1:1;
+  if(loc==='use'){const e=[0,.5,1,1,.6,.2][f];if(e<.3)return null;
+   if(side)return [Math.round(fwd*(2+4*e))+P.dx,Math.round(-6-3*e)+P.dy];
+   return [sx*Math.round(7-4*e)+P.dx,Math.round(-5-(view==='dos'?7:5)*e)+P.dy];}
+  if(loc==='melee'){const e=[-.4,-.6,.6,1,.7,.2][f];if(Math.abs(e)<.3)return null;
+   if(side)return [Math.round(fwd*(2+4*e))+P.dx,-8+P.dy];
+   if(e<0)return [sx*9+P.dx,-9+P.dy];
+   return [sx*Math.round(7-5*e)+P.dx,Math.round(-6+(view==='dos'?-3:1)*e)+P.dy];}
+  return null;
  }
- function simplePoseGuard(fn,dir,state,frame,combo){
-   assert(typeof fn==='function','game swordPose(dir,frame,combo) callback missing');
-   const pose=posesFor(dir,state,frame,combo,fn);
-   assert([...pose.w,...pose.v].every(Number.isFinite),'nonfinite sword pose');
-   return pose;
+ function renderPixelMap(dir,state,frame,combo,poseFn){
+  assert(Number.isInteger(dir)&&dir>=0&&dir<4,'direction must be 0..3');
+  assert(Object.hasOwn(STATES,state),'unknown animation '+state);
+  assert(Number.isInteger(frame)&&frame>=0&&frame<STATES[state],'invalid frame '+frame);
+  assert(Number.isInteger(combo)&&combo>=0&&combo<=3,'combo must be 0..3');
+  assert(typeof poseFn==='function','game swordPose(dir,frame,combo) callback missing');
+  const view=DIRECTIONS[dir],side=!FRONTAL(view),part=PARTS[view],v=normalizeState(state,frame),loc=v.loc;
+  const P=bodyPose(view,loc,v.f,combo);
+  const img=new Map();
+  // Lame : pose moteur, pose de repos/garde, ou étape du rangement dans le fourreau.
+  const stage=v.mode==='stowing'?STOW[v.phase]:v.mode==='drawing'?DRAW[v.phase]:null;
+  const sheathed=v.mode==='sheathed'||IN_SHEATH.has(stage);
+  let blade=null,two=false,smearLayer=null,reach=null;const held={};
+  const armSwing=side?(loc==='walk'?P.arm:loc==='hurt'?-1:loc==='dash'?-2:0)*(view==='droite'?1:-1):0;
+  if(!sheathed){
+   if(stage==='raise')blade=restBlade(RAISE,view,P);
+   else if(stage==='slide')blade=slideBlade(view,P);
+   // Frappe : angle de la lame moteur, longueur fixe. Dernière image : retour au repos.
+   else if(loc==='attack'&&v.f<5){const raw=poseFn(dir,v.f,combo);assert(raw.length===4&&raw.every(Number.isFinite),'nonfinite sword pose');blade=bladeOf(raw,P);}
+   else if(loc==='use'||loc==='melee')blade={...restBlade(LOW,view,P),low:true};
+   // De profil au repos, l'épée reste dans le poing du bras dessiné (la main éloignée,
+   // cachée par le corps, la tient aussi) : elle suit le balancement du bras.
+   else if(side&&!stage&&loc!=='guard'){const b=READY[view];blade={...aim([b.g[0]+armSwing+P.dx,b.g[1]+P.relax+P.dy],b.v),inFist:true};}
+   else blade=restBlade(loc==='guard'?GUARD:READY,view,P);
+   // Épée à deux mains : deux poings sur la fusée, sauf pour la ranger ou libérer une main.
+   two=!stage&&!blade.low&&!blade.inFist;
+   if(two){const T=raised(view,blade)?overhead(view,blade,P):twoHands(view,blade,P);blade=T.blade;Object.assign(held,T.hands);}
+   else held[FRONTAL(view)?(blade.g[0]<0?'L':'R'):(blade.sliding||blade.low||stage==='raise'?'far':'near')]=blade.g;
+   // Traînée sur les images de contact seulement (2 et 3) : elle ne prolonge jamais la lame.
+   if(!stage&&loc==='attack'&&(v.f===2||v.f===3)){
+    const pP=bodyPose(view,loc,v.f-1,combo),pb=bladeOf(poseFn(dir,v.f-1,combo),pP);
+    const prev=(raised(view,pb)?overhead(view,pb,pP):twoHands(view,pb,pP)).blade;
+    smearLayer=smear(new Map(),prev,blade);
+   }
+  }
+  if(stage==='seat')reach=hiltHand(view,P);
+  if(stage==='release'){const h=hiltHand(view,P),sh=FRONTAL(view)?SHOULDER[view][SHEATH[view].hilt[0]<0?'L':'R']:SHOULDER[view].far;
+   reach=[Math.round((h[0]+sh[0]+P.dx)/2),Math.round((h[1]+sh[1]+P.dy)/2)];}
+  if(reach)held[FRONTAL(view)?(SHEATH[view].hilt[0]<0?'L':'R'):'far']=reach;
+  // Bras libre : lever un objet ou frapper du poing (main droite de face, main proche de profil).
+  if(!reach&&!two&&!blade?.inFist){const free=blade?ARMS(view).find(a=>!held[a]):FRONTAL(view)?'R':'near',h=freeHand(view,loc,v.f,P,free);if(h)held[free]=h;}
+  // Bras : pièces sources (repos/marche) ou bras d'action tracés de l'épaule au poing.
+  // Les poings sont posés après la lame : ils serrent la fusée, la lame passe sur l'avant-bras.
+  const front=new Map(),back=new Map(),hands=new Map(),fists=[];
+  const behindBlade=blade&&(blade.sliding?view!=='dos':blade.low&&side||view==='dos'||blade.overhead||crossesFace(view,blade,P));
+  if(FRONTAL(view)){
+   for(const s of ['L','R']){
+    const hand=held[s];
+    if(hand){
+     // De dos, les bras sont devant le corps donc cachés, sauf la main qui va au fourreau.
+     const hidden=(view==='dos'||blade?.overhead)&&!stage;
+     if(hidden){const layer=new Map();arm(layer,view,s,shoulderOf(view,s,hand,P),hand,true);fist(layer,hand,true);over(back,layer,true);}
+     else{over(front,arm(new Map(),view,s,shoulderOf(view,s,hand,P),hand),true);over(hands,fist(new Map(),hand));fists.push(hand);}
+    }
+    else{const src=s==='L'?part.armL:part.armR,sw=s==='L'?P.swingL:P.swingR;over(front,shift(shearArm(src,0,sw+P.relax),P.dx,P.dy));}
+   }
+  }else{
+   const fwd=view==='droite'?1:-1;
+   // À deux mains, le bras éloigné est caché par le corps : seul son poing serre la fusée.
+   if(held.far&&two&&!blade.overhead)over(hands,fist(new Map(),held.far,true));
+   else if(held.far&&two);
+   else if(held.far){const layer=new Map();arm(layer,view,'far',shoulderOf(view,'far',held.far,P),held.far,true);fist(layer,held.far,true);over(back,layer,true);}
+   if(held.near&&blade?.overhead){const layer=new Map();arm(layer,view,'near',shoulderOf(view,'near',held.near,P),held.near,true);fist(layer,held.near,true);over(back,layer,true);}
+   else if(held.near){over(front,arm(new Map(),view,'near',shoulderOf(view,'near',held.near,P),held.near),true);over(hands,fist(new Map(),held.near));fists.push(held.near);}
+   else{const swing=armSwing;
+    if(!swing&&!P.relax)over(front,shift(part.arm,P.dx,P.dy));
+    else over(front,shift(shearArm(ARM_FILL[view],swing,P.relax),P.dx,P.dy),HANGING);}
+  }
+  // Ordre de dessin : lame arrière, bras arrière, jambes, tronc, tête, poignée rangée,
+  // bras avant, épaulières, lame avant, poings.
+  const swordLayer=blade?sword(new Map(),blade.g,blade.tip):null;
+  if(blade&&behindBlade){if(smearLayer)over(img,smearLayer);drawSword(img,swordLayer);}
+  over(img,back);
+  over(img,legsLayer(view,P));
+  if(side)over(img,shift(sprite(view,UNDER_ARM[view]),P.dx,P.dy));
+  over(img,shift(part.body,P.dx,P.dy));
+  // La traînée d'une lame tenue devant passe sur le corps mais derrière la tête.
+  if(smearLayer&&!behindBlade)over(img,smearLayer);
+  const head=shift(part.head,P.hx,P.hy);
+  if(P.blink)lids(view,head,P.hx,P.hy);
+  over(img,head);
+  // Coup vertical vu de dos : la lame passe par-dessus la tête, sa traînée aussi.
+  if(smearLayer&&view==='dos'&&blade.overhead)over(img,smearLayer);
+  if(P.head)over(img,shift(part.collar,P.dx,P.dy));
+  if(sheathed&&HILT[view])over(img,shift(sprite(view,HILT[view]),P.dx,P.dy));
+  if(blade?.inFist)drawSword(img,swordLayer);
+  over(img,front);
+  // Les épaulières de fourrure restent par-dessus le haut d'un bras d'action, jamais sur un poing.
+  if(view!=='dos'&&fists.length)for(const [k,c] of shift(part.fur,P.dx,P.dy)){
+   if(!front.has(k))continue;const x=KX(k),y=KY(k);
+   if(fists.some(h=>Math.abs(x-h[0])<=2&&Math.abs(y-h[1])<=2))continue;img.set(k,c);}
+  if(blade&&!behindBlade&&!blade.inFist)drawSword(img,swordLayer);
+  over(img,hands);
+  return finish(img);
+ }
+ /** Finition de silhouette : tout bord reçoit son contour d'un pixel (même quand une pièce
+  *  bouge et découvre un bord) et les petits trous fermés se bouchent. Les traînées tramées
+  *  (smears) restent ajourées. */
+ const SMEAR_KEYS=new Set(['e','E','W']);
+ function finish(img){
+  const add=[];
+  for(const [k,c] of img){if(c==='O'||SMEAR_KEYS.has(c))continue;const x=KX(k),y=KY(k);
+   for(const [dx,dy] of AROUND){const n=K(x+dx,y+dy);if(!img.has(n))add.push(n);}}
+  for(const n of add)img.set(n,'O');
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  for(const k of img.keys()){const x=KX(k),y=KY(k);if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+  const out=new Set(),stack=[];
+  for(let x=x0-1;x<=x1+1;x++)stack.push(K(x,y0-1),K(x,y1+1));
+  for(let y=y0-1;y<=y1+1;y++)stack.push(K(x0-1,y),K(x1+1,y));
+  while(stack.length){const k=stack.pop();if(out.has(k)||img.has(k))continue;const x=KX(k),y=KY(k);if(x<x0-1||x>x1+1||y<y0-1||y>y1+1)continue;
+   out.add(k);for(const [dx,dy] of AROUND)stack.push(K(x+dx,y+dy));}
+  const seen=new Set();
+  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const k=K(x,y);if(img.has(k)||out.has(k)||seen.has(k))continue;
+   const hole=[],q=[k];let smear=false;seen.add(k);
+   while(q.length){const h=q.pop();hole.push(h);for(const [dx,dy] of AROUND){const n=K(KX(h)+dx,KY(h)+dy),c=img.get(n);
+    if(c===undefined){if(!seen.has(n)){seen.add(n);q.push(n);}}else if(SMEAR_KEYS.has(c))smear=true;}}
+   if(!smear&&hole.length<=4)for(const h of hole)img.set(h,'O');}
+  return img;
  }
  function draw(context,dir=2,state='idle',frame=0,combo=0,poseFn){
-   const pixels=renderPixelMap(dir,state,frame,combo,poseFn);
-   for(const [xy,k]of pixels){const color=PALETTE[k];if(!color)continue;
-    const comma=xy.indexOf(','),x=+xy.slice(0,comma),y=+xy.slice(comma+1);
-    context.fillStyle=color;context.fillRect(x,y,1,1);
-   }
+  const pixels=renderPixelMap(dir,state,frame,combo,poseFn);
+  for(const [k,c] of pixels){const color=PALETTE[c];if(!color)continue;
+   const x=KX(k),y=KY(k);if(x+ANCHOR.x<0||x+ANCHOR.x>=CELL||y+ANCHOR.y<0||y+ANCHOR.y>=CELL)continue;
+   context.fillStyle=color;context.fillRect(x,y,1,1);}
  }
+ const RGB=Object.fromEntries(Object.entries(PALETTE).map(([k,h])=>[k,[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]]));
  function raster(opts={}){
-   const {dir=2,state='idle',frame=0,combo=0,swordPose}=opts;
-   const pixels=renderPixelMap(dir,state,frame,combo,swordPose);
-   const data=new Uint8ClampedArray(CELL*CELL*4);
-   for(const [xy,key]of pixels){const comma=xy.indexOf(','),x=+xy.slice(0,comma),y=+xy.slice(comma+1);
-    const X=ANCHOR.x+x,Y=ANCHOR.y+y;
-    if(X<0||X>=CELL||Y<0||Y>=CELL)continue;
-    const hex=PALETTE[key];if(!hex)continue;
-    const i=(Y*CELL+X)*4;data[i]=parseInt(hex.slice(1,3),16);data[i+1]=parseInt(hex.slice(3,5),16);data[i+2]=parseInt(hex.slice(5,7),16);data[i+3]=255;
-   }
-   return {width:CELL,height:CELL,anchor:ANCHOR,data};
+  const {dir=2,state='idle',frame=0,combo=0,swordPose}=opts;
+  const pixels=renderPixelMap(dir,state,frame,combo,swordPose),data=new Uint8ClampedArray(CELL*CELL*4);
+  for(const [k,c] of pixels){const X=ANCHOR.x+KX(k),Y=ANCHOR.y+KY(k);if(X<0||X>=CELL||Y<0||Y>=CELL)continue;
+   const rgb=RGB[c];if(!rgb)continue;const i=(Y*CELL+X)*4;data[i]=rgb[0];data[i+1]=rgb[1];data[i+2]=rgb[2];data[i+3]=255;}
+  return {width:CELL,height:CELL,anchor:ANCHOR,data};
  }
- function idleFrame(seconds){return [0,0,1,0,0,3,0,0][Math.floor(Math.max(0,seconds)*2)%8];}
+ // Respiration lente et clignement, comme le repos des batraciens (boucle de 4,3 s).
+ const IDLE_TIMELINE=[[0,1.30],[1,.22],[2,.70],[1,.30],[3,.16],[0,1.62]];
+ const IDLE_LOOP=IDLE_TIMELINE.reduce((a,[,d])=>a+d,0);
+ function idleFrame(seconds){let t=(Math.max(0,Number.isFinite(seconds)?seconds:0))%IDLE_LOOP;for(const [f,d] of IDLE_TIMELINE){if(t<d)return f;t-=d;}return 0;}
  function weaponVisual(actor,time,state='idle',frame=0){
   // A strictly visual state machine. No swing duration, stamina, hitbox or
   // movement delay is introduced. Clock is game-time, never wall-clock.
@@ -496,5 +675,5 @@
   }
   return {state,frame,mode:b.mode};
  }
- return Object.freeze({version:3,cell:CELL,anchor:ANCHOR,palette:PALETTE,parts:PARTS,directions:DIRECTIONS,states:STATES,holster:HOLSTER,draw,raster,idleFrame,weaponVisual});
+ return Object.freeze({version:5,cell:CELL,anchor:ANCHOR,palette:PALETTE,views:VIEWS,directions:DIRECTIONS,states:STATES,holster:HOLSTER,draw,raster,idleFrame,weaponVisual});
 });

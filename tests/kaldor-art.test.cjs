@@ -62,7 +62,7 @@ test('all four attacks show multiple poses with a smear on contact frames',()=>{
    hashes.push(crypto.createHash('sha256').update(data).digest('hex'));
    if(frame>=2&&frame<=3)for(let i=0;i<data.length;i+=4){
      const r=data[i],g=data[i+1],b=data[i+2];
-     if(data[i+3]&&(r===102&&g===137&&b===158 || r===200&&g===220&&b===229))haveSmear=true;
+     if(data[i+3]&&(r===196&&g===154&&b===92 || r===242&&g===220&&b===156))haveSmear=true;
    }
   }
   assert.ok(new Set(hashes).size>=4,`combination ${dir}:${combo} lacks unique frame changes`);
@@ -94,10 +94,15 @@ test('world renderer and iOS carry identical source with same save contract',()=
 });
 
 
-test('long hair remains rooted to a stable head, while 6-frame walk steps visibly move boots',()=>{
+test('head and long hair move as one block (1 px Game Boy bounce), while 6-frame walk steps visibly move boots',()=>{
  const d=2,imgs=Array.from({length:6},(_,frame)=>Art.raster({dir:d,state:'sheathed_walk',frame,swordPose:pose}));
  const slice=(im,x0,y0,x1,y1)=>{const bytes=[];for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)bytes.push(...im.data.slice((y*80+x)*4,(y*80+x)*4+4));return Buffer.from(bytes);};
- for(const im of imgs.slice(1))assert.deepEqual(slice(im,36,31,44,37),slice(imgs[0],36,31,44,37),'head wobble detected');
+ const head=slice(imgs[0],36,31,44,37);let bounces=0;
+ for(const im of imgs.slice(1)){
+  const still=slice(im,36,31,44,37).equals(head),bounce=slice(im,36,32,44,38).equals(head);
+  assert.ok(still||bounce,'head wobble detected');if(bounce&&!still)bounces++;
+ }
+ assert.ok(bounces>=2,'walk lacks the one-pixel bounce');
  assert.ok(new Set(imgs.map(im=>crypto.createHash('sha256').update(slice(im,30,47,50,55)).digest('hex'))).size>=4,'legs are not animated');
  // The rear hair strands visibly extend to the waist with varied highlights.
  const withHair=Art.raster({dir:0,state:'sheathed_idle',swordPose:pose}).data;
