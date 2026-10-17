@@ -5,7 +5,7 @@ test('the approved world has one mainland, two smaller islands and all settlemen
  const features=new Map();for(const c of A.cells.filter(c=>c.land)){const name=A.regions.get(c.region)?.territory;if(name){if(!features.has(name))features.set(name,new Set());features.get(name).add(c.feature);}}
  assert.deepEqual([...features.get('Igea')],[...features.get('Teremor')]);assert.deepEqual([...features.get('Sarak')],[...features.get('Teremor')]);assert.notDeepEqual([...features.get('Varan')],[...features.get('Teremor')]);assert.equal(raw.regions.length,14);assert.equal(raw.sites.length,83);
  for(const n of A.nodes)if(n.id!=='camp')assert.ok(A.findPath('camp',n.id),n.name);
- const home=A.routePlan('camp',A.home.id,{allowBoat:false});assert.ok(home&&!home.boat&&home.distance>900000);assert.equal(A.findPath('camp',A.refuge.id,{allowBoat:false}),null);
+ const home=A.routePlan('camp',A.home.id,{allowBoat:false});assert.ok(home&&!home.boat&&home.distance>20000&&home.distance<60000);assert.equal(A.findPath('camp',A.refuge.id,{allowBoat:false}),null);
 });
 test('metres round-trip exactly and every land road stays on land including fine coastal detours',()=>{
  for(const p of [[0,0],[1440000,960000],[A.prison.x,A.prison.y]]){const g=A.toGame(...p),w=A.toWorld(g.x,g.y);assert.ok(Math.hypot(w.x-p[0],w.y-p[1])<1e-7);}
@@ -16,7 +16,10 @@ test('a closed shared road is excluded; transport permissions and safer routing 
  for(const n of A.nodes){const cart=A.findPath(n.id,A.home.id,{mode:'cart'});if(cart)for(const s of cart)assert.ok(A.edgeById.get(s.edge).modes.includes(s.mode));}
 });
 test('journey minutes, distance, waits, boat legs and rests balance without imaginary shortcuts',()=>{
- const plan=A.routePlan('camp',A.refuge.id,{mode:'horse',clock:481});assert.ok(plan.boat);assert.ok(plan.stages.some(s=>s.kind==='rest'));assert.ok(plan.stages.some(s=>s.kind==='wait'));assert.ok(Math.abs(plan.stages.reduce((n,s)=>n+s.minutes,0)-plan.minutes)<1e-6);assert.ok(Math.abs(plan.stages.reduce((n,s)=>n+(s.length||0),0)-plan.distance)<1e-6);for(let i=1;i<plan.stages.length;i++){const p=plan.stages[i-1],q=plan.stages[i],a=p.to||[p.x,p.y],b=q.from||[q.x,q.y];assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6);}
+ const plan=A.routePlan('camp',A.refuge.id,{mode:'horse',clock:481});assert.ok(plan.boat);assert.ok(plan.stages.some(s=>s.kind==='wait'));
+ // The compact world rarely needs a halt; the longest walk across the mainland still makes one.
+ const walk=A.nodes.map(n=>A.routePlan('camp',n.id,{mode:'foot',allowBoat:false,clock:481})).filter(Boolean).sort((a,b)=>b.distance-a.distance)[0];assert.ok(walk.stages.some(s=>s.kind==='rest'));
+ for(const trip of [plan,walk]){assert.ok(Math.abs(trip.stages.reduce((n,s)=>n+s.minutes,0)-trip.minutes)<1e-6);assert.ok(Math.abs(trip.stages.reduce((n,s)=>n+(s.length||0),0)-trip.distance)<1e-6);for(let i=1;i<trip.stages.length;i++){const p=trip.stages[i-1],q=trip.stages[i],a=p.to||[p.x,p.y],b=q.from||[q.x,q.y];assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6);}}
 });
 test('news propagates with delay; residents retain stale closures and private companion news stays private',()=>{
  const W=new A.WorldState({clock:480}),camp=A.byId.camp,e=W.add('bridge',NEWS_ROAD,480,0,{source:'Garde'});W.learn('local',e.x,e.y,480);W.learn('far',A.home.x,A.home.y,480);assert.equal(W.news('local').length,1);assert.equal(W.news('far').length,0);
@@ -44,3 +47,13 @@ test('a requested halt during a sea crossing waits for a port, including after a
 });
 test('malformed journey payloads fall back to a safe station without corrupting the campaign',()=>{const g=new api.Game();const s=JSON.parse(JSON.stringify(g.serialize()));s.atlas.journey={plan:{from:'camp',to:'town-1',minutes:20,screenSeconds:5,stages:[{kind:'move',minutes:20,mode:'horse',road:'road-1',edge:[...api.Atlas.edgeById.keys()][0],from:null,to:null}]},index:0,progress:0};const loaded=new api.Game(s);assert.equal(loaded.journey,null);assert.equal(loaded.solid(loaded.player.x,loaded.player.y,5),false);assert.equal(loaded.worldState.campaign,g.worldState.campaign);});
 test('biome transitions blend across a shared boundary and cursed areas remain localized',()=>{let sample=null;for(const c of A.cells.filter(c=>c.land)){for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,x=(c.polygon[i]+c.polygon[j])/2,y=(c.polygon[i+1]+c.polygon[j+1])/2,e=A.environment(x,y);if(e.mix.length===2&&e.mix[0].biome!==e.mix[1].biome){sample={x,y,e};break;}}if(sample)break;}assert.ok(sample);assert.ok(Math.abs(sample.e.mix.reduce((n,e)=>n+e.weight,0)-1)<1e-9);assert.ok(sample.e.mix[1].weight>.49);assert.ok(A.curseCells.size<A.cells.filter(c=>c.land).length*.1);});
+test('a save from the macro map follows its nearest place to the compact layout and ends a voyage at its destination',()=>{
+ const A=api.Atlas,L=A.layout,o=L.legacy.origin,old=(x,y)=>({x:(x-o[0])*16,y:(y-o[1])*16}),near=(g,n)=>{const w=A.toWorld(g.player.x,g.player.y);return Math.hypot(w.x-n.x,w.y-n.y)<60;};
+ const base=new api.Game(),legacy=()=>{const s=JSON.parse(JSON.stringify(base.serialize()));delete s.atlas.layout;return s;},home=A.raw.sites.find(s=>'town-'+s.id===A.home.id),far=A.raw.sites.find(s=>s.id===40);
+ let saved=legacy();Object.assign(saved.player,old(home.legacy[0]+900,home.legacy[1]-600));saved.atlas.exploration.rows=[[5,[[1,3]]]];
+ saved.atlas.world.events=[{id:'event-999',serial:999,type:'bandits',target:'road-3',at:saved.atlas.world.clock,end:null,resolved:null,x:1e6,y:5e5,witnesses:[]}];
+ let g=new api.Game(saved);assert.ok(near(g,A.home),'relocated beside Clairfoyer');assert.ok(!g.worldState.events.some(e=>e.id==='event-999'));assert.equal(g.explorationRows.has(5),false);assert.equal(g.serialize().atlas.layout,L.id);
+ saved=legacy();saved.atlas.journey={plan:{from:'camp',to:'town-40',stages:[{kind:'move',minutes:60,road:'road-1',edge:'x',mode:'boat',length:9e4,from:[1e6,5e5],to:far.legacy}],minutes:60,screenSeconds:10},index:0,progress:5};
+ g=new api.Game(saved);assert.equal(g.journey,null);assert.ok(near(g,A.byId['town-40']),'arrived at the destination');
+ saved=legacy();const camp={x:base.player.x,y:base.player.y};g=new api.Game(saved);assert.deepEqual({x:g.player.x,y:g.player.y},camp);
+});

@@ -33,8 +33,8 @@ Game.prototype.initTravelParty=function(saved){explorationInit.call(this,saved);
  this.visitedPlaces=new Set((Array.isArray(saved.exploration?.visited)?saved.exploration.visited:[]).filter(id=>this.mapPlaces.some(n=>n.id===id)));
  const rows=Array.isArray(saved.exploration?.rows)?saved.exploration.rows:[];
  for(const entry of rows){if(!Array.isArray(entry)||!Number.isInteger(entry[0])||entry[0]<0||entry[0]>=FOG_ROWS||!Array.isArray(entry[1]))continue;for(const pair of entry[1])if(Array.isArray(pair)&&pair.length===2&&pair.every(Number.isInteger)&&pair[0]>=0&&pair[1]<FOG_COLS&&pair[0]<=pair[1])this.revealFogRange(entry[0],pair[0],pair[1]);}
- // Legacy saves remember visited settlements, not the old omniscient map.
- if(!saved.exploration)for(const id of this.discovered){const n=Atlas.byId[id];if(n)this.revealFogAt(n.x,n.y);}
+ // Legacy and relocated saves remember visited settlements, not the old fog.
+ if(!saved.exploration||saved.exploration.relocated)for(const id of this.discovered){const n=Atlas.byId[id];if(n)this.revealFogAt(n.x,n.y);}
 };
 const explorationRestore=Game.prototype.finishTravelRestore;
 Game.prototype.finishTravelRestore=function(saved){explorationRestore.call(this,saved);this.recordExploration();if(!this.canTrackPlace(this.mapPlaces.find(n=>n.id===this.navigation)))this.navigation=null;};
