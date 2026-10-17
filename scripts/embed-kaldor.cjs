@@ -13,7 +13,8 @@ replaceOnce("if(kind==='hero')oracleHero(c,dir,state,frame,combo);", "if(kind===
 const oldIdle="if(kind==='guardian'&&state==='idle')frame=guardianFrame(actor.dir,'idle',time);";
 replaceOnce(oldIdle,oldIdle+"if(kind==='hero'&&state==='idle')frame=HearthreaverKaldorArt.idleFrame(time);");
 const anchor="if(kind==='hero'&&state==='idle')frame=HearthreaverKaldorArt.idleFrame(time);";
-replaceOnce(anchor,anchor+"if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;}");
+if(!html.includes("if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;if(HearthreaverKaldorCivilianArt.ready()"))
+ replaceOnce(anchor,anchor+"if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;}");
 // Use the very same 48px modular head, outfit, arms and 8-frame walk as human NPCs.
 // When their PNG atlases are still decoding, the existing JS sprite remains a
 // transient fallback. Human frames bypass the legacy CharacterAtlas frame cache.
