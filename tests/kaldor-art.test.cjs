@@ -320,7 +320,7 @@ test('attacks hold the sword in both hands, along the exact gameplay blade direc
    const at=(x,y)=>{const i=(Math.round(y+52)*80+Math.round(x+40))*4;return d[i+3]?[d[i],d[i+1],d[i+2]].join(','):'';};
    const p=human.attackPose(dir,frame,combo,pose);
    // Strike, contact and follow-through keep the swept gameplay direction;
-   // wind-up and recovery are free drawings (the back-view chop lays the blade down).
+   // wind-up and recovery are free drawings.
    if(frame>=2&&frame<=4){
     const [x,y,vx,vy]=pose(dir,frame,combo),l=Math.hypot(vx,vy);
     assert.ok(Math.abs(p.blade[0]-vx/l)<1e-9&&Math.abs(p.blade[1]-vy/l)<1e-9,'blade follows swordPose '+dir+':'+combo+':'+frame);
@@ -344,5 +344,67 @@ test('sword, harness and scabbard never paint over the NPC eyes, nose and mouth'
   for(let y=36;y<=42;y++)for(let x=36;x<=44;x++){
    const i=(y*80+x)*4;assert.deepEqual([...hero.slice(i,i+4)],[...npc.slice(i,i+4)],`${state} face pixel ${x},${y}`);
   }
+ }
+});
+
+const STEEL=new Set(['154,166,171','214,220,220','251,251,239']);
+const rgbAt=(d,x,y)=>{const i=(y*80+x)*4;return d[i+3]?[d[i],d[i+1],d[i+2]].join(','):'';};
+
+test('the sword in hand is held point up in every view, while idle, walking and after a blow',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ for(let dir=0;dir<4;dir++){
+  for(let combo=0;combo<4;combo++)assert.ok(human.attackPose(dir,5,combo,pose).blade[1]<-.6,`recovery guard ${dir}:${combo}`);
+  for(const [state,n] of [['idle',4],['walk',8]])for(let f=0;f<n;f++){
+   const d=shot(human.nativeFrame(dir,state,f,0,pose).getContext('2d'));
+   let top=80,bottom=0,count=0;
+   for(let y=0;y<80;y++)for(let x=0;x<80;x++)if(STEEL.has(rgbAt(d,x,y))){count++;top=Math.min(top,y);bottom=Math.max(bottom,y);}
+   assert.ok(count>=4,`${state} ${dir}:${f} shows the blade`);
+   // Steel only above the hips, the tip above the shoulders.
+   assert.ok(bottom<=46&&top<=40,`${state} ${dir}:${f} blade points up (${top}..${bottom})`);
+  }
+ }
+});
+
+test('seen from the back, the swing stays behind the hair and body except the overhead wind-up',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ // Interior of the back-view silhouette, eroded by the 2px head lean.
+ const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,'idle',0,0).getContext('2d'));
+ const solid=(x,y)=>npc[(y*80+x)*4+3]>0;
+ const inside=(x,y)=>{for(let j=-2;j<=2;j++)for(let i=-2;i<=2;i++)if(!solid(x+i,y+j))return false;return true;};
+ for(let combo=0;combo<4;combo++)for(let frame=1;frame<=5;frame++){
+  const overhead=combo===3&&frame===1;
+  assert.equal(human.attackPose(0,frame,combo,pose).front,overhead,`front ${combo}:${frame}`);
+  if(overhead)continue;
+  const d=shot(human.nativeFrame(0,'attack',frame,combo,pose).getContext('2d'));
+  for(let y=2;y<78;y++)for(let x=2;x<78;x++)
+   assert.ok(!(inside(x,y)&&STEEL.has(rgbAt(d,x,y))),`steel over the back ${combo}:${frame} at ${x},${y}`);
+ }
+ for(let f=0;f<4;f++){
+  const d=shot(human.nativeFrame(0,'idle',f,0,pose).getContext('2d'));
+  for(let y=2;y<78;y++)for(let x=2;x<78;x++)assert.ok(!(inside(x,y)&&STEEL.has(rgbAt(d,x,y))),`idle steel over the back ${f}`);
+ }
+});
+
+test('scabbard and harness on the back move with the body through the walk and idle',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ for(let dir=0;dir<4;dir++)for(const [state,n] of [['sheathed_walk',8],['sheathed_idle',4]]){
+  const gaps=new Set(),heads=new Set();
+  for(let f=0;f<n;f++){
+   const p=human.pose(state,f,dir);
+   const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,p.action,dir,p.frame).getContext('2d'));
+   const hero=shot(human.nativeFrame(dir,state,f,0,pose).getContext('2d'));
+   let head=-1,gear=-1;
+   for(let y=0;y<80&&(head<0||gear<0);y++)for(let x=0;x<80;x++){
+    const i=(y*80+x)*4;
+    if(head<0&&npc[i+3])head=y;
+    if(gear<0&&(hero[i]!==npc[i]||hero[i+1]!==npc[i+1]||hero[i+2]!==npc[i+2]||hero[i+3]!==npc[i+3]))gear=y;
+   }
+   heads.add(head);gaps.add(gear-head);
+  }
+  assert.ok(heads.size>1,`${state} ${dir}: the body bobs`);
+  assert.equal(gaps.size,1,`${state} ${dir}: the hilt keeps its place on the shoulders`);
  }
 });

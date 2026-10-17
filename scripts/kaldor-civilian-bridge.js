@@ -125,6 +125,7 @@
  // 3px wrapped grip and pommel (16px from pommel to tip, as tall as his body).
  const BLADE=11;
  function paintSword(b,hx,hy,ux,uy,{hands=2,blade=BLADE}={}){
+  blade=Math.max(2,Math.round(blade));
   const nx=-uy,ny=ux,at=d=>[hx+ux*d,hy+uy*d];
   // Second blade row on the axis that keeps a 2px edge at every angle.
   const ox=Math.abs(ux)>=Math.abs(uy)?0:(ux*uy>=0?-1:1),oy=ox?0:-1;
@@ -180,7 +181,7 @@
   return out;
  }
  // Fold the two baked NPC hands into the torso: Kaldor's hands are on the grip.
- function torsoOnly(body,dir){
+ function torsoOnly(body,dir,dx=0){
   const cv=document.createElement('canvas');cv.width=cv.height=80;
   const c=cv.getContext('2d');c.drawImage(body,0,0);
   const im=c.getImageData(0,0,80,80),d=im.data;
@@ -189,14 +190,31 @@
   const solid=(x,y)=>d[(y*80+x)*4+3]>0;
   if(dir===0||dir===2){
    for(let y=top;y<=top+3;y++)for(let x=28;x<52;x++){
-    if(x<=35||x>=(y===top+3?45:44))put(x,y,null);
+    if(x<=35+dx||x>=(y===top+3?45:44)+dx)put(x,y,null);
    }
-   for(const x of [36,43])if(!solid(x,top))put(x,top,INK);
+   for(const x of [36+dx,43+dx])if(!solid(x,top))put(x,top,INK);
   }else{
-   const xs=dir===1?[38,39,40]:[38,39];
+   const xs=(dir===1?[38,39,40]:[38,39]).map(x=>x+dx);
    for(let y=top+1;y<=top+2;y++)for(const x of xs)if(solid(x,y))put(x,y,SKIN[0]);
   }
   c.putImageData(im,0,0);return cv;
+ }
+ // Shift of the NPC head (and the torso under it) from the idle rest pose:
+ // walk bob, breathing, recoil. Harness, scabbard and held sword follow it.
+ const shiftCache=new Map();
+ function headBox(action,dir,frame){
+  const L=layers(action,dir,frame);if(!L)return null;
+  const d=pixels(L.head);let top=-1,left=80;
+  for(let y=0;y<80;y++)for(let x=0;x<80;x++)if(d[(y*80+x)*4+3]){if(top<0)top=y;if(x<left)left=x;}
+  return top<0?null:[left,top];
+ }
+ function bodyShift(action,dir,frame){
+  const key=[action,dir,frame].join(':');
+  if(shiftCache.has(key))return shiftCache.get(key);
+  const a=headBox(action,dir,frame),r=headBox('idle',dir,0);
+  const out=a&&r?[a[0]-r[0],a[1]-r[1]]:[0,0];
+  if(a&&r)shiftCache.set(key,out);
+  return out;
  }
 
  // ---- Attack choreography -------------------------------------------------
@@ -217,28 +235,33 @@
    [null,F([6,-9],1,[1,-1]),F([5,-4],1,[0,0],[-1,0]),F([1,-3],1,[0,1],[0,-1]),F([-5,-3],1,[-1,1],[1,0]),null],
    [null,F([0,-21],2,[0,-1]),F([0,-5],1,[0,1],[0,-1]),F([0,-3],1,[0,2],[0,-1]),F([2,-3],1,[0,1]),null]
   ],
-  // Profile, facing right (left is mirrored).
+  // Profile, facing right (left is mirrored). Wind-ups raise the grip above
+  // the hair, so the blade never has to pass through the head.
   1:[
-   [null,F([-4,-15],1,[-1,0]),F([6,-9],1,[1,0],[-1,0],true),F([6,-6],1,[1,1],[-1,0],true),F([4,-4],1,[1,1],[0,0],true),null],
+   [null,F([-3,-20],1,[-1,0]),F([6,-9],1,[1,0],[-1,0],true),F([6,-6],1,[1,1],[-1,0],true),F([4,-4],1,[1,1],[0,0],true),null],
    [null,F([6,-6],1,[0,1]),F([6,-9],1,[1,0],[-1,0],true),F([2,-19],1,[1,-1],[-1,1],true),F([-2,-18],1,[0,-1],[0,1]),null],
-   [null,F([-3,-14],1,[-1,0]),F([5,-12],1,[0,-1],[-1,0],true),F([6,-7],1,[1,0],[-1,0],true),F([4,-4],1,[1,1],[0,0],true),null],
-   [null,F([-3,-16],1,[-1,-1]),F([5,-11],1,[0,0],[-1,0],true),F([5,-6],1,[1,1],[-1,0],true),F([4,-4],1,[1,2],[0,-1],true),null]
+   [null,F([-4,-19],1,[-1,0]),F([5,-12],1,[0,-1],[-1,0],true),F([6,-7],1,[1,0],[-1,0],true),F([4,-4],1,[1,1],[0,0],true),null],
+   [null,F([-4,-20],1,[-1,-1]),F([5,-11],1,[0,0],[-1,0],true),F([5,-6],1,[1,1],[-1,0],true),F([4,-4],1,[1,2],[0,-1],true),null]
   ],
-  // Back view: forward is up on screen, the blade shows above or beside the head.
+  // Back view: forward is up on screen. The sword is in front of the hero, so
+  // his hair and back hide the hands and the grip; only the blade and its
+  // smear show around the head. Overhead wind-up: hands above the hair.
   0:[
-   [null,F([7,-9],1,[1,0]),F([2,-15],0,[0,-1],[-1,0]),F([-4,-13],0,[0,-1],[1,0]),F([-7,-7],1,[-1,0],[1,0]),null],
-   [null,F([-4,-13],0,[-1,0]),F([2,-15],0,[0,-1],[1,0]),F([7,-9],1,[0,-1],[-1,0]),F([7,-7],1,[1,0],[-1,0]),null],
-   [null,F([7,-10],1,[1,0]),F([2,-15],0,[0,-1],[-1,0]),F([-4,-13],0,[0,-1],[1,0]),F([-7,-6],1,[-1,0],[1,0]),null],
-   [null,F([0,-21],1,[0,1],[0,0],false,[-.3,.95]),F([0,-17],0,[0,-1],[0,1]),F([0,-14],0,[0,-2],[0,1]),F([2,-12],0,[0,-1]),null]
+   [null,F([7,-9],0,[1,0]),F([2,-15],0,[0,-1],[-1,0]),F([-4,-13],0,[0,-1],[1,0]),F([-7,-7],0,[-1,0],[1,0]),null],
+   [null,F([-4,-13],0,[-1,0]),F([2,-15],0,[0,-1],[1,0]),F([7,-9],0,[0,-1],[-1,0]),F([7,-7],0,[1,0],[-1,0]),null],
+   [null,F([7,-10],0,[1,0]),F([2,-15],0,[0,-1],[-1,0]),F([-4,-13],0,[0,-1],[1,0]),F([-7,-6],0,[-1,0],[1,0]),null],
+   [null,F([0,-22],2,[0,1]),F([0,-17],0,[0,-1],[0,1]),F([0,-14],0,[0,-2],[0,1]),F([2,-12],0,[0,-1]),null]
   ]
  };
- // Sword held low and forward, ready: recovery frame, drawn idle and walk.
- const GUARD={2:{h:[-6,-6],u:[-.6,.8]},1:{h:[3,-6],u:[.8,.6]},0:{h:[6,-6],u:[.5,.85]},3:{h:[-4,-6],u:[-.8,.6]}};
+ // Sword held point up, ready: recovery frame, idle, walk. Face and back:
+ // in the right hand at the side, blade tilted out past the hair. Profile:
+ // hands forward, blade raised in front of the face.
+ const GUARD={2:{h:[-6,-6],u:[-.5,-.87]},1:{h:[3,-6],u:[.71,-.71]},0:{h:[6,-6],u:[.6,-.8]},3:{h:[-4,-6],u:[-.71,-.71]}};
  const SHOULDERS={2:[[-4,-8],[3,-8]],0:[[-4,-8],[3,-8]],1:[[0,-8]],3:[[-1,-8]]};
  function attackSpec(dir,frame,combo){
   const view=dir===3?1:dir,row=ATTACK[view][Math.max(0,Math.min(3,combo))];
   let s=row[Math.max(1,Math.min(5,frame))];
-  if(!s){const g=GUARD[dir];return {h:g.h,z:1,head:[0,0],hair:[0,0],lunge:false,u:g.u,rest:true};}
+  if(!s){const g=GUARD[dir];return {h:g.h,z:dir===0?0:1,head:[0,0],hair:[0,0],lunge:false,u:g.u,rest:true};}
   s={...s,h:[...s.h],head:[...s.head],hair:[...s.hair],u:s.u&&[...s.u]};
   if(dir===3){s.h[0]=-s.h[0]-1;s.head[0]=-s.head[0];s.hair[0]=-s.hair[0];if(s.u)s.u[0]=-s.u[0];}
   return s;
@@ -289,9 +312,11 @@
  }
 
  // ---- Back scabbard and harness, sized to the human torso. ----
+ // Hilt over the right shoulder in every view: screen right from the back,
+ // screen left from the front, behind the head in profile.
  const sheath={
   0:{w:[6,-13],v:[-8,10]},1:{w:[-6,-17],v:[6,9]},
-  2:{w:[6,-13],v:[-7,10]},3:{w:[5,-17],v:[-6,9]}
+  2:{w:[-9,-14],v:[8,10]},3:{w:[5,-17],v:[-6,9]}
  };
  // part: 'sheath' (leather body, under the hair) or 'hilt' (guard, grip
  // and pommel standing out of the hair above the shoulder); default both.
@@ -319,27 +344,31 @@
   b.paint(c);
  }
 
- // ---- Hand search for non-attack drawn states (walk, idle, hurt...). ----
- const HAND_ZONE={2:[30,36,43,49],1:[36,41,43,49],0:[43,49,43,49],3:[36,40,43,49]};
- function handPoint(d,dir){
-  const [x0,x1,y0,y1]=HAND_ZONE[dir];let sx=0,sy=0,n=0;
+ // ---- The NPC's own right hand in the face view (walk swing, recoil). ----
+ // Null when too little of it shows; the guard grip is used instead.
+ function handPoint(d){
+  const [x0,x1,y0,y1]=[30,36,43,49];let sx=0,sy=0,n=0;
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
    const i=(y*80+x)*4;if(!d[i+3])continue;
    const r=d[i],g=d[i+1],bb=d[i+2];
    if(r>=150&&r>g+30&&g>bb){sx+=x;sy+=y;n++;}
   }
-  return n?[sx/n-40,sy/n-52]:[GUARD[dir].h[0],GUARD[dir].h[1]];
+  return n>=3?[sx/n-40,sy/n-52]:null;
  }
- function weaponBlend(dir,state,frame,hand){
+ // Draw and sheathe: the hand travels between the guard and the scabbard
+ // mouth while the blade turns over the shoulder in depth, so its drawn length
+ // shrinks while it points at the camera, then grows into the scabbard.
+ function weaponBlend(dir,state,frame,hand,shift=[0,0]){
   const g=GUARD[dir],end=sheath[dir],[ex,ey]=unit(end.v[0],end.v[1]);
   const total=state==='draw'||state==='draw_walk'?5:6;
   const phase=state.endsWith('_walk')?Math.floor(frame/8):frame;
   const f=Math.max(0,Math.min(1,(phase+1)/total));
   const t=state.startsWith('draw')?1-f:f;
-  const sx=end.w[0]-ex,sy=end.w[1]-ey;
-  const a0=Math.atan2(g.u[1],g.u[0]);let da=Math.atan2(ey,ex)-a0;
-  while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;
-  return {h:[hand[0]+(sx-hand[0])*t,hand[1]+(sy-hand[1])*t],u:[Math.cos(a0+da*t),Math.sin(a0+da*t)]};
+  const mx=end.w[0]-ex+shift[0],my=end.w[1]-ey+shift[1];
+  const m=Math.min(1,t/.6),r=Math.max(0,Math.min(1,(t-.3)/.7));
+  const vx=g.u[0]+(ex-g.u[0])*r,vy=g.u[1]+(ey-g.u[1])*r;
+  return {h:[hand[0]+(mx-hand[0])*m,hand[1]+(my-hand[1])*m],u:unit(vx,vy),
+   length:Math.max(.3,Math.hypot(vx,vy)),t};
  }
 
  const HAIR_COLORS=Object.freeze(['#2e2029','#523a34','#927052']);
@@ -369,6 +398,21 @@
  }
 
  function canvas80(){const out=document.createElement('canvas');out.width=80;out.height=80;const c=out.getContext('2d');c.imageSmoothingEnabled=false;return [out,c];}
+ // Stack the NPC layers like the composer does, with the baked hands folded
+ // into the torso, the head and hair offset, and the harness on the chest.
+ function stack(c,L,legs,dir,head=[0,0],hair=[0,0],shift=[0,0]){
+  const at=(img,dx,dy)=>c.drawImage(img,dx,dy);
+  const [hx,hy]=head,[tx,ty]=[hx+hair[0],hy+hair[1]];
+  at(L.hair[0],tx,ty);
+  if(L.headFirst)at(L.head,hx,hy);
+  at(torsoOnly(legs.body,dir,shift[0]),0,0);
+  at(L.hair[1],tx,ty);
+  if(!L.headFirst)at(L.head,hx,hy);
+  at(legs.fore,0,0);
+  c.save();c.translate(40+shift[0],52+shift[1]);gear(c,dir);c.restore();
+  at(L.hair[2],tx,ty);
+ }
+ const paintAt=(c,g)=>{c.save();c.translate(40,52);g.paint(c);c.restore();};
  function attackFrame(dir,frame,combo,swordPose){
   const s=attackSpec(dir,frame,combo);
   const L=layers('idle',dir,0),legs=s.lunge?layers('walk',dir,0):L;
@@ -383,22 +427,36 @@
   if(frame===2||frame===3)smear(trail,dir,frame,combo,swordPose,frame===2?4.5:3,behind);
   else if(frame===4)smear(trail,dir,frame,combo,swordPose,1.5,behind);
   if(combo===3&&frame===3)impact(trail,s.h[0]+u[0]*(3+BLADE),s.h[1]+u[1]*(3+BLADE));
-  const at=(img,dx,dy)=>c.drawImage(img,dx,dy);
-  const [hx,hy]=s.head,[tx,ty]=[hx+s.hair[0],hy+s.hair[1]];
-  const draw=g=>{c.save();c.translate(40,52);g.paint(c);c.restore();};
-  draw(behind);
-  if(s.z!==1){draw(trail);draw(sword);}
-  at(L.hair[0],tx,ty);
-  if(L.headFirst)at(L.head,hx,hy);
-  at(torsoOnly(legs.body,dir),0,0);
-  at(L.hair[1],tx,ty);
-  if(!L.headFirst)at(L.head,hx,hy);
-  at(legs.fore,0,0);
-  c.save();c.translate(40,52);gear(c,dir);c.restore();
-  at(L.hair[2],tx,ty);
-  if(s.z===1){draw(trail);draw(sword);}
-  draw(hands);
+  paintAt(c,behind);
+  if(s.z!==1){paintAt(c,trail);paintAt(c,sword);}
+  stack(c,L,legs,dir,s.head,s.hair);
+  if(s.z===1){paintAt(c,trail);paintAt(c,sword);}
+  paintAt(c,hands);
   return out;
+ }
+ const BLEND_STATES=new Set(['sheathe','sheathe_walk','draw','draw_walk']);
+ // Sword in hand outside attacks, point up. Face and back: the NPC's own right
+ // hand holds it. Profile: both hands forward as in the attack guard. Hidden by
+ // the body when it is in front of the hero seen from the back, or on its way
+ // over the shoulder into the scabbard in the other views.
+ function heldSword(dir,state,frame,p,npcPixels,shift){
+  const profile=dir===1||dir===3,g=GUARD[dir];
+  // The back view hides the NPC hands under the hair: use the guard grip.
+  const hand=(dir===2&&handPoint(npcPixels))||[g.h[0]+shift[0],g.h[1]+shift[1]];
+  const held=BLEND_STATES.has(state)?weaponBlend(dir,state,frame,hand,shift):{h:hand,u:g.u,length:1,t:0};
+  held.behind=dir===0?held.t<.5:held.t>=(profile?.3:.5);
+  const sword=buffer(),hands=buffer(),grip=held.behind&&dir!==2?sword:hands;
+  const [hx,hy]=held.h,[ux,uy]=held.u;
+  paintSword(sword,hx,hy,ux,uy,{hands:0,blade:BLADE*held.length});
+  if(profile){
+   for(const [sx,sy] of SHOULDERS[dir])arm(grip,sx+shift[0],sy+shift[1],hx,hy);
+   fist(grip,hx,hy);fist(grip,hx-ux*2,hy-uy*2);
+  }else fist(grip,hx,hy);
+  sword.outline();hands.outline();
+  // Profile: carry is a walk with the arms out; take the walk with arms down.
+  let L=null;
+  if(profile)L=p.action==='carry'?layers('walk',dir,(8-p.frame)%8):layers(p.action,dir,p.frame);
+  return {sword,hands,behind:held.behind,L};
  }
 
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
@@ -417,21 +475,20 @@
    const human=CIVILIAN_BITMAPS.get(appearance,p.action,dir,p.frame);
    if(!human)return null;
    let c;[out,c]=canvas80();
+   const shift=bodyShift(p.action,dir,p.frame);
+   const onBody=paint=>{c.save();c.translate(40+shift[0],52+shift[1]);paint();c.restore();};
    const sheathed=state.startsWith('sheathed_');
-   if(sheathed&&dir!==0){c.save();c.translate(40,52);scabbard(c,dir);c.restore();}
    const npcPixels=pixels(human);
+   const held=sheathed?null:heldSword(dir,state,frame,p,npcPixels,shift);
+   if(sheathed&&dir!==0)onBody(()=>scabbard(c,dir));
+   if(held&&held.behind)paintAt(c,held.sword);
    hairTips(c,npcPixels,dir,state,frame,true);
-   c.drawImage(human,0,0);
+   if(held&&held.L)stack(c,held.L,held.L,dir,[0,0],[0,0],shift);
+   else{c.drawImage(human,0,0);onBody(()=>gear(c,dir));}
    hairTips(c,npcPixels,dir,state,frame,false);
-   c.save();c.translate(40,52);gear(c,dir);c.restore();
-   if(sheathed){
-    if(dir===0){c.save();c.translate(40,52);scabbard(c,dir);c.restore();}
-   }else{
-    const hand=handPoint(npcPixels,dir);
-    const g=['sheathe','sheathe_walk','draw','draw_walk'].includes(state)?weaponBlend(dir,state,frame,hand):{h:hand,u:GUARD[dir].u};
-    const b=buffer();paintSword(b,g.h[0],g.h[1],g.u[0],g.u[1],{hands:1});b.outline();
-    c.save();c.translate(40,52);b.paint(c);c.restore();
-   }
+   if(sheathed&&dir===0)onBody(()=>scabbard(c,dir));
+   if(held&&!held.behind)paintAt(c,held.sword);
+   if(held)paintAt(c,held.hands);
   }
   if(flash){
    const c=out.getContext('2d');
@@ -441,7 +498,7 @@
   cache.set(key,out);while(cache.size>192)cache.delete(cache.keys().next().value);
   return out;
  }
- function clear(){cache.clear();layerCache.clear();}
+ function clear(){cache.clear();layerCache.clear();shiftCache.clear();}
  // Grip and blade direction actually drawn, exposed for regression tests.
  function attackPose(dir,frame,combo,swordPose){
   const s=attackSpec(dir,frame,combo);

@@ -22,7 +22,10 @@ propre à Kaldor ; rien ne recouvre les yeux, le nez ni la bouche de la tête PN
   lit donc dans l'ordre 0, 7, 6 … 1 ; face et dos gardent l'ordre de l'atlas.
 - **Épée :** grande épée à l'échelle du corps humain (lame de 11 px sur
   deux rangs, garde dorée de 5 px, poignée de cuir et pommeau : 16 px de la
-  pointe au pommeau), contour d'encre de 1 px comme les PNJ.
+  pointe au pommeau), contour d'encre de 1 px comme les PNJ. Tirée, elle
+  est toujours tenue **pointe en haut** (repos, marche, retour en garde) :
+  de face et de dos dans la main droite, lame inclinée hors des cheveux ; de
+  profil à deux mains devant le corps, lame levée devant le visage.
 - **Attaques :** les calques PNJ (cheveux arrière, tête, torse, cheveux
   avant) sont posés séparément pour que la tête se penche et que les
   cheveux traînent ; les deux mains peintes dans le torse sont repliées et
@@ -33,14 +36,24 @@ propre à Kaldor ; rien ne recouvre les yeux, le nez ni la bouche de la tête PN
   direction de **`swordPose()`**, celle que balaie `bladeHits()` ; l'élan et
   le retour sont libres. Durées `COMBO_TIMES`, pas d'attaque, pause
   d'impact, zones de touche et règles de gameplay ne changent pas.
+- **Occultation :** de dos, l'épée est devant Kaldor, donc ses cheveux et son
+  dos cachent les mains, la poignée et la partie de lame qui passe derrière
+  la tête ; seule la levée du coup 4 montre les mains au-dessus des cheveux.
+  De profil, les élans lèvent la poignée au-dessus de la tête au lieu de
+  faire passer la lame à travers. Au rangement, l'épée passe derrière le
+  corps de face et de profil, et sur le dos dans la vue de dos.
 - **Autres états :** `carry`, `hit`, `startle` et `flee` restent les poses
-  du corps en garde, blessure, mêlée et esquive ; l'épée tirée est tenue
-  basse vers l'avant dans la vraie main du PNJ, sans passer devant le visage.
+  du corps en garde, blessure, mêlée et esquive ; l'épée tirée suit la main
+  du PNJ de face, et le décalage du corps (balancement de la marche,
+  respiration, recul) dans les autres vues.
 - **Rengainage :** conservation de `HearthreaverKaldorArt.weaponVisual()`.
   Les transitions de rangement gardent leurs étapes, tout en échantillonnant
   les **8** véritables frames de marche. Le fourreau, raccourci à la taille
-  de l'épée, passe sous les cheveux : de profil seul le pommeau dépasse
-  au-dessus de l'épaule.
+  de l'épée, porte la poignée sur l'épaule droite dans toutes les vues et
+  passe sous les cheveux ; fourreau et baudrier suivent le corps à chaque
+  image (marche, respiration, recul). Pendant le geste, la lame tourne
+  par-dessus l'épaule en profondeur : elle raccourcit à l'écran quand elle
+  pointe vers la caméra, puis s'allonge vers le fourreau.
 - **Chargement :** les modules PNG existants restent dans l'atlas intégré au
   HTML du jeu ; aucun téléchargement supplémentaire. Tant que le décodeur
   d'images prépare le module du héros, l'ancien Kaldor JavaScript sert de
