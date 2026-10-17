@@ -136,6 +136,11 @@ test('cold restart preserves a paid journey, which keeps going while the app is 
   // Back before the arrival: the time away is replayed, the alert is withdrawn and the trip goes on.
   a.game.journey.away-=1500;a.game.journey.arrival-=1500;hidden(false);raf(5040);
   assert.equal(a.state,'playing');assert.equal(a.game.journey.away,undefined);assert.ok(a.game.journey.elapsed>=elapsed+1.5);assert.equal(last().action,'cancel');assert.equal($('worldJourney').hidden,false);
+  // Turning the device to portrait does not pause a journey either; it is replayed back in landscape.
+  const rotate=(width,height)=>{w.innerWidth=width;w.innerHeight=height;w.dispatchEvent(new w.Event('resize'));};
+  rotate(390,844);assert.equal($('landscapeGate').hidden,false);assert.equal(a.state,'playing');assert.ok(Number.isFinite(a.game.journey.away));assert.equal(last().action,'schedule');
+  a.game.journey.away-=500;a.game.journey.arrival-=500;const turned=a.game.journey.elapsed;raf(5050);assert.equal(a.game.journey.elapsed,turned);
+  rotate(844,390);raf(5060);assert.equal(a.state,'playing');assert.equal(a.game.journey.away,undefined);assert.ok(a.game.journey.elapsed>=turned+.5);assert.equal(last().action,'cancel');
   // A journey saved while hidden resumes from a cold restart.
   w.dispatchEvent(new w.Event('pagehide'));assert.equal(a.state,'playing');assert.ok(Number.isFinite(a.game.journey.away));
   a.showTitle();raf(5100);assert.equal($('worldJourney').hidden,true);click('menuLoad');assert.equal(a.game.journey.away,undefined);raf(5130);assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);

@@ -14,7 +14,7 @@ Le menu utilise un logo rouge métallique bordé d'or, dessiné dans Aseprite, a
 
 Sur iPhone : ouvrir l'adresse dans Safari, puis Partager › « Sur l'écran d'accueil » (laisser « Ouvrir en tant qu'app web » activé) pour jouer en plein écran.
 
-Le jeu se joue en **paysage**. Le menu garde ses quatre boutons dans une colonne et adapte la taille du logo à la hauteur disponible, à l'encoche et à la barre d'accueil. L'app iOS autorise uniquement les deux orientations paysage. La version web demande le verrouillage lorsque le navigateur le permet ; sinon, passer en portrait affiche une invitation à tourner l'appareil et met la partie en pause, sans mouvement ni combat en arrière-plan.
+Le jeu se joue en **paysage**. Le menu garde ses quatre boutons dans une colonne et adapte la taille du logo à la hauteur disponible, à l'encoche et à la barre d'accueil. L'app iOS autorise uniquement les deux orientations paysage. La version web demande le verrouillage lorsque le navigateur le permet ; sinon, passer en portrait affiche une invitation à tourner l'appareil et met la partie en pause, sans mouvement ni combat en arrière-plan. Un voyage en cours continue, comme lorsque l'app passe en arrière-plan.
 
 Le colosse gardien utilise 32 animations Aseprite : huit actions dans quatre directions, avec un repos animé, une saisie synchronisée avec Kaldor et une mort en pierres sans sang. Sa chute accélère sous la gravité, avec des rebonds amortis et un peu de poussière. Les sprites sont inclus dans le jeu pour rester disponibles hors ligne.
 
