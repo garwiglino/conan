@@ -290,7 +290,7 @@ test('the real CharacterAtlas draws modular human head, hands and sheathed sword
  ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.40);
  const nextStep=human.gaitFrame(actor);
  const expectedStep=human.nativeFrame(2,'sheathed_walk',nextStep);
- assert.deepEqual(shot(ctx),shot(expectedStep.getContext('2d')));
+ assert.deepEqual(shot(actor._img.getContext('2d')),shot(expectedStep.getContext('2d')));
  actor.attack=.18;actor.combo=2;ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.5);
  assert.equal(actor.kaldorWeapon.mode,'drawn');assert.ok(actor._img);
 });
