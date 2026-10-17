@@ -14,7 +14,7 @@ Le menu utilise un logo rouge métallique bordé d'or, dessiné dans Aseprite, a
 
 Sur iPhone : ouvrir l'adresse dans Safari, puis Partager › « Sur l'écran d'accueil » (laisser « Ouvrir en tant qu'app web » activé) pour jouer en plein écran.
 
-Le jeu se joue en **paysage**. Le menu garde ses quatre boutons dans une colonne et adapte la taille du logo à la hauteur disponible, à l'encoche et à la barre d'accueil. L'app iOS autorise uniquement les deux orientations paysage. La version web demande le verrouillage lorsque le navigateur le permet ; sinon, passer en portrait affiche une invitation à tourner l'appareil et met la partie en pause, sans mouvement ni combat en arrière-plan.
+Le jeu se joue en **paysage**. Le menu garde ses quatre boutons dans une colonne et adapte la taille du logo à la hauteur disponible, à l'encoche et à la barre d'accueil. L'app iOS autorise uniquement les deux orientations paysage. La version web demande le verrouillage lorsque le navigateur le permet ; sinon, passer en portrait affiche une invitation à tourner l'appareil et met la partie en pause, sans mouvement ni combat en arrière-plan. Un voyage en cours continue, comme lorsque l'app passe en arrière-plan.
 
 Le colosse gardien utilise 32 animations Aseprite : huit actions dans quatre directions, avec un repos animé, une saisie synchronisée avec Kaldor et une mort en pierres sans sang. Sa chute accélère sous la gravité, avec des rebonds amortis et un peu de poussière. Les sprites sont inclus dans le jeu pour rester disponibles hors ligne.
 
@@ -33,6 +33,10 @@ interrompt le rangement immédiatement, sans perdre le momentum des quatre
 combos et de leurs smears. Les quatre directions et le rendu en JavaScript
 préservent les mêmes dimensions que les batraciens. Voir [la réalisation et
 ses tests](docs/kaldor-art.md) et [l'atelier interactif](art/kaldor-preview.html).
+
+## Voyages en arrière-plan
+
+Un voyage en cheval, charrette ou bateau continue quand on change d'app ou d'onglet. Il suit l'heure réelle : au retour, le temps passé ailleurs est rattrapé. Si le voyage s'est terminé pendant l'absence, Kaldor est à destination et **le jeu est en pause**, avec la raison de l'arrêt. Sur iPhone, l'app programme une notification **« Arrivé à destination »** à l'heure prévue ; un voyage stoppé en route (passage menacé ou fermé) annonce « Voyage interrompu » et l'étape où Kaldor attend. L'autorisation est demandée au premier départ. Dans un navigateur, le premier départ propose aussi les notifications du site ; sans autorisation (ou depuis l'écran d'accueil d'un iPhone), seule la pause au retour s'applique. **Les notifications iOS demandent une réinstallation depuis Xcode (version 1.4, build 5)** ; sans elle, le voyage continue tout de même et le jeu se met en pause au retour.
 
 ## Quêtes et repos
 
@@ -79,7 +83,7 @@ La musique du titre démarre dès l’introduction et continue sans redémarrer 
 - `scripts/title-art.lua` reconstruit les dessins dans Aseprite ; `npm run build:title-theme` reconstruit le MIDI et sa partition JSON ; `npm run embed:title` intègre le tout dans les versions web et iOS hors ligne.
 - Les identifiants techniques historiques de stockage, d'origine iOS et de dépôt restent stables pour préserver les sauvegardes et les mises à jour des installations existantes.
 - [Archive iOS](Hearthreaver-iOS.zip) : sources natives, nouvelles icônes et jeu hors ligne synchronisé.
-- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.3 (build 4). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
+- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.4 (build 5). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
 
 ## Crédits
 - Polices : [Alagard](https://www.dafont.com/alagard.font) (Hewett Tsoi) · [Pixel Operator](https://www.dafont.com/pixel-operator.font) (Jayvee Enaguas, CC0)

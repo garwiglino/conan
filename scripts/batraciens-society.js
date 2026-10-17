@@ -110,7 +110,8 @@ const BatracienSociety = (() => {
  // Stop before the visible area; near actors always use collision-checked local movement.
  const advance=Game.prototype.advanceAtlas;
  Game.prototype.advanceAtlas=function(dt=0){const previous=this.atlasLastClock??this.clock;advance.call(this,dt);const minutes=Math.max(0,this.clock-previous);
-  if(!minutes||this.dialogue||this.dead||this.dying)return;
+  // A journey replayed after an absence skips this unseen travel: its terrain checks would cost seconds.
+  if(!minutes||this.dialogue||this.dead||this.dying||this.journeyReplay)return;
   for(const n of this.npcs){const r=n.batracien?.routine;if(r?.kind!=='road'||!alive(n)||n.dangerState||member(this,n)||r.partner||dist(n,this.player)<1100)continue;
    if(r.wait>0){r.wait=Math.max(0,r.wait-minutes*DAY_LEN/1440);continue;}
    if(r.approach){stepRoad(this,n,Math.min(2,minutes*DAY_LEN/1440));continue;}

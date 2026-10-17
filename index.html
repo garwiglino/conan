@@ -3960,6 +3960,55 @@ Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&this.atlas
 Game.prototype.travelDestinations=function(){return this.stations.filter(s=>Atlas.byId[s.site].kind!=='dock').map(s=>Atlas.byId[s.site]);};
 Game.prototype.stationLanding=function(id){const station=this.stations.find(s=>s.site===id);if(!station)return null;const a=station.actor;for(const [dx,dy]of [[0,18],[18,0],[-18,0],[0,-18],[24,24],[-24,24],[24,-24],[-24,-24]]){const p={x:a.x+dx,y:a.y+dy};if(!this.solid(p.x,p.y,5,0)&&this.lineClear(p,a))return p;}return null;};
 
+/* A journey keeps the wall clock while the game is hidden: the absence is replayed on return. */
+const JOURNEY_FRAME=.04,JOURNEY_READ=1.6,JOURNEY_REPLAY_STEP=.25,JOURNEY_REPLAY_STEPS=20000;
+// Screen seconds stepJourney needs to reach `until` (the end by default): each phase lasts its share of
+// screenSeconds and stays readable 1.6 s, except a phase cut short by an interruption.
+Game.prototype.journeyScreenLeft=function(until=null){const j=this.journey;if(!j)return 0;const stages=j.plan.stages,rate=j.plan.minutes/j.plan.screenSeconds,stop=until?until.index:stages.length;
+ let left=Math.max(0,j.mealPause||0),label=null,minutes=0,read=0;
+ for(let i=j.index;i<stages.length;i++){const s=stages[i],from=i===j.index?j.progress:0;
+  if(s.label!==label){if(label!==null)left+=Math.max(minutes/rate,JOURNEY_READ-read);label=s.label;minutes=0;read=i===j.index&&j.readLabel===label?j.readTime||0:0;}
+  if(i===stop)return left+(minutes+Math.max(0,until.progress-from))/rate;minutes+=s.minutes-from;}
+ return label===null?left:left+Math.max(minutes/rate,JOURNEY_READ-read);};
+// The stops stepJourney would make, checked on a copy of the world events: the event calendar only depends on the clock.
+Game.prototype.forecastJourney=function(){const j=this.journey;if(!j)return null;const stages=j.plan.stages,rate=j.plan.minutes/j.plan.screenSeconds,world=new Atlas.WorldState(this.worldState.serialize()),live=this.worldState,now=this.clock,at=(s,u)=>s.kind==='move'?{x:s.from[0]+(s.to[0]-s.from[0])*u,y:s.from[1]+(s.to[1]-s.from[1])*u}:s;
+ let index=j.index,progress=j.progress,lastSafe=j.lastSafe,reason=null;world.weatherAt=live.weatherAt;
+ try{this.worldState=world;for(let k=0;k<200000&&index<stages.length;k++){const s=stages[index],w=at(s,progress/s.minutes),land=Atlas.cellAt(w.x,w.y)?.land,site=Atlas.siteAt(w.x,w.y,15),sea=s.kind==='move'&&s.mode==='boat';
+   if(j.cancel&&(!sea&&land||site?.rest&&land)){reason='Voyage interrompu';break;}
+   if(this.journeyThreat(s)){reason='Le transport refuse un passage menacé';break;}
+   if(s.kind==='move'&&world.edgeStatus(Atlas.edgeById.get(s.edge),this.clock).closed&&(!sea||progress===0&&site?.rest&&land)){reason='Le passage vient de fermer';break;}
+   const step=Math.min(rate*JOURNEY_FRAME,60,s.minutes-progress);progress+=step;this.clock+=step;world.advance(this.clock,worldClimateAt);
+   const p=at(s,Math.min(1,progress/s.minutes)),end=Atlas.siteAt(p.x,p.y,10);if(end&&this.stations.some(station=>station.site===end.id))lastSafe=end.id;if(progress>=s.minutes-1e-7){index++;progress=0;}}}
+ finally{this.worldState=live;this.clock=now;}
+ const place=!reason&&this.stationLanding(j.plan.to)?Atlas.byId[j.plan.to]:this.journeySafeStation({...j,lastSafe});
+ return {seconds:this.journeyScreenLeft(reason?{index,progress}:null),arrived:!reason,reason:reason||'Arrivée à destination',place:place?.name||''};};
+// Marks the first departure from the screen and returns what will happen, with its time (ms since epoch).
+Game.prototype.leaveJourney=function(now=Date.now()){const j=this.journey;if(!j)return null;if(!Number.isFinite(j.away)||!Number.isFinite(j.arrival)||!j.outcome){const f=this.forecastJourney();j.away=now;j.arrival=now+Math.ceil(f.seconds*1000);j.outcome={arrived:f.arrived,reason:f.reason,place:f.place};}
+ return {at:j.arrival,...j.outcome};};
+// Replays the absence in quarter-second steps, with one save at the end. Past the announced time, the trip always ends.
+Game.prototype.resumeJourney=function(now=Date.now()){const j=this.journey;if(!j||!Number.isFinite(j.away))return false;const finish=Number.isFinite(j.arrival)&&now>=j.arrival,queued=this.events.length;let left=Math.max(0,(now-j.away)/1000);delete j.away;delete j.arrival;delete j.outcome;
+ this.journeyReplay=true;try{for(let i=0;this.journey===j&&(finish||left>1e-9)&&i<JOURNEY_REPLAY_STEPS;i++){const dt=finish?JOURNEY_REPLAY_STEP:Math.min(JOURNEY_REPLAY_STEP,left);this.stepJourney(dt);left-=dt;}}finally{this.journeyReplay=false;}
+ const replayed=this.events.splice(queued);this.events.push(...replayed.filter(e=>e.type!=='save'));this.emit('save');return true;};
+// While away, frames that still run must not advance the trip a second time.
+const backgroundStepJourney=Game.prototype.stepJourney;
+Game.prototype.stepJourney=function(dt){if(Number.isFinite(this.journey?.away))return;return backgroundStepJourney.call(this,dt);};
+const backgroundStartJourney=Game.prototype.startJourney;
+Game.prototype.startJourney=function(plan){const started=backgroundStartJourney.call(this,plan);if(started)this.emit('journeystart');return started;};
+
+// Alert for a hidden journey: the iOS app bridge first, then web notifications the player allowed.
+class TravelAlerts{
+ constructor(env=globalThis){this.env=env;this.timer=0;this.shown=null;}
+ get native(){return this.env.webkit?.messageHandlers?.hearthreaverTravel||null;}
+ // Home-screen web apps on iOS cannot build a Notification without a service worker.
+ get web(){const N=this.env.Notification;return typeof N==='function'&&!this.env.navigator?.standalone?N:null;}
+ prepare(){try{if(this.native)this.native.postMessage({action:'authorize'});else if(this.web?.permission==='default')Promise.resolve(this.web.requestPermission()).catch(()=>{});}catch{}}
+ static text(outcome){const title=outcome.arrived?'Arrivé à destination':'Voyage interrompu',body=(outcome.arrived?outcome.place?'Kaldor est arrivé à '+outcome.place+'. ':'':outcome.reason+'. '+(outcome.place?'Kaldor attend à '+outcome.place+'. ':''))+'Le jeu est en pause.';return {title,body};}
+ schedule(outcome){this.cancel();if(!Number.isFinite(outcome?.at))return false;const delay=Math.max(1,(outcome.at-Date.now())/1000),{title,body}=TravelAlerts.text(outcome);
+  try{if(this.native){this.native.postMessage({action:'schedule',delay,title,body});return true;}const N=this.web;if(N?.permission!=='granted')return false;
+   this.timer=this.env.setTimeout(()=>{this.timer=0;try{const shown=new N(title,{body,tag:'hearthreaver-arrival'});shown.onclick=()=>{this.env.focus?.();shown.close();};this.shown=shown;}catch{}},delay*1000);return true;}catch{return false;}}
+ cancel(){if(this.timer)this.env.clearTimeout(this.timer);this.timer=0;try{this.shown?.close();}catch{}this.shown=null;try{this.native?.postMessage({action:'cancel'});}catch{}}
+}
+
 /* A compressed row-interval fog grid: walking reveals terrain, not distant POIs.
    Its size grows with explored corridors, never with the whole world's area. */
 const FOG_METRES=256,FOG_COLS=Math.ceil(Atlas.raw.width/FOG_METRES),FOG_ROWS=Math.ceil(Atlas.raw.height/FOG_METRES);
@@ -8991,7 +9040,8 @@ const BatracienSociety = (() => {
  // Stop before the visible area; near actors always use collision-checked local movement.
  const advance=Game.prototype.advanceAtlas;
  Game.prototype.advanceAtlas=function(dt=0){const previous=this.atlasLastClock??this.clock;advance.call(this,dt);const minutes=Math.max(0,this.clock-previous);
-  if(!minutes||this.dialogue||this.dead||this.dying)return;
+  // A journey replayed after an absence skips this unseen travel: its terrain checks would cost seconds.
+  if(!minutes||this.dialogue||this.dead||this.dying||this.journeyReplay)return;
   for(const n of this.npcs){const r=n.batracien?.routine;if(r?.kind!=='road'||!alive(n)||n.dangerState||member(this,n)||r.partner||dist(n,this.player)<1100)continue;
    if(r.wait>0){r.wait=Math.max(0,r.wait-minutes*DAY_LEN/1440);continue;}
    if(r.approach){stepRoad(this,n,Math.min(2,minutes*DAY_LEN/1440));continue;}
@@ -9098,7 +9148,7 @@ installTextScaling();
 const $=id=>document.getElementById(id),KEY='conan-serpent-v1';
 let saved=null,storageWorks=true;try{saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved?.version!==1)saved=null;}catch{storageWorks=false;}
 let game;try{game=new Game(saved);}catch{saved=null;game=new Game();}
-const renderer=new Renderer($('game'),$('map'),game),sound=new Sound(),haptics=new Haptics();let state='title',keys=new Set(),pending={dodge:false,interact:false,attack:false},last=0,toastUntil=0,uiTime=0,newConfirm=false,confirmReturn='title';
+const renderer=new Renderer($('game'),$('map'),game),sound=new Sound(),haptics=new Haptics(),travelAlerts=new TravelAlerts();let state='title',keys=new Set(),pending={dodge:false,interact:false,attack:false},last=0,toastUntil=0,uiTime=0,newConfirm=false,confirmReturn='title';
 // BEGIN LANDSCAPE UI
 // Native UIKit and the web manifest enforce landscape where supported.
 // Browsers that decline orientation lock show a gate and suspend the game.
@@ -9111,7 +9161,8 @@ function syncLandscape(){
  const gate=$('landscapeGate');gate.hidden=!blocked;document.querySelector('.page').inert=blocked;
  if(blocked){
   landscapeFocus=document.activeElement;keys.clear();resetTouch();
-  if(state==='playing')pause();
+  // A journey goes on while the device is turned, like when the app is hidden.
+  if(state==='playing'&&game.journey){travelAlerts.schedule(game.leaveJourney());save();}else if(state==='playing')pause();
   sound.tick(false,null);sound.rain(0);sound.ambience({active:false});
   gate.focus({preventScroll:true});
  }else{
@@ -9206,7 +9257,7 @@ function musicMode(){const now=performance.now(),dt=Math.min(.1,(now-lastMusicT)
 function save(){if(game.dead||game.won||['title','options','quit'].includes(state))return;try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));$('saveStatus').textContent='PROGRESSION SAUVEGARDÉE DANS CE NAVIGATEUR';}catch{storageWorks=false;$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';}}
 function toast(msg,force=false){if(!force)return;$('toast').textContent=msg;$('toast').classList.add('visible');toastUntil=performance.now()+4800;}
 function overlay(label,title,desc,button,hint='',secondary=false,opt={}){$("overlay").inert=false;$('overlayLabel').textContent=label;$('overlayTitle').innerHTML=title;$('overlayText')[opt.html?'innerHTML':'textContent']=desc;$('start').innerHTML=button+' <span>↵</span>';$('overlayHint').textContent=hint;$('newGame').hidden=!secondary;$('newGame').textContent=opt.second||'Nouvelle partie';$('newGame').classList.toggle('as-button',!!opt.second);$('overlay').className='screen-overlay'+(opt.mode?' '+opt.mode:'');const act=$('overlay').querySelector('.overlay-actions');if(opt.second&&!act){const w=document.createElement('div');w.className='overlay-actions';$('start').before(w);w.append($('start'),$('newGame'));}else if(!opt.second&&act){act.before($('start'));$('start').after($('newGame'));act.remove();}$('toast').classList.remove('visible');keys.clear();pending={dodge:false,interact:false,attack:false};}
-function run(){if(landscapeBlocked)return;if(mobileMode)enterFull(true);titleFocus(false);$("overlay").inert=true;if(state==='title'||state==='confirm')titleDeparture=true;state='playing';updateWorldUI();newConfirm=false;$('overlay').classList.add('hidden');$('game').focus({preventScroll:true});$('pause').textContent='Ⅱ';last=performance.now();}
+function run(){if(landscapeBlocked)return;if(Number.isFinite(game.journey?.away)){travelAlerts.cancel();game.resumeJourney();}if(mobileMode)enterFull(true);titleFocus(false);$("overlay").inert=true;if(state==='title'||state==='confirm')titleDeparture=true;state='playing';updateWorldUI();newConfirm=false;$('overlay').classList.add('hidden');$('game').focus({preventScroll:true});$('pause').textContent='Ⅱ';last=performance.now();}
 function begin(){if(!BITMAPS.ready){toast(BITMAPS.errors.length?'Un atlas n’a pas pu être chargé. Recharge ce fichier.':'Chargement des sprites…',true);return;}if(state==='confirm'){game=new Game();renderer.setGame(game);save();run();toast('Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');return;}if(state==='dead'){game=new Game();renderer.setGame(game);save();run();return;}if(state==='deathscreen'){run();game.revive();return;}if(state==='win'||game.won){game=new Game();renderer.setGame(game);save();run();return;}if(state==='title'){run();toast(saved?'L’aventure reprend. Avar veille sur ton acier.':'Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');return;}if(state==='paused')run();}
 function showTitle(){state='title';updateWorldUI();$('titleOptions').hidden=true;$('titleExit').hidden=true;overlay('','HearthreaveR','','COMMENCER','',false,{mode:'title'});refreshTitleMenu();}
 function cancelNewGame(){newConfirm=false;if(confirmReturn==='title')showTitle();else{state='playing';pause();}}
@@ -9273,8 +9324,10 @@ window.addEventListener('keydown',e=>{if(landscapeBlocked){e.preventDefault();re
 window.addEventListener('keyup',e=>keys.delete(e.code==='Numpad0'?'attack':e.code==='NumpadDecimal'?'guard':e.key.toLowerCase()));
 window.addEventListener('blur',suspendSession);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)suspendSession();});
-function suspendSession(){keys.clear();resetTouch();pending={dodge:false,interact:false,attack:false};if(state==='playing')pause();else save();updateWorldUI();sound.tick(false,null);sound.rain(0);sound.ambience({active:false});sound.silent?.pause();}
+function suspendSession(){keys.clear();resetTouch();pending={dodge:false,interact:false,attack:false};if(state==='playing'&&game.journey){travelAlerts.schedule(game.leaveJourney());save();}else if(state==='playing')pause();else save();updateWorldUI();sound.tick(false,null);sound.rain(0);sound.ambience({active:false});sound.silent?.pause();}
 window.addEventListener('pagehide',suspendSession);
+// A journey left running while hidden is replayed on return; arriving meanwhile leaves the game paused.
+function returnToJourney(){if(!Number.isFinite(game.journey?.away))return;travelAlerts.cancel();game.resumeJourney();if(game.journey||state!=='playing')return;const end=game.events.filter(e=>e.type==='notice').at(-1);handleEvents();if(state!=='playing')return;pause();const arrived=!end||end.title==='Arrivée à destination';$('overlayLabel').textContent=arrived?'ARRIVÉ À DESTINATION':'VOYAGE INTERROMPU';$('overlayText').textContent=(end?arrived?'Kaldor est arrivé à '+end.text+'. ':end.title+'. Kaldor attend à '+end.text+'. ':'')+'Le voyage s’est poursuivi pendant ton absence. Reprends quand tu le souhaites.';}
 window.addEventListener('hearthreaver-suspend',suspendSession);
 for(const name of ['gesturestart','gesturechange'])document.addEventListener(name,e=>e.preventDefault(),{passive:false});
 document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault();},{passive:false});
@@ -9492,8 +9545,8 @@ document.addEventListener('click',e=>{const b=e.target.closest?.('button');if(!b
  const cue=b.dataset.uiSound||(/Back|Close|Resume/.test(b.id)||['qpNo','slNo','dlgBye'].includes(b.id)?'back':b.id==='btnMenu'?'open':b.matches('.menu-tabs button')?'select':b.matches('.inv-act,#menuNew,#menuLoad,#qpYes')?'confirm':'select');sound.fx('ui_'+cue);haptics.pulse('ui');
 },true);
 addEventListener('resize',()=>setTimeout(layoutStick,60));
-function handleEvents(){for(const ev of game.events.splice(0)){if(ev.type==='haptic'){haptics.pulse(ev.kind);continue;}if(['questdone','levelup','stele'].includes(ev.type))haptics.pulse('success');if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}if(ev.type==='dialogue'){syncDialogue();continue;}if(ev.type==='save')save();else if(ev.type==='message'){}else if(ev.type==='fallen'){resetTouch();noticeQueue.length=0;clearTimeout(noticeTimer);noticeTimer=0;$('notices').replaceChildren();if(ev.over){state='dead';try{localStorage.removeItem(KEY);}catch{}saved=null;overlay('PLUS AUCUNE VIE','Game over','Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.','RECOMMENCER','ENTREE POUR RECOMMENCER',true,{mode:'gameover',second:'QUITTER'});}else{state='deathscreen';overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.','CONTINUER','ENTREE POUR CONTINUER',true,{mode:'death',second:'QUITTER',html:true});}}else if(ev.type==='quests'){renderTracker(true);syncBadge();if(state==='menu')renderMenu();}else if(ev.type==='questpanel'){openQuestPanel(ev);}else if(ev.type==='sleepmenu'){openSleepPanel();}else if(ev.type==='win'){state='win';try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));}catch{}let m=Math.floor(game.elapsed/60),s=Math.floor(game.elapsed%60);overlay('L’ACIER A TRIOMPHE','Le serpent<br>est vaincu.','Tu as libéré le temple en '+m+' min '+String(s).padStart(2,'0')+' s. '+game.player.kills+' ennemis vaincus, '+game.player.coins+' pièces retrouvées.','REJOUER','PAR AVAR, QUELLE AVENTURE !');sound.fx('win');}else sound.fx(ev.type,ev);}}
-function frame(now){let dt=Math.max(0,Math.min((now-last)/1000||.016,.04));last=now;studioIntro.update(dt);if(landscapeBlocked){sound.tick(studioIntro.active&&!document.hidden,'title');requestAnimationFrame(frame);return;}if(state==='playing'){let x=(keys.has('arrowright')||keys.has('d')?1:0)-(keys.has('arrowleft')||keys.has('q')||keys.has('a')?1:0),y=(keys.has('arrowdown')||keys.has('s')?1:0)-(keys.has('arrowup')||keys.has('z')||keys.has('w')?1:0);x+=stick.x;y+=stick.y;game.update(dt,{x,y,attack:keys.has('attack')||touchHas('attack'),attackPressed:pending.attack,guard:keys.has('guard')||touchHas('guard'),dodge:pending.dodge,interact:pending.interact});pending.dodge=false;pending.interact=false;pending.attack=false;handleEvents();}else if(['title','options','deathscreen','menu','dead','sleep'].includes(state))game.time+=dt;
+function handleEvents(){for(const ev of game.events.splice(0)){if(ev.type==='haptic'){haptics.pulse(ev.kind);continue;}if(ev.type==='journeystart'){travelAlerts.prepare();continue;}if(['questdone','levelup','stele'].includes(ev.type))haptics.pulse('success');if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}if(ev.type==='dialogue'){syncDialogue();continue;}if(ev.type==='save')save();else if(ev.type==='message'){}else if(ev.type==='fallen'){resetTouch();noticeQueue.length=0;clearTimeout(noticeTimer);noticeTimer=0;$('notices').replaceChildren();if(ev.over){state='dead';try{localStorage.removeItem(KEY);}catch{}saved=null;overlay('PLUS AUCUNE VIE','Game over','Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.','RECOMMENCER','ENTREE POUR RECOMMENCER',true,{mode:'gameover',second:'QUITTER'});}else{state='deathscreen';overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.','CONTINUER','ENTREE POUR CONTINUER',true,{mode:'death',second:'QUITTER',html:true});}}else if(ev.type==='quests'){renderTracker(true);syncBadge();if(state==='menu')renderMenu();}else if(ev.type==='questpanel'){openQuestPanel(ev);}else if(ev.type==='sleepmenu'){openSleepPanel();}else if(ev.type==='win'){state='win';try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));}catch{}let m=Math.floor(game.elapsed/60),s=Math.floor(game.elapsed%60);overlay('L’ACIER A TRIOMPHE','Le serpent<br>est vaincu.','Tu as libéré le temple en '+m+' min '+String(s).padStart(2,'0')+' s. '+game.player.kills+' ennemis vaincus, '+game.player.coins+' pièces retrouvées.','REJOUER','PAR AVAR, QUELLE AVENTURE !');sound.fx('win');}else sound.fx(ev.type,ev);}}
+function frame(now){let dt=Math.max(0,Math.min((now-last)/1000||.016,.04));last=now;studioIntro.update(dt);if(landscapeBlocked){sound.tick(studioIntro.active&&!document.hidden,'title');requestAnimationFrame(frame);return;}if(state==='playing'&&!document.hidden)returnToJourney();if(state==='playing'){let x=(keys.has('arrowright')||keys.has('d')?1:0)-(keys.has('arrowleft')||keys.has('q')||keys.has('a')?1:0),y=(keys.has('arrowdown')||keys.has('s')?1:0)-(keys.has('arrowup')||keys.has('z')||keys.has('w')?1:0);x+=stick.x;y+=stick.y;game.update(dt,{x,y,attack:keys.has('attack')||touchHas('attack'),attackPressed:pending.attack,guard:keys.has('guard')||touchHas('guard'),dodge:pending.dodge,interact:pending.interact});pending.dodge=false;pending.interact=false;pending.attack=false;handleEvents();}else if(['title','options','deathscreen','menu','dead','sleep'].includes(state))game.time+=dt;
  sound.updateFootsteps(game,state==='playing'&&!document.hidden,dt);syncDialogue();syncAct();if(['title','options','quit'].includes(state)){titleScene.draw(titleTime,reduceMotion.matches||state==='quit');if(!document.hidden&&state!=='quit')titleTime+=dt;}else renderer.frame();sound.tick(!document.hidden&&['title','options','playing','dead','deathscreen','menu','sleep'].includes(state),state==='dead'||state==='deathscreen'?'gameover':musicMode());{const on=!document.hidden&&(state==='playing'||state==='menu'||state==='sleep'),p=game.player;sound.setTravelQuiet(!!game.journey);sound.rain(on&&!game.journey?game.sky().rain:0);sound.ambience({active:on&&!game.journey,sky:game.sky(),night:renderer.nightK(),rain:game.sky().rain,battle:combatHold>0||(game.bossActive&&!game.won),region:regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).id});}if(now-uiTime>150){updateUI();uiTime=now;}if(now>toastUntil)$('toast').classList.remove('visible');requestAnimationFrame(frame);}
 if(saved&&!game.won)$('start').innerHTML='CONTINUER <span>↵</span>';
 if(saved&&!game.won)$('newGame').hidden=false;

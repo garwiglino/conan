@@ -13,6 +13,7 @@
 		10EBF8BD5B5C3DBD622827EE /* GameSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */; };
 		A6EC2AD5F281D5C14FC38980 /* SaveMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */; };
 		5C961F27657A86DE3213D084 /* GameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4228288160A5A93573BC33B6 /* GameUpdater.swift */; };
+		7E3A9C51D2B84F06A1C5E913 /* TravelNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B47E2C8A06D4F13B5E8C724 /* TravelNotifications.swift */; };
 		54AE4F1C1654F6C7540A33F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A26E73A2E8FA2140B58CF59D /* Assets.xcassets */; };
 		38C986325E6D0E0D64EBD4A7 /* Game in Resources */ = {isa = PBXBuildFile; fileRef = 258F8F2EA57204E8C1C44273 /* Game */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,7 @@
 		A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSchemeHandler.swift; sourceTree = "<group>"; };
 		20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveMirror.swift; sourceTree = "<group>"; };
 		4228288160A5A93573BC33B6 /* GameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUpdater.swift; sourceTree = "<group>"; };
+		9B47E2C8A06D4F13B5E8C724 /* TravelNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelNotifications.swift; sourceTree = "<group>"; };
 		A26E73A2E8FA2140B58CF59D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		258F8F2EA57204E8C1C44273 /* Game */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Game; sourceTree = "<group>"; };
 		24A87B8500628070CF803101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 				A0F3B51E7781A528EAD8D1DE /* GameSchemeHandler.swift */,
 				20B915AC25E4FE6184CD2E61 /* SaveMirror.swift */,
 				4228288160A5A93573BC33B6 /* GameUpdater.swift */,
+				9B47E2C8A06D4F13B5E8C724 /* TravelNotifications.swift */,
 				A26E73A2E8FA2140B58CF59D /* Assets.xcassets */,
 				258F8F2EA57204E8C1C44273 /* Game */,
 				24A87B8500628070CF803101 /* Info.plist */,
@@ -150,6 +153,7 @@
 				10EBF8BD5B5C3DBD622827EE /* GameSchemeHandler.swift in Sources */,
 				A6EC2AD5F281D5C14FC38980 /* SaveMirror.swift in Sources */,
 				5C961F27657A86DE3213D084 /* GameUpdater.swift in Sources */,
+				7E3A9C51D2B84F06A1C5E913 /* TravelNotifications.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +209,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Hearthreaver/Info.plist;
@@ -213,7 +217,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.garwiglino.conan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -227,7 +231,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Hearthreaver/Info.plist;
@@ -235,7 +239,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.garwiglino.conan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
