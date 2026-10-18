@@ -58,6 +58,6 @@ Renderer.prototype.npcDraw=function(n){
  const state=a.action||'idle',frame=civilianFrame(state,a.elapsed||0,a.distance||0),im=CIVILIAN_BITMAPS.get(a.appearance,state,n.dir??2,frame);
  if(!im)return civilianOriginalDraw.call(this,n);
  const c=this.c,g=this.g;c.save();c.globalAlpha=n.alpha??1;this.shadow(n.x,n.y,a.dead?17:12);c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
- if(!a.dead){text(c,n.label,n.x-Math.round(textW(c,n.label)/2),n.y-32,'#dfc889');const m=g.npcPresent(n)&&g.npcMark(n);if(m)this.questMark(n.x,n.y-38-Math.max(0,(textSettings.scale-1)*8),m);}
+ if(!a.dead){this.npcNameplate(n);const m=g.npcPresent(n)&&g.npcMark(n);if(m)this.questMark(n.x,n.y-38-Math.max(0,(textSettings.scale-1)*8),m);}
  if(n.id==='elyne'&&g.story.recruited&&!g.story.delivered&&g.companion.hp<10){box(c,n.x-10,n.y-39,20,2,'#34252c');box(c,n.x-10,n.y-39,2*g.companion.hp,2,'#be807b');}c.restore();
 };

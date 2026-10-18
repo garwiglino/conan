@@ -37,4 +37,5 @@ function installLandscapeUI(){
   const target=menuTab==='options'?$('menuSettings'):$('menuBody');
   target.setAttribute('role','tabpanel');target.setAttribute('aria-labelledby',document.querySelector('.menu-tabs .on')?.id||'menuTitle');
  };
+ installInteractionUI();
 }
