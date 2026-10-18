@@ -19,6 +19,7 @@
     "analyze:biomes": "node scripts/analyze-biome-audio.cjs",
     "analyze:mix": "node scripts/analyze-audio-mix.cjs",
     "build:kaldor": "node scripts/embed-kaldor.cjs",
+    "build:kaldor-outfits": "node scripts/build-kaldor-outfits.cjs && node scripts/embed-kaldor.cjs",
     "build:batraciens": "node scripts/build-batraciens.cjs"
   },
   "devDependencies": {

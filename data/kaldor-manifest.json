@@ -13,7 +13,16 @@
     40,
     52
   ],
-  "outfit": "E01-masculin-terre",
+  "outfit": "pagne-noue",
+  "outfits": [
+    "pagne-noue",
+    "brigandine-mercenaire",
+    "voiles-nomade",
+    "harnais-arene",
+    "pelisse-grand-froid",
+    "peau-ours",
+    "cuir-traqueur"
+  ],
   "head": "masculin-adulte",
   "hair": "masculin-hair-14",
   "walkFrames": 8,
@@ -42,6 +51,8 @@
   ],
   "fingerprints": {
     "legacyArt": "07f32600b7c662b64b623f24e73f0adc24fd2404b74562663c42251b73074ef7",
-    "humanBridge": "20d1557c78b59b8d98684a6df294f955106cb93c5ccb84ab69ef4a2f5095bc63"
+    "humanBridge": "2dc499ce8c4534f777e35c8289562cedc175c6ae9f89e268de50e177b7607bee",
+    "outfits": "f2cda1c773f29cc0de9f1c8b003b490ce86b8f84952783c01b1a37110dfe5911",
+    "wardrobe": "50e9eb0107050d05f7393697716e12754dbfadc755aae369f4285b1ae93caa3d"
   }
 }

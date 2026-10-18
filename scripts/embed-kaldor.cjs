@@ -22,6 +22,13 @@ replaceOnce("get(kind,dir,state,frame,flash=false,combo=0){const image=BITMAPS.g
  "get(kind,dir,state,frame,flash=false,combo=0){if(kind==='hero'){const h=HearthreaverKaldorCivilianArt.nativeFrame(dir,state,frame,combo,swordPose,greatsword,flash);if(h)return h;}const image=BITMAPS.get(");
 replaceOnce("if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;}",
  "if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;if(HearthreaverKaldorCivilianArt.ready()){const npcWalk=HearthreaverKaldorCivilianArt.gaitFrame(actor);frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}");
+// Putting an outfit on: the dressing pose replaces the hero's idle while it plays.
+replaceOnce("frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}const im=this.get(",
+ "frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}if(kind==='hero'){const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time);if(dressed){state=dressed.state;frame=dressed.frame;}}const im=this.get(");
+// Wardrobe in the inventory tab and the take action on a mannequin.
+replaceOnce("Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>';","Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>'+KaldorWardrobe.inventoryHTML(g);");
+replaceOnce("$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});","$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});KaldorWardrobe.bindInventory(body,g,()=>{handleEvents();renderMenu();});");
+replaceOnce("sleep:['moon','DORMIR']}","sleep:['moon','DORMIR'],outfit:['hand','PRENDRE']}");
 // Slightly shorter sword from the ONE authoritative pose used by both hit sweep
 // and v3 art. The authored four combo trajectories remain entirely unchanged.
 replaceOnce('return [p[0],p[1],p[2]*1.1,p[3]*1.1];','return [p[0],p[1],p[2]*1.02,p[3]*1.02];');
@@ -34,6 +41,19 @@ if(html.includes(begin)){
  if(html.split('// art.js').length!==2)throw Error('Kaldor: art insertion marker missing');
  html=html.replace('// art.js',block+'\n// art.js');
 }
+// Outfit atlas and wardrobe runtime after the world (Game, Renderer, Atlas).
+const outfitData=fs.readFileSync(path.join(root,'data/kaldor-outfits/atlas.json'),'utf8').trim();
+const wardrobe=fs.readFileSync(path.join(root,'scripts/kaldor-outfits.js'),'utf8');
+const wBegin='// BEGIN KALDOR WARDROBE',wEnd='// END KALDOR WARDROBE';
+const wBlock=wBegin+'\nvar KALDOR_OUTFITS='+outfitData+';\n'+wardrobe+'\n'+wEnd;
+if(html.includes(wBegin)){
+ const i=html.indexOf(wBegin),j=html.indexOf(wEnd,i);
+ if(j<0||html.indexOf(wBegin,i+wBegin.length)>=0)throw Error('Kaldor: corrupted or duplicated wardrobe section');
+ html=html.slice(0,i)+wBlock+html.slice(j+wEnd.length);
+}else{
+ if(html.split('// app.js').length!==2)throw Error('Kaldor: app insertion marker missing');
+ html=html.replace('// app.js',()=>wBlock+'\n// app.js');
+}
 const write=(rel,bytes)=>fs.writeFileSync(path.join(root,rel),bytes,'utf8');
 write('index.html',html);
 const ios=html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,'');
@@ -43,5 +63,5 @@ if(poseStart<0||poseEnd<0)throw Error('Kaldor: authored sword pose source missin
 const marker='/*__KALDOR_POSE_CODE__*/',template=fs.readFileSync(path.join(root,'art/kaldor-preview-template.html'),'utf8');
 if(template.split(marker).length!==2)throw Error('Kaldor: preview marker not unique');
 write('art/kaldor-preview.html',template.replace(marker,html.slice(poseStart,poseEnd)));
-write('data/kaldor-manifest.json',JSON.stringify({version:4,authored:'Aseprite human NPC modules + JavaScript sword',npcCell:[48,48],cell:[80,80],anchor:[40,52],outfit:'E01-masculin-terre',head:'masculin-adulte',hair:'masculin-hair-14',walkFrames:8,bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{legacyArt:crypto.createHash('sha256').update(source).digest('hex'),humanBridge:crypto.createHash('sha256').update(humanBridge).digest('hex')}},null,2)+'\n');
-console.log('Kaldor v4 rebuilt — actual modular NPC human head/hair/body/8-step gait + authoritative sword.');
+write('data/kaldor-manifest.json',JSON.stringify({version:4,authored:'Aseprite human NPC modules + JavaScript sword',npcCell:[48,48],cell:[80,80],anchor:[40,52],outfit:'pagne-noue',outfits:Object.keys(JSON.parse(outfitData).outfits),head:'masculin-adulte',hair:'masculin-hair-14',walkFrames:8,bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{legacyArt:crypto.createHash('sha256').update(source).digest('hex'),humanBridge:crypto.createHash('sha256').update(humanBridge).digest('hex'),outfits:crypto.createHash('sha256').update(outfitData).digest('hex'),wardrobe:crypto.createHash('sha256').update(wardrobe).digest('hex')}},null,2)+'\n');
+console.log('Kaldor v5 rebuilt, wardrobe of '+Object.keys(JSON.parse(outfitData).outfits).length+' outfits — actual modular NPC human head/hair/body/8-step gait + authoritative sword.');
