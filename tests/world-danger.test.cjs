@@ -27,8 +27,8 @@ test('an immediately adjacent enemy permits escape steps but not steps toward it
  const kills=g.player.kills,xp=g.player.xp;g.player.riposte=1;g.guardStrike(n,e);assert.equal(g.player.riposte,1);e.hp=1;g.guardStrike(n,e);assert.equal(e.dead,true);assert.equal(g.atlasDeaths[e.id],true);assert.equal(g.player.kills,kills);assert.equal(g.player.xp,xp);
 });
 test('civilians withdraw, remain absent, survive reload and return only after an actual calm interval',()=>{
- const g=fixture(),n=g.stations.find(s=>s.site==='camp').actor,home={x:n.x,y:n.y};g.solid=()=>false;
- const event=g.worldState.add('siege','camp',g.clock,100);g.assessCivilians(true);assert.ok(n.dangerState);
+ const g=fixture(),n=g.stations.find(s=>s.site==='camp').actor,home={x:n.x,y:n.y};g.solid=()=>false;g.atlasProps.push({id:'test-hut',kind:'hut',rest:true,x:n.x+40,y:n.y});
+ const event=g.worldState.add('siege','camp',g.clock,100);g.assessCivilians(true);assert.ok(n.dangerState);assert.equal(n.dangerState.shelter.cover,true);
  Object.assign(n,n.dangerState.shelter);for(let i=0;i<50;i++){g.time+=.04;g.stepNpcs(.04);}assert.equal(n.dangerState.mode,'sheltered');assert.equal(n.alpha,0);
  const save=JSON.parse(JSON.stringify(g.serialize())),restored=new a.Game(save),rn=restored.npcs.find(v=>v.id===n.id);assert.equal(rn.dangerState.mode,'sheltered');assert.equal(rn.alpha,0);
  g.worldState.resolve(event.id,g.clock);g.assessCivilians(true);assert.equal(n.dangerState.mode,'sheltered');g.clock+=9;g.assessCivilians(true);assert.equal(n.dangerState.mode,'sheltered');g.clock+=2;g.assessCivilians(true);assert.equal(n.dangerState.mode,'returning');Object.assign(n,home);g.stepNpcs(.04);assert.equal(n.dangerState,undefined);assert.equal(g.npcPresent(n),true);

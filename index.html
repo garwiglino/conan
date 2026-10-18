@@ -1218,8 +1218,8 @@ class Game{
   this.arena=clamp((this.arena||0)+(this.arenaLock?dt*4:-dt*2),0,1);
   if(this.gate&&p.y>=0&&p.y<190&&p.x>320&&p.x<480&&!this.bossActive&&!this.story?.templeFreed){this.bossActive=true;{const b=this.enemies.find(e=>e.kind==='boss');if(b){b.appearAt=this.time;for(let i=0;i<28;i++){const a=i/28*Math.PI*2,s=14+i%4*9;this.particles.push({x:b.x+Math.cos(a)*4,y:b.y-8,vx:Math.cos(a)*s,vy:Math.sin(a)*s*.6-12,life:.6+i%3*.15,size:2,color:['#3c2a4a','#6a4c7a','#a7cda0','#241a2e'][i%4]});}this.emit('bosscue',{cue:'nova_wind'});}}if(!this.worldFlags.bossTalk){this.worldFlags.bossTalk=true;this.talk('LE PRÊTRE DU SERPENT',['Kaldor… Tu as osé briser les sceaux de Nharos.','Tu ne quitteras pas ce sanctuaire vivant.'],this.enemies.find(e=>e.kind==='boss'),50);}}
   if(p.attack>0){const frame=attackFrame(p.attack,p.combo);if(frame===2&&!p.attackStep){p.attackStep=true;const [fx,fy]=this.facing(p.dir);this.move(p,fx*(p.combo===3?9:4),fy*(p.combo===3?9:4));}if(frame===2||frame===3)for(const e of this.combatTargets()){if(e.dead||this.hits.has(e.id)||(e.kind==='boss'&&!this.bossActive))continue;if(bladeHits(p,e,frame)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,p.combo===3?2:1);}}if(frame===2||frame===3)this.hitProps(p,frame);}
-  for(const e of this.enemies){if(e.dead)continue;if(e.batracien){this.stepBatracienEnemy(e,dt);continue;}if(!this.sameLevel(e,p)){e.wind=0;e.attack=0;e.anim=0;continue;}e.hurt=Math.max(0,(e.hurt||0)-dt);e.flash=Math.max(0,e.flash-dt);e.attack=Math.max(0,e.attack-dt);e.stun=Math.max(0,e.stun-dt);e.cooldown=Math.max(0,e.cooldown-dt);if(e.kind==='boss'){if(this.bossActive)this.bossStep(e,dt);continue;}if(e.stun>0)continue;let d=dist(e,p),hx=p.x-e.x,hy=p.y-e.y;
-   e.defenseCD=Math.max(0,e.defenseCD-dt);e.guardRaise=Math.max(0,e.guardRaise-dt);const sz=this.safeZone(p),br=this.brain(e,p,d,dt,sz);if(sz&&e.wind>0)e.wind=0;
+  let playerSafe;for(const e of this.enemies){if(e.dead)continue;if(e.batracien){this.stepBatracienEnemy(e,dt);continue;}if(!this.sameLevel(e,p)){e.wind=0;e.attack=0;e.anim=0;continue;}e.hurt=Math.max(0,(e.hurt||0)-dt);e.flash=Math.max(0,e.flash-dt);e.attack=Math.max(0,e.attack-dt);e.stun=Math.max(0,e.stun-dt);e.cooldown=Math.max(0,e.cooldown-dt);if(e.kind==='boss'){if(this.bossActive)this.bossStep(e,dt);continue;}if(e.stun>0)continue;if(this.fightNpcFoe?.(e,dt))continue;let d=dist(e,p),hx=p.x-e.x,hy=p.y-e.y;
+   e.defenseCD=Math.max(0,e.defenseCD-dt);e.guardRaise=Math.max(0,e.guardRaise-dt);const sz=playerSafe===undefined?(playerSafe=this.safeZone(p)):playerSafe,br=this.brain(e,p,d,dt,sz);if(sz&&e.wind>0)e.wind=0;
    if(e.guardTime>0){e.guardTime=Math.max(0,e.guardTime-dt);e.dir=this.direction(hx,hy);e.anim=0;continue;}
    if(['skeleton','guardian','cultist'].includes(e.kind)&&e.ai==='chase'&&e.defenseCD<=0&&p.attack>0&&d<62&&e.wind<=0&&e.attack<=0&&!e.move){e.guardTime=e.kind==='guardian'?.7:.5;e.guardRaise=.02;e.guardCount=0;e.defenseCD=e.kind==='guardian'?2.1:2.8;e.dir=this.direction(hx,hy);continue;}
    if(e.kind==='snake'&&e.ai==='chase'&&p.attack>0&&d<45&&e.defenseCD<=0&&e.wind<=0){const sign=e.phase++%2?1:-1;this.move(e,-hy/Math.max(1,d)*10*sign,hx/Math.max(1,d)*10*sign);e.defenseCD=2;}
@@ -1942,7 +1942,7 @@ function hurtSprite(c,kind,dir,frame){
  const pose=frame<2?'attack':'idle',f=frame===0?0:1;
  if(kind==='skeleton')skeleton(b,dir,pose,f);
  else if(kind==='snake')serpent(b,dir,'walk',[2,4,3,0][frame]);
- else if(kind==='cultist'||kind==='boss')mage(b,dir,pose,f,kind==='boss');
+ else if(kind==='cultist'||kind==='boss'||kind==='nomade')mage(b,dir,pose,f,kind==='boss');
  else if(kind==='guardian')guardian(b,dir,pose,f);
  else heroPixels(b,dir,pose,f,HP);
  const power={skeleton:5,snake:4,cultist:4,guardian:2,boss:1,hero:3}[kind]||3;
@@ -3485,7 +3485,7 @@ class Renderer{
   this.drawMechanisms();
   for(const s of g.steles)this.stelePad(s);this.groundDebris(false);
   for(const b of g.blood.filter(b=>!b.level))drawBloodStain(c,b);
-  for(const r of g.remains.filter(r=>!r.level)){if(r.kind==='batracien'||r.kind==='boss')continue;if(r.kind==='guardian'){if(r.age>=CO_ART.death.durationMs/1000)this.guardianRemains(r);continue;}if(r.kind!=='skeleton')drawBloodPool(c,r,g.time);const bone=r.kind==='skeleton',snake=r.kind==='snake',cloth=r.kind==='cultist'||r.kind==='boss'?'#594762':'#65443c';
+  for(const r of g.remains.filter(r=>!r.level)){if(r.kind==='batracien'||r.kind==='boss')continue;if(r.kind==='guardian'){if(r.age>=CO_ART.death.durationMs/1000)this.guardianRemains(r);continue;}if(r.kind!=='skeleton')drawBloodPool(c,r,g.time);const bone=r.kind==='skeleton',snake=r.kind==='snake',cloth=r.kind==='cultist'||r.kind==='boss'?'#594762':r.kind==='guard'?'#a8743f':'#65443c';
    pixels(c,snake?['..111111....','111221111...','..111..111..']:['....000000....','..0011111100..','00011222111000','.001111111100.','..000110000...','.....00.......'],r.x-7,r.y-3,{'0':'#281f26','1':bone?'#a4a58a':snake?'#617044':cloth,'2':bone?'#e0cea5':'#9c303b'});
    if(!snake){const offset=r.heavy?13:7;pixels(c,['.000.','01210','01110','.000.'],r.x+offset,r.y-3,{'0':'#291f25','1':bone?'#c8c29e':'#bc8567','2':bone?'#403d38':'#732433'});if(r.heavy){box(c,r.x-13,r.y+3,6,3,bone?'#c8c29e':'#b98569');box(c,r.x-8,r.y+3,2,3,'#922c38');}}
   }
@@ -5316,12 +5316,57 @@ const dangerTalk=Game.prototype.talkTo;
 Game.prototype.talkTo=function(n){if(!n||!this.npcPresent(n))return false;return dangerTalk.call(this,n);};
 
 Game.prototype.civilianProtected=function(n){return n.id==='fairy'||n.eventGuard||this.party?.some(c=>c.id===n.id);};
+// A struck or witnessing civilian runs from the attacker on foot and stays visible,
+// so it can still be caught. Shelter/return follow once the attacker is out of reach.
+const CIVILIAN_FLIGHT=Object.freeze({speed:1.6,calm:4,safe:220,lost:3,look:56,witness:150});
+Game.prototype.civilianAttacker=function(s){
+ if(s.attacker==='player')return this.player;if(!s.attacker)return null;
+ return this.enemies.find(e=>e.id===s.attacker&&!e.dead)||this.npcs.find(n=>n.id===s.attacker&&!n.civilian?.dead&&!n.batracien?.dead&&!n.guardState?.dead)||null;
+};
+Game.prototype.startCivilianFlight=function(n,source){
+ if(!n||!source||this.civilianProtected(n)||n.civilian?.dead||n.batracien?.dead||(n.alpha??1)<.5)return false;
+ const owner=source.owner?this.enemies.find(e=>e.id===source.owner)||this.npcs.find(a=>a.id===source.owner)||source:source,from=Number.isFinite(owner.x)?owner:source;
+ const old=n.dangerState,origin=old?.post||n.post||n;
+ const s=old?.mode==='fleeing'?old:n.dangerState={mode:'fleeing',post:{x:origin.x,y:origin.y},shelter:{x:n.x,y:n.y},clearAt:null,blocked:0};
+ Object.assign(s,{attacker:owner===this.player?'player':owner.id||null,ax:from.x,ay:from.y,hitAt:this.time,seenAt:this.time,goal:null});
+ n.alpha=1;n.path=[];if(this.dialogue?.who===n)this.dialogue=null;if(this.transportSession===n.id){this.transportSession=null;this.pendingTransport=null;}
+ return true;
+};
+Game.prototype.alarmWitnesses=function(victim,source){
+ for(const n of this.npcs){if(n===victim||!n.civilian||!this.sameLevel(n,victim)||dist(n,victim)>CIVILIAN_FLIGHT.witness)continue;
+  if(this.lineClear(n,victim)||this.lineClear(n,source))this.startCivilianFlight(n,source);}
+};
+Game.prototype.civilianFleeGoal=function(n,x,y){
+ const a=Math.atan2(n.y-y,n.x-x),L=CIVILIAN_FLIGHT.look,open=(px,py)=>!this.solid(px,py,4,0),free=(px,py)=>open(px,py)&&this.civilianStepSafe(n,px,py),here=Math.hypot(n.x-x,n.y-y);
+ // Walk each ray up to the first obstacle, so a wall ahead turns the run along it. The goal tile is checked too,
+ // because the path search aims for it, and a failed search must never run every frame.
+ let best=null,score=here-8;
+ for(const turn of [0,.4,-.4,.8,-.8,1.2,-1.2,1.6,-1.6,2.1,-2.1,2.7,-2.7]){const c=Math.cos(a+turn),s=Math.sin(a+turn);let len=0;for(let t=8;t<=L&&open(n.x+c*t,n.y+s*t);t+=8)len=t;
+  if(len<16)continue;const q={x:n.x+c*len,y:n.y+s*len},v=Math.hypot(q.x-x,q.y-y)+len*.25;if(v>score&&free(q.x,q.y)&&free(Math.floor(q.x/16)*16+8,Math.floor(q.y/16)*16+8)){best=q;score=v;if(turn===0&&len===L)break;}}
+ return best;
+};
+Game.prototype.stepCivilianFlight=function(n,s,dt){
+ const F=CIVILIAN_FLIGHT,a=this.civilianAttacker(s);
+ if(a&&this.time>=(s.lookAt||0)&&this.sameLevel(a,n)&&dist(a,n)<F.safe){s.lookAt=this.time+.25;if(this.lineClear(n,a)){s.seenAt=this.time;s.ax=a.x;s.ay=a.y;}}
+ const away=Math.hypot(n.x-s.ax,n.y-s.ay);
+ if(dist(n,this.player)>900||this.time-s.hitAt>=F.calm&&(!a||away>F.safe||this.time-s.seenAt>F.lost)){
+  const unsafe=this.dangerAt(n.x,n.y).unsafe||!!this.localThreatAt(n.x,n.y,n.level||0);
+  n.dangerState={mode:unsafe?'leaving':'returning',post:s.post,shelter:unsafe?this.civilianShelter(n):s.shelter,clearAt:null,blocked:0};n.path=[];return;
+ }
+ const busy=!!this.npcMoveLocked?.(n);
+ if(this.time>=(s.retryAt||0)&&(!s.goal||dist(n,s.goal)<4||this.time-(s.goalAt||0)>1.2)){s.goal=this.civilianFleeGoal(n,s.ax,s.ay);s.goalAt=this.time;n.path=[];if(!s.goal)s.retryAt=this.time+.3;}
+ if(!s.goal){if(!busy)s.blocked+=dt;return;} // Cornered: cower until a way out opens.
+ const before={x:n.x,y:n.y};this.walkNpc(n,s.goal,dt);
+ if(!busy&&!n.path?.length&&dist(n,s.goal)>=2){s.goal=null;s.retryAt=this.time+.3;}
+ s.blocked=busy?0:dist(before,n)<.01?s.blocked+dt:0;if(s.blocked>.5)s.goal=null;
+};
 Game.prototype.civilianStepSafe=function(n,x,y){const foe=this.localThreatAt(x,y,n.level||0,48);return !foe||Math.hypot(x-foe.x,y-foe.y)>dist(n,foe)+.1;};
 Game.prototype.civilianShelter=function(n){
  const home=n.home||this.atlasProps.filter(o=>o.rest&&Math.hypot(o.x-n.x,o.y-n.y)<240).sort((a,b)=>dist(a,n)-dist(b,n))[0];
  const foe=this.localThreatAt(n.x,n.y,n.level||0),away=foe?Math.atan2(n.y-foe.y,n.x-foe.x):0;
  const target=home?{x:home.x,y:home.y+(n.home?0:14)}:foe?{x:n.x+Math.cos(away)*80,y:n.y+Math.sin(away)*80}:{x:n.x,y:n.y};
- for(const r of [0,16,32,48])for(const [dx,dy]of [[0,r],[r,0],[-r,0],[0,-r]])if(!this.solid(target.x+dx,target.y+dy,4,n.level||0)&&!this.localThreatAt(target.x+dx,target.y+dy,n.level||0,72))return {x:target.x+dx,y:target.y+dy};
+ // Only a house or rest spot hides a civilian. In the open it stays visible, cowering, and can still be hurt.
+ for(const r of [0,16,32,48])for(const [dx,dy]of [[0,r],[r,0],[-r,0],[0,-r]])if(!this.solid(target.x+dx,target.y+dy,4,n.level||0)&&!this.localThreatAt(target.x+dx,target.y+dy,n.level||0,72))return {x:target.x+dx,y:target.y+dy,cover:!!home};
  return {x:n.x,y:n.y};
 };
 Game.prototype.assessCivilians=function(force=false){
@@ -5330,6 +5375,7 @@ Game.prototype.assessCivilians=function(force=false){
  for(const n of this.npcs){
   if(!n.dangerState&&dist(n,this.player)>1200)continue;
   if(this.civilianProtected(n)){if(n.dangerState){delete n.dangerState;n.alpha=1;n.phase='post';}continue;}
+  if(n.dangerState?.mode==='fleeing')continue;
   const s=n.dangerState,origin=s?.post||n.post||n,d=field.atActor({...origin,level:n.level||0}),combat=!!this.localThreatAt(n.x,n.y,n.level||0);
   const danger=d.unsafe||combat;
   if(danger){if(!s){n.dangerState={mode:'leaving',post:{x:origin.x,y:origin.y},shelter:this.civilianShelter(n),clearAt:null,blocked:0};n.path=[];}else{s.clearAt=null;if(s.mode==='returning')s.mode='leaving';}
@@ -5344,21 +5390,22 @@ Game.prototype.stepNpcs=function(dt){
  // The old day/night schedule must not fight a retreat or move a hidden resident.
  try{this.npcs=all.filter(n=>!n.dangerState);dangerStepNpcs.call(this,dt);}finally{this.npcs=all;}
  for(const n of all){const s=n.dangerState;if(!s||this.dialogue?.who===n)continue;
+  if(s.mode==='fleeing'){this.stepCivilianFlight(n,s,dt);continue;}
   if(s.mode==='sheltered'){n.alpha=0;n.anim=0;continue;}
   const target=s.mode==='returning'?s.post:s.shelter,offscreen=dist(n,this.player)>900;
-  if(offscreen){Object.assign(n,target);if(s.mode==='leaving'){s.mode='sheltered';n.alpha=0;}else this.finishCivilianReturn(n);continue;}
+  if(offscreen){Object.assign(n,{x:target.x,y:target.y});if(s.mode!=='leaving')this.finishCivilianReturn(n);else if(s.shelter.cover){s.mode='sheltered';n.alpha=0;}else n.alpha=1;continue;}
   if(s.mode==='returning')n.alpha=Math.min(1,(n.alpha??0)+dt/1.2);
   if(this.localThreatAt(target.x,target.y,n.level||0,72)&&s.mode==='leaving'){s.shelter=this.civilianShelter(n);n.path=[];continue;}
   const before={x:n.x,y:n.y},arrived=dist(n,target)<10||this.walkNpc(n,target,dt);
   s.blocked=dist(before,n)<.01&&!arrived?s.blocked+dt:0;
   // No teleport through walls. Retry a reachable nearby shelter when the path is blocked.
   if(s.blocked>3){n.path=[];if(s.mode==='leaving')s.shelter=this.civilianShelter(n);s.blocked=0;}
-  if(arrived){if(s.mode==='leaving'){n.alpha=Math.max(0,(n.alpha??1)-dt/1.2);if(n.alpha===0){s.mode='sheltered';n.anim=0;}}else this.finishCivilianReturn(n);}
+  if(arrived){if(s.mode==='leaving'){if(!s.shelter.cover){n.alpha=Math.min(1,(n.alpha??1)+dt/1.2);continue;}n.alpha=Math.max(0,(n.alpha??1)-dt/1.2);if(n.alpha===0){s.mode='sheltered';n.anim=0;}}else this.finishCivilianReturn(n);}
  }
 };
 Game.prototype.finishCivilianReturn=function(n){delete n.dangerState;n.alpha=1;n.phase='post';n.lastClock=this.clock;n.anim=0;n.path=[];const h=(this.clock/60)%24;if(n.home&&(h>=22.5||h<6))n.phase='leaving';};
 const dangerCouriers=Game.prototype.stepCouriers;
-Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>!this.npcs.find(n=>n.id===c.id)?.dangerState);dangerCouriers.call(this,minutes);}finally{this.couriers=all;}};
+Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>{const n=this.npcs.find(n=>n.id===c.id);return !n?.dangerState&&!n?.civilian?.dead;});dangerCouriers.call(this,minutes);}finally{this.couriers=all;}};
 
 // Bounded event groups. Stable event/slot IDs prevent save/reload or chunk farming.
 Game.prototype.stepEventGroups=function(dt=0){
@@ -5377,7 +5424,6 @@ Game.prototype.stepEventGroups=function(dt=0){
    else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id];Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}
   }
  }
- for(const n of this.npcs.filter(n=>n.eventGuard&&!n.batracien&&active.has(n.eventId))){const foe=this.enemies.find(e=>e.world&&!e.dead&&!e.retiring&&(e.level||0)===(n.level||0)&&dist(e,n)<120);if(foe){this.walkNpc(n,foe,.5);if(dist(n,foe)<28&&this.lineClear(n,foe)&&this.time>(n.guardHit||0)){n.guardHit=this.time+2;this.guardStrike(n,foe);}}}
 };
 const dangerBrain=Game.prototype.brain;
 Game.prototype.brain=function(e,p,d,dt,sz){if(e.retiring){e.ai='return';e.wind=e.attack=0;return {engage:false,tx:e.x+(e.x>=p.x?100:-100),ty:e.y+80,keep:0};}return dangerBrain.call(this,e,p,d,dt,sz);};
@@ -5404,7 +5450,7 @@ Game.prototype.advanceAtlas=function(dt=0){dangerAdvance.call(this,dt);if(!this.
 Game.prototype.journeyThreat=function(s){if(s?.kind!=='move'||s.mode==='boat')return null;return this.worldState.edgeStatus(Atlas.edgeById.get(s.edge),this.clock).events.find(e=>Atlas.EVENT_TYPES[e.type].group&&!Atlas.EVENT_TYPES[e.type].guard);};
 
 const dangerSerialize=Game.prototype.serialize;
-Game.prototype.serialize=function(){const data=dangerSerialize.call(this),ids=new Set(this.worldState.active(this.clock).flatMap(e=>Array.from({length:Atlas.EVENT_TYPES[e.type].group||0},(_,i)=>'incident-'+e.id+'-'+i)));data.atlas.danger={version:1,health:Object.fromEntries(Object.entries(this.incidentHealth||{}).filter(([id])=>ids.has(id)).slice(-128)),civilians:this.npcs.filter(n=>n.dangerState&&!this.civilianProtected(n)).map(n=>({id:n.id,x:n.x,y:n.y,alpha:n.alpha,...n.dangerState}))};return data;};
+Game.prototype.serialize=function(){const data=dangerSerialize.call(this),ids=new Set(this.worldState.active(this.clock).flatMap(e=>Array.from({length:Atlas.EVENT_TYPES[e.type].group||0},(_,i)=>'incident-'+e.id+'-'+i)));data.atlas.danger={version:1,health:Object.fromEntries(Object.entries(this.incidentHealth||{}).filter(([id])=>ids.has(id)).slice(-128)),civilians:this.npcs.filter(n=>n.dangerState&&!this.civilianProtected(n)).map(n=>({id:n.id,x:n.x,y:n.y,alpha:n.alpha,...(n.dangerState.mode==='fleeing'?{mode:'returning',post:n.dangerState.post,shelter:n.dangerState.shelter,clearAt:null}:n.dangerState)}))};return data;};
 Game.prototype.placeCampaignStart=function(){
  // Keep the authored combat layout. Only a new campaign starts farther south
  // on the existing camp path, with Elyne and the fairy still beside the hero.
@@ -5550,10 +5596,11 @@ Game.prototype.assessCivilians=function(force=false){
  for(const n of all)if(n.dangerState&&!previous.has(n.id)){const c=this.ensureCivilian(n);if(c&&!c.dead){this.civilianAction(n,c.action==='seated'||c.action==='sit_down'?'stand_up':'startle');c.alarmed=true;}}
 };
 const civilianWalk=Game.prototype.walkNpc;
+Game.prototype.npcMoveLocked=function(n){const c=n?.civilian;return !!c&&(c.dead||c.action==='seated'||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action));};
 Game.prototype.walkNpc=function(n,to,dt){
  const c=this.ensureCivilian(n);if(c&&(c.dead||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action)))return false;
  if(c&&c.action==='seated'){this.civilianAction(n,'stand_up');return false;}
- return civilianWalk.call(this,n,to,dt*(n.dangerState?.mode==='leaving'?2.1:1));
+ return civilianWalk.call(this,n,to,dt*({leaving:2.1,fleeing:CIVILIAN_FLIGHT.speed}[n.dangerState?.mode]||1));
 };
 const civilianStepNpcs=Game.prototype.stepNpcs;
 Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filter(n=>!n.civilian?.dead);civilianStepNpcs.call(this,dt);}finally{this.npcs=all;}
@@ -5575,7 +5622,7 @@ Game.prototype.damageCivilian=function(n,amount,source){
  }
  this.civilianAction(n,c.dead||member?.down?'death':'hit',true);n.anim=0;n.path=[];
  if(c.dead){delete n.dangerState;n.alpha=1;n.phase='post';}
- else if(source&&!member){const origin=n.post||n;n.dangerState??={mode:'leaving',post:{x:origin.x,y:origin.y},shelter:this.civilianShelter(n),clearAt:null,blocked:0};}
+ else if(source&&!member)this.startCivilianFlight(n,source);
  if(this.dialogue?.who===n)this.dialogue=null;
  this.emit('save');return true;
 };
@@ -5604,7 +5651,7 @@ Game.prototype.stepCivilianAnimations=function(dt){
   if(['hit','death','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action))continue;
   if(this.dialogue?.who===n){this.civilianAction(n,'talk');continue;}
   if((n.alpha??1)<.1||n.phase==='away')continue;
-  if(c.moveTime===this.time){this.civilianAction(n,n.dangerState?.mode==='leaving'?'flee':'walk');n.anim=c.distance/(c.action==='flee'?16/3:4);continue;}
+  if(c.moveTime===this.time){this.civilianAction(n,['leaving','fleeing'].includes(n.dangerState?.mode)?'flee':'walk');n.anim=c.distance/(c.action==='flee'?16/3:4);continue;}
   if(n.dangerState){this.civilianAction(n,n.dangerState.mode==='returning'?'idle':'cower');continue;}
   if(member){this.civilianAction(n,'idle');continue;}
   c.restClock=(c.restClock+delta)%52;
@@ -9253,7 +9300,12 @@ const Batraciens = (() => {
  Game.prototype.recruitCompanion=function(n,options){return !isArmed(n)&&oldRecruit.call(this,n,options);};
  const oldNpcMenu=Game.prototype.npcMenu;
  Game.prototype.npcMenu=function(n){const menu=oldNpcMenu.call(this,n);return isArmed(n)?menu.filter(m=>!/rejoindre|compagnon|recruter|voyager ensemble/i.test(m.label||'')):menu;};
- const oldWalkNpc=Game.prototype.walkNpc;
+ const oldWalkNpc=Game.prototype.walkNpc,oldMoveLocked=Game.prototype.npcMoveLocked;
+ Game.prototype.npcMoveLocked=function(n){
+  if(!n?.batracien)return !!oldMoveLocked?.call(this,n);const b=n.batracien;if(b.dead||n.civilian?.dead)return true;
+  if(isCivil(n))return ['seated','cower'].includes(b.action)||locked.has(b.action)&&b.elapsed<duration(n,b.action);
+  return ['thrust','slash','throw_javelin','block','hit'].includes(b.action)&&b.elapsed<duration(n,b.action);
+ };
  Game.prototype.walkNpc=function(n,to,dt){
   if(!n?.batracien)return oldWalkNpc.call(this,n,to,dt);const b=n.batracien;
   if(b.dead||n.civilian?.dead)return false;
@@ -9262,7 +9314,7 @@ const Batraciens = (() => {
    if(b.action==='seated'){this.civilianAction(n,'stand_up');return false;}
    if(b.action==='cower'){this.civilianAction(n,'cower_exit');return false;}
   }else if(['thrust','slash','throw_javelin','block','hit'].includes(b.action)&&b.elapsed<duration(n,b.action))return false;
-  const from={x:n.x,y:n.y};civilianWalk.call(this,n,to,Math.max(0,dt)*(n.dangerState?.mode==='leaving'?2.1:1));const dx=n.x-from.x,dy=n.y-from.y;n.x=from.x;n.y=from.y;this.move(n,dx,dy);if(Math.hypot(n.x-from.x,n.y-from.y)<.001&&Math.hypot(dx,dy)>.001)n.path=[];return dist(n,to)<2;
+  const from={x:n.x,y:n.y};civilianWalk.call(this,n,to,Math.max(0,dt)*({leaving:2.1,fleeing:CIVILIAN_FLIGHT.speed}[n.dangerState?.mode]||1));const dx=n.x-from.x,dy=n.y-from.y;n.x=from.x;n.y=from.y;this.move(n,dx,dy);if(Math.hypot(n.x-from.x,n.y-from.y)<.001&&Math.hypot(dx,dy)>.001)n.path=[];return dist(n,to)<2;
  };
  Game.prototype.stepBatracienCivilian=function(n,dt){
   const b=n.batracien,c=this.ensureCivilian(n);if(!c)return;
@@ -9279,9 +9331,10 @@ const Batraciens = (() => {
   if(dist(n,this.player)>C.activeRadius&&!n.dangerState&&!m)return;
   b.elapsed+=delta;
   if(locked.has(b.action)&&b.elapsed<duration(n,b.action)){syncCivil(n);return;}
-  if(c.moveTime===this.time){visual(n,n.dangerState?.mode==='leaving'?'flee':'walk');syncCivil(n);return;}
+  if(c.moveTime===this.time){visual(n,['leaving','fleeing'].includes(n.dangerState?.mode)?'flee':'walk');syncCivil(n);return;}
   if(n.dangerState){
    if(n.dangerState.mode==='returning'){if(b.action==='cower')visual(n,'cower_exit');else if(b.action!=='cower_exit'||b.elapsed>=duration(n,'cower_exit'))visual(n,'idle');}
+   else if(b.action==='cower_exit'||n.dangerState.mode==='fleeing'&&(n.dangerState.blocked||0)<.5&&!['cower','cower_enter'].includes(b.action))visual(n,'idle');
    else if(!['cower','cower_enter'].includes(b.action))visual(n,'cower_enter');else if(b.action==='cower_enter'&&b.elapsed>=duration(n,'cower_enter'))visual(n,'cower');
    syncCivil(n);return;
   }
@@ -9337,7 +9390,7 @@ const Batraciens = (() => {
  function front(g,n,t,min=.15){const [fx,fy]=g.facing(n.dir);return ((t.x-n.x)*fx+(t.y-n.y)*fy)/Math.max(1,dist(n,t))>min;}
  function alive(n){return n&&!n.dead&&!n.batracien?.dead&&!n.civilian?.dead&&(n.alpha??1)>.5;}
  function strike(g,n,t){if(!alive(t)||!g.sameLevel(n,t)||!g.lineClear(n,t))return;
-  if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
+  if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(g.isHumanGuard?.(t))g.damageHumanGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
  }
  function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;n.wind=spec.contact;n.attack=.72;g.foeSound?.(n,'melee','cultist');}
  function stepAttack(g,n,t,dt){const b=n.batracien,spec=combatSpec(n),before=b.elapsed;b.elapsed+=dt;n.dir=b.lockedDir??n.dir;
@@ -9358,7 +9411,7 @@ const Batraciens = (() => {
    if(!alive(target)||(target===this.player&&this.safeZone(target))){visual(e,'idle');e.wind=e.attack=0;return;}
    const ongoing=stepAttack(this,e,target,dt);e.wind=ongoing?Math.max(0,combatSpec(e).contact-b.elapsed):0;e.attack=ongoing?Math.max(0,.72-b.elapsed):0;return;
   }
-  const guard=this.npcs.find(n=>isArmed(n)&&alive(n)&&this.sameLevel(n,e)&&dist(n,e)<110&&this.lineClear(n,e));
+  const guard=this.npcs.find(n=>(isArmed(n)||this.isHumanGuard?.(n))&&alive(n)&&!n.guardState?.dead&&this.sameLevel(n,e)&&dist(n,e)<110&&this.lineClear(n,e));
   const d=dist(e,this.player),br=this.brain(e,this.player,d,dt,this.safeZone(this.player));
   const target=guard||(br.engage?this.player:null);const spec=combatSpec(e);
   if(target){e.dir=this.direction(target.x-e.x,target.y-e.y);const td=dist(e,target);
@@ -9388,8 +9441,8 @@ const Batraciens = (() => {
   if(!active(this))return;
   for(const n of this.npcs.filter(isArmed)){
    const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);for(const key of ['flash','hurt','stun'])n[key]=Math.max(0,(n[key]||0)-dt);
+   if(b.dead){n.wind=n.attack=0;if(b.action!=='death')visual(n,'death',true);b.elapsed=Math.min(duration(n,'death'),b.elapsed+dt);continue;}
    if(n.stun>0){n.wind=n.attack=0;visual(n,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);continue;}
-   if(b.dead){b.elapsed=Math.min(.96,b.elapsed+dt);continue;}
    if(['hit','block'].includes(b.action)&&b.elapsed<duration(n,b.action)){b.elapsed+=dt;continue;}
    const t=this.batracienWardenTarget?.(n)||this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
    if(['thrust','slash','throw_javelin'].includes(b.action)){const target=b.targetId==='player'?(this.isHostileBatracien(n)?this.player:null):this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
@@ -9413,9 +9466,9 @@ const Batraciens = (() => {
   if(!active(this)){if(this.journey||this.dead||this.dying||this.sleeping)this.batracienMissiles=[];return;}
   for(const s of this.batracienMissiles||[]){const dx=s.vx*dt,dy=s.vy*dt,parts=Math.max(1,Math.ceil(Math.hypot(dx,dy)/3));let wall=1.01;
    for(let j=1;j<=parts;j++)if(this.solid(s.x+dx*j/parts,s.y+dy*j/parts,1,s.level)){wall=j/parts;break;}
-   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
+   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)||this.isHumanGuard?.(n)&&!n.guardState?.dead))];let first=null;
    for(const t of targets){if(!this.sameLevel(s,t))continue;const u=swept(s,t,dx,dy);if(u!==null&&u<wall&&(!first||u<first.u)&&this.lineClear(s,t))first={t,u};}
-   if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
+   if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else if(this.isHumanGuard?.(first.t))this.damageHumanGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
    else if(wall<=1)s.life=0;else{s.x+=dx;s.y+=dy;s.life-=dt;}
   }
   this.batracienMissiles=(this.batracienMissiles||[]).filter(s=>s.life>0);
@@ -9668,6 +9721,183 @@ const BatracienSociety = (() => {
  return Object.freeze({route,roadPoint,roadSpecs,safe,config:C});
 })();
 Game.batracienSociety=BatracienSociety;
+
+/* Hearthreaver: everyone who fights can be hurt, and fighters answer each other.
+ * Human patrol guards ("LA GARDE") get health, a wind-up strike, the frog wardens'
+ * anger rule and a corpse. World enemies fight back against the guards that engage
+ * them instead of only ever targeting Kaldor. Civilian flight lives in world-danger.js.
+ * Story enemies keep their player-only AI: guards never complete Kaldor's kill quests.
+ */
+const NpcCombat=(()=>{
+ 'use strict';
+ const C=Object.freeze({
+  guard:{hp:8,reach:26,windup:.36,cooldown:1.4,damage:1,sight:150,leash:230,pursuit:380,view:220,anger:180,witness:220,active:700,speed:1.25},
+  foe:{sight:110,memory:6,leash:240,active:700}
+ });
+ const human=n=>!!n?.eventGuard&&!n.batracien;
+ BODY.guard=BODY.npc;
+ Game.prototype.isHumanGuard=function(n){return human(n);};
+ Game.prototype.ensureHumanGuard=function(n){
+  if(!human(n))return null;
+  if(!n.guardState){n.guardState={hp:C.guard.hp,maxHp:C.guard.hp,dead:false,inv:0,hostileUntil:0,targetId:null,strikeId:null};Object.assign(n,{kind:'guard',r:6,damage:C.guard.damage,cooldown:.6,post:n.post||{x:n.x,y:n.y}});}
+  return n.guardState;
+ };
+ Game.prototype.humanGuardAlive=function(n){return human(n)&&!n.guardState?.dead&&(n.alpha??1)>.5;};
+ Game.prototype.isHostileHumanGuard=function(n){return this.humanGuardAlive(n)&&(n.guardState?.hostileUntil||0)>this.clock;};
+ // Fighters that monsters answer: frog wardens and human patrols, angry or not.
+ function fighters(g){
+  if(g._fighterTime!==g.time){g._fighterTime=g.time;g._fighters=g.npcs.filter(n=>(n.batracien?.role?!n.batracien.dead&&!n.dead:g.humanGuardAlive(n))&&(n.alpha??1)>.5&&dist(n,g.player)<C.foe.active);}
+  return g._fighters;
+ }
+
+ Game.prototype.damageHumanGuard=function(n,amount,source){
+  const s=this.ensureHumanGuard(n);if(!s||s.dead||(n.alpha??1)<.5||!Number.isFinite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
+  const p=this.player,playerHit=source===p;if(!playerHit&&s.inv>0)return false;
+  if(playerHit){this.reportBatracienAssault(n,p);amount*=this.power();if(p.riposte>0){amount+=1;p.riposte=0;}p.hitPause=p.combo===3?.075:.04;if(!this.target())this.targetId=n.id;}
+  s.hp=Math.max(0,Math.round((s.hp-amount)*100)/100);if(s.hp<.05)s.hp=0;s.inv=playerHit?0:.5;
+  n.flash=.075;n.hurt=n.hurtDuration=.24;n.stun=Math.max(n.stun||0,.24);n.wind=n.attack=0;
+  const from=Number.isFinite(source?.x)?source:n,d=Math.max(1,dist(n,from));if(from!==n)this.move(n,(n.x-from.x)/d*6,(n.y-from.y)/d*6);
+  const owner=source?.owner?this.enemies.find(e=>e.id===source.owner):source;if(owner&&this.enemies.includes(owner))s.targetId=owner.id;
+  this.spill(n,from,false);this.emit('hit',{heavy:playerHit&&p.combo===3});
+  if(!s.hp){s.dead=true;this.spill(n,from,true);this.atlasDeaths[n.id]=true;this.npcs=this.npcs.filter(a=>a!==n);
+   if(this.dialogue?.who===n)this.dialogue=null;if(this.targetId===n.id)this.targetId=null;this.emit('bodyfall');}
+  this.emit('save');return true;
+ };
+
+ // An assault seen by a patrol angers it like the frog wardens; witnesses run away.
+ const report=Game.prototype.reportBatracienAssault;
+ Game.prototype.reportBatracienAssault=function(victim,source){
+  const alerted=report.call(this,victim,source);
+  if(source!==this.player||!victim||!this.npcs.includes(victim)||!this.sameLevel(victim,source))return alerted;
+  this.alarmWitnesses(victim,source);let fresh=false;
+  for(const n of this.npcs){if(!this.humanGuardAlive(n)||!this.sameLevel(n,victim))continue;
+   if(n!==victim&&(dist(n,victim)>C.guard.witness||!this.lineClear(n,victim)&&!this.lineClear(n,source)))continue;
+   const s=this.ensureHumanGuard(n);if(s.hostileUntil<=this.clock){fresh=true;n.cooldown=Math.min(n.cooldown||0,.5);}
+   s.hostileUntil=this.clock+C.guard.anger;if(this.dialogue?.who===n)this.dialogue=null;
+  }
+  if(fresh&&!alerted){this.emit('save');this.emit('notice',{title:'Les gardes interviennent',text:'Une agression a été vue. Éloigne-toi et cesse le combat pour les semer.'});}
+  return alerted||fresh;
+ };
+ const targets=Game.prototype.combatTargets;
+ Game.prototype.combatTargets=function(){return [...targets.call(this),...this.npcs.filter(n=>this.isHostileHumanGuard(n))];};
+ const damageEnemy=Game.prototype.damageEnemy;
+ Game.prototype.damageEnemy=function(n,amount){if(human(n)&&this.npcs.includes(n))return this.damageHumanGuard(n,amount,this.player);return damageEnemy.call(this,n,amount);};
+ const present=Game.prototype.npcPresent;
+ Game.prototype.npcPresent=function(n){return !(human(n)&&(n.guardState?.dead||this.isHostileHumanGuard(n)))&&present.call(this,n);};
+ const talk=Game.prototype.talkTo;
+ Game.prototype.talkTo=function(n){if(human(n)&&(n.guardState?.dead||this.isHostileHumanGuard(n)))return false;return talk.call(this,n);};
+
+ Game.prototype.humanGuardTarget=function(n,s){
+  const p=this.player;
+  if(this.isHostileHumanGuard(n)&&!this.dead&&!this.dying&&this.sameLevel(n,p)&&dist(n,n.post)<C.guard.pursuit&&dist(n,p)<C.guard.view&&this.lineClear(n,p))return p;
+  let e=s.targetId?this.enemies.find(e=>e.id===s.targetId&&!e.dead&&!e.retiring):null;
+  if(e&&(!this.sameLevel(e,n)||dist(e,n)>C.guard.sight*1.5)){e=null;}if(!e)s.targetId=null;
+  return e||this.enemies.filter(e=>!e.dead&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<C.guard.sight&&dist(e,n.post)<C.guard.leash&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0]||null;
+ };
+ Game.prototype.stepHumanGuards=function(dt){
+  const p=this.player,events=new Set((this.danger?.events||[]).map(e=>e.id));
+  for(const n of this.npcs){
+   if(!human(n))continue;const s=this.ensureHumanGuard(n);if(s.dead)continue;
+   for(const k of ['flash','hurt','stun','cooldown','attack'])n[k]=Math.max(0,(n[k]||0)-dt);s.inv=Math.max(0,s.inv-dt);
+   if(dist(n,p)>C.guard.active||!events.has(n.eventId)||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
+   if(n.stun>0||n.hurt>0){n.wind=0;continue;}
+   if(n.wind>0){n.wind-=dt;n.anim=0;if(n.wind<=0){n.wind=0;
+     const foe=s.strikeId==='player'?p:this.enemies.find(e=>e.id===s.strikeId&&!e.dead);
+     if(foe&&this.sameLevel(n,foe)&&dist(n,foe)<=C.guard.reach+8&&this.lineClear(n,foe)){if(foe!==p)this.guardStrike(n,foe);else if(this.isHostileHumanGuard(n))this.damagePlayer(C.guard.damage,n);}
+     n.attack=ATTACK_DURATION-.12;n.cooldown=Math.max(n.cooldown,C.guard.cooldown);}
+    continue;}
+   if(n.attack>0){n.anim=0;continue;}
+   const t=this.humanGuardTarget(n,s);
+   if(!t){if(dist(n,n.post)>4)this.walkNpc(n,n.post,dt);else n.anim=0;continue;}
+   const d=dist(n,t);n.dir=this.direction(t.x-n.x,t.y-n.y);
+   if(d<=C.guard.reach&&n.cooldown<=0&&this.lineClear(n,t)){n.wind=n.windup=C.guard.windup;s.strikeId=t===p?'player':t.id;n.anim=0;this.foeSound(n,'melee','cultist');continue;}
+   if(d>C.guard.reach-6)this.walkNpc(n,t,dt*C.guard.speed);else n.anim=0;
+  }
+ };
+
+ // Monsters remember the guard that hit them and answer it with their own moves.
+ const strike=Game.prototype.guardStrike;
+ Game.prototype.guardStrike=function(n,e){const hp=e?.hp;const result=strike.call(this,n,e);if(e&&!e.dead&&e.hp<hp){e.foeId=n.id;e.foeAt=this.time;}return result;};
+ Game.prototype.fightNpcFoe=function(e,dt){
+  if(!e.world||e.retiring||e.friendly||e.batracien||e.kind==='boss'||e.guardTime>0)return false;
+  // A wind-up, punch or sceptre blow aimed at Kaldor finishes with the original rules.
+  if(e.move&&!e.foeMove||e.wind>0&&!e.foeWind||e.melee>0&&!e.foeMelee)return false;
+  const p=this.player,F=C.foe,K=AI[e.kind]||AI.skeleton,list=fighters(this);
+  let foe=e.foeId?list.find(n=>n.id===e.foeId):null;
+  if(foe&&(!this.sameLevel(e,foe)||dist(e,foe)>F.leash||this.time-(e.foeAt||0)>F.memory))foe=null;
+  if(!foe)foe=list.filter(n=>this.sameLevel(e,n)&&dist(e,n)<F.sight&&this.lineClear(e,n)).sort((a,b)=>dist(a,e)-dist(b,e))[0]||null;
+  const busy=e.foeMove&&e.move||e.foeWind&&e.wind>0||e.foeMelee&&e.melee>0;
+  if(!foe&&!busy){e.foeId=null;return false;}
+  if(foe&&!busy){const dp=this.sameLevel(e,p)&&!this.dying&&!this.dead?dist(e,p):Infinity;if(dp<=dist(e,foe)&&(e.ai==='chase'||dp<K.feel))return false;}
+  if(foe){if(e.foeId!==foe.id)e.foeId=foe.id;if(dist(e,foe)<F.sight&&this.lineClear(e,foe))e.foeAt=this.time;}
+  const t=foe,d=t?dist(e,t):Infinity,hx=t?t.x-e.x:0,hy=t?t.y-e.y:0;
+  if(e.kind==='guardian'){
+   if(e.move){const M=CO_MOVES[e.move];e.mt+=dt;let f=0;while(f<5&&e.mt>=M.f[f+1])f++;e.mframe=f;
+    if(!e.hitDone&&e.mt>=M.hit){e.hitDone=true;const face=this.facing(e.dir),dp=dist(e,p),dot=((p.x-e.x)*face[0]+(p.y-e.y)*face[1])/Math.max(1,dp);
+     if(e.move==='slam'){(this.waves??=[]).push({x:e.x+face[0]*14,y:e.y+face[1]*8,t0:this.time,level:e.level||0});this.emit('hit',{heavy:true});
+      for(let i=0;i<16;i++){const a=i/16*Math.PI*2,sp=40+(i%4)*14;this.particles.push({level:e.level||0,x:e.x+face[0]*14+Math.cos(a)*6,y:e.y+face[1]*8+Math.sin(a)*3,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.55,life:.35+(i%3)*.08,size:1+(i%3===0?1:0),color:i%2?'#b49a74':'#7a6448'});}
+      if(dp<50&&this.sameLevel(e,p))this.damagePlayer(1,{x:e.x,y:e.y,level:e.level||0,unblockable:true});}
+     else if(dp<44&&dot>.25&&this.lineClear(e,p))this.damagePlayer(2,e);}
+    if(e.mt>=M.end){e.move=null;e.foeMove=false;e.mframe=0;e.cooldown=M.cd;}
+    e.anim=0;return true;}
+   if(t&&e.cooldown<=0&&d<52&&this.lineClear(e,t)){e.move=d<36&&Math.random()<.6?'punch':'slam';e.foeMove=true;e.mt=0;e.mframe=0;e.hitDone=false;e.dir=this.direction(hx,hy);this.foeSound(e,'strike');e.anim=0;return true;}
+  }
+  if(e.melee>0){e.melee-=dt;const pr=1-e.melee/e.meleeDur;
+   if(!e.meleeHit&&pr>=.55){e.meleeHit=true;if(this.sameLevel(e,p)&&dist(e,p)<27&&this.lineClear(e,p))this.damagePlayer(e.damage,e);}
+   if(e.melee<=0){e.melee=0;e.foeMelee=false;e.cooldown=Math.max(e.cooldown,.7);}e.anim=0;return true;}
+  if(e.wind>0){e.wind-=dt;if(!e.sfxPre&&e.kind!=='cultist'&&e.wind<=(e.kind==='snake'?.19:.08)){e.sfxPre=true;this.foeSound(e,'strike');}
+   if(e.wind<=0){e.wind=0;e.foeWind=false;e.attack=ATTACK_DURATION-.12;
+    if(e.kind==='cultist'){this.fire(e,Math.atan2(e.attackY-e.y,e.attackX-e.x),112);this.burst(e.x+(e.dir===1?7:e.dir===3?-7:e.dir===0?-6:7),e.y-27,'#d4e5a0',7);this.foeSound(e,'strike');}
+    else if(this.sameLevel(e,p)&&dist(e,p)<e.reach+10&&this.lineClear(e,p))this.damagePlayer(e.damage,e);
+    e.cooldown=e.kind==='snake'?1.1:1.45;}
+   e.anim=0;return true;}
+  if(e.attack>0){e.anim=0;return true;}
+  if(!t)return false;
+  e.dir=this.direction(hx,hy);
+  if(e.kind==='cultist'){e.meleeCD=Math.max(0,(e.meleeCD||0)-dt);if(d<23&&e.meleeCD<=0&&this.lineClear(e,t)){e.melee=e.meleeDur=.55;e.meleeHit=false;e.foeMelee=true;e.meleeCD=1.4;this.foeSound(e,'melee');return true;}}
+  if(e.kind!=='guardian'&&d<e.reach&&e.cooldown<=0&&this.lineClear(e,t)){e.wind=e.windup;e.foeWind=true;e.sfxPre=false;e.attackX=t.x;e.attackY=t.y;if(e.kind==='cultist')this.foeSound(e,'wind');return true;}
+  const keep=e.kind==='guardian'?30:Math.max(12,e.reach-8);
+  if(d>keep){const ox=e.x,oy=e.y;this.moveFoe(e,hx/d*e.speed*dt,hy/d*e.speed*dt);const moved=Math.hypot(e.x-ox,e.y-oy);e.anim=moved>.001?e.anim+moved/3:0;}else e.anim=0;
+  return true;
+ };
+
+ // Blade, monster strikes, spells and orbs reach patrol guards like every other person.
+ const combat=Game.prototype.civilianCombat;
+ Game.prototype.civilianCombat=function(dt,before){
+  combat.call(this,dt,before);const p=this.player,guards=this.npcs.filter(n=>this.humanGuardAlive(n)&&dist(n,p)<C.guard.active);if(!guards.length)return;
+  if(p.attack>0){const f=attackFrame(p.attack,p.combo);if(f===2||f===3)for(const n of guards){if(this.hits.has(n.id)||!this.sameLevel(p,n)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageHumanGuard(n,p.combo===3?2:1,p);}}
+  for(const e of this.enemies){const prev=before.get(e);if(!prev||e.dead||e.friendly||e.batracien)continue;
+   const melee=prev.melee>0&&!prev.meleeHit&&e.meleeHit,blow=prev.wind>0&&e.wind<=0&&e.kind!=='cultist',heavy=e.kind==='guardian'&&e.move&&!prev.hitDone&&e.hitDone;
+   if(!melee&&!blow&&!heavy)continue;const [fx,fy]=this.facing(e.dir);
+   for(const n of guards){if(!this.sameLevel(e,n))continue;const d=dist(n,e),dot=((n.x-e.x)*fx+(n.y-e.y)*fy)/Math.max(1,d);
+    if(d<(heavy?e.move==='slam'?50:44:melee?27:(e.reach||20)+8)&&(heavy&&e.move==='slam'||dot>-.05)&&this.lineClear(e,n))this.damageHumanGuard(n,heavy?2:e.damage||1,e);}
+  }
+  for(const h of this.hazards){if(h.delay>0||h.life<=0)continue;h.humanGuardHits??=new Set();for(const n of guards)if(!h.humanGuardHits.has(n.id)&&this.sameLevel(h,n)&&dist(h,n)<(h.r||18)&&this.lineClear(h,n)){h.humanGuardHits.add(n.id);this.damageHumanGuard(n,2,h);}}
+ };
+ const projectiles=Game.prototype.civilianProjectiles;
+ Game.prototype.civilianProjectiles=function(dt){
+  const guards=this.npcs.filter(n=>this.humanGuardAlive(n));
+  if(guards.length)for(const s of this.shots){if(s.life<=0)continue;const dx=s.vx*dt,dy=s.vy*dt,L=dx*dx+dy*dy;
+   for(const n of guards){if(!this.sameLevel(n,s))continue;const u=L?clamp(((n.x-s.x)*dx+(n.y-s.y)*dy)/L,0,1):0;
+    if(Math.hypot(n.x-s.x-dx*u,n.y-s.y-dy*u)<7&&this.lineClear(s,n)){this.damageHumanGuard(n,s.damage||1,s);s.life=0;break;}}}
+  return projectiles.call(this,dt);
+ };
+ const update=Game.prototype.update;
+ Game.prototype.update=function(dt,input){
+  const running=!this.dialogue&&!this.journey&&!this.sleeping&&!this.dying&&!this.dead&&!this.won;update.call(this,dt,input);
+  if(running&&!this.journey)this.stepHumanGuards(clamp(Number(dt)||0,0,.04));
+ };
+
+ // Health bar, anger mark and lock-on ring, as drawn over monsters and frog wardens.
+ const draw=Renderer.prototype.npcDraw;
+ Renderer.prototype.npcDraw=function(n){
+  draw.call(this,n);if(!human(n)||!n.guardState||(n.alpha??1)<=0)return;const s=n.guardState,c=this.c;
+  if(this.g.targetId===n.id)this.targetRing(n.x,n.y,12);
+  if(s.hp<s.maxHp){box(c,n.x-9,n.y-30,18,3,PAL.ink);box(c,n.x-8,n.y-29,Math.ceil(16*s.hp/s.maxHp),1,'#cda46d');}
+  if(this.g.isHostileHumanGuard(n))text(c,'!',n.x-2,n.y-46,'#edb279');
+ };
+ return Object.freeze({config:C});
+})();
 
 // END WORLD ATLAS
 // BEGIN SNOW RENDER

@@ -112,7 +112,12 @@ const Batraciens = (() => {
  Game.prototype.recruitCompanion=function(n,options){return !isArmed(n)&&oldRecruit.call(this,n,options);};
  const oldNpcMenu=Game.prototype.npcMenu;
  Game.prototype.npcMenu=function(n){const menu=oldNpcMenu.call(this,n);return isArmed(n)?menu.filter(m=>!/rejoindre|compagnon|recruter|voyager ensemble/i.test(m.label||'')):menu;};
- const oldWalkNpc=Game.prototype.walkNpc;
+ const oldWalkNpc=Game.prototype.walkNpc,oldMoveLocked=Game.prototype.npcMoveLocked;
+ Game.prototype.npcMoveLocked=function(n){
+  if(!n?.batracien)return !!oldMoveLocked?.call(this,n);const b=n.batracien;if(b.dead||n.civilian?.dead)return true;
+  if(isCivil(n))return ['seated','cower'].includes(b.action)||locked.has(b.action)&&b.elapsed<duration(n,b.action);
+  return ['thrust','slash','throw_javelin','block','hit'].includes(b.action)&&b.elapsed<duration(n,b.action);
+ };
  Game.prototype.walkNpc=function(n,to,dt){
   if(!n?.batracien)return oldWalkNpc.call(this,n,to,dt);const b=n.batracien;
   if(b.dead||n.civilian?.dead)return false;
@@ -121,7 +126,7 @@ const Batraciens = (() => {
    if(b.action==='seated'){this.civilianAction(n,'stand_up');return false;}
    if(b.action==='cower'){this.civilianAction(n,'cower_exit');return false;}
   }else if(['thrust','slash','throw_javelin','block','hit'].includes(b.action)&&b.elapsed<duration(n,b.action))return false;
-  const from={x:n.x,y:n.y};civilianWalk.call(this,n,to,Math.max(0,dt)*(n.dangerState?.mode==='leaving'?2.1:1));const dx=n.x-from.x,dy=n.y-from.y;n.x=from.x;n.y=from.y;this.move(n,dx,dy);if(Math.hypot(n.x-from.x,n.y-from.y)<.001&&Math.hypot(dx,dy)>.001)n.path=[];return dist(n,to)<2;
+  const from={x:n.x,y:n.y};civilianWalk.call(this,n,to,Math.max(0,dt)*({leaving:2.1,fleeing:CIVILIAN_FLIGHT.speed}[n.dangerState?.mode]||1));const dx=n.x-from.x,dy=n.y-from.y;n.x=from.x;n.y=from.y;this.move(n,dx,dy);if(Math.hypot(n.x-from.x,n.y-from.y)<.001&&Math.hypot(dx,dy)>.001)n.path=[];return dist(n,to)<2;
  };
  Game.prototype.stepBatracienCivilian=function(n,dt){
   const b=n.batracien,c=this.ensureCivilian(n);if(!c)return;
@@ -138,9 +143,10 @@ const Batraciens = (() => {
   if(dist(n,this.player)>C.activeRadius&&!n.dangerState&&!m)return;
   b.elapsed+=delta;
   if(locked.has(b.action)&&b.elapsed<duration(n,b.action)){syncCivil(n);return;}
-  if(c.moveTime===this.time){visual(n,n.dangerState?.mode==='leaving'?'flee':'walk');syncCivil(n);return;}
+  if(c.moveTime===this.time){visual(n,['leaving','fleeing'].includes(n.dangerState?.mode)?'flee':'walk');syncCivil(n);return;}
   if(n.dangerState){
    if(n.dangerState.mode==='returning'){if(b.action==='cower')visual(n,'cower_exit');else if(b.action!=='cower_exit'||b.elapsed>=duration(n,'cower_exit'))visual(n,'idle');}
+   else if(b.action==='cower_exit'||n.dangerState.mode==='fleeing'&&(n.dangerState.blocked||0)<.5&&!['cower','cower_enter'].includes(b.action))visual(n,'idle');
    else if(!['cower','cower_enter'].includes(b.action))visual(n,'cower_enter');else if(b.action==='cower_enter'&&b.elapsed>=duration(n,'cower_enter'))visual(n,'cower');
    syncCivil(n);return;
   }
@@ -196,7 +202,7 @@ const Batraciens = (() => {
  function front(g,n,t,min=.15){const [fx,fy]=g.facing(n.dir);return ((t.x-n.x)*fx+(t.y-n.y)*fy)/Math.max(1,dist(n,t))>min;}
  function alive(n){return n&&!n.dead&&!n.batracien?.dead&&!n.civilian?.dead&&(n.alpha??1)>.5;}
  function strike(g,n,t){if(!alive(t)||!g.sameLevel(n,t)||!g.lineClear(n,t))return;
-  if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
+  if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(g.isHumanGuard?.(t))g.damageHumanGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
  }
  function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;n.wind=spec.contact;n.attack=.72;g.foeSound?.(n,'melee','cultist');}
  function stepAttack(g,n,t,dt){const b=n.batracien,spec=combatSpec(n),before=b.elapsed;b.elapsed+=dt;n.dir=b.lockedDir??n.dir;
@@ -217,7 +223,7 @@ const Batraciens = (() => {
    if(!alive(target)||(target===this.player&&this.safeZone(target))){visual(e,'idle');e.wind=e.attack=0;return;}
    const ongoing=stepAttack(this,e,target,dt);e.wind=ongoing?Math.max(0,combatSpec(e).contact-b.elapsed):0;e.attack=ongoing?Math.max(0,.72-b.elapsed):0;return;
   }
-  const guard=this.npcs.find(n=>isArmed(n)&&alive(n)&&this.sameLevel(n,e)&&dist(n,e)<110&&this.lineClear(n,e));
+  const guard=this.npcs.find(n=>(isArmed(n)||this.isHumanGuard?.(n))&&alive(n)&&!n.guardState?.dead&&this.sameLevel(n,e)&&dist(n,e)<110&&this.lineClear(n,e));
   const d=dist(e,this.player),br=this.brain(e,this.player,d,dt,this.safeZone(this.player));
   const target=guard||(br.engage?this.player:null);const spec=combatSpec(e);
   if(target){e.dir=this.direction(target.x-e.x,target.y-e.y);const td=dist(e,target);
@@ -247,8 +253,8 @@ const Batraciens = (() => {
   if(!active(this))return;
   for(const n of this.npcs.filter(isArmed)){
    const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);for(const key of ['flash','hurt','stun'])n[key]=Math.max(0,(n[key]||0)-dt);
+   if(b.dead){n.wind=n.attack=0;if(b.action!=='death')visual(n,'death',true);b.elapsed=Math.min(duration(n,'death'),b.elapsed+dt);continue;}
    if(n.stun>0){n.wind=n.attack=0;visual(n,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);continue;}
-   if(b.dead){b.elapsed=Math.min(.96,b.elapsed+dt);continue;}
    if(['hit','block'].includes(b.action)&&b.elapsed<duration(n,b.action)){b.elapsed+=dt;continue;}
    const t=this.batracienWardenTarget?.(n)||this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
    if(['thrust','slash','throw_javelin'].includes(b.action)){const target=b.targetId==='player'?(this.isHostileBatracien(n)?this.player:null):this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
@@ -272,9 +278,9 @@ const Batraciens = (() => {
   if(!active(this)){if(this.journey||this.dead||this.dying||this.sleeping)this.batracienMissiles=[];return;}
   for(const s of this.batracienMissiles||[]){const dx=s.vx*dt,dy=s.vy*dt,parts=Math.max(1,Math.ceil(Math.hypot(dx,dy)/3));let wall=1.01;
    for(let j=1;j<=parts;j++)if(this.solid(s.x+dx*j/parts,s.y+dy*j/parts,1,s.level)){wall=j/parts;break;}
-   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
+   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)||this.isHumanGuard?.(n)&&!n.guardState?.dead))];let first=null;
    for(const t of targets){if(!this.sameLevel(s,t))continue;const u=swept(s,t,dx,dy);if(u!==null&&u<wall&&(!first||u<first.u)&&this.lineClear(s,t))first={t,u};}
-   if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
+   if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else if(this.isHumanGuard?.(first.t))this.damageHumanGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
    else if(wall<=1)s.life=0;else{s.x+=dx;s.y+=dy;s.life-=dt;}
   }
   this.batracienMissiles=(this.batracienMissiles||[]).filter(s=>s.life>0);

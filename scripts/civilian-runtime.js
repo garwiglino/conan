@@ -58,10 +58,11 @@ Game.prototype.assessCivilians=function(force=false){
  for(const n of all)if(n.dangerState&&!previous.has(n.id)){const c=this.ensureCivilian(n);if(c&&!c.dead){this.civilianAction(n,c.action==='seated'||c.action==='sit_down'?'stand_up':'startle');c.alarmed=true;}}
 };
 const civilianWalk=Game.prototype.walkNpc;
+Game.prototype.npcMoveLocked=function(n){const c=n?.civilian;return !!c&&(c.dead||c.action==='seated'||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action));};
 Game.prototype.walkNpc=function(n,to,dt){
  const c=this.ensureCivilian(n);if(c&&(c.dead||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action)))return false;
  if(c&&c.action==='seated'){this.civilianAction(n,'stand_up');return false;}
- return civilianWalk.call(this,n,to,dt*(n.dangerState?.mode==='leaving'?2.1:1));
+ return civilianWalk.call(this,n,to,dt*({leaving:2.1,fleeing:CIVILIAN_FLIGHT.speed}[n.dangerState?.mode]||1));
 };
 const civilianStepNpcs=Game.prototype.stepNpcs;
 Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filter(n=>!n.civilian?.dead);civilianStepNpcs.call(this,dt);}finally{this.npcs=all;}
@@ -83,7 +84,7 @@ Game.prototype.damageCivilian=function(n,amount,source){
  }
  this.civilianAction(n,c.dead||member?.down?'death':'hit',true);n.anim=0;n.path=[];
  if(c.dead){delete n.dangerState;n.alpha=1;n.phase='post';}
- else if(source&&!member){const origin=n.post||n;n.dangerState??={mode:'leaving',post:{x:origin.x,y:origin.y},shelter:this.civilianShelter(n),clearAt:null,blocked:0};}
+ else if(source&&!member)this.startCivilianFlight(n,source);
  if(this.dialogue?.who===n)this.dialogue=null;
  this.emit('save');return true;
 };
@@ -112,7 +113,7 @@ Game.prototype.stepCivilianAnimations=function(dt){
   if(['hit','death','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action))continue;
   if(this.dialogue?.who===n){this.civilianAction(n,'talk');continue;}
   if((n.alpha??1)<.1||n.phase==='away')continue;
-  if(c.moveTime===this.time){this.civilianAction(n,n.dangerState?.mode==='leaving'?'flee':'walk');n.anim=c.distance/(c.action==='flee'?16/3:4);continue;}
+  if(c.moveTime===this.time){this.civilianAction(n,['leaving','fleeing'].includes(n.dangerState?.mode)?'flee':'walk');n.anim=c.distance/(c.action==='flee'?16/3:4);continue;}
   if(n.dangerState){this.civilianAction(n,n.dangerState.mode==='returning'?'idle':'cower');continue;}
   if(member){this.civilianAction(n,'idle');continue;}
   c.restClock=(c.restClock+delta)%52;
