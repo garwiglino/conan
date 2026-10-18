@@ -371,7 +371,7 @@ const Batraciens = (() => {
     for(const layer of ['scene_back']){const im=atlas.get(action,b.workDir,f,{layer,catch:false});c.drawImage(im,Math.round(b.work.x)-40,Math.round(b.work.y)-52);}
    }
    this.shadow(n.x,n.y,dead?12:10);const im=atlas.get(b.action,n.dir??2,frame,{catch:false});c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
-   if(!dead){text(c,n.label,n.x-Math.round(textW(c,n.label)/2),n.y-28,'#dfc889');const m=this.g.npcPresent(n)&&this.g.npcMark(n);if(m)this.questMark(n.x,n.y-35,m);}
+   if(!dead){this.npcNameplate(n);const m=this.g.npcPresent(n)&&this.g.npcMark(n);if(m)this.questMark(n.x,n.y-35,m);}
   }finally{c.restore();}
   this.coldBreath?.(n);
  };
