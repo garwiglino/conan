@@ -20,7 +20,7 @@ const WorldSociety=(()=>{
   const status=g.worldState.edgeStatus(Atlas.edgeById.get(s.edge),g.clock);
   return !status.closed&&!status.events.some(e=>Atlas.EVENT_TYPES[e.type].evacuate)&&!g.solid(point.x,point.y,5,n?.level||0)&&!g.dangerAt(point.x,point.y,n?.level||0).unsafe;
  }
- function snapshot(g,n){const r=n.roadTraffic;return {id:n.id,road:r.road,index:r.originIndex??r.index,window:r.originWindow??r.window,cursorIndex:r.index,cursorWindow:r.window,slot:r.slot,progress:r.progress,sign:r.sign,hp:n.civilian?.hp??6,dead:!!n.civilian?.dead,appearance:n.civilian?.appearance?{...n.civilian.appearance}:undefined,clock:g.clock};}
+ function snapshot(g,n){const r=n.roadTraffic,hp=member(g,n)?clamp(n.civilian?.hp??6,1,6):n.civilian?.hp??6;return {id:n.id,x:n.x,y:n.y,road:r.road,index:r.originIndex??r.index,window:r.originWindow??r.window,cursorIndex:r.index,cursorWindow:r.window,slot:r.slot,progress:r.progress,sign:r.sign,hp,dead:!!n.civilian?.dead,appearance:n.civilian?.appearance?{...n.civilian.appearance}:undefined,clock:g.clock};}
  Game.prototype.ensureWorldSociety=function(){return this.society||(this.society={records:new Map(),nextTraffic:0,nextChat:this.time+10,nextPerception:0});};
  Game.prototype.incidentRoadPosition=function(event,slot,attempt){
   if(!Atlas.EVENT_TYPES[event.type]?.guard)return null;
@@ -30,11 +30,12 @@ const WorldSociety=(()=>{
   const progress=clamp(((centre.x-a.x)*dx+(centre.y-a.y)*dy)/Math.max(1,length*length),0,1)*length;
   return routePoint({a,b,length},clamp(progress+(slot%2?1:-1)*(70+attempt*14),0,length));
  };
- Game.prototype.roadTrafficSpawn=function(road,index,window,slot){
+ Game.prototype.roadTrafficSpawn=function(road,index,window,slot,{restore=false,position=null}={}){
   if(!descriptor(road,index,window))return null;const state=this.ensureWorldSociety(),id='road-person-'+road.id+'-'+index+'-'+window+'-'+slot,seed=civilianHash(id),record=state.records.get(id),s=descriptor(road,record?.cursorIndex??index,record?.cursorWindow??window);if(!s)return null;
   if(record?.dead||this.atlasDeaths[id]||this.npcs.some(n=>n.id===id))return null;
-  const progress=record?.progress??s.length*(slot===0?.28:.72),pos=routePoint(s,progress),d=dist(pos,this.player);
-  if(d<C.spawn||d>C.load||this.npcs.some(n=>alive(n)&&dist(n,pos)<28)||!roadOpen(this,null,s,pos)||this.localThreatAt(pos.x,pos.y,0,220))return null;
+  const progress=record?.progress??s.length*(slot===0?.28:.72),expected=routePoint(s,progress),pos=restore&&position&&finite(position.x)&&finite(position.y)?{x:position.x,y:position.y}:restore&&finite(record?.x)&&finite(record?.y)&&dist(record,expected)<400?{x:record.x,y:record.y}:expected,d=dist(pos,this.player);
+  if(this.solid(pos.x,pos.y,5,0))return null;
+  if(!restore&&(d<C.spawn||d>C.load||this.npcs.some(n=>alive(n)&&dist(n,pos)<28)||!roadOpen(this,null,s,pos)||this.localThreatAt(pos.x,pos.y,0,220)))return null;
   const trader=seed%3===0,n={id,...pos,post:{...pos},world:true,alpha:1,dir:2,look:'nomade',head:30,name:trader?'MARCHAND':'VOYAGEUR',label:trader?'MARCHAND':'VOYAGEUR',title:trader?'Marchand de passage':'Voyageur de la route',civilianJob:trader?'carry':'idle',roadTraffic:{...s,originIndex:index,originWindow:window,slot,progress,sign:record?.sign===-1?-1:1,wait:0,blocked:0},
    greet:()=>trader?['Je fais la tournée des relais. Tu cherches quelque chose ?']:['Toi aussi, tu fais la route ?'],topics:()=>[],bye:()=>['Bonne route.']};
   this.ensureCivilian(n,record);n.civilian.restClock=0;this.npcs.push(n);this.atlasNpcs.push(n);return n;
@@ -44,11 +45,11 @@ const WorldSociety=(()=>{
   for(const n of this.npcs.filter(n=>n.roadTraffic&&dist(n,this.player)>C.unload&&!member(this,n)&&this.dialogue?.who!==n&&!n.dangerState&&!n.worldChat)){
    state.records.set(n.id,snapshot(this,n));this.npcs=this.npcs.filter(a=>a!==n);this.atlasNpcs=this.atlasNpcs.filter(a=>a!==n);
   }
-  while(state.records.size>512)state.records.delete(state.records.keys().next().value);
+  this.advanceDistantRoadTraffic();
   // A traveller keeps its identity after crossing a streaming window or reloading.
   for(const r of state.records.values()){
    if(r.dead||this.npcs.filter(n=>n.roadTraffic).length>=C.trafficLimit)continue;
-   const road=Atlas.roadById[r.road],s=descriptor(road,r.cursorIndex??r.index,r.cursorWindow??r.window);if(s&&dist(routePoint(s,r.progress),this.player)<=C.load)this.roadTrafficSpawn(road,r.index,r.window,r.slot);
+   const road=Atlas.roadById[r.road],s=descriptor(road,r.cursorIndex??r.index,r.cursorWindow??r.window);if(s&&dist(routePoint(s,r.progress),this.player)<=C.load)this.roadTrafficSpawn(road,r.index,r.window,r.slot,{restore:true});
   }
   if(this.player.level)return;const w=Atlas.toWorld(this.player.x,this.player.y),near=Atlas.closestRoad(w.x,w.y);
   if(!land(near?.road)||near.d>48)return;const road=near.road,index=road.segments.indexOf(near.segment),a=Atlas.toGame(near.segment.a[0],near.segment.a[1]),b=Atlas.toGame(near.segment.b[0],near.segment.b[1]),dx=b.x-a.x,dy=b.y-a.y;
@@ -56,6 +57,27 @@ const WorldSociety=(()=>{
   for(const k of [window,window-1,window+1])for(let slot=0;slot<2;slot++){
    if(this.npcs.filter(n=>n.roadTraffic).length>=C.trafficLimit)return;
    this.roadTrafficSpawn(road,index,k,slot);
+  }
+ };
+ Game.prototype.advanceDistantRoadTraffic=function(){
+  const state=this.ensureWorldSociety(),loaded=new Set(this.npcs.map(n=>n.id));
+  for(const r of state.records.values()){
+   if(r.dead||loaded.has(r.id)||this.party.some(c=>c.id===r.id))continue;
+   const road=Atlas.roadById[r.road];let s=descriptor(road,r.cursorIndex??r.index,r.cursorWindow??r.window);if(!s)continue;
+   const elapsed=Math.max(0,this.clock-(r.clock??this.clock));r.clock=this.clock;
+   const speed=WorldPacing.civilianWalk*WorldPacing.dayRealSeconds/1440*(civilianHash(r.id)%3===0?.85:1);let remaining=elapsed*speed;
+   // The same graph and pace are used outside streaming range. No off-screen damage.
+   for(let guard=0;remaining>0&&guard<4096;guard++){
+    const old=routePoint(s,r.progress);if(dist(old,this.player)<=C.load)break;
+    const status=this.worldState.edgeStatus(Atlas.edgeById.get(s.edge),this.clock);if(status.closed||status.events.some(e=>Atlas.EVENT_TYPES[e.type].evacuate))break;
+    const room=r.sign>0?s.length-r.progress:r.progress,step=Math.min(remaining,room,Math.max(1,dist(old,this.player)-C.load));r.progress+=r.sign*step;remaining-=step;
+    if(step<room)continue;
+    let next=descriptor(road,s.index,s.window+r.sign);
+    if(!next){const index=s.index+r.sign,segment=road.segments[index],window=r.sign>0?0:segment?Math.max(0,Math.ceil(segment.length*16/C.window)-1):0;next=descriptor(road,index,window);}
+    if(next){s=next;r.cursorIndex=s.index;r.cursorWindow=s.window;r.progress=r.sign>0?0:s.length;}
+    else{r.sign*=-1;remaining=Math.max(0,remaining-(15+civilianHash(r.id)%20)*WorldPacing.civilianWalk);}
+   }
+   Object.assign(r,routePoint(s,r.progress));
   }
  };
  Game.prototype.stepRoadTraffic=function(n,dt){
@@ -129,7 +151,7 @@ const WorldSociety=(()=>{
   }
  };
  Game.prototype.stepWorldLocal=function(n,dt){
-  if(!n.resident||n.batracien||n.roadTraffic||!calm(this,n)||n.worldChat||this.dialogue?.who===n||dist(n,this.player)>650)return;
+  if(!n.resident||n.batracien||n.roadTraffic||n.reliefPost||!calm(this,n)||n.worldChat||this.dialogue?.who===n||dist(n,this.player)>650)return;
   const h=((this.clock/60)%24+24)%24;if(h<6||h>=22)return;
   const s=n.localLife||(n.localLife={after:this.time+10+civilianHash(n.id)%20,cycle:0,goal:null});
   if(!s.goal){if(this.time<s.after)return;s.cycle++;
@@ -174,14 +196,35 @@ const WorldSociety=(()=>{
   this.stepCivilianAnimations(dt);for(const n of this.npcs)if(n.worldChat)this.civilianAction(n,'talk');
  };
  const save=Game.prototype.serialize;
- Game.prototype.serialize=function(){const data=save.call(this);if(!data.atlas)return data;const state=this.ensureWorldSociety(),records=new Map(state.records);for(const n of this.npcs)if(n.roadTraffic)records.set(n.id,snapshot(this,n));data.atlas.society={version:1,traffic:[...records.values()].slice(-512)};return data;};
- const restore=Game.prototype.finishAtlasRestore;
- Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);const state=this.ensureWorldSociety();
-  if(saved?.atlas?.society?.version!==1||this.layoutMigrated)return;
-  for(const r of (Array.isArray(saved.atlas.society.traffic)?saved.atlas.society.traffic:[]).slice(-512)){
+ Game.prototype.serialize=function(){const data=save.call(this);if(!data.atlas)return data;const state=this.ensureWorldSociety(),records=new Map(state.records);for(const n of this.npcs)if(n.roadTraffic)records.set(n.id,snapshot(this,n));
+  const guards=new Map(this.guardRecords||[]);for(const n of this.npcs)if(n.eventGuard&&n.guardState)guards.set(n.id,{id:n.id,eventId:n.eventId,x:n.x,y:n.y,hp:n.guardState.hp,hostileUntil:n.guardState.hostileUntil});
+  data.atlas.society={version:1,traffic:[...records.values()],guards:[...guards.values()]};return data;};
+ Game.prototype.loadSocietyRecords=function(saved){const state=this.ensureWorldSociety();this.guardRecords||=new Map();
+  if(saved?.version!==1||this.layoutMigrated)return;
+  for(const r of Array.isArray(saved.traffic)?saved.traffic:[]){
    const road=Atlas.roadById[r?.road],s=descriptor(road,r?.cursorIndex??r?.index,r?.cursorWindow??r?.window);
    if(!s||!descriptor(road,r.index,r.window)||![0,1].includes(r.slot)||r.id!=='road-person-'+r.road+'-'+r.index+'-'+r.window+'-'+r.slot||!finite(r.progress)||r.progress<0||r.progress>s.length||![-1,1].includes(r.sign)||!finite(r.hp)||r.hp<0||r.hp>6)continue;
    state.records.set(r.id,{...r,dead:r.dead===true||r.hp===0});
+  }
+  for(const r of Array.isArray(saved.guards)?saved.guards:[]){const e=this.worldState.events.find(e=>e.id===r?.eventId),rule=e&&Atlas.EVENT_TYPES[e.type];
+   if(!rule?.guard||!Array.from({length:rule.group},(_,i)=>'incident-'+e.id+'-'+i).includes(r.id)||!finite(r.hp)||r.hp<0||r.hp>8)continue;this.guardRecords.set(r.id,{...r,hostileUntil:finite(r.hostileUntil)?r.hostileUntil:0});
+  }
+ };
+ const initParty=Game.prototype.initTravelParty;
+ Game.prototype.initTravelParty=function(saved={}){
+  this.loadSocietyRecords(saved.society);
+  for(const r of this.ensureWorldSociety().records.values()){
+   const recruited=(saved.party||[]).find(c=>c.id===r.id),s=descriptor(Atlas.roadById[r.road],r.cursorIndex??r.index,r.cursorWindow??r.window);
+   if(recruited||s&&dist(routePoint(s,r.progress),this.player)<=C.load)this.roadTrafficSpawn(Atlas.roadById[r.road],r.index,r.window,r.slot,{restore:true,position:recruited});
+  }return initParty.call(this,saved);
+ };
+ const restore=Game.prototype.finishAtlasRestore;
+ Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);
+  // Player coordinates are restored after initTravelParty, so nearby non-party
+  // actors must be loaded against the final saved position, not the starting camp.
+  for(const r of this.ensureWorldSociety().records.values()){
+   if(r.dead||this.npcs.some(n=>n.id===r.id))continue;const road=Atlas.roadById[r.road],s=descriptor(road,r.cursorIndex??r.index,r.cursorWindow??r.window);
+   if(s&&dist(routePoint(s,r.progress),this.player)<=C.load)this.roadTrafficSpawn(road,r.index,r.window,r.slot,{restore:true});
   }
  };
  // Bubbles are optional overheard speech: never a modal, voice beep or notification.

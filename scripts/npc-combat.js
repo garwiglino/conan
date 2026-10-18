@@ -16,6 +16,9 @@ const NpcCombat=(()=>{
  Game.prototype.ensureHumanGuard=function(n){
   if(!human(n))return null;
   if(!n.guardState){n.guardState={hp:C.guard.hp,maxHp:C.guard.hp,dead:false,inv:0,hostileUntil:0,targetId:null,strikeId:null};Object.assign(n,{kind:'guard',r:6,damage:C.guard.damage,cooldown:.6,post:n.post||{x:n.x,y:n.y}});}
+  if(!n.guardRestored){n.guardRestored=true;const r=this.guardRecords?.get(n.id);if(r){n.guardState.hp=clamp(r.hp,0,C.guard.hp);n.guardState.dead=r.hp<=0;n.guardState.hostileUntil=clamp(r.hostileUntil||0,0,this.clock+C.guard.anger);
+   if(Number.isFinite(r.x)&&Number.isFinite(r.y)&&dist(n,r)<900&&!this.solid(r.x,r.y,6,0)){n.x=r.x;n.y=r.y;n.post={x:r.x,y:r.y};}
+  }}
   return n.guardState;
  };
  Game.prototype.humanGuardAlive=function(n){return human(n)&&!n.guardState?.dead&&(n.alpha??1)>.5;};
@@ -35,7 +38,7 @@ const NpcCombat=(()=>{
   const from=Number.isFinite(source?.x)?source:n,d=Math.max(1,dist(n,from));if(from!==n)this.move(n,(n.x-from.x)/d*6,(n.y-from.y)/d*6);
   const owner=source?.owner?this.enemies.find(e=>e.id===source.owner):source;if(owner&&this.enemies.includes(owner))s.targetId=owner.id;
   this.spill(n,from,false);this.emit('hit',{heavy:playerHit&&p.combo===3});
-  if(!s.hp){s.dead=true;this.spill(n,from,true);this.atlasDeaths[n.id]=true;this.npcs=this.npcs.filter(a=>a!==n);
+  if(!s.hp){s.dead=true;this.spill(n,from,true);this.atlasDeaths[n.id]=true;this.guardRecords||=new Map();this.guardRecords.set(n.id,{id:n.id,eventId:n.eventId,x:n.x,y:n.y,hp:0,hostileUntil:s.hostileUntil});this.npcs=this.npcs.filter(a=>a!==n);
    if(this.dialogue?.who===n)this.dialogue=null;if(this.targetId===n.id)this.targetId=null;this.emit('bodyfall');}
   this.emit('save');return true;
  };

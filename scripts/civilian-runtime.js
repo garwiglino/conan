@@ -58,9 +58,9 @@ Game.prototype.assessCivilians=function(force=false){
  for(const n of all)if(n.dangerState&&!previous.has(n.id)){const c=this.ensureCivilian(n);if(c&&!c.dead){this.civilianAction(n,c.action==='seated'||c.action==='sit_down'?'stand_up':'startle');c.alarmed=true;}}
 };
 const civilianWalk=Game.prototype.walkNpc;
-Game.prototype.npcMoveLocked=function(n){const c=n?.civilian;return !!c&&(c.dead||c.action==='seated'||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action));};
+Game.prototype.npcMoveLocked=function(n){const c=n?.civilian;return !!c&&(c.dead||c.critical||c.action==='seated'||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action));};
 Game.prototype.walkNpc=function(n,to,dt){
- const c=this.ensureCivilian(n);if(c&&(c.dead||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action)))return false;
+ const c=this.ensureCivilian(n);if(c&&(c.dead||c.critical||['hit','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action)))return false;
  if(c&&c.action==='seated'){this.civilianAction(n,'stand_up');return false;}
  return civilianWalk.call(this,n,to,dt*({leaving:2.1,fleeing:CIVILIAN_FLIGHT.speed}[n.dangerState?.mode]||1));
 };
@@ -110,6 +110,7 @@ Game.prototype.stepCivilianAnimations=function(dt){
   const moved=Math.hypot(n.x-c.lastX,n.y-c.lastY);c.lastX=n.x;c.lastY=n.y;const member=this.party?.find(v=>v.id===n.id);if(moved>.01&&moved<20){c.distance+=moved;c.moveTime=this.time;}
   if(member){if(c.lastHP!==undefined&&member.hp<c.lastHP)this.civilianAction(n,member.down?'death':'hit',true);c.lastHP=member.hp;if(member.down){if(c.action!=='death')this.civilianAction(n,'death');continue;}if(c.action==='death')this.civilianAction(n,'stand_up');}
   if(c.dead)continue;
+  if(c.critical){this.civilianAction(n,'cower');n.anim=0;n.path=[];continue;}
   if(['hit','death','startle','sit_down','stand_up'].includes(c.action)&&c.elapsed<civilianDuration(c.action))continue;
   if(this.dialogue?.who===n){this.civilianAction(n,'talk');continue;}
   if((n.alpha??1)<.1||n.phase==='away')continue;

@@ -94,10 +94,12 @@ lui devient connue qu'avec le délai de propagation déjà géré par le monde.
 
 ## Limites et validation
 
-La géopolitique causale complète décrite par la bible (effectifs financés, stocks,
-ordres juridiques et contrats) reste un chantier distinct. Ces ajouts ne remplacent
-pas les déclencheurs calendaires du moteur par une simulation économique complète.
-Ils donnent des conséquences physiques aux événements existants.
+La géopolitique causale complète décrite par la bible reste en cours.
+Le nouveau raccordement `world-simulation.js` remplace les déclencheurs calendaires
+dans le jeu embarqué et apporte stocks, contrats et mandats financés. Il ne faut
+pas le confondre avec une diplomatie, une justice ou un peuplement déjà complets.
+État exact, unités économiques et points encore ouverts :
+[`living-world-integration.md`](living-world-integration.md).
 
 Tests : `tests/world-society.test.cjs`, plus les suites danger, combat entre PNJ,
 batraciens et propagation des nouvelles. Le contrôle navigateur

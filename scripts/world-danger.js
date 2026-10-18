@@ -17,7 +17,7 @@ class WorldDanger {
   const events=new Map();for(const id of [...roadIds,site?.id,site?.town])for(const e of this.targets.get(id)||[])events.set(e.id,e);
   // Site events also reach the actual actor positions and the settlement outskirts.
   for(const e of this.events){const n=Atlas.byId[e.target];if(n&&Math.hypot(x-e.x,y-e.y)<(n.radius||12)+20)events.set(e.id,e);}
-  const es=[...events.values()],cursed=Atlas.curseCells.has(cell?.id),sky=worldClimateAt(g.clock,x,y);
+  const es=[...events.values()].filter(e=>!e.radius||Math.hypot(e.x-x,e.y-y)<=e.radius),cursed=Atlas.curseCells.has(cell?.id),sky=worldClimateAt(g.clock,x,y);
   const terrain=road?(road.type==='roads'?1:road.type==='trails'?2:1):({1:1.8,2:1.6,3:1.3,4:1.2,5:2.3,6:1.8,7:2.2,8:2,9:1.8,10:1.6,11:1.7,12:2.1}[cell?.biome]||1);
   let hostility=(site?.rest? .3:terrain)+(cursed?2:0),hazard=(cell?.height>60?.7:0)+(sky.blizzard||0)+(sky.rain||0)*.25;
   let unsafe=false;for(const e of es){const rule=Atlas.EVENT_TYPES[e.type];hostility+=rule.risk||0;hazard+=rule.hazard||0;unsafe ||=!!rule.evacuate;}

@@ -48,7 +48,7 @@ test('a real hostile incident refuses departure without charging and can stop an
  const g=fixture(),station=g.stations.find(s=>s.site==='camp');Object.assign(g.player,{x:station.actor.x,y:station.actor.y+16,coins:5000});assert.ok(g.prepareTransport(station.id));
  const plan=g.planJourney(a.Atlas.home.id,{mode:'horse'}),leg=plan.stages.find(s=>s.kind==='move'),money=g.player.coins;
  const ev=g.worldState.add('bandits',leg.road,g.clock,600);assert.equal(g.startJourney(plan),false);assert.equal(g.player.coins,money);
- g.worldState.resolve(ev.id,g.clock);assert.ok(g.startJourney(plan));const paid=g.player.coins;g.worldState.add('bandits',leg.road,g.clock,600);g.stepJourney(.04);assert.equal(g.journey,null);assert.equal(g.player.coins,paid);
+ g.worldState.resolve(ev.id,g.clock);assert.ok(g.startJourney(plan));const paid=g.player.coins;g.worldState.add('bandits',leg.road,g.clock,600,{position:{x:(leg.from[0]+leg.to[0])/2,y:(leg.from[1]+leg.to[1])/2}});g.stepJourney(.04);assert.equal(g.journey,null);assert.equal(g.player.coins,paid);
 });
 test('snow announcements follow actual precipitation, and incomplete legacy saves remain loadable',()=>{
  const A=a.Atlas,snow=new A.WorldState({clock:0}),rain=new A.WorldState({clock:0});snow.advance(360,()=>({snow:.8,rain:0}));rain.advance(360,()=>({snow:0,rain:.8}));assert.ok(snow.events.some(e=>e.type==='snow'));assert.ok(!snow.events.some(e=>e.type==='rain'));assert.ok(rain.events.some(e=>e.type==='rain'));

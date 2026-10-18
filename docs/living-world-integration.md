@@ -1,0 +1,104 @@
+# Monde vivant — intégration en cours
+
+Auteur des ajouts : **Codex / ChatGPT**, pour transmission à Claude.
+Branche de travail : `codex/living-world`. Ce document ne vaut pas validation
+d'une simulation politique ou démographique complète.
+
+## Raccordements effectifs
+
+- `world-pacing.js` : journée de 3 600 secondes réelles, 16 pixels par mètre,
+  marche nominale du joueur à 67 px/s. Le graphe de transport utilise cette
+  conversion ; fatigue et déshydratation ralentissent effectivement le joueur.
+- `world-society.js`, `npc-combat.js` : restauration des voyageurs proches et
+  recrutés, blessés/à terre compris ; santé et hostilité des gardes ; conservation
+  de tous les décès et livres de connaissances. La distance minimale d'apparition
+  d'un nouveau passant ne s'applique pas à une identité déjà sauvegardée.
+- Voyageurs humains déchargés : progression sur leurs segments, à la vitesse des
+  civils, arrêt aux fermetures, aucun dégât abstrait. Leur proximité avec le joueur
+  arrête l'avance abstraite et rend la main au déplacement local.
+- `world-simulation.js` : stocks persistants, consommation, intrants des recettes,
+  gisements et renouvellement, trésorerie, personnel réservé, contrats de transport
+  et circulation des nouvelles avec les cargaisons. Le moteur embarqué remplace
+  les incidents tirés selon le modulo des dates par ces causes.
+- Un chargement réserve au départ ses marchandises, deux travailleurs et le
+  paiement en séquestre. Capacité de 80 lots par chargement, 24 convois en mouvement
+  au maximum. Livraison unique ; retour sur le graphe avant libération du personnel.
+  Un retour bloqué ne rend ni les ouvriers ni les biens par téléportation.
+- Une pénurie provient des disponibilités alimentaires/eau, et sa fin exige un
+  rétablissement des réserves. Les achats du joueur débitent les réserves réelles.
+- Ponts, éboulements, avalanches et dégâts d'incendie : travaux payés, outils,
+  bois éventuel, équipe indisponible pendant le chantier. Pas de réparation par
+  expiration. Les crues ne se terminent qu'après décrue du niveau simulé.
+- Patrouilles : budget, provisions, effectifs disponibles et autorité locale
+  requis pour un mandat. Les morts observés ne réintègrent pas les effectifs.
+  Une proximité géographique n'autorise pas une intervention chez une autre autorité.
+- Nouvelles : un registre local reste local ; les cargaisons emportent une copie
+  datée de ce qu'elles savent au départ. Une résolution survenue ailleurs n'est
+  pas devinée. La proximité seule ne donne pas la qualité de « témoin direct ».
+- Personnages essentiels : blessure grave persistante, travail/déplacement/service
+  suspendus, guérison conditionnée par médicaments et nourriture. Après six heures,
+  un résident disponible peut prendre la relève d'un transport. Il rejoint son
+  poste à pied ; le service n'est utilisable qu'une fois arrivé. La relève est
+  sauvegardée et prend fin à la guérison du titulaire.
+
+## Unités et limites de ce premier raccordement
+
+La population canonique et ses six espèces restent celles de la bible. Le champ
+`population` économique est une **cohorte de campagne réduite**, pas une nouvelle
+estimation de population réelle. Les réserves de départ, débits et budgets sont
+des paramètres de jeu explicites, persistants et encore à équilibrer.
+
+Les spécialités exportatrices ne constituent pas toute l'alimentation d'une ville :
+une culture de subsistance compatible avec le potentiel régional complète le
+modèle. Les habitants mangent aussi des aliments frais, pas exclusivement des
+provisions conservées. Les recettes de conservation consomment leurs vrais intrants.
+
+Le niveau hydrologique est un modèle de jeu, pas une simulation de bassin versant.
+Le moteur pur `world-model.js`, utilisé seul sans bible ni simulation attachée,
+conserve le générateur historique pour compatibilité ; **le jeu embarqué**, lui,
+attache toujours la simulation causale. Les tests de celle-ci doivent donc passer
+par `world-simulation.test.cjs`, et non seulement par les tests historiques.
+
+## Points encore ouverts — ne pas annoncer comme terminés
+
+1. Les marchands visibles et les cargaisons économiques ne sont pas encore la
+   même identité physique. La liaison doit empêcher toute livraison pendant un
+   combat local et conserver exactement biens, personnel et progression.
+2. Le départ et le retour géographiques des patrouilles restent à raccorder :
+   les effectifs et mandats sont persistants, mais la ronde locale n'est pas une
+   tournée de plusieurs relais. Pas de bataille automatique hors écran.
+3. Les relations et différends politiques de la bible sont chargés mais ne
+   constituent pas encore des décisions diplomatiques opérationnelles. Aucune
+   guerre, occupation ou alliance militaire ne doit être inventée par calendrier.
+4. Le droit n'est pas encore un système de justice : il faut une mémoire locale
+   des infractions, des témoignages réels, des procédures et sanctions explicites.
+   L'hostilité momentanée des gardes ne doit pas être présentée comme cela.
+5. Péages, vol de cargaisons, rançon et négociation ne sont pas encore des objectifs
+   économiques jouables des brigands.
+6. Le transport du joueur utilise encore la réalité globale pour ses choix et
+   refus : séparer conseil fondé sur les nouvelles connues et interception réelle.
+7. Les courriers et voyageurs batraciens gardent certaines routines distinctes ;
+   la progression hors écran des humains doit encore être testée au passage des
+   fermetures historiques et sur une campagne fortement accélérée.
+8. Peuplement physique des six espèces, vrais ateliers, besoins personnels,
+   emplois du temps et relations sociales durables restent à compléter. Ne pas
+   confondre un stock de ville avec un atelier animé ayant réellement produit.
+9. Les événements et faits ne sont plus évincés arbitrairement. Prévoir un archivage
+   indexé des faits anciens résolus pour les très longues campagnes, sans effacer
+   les incidents actifs, morts, mandats ou conséquences persistantes.
+
+## Vérification
+
+Compiler les deux variantes avec `node scripts/embed-world.cjs`.
+
+- `tests/world-simulation.test.cjs` : conservation, intrants, réservations,
+  réparation financée, décrue, livraison unique, retour bloqué, propagation et
+  équivalence avance fractionnée / longue / sauvegarde intermédiaire.
+- `tests/world-life-runtime.test.cjs` : régressions de persistance, voyageurs
+  recrutés à terre, gardes, relève et soif dans le vrai `Game` embarqué.
+- `scripts/check-world-society.cjs` : navigateur réel, conversations, bulles,
+  interruption, circulation routière et erreurs JavaScript.
+
+Les tests historiques qui ajoutaient un incident au milieu d'une longue route
+pour arrêter son premier segment ont été précisés : l'incident est maintenant
+placé sur le segment réellement testé. Il ne ferme plus toute la route par magie.

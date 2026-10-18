@@ -2,7 +2,7 @@
 const FULL_MEAL_MINUTES=2160,RATION_ENERGY=50;
 const travelNumber=(v,fallback,max=100)=>Number.isFinite(v)?clamp(v,0,max):fallback;
 Game.prototype.initTravelParty=function(saved){
- this.needs={satiety:travelNumber(saved.needs?.satiety,100),autoEat:saved.needs?.autoEat!==false,starved:travelNumber(saved.needs?.starved,0,100000)};
+ this.needs={satiety:travelNumber(saved.needs?.satiety,100),autoEat:saved.needs?.autoEat!==false,starved:travelNumber(saved.needs?.starved,0,100000),dehydrated:travelNumber(saved.needs?.dehydrated,0,100000)};
  this.mapPlaces=Atlas.nodes.map(n=>({...n,siteId:n.id,category:'places'}));
  this.transportSession=null;this.pendingTransport=null;this.stations=[];
  this.companion.status=saved.companion?.status==='waiting'?'waiting':'following';
