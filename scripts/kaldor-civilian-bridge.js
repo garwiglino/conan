@@ -8,6 +8,13 @@
  * folded into the torso and redrawn on the grip. The blade keeps the exact
  * direction of the game's swordPose() on every frame; hit timing, reach and
  * collision sweeps stay in the engine and are not read or changed here.
+ * Outfits (v4): the body, foreground and bare-torso sheets come from
+ * KALDOR_OUTFITS (scripts/build-kaldor-outfits.cjs, same rig as the NPCs);
+ * the head and hair stay the civilian modules. wear() switches the outfit and
+ * the 'dress' clip pulls the new garment over his head.
+ * Helmets (v5): three planes like the NPC headgear modules, the nape behind
+ * the head, the helmet over the hair and a mask that erases the hair under
+ * it. wearHelmet() switches it and the 'helm' clip lifts it onto his head.
  */
 (function(root,factory){
  'use strict';
@@ -16,27 +23,47 @@
  if(root)root.HearthreaverKaldorCivilianArt=art;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
+ // outfit names the civilian look the starting pagne reproduces pixel for
+ // pixel; the outfit actually drawn is worn.outfit, from KALDOR_OUTFITS.
  const appearance=Object.freeze({
   sex:'masculin',outfit:'E01-masculin-terre',age:'adulte',
   hair:'14',color:'brun',hat:null,beard:null,moustache:null
  });
+ const START_OUTFIT='pagne-noue';
+ // previous: what he wore before the last change ({outfit, helmet}), shown
+ // until the swap frame of the dress or helm clip.
+ const worn={outfit:START_OUTFIT,helmet:null,previous:null};
  const foot=Object.freeze({x:40,y:52});
- const cache=new Map(),strides=new WeakMap(),layerCache=new Map();
+ const cache=new Map(),strides=new WeakMap(),layerCache=new Map(),sheets=new Map();
  let loading=null,loaded=false,failed=false;
+ const OUTFITS=()=>typeof KALDOR_OUTFITS!=='undefined'?KALDOR_OUTFITS:null;
+ const outfitData=id=>OUTFITS()?.outfits?.[id]||null;
+ const helmetData=id=>id&&OUTFITS()?.helmets?.[id]||null;
+ const headId=appearance.sex+'-'+appearance.age,hairId=appearance.sex+'-hair-'+appearance.hair;
  const valid=()=>typeof CIVILIAN_ART!=='undefined'&&typeof CIVILIAN_BITMAPS!=='undefined'&&
-  !!CIVILIAN_ART.outfits?.[appearance.outfit]&&
-  !!CIVILIAN_ART.modules?.[appearance.sex+'-'+appearance.age]&&
-  !!CIVILIAN_ART.modules?.[appearance.sex+'-hair-'+appearance.hair];
+  !!outfitData(worn.outfit)&&!!CIVILIAN_ART.modules?.[headId]&&!!CIVILIAN_ART.modules?.[hairId];
+ // Outfit sheets are decoded once and kept: switching never waits on a decode.
+ function sheet(key,asset){
+  let e=sheets.get(key);if(e)return e;
+  const im=new Image();e={image:im,ready:false};
+  e.promise=new Promise(resolve=>{im.onload=()=>{e.ready=true;resolve(true);};im.onerror=()=>resolve(false);});
+  im.src='data:image/png;base64,'+asset.png;sheets.set(key,e);return e;
+ }
+ function sheetsOf(o){return {body:sheet(o.id,o.asset),fore:sheet(o.id+'-front',o.foreground),bare:sheet(o.id+'-bare',o.bare),stand:sheet(o.id+'-stand',o.stand)};}
+ const helmetSheet=h=>sheet('casque:'+h.id,h.asset);
  function preload(){
   if(!valid())return Promise.resolve(false);
   if(loading)return loading;
-  loading=Promise.resolve().then(()=>CIVILIAN_BITMAPS.preload(appearance))
-   .then(values=>{loaded=Array.isArray(values)&&values.every(Boolean);failed=!loaded;return loaded;})
+  const modules=[headId,hairId].map(id=>sheet(id,CIVILIAN_ART.modules[id].asset).promise);
+  const outfits=Object.values(OUTFITS().outfits).flatMap(o=>Object.values(sheetsOf(o)).map(e=>e.promise));
+  const helmets=Object.values(OUTFITS().helmets||{}).map(h=>helmetSheet(h).promise);
+  loading=Promise.all([...modules,...outfits,...helmets])
+   .then(values=>{loaded=values.every(Boolean);failed=!loaded;return loaded;})
    .catch(()=>{loaded=false;failed=true;return false;});
   return loading;
  }
  function ready(){return loaded&&valid();}
- function clip(action){return valid()?CIVILIAN_ART.clips[action]:null;}
+ function clip(action){return valid()?(OUTFITS().clips?.[action]||CIVILIAN_ART.clips[action]):null;}
  function frameAt(action,seconds=0,distance=0){
   const spec=clip(action);if(!spec)return 0;
   const sum=spec.durations.reduce((a,b)=>a+b,0);
@@ -95,6 +122,9 @@
  const GOLD=['#b5772c','#f3af3c'];
  const GRIP=['#50342f','#754b37'];
  const SMEAR=['#fff0be','#e3eee9','#b8cdd2'];
+ // Bare arms and hands by default; gloves and sleeves of the worn outfit.
+ let ARM=SKIN[1],FIST=SKIN;
+ function dressArms(o){const a=o?.arms;FIST=a?a.hand.map(c=>'#'+c):SKIN;ARM=a?'#'+a.sleeve[1]:SKIN[1];}
  function buffer(){
   const px=new Map();
   return {
@@ -144,43 +174,71 @@
  }
  function fist(b,x,y){
   x=Math.round(x-.5);y=Math.round(y-.5);
-  b.set(x,y,SKIN[0],8);b.set(x+1,y,SKIN[0],8);b.set(x,y+1,SKIN[0],8);b.set(x+1,y+1,SKIN[1],8);
+  b.set(x,y,FIST[0],8);b.set(x+1,y,FIST[0],8);b.set(x,y+1,FIST[0],8);b.set(x+1,y+1,FIST[1],8);
  }
  function arm(b,sx,sy,hx,hy){
   // Hidden behind the big NPC head once the hand is raised above the chin.
   if(Math.hypot(hx-sx,hy-sy)<3.5||hy<-11)return;
-  b.line(sx,sy,hx,hy,SKIN[1],1);
+  b.line(sx,sy,hx,hy,ARM,1);
  }
 
  // ---- Separate NPC layers, so the head, hair and torso can move apart. ----
- function layers(action,dir,frame){
-  const key=[action,dir,frame].join(':');
+ function layers(action,dir,frame,outfit=worn.outfit,helmet=worn.helmet){
+  const key=[outfit,helmet,action,dir,frame].join(':');
   if(layerCache.has(key))return layerCache.get(key);
-  const A=CIVILIAN_ART,o=A.outfits[appearance.outfit],d=[2,1,0,3][dir];
-  if(!o.frames[action])return null;
-  const entry=(id,asset)=>{const e=CIVILIAN_BITMAPS.image(id,asset);return e.ready?e.image:null;};
-  const tile=(asset,image,index)=>{
+  const A=CIVILIAN_ART,o=outfitData(outfit),d=[2,1,0,3][dir];
+  if(!o||!o.frames[action])return null;
+  const image=e=>e.ready?e.image:null;
+  const tile=(asset,img,index,dx=0,dy=0)=>{
    const cv=document.createElement('canvas');cv.width=cv.height=80;
    const c=cv.getContext('2d');c.imageSmoothingEnabled=false;
-   const i=asset.tiles[index];c.drawImage(image,(i%16)*48,Math.floor(i/16)*48,48,48,16,16,48,48);
+   const i=asset.tiles[index];c.drawImage(img,(i%16)*48,Math.floor(i/16)*48,48,48,16+dx,16+dy,48,48);
    return cv;
   };
-  const bodyImage=entry(appearance.outfit,o.asset),foreImage=entry(appearance.outfit+'-front',o.foreground);
-  const headId=appearance.sex+'-'+appearance.age,hairId=appearance.sex+'-hair-'+appearance.hair;
-  const headImage=entry(headId,A.modules[headId].asset),hairImage=entry(hairId,A.modules[hairId].asset);
-  if(!bodyImage||!foreImage||!headImage||!hairImage)return null;
-  const base=A.moduleFrames[action][d]+frame;
+  const S=sheetsOf(o),bodyImage=image(S.body),foreImage=image(S.fore),bareImage=image(S.bare);
+  const headImage=image(sheet(headId,A.modules[headId].asset)),hairImage=image(sheet(hairId,A.modules[hairId].asset));
+  if(!bodyImage||!foreImage||!bareImage||!headImage||!hairImage)return null;
+  // Hero-only clips reuse the rest head, moved like the rig moves a head.
+  const hero=!A.moduleFrames[action],[hx,hy]=hero?OUTFITS()[action].head[d][frame]:[0,0];
+  const base=hero?A.moduleFrames.idle[d]:A.moduleFrames[action][d]+frame,index=o.frames[action][d]+frame;
   const out={
-   body:tile(o.asset,bodyImage,o.frames[action][d]+frame),
-   fore:tile(o.foreground,foreImage,o.frames[action][d]+frame),
-   head:tile(A.modules[headId].asset,headImage,base),
-   hair:[0,1,2].map(p=>tile(A.modules[hairId].asset,hairImage,base+p*A.moduleCount)),
-   headFirst:!!o.headFirst
+   body:tile(o.asset,bodyImage,index),
+   fore:tile(o.foreground,foreImage,index),
+   bare:tile(o.bare,bareImage,index),
+   head:tile(A.modules[headId].asset,headImage,base,hx,hy),
+   hair:[0,1,2].map(p=>tile(A.modules[hairId].asset,hairImage,base+p*A.moduleCount,hx,hy)),
+   headFirst:!!o.headFirst,fold:o.torso==='fold',hat:null,mask:null
   };
+  // Helmet planes, animated with the same clips as the outfit bodies.
+  const h=helmetData(helmet);
+  if(h){
+   const helmImage=image(helmetSheet(h));if(!helmImage)return null;
+   const at=h.frames[action][d]+frame;
+   out.hat=[0,1].map(p=>tile(h.asset,helmImage,p*h.count+at));
+   out.mask=tile(h.asset,helmImage,2*h.count+at);
+  }
   layerCache.set(key,out);while(layerCache.size>48)layerCache.delete(layerCache.keys().next().value);
   return out;
  }
+ // A hair plane at (tx,ty) with the helmet mask at the head (hx,hy) erased,
+ // as CivilianAtlas.get masks the hair under an NPC's headgear.
+ function hairOn(c,L,p,tx=0,ty=0,hx=tx,hy=ty){
+  if(!L.mask){c.drawImage(L.hair[p],tx,ty);return;}
+  const [cv,k]=canvas80();k.drawImage(L.hair[p],tx,ty);
+  k.globalCompositeOperation='destination-out';k.drawImage(L.mask,hx,hy);c.drawImage(cv,0,0);
+ }
+ // The same stack as CivilianAtlas.get for Kaldor's head, hair, outfit and
+ // helmet (nape behind the head, helmet over the front hair).
+ function human(L){
+  const [out,c]=canvas80();
+  hairOn(c,L,0);if(L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.body,0,0);
+  hairOn(c,L,1);if(L.hat)c.drawImage(L.hat[0],0,0);if(!L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.fore,0,0);
+  hairOn(c,L,2);if(L.hat)c.drawImage(L.hat[1],0,0);
+  return out;
+ }
  // Fold the two baked NPC hands into the torso: Kaldor's hands are on the grip.
+ // Clothed outfits ship a bare torso sheet instead (arms layers removed).
+ function torso(L,dir,dx=0){return L.fold?torsoOnly(L.body,dir,dx):L.bare;}
  function torsoOnly(body,dir,dx=0){
   const cv=document.createElement('canvas');cv.width=cv.height=80;
   const c=cv.getContext('2d');c.drawImage(body,0,0);
@@ -346,12 +404,13 @@
 
  // ---- The NPC's own right hand in the face view (walk swing, recoil). ----
  // Null when too little of it shows; the guard grip is used instead.
- function handPoint(d){
+ function handPoint(d,o){
   const [x0,x1,y0,y1]=[30,36,43,49];let sx=0,sy=0,n=0;
+  const gloves=o&&o.torso!=='fold'?new Set(o.arms.hand.map(c=>parseInt(c,16))):null;
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
    const i=(y*80+x)*4;if(!d[i+3])continue;
    const r=d[i],g=d[i+1],bb=d[i+2];
-   if(r>=150&&r>g+30&&g>bb){sx+=x;sy+=y;n++;}
+   if(gloves?gloves.has((r<<16)|(g<<8)|bb):r>=150&&r>g+30&&g>bb){sx+=x;sy+=y;n++;}
   }
   return n>=3?[sx/n-40,sy/n-52]:null;
  }
@@ -403,14 +462,16 @@
  function stack(c,L,legs,dir,head=[0,0],hair=[0,0],shift=[0,0]){
   const at=(img,dx,dy)=>c.drawImage(img,dx,dy);
   const [hx,hy]=head,[tx,ty]=[hx+hair[0],hy+hair[1]];
-  at(L.hair[0],tx,ty);
+  hairOn(c,L,0,tx,ty,hx,hy);
   if(L.headFirst)at(L.head,hx,hy);
-  at(torsoOnly(legs.body,dir,shift[0]),0,0);
-  at(L.hair[1],tx,ty);
+  at(torso(legs,dir,shift[0]),0,0);
+  hairOn(c,L,1,tx,ty,hx,hy);
+  if(L.hat)at(L.hat[0],hx,hy);
   if(!L.headFirst)at(L.head,hx,hy);
   at(legs.fore,0,0);
   c.save();c.translate(40+shift[0],52+shift[1]);gear(c,dir);c.restore();
-  at(L.hair[2],tx,ty);
+  hairOn(c,L,2,tx,ty,hx,hy);
+  if(L.hat)at(L.hat[1],hx,hy);
  }
  const paintAt=(c,g)=>{c.save();c.translate(40,52);g.paint(c);c.restore();};
  function attackFrame(dir,frame,combo,swordPose){
@@ -442,7 +503,7 @@
  function heldSword(dir,state,frame,p,npcPixels,shift){
   const profile=dir===1||dir===3,g=GUARD[dir];
   // The back view hides the NPC hands under the hair: use the guard grip.
-  const hand=(dir===2&&handPoint(npcPixels))||[g.h[0]+shift[0],g.h[1]+shift[1]];
+  const hand=(dir===2&&handPoint(npcPixels,outfitData(worn.outfit)))||[g.h[0]+shift[0],g.h[1]+shift[1]];
   const held=BLEND_STATES.has(state)?weaponBlend(dir,state,frame,hand,shift):{h:hand,u:g.u,length:1,t:0};
   held.behind=dir===0?held.t<.5:held.t>=(profile?.3:.5);
   const sword=buffer(),hands=buffer(),grip=held.behind&&dir!==2?sword:hands;
@@ -462,29 +523,32 @@
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
-  const key=[dir,state,frame,combo,!!flash].join(':');
+  const key=[worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
   if(cache.has(key)){
    const value=cache.get(key);cache.delete(key);cache.set(key,value);return value;
   }
-  let out;
-  if(state==='attack'){
+  let out;dressArms(outfitData(worn.outfit));
+  if(state==='dress'||state==='helm'){
+   out=dressFrame(dir,Math.max(0,Math.min(clip(state).durations.length-1,frame|0)),state);
+   if(!out)return null;
+  }else if(state==='attack'){
    out=attackFrame(dir,Math.max(0,Math.min(5,frame)),combo,swordPose);
    if(!out)return null;
   }else{
    const p=pose(state,frame,dir);if(!p)return null;
-   const human=CIVILIAN_BITMAPS.get(appearance,p.action,dir,p.frame);
-   if(!human)return null;
+   const L=layers(p.action,dir,p.frame);if(!L)return null;
+   const npc=human(L);
    let c;[out,c]=canvas80();
    const shift=bodyShift(p.action,dir,p.frame);
    const onBody=paint=>{c.save();c.translate(40+shift[0],52+shift[1]);paint();c.restore();};
    const sheathed=state.startsWith('sheathed_');
-   const npcPixels=pixels(human);
+   const npcPixels=pixels(npc);
    const held=sheathed?null:heldSword(dir,state,frame,p,npcPixels,shift);
    if(sheathed&&dir!==0)onBody(()=>scabbard(c,dir));
    if(held&&held.behind)paintAt(c,held.sword);
    hairTips(c,npcPixels,dir,state,frame,true);
    if(held&&held.L)stack(c,held.L,held.L,dir,[0,0],[0,0],shift);
-   else{c.drawImage(human,0,0);onBody(()=>gear(c,dir));}
+   else{c.drawImage(npc,0,0);onBody(()=>gear(c,dir));}
    hairTips(c,npcPixels,dir,state,frame,false);
    if(sheathed&&dir===0)onBody(()=>scabbard(c,dir));
    if(held&&!held.behind)paintAt(c,held.sword);
@@ -498,14 +562,90 @@
   cache.set(key,out);while(cache.size>192)cache.delete(cache.keys().next().value);
   return out;
  }
+ // Putting an outfit on ('dress'): the old one until the garment is over the
+ // head, then the new one. Changing helmets ('helm'): the old helmet until
+ // both hands hold the new one at the head. The sword stays on the back.
+ function dressFrame(dir,frame,id='dress'){
+  const D=OUTFITS()[id],next=outfitData(worn.outfit),before=frame<D.swap&&worn.previous;
+  const outfit=id==='dress'&&before&&outfitData(worn.previous.outfit)?worn.previous.outfit:worn.outfit;
+  const helmet=id==='helm'&&before?worn.previous.helmet:worn.helmet;
+  const L=layers(id,dir,frame,outfit,helmetData(helmet)?helmet:null);if(!L)return null;
+  const [out,c]=canvas80(),d=[2,1,0,3][dir],shift=bodyShift(id,dir,frame);
+  const onBody=paint=>{c.save();c.translate(40+shift[0],52+shift[1]);paint();c.restore();};
+  if(dir!==0)onBody(()=>scabbard(c,dir));
+  hairOn(c,L,0);if(L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.body,0,0);
+  hairOn(c,L,1);if(L.hat)c.drawImage(L.hat[0],0,0);if(!L.headFirst)c.drawImage(L.head,0,0);
+  onBody(()=>gear(c,dir));hairOn(c,L,2);if(L.hat)c.drawImage(L.hat[1],0,0);
+  if(dir===0)onBody(()=>scabbard(c,dir));
+  // Raised arms and the garment are in front of the hair.
+  if(D.cloth)for(const [x,y,k] of D.cloth[d][frame]){c.fillStyle=k===3?INK:'#'+next.cloth[k];c.fillRect(x,y,1,1);}
+  c.drawImage(L.fore,0,0);
+  return out;
+ }
+ const clipMs=id=>clip(id)?.durations.reduce((a,b)=>a+b,0)||0;
+ function wear(id){
+  if(!outfitData(id))return false;
+  if(id!==worn.outfit){worn.previous={outfit:worn.outfit,helmet:worn.helmet};worn.outfit=id;}
+  return true;
+ }
+ // null takes the helmet off.
+ function wearHelmet(id){
+  if(id!==null&&!helmetData(id))return false;
+  if(id!==worn.helmet){worn.previous={outfit:worn.outfit,helmet:worn.helmet};worn.helmet=id;}
+  return true;
+ }
+ // Engine hook: the dressing pose (dress or helm clip) replaces idle while it
+ // plays; moving, fighting or being hit ends it at once.
+ function dressLook(actor,time){
+  const d=actor?.dressing;if(!d)return null;
+  const t=time-d.t0,id=d.clip==='helm'?'helm':'dress';
+  if(actor.moving||actor.attack>0||actor.dash>0||actor.hurt>0||actor.guard||actor.melee>0||t<0||t*1000>=clipMs(id)){actor.dressing=null;return null;}
+  return {state:id,frame:frameAt(id,t)};
+ }
+ // Kaldor in any outfit and helmet, for menus: portrait('id') or
+ // portrait({outfit, helmet}); a bare id shows the outfit without helmet.
+ function portrait(look,dir=2,state='sheathed_idle',frame=0){
+  const keep={...worn};
+  if(typeof look==='string')look={outfit:look,helmet:null};
+  worn.outfit=look.outfit||worn.outfit;worn.helmet=look.helmet===undefined?worn.helmet:look.helmet;worn.previous=null;
+  try{return nativeFrame(dir,state,frame);}finally{Object.assign(worn,keep);}
+ }
+ // Kaldor's bare head and mane at rest, seen from the front ("no helmet").
+ function bareHead(){
+  const key='head:'+worn.outfit;if(layerCache.has(key))return layerCache.get(key);
+  const L=layers('idle',2,0,worn.outfit,null);if(!L)return null;
+  const [out,c]=canvas80();c.drawImage(L.hair[0],0,0);c.drawImage(L.head,0,0);c.drawImage(L.hair[1],0,0);c.drawImage(L.hair[2],0,0);
+  layerCache.set(key,out);return out;
+ }
+ // Kaldor bareheaded in an outfit, at rest and seen from the front (wardrobe icon).
+ function figure(id){
+  const key='figure:'+id;if(layerCache.has(key))return layerCache.get(key);
+  const L=layers('idle',2,0,id,null);if(!L)return null;
+  const out=human(L);layerCache.set(key,out);return out;
+ }
+ // Mannequin pieces. Outfit (stand sheet): 0 the garment without legs, 1 its
+ // boots. Helmet: its nape and helmet planes at rest, seen from the front.
+ function garment(id,part=0){
+  const key='stand:'+id+':'+part;if(layerCache.has(key))return layerCache.get(key);
+  const o=outfitData(id),h=!o&&helmetData(id),e=o?sheetsOf(o).stand:h&&helmetSheet(h);if(!e?.ready)return null;
+  const cv=document.createElement('canvas');cv.width=cv.height=80;
+  const c=cv.getContext('2d'),put=(asset,i)=>c.drawImage(e.image,(asset.tiles[i]%16)*48,Math.floor(asset.tiles[i]/16)*48,48,48,16,16,48,48);
+  if(o)put(o.stand,part);
+  else for(const p of [0,1])put(h.asset,p*h.count+h.frames.idle[0]);
+  layerCache.set(key,cv);return cv;
+ }
  function clear(){cache.clear();layerCache.clear();shiftCache.clear();}
  // Grip and blade direction actually drawn, exposed for regression tests.
  function attackPose(dir,frame,combo,swordPose){
   const s=attackSpec(dir,frame,combo);
   return {hand:[...s.h],blade:bladeDir(dir,frame,combo,swordPose),front:s.z!==0};
  }
- return Object.freeze({version:3,appearance,anchor:foot,
+ return Object.freeze({version:5,appearance,anchor:foot,
   preload,ready,frameAt,gaitFrame,remap,pose,nativeFrame,attackPose,clear,
+  wear,wearHelmet,dressLook,portrait,garment,bareHead,figure,dressDuration:(id='dress')=>clipMs(id)/1000,
+  outfit:()=>worn.outfit,helmet:()=>worn.helmet,
+  outfits:()=>Object.values(OUTFITS()?.outfits||{}).map(({id,label,warmth,description,place,cloth})=>({id,label,warmth,description,place,cloth})),
+  helmets:()=>Object.values(OUTFITS()?.helmets||{}).map(({id,label,warmth,description,place,closed})=>({id,label,warmth,description,place,closed})),
   stats:()=>({ready:loaded,failed,loading:!!loading,frames:cache.size})
  });
 });

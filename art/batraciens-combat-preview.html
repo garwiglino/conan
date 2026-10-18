@@ -1,0 +1,3742 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hearthreaver · Combat des batraciens</title><style>body{margin:0;padding:16px;max-width:800px;margin:auto;background:light-dark(#f5f6f0,#17201d);color-scheme:light dark}</style><div id="hr-batraciens-combat">
+<style>
+#hr-batraciens-combat{font-family:system-ui,sans-serif;color:light-dark(#292f2c,#e6e7dc);color-scheme:light dark}
+#hr-batraciens-combat *{box-sizing:border-box}
+#hr-batraciens-combat .hr-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+#hr-batraciens-combat .hr-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#hr-batraciens-combat label{display:grid;gap:5px;min-width:0}
+#hr-batraciens-combat button,#hr-batraciens-combat select{font:inherit;color:inherit;background:light-dark(#edf0e8,#29332d);border:1px solid light-dark(#b6bfb0,#5e6d59);border-radius:5px;padding:10px;min-height:44px;max-width:100%}
+#hr-batraciens-combat button[aria-pressed="true"]{background:light-dark(#d2dfc5,#4a5c37)}
+#hr-batraciens-combat canvas{display:block;width:100%;height:300px;image-rendering:pixelated;background:#35434d;border-radius:6px;margin-top:14px}
+#hr-batraciens-combat canvas[data-hr="lineup"]{height:190px}
+#hr-batraciens-combat input[type="range"]{width:100%;min-height:40px;accent-color:light-dark(#576f40,#bacd94)}
+#hr-batraciens-combat .hr-scrub{flex:1;min-width:130px}
+#hr-batraciens-combat .hr-inline{display:flex;gap:8px;align-items:center;min-height:44px}
+#hr-batraciens-combat .hr-detail{min-height:44px;margin:8px 0;overflow-wrap:anywhere}
+#hr-batraciens-combat .hr-title{font-weight:500;margin:0 0 10px}
+@media(max-width:520px){#hr-batraciens-combat .hr-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<div class="hr-title">Hearthreaver · Tenues et combat</div>
+<div class="hr-fields">
+<label>Catégorie<select data-hr="role" aria-label="Catégorie"></select></label>
+<label>Coup<select data-hr="action" aria-label="Coup"></select></label>
+<label>Vue<select data-hr="direction" aria-label="Vue"><option value="1">Droite</option><option value="2" selected>Face</option><option value="3">Gauche</option><option value="0">Dos</option></select></label>
+<label>Peau<select data-hr="palette" aria-label="Couleur de peau"><option value="original">Olive</option><option value="jade">Jade</option><option value="turquoise_sombre">Turquoise</option><option value="ocre_mousse">Ocre mousse</option><option value="ardoise">Ardoise</option></select></label>
+<label>Vitesse<select data-hr="speed" aria-label="Vitesse"><option value="1">Normale</option><option value="0.5">× 0,5</option><option value="0.25">× 0,25</option></select></label>
+</div>
+<canvas data-hr="canvas" role="img" aria-label="Animation native du batracien sélectionné ; témoin de blocage à droite">Animation de combat.</canvas>
+<div class="hr-row"><button type="button" data-hr="play">Pause</button><button type="button" data-hr="next">Image suivante</button><label class="hr-scrub">Image <output data-hr="frame-label">1 / 12</output><input data-hr="frame" type="range" min="0" max="11" value="0" aria-label="Image d’animation"></label></div>
+<div class="hr-row"><label class="hr-inline"><input data-hr="equipment" type="checkbox" checked> Armes et bouclier</label><label class="hr-inline"><input data-hr="smear" type="checkbox" checked> Smear</label><label class="hr-inline"><input data-hr="sequence" type="checkbox" checked> Alterner les coups</label><label class="hr-inline"><input data-hr="pixels" type="checkbox"> Grille de pixels</label></div>
+<div class="hr-row" aria-label="Essais du bouclier"><button type="button" data-hr="front">Frapper de face</button><button type="button" data-hr="rear">Frapper dans le dos</button><button type="button" data-hr="heavy">Coup lourd</button></div>
+<div class="hr-detail" data-hr="status" aria-live="polite">Anticipation</div>
+<div>Repos armé · profils gauche et droit</div><canvas data-hr="lineup" role="img" aria-label="Comparaison simultanée des profils gauche et droit au repos armé"></canvas>
+<script>
+/* Hearthreaver batraciens v3 — fichier autonome, zéro dépendance. */
+(function(root){
+'use strict';
+const M=(function(){const module={exports:{}};const exports=module.exports;
+/**
+ * Hearthreaver — Batracien bipède, dessin JavaScript natif.
+ * Source : personnage de la planche validée dans cette conversation.
+ * Contrat du fichier de référence (pas de nouvel audit du dépôt) : garwiglino/conan @ b598bc103c61112c4e81eac29e58f37653213de8.
+ *
+ * Animation v2 : tête et bras articulés, silhouettes et palettes sources conservées.
+ * Aucun PNG embarqué, aucune image chargée : chaque caractère ci-dessous est UN pixel.
+ * Couleurs fixes ; alpha binaire ; aucune rotation, interpolation, texture ou miroir.
+ * Case moteur : 80 × 80 / ancre : (40,52).
+ * Case de travail : 48 × 48 / ancre : (24,36), translation exacte de (+16,+16).
+ * Le personnage visible mesure 19×20 px de face/dos et 16×21 px de profil au repos.
+ * Les pieds occupent la ligne d'ancrage (y = 52), sans recentrage automatique.
+ *
+ * Module navigateur (HearthreaverBatracien) et CommonJS, sans dépendance.
+ * À charger après le moteur pour utiliser installCharacterAtlas(), ou seul pour l'atelier.
+ */
+(function (root, factory) {
+  'use strict';
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.HearthreaverBatracien = factory();
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  /** O/K : contours ; s/g/l/h : peau ; d/b/c : crème ; u/v/w/t/r : cuir ; a/e/y/i : œil. */
+  const PALETTE = Object.freeze({
+    "O": "#100e20",
+    "K": "#30262a",
+    "s": "#575c39",
+    "g": "#80834c",
+    "l": "#a1a365",
+    "h": "#c4c57c",
+    "d": "#b9a16b",
+    "b": "#e1c58a",
+    "c": "#f3dfa4",
+    "u": "#50342f",
+    "v": "#754b37",
+    "w": "#a16a44",
+    "t": "#bb8051",
+    "r": "#cf955f",
+    "a": "#b5772c",
+    "e": "#f3af3c",
+    "y": "#ffd45e",
+    "i": "#fff0be"
+});
+
+  // Quatre dessins indépendants. Les profils ne sont pas des images retournées.
+  const SOURCE_VIEWS = {
+    "face": [
+        "....OO......OOO....",
+        "...OhlOO...OlgsO...",
+        "..OiyvgsOOOggviyO..",
+        "..OOOegggggggeOOO..",
+        "..OyeagdgggggaeyO..",
+        ".OussggsgggsgssuOO.",
+        ".OlgggggggggggggsO.",
+        ".OldggcccccccgglgO.",
+        "..OccccccccccccbO..",
+        "..OuwddccccchduuO..",
+        "..OvwwvOOOOOvtwuOK.",
+        ".OgOOuwwuuwwvKOKgO.",
+        "OggOddOOwuOOOddOggO",
+        "OslOdcccOwuOOOObbsO",
+        "ObuOObcccOvOubvhsbO",
+        ".OOOsOtddvOOwuuOOO.",
+        "....ggsOKvuOOOO....",
+        "...OtgguOOOsgggO...",
+        "..ObvctwO.OgtcvbO..",
+        "..OOOOOOO.OOOOOOO.."
+    ],
+    "droite": [
+        "........OOO.....",
+        ".......OlggO....",
+        ".....OlgayyuO...",
+        "....OlguyiOeO...",
+        "...OlgguyOOeOgO.",
+        "..OdgggsaeeaggsO",
+        ".OggggggsuugghbO",
+        ".OggggggggggcccO",
+        ".OgggggdccccccO.",
+        "..OsggccccccKO..",
+        "..OwwtwwvObOO...",
+        ".OvvtwwvvwvwO...",
+        ".OOOwuOOOOOKO...",
+        "OwwuOOsggOvO....",
+        "OruvOvgghcOu....",
+        "OuvvOuglbhOv....",
+        ".OvuOsObbvdO....",
+        "..OOOusOOsO.....",
+        "....OsggOsOO....",
+        "...OsgtccvbtO...",
+        "...OOOOOOOOOO..."
+    ],
+    "dos": [
+        "....OOO.....OOO....",
+        "...OhgsO...OKdgO...",
+        "..OlgggsOOOlhggsO..",
+        "..OlgggggggglggsO..",
+        "..OgggggdggggggsO..",
+        ".OOdggggggggggggsO.",
+        ".OdggggggggggggggO.",
+        ".OggggggggggggggsO.",
+        "..OgggsssssssggsO..",
+        "..OuwtwwwwwwwwtuO..",
+        "..OuvwttwwwwwwvuOO.",
+        ".OgOuuuvwwwvuKvOgO.",
+        "OggOOwwOOOOOtwuOggO",
+        "OctKwOOwwwwwOOOOtcO",
+        "OctOOwOuwcwuOvOOtcO",
+        ".OOOsOOvuwuvOOsOOO.",
+        "....gsOvvvvvOsg....",
+        "...OOgsOOOOOsgOO...",
+        "..OdchtgO.OgtrctO..",
+        "..OOOOOOO.OOOOOOO.."
+    ],
+    "gauche": [
+        ".....OOO........",
+        "....OllgO.......",
+        "...OayyugOO.....",
+        "...OyiOeuggO....",
+        ".OlOyOOeuggsO...",
+        "OlggaeeasggggO..",
+        "ObhgguugggggssO.",
+        "OcccgggggggggsO.",
+        ".OccccccbggggsO.",
+        "..OKccccccggsO..",
+        "...OObOvtttwvO..",
+        "...OwvtwttwwuuO.",
+        "...OKvOOOOOuOOO.",
+        "....OwOggsOOuwwO",
+        "....vOcbgsvOvurO",
+        "....tObbbtuOvvuO",
+        "....OutvcOsOuuO.",
+        ".....OuOOsuOOO..",
+        "....OOuOggsO....",
+        "...OdcvccrgsO...",
+        "...OOOOOOOOOO..."
+    ]
+};
+
+  for (const rows of Object.values(SOURCE_VIEWS)) Object.freeze(rows);
+  Object.freeze(SOURCE_VIEWS);
+
+  const DIR = Object.freeze({ NORTH: 0, EAST: 1, SOUTH: 2, WEST: 3 });
+  const ENGINE_DIRECTIONS = Object.freeze(['dos', 'droite', 'face', 'gauche']);
+  const SHEET_DIRECTIONS = Object.freeze(['face', 'droite', 'dos', 'gauche']);
+  const ANCHOR = Object.freeze({ x: 40, y: 52 });
+  const NATIVE_ANCHOR = Object.freeze({ x: 24, y: 36 });
+  const CLIPS = Object.freeze({
+    idle: Object.freeze({ frames: 8, durations: Object.freeze([1300, 220, 380, 320, 650, 100, 130, 1200]), loop: true, stride: null }),
+    walk: Object.freeze({ frames: 8, durations: Object.freeze([63, 62, 63, 62, 63, 62, 63, 62]), loop: true, stride: 18 })
+  });
+  const RGBA = Object.fromEntries(Object.entries(PALETTE).map(([k, hex]) =>
+    [k, Object.freeze([parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16), 255])]
+  ));
+  Object.freeze(RGBA);
+
+  function finite(value, label) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) throw new TypeError(label + ' doit être un nombre fini.');
+    return value;
+  }
+  function directionName(dir = DIR.SOUTH) {
+    if (Number.isInteger(dir) && dir >= 0 && dir <= 3) return ENGINE_DIRECTIONS[dir];
+    if (typeof dir === 'string' && Object.hasOwn(SOURCE_VIEWS, dir)) return dir;
+    throw new RangeError('Direction attendue : 0..3, face, droite, dos ou gauche.');
+  }
+  function clipInfo(action) {
+    if (!Object.hasOwn(CLIPS, action)) throw new RangeError('Animation non dessinée : ' + String(action));
+    return CLIPS[action];
+  }
+  function frameIndex(action, frame) {
+    const clip = clipInfo(action);
+    if (!Number.isInteger(frame) || frame < 0 || frame >= clip.frames) {
+      throw new RangeError('Image hors animation : ' + action + '/' + String(frame));
+    }
+    return frame;
+  }
+  /** En jeu, la marche suit la distance réellement parcourue, pas le temps passé contre un mur. */
+  function frameAt(action, seconds = 0, distancePx) {
+    const clip = clipInfo(action);
+    finite(seconds, 'seconds');
+    const duration = clip.durations.reduce((a,b) => a+b, 0);
+    let ms;
+    if (clip.stride !== null && distancePx !== undefined) {
+      finite(distancePx, 'distancePx');
+      ms = ((distancePx % clip.stride + clip.stride) % clip.stride) / clip.stride * duration;
+    } else {
+      ms = Math.max(0, seconds) * 1000;
+      ms = clip.loop ? ms % duration : Math.min(ms, duration - 0.001);
+    }
+    for (let frame = 0; frame < clip.frames; frame++) {
+      if (ms < clip.durations[frame]) return frame;
+      ms -= clip.durations[frame];
+    }
+    return clip.frames - 1;
+  }
+
+  class PixelBuffer {
+    constructor(width, height) {
+      this.width = width; this.height = height;
+      this.data = new Uint8ClampedArray(width * height * 4);
+    }
+    set(x, y, key) {
+      if (key === '.') return;
+      if (!Number.isInteger(x) || !Number.isInteger(y)) throw new TypeError('Coordonnée de pixel non entière.');
+      if (x < 0 || y < 0 || x >= this.width || y >= this.height) throw new RangeError('Le dessin dépasse son cadre.');
+      const color = RGBA[key];
+      if (!color) throw new RangeError('Couleur inconnue : ' + key);
+      this.data.set(color, (y * this.width + x) * 4);
+    }
+    stamp(rows, x, y) {
+      rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) this.set(x+i, y+j, row[i]); });
+    }
+  }
+
+  /**
+   * Articulation sur la grille native : tête, tronc, bras et appuis indépendants.
+   * Les SOURCES sont INCHANGÉES. Les déplacements sont des pixels entiers.
+   * Le col et le sac restent sur le tronc ; raccord de cou dessiné derrière la tête.
+   * Pas de rotation de bitmap, de miroir, de flou, ni d'échelle flottante.
+   */
+  const IDLE_PATCHES = {
+    face: {
+      breath: [[5,13,'cc'], [6,14,'cc'], [6,15,'bd']],
+      blink: [[3,2,'lgs'], [14,2,'gs'], [3,3,'OOO'], [13,3,'OOO'], [3,4,'gss'], [13,4,'sgg']]
+    },
+    droite: {
+      breath: [[8,8,'cc'], [7,9,'cc']],
+      blink: [[8,2,'lggs'], [8,3,'OOOO'], [8,4,'ggss'], [8,5,'ggsg']]
+    },
+    dos: { breath: [[7,12,'tw'], [8,14,'b']], blink: [] },
+    gauche: {
+      breath: [[4,8,'cc'], [6,9,'cc']],
+      blink: [[4,2,'llgs'], [4,3,'OOOO'], [4,4,'gggs'], [4,5,'ggsg']]
+    }
+  };
+  const SEX = 'male';
+  function deepFreeze(value) {
+    if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+      Object.values(value).forEach(deepFreeze); Object.freeze(value);
+    }
+    return value;
+  }
+  const POSES = deepFreeze({
+    idle: [
+      {body:0,head:0,arms:0,blink:false,breath:false},
+      {body:0,head:-1,arms:0,blink:false,breath:true},
+      {body:0,head:-1,arms:-1,blink:false,breath:true},
+      {body:0,head:-1,arms:0,blink:false,breath:true},
+      {body:0,head:0,arms:0,blink:false,breath:false},
+      {body:0,head:0,arms:0,blink:true,breath:false},
+      {body:0,head:0,arms:0,blink:false,breath:false},
+      {body:0,head:0,arms:0,blink:false,breath:false}
+    ],
+    // Contact, amorti, passage, remontée ; puis l'autre appui.
+    walk: [
+      {body:0,head:0,swing:-2,nearX: 2,farX:-2,nearY: 0,farY:-1},
+      {body:1,head:0,swing:-1,nearX: 1,farX:-1,nearY: 0,farY:-1},
+      {body:1,head:1,swing: 0,nearX:-1,farX: 1,nearY: 0,farY:-2},
+      {body:0,head:0,swing: 1,nearX:-2,farX: 2,nearY: 0,farY:-1},
+      {body:0,head:0,swing: 2,nearX:-2,farX: 2,nearY:-1,farY: 0},
+      {body:1,head:0,swing: 1,nearX:-1,farX: 1,nearY:-1,farY: 0},
+      {body:1,head:1,swing: 0,nearX: 1,farX:-1,nearY:-2,farY: 0},
+      {body:0,head:0,swing:-1,nearX: 2,farX:-2,nearY:-1,farY: 0}
+    ]
+  });
+  const SIDE_FEET = deepFreeze({
+    droite:{far:['..OsO..','OsgtbO.','OOOOOO.'],near:['..OgO..','.OgbccO','.OOOOOO']},
+    gauche:{far:['..OsO..','.ObtgsO','.OOOOOO'],near:['..OgO..','OccbgO.','OOOOOO.']}
+  });
+
+  // Les bras sont détourés géométriquement, pas par couleur (le cuir et la peau
+  // partagent parfois des teintes). On conserve donc les motifs et la besace.
+  function partAt(view,x,y) {
+    const side=view==='droite'||view==='gauche';
+    if(y<(side?10:9))return 'head';
+    if(y>=SOURCE_VIEWS[view].length-3)return 'feet';
+    if(!side && y>=11 && y<=15) {
+      if(x <= (SEX==='femelle'?4:3))return 'left';
+      if(x >= (SEX==='femelle'?14:15))return 'right';
+    }
+    if(side) {
+      if(view==='droite') {
+        if(y===12&&x>=6&&x<=7)return 'near';
+        if(y>=13&&y<=(SEX==='femelle'?16:17)&&x>=5&&x<=(SEX==='femelle'?9:10))return 'near';
+      } else {
+        if(y===12&&x>=8&&x<=9)return 'near';
+        if(y>=13&&y<=(SEX==='femelle'?16:17)&&x>=6&&x<=10)return 'near';
+        if(SEX==='male'&&y>=14&&y<=16&&x===5)return 'near';
+      }
+    }
+    return 'body';
+  }
+  const RIGS = {};
+  for(const [view,rows] of Object.entries(SOURCE_VIEWS)) {
+    const rig={head:[],body:[],feet:[],left:[],right:[],near:[]};
+    rows.forEach((row,y)=>Array.from(row).forEach((key,x)=>{
+      if(key!=='.')rig[partAt(view,x,y)].push([x,y,key]);
+    }));
+    RIGS[view]=rig;
+  }
+  deepFreeze(RIGS);
+  function stampPart(buffer,pixels,x,y,dx=0,dy=0) {
+    for(const [px,py,key] of pixels)buffer.set(x+px+dx,y+py+dy,key);
+  }
+  function line(buffer,ax,ay,bx,by,key) {
+    const dx=Math.abs(bx-ax),sx=ax<bx?1:-1,dy=-Math.abs(by-ay),sy=ay<by?1:-1;
+    let err=dx+dy;
+    for(;;){buffer.set(ax,ay,key);if(ax===bx&&ay===by)break;
+      const e=2*err;if(e>=dy){err+=dy;ax+=sx;}if(e<=dx){err+=dx;ay+=sy;}}
+  }
+  function leg(buffer,ax,ay,bx,by,far) {
+    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])line(buffer,ax+dx,ay+dy,bx+dx,by+dy,'O');
+    line(buffer,ax,ay,bx,by,far?'s':'g');
+  }
+  // Epaule fixe ; coude et poignet suivent des translations quantifiées.
+  // Les rares lignes supplémentaires sont reliées sans inventer de couleurs.
+  function arm(buffer,pixels,x,y,handX,handY) {
+    if(!pixels.length)return;
+    if(handX===0&&handY===0){stampPart(buffer,pixels,x,y);return;}
+    const minY=Math.min(...pixels.map(p=>p[1])),maxY=Math.max(...pixels.map(p=>p[1]));
+    const rows=new Map();for(const p of pixels){if(!rows.has(p[1]))rows.set(p[1],[]);rows.get(p[1]).push(p);}
+    let previous=null;
+    for(let py=minY;py<=maxY;py++) {
+      const row=rows.get(py)||[],t=Math.min(1,(py-minY)/Math.max(1,maxY-minY-2));
+      const dx=Math.round(handX*t),dy=Math.round(handY*t),yy=py+dy;
+      if(previous && yy>previous.yy+1) {
+        for(let fill=previous.yy+1;fill<yy;fill++) {
+          const f=(fill-previous.yy)/(yy-previous.yy);
+          const between=Math.round(previous.dx+(dx-previous.dx)*f);
+          for(const [px,_sy,key] of previous.row)buffer.set(x+px+between,y+fill,key);
+        }
+      }
+      for(const [px,_sy,key] of row)buffer.set(x+px+dx,y+yy,key);
+      previous={yy,dx,row};
+    }
+  }
+  function neck(buffer,view,x,y,bodyY,headY) {
+    const side=view==='droite'||view==='gauche',bottom=side?9:8;
+    const left=side?(view==='droite'?6:5):6;
+    const right=side?(view==='droite'?10:9):12;
+    for(let yy=bottom+headY;yy<=bottom+1+bodyY;yy++) {
+      for(let xx=left;xx<=right;xx++) {
+        const color=(xx===left||xx===right)?'O':view==='dos'?(xx<9?'g':'s'):(xx===right-1?'b':'c');
+        buffer.set(x+xx,y+yy,color);
+      }
+    }
+  }
+  function profileUnderpaint(buffer,view,rig,x,y) {
+    // Remplit exclusivement les zones du tronc autrefois masquées par le bras.
+    // Ces pixels sont cachés à nouveau par le bras dans la pose neutre.
+    for(const [px,py] of rig.near) {
+      if(py<13)continue;
+      const min=view==='droite'?5:6,max=view==='droite'?10:10;
+      if(px<min||px>max)continue;
+      const edge=(view==='droite'?px===max:px===min);
+      buffer.set(x+px,y+py,edge?'u':px<=7?'w':'v');
+    }
+  }
+  function feet(buffer,view,rig,x,y,pose,walking) {
+    if(!walking){stampPart(buffer,rig.feet,x,y);return;}
+    const side=view==='droite'||view==='gauche',top=SOURCE_VIEWS[view].length-3;
+    if(side) {
+      const sign=view==='droite'?1:-1;
+      const farX=(view==='droite'?4:5)+sign*pose.farX;
+      const nearX=(view==='droite'?6:3)+sign*pose.nearX;
+      leg(buffer,x+(view==='droite'?6:9),y+top-1+pose.body,x+farX+3,y+top+pose.farY,true);
+      buffer.stamp(SIDE_FEET[view].far,x+farX,y+top+pose.farY);
+      leg(buffer,x+(view==='droite'?9:6),y+top-1+pose.body,x+nearX+3,y+top+pose.nearY,false);
+      buffer.stamp(SIDE_FEET[view].near,x+nearX,y+top+pose.nearY);
+    } else {
+      // Un appui au sol ; l'autre pied se lève au passage. Pas de translation
+      // horizontale globale ni de recentrage à partir de la bounding box.
+      for(const [px,py,key] of rig.feet){
+        const dy=px<9?pose.nearY:pose.farY;
+        const dx=0;
+        buffer.set(x+px+dx,y+py+dy,key);
+      }
+    }
+  }
+  function animate(buffer,view,action,frame,x,y) {
+    const rig=RIGS[view],pose=POSES[action][frame],walk=action==='walk';
+    const side=view==='droite'||view==='gauche';
+    // Assure la stricte identité de la pose de référence et sa lisibilité au repos.
+    if(!walk && !pose.head && !pose.arms && !pose.blink && !pose.breath) {
+      buffer.stamp(SOURCE_VIEWS[view],x,y);return;
+    }
+    feet(buffer,view,rig,x,y,pose,walk);
+    // De profil, le bras lointain reste occulté par le tronc et la besace,
+    // conformément au dessin de référence : pas de fragment ajouté en bordure.
+    neck(buffer,view,x,y,pose.body,pose.head);
+    if(side)profileUnderpaint(buffer,view,rig,x,y+pose.body);
+    stampPart(buffer,rig.body,x,y,0,pose.body);
+    if(side) {
+      const q=view==='droite'?1:-1;
+      arm(buffer,rig.near,x,y+pose.body,walk?pose.swing*q:0,walk?(Math.abs(pose.swing)===2?-1:0):pose.arms);
+    } else {
+      const s=walk?Math.round(pose.swing/2):0;
+      const projected=view==='face'?s:-s;
+      arm(buffer,rig.left,x,y+pose.body,walk?projected:0,walk?projected:pose.arms);
+      arm(buffer,rig.right,x,y+pose.body,walk?projected:0,walk?-projected:pose.arms);
+    }
+    stampPart(buffer,rig.head,x,y,0,pose.head);
+    if(!walk && pose.breath) {
+      for(const [dx,dy,keys] of IDLE_PATCHES[view].breath) {
+        buffer.stamp([keys],x+dx,y+dy+(dy<(side?10:9)?pose.head:pose.body));
+      }
+    }
+    if(!walk && pose.blink) {
+      for(const [dx,dy,keys] of IDLE_PATCHES[view].blink)buffer.stamp([keys],x+dx,y+dy+pose.head);
+    }
+  }
+
+  /** Retourne un tampon RGBA indépendant ; formats engine 80px et native 48px. */
+  function raster(action = 'idle', dir = DIR.SOUTH, frame = 0, format = 'engine') {
+    const view=directionName(dir);frameIndex(action,frame);
+    if(format!=='engine'&&format!=='native')throw new RangeError('Format attendu : engine ou native.');
+    const size=format==='engine'?80:48,anchor=format==='engine'?ANCHOR:NATIVE_ANCHOR;
+    const rows=SOURCE_VIEWS[view],x=anchor.x-Math.floor(rows[0].length/2),y=anchor.y-rows.length+1;
+    const buffer=new PixelBuffer(size,size);animate(buffer,view,action,frame,x,y);
+    return {width:size,height:size,anchor,data:buffer.data};
+  }
+
+  function defaultCanvasFactory(width, height) {
+    let cv;
+    if (typeof document !== 'undefined') cv = document.createElement('canvas');
+    else if (typeof OffscreenCanvas !== 'undefined') cv = new OffscreenCanvas(width, height);
+    else throw new Error('Fournir canvasFactory sous Node, ou utiliser raster() pour obtenir les pixels sans Canvas.');
+    cv.width = width; cv.height = height; return cv;
+  }
+
+  class Atlas {
+    constructor(options = {}) {
+      this.canvasFactory = options.canvasFactory || defaultCanvasFactory;
+      this.maxFrames = options.maxFrames === undefined ? 64 : options.maxFrames;
+      if (!Number.isInteger(this.maxFrames) || this.maxFrames < 1 || this.maxFrames > 256) throw new RangeError('maxFrames : entier de 1 à 256.');
+      this.cache = new Map();
+    }
+    get(action = 'idle', dir = DIR.SOUTH, frame = 0) {
+      const view = directionName(dir); frameIndex(action,frame);
+      const key = action + ':' + view + ':' + frame;
+      if (this.cache.has(key)) {
+        const value = this.cache.get(key); this.cache.delete(key); this.cache.set(key,value); return value;
+      }
+      const pixels = raster(action,view,frame), cv = this.canvasFactory(80,80);
+      cv.width = cv.height = 80;
+      const c = cv.getContext('2d');
+      if (!c) throw new Error('Canvas 2D indisponible.');
+      const image = c.createImageData(80,80); image.data.set(pixels.data); c.putImageData(image,0,0);
+      this.cache.set(key,cv);
+      while (this.cache.size > this.maxFrames) this.cache.delete(this.cache.keys().next().value);
+      return cv;
+    }
+    /**
+     * Dessine sur le contexte monde déjà transformé par le Renderer.
+     * L'acteur fournit x, y, dir, alpha (facultatif), z (facultatif).
+     * state : { action, elapsed, distance, frame }. frame est un index explicite facultatif.
+     * Aucune ombre intégrée : utiliser l'ombre du Renderer, une seule fois.
+     */
+    draw(ctx, actor, time = 0, state = {}) {
+      if (!ctx || typeof ctx.drawImage !== 'function') throw new TypeError('Contexte Canvas 2D attendu.');
+      if (!actor) throw new TypeError('Acteur attendu.');
+      finite(actor.x,'actor.x'); finite(actor.y,'actor.y'); finite(time,'time');
+      const z = actor.z === undefined ? 0 : finite(actor.z,'actor.z');
+      const alpha = actor.alpha === undefined ? 1 : Math.max(0,Math.min(1,finite(actor.alpha,'actor.alpha')));
+      if (alpha === 0) return null;
+      const action = state.action || 'idle';
+      const frame = state.frame === undefined ? frameAt(action, state.elapsed === undefined ? time : state.elapsed, state.distance) : frameIndex(action,state.frame);
+      const image = this.get(action, actor.dir === undefined ? DIR.SOUTH : actor.dir, frame);
+      ctx.save();
+      try {
+        ctx.imageSmoothingEnabled = false; ctx.globalAlpha *= alpha;
+        ctx.drawImage(image, Math.round(actor.x)-ANCHOR.x, Math.round(actor.y-z)-ANCHOR.y);
+      } finally { ctx.restore(); }
+      actor._img = image;
+      return image;
+    }
+    /** Aperçu uniquement : agrandissement entier, sans changer les dimensions du dessin. */
+    preview(ctx, action, dir, frame, footX, footY, scale = 1) {
+      if (!Number.isInteger(scale) || scale < 1) throw new RangeError('Agrandissement entier positif attendu.');
+      finite(footX,'footX'); finite(footY,'footY');
+      const image = this.get(action,dir,frame);
+      ctx.save();
+      try {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(image,Math.round(footX)-ANCHOR.x*scale,Math.round(footY)-ANCHOR.y*scale,80*scale,80*scale);
+      } finally { ctx.restore(); }
+    }
+    clear() { this.cache.clear(); }
+  }
+
+  /** Même organisation que les planches du dépôt : action/direction par ligne, pose par colonne. */
+  function buildSheet(format = 'engine') {
+    if (format !== 'engine' && format !== 'native') throw new RangeError('Format inconnu.');
+    const cell = format === 'engine' ? 80 : 48, columns = 8, rows = 8;
+    const result = { width:columns*cell, height:rows*cell, data:new Uint8ClampedArray(columns*cell*rows*cell*4) };
+    Object.keys(CLIPS).forEach((action, a) => SHEET_DIRECTIONS.forEach((dir,d) => {
+      for (let frame=0;frame<CLIPS[action].frames;frame++) {
+        const image=raster(action,dir,frame,format), x=frame*cell, y=(a*4+d)*cell;
+        for (let j=0;j<cell;j++) result.data.set(image.data.subarray(j*cell*4,(j+1)*cell*4),((y+j)*result.width+x)*4);
+      }
+    }));
+    return result;
+  }
+  function manifest() {
+    const clips=[];
+    Object.entries(CLIPS).forEach(([action,clip],a) => SHEET_DIRECTIONS.forEach((dir,d) => clips.push({
+      action, direction:dir, engineDirection:ENGINE_DIRECTIONS.indexOf(dir), row:a*4+d,
+      frames:clip.frames, durations:[...clip.durations], loop:clip.loop, strideWorldPixels:clip.stride,
+      rectangles:Array.from({length:clip.frames},(_,f)=>[f*80,(a*4+d)*80,80,80])
+    })));
+    return {
+      id:'batracien', version:2, authoring:'JavaScript — explicit pixel grids',
+      reference:'Approved frog/toad adventurer sheet from this conversation; native-grid reconstruction, not a pixel-identical reduction of its uneven enlarged blocks.',
+      auditedRepository:'garwiglino/conan', auditedCommit:'b598bc103c61112c4e81eac29e58f37653213de8',
+      cell:[80,80], anchor:[40,52], nativeCell:[48,48], nativeAnchor:[24,36], nativeOffset:[16,16],
+      sheet:{file:'batracien.png',size:[640,640],columns:8,rows:8},
+      staticSheet:{file:'batracien-quatre-vues.png',size:[320,80],directions:[...SHEET_DIRECTIONS]},
+      idleVisibleSize:{face:[19,20],droite:[16,21],dos:[19,20],gauche:[16,21]},
+      alpha:'binary 0/255', lighting:'screen upper-left; four independently authored directions',
+      palette:{...PALETTE}, clips, animationRevision:'Articulated v2: independent head, attached arms, trunk and legs; 8 idle and 8 walk frames.',
+      timing:{walkMs:500,strideWorldPixels:18,idleMs:4300},
+      sourceDesignPreserved:true, neutralPoseExact:true,
+      scope:'Graphic asset only: idle and walk. No attack, death, AI, statistics, collisions or spawn added.'
+    };
+  }
+
+  const installations = new WeakMap();
+  /**
+   * Adaptateur optionnel, réversible : CharacterAtlas.draw(ctx, kind, actor, time).
+   * Appeler après la définition de CharacterAtlas ; ne touche qu'au kind "batracien".
+   * L'installation n'ajoute aucun acteur au monde et ne modifie aucune collision.
+   */
+  function installCharacterAtlas(target, options = {}) {
+    const proto = typeof target === 'function' ? target.prototype : target;
+    if (!proto || typeof proto.draw !== 'function') throw new TypeError('CharacterAtlas ou son instance est attendu.');
+    if (installations.has(proto)) return installations.get(proto);
+    const original = proto.draw, atlas = options.atlas || new Atlas(options);
+    const stateFor = options.stateFor || ((actor,time) => actor.batracien || {action:'idle',elapsed:time});
+    function wrapped(ctx,kind,actor,time=0) {
+      if (kind !== 'batracien') return original.apply(this,arguments);
+      return atlas.draw(ctx,actor,time,stateFor(actor,time));
+    }
+    proto.draw = wrapped;
+    const handle = { atlas, uninstall() {
+      if (proto.draw !== wrapped) throw new Error('Un autre adaptateur a été installé depuis ; désinstallation automatique refusée.');
+      proto.draw = original; installations.delete(proto); atlas.clear();
+    }};
+    installations.set(proto,handle); return handle;
+  }
+
+  // Les fautes dans une grille sont détectées au chargement, avant la création d'un Canvas.
+  for (const [view,rows] of Object.entries(SOURCE_VIEWS)) {
+    const width=rows[0].length;
+    for (const row of rows) {
+      if (row.length !== width) throw new Error('Grille non rectangulaire : ' + view);
+      for (const key of row) if (key !== '.' && !Object.hasOwn(PALETTE,key)) throw new Error('Palette manquante : '+key);
+    }
+  }
+  return Object.freeze({ version:2, DIR, ANCHOR, NATIVE_ANCHOR, CLIPS, PALETTE, SOURCE_VIEWS,
+    POSES, RIGS, directionName, frameAt, raster, Atlas, buildSheet, manifest, installCharacterAtlas });
+});
+
+return module.exports;})();
+const F=(function(){const module={exports:{}};const exports=module.exports;
+/**
+ * Hearthreaver — Batracienne de base, dessin JavaScript natif.
+ * Source : variante femelle du module batracien.js fourni dans cette conversation.
+ * Contrat hérité du module de référence, audité sur garwiglino/conan @ b598bc103c61112c4e81eac29e58f37653213de8.
+ *
+ * Animation v2 : tête et bras articulés, silhouettes et palettes sources conservées.
+ * Aucun PNG embarqué, aucune image chargée : chaque caractère ci-dessous est UN pixel.
+ * Couleurs fixes ; alpha binaire ; aucune rotation, interpolation, texture ou miroir.
+ * Case moteur : 80 × 80 / ancre : (40,52).
+ * Case de travail : 48 × 48 / ancre : (24,36), translation exacte de (+16,+16).
+ * Le personnage visible mesure 17×20 px de face/dos et 16×21 px de profil au repos.
+ * Les pieds occupent la ligne d'ancrage (y = 52), sans recentrage automatique.
+ *
+ * Module navigateur (HearthreaverBatracienne) et CommonJS, sans dépendance.
+ * À charger après le moteur pour utiliser installCharacterAtlas(), ou seul pour l'atelier.
+ */
+(function (root, factory) {
+  'use strict';
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.HearthreaverBatracienne = factory();
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  /** O/K : contours ; s/g/l/h : peau ; d/b/c : crème ; u/v/w/t/r : cuir ; a/e/y/i : œil. */
+  const PALETTE = Object.freeze({
+    "O": "#100e20",
+    "K": "#30262a",
+    "s": "#575c39",
+    "g": "#80834c",
+    "l": "#a1a365",
+    "h": "#c4c57c",
+    "d": "#b9a16b",
+    "b": "#e1c58a",
+    "c": "#f3dfa4",
+    "u": "#50342f",
+    "v": "#754b37",
+    "w": "#a16a44",
+    "t": "#bb8051",
+    "r": "#cf955f",
+    "a": "#b5772c",
+    "e": "#f3af3c",
+    "y": "#ffd45e",
+    "i": "#fff0be"
+});
+
+  // Variante femelle : joues adoucies, épaules et bras plus fins, tunique croisée
+  // courte et ceinturée ; même peau olive, iris ambrés, sac de cuir et pieds palmés.
+  // Choix de design fantasy, pas une règle biologique. Aucun cil, cheveu ou sein ajouté.
+  // Quatre dessins explicites ; les profils ne sont pas des images retournées.
+  const SOURCE_VIEWS = {
+    "face": [
+        "....OOO.....OOO....",
+        "...OhllO...OlgsO...",
+        "..OiyvgsOOOggviyO..",
+        "..OOOegggggggeOOO..",
+        "..OyeagggggggaeyO..",
+        ".OlssggggggggssgsO.",
+        ".OlgggglggggggggsO.",
+        "..OlggcccccccggsO..",
+        "...ObcccccccccbO...",
+        "...OuwddccccduuO...",
+        "...OwtwwuOuvwwuO...",
+        "..OgOuwccwttvuOgO..",
+        ".OglOwtccOvwwuOgsO.",
+        ".ObcOvtwcOwvvuOdbO.",
+        ".ObdOOuuwbuuvOOdsO.",
+        "..OO.OwttwvwvO.OO..",
+        "....OwtbwwvuwvO....",
+        "...OtgguOOOsgggO...",
+        "..ObvctwO.OgtcvbO..",
+        "..OOOOOOO.OOOOOOO.."
+    ],
+    "droite": [
+        "........OOO.....",
+        ".......OlggO....",
+        ".....OlgayyuO...",
+        "....OlguyiOeO...",
+        "...OlgguyOOeOgO.",
+        "..OdgggsaeeaggsO",
+        ".OlgggggsuugghbO",
+        ".OggggggggggcccO",
+        ".OgggggcccccccO.",
+        "..OsggccccccKO..",
+        "..OwwtwwvObOO...",
+        ".OvttwwvvwvuO...",
+        ".OuwtwOOuvuuO...",
+        "OwtuOOsggOuO....",
+        "OruvOvghcOvuO...",
+        "OuvvOvgbbOwvO...",
+        ".OvuOsObdOvuO...",
+        "..OOOwttvwvuO...",
+        "....OsggOsOO....",
+        "...OsgtccvbtO...",
+        "...OOOOOOOOOO..."
+    ],
+    "dos": [
+        "....OOO.....OOO....",
+        "...OhllO...OlgsO...",
+        "..OlgggsOOOggggsO..",
+        "..OlgggggggglggsO..",
+        "..OlgggglggggggsO..",
+        ".OlgggggggggggggsO.",
+        ".OlgggggggggggggsO.",
+        "..OlgggggggggggsO..",
+        "...OgggssssgggsO...",
+        "...OuwtwwwwwwvuO...",
+        "...OuvwttwwwwvuO...",
+        "..OgOuvwwwwvuuOgO..",
+        ".OglOwtOOOOOvuOgsO.",
+        ".ObcOOOwwtwwOOOdbO.",
+        ".ObdOOuwcbwuOOOdsO.",
+        "..OO.OvvvuvvvO.OO..",
+        "....OwtOOOOOvwO....",
+        "...OOgsOOOOOsgOO...",
+        "..OdchtgO.OgtrctO..",
+        "..OOOOOOO.OOOOOOO.."
+    ],
+    "gauche": [
+        ".....OOO........",
+        "....OllgO.......",
+        "...OayyugOO.....",
+        "...OyiOeuggO....",
+        ".OlOyOOeuggsO...",
+        "OlggaeeasggggO..",
+        "ObhgguugggggssO.",
+        "OcccgggggggggsO.",
+        ".OccccccgggggsO.",
+        "..OKccccccggsO..",
+        "...OObOvtttwvO..",
+        "...OutttwwwwuuO.",
+        "...OuuuvOOwtwuO.",
+        "....OuOggsOOwtwO",
+        "....OwOcblvOvurO",
+        "....OvOcbbvOvvuO",
+        "....OwObdOsOuuO.",
+        "...OwtwtvvuOOO..",
+        "....OOuOggsO....",
+        "...OdcvccrgsO...",
+        "...OOOOOOOOOO..."
+    ]
+};
+
+  for (const rows of Object.values(SOURCE_VIEWS)) Object.freeze(rows);
+  Object.freeze(SOURCE_VIEWS);
+
+  const DIR = Object.freeze({ NORTH: 0, EAST: 1, SOUTH: 2, WEST: 3 });
+  const ENGINE_DIRECTIONS = Object.freeze(['dos', 'droite', 'face', 'gauche']);
+  const SHEET_DIRECTIONS = Object.freeze(['face', 'droite', 'dos', 'gauche']);
+  const ANCHOR = Object.freeze({ x: 40, y: 52 });
+  const NATIVE_ANCHOR = Object.freeze({ x: 24, y: 36 });
+  const CLIPS = Object.freeze({
+    idle: Object.freeze({ frames: 8, durations: Object.freeze([1300, 220, 380, 320, 650, 100, 130, 1200]), loop: true, stride: null }),
+    walk: Object.freeze({ frames: 8, durations: Object.freeze([63, 62, 63, 62, 63, 62, 63, 62]), loop: true, stride: 18 })
+  });
+  const RGBA = Object.fromEntries(Object.entries(PALETTE).map(([k, hex]) =>
+    [k, Object.freeze([parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16), 255])]
+  ));
+  Object.freeze(RGBA);
+
+  function finite(value, label) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) throw new TypeError(label + ' doit être un nombre fini.');
+    return value;
+  }
+  function directionName(dir = DIR.SOUTH) {
+    if (Number.isInteger(dir) && dir >= 0 && dir <= 3) return ENGINE_DIRECTIONS[dir];
+    if (typeof dir === 'string' && Object.hasOwn(SOURCE_VIEWS, dir)) return dir;
+    throw new RangeError('Direction attendue : 0..3, face, droite, dos ou gauche.');
+  }
+  function clipInfo(action) {
+    if (!Object.hasOwn(CLIPS, action)) throw new RangeError('Animation non dessinée : ' + String(action));
+    return CLIPS[action];
+  }
+  function frameIndex(action, frame) {
+    const clip = clipInfo(action);
+    if (!Number.isInteger(frame) || frame < 0 || frame >= clip.frames) {
+      throw new RangeError('Image hors animation : ' + action + '/' + String(frame));
+    }
+    return frame;
+  }
+  /** En jeu, la marche suit la distance réellement parcourue, pas le temps passé contre un mur. */
+  function frameAt(action, seconds = 0, distancePx) {
+    const clip = clipInfo(action);
+    finite(seconds, 'seconds');
+    const duration = clip.durations.reduce((a,b) => a+b, 0);
+    let ms;
+    if (clip.stride !== null && distancePx !== undefined) {
+      finite(distancePx, 'distancePx');
+      ms = ((distancePx % clip.stride + clip.stride) % clip.stride) / clip.stride * duration;
+    } else {
+      ms = Math.max(0, seconds) * 1000;
+      ms = clip.loop ? ms % duration : Math.min(ms, duration - 0.001);
+    }
+    for (let frame = 0; frame < clip.frames; frame++) {
+      if (ms < clip.durations[frame]) return frame;
+      ms -= clip.durations[frame];
+    }
+    return clip.frames - 1;
+  }
+
+  class PixelBuffer {
+    constructor(width, height) {
+      this.width = width; this.height = height;
+      this.data = new Uint8ClampedArray(width * height * 4);
+    }
+    set(x, y, key) {
+      if (key === '.') return;
+      if (!Number.isInteger(x) || !Number.isInteger(y)) throw new TypeError('Coordonnée de pixel non entière.');
+      if (x < 0 || y < 0 || x >= this.width || y >= this.height) throw new RangeError('Le dessin dépasse son cadre.');
+      const color = RGBA[key];
+      if (!color) throw new RangeError('Couleur inconnue : ' + key);
+      this.data.set(color, (y * this.width + x) * 4);
+    }
+    stamp(rows, x, y) {
+      rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) this.set(x+i, y+j, row[i]); });
+    }
+  }
+
+  /**
+   * Articulation sur la grille native : tête, tronc, bras et appuis indépendants.
+   * Les SOURCES sont INCHANGÉES. Les déplacements sont des pixels entiers.
+   * Le col et le sac restent sur le tronc ; raccord de cou dessiné derrière la tête.
+   * Pas de rotation de bitmap, de miroir, de flou, ni d'échelle flottante.
+   */
+  const IDLE_PATCHES = {
+    face: {
+      breath: [[7,12,'bc'], [7,13,'bc']],
+      blink: [[3,2,'lgs'], [14,2,'gs'], [3,3,'OOO'], [13,3,'OOO'], [3,4,'gss'], [13,4,'sgg']]
+    },
+    droite: {
+      breath: [[8,8,'cc'], [7,9,'cc']],
+      blink: [[8,2,'lggs'], [8,3,'OOOO'], [8,4,'ggss'], [8,5,'ggsg']]
+    },
+    dos: { breath: [[8,13,'tw'], [9,14,'b']], blink: [] },
+    gauche: {
+      breath: [[4,8,'cc'], [6,9,'cc']],
+      blink: [[4,2,'llgs'], [4,3,'OOOO'], [4,4,'gggs'], [4,5,'ggsg']]
+    }
+  };
+  const SEX = 'femelle';
+  function deepFreeze(value) {
+    if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+      Object.values(value).forEach(deepFreeze); Object.freeze(value);
+    }
+    return value;
+  }
+  const POSES = deepFreeze({
+    idle: [
+      {body:0,head:0,arms:0,blink:false,breath:false},
+      {body:0,head:-1,arms:0,blink:false,breath:true},
+      {body:0,head:-1,arms:-1,blink:false,breath:true},
+      {body:0,head:-1,arms:0,blink:false,breath:true},
+      {body:0,head:0,arms:0,blink:false,breath:false},
+      {body:0,head:0,arms:0,blink:true,breath:false},
+      {body:0,head:0,arms:0,blink:false,breath:false},
+      {body:0,head:0,arms:0,blink:false,breath:false}
+    ],
+    // Contact, amorti, passage, remontée ; puis l'autre appui.
+    walk: [
+      {body:0,head:0,swing:-2,nearX: 2,farX:-2,nearY: 0,farY:-1},
+      {body:1,head:0,swing:-1,nearX: 1,farX:-1,nearY: 0,farY:-1},
+      {body:1,head:1,swing: 0,nearX:-1,farX: 1,nearY: 0,farY:-2},
+      {body:0,head:0,swing: 1,nearX:-2,farX: 2,nearY: 0,farY:-1},
+      {body:0,head:0,swing: 2,nearX:-2,farX: 2,nearY:-1,farY: 0},
+      {body:1,head:0,swing: 1,nearX:-1,farX: 1,nearY:-1,farY: 0},
+      {body:1,head:1,swing: 0,nearX: 1,farX:-1,nearY:-2,farY: 0},
+      {body:0,head:0,swing:-1,nearX: 2,farX:-2,nearY:-1,farY: 0}
+    ]
+  });
+  const SIDE_FEET = deepFreeze({
+    droite:{far:['..OsO..','OsgtbO.','OOOOOO.'],near:['..OgO..','.OgbccO','.OOOOOO']},
+    gauche:{far:['..OsO..','.ObtgsO','.OOOOOO'],near:['..OgO..','OccbgO.','OOOOOO.']}
+  });
+
+  // Les bras sont détourés géométriquement, pas par couleur (le cuir et la peau
+  // partagent parfois des teintes). On conserve donc les motifs et la besace.
+  function partAt(view,x,y) {
+    const side=view==='droite'||view==='gauche';
+    if(y<(side?10:9))return 'head';
+    if(y>=SOURCE_VIEWS[view].length-3)return 'feet';
+    if(!side && y>=11 && y<=15) {
+      if(x <= (SEX==='femelle'?4:3))return 'left';
+      if(x >= (SEX==='femelle'?14:15))return 'right';
+    }
+    if(side) {
+      if(view==='droite') {
+        if(y===12&&x>=6&&x<=7)return 'near';
+        if(y>=13&&y<=(SEX==='femelle'?16:17)&&x>=5&&x<=(SEX==='femelle'?9:10))return 'near';
+      } else {
+        if(y===12&&x>=8&&x<=9)return 'near';
+        if(y>=13&&y<=(SEX==='femelle'?16:17)&&x>=6&&x<=10)return 'near';
+        if(SEX==='male'&&y>=14&&y<=16&&x===5)return 'near';
+      }
+    }
+    return 'body';
+  }
+  const RIGS = {};
+  for(const [view,rows] of Object.entries(SOURCE_VIEWS)) {
+    const rig={head:[],body:[],feet:[],left:[],right:[],near:[]};
+    rows.forEach((row,y)=>Array.from(row).forEach((key,x)=>{
+      if(key!=='.')rig[partAt(view,x,y)].push([x,y,key]);
+    }));
+    RIGS[view]=rig;
+  }
+  deepFreeze(RIGS);
+  function stampPart(buffer,pixels,x,y,dx=0,dy=0) {
+    for(const [px,py,key] of pixels)buffer.set(x+px+dx,y+py+dy,key);
+  }
+  function line(buffer,ax,ay,bx,by,key) {
+    const dx=Math.abs(bx-ax),sx=ax<bx?1:-1,dy=-Math.abs(by-ay),sy=ay<by?1:-1;
+    let err=dx+dy;
+    for(;;){buffer.set(ax,ay,key);if(ax===bx&&ay===by)break;
+      const e=2*err;if(e>=dy){err+=dy;ax+=sx;}if(e<=dx){err+=dx;ay+=sy;}}
+  }
+  function leg(buffer,ax,ay,bx,by,far) {
+    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])line(buffer,ax+dx,ay+dy,bx+dx,by+dy,'O');
+    line(buffer,ax,ay,bx,by,far?'s':'g');
+  }
+  // Epaule fixe ; coude et poignet suivent des translations quantifiées.
+  // Les rares lignes supplémentaires sont reliées sans inventer de couleurs.
+  function arm(buffer,pixels,x,y,handX,handY) {
+    if(!pixels.length)return;
+    if(handX===0&&handY===0){stampPart(buffer,pixels,x,y);return;}
+    const minY=Math.min(...pixels.map(p=>p[1])),maxY=Math.max(...pixels.map(p=>p[1]));
+    const rows=new Map();for(const p of pixels){if(!rows.has(p[1]))rows.set(p[1],[]);rows.get(p[1]).push(p);}
+    let previous=null;
+    for(let py=minY;py<=maxY;py++) {
+      const row=rows.get(py)||[],t=Math.min(1,(py-minY)/Math.max(1,maxY-minY-2));
+      const dx=Math.round(handX*t),dy=Math.round(handY*t),yy=py+dy;
+      if(previous && yy>previous.yy+1) {
+        for(let fill=previous.yy+1;fill<yy;fill++) {
+          const f=(fill-previous.yy)/(yy-previous.yy);
+          const between=Math.round(previous.dx+(dx-previous.dx)*f);
+          for(const [px,_sy,key] of previous.row)buffer.set(x+px+between,y+fill,key);
+        }
+      }
+      for(const [px,_sy,key] of row)buffer.set(x+px+dx,y+yy,key);
+      previous={yy,dx,row};
+    }
+  }
+  function neck(buffer,view,x,y,bodyY,headY) {
+    const side=view==='droite'||view==='gauche',bottom=side?9:8;
+    const left=side?(view==='droite'?6:5):6;
+    const right=side?(view==='droite'?10:9):12;
+    for(let yy=bottom+headY;yy<=bottom+1+bodyY;yy++) {
+      for(let xx=left;xx<=right;xx++) {
+        const color=(xx===left||xx===right)?'O':view==='dos'?(xx<9?'g':'s'):(xx===right-1?'b':'c');
+        buffer.set(x+xx,y+yy,color);
+      }
+    }
+  }
+  function profileUnderpaint(buffer,view,rig,x,y) {
+    // Remplit exclusivement les zones du tronc autrefois masquées par le bras.
+    // Ces pixels sont cachés à nouveau par le bras dans la pose neutre.
+    for(const [px,py] of rig.near) {
+      if(py<13)continue;
+      const min=view==='droite'?5:6,max=view==='droite'?10:10;
+      if(px<min||px>max)continue;
+      const edge=(view==='droite'?px===max:px===min);
+      buffer.set(x+px,y+py,edge?'u':px<=7?'w':'v');
+    }
+  }
+  function feet(buffer,view,rig,x,y,pose,walking) {
+    if(!walking){stampPart(buffer,rig.feet,x,y);return;}
+    const side=view==='droite'||view==='gauche',top=SOURCE_VIEWS[view].length-3;
+    if(side) {
+      const sign=view==='droite'?1:-1;
+      const farX=(view==='droite'?4:5)+sign*pose.farX;
+      const nearX=(view==='droite'?6:3)+sign*pose.nearX;
+      leg(buffer,x+(view==='droite'?6:9),y+top-1+pose.body,x+farX+3,y+top+pose.farY,true);
+      buffer.stamp(SIDE_FEET[view].far,x+farX,y+top+pose.farY);
+      leg(buffer,x+(view==='droite'?9:6),y+top-1+pose.body,x+nearX+3,y+top+pose.nearY,false);
+      buffer.stamp(SIDE_FEET[view].near,x+nearX,y+top+pose.nearY);
+    } else {
+      // Un appui au sol ; l'autre pied se lève au passage. Pas de translation
+      // horizontale globale ni de recentrage à partir de la bounding box.
+      for(const [px,py,key] of rig.feet){
+        const dy=px<9?pose.nearY:pose.farY;
+        const dx=0;
+        buffer.set(x+px+dx,y+py+dy,key);
+      }
+    }
+  }
+  function animate(buffer,view,action,frame,x,y) {
+    const rig=RIGS[view],pose=POSES[action][frame],walk=action==='walk';
+    const side=view==='droite'||view==='gauche';
+    // Assure la stricte identité de la pose de référence et sa lisibilité au repos.
+    if(!walk && !pose.head && !pose.arms && !pose.blink && !pose.breath) {
+      buffer.stamp(SOURCE_VIEWS[view],x,y);return;
+    }
+    feet(buffer,view,rig,x,y,pose,walk);
+    // De profil, le bras lointain reste occulté par le tronc et la besace,
+    // conformément au dessin de référence : pas de fragment ajouté en bordure.
+    neck(buffer,view,x,y,pose.body,pose.head);
+    if(side)profileUnderpaint(buffer,view,rig,x,y+pose.body);
+    stampPart(buffer,rig.body,x,y,0,pose.body);
+    if(side) {
+      const q=view==='droite'?1:-1;
+      arm(buffer,rig.near,x,y+pose.body,walk?pose.swing*q:0,walk?(Math.abs(pose.swing)===2?-1:0):pose.arms);
+    } else {
+      const s=walk?Math.round(pose.swing/2):0;
+      const projected=view==='face'?s:-s;
+      arm(buffer,rig.left,x,y+pose.body,walk?projected:0,walk?projected:pose.arms);
+      arm(buffer,rig.right,x,y+pose.body,walk?projected:0,walk?-projected:pose.arms);
+    }
+    stampPart(buffer,rig.head,x,y,0,pose.head);
+    if(!walk && pose.breath) {
+      for(const [dx,dy,keys] of IDLE_PATCHES[view].breath) {
+        buffer.stamp([keys],x+dx,y+dy+(dy<(side?10:9)?pose.head:pose.body));
+      }
+    }
+    if(!walk && pose.blink) {
+      for(const [dx,dy,keys] of IDLE_PATCHES[view].blink)buffer.stamp([keys],x+dx,y+dy+pose.head);
+    }
+  }
+
+  /** Retourne un tampon RGBA indépendant ; formats engine 80px et native 48px. */
+  function raster(action = 'idle', dir = DIR.SOUTH, frame = 0, format = 'engine') {
+    const view=directionName(dir);frameIndex(action,frame);
+    if(format!=='engine'&&format!=='native')throw new RangeError('Format attendu : engine ou native.');
+    const size=format==='engine'?80:48,anchor=format==='engine'?ANCHOR:NATIVE_ANCHOR;
+    const rows=SOURCE_VIEWS[view],x=anchor.x-Math.floor(rows[0].length/2),y=anchor.y-rows.length+1;
+    const buffer=new PixelBuffer(size,size);animate(buffer,view,action,frame,x,y);
+    return {width:size,height:size,anchor,data:buffer.data};
+  }
+
+  function defaultCanvasFactory(width, height) {
+    let cv;
+    if (typeof document !== 'undefined') cv = document.createElement('canvas');
+    else if (typeof OffscreenCanvas !== 'undefined') cv = new OffscreenCanvas(width, height);
+    else throw new Error('Fournir canvasFactory sous Node, ou utiliser raster() pour obtenir les pixels sans Canvas.');
+    cv.width = width; cv.height = height; return cv;
+  }
+
+  class Atlas {
+    constructor(options = {}) {
+      this.canvasFactory = options.canvasFactory || defaultCanvasFactory;
+      this.maxFrames = options.maxFrames === undefined ? 64 : options.maxFrames;
+      if (!Number.isInteger(this.maxFrames) || this.maxFrames < 1 || this.maxFrames > 256) throw new RangeError('maxFrames : entier de 1 à 256.');
+      this.cache = new Map();
+    }
+    get(action = 'idle', dir = DIR.SOUTH, frame = 0) {
+      const view = directionName(dir); frameIndex(action,frame);
+      const key = action + ':' + view + ':' + frame;
+      if (this.cache.has(key)) {
+        const value = this.cache.get(key); this.cache.delete(key); this.cache.set(key,value); return value;
+      }
+      const pixels = raster(action,view,frame), cv = this.canvasFactory(80,80);
+      cv.width = cv.height = 80;
+      const c = cv.getContext('2d');
+      if (!c) throw new Error('Canvas 2D indisponible.');
+      const image = c.createImageData(80,80); image.data.set(pixels.data); c.putImageData(image,0,0);
+      this.cache.set(key,cv);
+      while (this.cache.size > this.maxFrames) this.cache.delete(this.cache.keys().next().value);
+      return cv;
+    }
+    /**
+     * Dessine sur le contexte monde déjà transformé par le Renderer.
+     * L'acteur fournit x, y, dir, alpha (facultatif), z (facultatif).
+     * state : { action, elapsed, distance, frame }. frame est un index explicite facultatif.
+     * Aucune ombre intégrée : utiliser l'ombre du Renderer, une seule fois.
+     */
+    draw(ctx, actor, time = 0, state = {}) {
+      if (!ctx || typeof ctx.drawImage !== 'function') throw new TypeError('Contexte Canvas 2D attendu.');
+      if (!actor) throw new TypeError('Acteur attendu.');
+      finite(actor.x,'actor.x'); finite(actor.y,'actor.y'); finite(time,'time');
+      const z = actor.z === undefined ? 0 : finite(actor.z,'actor.z');
+      const alpha = actor.alpha === undefined ? 1 : Math.max(0,Math.min(1,finite(actor.alpha,'actor.alpha')));
+      if (alpha === 0) return null;
+      const action = state.action || 'idle';
+      const frame = state.frame === undefined ? frameAt(action, state.elapsed === undefined ? time : state.elapsed, state.distance) : frameIndex(action,state.frame);
+      const image = this.get(action, actor.dir === undefined ? DIR.SOUTH : actor.dir, frame);
+      ctx.save();
+      try {
+        ctx.imageSmoothingEnabled = false; ctx.globalAlpha *= alpha;
+        ctx.drawImage(image, Math.round(actor.x)-ANCHOR.x, Math.round(actor.y-z)-ANCHOR.y);
+      } finally { ctx.restore(); }
+      actor._img = image;
+      return image;
+    }
+    /** Aperçu uniquement : agrandissement entier, sans changer les dimensions du dessin. */
+    preview(ctx, action, dir, frame, footX, footY, scale = 1) {
+      if (!Number.isInteger(scale) || scale < 1) throw new RangeError('Agrandissement entier positif attendu.');
+      finite(footX,'footX'); finite(footY,'footY');
+      const image = this.get(action,dir,frame);
+      ctx.save();
+      try {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(image,Math.round(footX)-ANCHOR.x*scale,Math.round(footY)-ANCHOR.y*scale,80*scale,80*scale);
+      } finally { ctx.restore(); }
+    }
+    clear() { this.cache.clear(); }
+  }
+
+  /** Même organisation que les planches du dépôt : action/direction par ligne, pose par colonne. */
+  function buildSheet(format = 'engine') {
+    if (format !== 'engine' && format !== 'native') throw new RangeError('Format inconnu.');
+    const cell = format === 'engine' ? 80 : 48, columns = 8, rows = 8;
+    const result = { width:columns*cell, height:rows*cell, data:new Uint8ClampedArray(columns*cell*rows*cell*4) };
+    Object.keys(CLIPS).forEach((action, a) => SHEET_DIRECTIONS.forEach((dir,d) => {
+      for (let frame=0;frame<CLIPS[action].frames;frame++) {
+        const image=raster(action,dir,frame,format), x=frame*cell, y=(a*4+d)*cell;
+        for (let j=0;j<cell;j++) result.data.set(image.data.subarray(j*cell*4,(j+1)*cell*4),((y+j)*result.width+x)*4);
+      }
+    }));
+    return result;
+  }
+  function manifest() {
+    const clips=[];
+    Object.entries(CLIPS).forEach(([action,clip],a) => SHEET_DIRECTIONS.forEach((dir,d) => clips.push({
+      action, direction:dir, engineDirection:ENGINE_DIRECTIONS.indexOf(dir), row:a*4+d,
+      frames:clip.frames, durations:[...clip.durations], loop:clip.loop, strideWorldPixels:clip.stride,
+      rectangles:Array.from({length:clip.frames},(_,f)=>[f*80,(a*4+d)*80,80,80])
+    })));
+    return {
+      id:'batracienne', species:'batracien', sex:'femelle', version:2, authoring:'JavaScript — explicit pixel grids',
+      reference:'Female counterpart of the supplied batracien.js; same palette, scale, anchors and animation clock. Four edited native pixel grids, not a recolor.',
+      auditedRepository:'garwiglino/conan', auditedCommit:'b598bc103c61112c4e81eac29e58f37653213de8',
+      cell:[80,80], anchor:[40,52], nativeCell:[48,48], nativeAnchor:[24,36], nativeOffset:[16,16],
+      sheet:{file:'batracienne.png',size:[640,640],columns:8,rows:8},
+      staticSheet:{file:'batracienne-quatre-vues.png',size:[320,80],directions:[...SHEET_DIRECTIONS]},
+      idleVisibleSize:{face:[17,20],droite:[16,21],dos:[17,20],gauche:[16,21]},
+      alpha:'binary 0/255', lighting:'screen upper-left; four independently authored directions',
+      palette:{...PALETTE}, clips, animationRevision:'Articulated v2: independent head, attached arms, trunk and legs; 8 idle and 8 walk frames.',
+      timing:{walkMs:500,strideWorldPixels:18,idleMs:4300},
+      sourceDesignPreserved:true, neutralPoseExact:true,
+      scope:'Graphic asset only: idle and walk. No attack, death, AI, statistics, collisions or spawn added.'
+    };
+  }
+
+  const installations = new WeakMap();
+  /**
+   * Adaptateur optionnel, réversible : CharacterAtlas.draw(ctx, kind, actor, time).
+   * Appeler après la définition de CharacterAtlas ; ne touche qu'au kind "batracienne".
+   * L'installation n'ajoute aucun acteur au monde et ne modifie aucune collision.
+   */
+  function installCharacterAtlas(target, options = {}) {
+    const proto = typeof target === 'function' ? target.prototype : target;
+    if (!proto || typeof proto.draw !== 'function') throw new TypeError('CharacterAtlas ou son instance est attendu.');
+    if (installations.has(proto)) return installations.get(proto);
+    const original = proto.draw, atlas = options.atlas || new Atlas(options);
+    const stateFor = options.stateFor || ((actor,time) => actor.batracienne || {action:'idle',elapsed:time});
+    function wrapped(ctx,kind,actor,time=0) {
+      if (kind !== 'batracienne') return original.apply(this,arguments);
+      return atlas.draw(ctx,actor,time,stateFor(actor,time));
+    }
+    proto.draw = wrapped;
+    const handle = { atlas, uninstall() {
+      if (proto.draw !== wrapped) throw new Error('Un autre adaptateur a été installé depuis ; désinstallation automatique refusée.');
+      proto.draw = original; installations.delete(proto); atlas.clear();
+    }};
+    installations.set(proto,handle); return handle;
+  }
+
+  // Les fautes dans une grille sont détectées au chargement, avant la création d'un Canvas.
+  for (const [view,rows] of Object.entries(SOURCE_VIEWS)) {
+    const width=rows[0].length;
+    for (const row of rows) {
+      if (row.length !== width) throw new Error('Grille non rectangulaire : ' + view);
+      for (const key of row) if (key !== '.' && !Object.hasOwn(PALETTE,key)) throw new Error('Palette manquante : '+key);
+    }
+  }
+  return Object.freeze({ version:2, DIR, ANCHOR, NATIVE_ANCHOR, CLIPS, PALETTE, SOURCE_VIEWS,
+    POSES, RIGS, directionName, frameAt, raster, Atlas, buildSheet, manifest, installCharacterAtlas });
+});
+
+return module.exports;})();
+const API=(function(){const module={exports:{}};const require=(id)=>id.includes("batracienne")?F:M;
+/**
+ * Hearthreaver — activités des batraciens, v3.
+ * Pixel art procédural éditable, dérivé des GRILLES VALIDÉES v2 (pas des planches IA).
+ * Le moteur ne dessine que des pixels entiers ; aucun bitmap tourné, redimensionné ou retourné.
+ * Cadre 80×80, ancre (40,52) ; variante 48×48 par translation (-16,-16), sans mise à l'échelle.
+ * © Fichiers créés pour ce projet. Aucun chargement d'image, bibliothèque ou service requis.
+ */
+(function(root,factory){
+ 'use strict';
+ if(typeof module==='object' && module.exports)module.exports=factory(require('../base/batracien-v2.js'),require('../base/batracienne-v2.js'));
+ else root.HearthreaverBatraciens=factory(root.HearthreaverBatracien,root.HearthreaverBatracienne);
+})(typeof globalThis!=='undefined'?globalThis:this,function(MaleBase,FemaleBase){
+ 'use strict';
+ if(!MaleBase||!FemaleBase)throw new Error('Charger les deux bases v2 avant le moteur d’activités.');
+ const VERSION='3.0.0';
+ const ANCHOR=Object.freeze({x:40,y:52}),NATIVE_ANCHOR=Object.freeze({x:24,y:36});
+ const DIR=Object.freeze({NORTH:0,EAST:1,SOUTH:2,WEST:3});
+ const DIRECTIONS=Object.freeze(['dos','droite','face','gauche']);
+ const SHEET_DIRECTIONS=Object.freeze(['face','droite','dos','gauche']);
+ function freeze(o){if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.values(o).forEach(freeze);Object.freeze(o);}return o;}
+ const CLIPS=freeze({
+  "idle": {
+    "label": "Repos",
+    "group": "commun",
+    "frames": 8,
+    "durations": [
+      1300,
+      220,
+      380,
+      320,
+      650,
+      100,
+      130,
+      1200
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 4300,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "walk": {
+    "label": "Marche",
+    "group": "commun",
+    "frames": 8,
+    "durations": [
+      63,
+      62,
+      63,
+      62,
+      63,
+      62,
+      63,
+      62
+    ],
+    "loop": true,
+    "stride": 18,
+    "duration": 500,
+    "rootMotion": "none",
+    "groundLocked": false,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "talk": {
+    "label": "Parler",
+    "group": "social",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "carry_idle": {
+    "label": "Tenir une caisse à l’arrêt",
+    "group": "manutention",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "carry": {
+    "label": "Porter une caisse",
+    "group": "manutention",
+    "frames": 8,
+    "durations": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "loop": true,
+    "stride": 18,
+    "duration": 800,
+    "rootMotion": "none",
+    "groundLocked": false,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "load": {
+    "label": "Soulever une caisse",
+    "group": "manutention",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "grasp",
+        "frame": 4,
+        "atMs": 600
+      },
+      {
+        "name": "carried",
+        "frame": 7,
+        "atMs": 1050
+      }
+    ]
+  },
+  "unload": {
+    "label": "Déposer une caisse",
+    "group": "manutention",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "release",
+        "frame": 4,
+        "atMs": 600
+      },
+      {
+        "name": "placed",
+        "frame": 7,
+        "atMs": 1050
+      }
+    ]
+  },
+  "sit_down": {
+    "label": "S’asseoir",
+    "group": "social",
+    "frames": 8,
+    "durations": [
+      110,
+      100,
+      100,
+      100,
+      120,
+      120,
+      140,
+      160
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 950,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "seated",
+        "frame": 7,
+        "atMs": 790
+      }
+    ]
+  },
+  "seated": {
+    "label": "Repos assis",
+    "group": "social",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "stand_up": {
+    "label": "Se relever",
+    "group": "social",
+    "frames": 8,
+    "durations": [
+      160,
+      140,
+      120,
+      120,
+      100,
+      100,
+      100,
+      110
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 950,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "standing",
+        "frame": 7,
+        "atMs": 840
+      }
+    ]
+  },
+  "startle": {
+    "label": "Sursaut",
+    "group": "reaction",
+    "frames": 6,
+    "durations": [
+      90,
+      75,
+      85,
+      110,
+      140,
+      220
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 720,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 3
+      },
+      {
+        "name": "recovery",
+        "from": 4,
+        "to": 5
+      }
+    ],
+    "markers": []
+  },
+  "flee": {
+    "label": "Fuir",
+    "group": "reaction",
+    "frames": 8,
+    "durations": [
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45
+    ],
+    "loop": true,
+    "stride": 22,
+    "duration": 360,
+    "rootMotion": "none",
+    "groundLocked": false,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "cower_enter": {
+    "label": "Se recroqueviller",
+    "group": "reaction",
+    "frames": 6,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 900,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 3
+      },
+      {
+        "name": "recovery",
+        "from": 4,
+        "to": 5
+      }
+    ],
+    "markers": []
+  },
+  "cower_exit": {
+    "label": "Sortir de l’abri des bras",
+    "group": "reaction",
+    "frames": 6,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 900,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 3
+      },
+      {
+        "name": "recovery",
+        "from": 4,
+        "to": 5
+      }
+    ],
+    "markers": []
+  },
+  "cower": {
+    "label": "Se protéger",
+    "group": "reaction",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "hit": {
+    "label": "Coup reçu",
+    "group": "reaction",
+    "frames": 6,
+    "durations": [
+      55,
+      70,
+      80,
+      100,
+      130,
+      200
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 635,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 3
+      },
+      {
+        "name": "recovery",
+        "from": 4,
+        "to": 5
+      }
+    ],
+    "markers": []
+  },
+  "death": {
+    "label": "Chute / mort",
+    "group": "reaction",
+    "frames": 12,
+    "durations": [
+      100,
+      100,
+      110,
+      110,
+      110,
+      120,
+      120,
+      140,
+      140,
+      160,
+      190,
+      300
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 1700,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 2
+      },
+      {
+        "name": "action",
+        "from": 3,
+        "to": 8
+      },
+      {
+        "name": "recovery",
+        "from": 9,
+        "to": 11
+      }
+    ],
+    "markers": [
+      {
+        "name": "ground_contact",
+        "frame": 9,
+        "atMs": 1050
+      }
+    ]
+  },
+  "fish_cast": {
+    "label": "Lancer la ligne",
+    "group": "peche",
+    "frames": 8,
+    "durations": [
+      150,
+      110,
+      100,
+      80,
+      100,
+      120,
+      160,
+      230
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 1050,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "cast",
+        "frame": 4,
+        "atMs": 440
+      }
+    ]
+  },
+  "fish_wait": {
+    "label": "Attendre une touche",
+    "group": "peche",
+    "frames": 8,
+    "durations": [
+      550,
+      450,
+      500,
+      500,
+      550,
+      450,
+      500,
+      500
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 4000,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  },
+  "fish_reel": {
+    "label": "Ramener la prise",
+    "group": "peche",
+    "frames": 10,
+    "durations": [
+      200,
+      140,
+      140,
+      120,
+      140,
+      170,
+      180,
+      170,
+      170,
+      270
+    ],
+    "loop": false,
+    "stride": null,
+    "duration": 1700,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": true,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 6
+      },
+      {
+        "name": "recovery",
+        "from": 7,
+        "to": 9
+      }
+    ],
+    "markers": [
+      {
+        "name": "retrieve",
+        "frame": 5,
+        "atMs": 740
+      }
+    ]
+  },
+  "fish_spear": {
+    "label": "Pêcher au harpon",
+    "group": "peche",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "fishing_attempt",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "net": {
+    "label": "Réparer un filet",
+    "group": "peche",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "knot",
+        "frame": 5,
+        "atMs": 750
+      }
+    ]
+  },
+  "punt": {
+    "label": "Pousser à la perche",
+    "group": "navigation",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "pole_planted",
+        "frame": 2,
+        "atMs": 300
+      },
+      {
+        "name": "pole_lifted",
+        "frame": 6,
+        "atMs": 900
+      }
+    ]
+  },
+  "rice": {
+    "label": "Repiquer le riz",
+    "group": "agriculture",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "plant",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "harvest": {
+    "label": "Couper les roseaux / récolter",
+    "group": "agriculture",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "cut",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "weave": {
+    "label": "Tresser un panier",
+    "group": "artisanat",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "weave_pass",
+        "frame": 5,
+        "atMs": 750
+      }
+    ]
+  },
+  "rope": {
+    "label": "Lover un cordage",
+    "group": "navigation",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "coil",
+        "frame": 5,
+        "atMs": 750
+      }
+    ]
+  },
+  "hoe": {
+    "label": "Travailler la terre",
+    "group": "agriculture",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "ground_contact",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "sow": {
+    "label": "Semer",
+    "group": "agriculture",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "scatter",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "gather": {
+    "label": "Cueillir des plantes",
+    "group": "agriculture",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "gather",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "craft": {
+    "label": "Travailler à l’établi",
+    "group": "artisanat",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "tool_contact",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "pottery": {
+    "label": "Façonner une poterie",
+    "group": "artisanat",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "shape",
+        "frame": 5,
+        "atMs": 750
+      }
+    ]
+  },
+  "stir": {
+    "label": "Remuer une préparation",
+    "group": "artisanat",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "stir",
+        "frame": 5,
+        "atMs": 750
+      }
+    ]
+  },
+  "ledger": {
+    "label": "Consulter / écrire un registre",
+    "group": "commerce",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "write",
+        "frame": 5,
+        "atMs": 750
+      }
+    ]
+  },
+  "eat": {
+    "label": "Manger",
+    "group": "quotidien",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "bite",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "drink": {
+    "label": "Boire",
+    "group": "quotidien",
+    "frames": 8,
+    "durations": [
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 1200,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "preparation",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "name": "action",
+        "from": 2,
+        "to": 5
+      },
+      {
+        "name": "recovery",
+        "from": 6,
+        "to": 7
+      }
+    ],
+    "markers": [
+      {
+        "name": "sip",
+        "frame": 4,
+        "atMs": 600
+      }
+    ]
+  },
+  "sleep": {
+    "label": "Dormir",
+    "group": "quotidien",
+    "frames": 8,
+    "durations": [
+      700,
+      400,
+      500,
+      600,
+      700,
+      400,
+      500,
+      600
+    ],
+    "loop": true,
+    "stride": null,
+    "duration": 4400,
+    "rootMotion": "none",
+    "groundLocked": true,
+    "terminal": false,
+    "phases": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7
+      }
+    ],
+    "markers": []
+  }
+});
+ const COLOR_VARIANTS=freeze({
+  "male": {
+    "jade": {
+      "label": "Jade",
+      "palette": {
+        "s": "#3f6156",
+        "g": "#58897a",
+        "l": "#79af9a",
+        "h": "#9fd2ba",
+        "d": "#afa36e",
+        "b": "#d8ca8f",
+        "c": "#eee4ae"
+      }
+    },
+    "turquoise_sombre": {
+      "label": "Turquoise sombre",
+      "palette": {
+        "s": "#31535a",
+        "g": "#46717b",
+        "l": "#628f9c",
+        "h": "#87b2bf",
+        "d": "#a2a07a",
+        "b": "#cbc79e",
+        "c": "#e4dec0"
+      }
+    },
+    "ocre_mousse": {
+      "label": "Ocre mousse",
+      "palette": {
+        "s": "#66623a",
+        "g": "#8b854d",
+        "l": "#afa965",
+        "h": "#d0ca81",
+        "d": "#baa06a",
+        "b": "#dfc187",
+        "c": "#f0db9e"
+      }
+    },
+    "ardoise": {
+      "label": "Ardoise",
+      "palette": {
+        "s": "#4d5555",
+        "g": "#697272",
+        "l": "#8b9593",
+        "h": "#b1bab4",
+        "d": "#ab9f84",
+        "b": "#d0c4a8",
+        "c": "#e7dfc8"
+      }
+    }
+  },
+  "female": {
+    "rose_mauve": {
+      "label": "Rose mauve",
+      "palette": {
+        "s": "#5f4a60",
+        "g": "#816181",
+        "l": "#a27aa2",
+        "h": "#c599c4",
+        "d": "#c39a9d",
+        "b": "#dfb8be",
+        "c": "#f3d8df"
+      }
+    },
+    "lilas": {
+      "label": "Lilas",
+      "palette": {
+        "s": "#58556e",
+        "g": "#767396",
+        "l": "#9a96bf",
+        "h": "#c0bbe2",
+        "d": "#c2b2c7",
+        "b": "#ddd0e0",
+        "c": "#efe6f0"
+      }
+    },
+    "prune_rose": {
+      "label": "Prune rosée",
+      "palette": {
+        "s": "#654252",
+        "g": "#87576d",
+        "l": "#ad7489",
+        "h": "#d19ab0",
+        "d": "#c79a99",
+        "b": "#e1b7b6",
+        "c": "#f2d7d3"
+      }
+    },
+    "corail_doux": {
+      "label": "Corail doux",
+      "palette": {
+        "s": "#71524f",
+        "g": "#956865",
+        "l": "#bd8783",
+        "h": "#dcaba7",
+        "d": "#cea399",
+        "b": "#e5c1b8",
+        "c": "#f5dfd7"
+      }
+    }
+  }
+});
+ const BASES=Object.freeze({male:MaleBase,female:FemaleBase});
+ const ALIASES=freeze({seated_idle:'seated',frightened_flight:'flee',repair_net:'net',punt_boat_or_push_pole:'punt',
+  tend_or_transplant_rice:'rice',harvest_reeds_or_rice:'harvest',weave_reeds_or_basket:'weave',
+  fish_spear_or_rod:'fish_cast',coil_rope_or_load_bundles:'rope',lift:'load',put_down:'unload'});
+ const LAYERS=Object.freeze(['scene_back','tools_back','body','tools_front','hands','effects','scene_front']);
+ const ACTOR_LAYERS=Object.freeze(['tools_back','body','tools_front','hands','effects']);
+ // Les couleurs d’accessoires ne passent JAMAIS par le remplacement des palettes de peau.
+ const TOOL_COLORS=freeze({O:'#100e20',wood0:'#50342f',wood1:'#754b37',wood2:'#a16a44',wood3:'#cf955f',
+  metal0:'#354953',metal1:'#708b91',metal2:'#c3ced1',metal3:'#f0eedc',rope0:'#795445',rope1:'#b9a16b',rope2:'#e1c58a',
+  leaf0:'#294c39',leaf1:'#526d3d',leaf2:'#96a469',leaf3:'#bac38b',water0:'#24453e',water1:'#46717b',water2:'#87b2bf',water3:'#e1eee1',
+  clay0:'#754b37',clay1:'#b47759',clay2:'#d8a280',paper0:'#a18d66',paper1:'#dfc889',paper2:'#f3dfa4',
+  fish0:'#354953',fish1:'#708b91',fish2:'#c3ced1',float0:'#a45131',float1:'#f3dfa4',food0:'#a16a44',food1:'#df984e'});
+ function finite(v,label){if(typeof v!=='number'||!Number.isFinite(v))throw new TypeError(label+' doit être fini.');return v;}
+ function integer(v,label){if(!Number.isInteger(v))throw new TypeError(label+' doit être un entier.');return v;}
+ function sexName(sex='male'){if(sex==='male'||sex==='masculin'||sex==='batracien')return'male';if(sex==='female'||sex==='femelle'||sex==='feminin'||sex==='batracienne')return'female';throw new RangeError('Sexe : male ou female.');}
+ function directionName(dir=2){return MaleBase.directionName(dir);}
+ function canonical(action='idle'){const k=ALIASES[action]||action;if(!Object.hasOwn(CLIPS,k))throw new RangeError('Animation inconnue : '+action);return k;}
+ function paletteName(sex,name){const n=name===undefined?(sex==='female'?'rose_mauve':'original'):name;if(n==='original'||n==='base'||n==='olive')return'original';if(!Object.hasOwn(COLOR_VARIANTS[sex],n))throw new RangeError('Palette inconnue pour '+sex+' : '+n);return n;}
+ function paletteFor(sex,name){const s=sexName(sex),n=paletteName(s,name);return {...BASES[s].PALETTE,...(n==='original'?{}:COLOR_VARIANTS[s][n].palette)};}
+ function checkFrame(action,frame){const c=CLIPS[canonical(action)];integer(frame,'frame');if(frame<0||frame>=c.frames)throw new RangeError('Image hors animation : '+action+'/'+frame);return frame;}
+ function frameAt(action='idle',seconds=0,distance){const c=CLIPS[canonical(action)];finite(seconds,'seconds');let ms;
+  if(c.stride!==null&&distance!==undefined){finite(distance,'distance');ms=((distance%c.stride+c.stride)%c.stride)/c.stride*c.duration;}
+  else {ms=Math.max(0,seconds)*1000;ms=c.loop?ms%c.duration:Math.min(ms,c.duration-0.0001);}
+  for(let i=0;i<c.frames;i++){if(ms<c.durations[i])return i;ms-=c.durations[i];}return c.frames-1;
+ }
+ function sample(action='idle',seconds=0,distance){const id=canonical(action),c=CLIPS[id],frame=frameAt(id,seconds,distance);return {action:id,frame,phase:c.phases.find(p=>frame>=p.from&&frame<=p.to)?.name||'action',finished:!c.loop&&seconds*1000>=c.duration};}
+ // Renvoie les repères franchis, sans jamais donner de poisson, de dégâts ou de marchandises.
+ function crossedMarkers(action,fromSeconds,toSeconds,max=64){const id=canonical(action),c=CLIPS[id];finite(fromSeconds,'from');finite(toSeconds,'to');integer(max,'max');if(max<1||max>256)throw new RangeError('max doit être 1..256');if(toSeconds<fromSeconds)throw new RangeError('Le temps ne peut pas reculer.');
+  const out=[];if(!c.markers.length)return out;const a=Math.max(-1,fromSeconds*1000),b=Math.max(0,toSeconds*1000);
+  const first=c.loop?Math.max(0,Math.floor(a/c.duration)):0,last=c.loop?Math.floor(b/c.duration):0;
+  for(let cycle=first;cycle<=last;cycle++){for(const e of c.markers){const at=cycle*c.duration+e.atMs;if(at>a&&at<=b){if(out.length===max)return out;out.push({...e,cycle,atMs:at,visualOnly:true});}}if(out.length===max)break;}return out;
+ }
+ const hexCache=new Map();function color(hex){if(!hexCache.has(hex))hexCache.set(hex,[parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16),255]);return hexCache.get(hex);}
+ class Pixels{
+  constructor(palette,w=80,h=80){this.palette=palette;this.width=w;this.height=h;this.data=new Uint8ClampedArray(w*h*4);}
+  set(x,y,key){if(key==='.'||key===null)return;integer(x,'x');integer(y,'y');if(x<0||y<0||x>=this.width||y>=this.height)throw new RangeError('Pixel hors cadre '+x+','+y);const h=this.palette[key]||(typeof key==='string'&&/^#[0-9a-f]{6}$/i.test(key)?key:null);if(!h)throw new RangeError('Couleur non définie : '+key);this.data.set(color(h),(y*this.width+x)*4);}
+  stamp(rows,x,y){rows.forEach((r,j)=>{for(let i=0;i<r.length;i++)this.set(x+i,y+j,r[i]);});}
+  rect(x,y,w,h,key){for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)this.set(xx,yy,key);}
+  line(x,y,xx,yy,key){x=Math.round(x);y=Math.round(y);xx=Math.round(xx);yy=Math.round(yy);const dx=Math.abs(xx-x),sx=x<xx?1:-1,dy=-Math.abs(yy-y),sy=y<yy?1:-1;let err=dx+dy;
+   for(;;){this.set(x,y,key);if(x===xx&&y===yy)break;const e=err*2;if(e>=dy){err+=dy;x+=sx;}if(e<=dx){err+=dx;y+=sy;}}
+  }
+  rod(a,b,key='wood2',highlight='wood3'){for(const [x,y] of [[-1,0],[1,0],[0,-1],[0,1]])this.line(a[0]+x,a[1]+y,b[0]+x,b[1]+y,'O');this.line(...a,...b,key);if(highlight)this.set(Math.round(a[0]),Math.round(a[1]),highlight);}
+  poly(points,key,outline){const min=Math.floor(Math.min(...points.map(p=>p[1]))),max=Math.ceil(Math.max(...points.map(p=>p[1])));for(let y=min;y<=max;y++){
+   const xs=[];for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length];if((a[1]<=y&&b[1]>y)||(b[1]<=y&&a[1]>y))xs.push(a[0]+(y-a[1])*(b[0]-a[0])/(b[1]-a[1]));}
+   xs.sort((a,b)=>a-b);for(let i=0;i+1<xs.length;i+=2)for(let x=Math.ceil(xs[i]);x<=Math.floor(xs[i+1]);x++)this.set(x,y,key);
+  }if(outline)for(let i=0;i<points.length;i++)this.line(...points[i],...points[(i+1)%points.length],outline);}
+  ellipse(cx,cy,rx,ry,key){for(let y=Math.floor(cy-ry);y<=cy+ry;y++)for(let x=Math.floor(cx-rx);x<=cx+rx;x++)if(((x-cx)/rx)**2+((y-cy)/ry)**2<=1)this.set(x,y,key);}
+ }
+ function composite(layers){const data=new Uint8ClampedArray(80*80*4);for(const im of layers){const a=im.data||im;for(let i=0;i<a.length;i+=4)if(a[i+3])data.set(a.subarray(i,i+4),i);}return {width:80,height:80,anchor:ANCHOR,data};}
+ function formatImage(image,format){if(format==='engine')return {...image,anchor:ANCHOR};if(format!=='native')throw new RangeError('Format : engine ou native.');const data=new Uint8ClampedArray(48*48*4);
+  for(let y=0;y<80;y++)for(let x=0;x<80;x++){const i=(y*80+x)*4;if(x>=16&&x<64&&y>=16&&y<64)data.set(image.data.subarray(i,i+4),((y-16)*48+x-16)*4);else if(image.data[i+3])throw new RangeError('Le format 48px couperait du dessin.');}
+  return {width:48,height:48,anchor:NATIVE_ANCHOR,data};
+ }
+ function project(view,lateral,depth,height=0){switch(view){case'face':return[40+Math.round(lateral),52+Math.round(depth*.5)-Math.round(height)];case'dos':return[40-Math.round(lateral),52-Math.round(depth*.5)-Math.round(height)];case'droite':return[40+Math.round(depth),52+Math.round(lateral*.4)-Math.round(height)];case'gauche':return[40-Math.round(depth),52-Math.round(lateral*.4)-Math.round(height)];}}
+ function plus(p,x=0,y=0){return [p[0]+Math.round(x),p[1]+Math.round(y)];}
+ function mix(a,b,t){return [Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t)];}
+ const CYCLE=[0,0.3,0.7,1,1,0.7,0.3,0],BREATH=[0,0,-1,-1,0,0,0,0];
+ const RIGS={};
+ function rigFor(sex,view){const key=sex+view;if(RIGS[key])return RIGS[key];const rows=BASES[sex].SOURCE_VIEWS[view],side=view==='droite'||view==='gauche',female=sex==='female';const rig={rows,side,head:[],body:[],feet:[],left:[],right:[],near:[]};
+  rows.forEach((row,y)=>{for(let x=0;x<row.length;x++){const k=row[x];if(k==='.')continue;let part='body';if(y<(side?10:9))part='head';else if(y>=rows.length-3)part='feet';else if(!side&&y>=11&&y<=15){if(x<=(female?4:3))part='left';else if(x>=(female?14:15))part='right';}
+   else if(side){if(view==='droite'&&((y===12&&x>=6&&x<=7)||(y>=13&&y<=(female?16:17)&&x>=5&&x<=(female?9:10))))part='near';
+    if(view==='gauche'&&((y===12&&x>=8&&x<=9)||(y>=13&&y<=(female?16:17)&&x>=6&&x<=10)||(!female&&y>=14&&y<=16&&x===5)))part='near';}
+   rig[part].push([x,y,k]);}});
+  rig.x=40-Math.floor(rows[0].length/2);rig.y=52-rows.length+1;RIGS[key]=rig;return rig;
+ }
+ function stampPoints(b,pts,x,y,dx=0,dy=0,limit=80){for(const [xx,yy,k]of pts)if(y+yy+dy<limit)b.set(x+xx+dx,y+yy+dy,k);}
+ function poseFor(action,frame,view){const c=CLIPS[action],f=Math.min(7,Math.round(frame*7/(c.frames-1))),t=CYCLE[f];const p={body:0,head:0,hx:0,bx:0,seated:0,closed:false,talk:false,frame:f,tool:null,hands:null,contact:null,prone:0,walking:false};
+  const q=view==='gauche'?-1:view==='droite'?1:0;
+  switch(action){
+   case'talk':p.head=BREATH[f];p.talk=[1,2,4,6].includes(f);break;
+   case'sit_down':p.seated=Math.round(frame/(c.frames-1)*3);p.body=p.head=p.seated;break;
+   case'seated':p.seated=3;p.body=3;p.head=3+BREATH[f];break;
+   case'stand_up':p.seated=3-Math.round(frame/(c.frames-1)*3);p.body=p.head=p.seated;break;
+   case'cower_enter':case'cower_exit':{const phase=action==='cower_enter'?frame/(c.frames-1):1-frame/(c.frames-1);p.seated=Math.round(phase*2);p.body=p.seated;p.head=Math.round(phase*3);p.hx=q*Math.round(phase);p.closed=phase>.6;p.protect=phase;break;}
+   case'cower':p.seated=2;p.body=2;p.head=3+(f===3||f===5?1:0);p.hx=q;p.closed=true;break;
+   case'startle':p.head=[0,-1,-2,-1,0,0][frame];p.body=frame===2?-1:0;break;
+   case'hit':p.bx=[0,-1,-2,-1,0,0][frame]*(q||1);p.hx=p.bx;p.body=[0,0,1,1,0,0][frame];p.head=p.body;p.closed=frame>=1&&frame<=3;break;
+   case'death':if(frame<6){p.seated=[0,0,1,2,3,3][frame];p.body=p.seated;p.head=p.seated;p.hx=q*Math.min(frame,2);p.closed=frame>1;}else p.prone=frame-5;break;
+   case'sleep':p.prone=6;p.closed=true;p.sleep=true;break;
+   case'flee':p.walking=true;p.run=true;p.hx=q;break;
+   case'carry':p.walking=true;break;
+   case'carry_idle':p.head=BREATH[f];break;
+   case'load':case'unload':{const j=action==='load'?f:7-f;p.seated=Math.round([0,1,2,3,3,2,1,0][j]);p.body=p.seated;p.head=p.seated;p.hx=q*(p.seated>1?1:0);break;}
+   case'net':case'weave':case'pottery':p.seated=2;p.body=2;p.head=2+(f===3?1:0);break;
+   case'rice':case'gather':p.body=Math.round(t*2);p.head=Math.round(t*3);p.hx=q*Math.round(t*2);break;
+   case'harvest':case'hoe':case'fish_spear':p.body=Math.round(t);p.head=Math.round(t);p.hx=q*Math.round(t);break;
+   case'punt':p.body=[0,0,1,1,1,1,0,0][f];p.head=p.body;p.hx=q*[0,0,1,1,0,-1,-1,0][f];break;
+   case'craft':p.body=f===4?1:0;p.head=p.body;break;
+   case'ledger':p.head=1;p.hx=q;break;
+   case'fish_wait':p.head=BREATH[f];break;
+   case'fish_cast':case'fish_reel':p.hx=q*(f===2||f===3?1:0);p.head=BREATH[f];break;
+   case'rope':case'stir':case'sow':p.head=f===3?1:0;break;
+   case'eat':case'drink':p.head=f===3||f===4?-1:0;break;
+  }
+  return p;
+ }
+ function restingHands(rig,sex,view,p){if(rig.side)return [project(view,-3,2,10),[rig.x+(view==='droite'?8:8)+p.bx,rig.y+15+p.body]];
+  return [[rig.x+(sex==='female'?2:1),rig.y+14+p.body],[rig.x+(sex==='female'?16:17),rig.y+14+p.body]];
+ }
+ function workHands(view,height=9,depth=5,width=4){return [project(view,-width,depth,height),project(view,width,depth,height)];}
+ function palm(b,xy){const [x,y]=xy;b.set(x,y-1,'O');b.set(x-1,y,'O');b.set(x,y,'c');b.set(x+1,y,'b');b.set(x,y+1,'b');b.set(x+1,y+1,'d');b.set(x+2,y,'O');b.set(x+1,y+2,'O');b.set(x-1,y+1,'O');}
+ function drawArm(b,shoulder,hand,far=false,side=1){const elbow=[Math.round((shoulder[0]+hand[0])*.5)+side,Math.round((shoulder[1]+hand[1])*.5)+1];
+  b.rod(shoulder,elbow,far?'s':'g',null);b.rod(elbow,hand,far?'g':'l',null);
+  b.set(shoulder[0],shoulder[1],'g');b.set(elbow[0]-1,elbow[1],'l');palm(b,hand);return {shoulder,elbow,hand};
+ }
+ function head(b,rig,view,p){stampPoints(b,rig.head,rig.x,rig.y,p.hx,p.head);const x=rig.x+p.hx,y=rig.y+p.head;
+  if(p.closed){const centers=view==='face'?[4,14]:view==='droite'?[9]:view==='gauche'?[5]:[];for(const cx of centers){for(let yy=2;yy<=5;yy++)for(let xx=cx-1;xx<=cx+1;xx++)b.set(x+xx,y+yy,yy===3?'s':'g');b.line(x+cx-1,y+3,x+cx+1,y+3,'O');}}
+  if(p.talk){if(view==='face'){b.line(x+7,y+8,x+11,y+8,'K');b.set(x+9,y+8,'b');}else if(view==='droite')b.line(x+12,y+8,x+14,y+8,'K');else if(view==='gauche')b.line(x+1,y+8,x+3,y+8,'K');}
+ }
+ function drawProne(layers,rig,view,p){const b=layers.body,q=view==='gauche'?-1:1,settle=Math.min(3,p.prone),baseY=50;const arr=[[-11,0],[-12,-3],[-8,-6],[3,-5],[9,-3],[11,0]];
+  b.poly(arr.map(([x,y])=>[40+x,baseY+y]),'v','O');b.rect(33,45,9,3,'w');b.line(33,45,39,45,'t');b.rect(40,47,7,3,'u');b.line(33,49,38,49,'g');b.line(45,49,49,49,'s');
+  const hp={...p,head:10+(settle===1?-1:0)+(p.sleep?BREATH[p.frame]:0),hx:q*(view==='face'||view==='dos'?6:6),closed:true,talk:false};
+  // La tête est déplacée entière ; aucune rotation du bitmap ou de la lumière.
+  head(b,rig,view,hp);palm(b,[40-q*8,50]);b.line(30,52,35,52,'O');b.line(43,52,48,52,'O');
+ }
+ function drawBody(layers,sex,view,p){const rig=rigFor(sex,view),b=layers.body;const joints=[];
+  if(p.prone){drawProne(layers,rig,view,p);return joints;}
+  if(p.walking){const src=BASES[sex].raster('walk',view,p.frame,'engine'),rawPal=BASES[sex].PALETTE,dstPal=b.palette,map=new Map(Object.entries(rawPal).map(([k,h])=>[h.toLowerCase(),dstPal[k]]));
+   for(let i=0;i<src.data.length;i+=4){if(src.data[i+3]){const h='#'+[src.data[i],src.data[i+1],src.data[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');b.data.set(color(map.get(h)||h),i);}}
+   // Retirer les bras du cycle de marche n’est pas nécessaire : le tronc neutre
+   // et le bras porteur les recouvrent dans la zone autorisée, les pieds restent exacts.
+   for(let yy=rig.y-2;yy<rig.y+rig.rows.length-3;yy++)for(let xx=28;xx<53;xx++){const i=(yy*80+xx)*4;b.data.fill(0,i,i+4);}
+   p.body=[0,1,1,0,0,1,1,0][p.frame];p.head=[0,0,1,0,0,0,1,0][p.frame];
+  }else stampPoints(b,rig.feet,rig.x,rig.y);
+  // Les hanches se rapprochent des genoux ; aucune mise à l’échelle du corps.
+  if(rig.side)for(const [x,y]of rig.near)if(y>=13)b.set(rig.x+x+p.bx,rig.y+y+p.body,x<8?'w':'v');
+  stampPoints(b,rig.body,rig.x,rig.y,p.bx,p.body,p.seated?51:80);
+  const neckY=rig.y+(rig.side?9:8);b.rect(37+p.bx,neckY+Math.min(p.head,p.body),6,Math.abs(p.head-p.body)+2,view==='dos'?'g':'b');
+  let hands=p.hands||restingHands(rig,sex,view,p);
+  if(!rig.side)hands=[...hands].sort((a,c)=>a[0]-c[0]);
+  const shoulderL=[rig.x+(sex==='female'?5:4)+p.bx,rig.y+11+p.body],shoulderR=[rig.x+(sex==='female'?13:14)+p.bx,rig.y+11+p.body];
+  if(rig.side){const nearShoulder=[rig.x+8+p.bx,rig.y+12+p.body],farShoulder=project(view,-3,2,11-p.body);
+   if(p.hands)joints.push(drawArm(b,farShoulder,hands[0],true,view==='droite'?1:-1));
+   joints.push(drawArm(b,nearShoulder,hands[1],false,view==='droite'?-1:1));
+  }else{joints.push(drawArm(b,shoulderL,hands[0],false,-1));joints.push(drawArm(b,shoulderR,hands[1],true,1));}
+  head(b,rig,view,p);
+  if(p.hands&&view!=='dos'){for(const h of (rig.side?[hands[1]]:hands))palm(layers.hands,h);}
+  return joints;
+ }
+ function box(b,cx,cy,w=11,h=7){const x=cx-Math.floor(w/2),y=cy-Math.floor(h/2);b.rect(x,y,w,h,'O');b.rect(x+1,y+1,w-2,h-2,'wood1');b.line(x+1,y+1,x+w-2,y+1,'wood3');b.line(x+1,y+h-2,x+w-2,y+h-2,'wood0');for(let i=x+3;i<x+w-1;i+=3)b.line(i,y+2,i,y+h-3,'wood2');b.line(x+1,y+2,x+w-2,y+h-2,'wood2');}
+ function basket(b,cx,cy,w=11,h=7){b.poly([[cx-Math.floor(w/2),cy-3],[cx+Math.floor(w/2),cy-3],[cx+Math.floor(w/2)-1,cy+3],[cx-Math.floor(w/2)+1,cy+3]],'rope0','O');
+  for(let y=cy-2;y<=cy+2;y++){for(let x=cx-Math.floor(w/2)+1;x<cx+Math.floor(w/2);x++)b.set(x,y,(x+y)%3===0?'rope2':'rope1');}b.line(cx-4,cy-3,cx+4,cy-3,'rope2');}
+ function coil(b,cx,cy){b.ellipse(cx,cy,5,3,'O');b.ellipse(cx,cy,4,2,'rope1');b.ellipse(cx,cy,2,1,'rope0');b.set(cx-3,cy-1,'rope2');b.set(cx+2,cy+2,'rope0');}
+ function leaves(b,x,y,seed=false){b.line(x,y,x,y-5,seed?'rope1':'leaf1');b.line(x,y-2,x-3,y-4,seed?'rope2':'leaf2');b.line(x,y-2,x+2,y-6,seed?'rope2':'leaf2');b.set(x-1,y-5,seed?'rope2':'leaf3');}
+ function fish(b,x,y){b.poly([[x-3,y],[x,y-2],[x+3,y-1],[x+3,y+1],[x,y+2]],'fish1','O');b.set(x+2,y-1,'fish2');b.set(x+2,y,'O');b.line(x-3,y,x-5,y-2,'fish1');b.line(x-3,y,x-5,y+2,'fish1');}
+ function pot(b,cx,cy){b.ellipse(cx,cy,5,4,'O');b.ellipse(cx,cy-1,4,3,'clay1');b.line(cx-2,cy-3,cx+2,cy-3,'clay2');b.ellipse(cx,cy-4,3,1,'O');b.line(cx-2,cy-4,cx+2,cy-4,'clay0');b.set(cx-3,cy-1,'clay2');}
+ function table(b,cx,cy,view){const side=view==='gauche'||view==='droite',w=side?13:19;const x=cx-Math.floor(w/2);b.rect(x,cy,w,3,'O');b.rect(x+1,cy,w-2,1,'wood3');b.rect(x+1,cy+1,w-2,1,'wood1');b.line(x+2,cy+3,x+2,cy+7,'wood0');b.line(x+w-3,cy+3,x+w-3,cy+7,'wood1');}
+ function makeTools(layers,sex,action,view,p,frame,opts){const f=p.frame,t=CYCLE[f],back=view==='dos',tool=layers[back?'tools_back':'tools_front'],scene=layers.scene_back,fx=layers.effects;
+  const q=view==='gauche'||view==='dos'?-1:1,side=view==='droite'||view==='gauche';
+  const work=project(view,0,9,3),ground=project(view,0,10,0);let h=workHands(view,9,4,4);const addHands=(a,b)=>{p.hands=[a,b];};
+  // Social : gestes lisibles sans accessoire ou pose démesurée.
+  if(action==='flee'){const r=rigFor(sex,view),h=restingHands(r,sex,view,p),s=[-2,-1,0,1,2,1,0,-1][f];p.hands=side?[plus(h[0],q*-s,-1),plus(h[1],q*s,-1-Math.abs(s))]:[plus(h[0],-1,s),plus(h[1],1,-s)];return;}
+  if(action==='talk'){const r=rigFor(sex,view),rest=restingHands(r,sex,view,p);p.hands=[rest[0],plus(rest[1],q*Math.round(t),-Math.round(t*3))];return;}
+  if(['sit_down','seated','stand_up'].includes(action)){const amt=p.seated/3,rest=restingHands(rigFor(sex,view),sex,view,p),seated=workHands(view,4,4,5);addHands(mix(rest[0],seated[0],amt),mix(rest[1],seated[1],amt));return;}
+  if(action==='cower'||action==='cower_enter'||action==='cower_exit'){const a=project(view,-5,4,13),b=project(view,5,4,13);if(action==='cower')addHands(a,b);else{const r=restingHands(rigFor(sex,view),sex,view,p);addHands(mix(r[0],a,p.protect),mix(r[1],b,p.protect));}return;}
+  if(action==='startle'){const a=[0,2,4,3,1,0][frame],rest=restingHands(rigFor(sex,view),sex,view,p);addHands(plus(rest[0],-Math.round(a/2),-a),plus(rest[1],Math.round(a/2),-a));return;}
+  if(action==='hit'||action==='death'||action==='sleep')return;
+  if(action==='carry'||action==='carry_idle'||action==='load'||action==='unload'){
+   const j=action==='load'?f:action==='unload'?7-f:7,frac=[0,0,0,0,.1,.45,.8,1][j];const target=project(view,0,5,7),start=project(view,0,6,2);const at=mix(start,target,frac);
+   if(action==='carry')at[1]+=[0,1,1,0,0,1,1,0][f];const hh=side?[[at[0]-q*3,at[1]-2],[at[0]+q*3,at[1]+1]]:[[at[0]-5,at[1]],[at[0]+5,at[1]]];
+   if(action==='carry'||action==='carry_idle'||j>=3)addHands(...hh);else{const rest=restingHands(rigFor(sex,view),sex,view,p);addHands(mix(rest[0],hh[0],j/3),mix(rest[1],hh[1],j/3));}
+   box((action==='carry'||action==='carry_idle'||j>=4)?tool:layers[back?'scene_back':'scene_front'],...at,side?9:11,7);p.tool='crate';p.contact={point:at,held:action==='carry'||action==='carry_idle'||j>=4};return;
+  }
+  if(['fish_cast','fish_wait','fish_reel','fish_spear'].includes(action)){
+   const grip=project(view,5,4,9),tableTips=[[6,-16],[2,-20],[5,-18],[12,-11],[17,-6],[17,-6],[17,-6],[17,-6]];
+   let delta=tableTips[action==='fish_wait'?7:action==='fish_reel'?Math.max(0,7-f):f];
+   if(action==='fish_spear')delta=[[3,-17],[4,-18],[7,-13],[12,-5],[16,4],[14,2],[7,-10],[3,-17]][f];
+   let tip=plus(grip,q*delta[0],delta[1]);if(action==='fish_spear'){const target=project(view,8,18,0);if(f===4)tip=target;else if(f===3)tip=mix(grip,target,.65);else if(f===5)tip=mix(target,grip,.2);scene.ellipse(target[0],target[1],5,2,'water0');scene.line(target[0]-3,target[1]+1,target[0]+3,target[1]+1,'water1');if(f===4){fx.set(target[0]-2,target[1]-1,'water2');fx.set(target[0]+2,target[1]-2,'water2');}}const butt=plus(grip,-q*2,3),h2=mix(grip,tip,.22);
+   addHands(project(view,-3,3,8),grip);tool.rod(butt,tip,'wood2','wood3');p.tool=action==='fish_spear'?'fishing_spear':'fishing_rod';p.contact={point:tip,held:true};
+   if(action==='fish_spear'){const v=mix(grip,tip,.85);tool.poly([tip,plus(v,-1,-1),plus(v,1,1)],'metal2','metal0');}
+   else {let float=project(view,8,20,0);float[0]=Math.max(18,Math.min(61,float[0]));if(action==='fish_cast')float=mix(plus(tip,0,7),float,Math.min(1,f/4));
+    if(action==='fish_reel')float=mix(float,plus(tip,0,6),Math.min(1,frame/6));
+    tool.line(...tip,Math.round((tip[0]+float[0])/2),Math.round((tip[1]+float[1])/2)+2,'metal1');tool.line(Math.round((tip[0]+float[0])/2),Math.round((tip[1]+float[1])/2)+2,...float,'metal2');
+    if(action==='fish_reel'&&frame>=5&&opts.catch!==false)fish(tool,float[0],float[1]);else{tool.set(float[0],float[1]-1,'float1');tool.set(float[0],float[1],'float0');}
+    const pond=project(view,7,17,0);scene.ellipse(pond[0],pond[1],side?6:8,2,'water0');scene.line(pond[0]-4,pond[1]+2,pond[0]+3,pond[1]+2,'water1');
+    if(action==='fish_cast'&&f===4||action==='fish_reel'&&frame===5){fx.set(float[0]-2,float[1]-1,'water2');fx.set(float[0]+2,float[1]-2,'water2');}
+   }return;
+  }
+  if(action==='punt'){
+   const foot={face:[47,57],dos:[32,49],droite:[53,56],gauche:[27,56]}[view];
+   const sway=[0,0,1,1,0,-1,-1,0][f];
+   const upper={face:[38+sway,41],dos:[42+sway,39],droite:[44+sway,40],gauche:[36-sway,40]}[view];
+   const lift=[5,2,0,0,0,0,3,5][f],bottom=plus(foot,0,-lift);
+   const near=mix(upper,bottom,.28),far=upper,top=plus(upper,(upper[0]-bottom[0])*.65,(upper[1]-bottom[1])*.65);
+   addHands(far,near);tool.rod(bottom,top);p.tool='pole';p.contact={point:bottom,planted:f>=2&&f<=5};
+   const boat=layers.scene_back,rim=layers.scene_front;
+   if(side){
+    boat.poly([[19,51],[23,47],[57,47],[61,51],[56,58],[24,58]],'wood1','O');boat.line(23,49,57,49,'wood3');boat.line(24,50,56,50,'wood0');
+    rim.poly([[19,52],[23,53],[57,53],[61,52],[56,58],[24,58]],'wood1','O');rim.line(23,54,56,54,'wood2');rim.line(26,56,54,56,'wood0');
+   }else{
+    boat.poly([[33,45],[47,45],[51,55],[47,60],[33,60],[29,55]],'wood1','O');boat.line(34,46,46,46,'wood3');boat.line(33,48,47,48,'wood0');
+    rim.poly([[30,54],[34,55],[46,55],[50,54],[47,60],[33,60]],'wood1','O');rim.line(33,56,47,56,'wood3');rim.line(34,58,46,58,'wood0');
+   }
+   // Les éclaboussures de la perche sont dans le décor, jamais attachées au corps.
+   if(f>=2&&f<=5){rim.set(bottom[0]-2,bottom[1]+1,'water2');rim.set(bottom[0]+2,bottom[1],'water3');}return;
+  }
+  if(action==='net'){
+   const at=project(view,0,6,5);table(scene,at[0],at[1]+3,view);const lift=[0,1,2,1,2,1,0,0][f],w=side?9:15;const xx=at[0]-Math.floor(w/2),yy=at[1]-2-lift;
+   tool.poly([[xx,yy],[xx+w,yy+1],[xx+w-1,yy+6],[xx+1,yy+5]],'metal0','rope0');
+   for(let x=xx+1;x<xx+w;x+=3)tool.line(x,yy+1,x+1,yy+5,'rope1');for(let y=yy+2;y<=yy+5;y+=2)tool.line(xx+1,y,xx+w-1,y,'rope2');
+   addHands([xx+2,yy+1],[xx+w-2,yy+3-(f%2)]);tool.line(xx+w-2,yy+3-(f%2),xx+w+1,yy+1,'metal2');p.tool='net_needle';return;
+  }
+  if(action==='rope'){
+   const at=project(view,0,6,4);coil(tool,...at);const a=project(view,-3,4,10+[0,1,2,3,3,2,1,0][f]),b=project(view,4,4,8);
+   tool.line(...a,at[0]-2,at[1],'rope2');tool.line(at[0]+2,at[1],...b,'rope1');addHands(a,b);p.tool='rope';return;
+  }
+  if(action==='rice'||action==='gather'){
+   const target=project(view,3,7,1),a=project(view,-4,3,8),b=mix(project(view,4,4,8),target,t);addHands(a,b);
+   leaves(tool,a[0],a[1]+1);for(let j=-1;j<=1;j++)leaves(scene,ground[0]+j*4,ground[1]+2);
+   if(action==='rice'&&f>=4)leaves(scene,...target);else if(action==='gather'&&f>=4&&f<=6)leaves(tool,b[0],b[1]+1);
+   p.tool=action==='rice'?'seedlings':'herb_bundle';p.contact={point:target,active:f===4};return;
+  }
+  if(action==='harvest'){
+   const a=project(view,-4,5,7),b=project(view,4,5+[0,1,2,3,3,2,1,0][f],7);addHands(a,b);
+   const cut=f>=3&&f<=5;tool.rod(b,plus(b,q*2,cut?1:-3));const tip=plus(b,q*3,cut?0:-5);tool.line(...tip,tip[0]+q*3,tip[1]+1,'metal2');tool.line(tip[0]+q*3,tip[1]+1,tip[0]+q*3,tip[1]+4,'metal1');tool.set(tip[0]+q*2,tip[1]+5,'metal0');
+   if(f>=4&&f<=6){for(let i=-1;i<=1;i++)leaves(tool,a[0]+i*2,a[1]+2,true);}const reedGround=project(view,6,10,0);for(let i=-1;i<=1;i++)leaves(scene,reedGround[0]+i*3,reedGround[1]+2,true);
+   p.tool='sickle';p.contact={point:ground,active:f===4};return;
+  }
+  if(action==='hoe'){
+   const grip=project(view,0,3,10);let end=plus(grip,q*[2,3,5,8,10,9,5,2][f],[-12,-13,-10,-5,5,3,-7,-12][f]);if(f===4)end=ground;else if(f===3)end=mix(grip,ground,.65);else if(f===5)end=mix(grip,ground,.85);addHands(mix(grip,end,.23),grip);tool.rod(plus(grip,-q*2,3),end);tool.line(end[0]-3,end[1],end[0]+3,end[1],'metal0');tool.line(end[0]-3,end[1]-1,end[0]+3,end[1]-1,'metal2');
+   scene.ellipse(ground[0],ground[1]+1,6,2,'wood0');if(f===4){fx.set(end[0]-2,end[1]+2,'wood2');fx.set(end[0]+3,end[1]+1,'wood1');}p.tool='hoe';p.contact={point:end,active:f===4};return;
+  }
+  if(action==='sow'){
+   const at=project(view,-4,3,6),a=plus(at,0,-2),b=project(view,4+[0,0,1,2,3,2,0,0][f],5,9);basket(tool,...at,7);addHands(a,b);
+   if(f>=3&&f<=5){for(let i=0;i<4;i++){const pt=project(view,2+i*2,8+i,3-(f-3));fx.set(pt[0],pt[1],'rope2');}}p.tool='seed_basket';return;
+  }
+  if(action==='weave'){
+   const at=project(view,0,5,4);basket(tool,...at,side?9:11);addHands(plus(at,-3,-2+(f%2)),plus(at,3,-1-(f%2)));tool.line(at[0]-3,at[1]-2+(f%2),at[0]+4,at[1]-1-(f%2),'rope2');for(let j=0;j<3;j++)scene.line(ground[0]-5+j,ground[1],ground[0]-2+j,ground[1]+1,'rope0');p.tool='basket';return;
+  }
+  if(action==='craft'){
+   const at=project(view,0,6,5);table(scene,at[0],at[1]+1,view);tool.rect(at[0]-2,at[1]-1,5,2,'wood2');const a=plus(at,-3,-1),b=plus(at,q*(side?1:4),-[3,5,6,5,4,4,3,3][f]);addHands(a,b);const end=f===4?plus(at,0,-1):f===3?plus(b,q,0):f===5?plus(b,q,1):plus(b,q*2,-4);tool.rod(b,end);tool.rect(end[0]-2,end[1]-1,5,3,'metal0');tool.line(end[0]-2,end[1]-1,end[0]+2,end[1]-1,'metal2');p.tool='hammer';p.contact={point:at,active:f===4};return;
+  }
+  if(action==='pottery'){
+   const at=project(view,0,5,3);scene.ellipse(at[0],at[1]+2,8,2,'wood0');pot(tool,...at);addHands(plus(at,-4,-1+(f%2)),plus(at,4,-1-(f%2)));p.tool='pot';return;
+  }
+  if(action==='stir'){
+   const at=project(view,0,8,3);pot(scene,...at);const end=plus(at,[0,1,2,1,0,-1,-2,-1][f],-2),grip=plus(end,side?-q*2:3,-8);tool.rod(end,grip,'wood1','wood2');addHands(project(view,back?4:-4,3,8),grip);p.tool='stirring_spoon';return;
+  }
+  if(action==='ledger'){
+   const at=project(view,0,5,8);tool.rect(at[0]-6,at[1]-2,13,7,'O');tool.rect(at[0]-5,at[1]-1,5,5,'paper2');tool.rect(at[0]+1,at[1]-1,5,5,'paper1');tool.line(at[0],at[1]-1,at[0],at[1]+3,'wood0');tool.line(at[0]-4,at[1],at[0]-2,at[1],'wood1');tool.line(at[0]+2,at[1]+1,at[0]+4,at[1]+1,'wood1');
+   const a=plus(at,-5,3),b=plus(at,4-(f%3),-1);tool.line(...b,b[0]+2,b[1]-3,'paper2');addHands(a,b);p.tool='ledger';return;
+  }
+  if(action==='eat'||action==='drink'){
+   const r=rigFor(sex,view),mouth=[r.x+(view==='gauche'?3:view==='droite'?13:9),r.y+(r.side?8:8)+p.head],rest=project(view,3,3,7),at=mix(rest,plus(mouth,0,1),t);addHands(project(view,-4,3,7),at);
+   if(action==='eat'){tool.ellipse(at[0]+q,at[1]-1,2,2,'food0');tool.set(at[0]+q,at[1]-2,'food1');}else{tool.rect(at[0]-1,at[1]-3,4,4,'wood1');tool.line(at[0]-1,at[1]-3,at[0]+2,at[1]-3,'rope2');tool.line(at[0]+3,at[1]-2,at[0]+3,at[1],'wood0');}p.tool=action==='eat'?'food':'cup';return;
+  }
+ }
+ function recolorBase(image,sex,palette){const source=BASES[sex].PALETTE,target=paletteFor(sex,palette),look=new Map(Object.entries(source).map(([k,h])=>[parseInt(h.slice(1),16),color(target[k])]));const out=new Uint8ClampedArray(image.data.length);
+  for(let i=0;i<out.length;i+=4)if(image.data[i+3])out.set(look.get((image.data[i]<<16)|(image.data[i+1]<<8)|image.data[i+2]),i);return {...image,data:out};
+ }
+ function renderLayers(options={}){
+  const sex=sexName(options.sex),action=canonical(options.action),view=directionName(options.dir),frame=checkFrame(action,options.frame===undefined?0:options.frame),palette=paletteName(sex,options.palette);
+  const bodyPal=paletteFor(sex,palette),layers=Object.fromEntries(LAYERS.map(k=>[k,new Pixels(k==='body'||k==='hands'?bodyPal:TOOL_COLORS)]));
+  let p=poseFor(action,frame,view),joints=[];
+  if(action==='idle'||action==='walk'){
+   const baseAction=action;layers.body.data.set(recolorBase(BASES[sex].raster(baseAction,view,frame),sex,palette).data);
+  }else{makeTools(layers,sex,action,view,p,frame,options);joints=drawBody(layers,sex,view,p);
+   const neutral=(action==='sit_down'&&frame===0)||(action==='stand_up'&&frame===CLIPS[action].frames-1)||(['hit','startle'].includes(action)&&(frame===0||frame===CLIPS[action].frames-1))||(action==='death'&&frame===0)||(action==='cower_enter'&&frame===0)||(action==='cower_exit'&&frame===CLIPS[action].frames-1)||(action==='unload'&&frame===CLIPS[action].frames-1);
+   if(neutral){layers.body.data.set(recolorBase(BASES[sex].raster('idle',view,0),sex,palette).data);layers.hands.data.fill(0);joints=[];}
+  }
+  const result=Object.fromEntries(LAYERS.map(k=>[k,{width:80,height:80,anchor:ANCHOR,data:layers[k].data}]));
+  return {layers:result,metadata:{sex,palette,action,direction:view,engineDirection:DIRECTIONS.indexOf(view),frame,anchor:ANCHOR,
+   tool:p.tool,hands:p.hands,joints,contact:p.contact,socketCoordinateSpace:'engine_80px',rootMotion:[0,0],sceneRequired:action==='punt'?'boat':null}};
+ }
+ function raster(options={}){const format=options.format||'engine',which=options.layer||(options.scene?'composite':'actor'),r=renderLayers(options);let image;
+  if(which==='composite')image=composite(LAYERS.map(k=>r.layers[k]));else if(which==='actor')image=composite(ACTOR_LAYERS.map(k=>r.layers[k]));else if(Object.hasOwn(r.layers,which))image=r.layers[which];else throw new RangeError('Calque inconnu : '+which);
+  return {...formatImage(image,format),metadata:r.metadata};
+ }
+ function canvasFactory(w,h){let cv;if(typeof document!=='undefined')cv=document.createElement('canvas');else if(typeof OffscreenCanvas!=='undefined')cv=new OffscreenCanvas(w,h);else throw new Error('Fournir canvasFactory sous Node ; raster() fonctionne sans Canvas.');cv.width=w;cv.height=h;return cv;}
+ class Atlas{
+  constructor(options={}){this.sex=sexName(options.sex);this._palette=paletteName(this.sex,options.palette);this.canvasFactory=options.canvasFactory||canvasFactory;this.maxFrames=options.maxFrames===undefined?128:integer(options.maxFrames,'maxFrames');if(this.maxFrames<1||this.maxFrames>256)throw new RangeError('maxFrames : 1..256');this.cache=new Map();}
+  get palette(){return this._palette;}set palette(name){const n=paletteName(this.sex,name);if(n!==this._palette){this._palette=n;this.clear();}}
+  get(action='idle',dir=2,frame=0,options={}){const id=canonical(action),view=directionName(dir);checkFrame(id,frame);const layer=options.layer||(options.scene?'composite':'actor');const key=[id,view,frame,layer,options.catch!==false].join(':');
+   if(this.cache.has(key)){const v=this.cache.get(key);this.cache.delete(key);this.cache.set(key,v);return v;}
+   const im=raster({...options,sex:this.sex,palette:this.palette,action:id,dir:view,frame,format:'engine'}),cv=this.canvasFactory(80,80);cv.width=cv.height=80;const c=cv.getContext('2d');if(!c)throw new Error('Canvas 2D indisponible.');const data=c.createImageData(80,80);data.data.set(im.data);c.putImageData(data,0,0);
+   this.cache.set(key,cv);while(this.cache.size>this.maxFrames)this.cache.delete(this.cache.keys().next().value);return cv;
+  }
+  draw(ctx,actor,time=0,state={}){if(!ctx||typeof ctx.drawImage!=='function')throw new TypeError('Contexte Canvas 2D attendu.');if(!actor)throw new TypeError('Acteur attendu.');finite(actor.x,'x');finite(actor.y,'y');finite(time,'time');const z=actor.z===undefined?0:finite(actor.z,'z'),alpha=actor.alpha===undefined?1:Math.max(0,Math.min(1,finite(actor.alpha,'alpha')));
+   if(alpha===0)return null;const id=canonical(state.action),frame=state.frame===undefined?frameAt(id,state.elapsed===undefined?time:state.elapsed,state.distance):checkFrame(id,state.frame);const im=this.get(id,actor.dir===undefined?2:actor.dir,frame,state);
+   ctx.save();try{ctx.imageSmoothingEnabled=false;ctx.globalAlpha*=alpha;ctx.drawImage(im,Math.round(actor.x)-40,Math.round(actor.y-z)-52);}finally{ctx.restore();}actor._img=im;return im;
+  }
+  preview(ctx,action,dir,frame,x,y,scale=1,options={}){integer(scale,'scale');finite(x,'x');finite(y,'y');if(scale<1||scale>32)throw new RangeError('scale : 1..32');const im=this.get(action,dir,frame,options);ctx.save();try{ctx.imageSmoothingEnabled=false;ctx.drawImage(im,Math.round(x)-40*scale,Math.round(y)-52*scale,80*scale,80*scale);}finally{ctx.restore();}}
+  clear(){this.cache.clear();}
+ }
+ function buildSheet(options={}){const actions=options.actions||Object.keys(CLIPS),cell=options.format==='native'?48:80,columns=Math.max(...actions.map(a=>CLIPS[canonical(a)].frames)),rows=actions.length*4;
+  if(!actions.length||rows*cell>4096)throw new RangeError('Choisir 1..12 activités par page (max. 4096px).');const result={width:columns*cell,height:rows*cell,data:new Uint8ClampedArray(columns*cell*rows*cell*4)};
+  actions.forEach((a,i)=>SHEET_DIRECTIONS.forEach((d,j)=>{for(let f=0;f<CLIPS[canonical(a)].frames;f++){const im=raster({...options,action:a,dir:d,frame:f});for(let y=0;y<cell;y++)result.data.set(im.data.subarray(y*cell*4,(y+1)*cell*4),(((i*4+j)*cell+y)*result.width+f*cell)*4);}}));return result;
+ }
+ function manifest(){return {id:'batraciens-activities',version:VERSION,authoring:'JavaScript, indexed pixel grids and articulated integer poses',cell:[80,80],anchor:[40,52],nativeCell:[48,48],nativeAnchor:[24,36],nativeOffset:[16,16],directions:DIRECTIONS,sheetDirections:SHEET_DIRECTIONS,clips:CLIPS,aliases:ALIASES,palettes:COLOR_VARIANTS,layers:LAYERS,actorLayers:ACTOR_LAYERS,alpha:'binary',baseV2Preserved:['idle','walk'],rootMotion:'owned by game only',sourcePolicy:'v2 grids are canonical; generated illustrations are intent references only',scope:'Graphic assets and playback only; no NPC spawning, economy, combat AI or resource rewards.'};}
+ const installations=new WeakMap();
+ function installCharacterAtlas(target,options={}){const proto=typeof target==='function'?target.prototype:target;if(!proto||typeof proto.draw!=='function')throw new TypeError('CharacterAtlas attendu.');if(installations.has(proto))return installations.get(proto);const original=proto.draw,atlases=new Map();
+  function wrapped(ctx,kind,actor,time=0){if(kind!=='batracien'&&kind!=='batracienne')return original.apply(this,arguments);const sex=kind==='batracienne'?'female':'male',state=options.stateFor?options.stateFor(actor,time,sex):(actor[kind]||actor.batracien||{action:'idle',elapsed:time}),pal=paletteName(sex,state.palette),key=sex+pal;
+   if(!atlases.has(key))atlases.set(key,new Atlas({...options,sex,palette:pal}));return atlases.get(key).draw(ctx,actor,time,state);}
+  proto.draw=wrapped;const handle={uninstall(){if(proto.draw!==wrapped)throw new Error('Retirer d’abord l’adaptateur ajouté ensuite.');proto.draw=original;for(const a of atlases.values())a.clear();installations.delete(proto);},atlases};installations.set(proto,handle);return handle;
+ }
+ function character(sex){const s=sexName(sex);class CharacterAtlas extends Atlas{constructor(options={}){super({...options,sex:s});}}
+  return Object.freeze({version:VERSION,DIR,ANCHOR,NATIVE_ANCHOR,CLIPS,PALETTE:BASES[s].PALETTE,SOURCE_VIEWS:BASES[s].SOURCE_VIEWS,directionName,frameAt,Atlas:CharacterAtlas,
+   raster(action='idle',dir=2,frame=0,format='engine',options={}){return raster({...options,sex:s,action,dir,frame,format});},
+   buildSheet(format='engine',options={}){return buildSheet({...options,sex:s,format});},manifest,
+   installCharacterAtlas});}
+ const Male=character('male'),Female=character('female');
+ return Object.freeze({VERSION,ANCHOR,NATIVE_ANCHOR,DIR,DIRECTIONS,SHEET_DIRECTIONS,CLIPS,ALIASES,COLOR_VARIANTS,TOOL_COLORS,LAYERS,ACTOR_LAYERS,sexName,directionName,canonical,paletteFor,paletteName,frameAt,sample,crossedMarkers,renderLayers,raster,Atlas,buildSheet,manifest,installCharacterAtlas,Male,Female});
+});
+
+return module.exports;})();
+if(typeof module==='object'&&module.exports)module.exports=API;else{root.HearthreaverBatraciens=API;root.HearthreaverBatracien=API.Male;root.HearthreaverBatracienne=API.Female;}
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+// Combat, tenues et raccord du tronc : Codex / ChatGPT, 2026-10-18. Voir docs/CODEX-BATRACIENS-HANDOFF.md.
+(function(root,factory){'use strict';if(typeof module==='object'&&module.exports)module.exports=factory(require('./batraciens-complet.js'));else root.HearthreaverBatraciensCombattants=factory(root.HearthreaverBatraciens);})(typeof globalThis!=='undefined'?globalThis:this,function(API){'use strict';
+ if(!API) throw new Error('HearthreaverBatraciens requis.');
+ const VERSION='2.3.0';
+ const ANCHOR=API.ANCHOR, NATIVE_ANCHOR=API.NATIVE_ANCHOR, DIR=API.DIR, DIRECTIONS=API.DIRECTIONS, SHEET_DIRECTIONS=API.SHEET_DIRECTIONS;
+ const MALE=API.Male;
+ const freeze=o=>{if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.values(o).forEach(freeze);Object.freeze(o);}return o;};
+ const ROLE_GROUPS=freeze({
+   village_guard:{label:'Garde de communauté',weapon:'spear',offhand:'shield',accent:'guard',banner:false},
+   channel_sentinel:{label:'Sentinelle des voies d’eau',weapon:'spear',offhand:'shield',accent:'water',banner:false},
+   boat_escort:{label:'Escorte de bateliers',weapon:'sword',offhand:'shield',accent:'escort',banner:false},
+   scout:{label:'Éclaireur',weapon:'javelin',offhand:null,accent:'scout',bundle:true,banner:false},
+   raider:{label:'Pillard de chenal',weapon:'club',offhand:null,accent:'raider',banner:false},
+   captain:{label:'Chef de patrouille',weapon:'spear',offhand:'shield',accent:'captain',banner:true}
+ });
+ const LEGACY_CLIPS=freeze({
+   idle:{label:'Repos armé',group:'commun',frames:8,durations:[1300,220,380,320,650,100,130,1200],loop:true,stride:null,duration:4300,terminal:false,base:'idle'},
+   walk:{label:'Marche armée',group:'commun',frames:8,durations:[63,62,63,62,63,62,63,62],loop:true,stride:18,duration:500,terminal:false,base:'walk'},
+   patrol:{label:'Patrouille',group:'commun',frames:8,durations:[63,62,63,62,63,62,63,62],loop:true,stride:18,duration:500,terminal:false,base:'walk'},
+   alert:{label:'Alerte',group:'combat',frames:8,durations:[100,100,100,100,100,100,100,100],loop:false,stride:null,duration:800,terminal:true,base:'startle'},
+   challenge:{label:'Sommer / menacer',group:'combat',frames:8,durations:[120,120,120,120,120,120,120,120],loop:true,stride:null,duration:960,terminal:false,base:'talk'},
+   guard:{label:'Garde haute',group:'combat',frames:8,durations:[140,140,140,140,140,140,140,140],loop:true,stride:null,duration:1120,terminal:false,base:'idle'},
+   block:{label:'Parade / blocage',group:'combat',frames:8,durations:[120,120,120,120,120,120,120,120],loop:true,stride:null,duration:960,terminal:false,base:'cower'},
+   thrust:{label:'Estoc / coup de lance',group:'combat',frames:8,durations:[90,90,90,90,90,90,90,90],loop:false,stride:null,duration:720,terminal:true,base:'fish_spear'},
+   slash:{label:'Taille / frappe courte',group:'combat',frames:8,durations:[90,90,90,90,90,90,90,90],loop:false,stride:null,duration:720,terminal:true,base:'harvest'},
+   throw_javelin:{label:'Lancer de javelot',group:'combat',frames:8,durations:[90,90,90,90,90,90,90,90],loop:false,stride:null,duration:720,terminal:true,base:'fish_cast'},
+   flee:{label:'Fuite armée',group:'combat',frames:8,durations:[80,80,80,80,80,80,80,80],loop:true,stride:18,duration:640,terminal:false,base:'flee'},
+   hit:{label:'Réception d’un coup',group:'combat',frames:8,durations:[100,100,100,100,100,100,100,100],loop:false,stride:null,duration:800,terminal:true,base:'hit'},
+   death:{label:'Mort',group:'combat',frames:8,durations:[120,120,120,120,120,120,120,120],loop:false,stride:null,duration:960,terminal:true,base:'death'},
+   surrender:{label:'Se rendre',group:'combat',frames:8,durations:[120,120,120,120,120,120,120,120],loop:true,stride:null,duration:960,terminal:false,base:'startle'},
+   rally:{label:'Rallier / donner un ordre',group:'combat',frames:8,durations:[120,120,120,120,120,120,120,120],loop:true,stride:null,duration:960,terminal:false,base:'talk'}
+ });
+ // Combat v2: native-pixel posing, attached hands, weapon arcs and brief opaque smears.
+ const ATTACKS=freeze({village_guard:['thrust','sweep'],channel_sentinel:['thrust','overhead'],boat_escort:['slash','backslash'],scout:['throw_javelin','jab'],raider:['slash','crush'],captain:['thrust','sweep','overhead']});
+ const meleeDurations=[90,75,65,70,60,35,35,40,50,60,65,75];
+ function attackClip(label,durations=meleeDurations,contact=.36){return {label,group:'combat',frames:12,durations,loop:false,stride:null,duration:durations.reduce((a,b)=>a+b,0),terminal:true,contact,activeFrames:[5,6],base:'idle'};}
+ const CLIPS=freeze({...LEGACY_CLIPS,
+  thrust:attackClip('Estoc de lance'),sweep:attackClip('Balayage de hampe'),overhead:attackClip('Frappe plongeante'),
+  slash:attackClip('Taille croisée'),backslash:attackClip('Revers court'),crush:attackClip('Coup de massue abattu'),jab:attackClip('Estoc court au javelot'),
+  throw_javelin:attackClip('Lancer de javelot',[130,120,110,100,80,35,35,45,60,70,80,95],.54),
+  guard:{...LEGACY_CLIPS.guard,base:'idle'},guard_walk:{...LEGACY_CLIPS.walk,label:'Déplacement en garde',base:'walk'},block:{...LEGACY_CLIPS.block,frames:6,durations:[35,45,55,65,65,75],duration:340,loop:false,terminal:true,base:'idle'}
+ });
+ function isAttack(a){return !!CLIPS[a]?.activeFrames;}
+ const KEYS={
+  thrust:[[4,6,10,2,7,17],[2,1,11,1,3,18],[0,-3,11,0,-1,19],[-1,-5,11,0,-3,20],[1,-1,11,0,4,23],[5,9,11,0,27,12],[5,11,11,0,29,12],[4,10,11,0,27,12],[3,7,11,0,21,13],[2,5,10,0,15,16],[1,5,10,1,11,17],[4,6,10,2,7,17]],
+  slash:[[4,5,10,3,7,20],[3,3,12,-3,2,22],[1,0,14,-9,-3,24],[0,-1,15,-13,-5,25],[1,1,14,-13,-4,23],[5,7,11,15,15,8],[6,9,10,18,16,4],[6,9,10,17,15,4],[5,8,10,13,13,9],[4,6,10,8,10,14],[4,5,10,4,8,18],[4,5,10,3,7,20]],
+  backslash:[[4,5,10,3,7,20],[5,7,10,9,12,8],[6,8,10,14,13,5],[6,9,10,16,14,5],[5,8,11,17,13,9],[-2,3,13,-16,-1,20],[-3,2,13,-18,-4,20],[-3,1,13,-16,-4,20],[-1,2,12,-12,1,21],[1,3,11,-6,3,22],[3,4,10,0,5,21],[4,5,10,3,7,20]],
+  crush:[[4,5,10,3,7,20],[3,2,13,2,3,25],[2,0,15,1,-2,28],[2,-1,17,0,-4,31],[2,0,17,0,-3,31],[3,10,9,1,18,3],[3,12,7,1,21,1],[3,12,7,1,21,1],[3,11,8,2,18,5],[4,8,9,3,13,10],[4,6,10,3,9,16],[4,5,10,3,7,20]],
+  throw_javelin:[[4,5,11,3,7,24],[4,1,13,4,1,27],[4,-4,15,3,-7,29],[3,-7,15,3,-11,29],[3,-8,15,3,-12,28],[4,9,13,3,26,15],[4,12,12,3,29,12],[4,11,11,3,28,11],[4,9,10,3,24,10],[4,7,10,3,17,14],[4,6,10,3,11,19],[4,5,11,3,7,24]]
+ };
+ function projection(view,l,d,h){if(view==='face')return [40+Math.round(l),52+Math.round(d*.5-h)];if(view==='dos')return [40-Math.round(l),52+Math.round(-d*.5-h)];if(view==='droite')return [40+Math.round(d),52+Math.round(l*.4-h)];return [40-Math.round(d),52+Math.round(-l*.4-h)];}
+ function combatPose(role,action,view,frame){
+  roleName(role);clipName(action);view=directionName(view);integer(frame,'frame');if(frame<0||frame>=CLIPS[action].frames)throw new RangeError('frame hors limite');
+  const guard=['guard','guard_walk','block'].includes(action),walking=['walk','patrol','flee','guard_walk'].includes(action),rest=action==='idle'||walking&&!guard,f=guard?Math.min(frame,5):frame;
+  let key=KEYS[action]||KEYS.thrust;
+  if(action==='sweep')key=KEYS.slash;if(action==='overhead')key=KEYS.crush;if(action==='jab')key=KEYS.thrust;
+  let k=key[f];if(guard)k=[4,3,11,4,6,26];if(rest){const w=ROLE_GROUPS[role].weapon;k=w==='sword'?[4,5,9,4,15,4]:w==='club'?[4,5,9,4,10,19]:[4,5,9,4,7,28];}
+  // A spear sweep keeps its full shaft, unlike a short blade's compact arc.
+  let [l,d,h,tl,td,th]=k;if(action==='sweep'){tl=Math.round(tl*1.45);td=Math.round(td*1.2);}
+  if(action==='overhead')th+=4;if(action==='jab'){td=Math.round(td*.7);th=Math.round(th*.85);}
+  const lean=guard||rest?0:[0,-1,-1,-1,-1,2,2,2,1,1,0,0][f],down=rest?0:guard?(action==='block'?[0,1,1,1,0,0][f]:0):[0,0,0,0,0,1,2,2,1,0,0,0][f];
+  const hand=projection(view,l,d,h),tip=projection(view,tl,td,th);
+  if(rest&&ROLE_GROUPS[role].weapon==='sword'){tip[0]=hand[0]+(view==='gauche'?-10:view==='droite'?10:view==='face'?9:-9);tip[1]=hand[1]+(view==='face'?8:view==='dos'?6:5);}
+  const left=guard?projection(view,-4,8+(action==='block'?[0,-2,-2,-1,0,0][f]:0),12-down):projection(view,-4,3+Math.max(0,lean),10-down);
+  if(rest)left[1]=46;
+  const shift=view==='droite'?[lean,down]:view==='gauche'?[-lean,down]:[0,down+(view==='face'?Math.round(lean*.5):-Math.round(lean*.5))];
+  if(walking){const dy=[0,1,1,0,0,1,1,0][frame];shift[1]+=dy;hand[1]+=dy;tip[1]+=dy;left[1]+=dy;}
+  return {hand,tip,left,shift,frame,view,phase:rest?(walking?'marche armée':'repos armé'):guard?(action==='block'?'impact':'garde'):f<5?'anticipation':f<7?'frappe':'retour',active:!rest&&!guard&&f>=5&&f<=6,release:action==='throw_javelin'&&f>=5};
+ }
+ // Local materials: waxed cloth, reed/cured-leather guards, reused iron and limited bronze.
+ // Equipment denotes occupation, never an innate faction or an enemy skin pigment.
+ const OUTFITS=freeze({
+  village_guard:{label:'Garde · cuir tressé et lin écru',fabric:['#50342f','#754b37','#a16a44','#cf955f'],trim:'#dfc889',metal:'#b9a16b',style:'woven'},
+  channel_sentinel:{label:'Sentinelle · surcot de toile cirée et épaules renforcées',fabric:['#233b3d','#36575b','#547778','#88a3a0'],trim:'#b9a16b',metal:'#708b91',style:'lamellar'},
+  boat_escort:{label:'Épéiste · gilet de cuir et écharpe de lin',fabric:['#30262a','#50342f','#754b37','#a16a44'],trim:'#dfc889',metal:'#c3ced1',style:'vest'},
+  scout:{label:'Éclaireur · mantelet court et brassard de cuir',fabric:['#273a30','#40513a','#647149','#969766'],trim:'#b9a16b',metal:'#795445',style:'mantle'},
+  raider:{label:'Pillard · cuir rapiécé et ceinture de corde',fabric:['#382c2c','#604038','#87513e','#b47759'],trim:'#a18d66',metal:'#708b91',style:'patched'},
+  captain:{label:'Chef · brigandine de cuir, bronze et étoffe garance',fabric:['#412a2d','#683b3c','#96554a','#c18263'],trim:'#d3b374',metal:'#b9a16b',style:'brigandine'}
+ });
+ const HEADGEAR=freeze({village_guard:'bandeau de cuir',channel_sentinel:'calotte de bronze ouverte',boat_escort:'calotte de fer ouverte',scout:'capuchon court',raider:'tête nue',captain:'casque de bronze ouvert à crête courte'});
+ function headgear(image,role,view,action,frame,palette,enabled=true){if(!enabled||role==='raider')return;
+  const rows=MALE.SOURCE_VIEWS[view],side=view==='droite'||view==='gauche',x0=40-Math.floor(rows[0].length/2),y0=52-rows.length+1;
+  let dx=0,dy=0;if(isAttack(action)||['idle','walk','patrol','flee','guard','guard_walk','block'].includes(action)){const p=combatPose(role,action,view,frame);dx=p.shift[0];dy=p.shift[1];if(isAttack(action)&&frame>=2&&frame<=4)dy--;if(action==='idle')dy=MALE.POSES?MALE.POSES.idle[frame].head:([0,-1,-1,-1,0,0,0,0][frame]);}
+  if(['walk','patrol','flee','guard_walk'].includes(action))dy=[0,0,1,0,0,0,1,0][frame];
+  const sourceAction=LEGACY_CLIPS[action]?.base,sourceFrames=API.CLIPS[sourceAction]?.frames;
+  const sourceFrame=sourceFrames?Math.round(frame*(sourceFrames-1)/(CLIPS[action].frames-1)):frame;
+  if(sourceAction==='startle')dy=[0,-1,-2,-1,0,0][sourceFrame];
+  if(sourceAction==='talk')dy=[0,0,-1,-1,0,0,0,0][sourceFrame];
+  if(action==='hit'){dx=[0,-1,-2,-1,0,0][sourceFrame]*(view==='gauche'?-1:1);dy=[0,0,1,1,0,0][sourceFrame];}
+  if(action==='death'){const f=sourceFrame;dy=f<6?[0,0,1,2,3,3][f]:f===6?9:10;dx=f<6?(view==='gauche'?-1:1)*Math.min(f,2):(view==='gauche'?-6:6);}
+  const o=OUTFITS[role],dark=role==='boat_escort'?COLOR.metal0:rgba(o.fabric[0]),mid=role==='boat_escort'?COLOR.metal1:role==='scout'?rgba(o.fabric[1]):rgba(o.metal),light=role==='boat_escort'?COLOR.metal2:rgba(o.trim);
+  // Leave the protruding eyes and mouth exposed: cap bridge and rear skull only.
+  const put=(x,y,c)=>{if(['a','e','y','i'].includes(rows[y]?.[x]))return;set(image,x0+x+dx,y0+y+dy,c);};
+  if(!side){for(let x=6;x<=12;x++){put(x,1,COLOR.outline);put(x,2,x<9?light:mid);put(x,3,dark);}if(role==='scout'){for(const x of [1,17]){put(x,6,dark);put(x,7,mid);put(x,8,dark);}}}
+  else{const back=view==='droite'?3:12;for(let j=0;j<4;j++){put(back,j+3,j===0?light:mid);put(back+(view==='droite'?1:-1),j+3,dark);}for(let x=5;x<=8;x++){put(x,1,COLOR.outline);put(x,2,x<7?light:mid);}if(role==='scout')put(back,7,dark);}
+  if(['channel_sentinel','boat_escort','captain','scout'].includes(role)){if(side){const back=view==='droite'?3:12,sign=view==='droite'?1:-1;for(let y=3;y<=7;y++)for(let j=0;j<3;j++)put(back+sign*j,y,j===0?dark:j===1?mid:light);}else if(view==='dos'){for(let y=3;y<=6;y++)for(let x=5;x<=13;x++)put(x,y,x===5||x===13?dark:(x+y)%4===0?light:mid);}}
+  if(role==='captain'){for(let y=-1;y<=1;y++){put(side?7:9,y,y===-1?COLOR.outline:rgba('#96554a'));}put(side?6:8,0,rgba('#c18263'));}
+ }
+
+ function rgba(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16),255];}
+ function dress(image,role,view,action,frame,shift=[0,0],enabled=true){if(!enabled)return;
+  const o=OUTFITS[role],rows=MALE.SOURCE_VIEWS[view],side=view==='droite'||view==='gauche',x0=40-Math.floor(rows[0].length/2)+shift[0],y0=52-rows.length+1+shift[1];
+  const colors=o.fabric.map(rgba),trim=rgba(o.trim),metal=rgba(o.metal),outline=COLOR.outline;
+  const leather=new Map(['u','v','w','t','r'].map((k,i)=>[MALE.PALETTE[k],colors[Math.min(i,3)]]));
+  const prone=action==='death'&&frame>=4,top=prone?45:y0+9,bottom=prone?51:y0+18;
+  for(let y=top;y<=bottom;y++)for(let x=24;x<=56;x++){const i=(y*80+x)*4;if(!image.data[i+3])continue;const hex='#'+[image.data[i],image.data[i+1],image.data[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');if(leather.has(hex))image.data.set(leather.get(hex),i);}
+  // Decorations stamp only existing cloth/body pixels; silhouettes and hands remain authored.
+  const put=(x,y,c)=>{x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=80||y>=80)return;const i=(y*80+x)*4;if(image.data[i+3])set(image,x,y,c);};
+  const patch=(x,y,w,h,c)=>{for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)put(x+xx,y+yy,c);};
+  if(prone)return;
+  const left=x0+(side?6:5),right=x0+(side?10:13),topY=y0+10;
+  // Closed, continuous tunic. The belt and patterns ride with the torso, never the shield.
+  for(let y=topY;y<=y0+16;y++)for(let x=left;x<=right;x++){
+   const edge=x===left||x===right;put(x,y,edge?colors[0]:colors[1+((x+y)%4===0?1:0)]);
+  }
+  for(let x=left;x<=right;x++)put(x,y0+15,colors[0]);put(side?right-1:x0+9,y0+15,metal);
+  if(o.style==='woven'){for(let y=topY+1;y<y0+15;y+=2)for(let x=left+1;x<right;x+=2)put(x,y,colors[3]);for(let x=left;x<=right;x++)put(x,y0+10,trim);}
+  if(o.style==='lamellar'||o.style==='brigandine'){
+   for(let y=topY+1;y<y0+15;y+=2){for(let x=left+1;x<right;x+=2){put(x,y,metal);put(x,y+1,colors[0]);}}
+   patch(left-1,topY,3,2,colors[2]);patch(right-1,topY,3,2,colors[2]);put(left,topY,metal);put(right,topY,metal);
+   if(o.style==='brigandine'){for(let y=topY;y<y0+17;y++)put(side?left+1:x0+8,y,trim);patch(side?left:x0+5,y0+16,side?3:4,2,colors[2]);}
+  }
+  if(o.style==='vest'){patch(left,topY,2,4,colors[3]);patch(right-1,topY,2,4,colors[2]);patch(side?right-1:x0+8,topY,2,3,trim);put(side?right:x0+10,topY+3,colors[0]);}
+  if(o.style==='patched'){patch(left+1,topY+2,3,3,colors[2]);put(left+1,topY+2,trim);put(left+3,topY+4,trim);for(let x=left;x<=right;x++)put(x,y0+15,(x&1)?trim:colors[3]);patch(right-1,y0+16,2,2,colors[0]);}
+  if(o.style==='mantle'){for(let y=topY-1;y<=topY+3;y++)for(let x=left-1;x<=right+1;x++)put(x,y,x<left+2?colors[2]:colors[1]);put(side?left+1:x0+9,topY,trim);for(let x=left;x<=right;x++)if(x%2===0)put(x,topY+3,colors[0]);}
+  // Neck wraps remain below the mouth and eyes; no sealed helmet in a wet climate.
+  if(o.style==='vest'||o.style==='lamellar'||o.style==='mantle'){
+   for(let x=left-1;x<=right+1;x++)put(x,y0+9,o.style==='vest'?trim:colors[2]);
+  }
+  if(o.style==='brigandine'||o.style==='woven'){
+   const crownY=y0+(isAttack(action)&&frame>=2&&frame<=4?-1:0);
+   if(side){const backX=x0+(view==='droite'?3:12);put(backX,crownY+4,trim);put(backX,crownY+5,metal);}
+   else{for(let x=x0+7;x<=x0+11;x++)put(x,crownY+3,o.style==='brigandine'?metal:colors[2]);put(x0+9,crownY+2,trim);}
+  }
+ }
+
+ function combatRaster(role,action,view,frame,palette,smears=true,outfit=true,equipment=true){
+  const image=empty(),back=empty(),body=empty(),arms=empty(),gear=empty(),fx=empty(),p=combatPose(role,action,view,frame),pal=API.paletteFor('male',palette),rows=MALE.SOURCE_VIEWS[view],side=view==='droite'||view==='gauche',x0=40-Math.floor(rows[0].length/2),y0=52-rows.length+1;
+  const resting=['idle','walk','patrol','flee','guard_walk'].includes(action),walking=resting&&action!=='idle';
+  const reference=resting?API.renderLayers({sex:'male',action:walking?'walk':'idle',dir:view,frame,palette}).layers.body:null;
+  const c=k=>{const h=pal[k];return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16),255];},skin=c('g'),light=c('l'),shade=c('s'),outline=c('O');
+  // Preserve authored head and torso pixel clusters, clear only the articulated arm regions.
+  rows.forEach((row,y)=>{for(let x=0;x<row.length;x++){const k=row[x];if(k==='.')continue;
+   // The civilian reference carries a satchel: remove it from armed silhouettes.
+   if(side&&y>=11&&y<=17&&(view==='droite'?x<=4:x>=11))continue;
+   const head=y<(side?10:9),feet=y>=rows.length-3;if(resting&&(head||walking&&feet))continue;
+   let arm=!side&&y>=11&&y<=15&&(x<=3||x>=15);
+   if(side)arm=view==='droite'?((y===12&&x>=6&&x<=7)||(y>=13&&y<=17&&x>=5&&x<=10)):((y===12&&x>=8&&x<=9)||(y>=13&&y<=17&&x>=6&&x<=10)||(y>=14&&y<=16&&x===5));
+   if(arm)continue;let dx=feet?0:p.shift[0],dy=feet?0:p.shift[1];
+   if(head&&isAttack(action)&&frame>=2&&frame<=4)dy-=1;
+   if(feet&&isAttack(action)){const near=x<rows[0].length/2;dx=side?(view==='droite'?1:-1)*(near?-1:1)*(frame>=5&&frame<=8?2:1):near?-1:1;}
+   set(body,x0+x+dx,y0+y+dy,c(k));
+  }});
+  if(resting){rect(body,37,40+p.shift[1],6,5,c('b'));for(let y=y0-2;y<y0+(side?10:9);y++)for(let x=24;x<56;x++){const i=(y*80+x)*4;if(reference.data[i+3])body.data.set(reference.data.subarray(i,i+4),i);}
+   if(walking)for(let y=y0+rows.length-4;y<=53;y++)for(let x=24;x<56;x++){const i=(y*80+x)*4;if(reference.data[i+3])body.data.set(reference.data.subarray(i,i+4),i);}
+  }
+  // Removing the source arm also removes pixels it occluded. Rebuild the actual trunk,
+  // independently of shield/outfit visibility, before attaching the articulated arms.
+  const torso=[];if(side)for(let y=11;y<=17;y++)for(let x=5;x<=10;x++){
+   const xx=x0+x+p.shift[0],yy=y0+y+p.shift[1];torso.push([xx,yy]);
+   const at=(yy*80+xx)*4;if(!body.data[at+3])set(body,xx,yy,c(x===5||x===10?'u':'v'));
+  }
+  dress(body,role,view,action,frame,p.shift,outfit);
+  function arm(layer,shoulder,hand,far){const elbow=[Math.round((shoulder[0]+hand[0])/2)+(side?0:far?-1:1),Math.round((shoulder[1]+hand[1])/2)+1];for(const [a,b] of [[shoulder,elbow],[elbow,hand]]){for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])line(layer,a[0]+dx,a[1]+dy,b[0]+dx,b[1]+dy,outline);line(layer,...a,...b,far?shade:skin);}set(layer,elbow[0]-1,elbow[1],light);rect(layer,hand[0]-1,hand[1]-1,3,3,outline);rect(layer,hand[0],hand[1],2,2,c('b'));return {shoulder,elbow,hand};}
+  const shoulder=(left)=>[40+(side?0:left?-5:5)+p.shift[0],42+p.shift[1]];
+  const joints=[arm(view==='gauche'?arms:back,shoulder(true),p.left,view!=='gauche'),arm(view==='gauche'?back:arms,shoulder(false),p.hand,view==='gauche')];
+  const spec=ROLE_GROUPS[role],weapon=spec.weapon;
+  if(equipment&&spec.offhand==='shield')shield(view==='dos'||view==='droite'?back:gear,p.left[0],p.left[1],view,spec.accent);
+  if(equipment&&spec.bundle){const bx=view==='gauche'?44:view==='droite'?36:40;rect(back,bx-1,40,3,8,'leather0');rect(back,bx,40,1,7,'leather1');line(back,bx,40,bx,35,'wood2');set(back,bx,34,'metal1');}
+  if(equipment&&smears&&p.active){const prev=combatPose(role,action,view,frame-1);const av=[prev.tip[0]-prev.hand[0],prev.tip[1]-prev.hand[1]],bv=[p.tip[0]-p.hand[0],p.tip[1]-p.hand[1]];let a0=Math.atan2(av[1],av[0]),delta=Math.atan2(bv[1],bv[0])-a0;while(delta>Math.PI)delta-=Math.PI*2;while(delta<-Math.PI)delta+=Math.PI*2;
+   for(let j=0;j<=24;j++){const t=j/24,a=a0+delta*t,len=Math.hypot(...av)*(1-t)+Math.hypot(...bv)*t,mx=prev.hand[0]*(1-t)+p.hand[0]*t,my=prev.hand[1]*(1-t)+p.hand[1]*t;
+    for(let r=len*.68;r<=len;r+=.7){const x=Math.round(mx+Math.cos(a)*r),y=Math.round(my+Math.sin(a)*r);if(j<5&&((x+y)&1))continue;set(fx,x,y,r>len*.9?'metal2':'metal1');}
+   }
+  }
+  const behind=view==='dos'||(resting&&view==='gauche')||(isAttack(action)&&p.tip[1]<32&&frame<5),wl=behind?back:gear;
+  if(equipment&&!(action==='throw_javelin'&&frame>=5)){
+   if(weapon==='spear'){
+    const vx=p.tip[0]-p.hand[0],vy=p.tip[1]-p.hand[1],len=Math.max(1,Math.hypot(vx,vy));const butt=[Math.round(p.hand[0]-vx/len*7),Math.round(p.hand[1]-vy/len*7)];line(wl,...butt,...p.tip,'wood0');spear(wl,p.hand,p.tip,spec.accent,spec.banner);
+   }else if(weapon==='sword')sword(wl,p.hand,p.tip);else if(weapon==='club')club(wl,p.hand,p.tip);else javelin(wl,p.hand,p.tip);
+  }
+  merge(image,fx);merge(image,back);merge(image,body);merge(image,arms);merge(image,gear);
+  // Knuckles remain above the grip; the weapon can never float beside a detached hand.
+  set(image,p.hand[0],p.hand[1],c('b'));set(image,p.hand[0]+1,p.hand[1],c('c'));
+  return {...image,metadata:{role,action,direction:view,engineDirection:DIRECTIONS.indexOf(view),frame,palette,anchor:ANCHOR,phase:p.phase,outfit:outfit?OUTFITS[role].label:null,torso,active:p.active,smear:p.active&&smears&&equipment,joints,weapon:{hand:p.hand,tip:p.tip},release:p.release}};
+ }
+
+ const COLOR=freeze({
+   outline:[16,14,32,255], wood0:[80,52,47,255], wood1:[117,75,55,255], wood2:[161,106,68,255],
+   metal0:[94,104,110,255], metal1:[143,152,156,255], metal2:[207,213,214,255],
+   leather0:[80,52,47,255], leather1:[117,75,55,255],
+   shield0:[70,60,40,255], shield1:[115,99,66,255], shield2:[184,164,105,255],
+   cloth0:[69,92,115,255], cloth1:[107,136,163,255], cloth2:[166,185,201,255],
+   red0:[124,43,42,255], red1:[176,77,62,255], red2:[214,145,92,255],
+   green0:[63,97,86,255], green1:[88,137,122,255], green2:[121,175,154,255],
+   gold0:[181,119,44,255], gold1:[243,175,60,255], gold2:[255,212,94,255]
+ });
+ function finite(n,label){if(typeof n!=='number'||!Number.isFinite(n)) throw new TypeError(label+' doit être un nombre fini.');return n;}
+ function integer(n,label){if(!Number.isInteger(n)) throw new TypeError(label+' doit être un entier.');return n;}
+ function clipName(name){if(!Object.hasOwn(CLIPS,name)) throw new RangeError('Animation inconnue : '+name); return name;}
+ function roleName(name){if(!Object.hasOwn(ROLE_GROUPS,name)) throw new RangeError('Rôle inconnu : '+name); return name;}
+ function directionName(dir){return API.directionName(dir);}
+ function paletteName(name){return API.paletteName('male',name||'original');}
+ function frameAt(action='idle',seconds=0,distancePx){const clip=CLIPS[clipName(action)];finite(seconds,'seconds');const total=clip.duration;let ms; if(clip.stride!==null&&distancePx!==undefined){finite(distancePx,'distancePx'); ms=((distancePx%clip.stride+clip.stride)%clip.stride)/clip.stride*total;} else {ms=Math.max(0,seconds)*1000; ms=clip.loop?ms%total:Math.min(ms,total-0.001);} for(let i=0;i<clip.frames;i++){if(ms<clip.durations[i]) return i; ms-=clip.durations[i];} return clip.frames-1;}
+ function empty(w=80,h=80){return {width:w,height:h,anchor:ANCHOR,data:new Uint8ClampedArray(w*h*4)};}
+ function clone(image){return {width:image.width,height:image.height,anchor:image.anchor,data:new Uint8ClampedArray(image.data)};}
+ function set(image,x,y,color){if(x<0||y<0||x>=image.width||y>=image.height) return; const c=Array.isArray(color)?color:COLOR[color]; if(!c) return; const i=(y*image.width+x)*4; image.data[i]=c[0]; image.data[i+1]=c[1]; image.data[i+2]=c[2]; image.data[i+3]=c[3];}
+ function line(image,x0,y0,x1,y1,color){x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);let dx=Math.abs(x1-x0),sx=x0<x1?1:-1,dy=-Math.abs(y1-y0),sy=y0<y1?1:-1,err=dx+dy;for(;;){set(image,x0,y0,color); if(x0===x1&&y0===y1) break; const e2=2*err; if(e2>=dy){err+=dy;x0+=sx;} if(e2<=dx){err+=dx;y0+=sy;}}}
+ function rect(image,x,y,w,h,color){for(let j=0;j<h;j++) for(let i=0;i<w;i++) set(image,x+i,y+j,color);}
+ function ellipse(image,cx,cy,rx,ry,color,fill=true){for(let y=-ry;y<=ry;y++)for(let x=-rx;x<=rx;x++){const v=(x*x)/(rx*rx)+(y*y)/(ry*ry); if(fill? v<=1 : Math.abs(v-1)<0.35) set(image,cx+x,cy+y,color);}}
+ function merge(dst,src){for(let i=0;i<dst.data.length;i+=4){const a=src.data[i+3]; if(!a) continue; dst.data[i]=src.data[i]; dst.data[i+1]=src.data[i+1]; dst.data[i+2]=src.data[i+2]; dst.data[i+3]=a; } return dst;}
+ function composite(list){const out=empty(list[0].width,list[0].height); for(const im of list) merge(out,im); return out;}
+ function formatImage(image,format){if(format==='engine'||!format) return image; if(format==='native'){for(let y=0;y<80;y++)for(let x=0;x<80;x++)if((x<16||y<16||x>=64||y>=64)&&image.data[(y*80+x)*4+3])throw new RangeError('Cette pose comporte du matériel au sol hors 48x48 ; utiliser engine 80x80, sans recadrage destructeur.');const out=empty(48,48); for(let y=0;y<48;y++) for(let x=0;x<48;x++){const sx=x+16,sy=y+16,si=(sy*80+sx)*4,di=(y*48+x)*4; out.data[di]=image.data[si]; out.data[di+1]=image.data[si+1]; out.data[di+2]=image.data[si+2]; out.data[di+3]=image.data[si+3];} out.anchor=NATIVE_ANCHOR; return out;} throw new RangeError('Format attendu : engine ou native');}
+ function baseFrameData(action,view,frame,palette){const base=CLIPS[action].base; const baseClip=API.CLIPS[base]; const mapped=baseClip.frames===CLIPS[action].frames?frame:Math.max(0,Math.min(baseClip.frames-1,Math.round(frame*(baseClip.frames-1)/(CLIPS[action].frames-1)))); const r=API.renderLayers({sex:'male',action:base,dir:view,frame:mapped,palette}); return {image:composite([r.layers.body,r.layers.hands]),body:r.layers.body,hands:r.layers.hands,meta:r.metadata};}
+ function fallbackHands(view){if(view==='face') return [[36,42],[44,45]]; if(view==='dos') return [[38,42],[42,45]]; if(view==='droite') return [[47,42],[43,46]]; return [[33,42],[37,46]];}
+ function handsFor(meta,view){return meta&&Array.isArray(meta.hands)&&meta.hands.length===2?meta.hands:fallbackHands(view);}
+ function shield(image,cx,cy,view,accent){const accentColor=accent==='water'?'cloth1':accent==='captain'?'red1':'shield2'; if(view==='face'||view==='dos'){ellipse(image,cx,cy,5,6,'shield0'); ellipse(image,cx,cy,4,5,'shield1'); rect(image,cx-1,cy-4,2,8,accentColor); rect(image,cx-3,cy-1,6,2,'metal2');} else {ellipse(image,cx,cy,4,6,'shield0'); ellipse(image,cx,cy,3,5,'shield1'); rect(image,cx-1,cy-4,1,8,accentColor); rect(image,cx-2,cy-1,4,2,'metal2');}}
+ function spear(image,a,b,accent,banner){line(image,a[0],a[1],b[0],b[1],'wood2'); const dx=Math.sign(b[0]-a[0])||1,dy=Math.sign(b[1]-a[1])||-1; set(image,b[0],b[1],'metal2'); set(image,b[0]-dx,b[1]-dy,'metal1'); set(image,b[0]-dx,b[1],'metal0'); if(banner){rect(image,a[0]+(dx<0?-4:1),a[1]-6,3,5,'red1'); set(image,a[0]+(dx<0?-2:3),a[1]-2,'red2');}}
+ function sword(image,a,b){line(image,a[0],a[1],b[0],b[1],'metal1'); line(image,b[0],b[1],b[0]+(b[0]>=a[0]?1:-1),b[1]-1,'metal2'); line(image,a[0]-1,a[1],a[0]+1,a[1],'gold1'); set(image,a[0],a[1]+1,'wood0');}
+ function club(image,a,b){line(image,a[0],a[1],b[0],b[1],'wood1'); rect(image,b[0]-1,b[1]-1,3,3,'wood2'); set(image,b[0]+1,b[1]+1,'metal0');}
+ function javelin(image,a,b){line(image,a[0],a[1],b[0],b[1],'wood2'); set(image,b[0],b[1],'metal2'); set(image,b[0]-Math.sign(b[0]-a[0]||1),b[1],'metal1');}
+ function bundle(image,cx,cy,count=3){for(let i=0;i<count;i++) line(image,cx+i,cy+6,cx+4+i,cy-6,'wood2'); for(let i=0;i<count;i++) set(image,cx+4+i,cy-6,'metal2'); }
+ function roleAccent(role){return ROLE_GROUPS[role].accent;}
+ function guardHandPose(view,frame){const bob=[0,0,1,1,0,-1,-1,0][frame]; if(view==='face') return {main:[[44,44],[46,29+bob]],off:[35,44],shield:[31,42+bob]}; if(view==='dos') return {main:[[36,44],[34,28+bob]],off:[45,44],shield:[48,42+bob]}; if(view==='droite') return {main:[[44,45],[50,29+bob]],off:[41,44],shield:[38,42+bob]}; return {main:[[36,45],[30,29+bob]],off:[39,44],shield:[42,42+bob]};}
+ function attackPose(view,frame,kind){const t=frame/7; if(kind==='thrust'){ if(view==='face') return {a:[44,43],b:[44,30-2*t],c:[36,44],shield:[32,42]}; if(view==='dos') return {a:[36,43],b:[36,28-2*t],c:[44,44],shield:[48,42]}; if(view==='droite') return {a:[44,43],b:[50+Math.round(t*5),38-Math.round(t*3)],c:[41,45],shield:[38,42]}; return {a:[36,43],b:[30-Math.round(t*5),38-Math.round(t*3)],c:[39,45],shield:[42,42]}; }
+ if(kind==='slash'){ if(view==='face') return {a:[43,41],b:[49-Math.round(t*5),31+Math.round(t*8)],c:[35,44],shield:[31,42]}; if(view==='dos') return {a:[37,41],b:[31+Math.round(t*5),31+Math.round(t*8)],c:[45,44],shield:[49,42]}; if(view==='droite') return {a:[45,41],b:[52-Math.round(t*6),33+Math.round(t*10)],c:[41,44],shield:[38,42]}; return {a:[35,41],b:[28+Math.round(t*6),33+Math.round(t*10)],c:[39,44],shield:[42,42]}; }
+ if(kind==='throw'){ if(view==='face') return {a:[45,39],b:[49-Math.round(t*8),28+Math.round(t*4)],bundle:[33,40]}; if(view==='dos') return {a:[35,39],b:[31+Math.round(t*8),28+Math.round(t*4)],bundle:[47,40]}; if(view==='droite') return {a:[45,39],b:[52-Math.round(t*3)+Math.round(t*10),30-Math.round(t*8)],bundle:[39,40]}; return {a:[35,39],b:[28+Math.round(t*3)-Math.round(t*10),30-Math.round(t*8)],bundle:[41,40]}; }
+ return null; }
+ function challengePose(view,frame){const t=frame/7; if(view==='face') return {point:[[44,42],[48,37-Math.round(t*2)]],off:[35,44],shield:[31,42]}; if(view==='dos') return {point:[[36,42],[32,37-Math.round(t*2)]],off:[45,44],shield:[48,42]}; if(view==='droite') return {point:[[44,42],[52,39]],off:[41,44],shield:[38,42]}; return {point:[[36,42],[28,39]],off:[39,44],shield:[42,42]}; }
+ function renderRoleGear(role,action,view,frame,image,meta){const spec=ROLE_GROUPS[role], accent=roleAccent(role); const hands=handsFor(meta,view);
+  // back bundle for scout
+  if(spec.bundle && !['death','surrender'].includes(action)){ if(view==='dos') bundle(image,42,38,3); else if(view==='droite') bundle(image,45,39,3); else if(view==='gauche') bundle(image,31,39,3); }
+  if(action==='death'){
+    if(spec.weapon==='spear') spear(image,[48,54],[55,69],accent,spec.banner); else if(spec.weapon==='sword') sword(image,[47,55],[54,62]); else if(spec.weapon==='club') club(image,[47,56],[53,61]); else if(spec.weapon==='javelin') javelin(image,[48,55],[55,62]);
+    if(spec.offhand==='shield') shield(image,31,58,view,accent); return;
+  }
+  if(action==='surrender') return;
+  if(action==='block'){
+    if(spec.offhand==='shield'){ const p=guardHandPose(view,frame); shield(image,p.shield[0],p.shield[1]-(view==='face'||view==='dos'?2:1),view,accent);} 
+    if(spec.weapon==='spear'){ const p=guardHandPose(view,frame); spear(image,p.main[0], p.main[1], accent,spec.banner); }
+    return;
+  }
+  if(action==='alert'||action==='guard'||action==='idle'||action==='walk'||action==='patrol'||action==='flee'||action==='hit'){
+    const p=guardHandPose(view,frame); if(spec.offhand==='shield') shield(image,p.shield[0],p.shield[1],view,accent);
+    if(spec.weapon==='spear') spear(image,p.main[0],p.main[1],accent,spec.banner);
+    else if(spec.weapon==='sword') sword(image,[view==='gauche'?37:43,46],[view==='gauche'?31:49,35]);
+    else if(spec.weapon==='club') club(image,[view==='gauche'?37:43,46],[view==='gauche'?30:50,38]);
+    else if(spec.weapon==='javelin'){ const q=view==='gauche'?-1:1; javelin(image,[view==='gauche'?37:43,45],[view==='gauche'?29:51,33]); }
+    return;
+  }
+  if(action==='challenge'||action==='rally'){
+    const p=challengePose(view,frame); if(spec.offhand==='shield') shield(image,p.shield[0],p.shield[1],view,accent);
+    if(spec.weapon==='spear') spear(image,p.point[0],p.point[1],accent,spec.banner);
+    else if(spec.weapon==='sword') sword(image,p.point[0],p.point[1]);
+    else if(spec.weapon==='club') club(image,p.point[0],p.point[1]);
+    else if(spec.weapon==='javelin'){ javelin(image,p.point[0],p.point[1]); bundle(image,p.bundle?p.bundle[0]:33,p.bundle?p.bundle[1]:40,2); }
+    return;
+  }
+  if(action==='thrust'){
+    const p=attackPose(view,frame,'thrust'); if(spec.offhand==='shield') shield(image,p.shield[0],p.shield[1],view,accent);
+    if(spec.weapon==='spear') spear(image,p.a,p.b,accent,spec.banner); else if(spec.weapon==='sword') sword(image,p.a,p.b); else if(spec.weapon==='club') club(image,p.a,p.b); else javelin(image,p.a,p.b);
+    return;
+  }
+  if(action==='slash'){
+    const p=attackPose(view,frame,'slash'); if(spec.offhand==='shield') shield(image,p.shield[0],p.shield[1],view,accent);
+    if(spec.weapon==='spear') spear(image,p.a,p.b,accent,spec.banner); else if(spec.weapon==='sword') sword(image,p.a,p.b); else if(spec.weapon==='club') club(image,p.a,p.b); else javelin(image,p.a,p.b);
+    return;
+  }
+  if(action==='throw_javelin'){
+    const p=attackPose(view,frame,'throw'); if(spec.bundle) bundle(image,p.bundle[0],p.bundle[1],2); if(frame<5) javelin(image,p.a,p.b); else if(frame===5) javelin(image,p.a,[p.b[0]+(view==='gauche'?-12:view==='droite'?12:0),p.b[1]-2]);
+    return;
+  }
+ }
+ function raster(options={}){const role=roleName(options.role||'village_guard'), action=clipName(options.action||'idle'), view=directionName(options.dir===undefined?DIR.SOUTH:options.dir), frame=integer(options.frame===undefined?0:options.frame,'frame'), palette=paletteName(options.palette||'original'), format=options.format||'engine';
+  if(frame<0||frame>=CLIPS[action].frames) throw new RangeError('frame hors limite');
+  if(isAttack(action)||['idle','walk','patrol','flee','guard','guard_walk','block'].includes(action)){const im=combatRaster(role,action,view,frame,palette,options.smear!==false,options.outfit!==false,options.equipment!==false);headgear(im,role,view,action,frame,palette,options.headgear!==false);im.metadata.headgear=options.headgear===false?null:HEADGEAR[role];return {...formatImage(im,format),metadata:im.metadata};}
+  const base=baseFrameData(action,view,frame,palette); const image=clone(base.body);
+  // hide stars for hit? body+hands already no tools only.
+  const side=view==='droite'||view==='gauche',rows=MALE.SOURCE_VIEWS[view],x0=40-Math.floor(rows[0].length/2),y0=52-rows.length+1,joint=base.meta.joints?.[side?base.meta.joints.length-1:0];
+  const offset=joint?[joint.shoulder[0]-(x0+(side?8:4)),joint.shoulder[1]-(y0+(side?12:11))]:[0,['walk','patrol','flee'].includes(action)&&[1,2,5,6].includes(frame)?1:0];
+  dress(image,role,view,action,frame,offset,options.outfit!==false);merge(image,base.hands);
+  if(options.equipment!==false)renderRoleGear(role,action,view,frame,image,base.meta);
+  headgear(image,role,view,action,frame,palette,options.headgear!==false);
+  return {...formatImage(image,format), metadata:{role,action,direction:view,engineDirection:DIRECTIONS.indexOf(view),frame,palette,outfit:options.outfit===false?null:OUTFITS[role].label,anchor:format==='native'?NATIVE_ANCHOR:ANCHOR}};
+ }
+ class Atlas{ constructor(options={}){this.role=roleName(options.role||'village_guard'); this.palette=paletteName(options.palette||'original'); this.canvasFactory=options.canvasFactory||defaultCanvasFactory; this.maxFrames=options.maxFrames===undefined?128:integer(options.maxFrames,'maxFrames'); if(this.maxFrames<1||this.maxFrames>256)throw new RangeError('maxFrames : 1..256'); this.cache=new Map();}
+   get(action='idle',dir=DIR.SOUTH,frame=0){const key=[this.role,this.palette,action,dir,frame].join(':'); if(this.cache.has(key)){const v=this.cache.get(key); this.cache.delete(key); this.cache.set(key,v); return v;} const im=raster({role:this.role,palette:this.palette,action,dir,frame,format:'engine'}); const cv=this.canvasFactory(80,80), c=cv.getContext('2d'); const id=c.createImageData(80,80); id.data.set(im.data); c.putImageData(id,0,0); this.cache.set(key,cv); while(this.cache.size>this.maxFrames) this.cache.delete(this.cache.keys().next().value); return cv;}
+   draw(ctx,actor,time=0,state={}){const action=clipName(state.action||'idle'); const frame=state.frame===undefined?frameAt(action,state.elapsed===undefined?time:state.elapsed,state.distance):state.frame; const im=this.get(action,actor.dir===undefined?DIR.SOUTH:actor.dir,frame); const z=actor.z||0, alpha=actor.alpha===undefined?1:actor.alpha; ctx.save(); try{ctx.imageSmoothingEnabled=false; ctx.globalAlpha*=alpha; ctx.drawImage(im,Math.round(actor.x)-ANCHOR.x,Math.round(actor.y-z)-ANCHOR.y);} finally{ctx.restore();} actor._img=im; return im;}
+   clear(){this.cache.clear();}
+ }
+ function defaultCanvasFactory(w,h){let cv;if(typeof document!=='undefined')cv=document.createElement('canvas'); else if(typeof OffscreenCanvas!=='undefined')cv=new OffscreenCanvas(w,h); else throw new Error('Canvas indisponible'); cv.width=w; cv.height=h; return cv;}
+ function buildSheet(options={}){const actions=options.actions||Object.keys(CLIPS), role=roleName(options.role||'village_guard'), palette=paletteName(options.palette||'original'), format=options.format||'engine', cell=format==='native'?48:80; const columns=Math.max(...actions.map(a=>CLIPS[clipName(a)].frames)), rows=actions.length*4; const out={width:columns*cell,height:rows*cell,data:new Uint8ClampedArray(columns*cell*rows*cell*4)}; for(let ai=0;ai<actions.length;ai++) for(let di=0;di<4;di++) for(let f=0;f<CLIPS[actions[ai]].frames;f++){const im=raster({role,palette,action:actions[ai],dir:SHEET_DIRECTIONS[di],frame:f,format}); for(let y=0;y<cell;y++) out.data.set(im.data.subarray(y*cell*4,(y+1)*cell*4), (((ai*4+di)*cell+y)*out.width+f*cell)*4);} return out;}
+ function manifest(){return {id:'batraciens-combattants',version:VERSION,cell:[80,80],anchor:[40,52],nativeCell:[48,48],nativeAnchor:[24,36],directions:DIRECTIONS,sheetDirections:SHEET_DIRECTIONS,roles:ROLE_GROUPS,clips:CLIPS,palettes:API.COLOR_VARIANTS.male,scope:'Male armed roles only. Sprites and playback, no AI or combat rules.'};}
+ return freeze({VERSION,DIR,ANCHOR,NATIVE_ANCHOR,DIRECTIONS,SHEET_DIRECTIONS,ROLES:ROLE_GROUPS,OUTFITS,HEADGEAR,CLIPS,ATTACKS,isAttack,combatPose,frameAt,raster,Atlas,buildSheet,manifest});
+});
+
+(()=>{'use strict';
+const root=document.getElementById('hr-batraciens-combat'),$=name=>root.querySelector('[data-hr="'+name+'"]'),A=globalThis.HearthreaverBatraciensCombattants,C={
+  "version": 1,
+  "status": "runtime_population_extension",
+  "note": "Named sparse actors, not a new percentage denominator for the four-species world-bible census. Core enemies, transport operators, quest givers and existing residents are preserved.",
+  "maxCivilians": 62,
+  "maxWardens": 11,
+  "activeRadius": 700,
+  "enemyClearance": 220,
+  "allowedBiomes": [
+    5,
+    7,
+    8,
+    12
+  ],
+  "columns": [
+    "site",
+    "civilianJobs",
+    "wardenRole"
+  ],
+  "communities": [
+    [
+      "town-10",
+      [
+        "net",
+        "rope",
+        "rope",
+        "net",
+        "ledger"
+      ],
+      "boat_escort"
+    ],
+    [
+      "town-73",
+      [
+        "rice",
+        "weave",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      "village_guard"
+    ],
+    [
+      "town-74",
+      [
+        "pottery",
+        "gather",
+        "weave",
+        "pottery"
+      ],
+      "channel_sentinel"
+    ],
+    [
+      "town-75",
+      [
+        "weave",
+        "stir",
+        "weave",
+        "pottery"
+      ],
+      "village_guard"
+    ],
+    [
+      "town-76",
+      [
+        "net",
+        "gather",
+        "weave",
+        "pottery"
+      ],
+      "channel_sentinel"
+    ],
+    [
+      "town-77",
+      [
+        "gather",
+        "stir",
+        "weave",
+        "pottery"
+      ],
+      "captain"
+    ],
+    [
+      "town-27",
+      [
+        "craft",
+        "net",
+        "rope",
+        "net"
+      ],
+      "boat_escort"
+    ],
+    [
+      "town-40",
+      [
+        "ledger",
+        "rope",
+        "rope",
+        "net",
+        "ledger"
+      ],
+      "boat_escort"
+    ],
+    [
+      "town-50",
+      [
+        "net",
+        "pottery",
+        "rope",
+        "net"
+      ],
+      "channel_sentinel"
+    ],
+    [
+      "town-55",
+      [
+        "gather",
+        "weave",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      "scout"
+    ],
+    [
+      "town-61",
+      [
+        "craft",
+        "stir",
+        "weave",
+        "pottery"
+      ],
+      null
+    ],
+    [
+      "town-1",
+      [
+        "ledger",
+        "net",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      "village_guard"
+    ],
+    [
+      "town-25",
+      [
+        "net",
+        "weave",
+        "weave",
+        "pottery",
+        "ledger"
+      ],
+      null
+    ],
+    [
+      "town-38",
+      [
+        "weave",
+        "pottery",
+        "weave",
+        "pottery"
+      ],
+      null
+    ]
+  ],
+  "malePalettes": [
+    "original",
+    "jade",
+    "turquoise_sombre",
+    "ocre_mousse",
+    "ardoise"
+  ],
+  "femalePalettes": [
+    "rose_mauve",
+    "lilas",
+    "prune_rose",
+    "corail_doux"
+  ],
+  "hostileEvents": [
+    "bandits"
+  ],
+  "combat": {
+    "village_guard": {
+      "attack": "thrust",
+      "range": 29,
+      "damage": 1,
+      "hp": 8,
+      "cooldown": 1.5,
+      "contact": 0.36,
+      "shield": true
+    },
+    "channel_sentinel": {
+      "attack": "thrust",
+      "range": 29,
+      "damage": 1,
+      "hp": 8,
+      "cooldown": 1.5,
+      "contact": 0.36,
+      "shield": true
+    },
+    "boat_escort": {
+      "attack": "slash",
+      "range": 24,
+      "damage": 1,
+      "hp": 8,
+      "cooldown": 1.3,
+      "contact": 0.36,
+      "shield": true
+    },
+    "scout": {
+      "attack": "throw_javelin",
+      "range": 100,
+      "damage": 1,
+      "hp": 6,
+      "cooldown": 2.2,
+      "contact": 0.54,
+      "shield": false
+    },
+    "raider": {
+      "attack": "slash",
+      "range": 25,
+      "damage": 1,
+      "hp": 3,
+      "cooldown": 1.5,
+      "contact": 0.36,
+      "shield": false
+    },
+    "captain": {
+      "attack": "thrust",
+      "range": 29,
+      "damage": 1,
+      "hp": 10,
+      "cooldown": 1.4,
+      "contact": 0.36,
+      "shield": true
+    }
+  },
+  "society": {
+    "version": 1,
+    "localSlots": [
+      2,
+      3
+    ],
+    "walkRadius": 176,
+    "talkRadius": 64,
+    "witnessRadius": 220,
+    "pursuitRadius": 380,
+    "angerMinutes": 180,
+    "roads": [
+      {
+        "site": "town-10",
+        "slot": 4,
+        "to": "town-74",
+        "sex": "male"
+      },
+      {
+        "site": "town-73",
+        "slot": 4,
+        "to": "town-74",
+        "sex": "female"
+      },
+      {
+        "site": "town-40",
+        "slot": 4,
+        "to": "town-27",
+        "sex": "male"
+      },
+      {
+        "site": "town-55",
+        "slot": 4,
+        "to": "town-61",
+        "sex": "female"
+      },
+      {
+        "site": "town-1",
+        "slot": 4,
+        "to": "town-38",
+        "sex": "female"
+      },
+      {
+        "site": "town-25",
+        "slot": 4,
+        "to": "town-38",
+        "sex": "male"
+      }
+    ]
+  }
+};
+const canvas=$('canvas'),ctx=canvas.getContext('2d'),lineup=$('lineup'),lc=lineup.getContext('2d');
+let role='village_guard',action='idle',direction=2,frame=0,elapsed=0,cycle=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,last=0,notice='',test=null,testAge=0,hold=.42;
+const cache=new Map();function drawSprite(r,a,d,f,x,y,zoom,smear=true,target=ctx,loadout=undefined){const palette=$('palette').value,equipment=loadout===undefined?$('equipment').checked:loadout,key=[r,a,d,f,smear,equipment,palette].join('|');let cv=cache.get(key);if(!cv){const im=A.raster({role:r,action:a,dir:d,frame:f,palette,smear,equipment});cv=document.createElement('canvas');cv.width=cv.height=80;const c=cv.getContext('2d'),id=c.createImageData(80,80);id.data.set(im.data);c.putImageData(id,0,0);cache.set(key,cv);if(cache.size>200)cache.delete(cache.keys().next().value);}target.drawImage(cv,Math.round(x)-40*zoom,Math.round(y)-52*zoom,80*zoom,80*zoom);}
+for(const[k,v]of Object.entries(A.ROLES))$('role').add(new Option(v.label,k));$('role').value=role;
+function actions(){const old=$('action').value||'idle';$('action').replaceChildren();for(const a of [...A.ATTACKS[role],'guard','guard_walk','block','idle','walk','hit','death'])$('action').add(new Option(A.CLIPS[a].label,a));action=(A.ATTACKS[role].includes(old)||['idle','walk','guard','block','hit','death'].includes(old))?old:'idle';$('action').value=action;reset();}
+function reset(){elapsed=0;frame=0;cycle=Math.max(0,A.ATTACKS[role].indexOf(action));notice='';test=null;testAge=0;$('frame').max=A.CLIPS[action].frames-1;status();}
+function status(){const c=A.CLIPS[action],phase=A.isAttack(action)?A.combatPose(role,action,direction,frame).phase:c.label;$('frame').max=c.frames-1;$('frame-label').textContent=(frame+1)+' / '+c.frames;$('frame').value=frame;$('status').textContent=notice||A.OUTFITS[role].label+' · '+A.HEADGEAR[role]+' · '+phase+(A.isAttack(action)?' · contact '+Math.round(c.contact*1000)+' ms':'');$('play').textContent=playing?'Pause':'Lecture';const shield=!!A.ROLES[role].offhand;for(const k of ['front','rear','heavy'])$(k).disabled=!shield;}
+$('role').onchange=()=>{role=$('role').value;actions();};$('action').onchange=()=>{action=$('action').value;reset();};$('direction').onchange=()=>{direction=+$('direction').value;test=null;notice='';};$('play').onclick=()=>{playing=!playing;status();};$('next').onclick=()=>{playing=false;test=null;notice='';frame=(frame+1)%A.CLIPS[action].frames;elapsed=A.CLIPS[action].durations.slice(0,frame).reduce((a,b)=>a+b,0)/1000;status();};$('frame').oninput=()=>{playing=false;test=null;notice='';frame=+$('frame').value;elapsed=A.CLIPS[action].durations.slice(0,frame).reduce((a,b)=>a+b,0)/1000;status();};
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),combatSpec=n=>C.combat[n.batracien.role],alive=n=>n&&!n.dead&&!n.batracien?.dead&&!n.civilian?.dead&&(n.alpha??1)>.5,front=(g,n,t,min=.15)=>{const[fX,fY]=g.facing(n.dir);return ((t.x-n.x)*fX+(t.y-n.y)*fY)/Math.max(1,dist(n,t))>min;},visual=(n,a,restart=false)=>{if(n.batracien.action!==a||restart){n.batracien.action=a;n.batracien.elapsed=0;n.batracien.contactDone=false;}},Game={prototype:{}};
+ Game.prototype.tryBatracienBlock=function(n,source){const b=n?.batracien;
+  if(!b?.role||!combatSpec(n).shield||!source||source.unblockable||!alive(n)||n.stun>0||!['guard','guard_walk','block'].includes(b.action)||(b.guardRaise||0)>0||b.guardHold===0||(b.blockCount||0)>=2||!this.sameLevel(n,source)||!this.lineClear(n,source)||!front(this,n,source,.25))return false;
+  if(source===this.player&&source.combo===3){b.guardHold=0;n.stun=.85;n.wind=n.attack=0;visual(n,'hit',true);this.emit('parry');return false;}
+  b.blockCount=(b.blockCount||0)+1;visual(n,'block',true);n.wind=n.attack=0;this.burst(n.x,n.y-14,'#c9d4bc',6);if(source===this.player)this.player.hitPause=.035;this.emit('block');return true;
+ };
+const g={player:{x:120,y:100,combo:0,level:0},sameLevel:(a,b)=>(a.level||0)===(b.level||0),lineClear:()=>true,facing:d=>[[0,-1],[1,0],[0,1],[-1,0]][d],burst:()=>{},emit:()=>{}};
+for(const mode of ['front','rear','heavy'])$(mode).onclick=()=>{
+ direction=1;$('direction').value='1';action='guard';$('action').value='guard';frame=0;elapsed=0;
+ // This isolated test calls the shipped game's defense function; world AI is not simulated here.
+ test={x:100,y:100,dir:1,level:0,stun:0,batracien:{role,action:'guard',elapsed:.2,hp:C.combat[role].hp,guardRaise:0,guardHold:.72,blockCount:0}};testAge=0;
+ g.player.x=mode==='rear'?80:120;g.player.combo=mode==='heavy'?3:0;const blocked=Game.prototype.tryBatracienBlock.call(g,test,g.player);
+ if(!blocked){test.batracien.hp--;visual(test,'hit',true);}
+ notice=blocked?'Bloqué de face · aucun dégât':mode==='heavy'?'Garde brisée · étourdissement 850 ms · dégât reçu':'Coup dans le dos · dégât reçu';playing=true;status();
+};
+const resize=()=>{canvas.width=Math.floor(canvas.getBoundingClientRect().width);canvas.height=canvas.width<420?210:canvas.width<620?260:300;canvas.style.height=canvas.height+'px';lineup.width=canvas.width;lineup.height=canvas.width<420?160:190;lineup.style.height=lineup.height+'px';};new ResizeObserver(resize).observe(canvas);resize();actions();
+function render(now){const dt=last?Math.min(.05,(now-last)/1000):0;last=now;const w=canvas.width,h=canvas.height,z=w<420?4:w<620?5:7,ground=h-42,x=Math.round(w*(test?.batracien? .37:.5));
+ ctx.imageSmoothingEnabled=false;ctx.fillStyle='#35434d';ctx.fillRect(0,0,w,h);ctx.fillStyle='#3d4d52';for(let y=38;y<h;y+=24)for(let x=0;x<w;x+=24)if(((x+y)/24|0)%2)ctx.fillRect(x,y,24,24);ctx.fillStyle='#6c796e';ctx.fillRect(0,ground+2,w,1);
+ if(playing){elapsed+=dt*+$('speed').value;if(test)testAge+=dt*+$('speed').value;
+  const c=A.CLIPS[action],total=c.duration/1000;if(A.isAttack(action)&&elapsed>total+hold){elapsed=0;if($('sequence').checked){const list=A.ATTACKS[role];cycle=(cycle+1)%list.length;action=list[cycle];$('action').value=action;}}
+  frame=A.frameAt(action,A.CLIPS[action].loop?elapsed:Math.min(elapsed,A.CLIPS[action].duration/1000-.0001));
+ }
+ let visibleAction=action,visibleFrame=frame;if(test){visibleAction=test.batracien.action;visibleFrame=A.frameAt(visibleAction,testAge);if(testAge>1.35){test=null;notice='';}}
+ ctx.fillStyle='#26353b';ctx.beginPath();ctx.ellipse(x,ground+3,12*z,2*z,0,0,Math.PI*2);ctx.fill();drawSprite(role,visibleAction,direction,visibleFrame,x,ground,z,$('smear').checked);
+ if($('equipment').checked&&!test&&action==='throw_javelin'&&elapsed>=A.CLIPS.throw_javelin.contact&&elapsed<A.CLIPS.throw_javelin.contact+.36){const [fx,fy]=g.facing(direction),travel=8+(elapsed-A.CLIPS.throw_javelin.contact)*112,px=x+fx*travel*z,py=ground-16*z+fy*travel*z;for(let i=-4;i<=4;i++){ctx.fillStyle=i===4?'#cfd5d6':'#a16a44';ctx.fillRect(Math.round(px+fx*i*z),Math.round(py+fy*i*z),z,z);}}
+ if(test){const tx=Math.round(w*.78),tz=Math.max(3,z-2);drawSprite('raider','idle',3,0,tx,ground,tz);if(testAge<.18){ctx.fillStyle='#f3dfa4';const sx=x+7*z,sy=ground-12*z;ctx.fillRect(sx,sy,3*z,z);ctx.fillRect(sx+z,sy-z,z,3*z);}}
+ if($('pixels').checked){ctx.strokeStyle='rgba(220,230,210,.15)';ctx.lineWidth=1;ctx.beginPath();for(let xx=x-24*z;xx<x+24*z;xx+=z){ctx.moveTo(xx+.5,ground-44*z);ctx.lineTo(xx+.5,ground+4*z);}for(let yy=ground-44*z;yy<=ground+4*z;yy+=z){ctx.moveTo(x-24*z,yy+.5);ctx.lineTo(x+24*z,yy+.5);}ctx.stroke();}
+ lc.imageSmoothingEnabled=false;lc.fillStyle='#35434d';lc.fillRect(0,0,lineup.width,lineup.height);[3,1].forEach((d,i)=>{const xx=Math.round((i+.5)*lineup.width/2);drawSprite(role,'idle',d,A.frameAt('idle',elapsed),xx,lineup.height-30,lineup.width<420?4:5,false,lc,true);lc.fillStyle='#eadfc8';lc.font='12px system-ui';lc.textAlign='center';lc.fillText(d===3?'Gauche':'Droite',xx,lineup.height-7);});
+ status();requestAnimationFrame(render);
+}requestAnimationFrame(render);
+})();
+</script>
+</div>
+</html>

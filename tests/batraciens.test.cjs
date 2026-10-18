@@ -1,7 +1,7 @@
 'use strict';
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {loadGame,canvas,root}=require('./game-harness.cjs');
-const Artwork=require('../sprites/batraciens/batraciens-complet.js'),Armed=require('../sprites/batraciens/batraciens-combattants.js'),approved=require('../data/batraciens/approved-art.json');
+const Artwork=require('../sprites/batraciens/batraciens-complet.js'),Armed=require('../sprites/batraciens/batraciens-combattants.js'),approved=require('../data/batraciens/approved-art.json'),combatArt=require('../data/batraciens/combat-art-v2.json'),outfitArt=require('../data/batraciens/headgear-tactics-art-v5.json');
 let api,B;before(async()=>{api=await loadGame();B=api.Game.batracienRuntime;});
 const json=x=>JSON.parse(JSON.stringify(x));
 function game(){const g=new api.Game();g.clock=480;g.worldState=new api.Atlas.WorldState({clock:480});g.player.spawnFX=0;return g;}
@@ -14,10 +14,12 @@ function incident(g,type='bandits',siteId='town-73'){
 test('approved civil bundle is unchanged byte-for-byte',()=>{
  const h=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'sprites/batraciens/batraciens-complet.js'))).digest('hex');assert.equal(h,approved.civilBundleSHA256);
 });
-test('all male armed role/palette/frame pixels remain identical to the approved pack',()=>{
+test('outfits match reviewed pixels; disabling outfits retains non-combat v1 frames',()=>{
  for(const role of Object.keys(Armed.ROLES))for(const pal of ['original','jade','turquoise_sombre','ocre_mousse','ardoise']){
-  const hash=crypto.createHash('sha256');for(const action of Object.keys(Armed.CLIPS))for(let dir=0;dir<4;dir++)for(let frame=0;frame<8;frame++)hash.update(Armed.raster({role,palette:pal,action,dir,frame}).data);
-  assert.equal(hash.digest('hex'),approved.armed[role+':'+pal],role+':'+pal);
+  for(const [actions,expected,outfit] of [[Object.keys(Armed.CLIPS),outfitArt.armed,true],[combatArt.unchangedActions.filter(a=>!['idle','walk','patrol','flee'].includes(a)),outfitArt.legacyUnchanged,false]]){
+   const hash=crypto.createHash('sha256');for(const action of actions)for(let dir=0;dir<4;dir++)for(let frame=0;frame<Armed.CLIPS[action].frames;frame++)hash.update(Armed.raster({role,palette:pal,action,dir,frame,outfit,headgear:outfit}).data);
+   assert.equal(hash.digest('hex'),expected[role+':'+pal],role+':'+pal);
+  }
  }
 });
 test('14 real wetland communities create 62 civilians and 11 separate male wardens',()=>{

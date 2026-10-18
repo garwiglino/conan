@@ -1,10 +1,14 @@
 # Batraciens — intégration jouable et palettes
 
-Les dessins approuvés sont conservés : les sources JavaScript des mâles et des
-femelles v2/v3, leurs animations civiles et les six rôles armés mâles. Aucun
-personnage n'est redessiné pour changer de couleur. Les empreintes de référence
-sont dans `data/batraciens/approved-art.json` et testées sur toutes les images
-80 × 80 des combattants, pour les cinq palettes mâles.
+Coordination : [ajouts de Codex / ChatGPT et raccord à la PR de Claude](CODEX-BATRACIENS-HANDOFF.md).
+
+Les dessins civils approuvés sont conservés : bases mâles et femelles v2/v3
+et animations de métier. La révision de combat v2 articule les six rôles armés
+sur ces mêmes grilles et palettes. La révision de tenues v3 leur ajoute des
+vêtements propres à leur fonction et répare le tronc sous le bras articulé. Les références historiques sont conservées
+dans `data/batraciens/approved-art.json` ; celles du nouveau combat, avec
+vérification des poses hors combat sans tenue, sont dans `combat-art-v2.json`.
+La référence habillée est dans `outfits-art-v3.json`.
 
 ## Contrat graphique
 
@@ -112,8 +116,9 @@ le boss, les squelettes, les manifestations maudites et les ennemis scénarisés
 ne sont pas convertis. Aucun incident supplémentaire n'est tiré pour justifier
 leur présence, et aucune espèce entière ne devient hostile.
 
-Les rôles n'utilisent que l'attaque de leur équipement : estoc pour la lance,
-taille pour l'arme courte/massue, lancer pour l'éclaireur. Direction fixée au
+Les rôles utilisent les attaques de leur équipement : estoc et balayage/plongeon
+pour la lance, taille et revers pour l'épée, taille et frappe abattue pour la
+massue, lancer et estoc rapproché pour l'éclaireur. Direction fixée au
 départ du geste, contact unique, annulation par étourdissement/parade, cooldown
 et vérification de portée, niveau et ligne de vue. Les javelots utilisent une
 collision balayée avec obstacles et un nombre maximal de 12 projectiles actifs.
@@ -212,3 +217,32 @@ Sources : `scripts/batraciens-society.js`, `scripts/batraciens-runtime.js` et
 `data/batraciens/communities.json`. Les grilles et palettes des packs approuvés
 n'ont pas été modifiées. Les tests supplémentaires sont dans
 `tests/batraciens-society.test.cjs`.
+
+## Révision de combat v2 — 18 octobre 2026
+
+Les dessins civils restent inchangés. Le combat armé a maintenant un moteur de
+poses et de smears sur la grille native ; les anciennes empreintes de combat v1
+restent archivées et la nouvelle référence se trouve dans `combat-art-v2.json`.
+Voir [belligérants, répertoires, boucliers et limites d'intégration](batraciens-belligerants.md)
+et [le lecteur interactif](../art/batraciens-combat-preview.html).
+Les paragraphes précédents décrivant un seul coup par équipement et des
+empreintes armées toutes inchangées sont remplacés, pour le combat, par cette
+révision. Les implantations civiles et les affiliations politiques restent
+celles décrites plus haut.
+
+## Tenues armées v3 et raccord du bouclier
+
+La découpe du bras de profil supprimait aussi le tronc qu'il cachait. Le moteur
+reconstruit maintenant ce volume avant de dessiner les vêtements, les bras et
+le bouclier. Le corps reste fermé même avec `equipment:false` et `outfit:false`.
+Le lecteur permet de masquer armes et bouclier pour examiner ce raccord.
+
+Les six tenues emploient les ressources de Varan/Tagon : cuir tressé et lin pour
+les gardes ; toile cirée renforcée pour les sentinelles ; gilet de cuir et
+écharpe de lin pour les épéistes ; mantelet court pour les éclaireurs ; cuir
+rapiécé et corde pour les pillards ; cuir clouté, bronze limité et étoffe garance
+pour les chefs. Le ventre, le museau et les yeux restent lisibles. Pas de casque
+fermé ni d'armure massive imposée aux habitants des milieux humides.
+Les vêtements suivent le tronc dans les poses de repos, la marche et le combat.
+Leur matière ne change pas avec la pigmentation de la peau. Ces tenues indiquent
+un métier/équipement, pas une appartenance criminelle universelle.

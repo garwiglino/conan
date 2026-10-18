@@ -54,12 +54,57 @@ const dangerTalk=Game.prototype.talkTo;
 Game.prototype.talkTo=function(n){if(!n||!this.npcPresent(n))return false;return dangerTalk.call(this,n);};
 
 Game.prototype.civilianProtected=function(n){return n.id==='fairy'||n.eventGuard||this.party?.some(c=>c.id===n.id);};
+// A struck or witnessing civilian runs from the attacker on foot and stays visible,
+// so it can still be caught. Shelter/return follow once the attacker is out of reach.
+const CIVILIAN_FLIGHT=Object.freeze({speed:1.6,calm:4,safe:220,lost:3,look:56,witness:150});
+Game.prototype.civilianAttacker=function(s){
+ if(s.attacker==='player')return this.player;if(!s.attacker)return null;
+ return this.enemies.find(e=>e.id===s.attacker&&!e.dead)||this.npcs.find(n=>n.id===s.attacker&&!n.civilian?.dead&&!n.batracien?.dead&&!n.guardState?.dead)||null;
+};
+Game.prototype.startCivilianFlight=function(n,source){
+ if(!n||!source||this.civilianProtected(n)||n.civilian?.dead||n.batracien?.dead||(n.alpha??1)<.5)return false;
+ const owner=source.owner?this.enemies.find(e=>e.id===source.owner)||this.npcs.find(a=>a.id===source.owner)||source:source,from=Number.isFinite(owner.x)?owner:source;
+ const old=n.dangerState,origin=old?.post||n.post||n;
+ const s=old?.mode==='fleeing'?old:n.dangerState={mode:'fleeing',post:{x:origin.x,y:origin.y},shelter:{x:n.x,y:n.y},clearAt:null,blocked:0};
+ Object.assign(s,{attacker:owner===this.player?'player':owner.id||null,ax:from.x,ay:from.y,hitAt:this.time,seenAt:this.time,goal:null});
+ n.alpha=1;n.path=[];if(this.dialogue?.who===n)this.dialogue=null;if(this.transportSession===n.id){this.transportSession=null;this.pendingTransport=null;}
+ return true;
+};
+Game.prototype.alarmWitnesses=function(victim,source){
+ for(const n of this.npcs){if(n===victim||!n.civilian||!this.sameLevel(n,victim)||dist(n,victim)>CIVILIAN_FLIGHT.witness)continue;
+  if(this.lineClear(n,victim)||this.lineClear(n,source))this.startCivilianFlight(n,source);}
+};
+Game.prototype.civilianFleeGoal=function(n,x,y){
+ const a=Math.atan2(n.y-y,n.x-x),L=CIVILIAN_FLIGHT.look,open=(px,py)=>!this.solid(px,py,4,0),free=(px,py)=>open(px,py)&&this.civilianStepSafe(n,px,py),here=Math.hypot(n.x-x,n.y-y);
+ // Walk each ray up to the first obstacle, so a wall ahead turns the run along it. The goal tile is checked too,
+ // because the path search aims for it, and a failed search must never run every frame.
+ let best=null,score=here-8;
+ for(const turn of [0,.4,-.4,.8,-.8,1.2,-1.2,1.6,-1.6,2.1,-2.1,2.7,-2.7]){const c=Math.cos(a+turn),s=Math.sin(a+turn);let len=0;for(let t=8;t<=L&&open(n.x+c*t,n.y+s*t);t+=8)len=t;
+  if(len<16)continue;const q={x:n.x+c*len,y:n.y+s*len},v=Math.hypot(q.x-x,q.y-y)+len*.25;if(v>score&&free(q.x,q.y)&&free(Math.floor(q.x/16)*16+8,Math.floor(q.y/16)*16+8)){best=q;score=v;if(turn===0&&len===L)break;}}
+ return best;
+};
+Game.prototype.stepCivilianFlight=function(n,s,dt){
+ const F=CIVILIAN_FLIGHT,a=this.civilianAttacker(s);
+ if(a&&this.time>=(s.lookAt||0)&&this.sameLevel(a,n)&&dist(a,n)<F.safe){s.lookAt=this.time+.25;if(this.lineClear(n,a)){s.seenAt=this.time;s.ax=a.x;s.ay=a.y;}}
+ const away=Math.hypot(n.x-s.ax,n.y-s.ay);
+ if(dist(n,this.player)>900||this.time-s.hitAt>=F.calm&&(!a||away>F.safe||this.time-s.seenAt>F.lost)){
+  const unsafe=this.dangerAt(n.x,n.y).unsafe||!!this.localThreatAt(n.x,n.y,n.level||0);
+  n.dangerState={mode:unsafe?'leaving':'returning',post:s.post,shelter:unsafe?this.civilianShelter(n):s.shelter,clearAt:null,blocked:0};n.path=[];return;
+ }
+ const busy=!!this.npcMoveLocked?.(n);
+ if(this.time>=(s.retryAt||0)&&(!s.goal||dist(n,s.goal)<4||this.time-(s.goalAt||0)>1.2)){s.goal=this.civilianFleeGoal(n,s.ax,s.ay);s.goalAt=this.time;n.path=[];if(!s.goal)s.retryAt=this.time+.3;}
+ if(!s.goal){if(!busy)s.blocked+=dt;return;} // Cornered: cower until a way out opens.
+ const before={x:n.x,y:n.y};this.walkNpc(n,s.goal,dt);
+ if(!busy&&!n.path?.length&&dist(n,s.goal)>=2){s.goal=null;s.retryAt=this.time+.3;}
+ s.blocked=busy?0:dist(before,n)<.01?s.blocked+dt:0;if(s.blocked>.5)s.goal=null;
+};
 Game.prototype.civilianStepSafe=function(n,x,y){const foe=this.localThreatAt(x,y,n.level||0,48);return !foe||Math.hypot(x-foe.x,y-foe.y)>dist(n,foe)+.1;};
 Game.prototype.civilianShelter=function(n){
  const home=n.home||this.atlasProps.filter(o=>o.rest&&Math.hypot(o.x-n.x,o.y-n.y)<240).sort((a,b)=>dist(a,n)-dist(b,n))[0];
  const foe=this.localThreatAt(n.x,n.y,n.level||0),away=foe?Math.atan2(n.y-foe.y,n.x-foe.x):0;
  const target=home?{x:home.x,y:home.y+(n.home?0:14)}:foe?{x:n.x+Math.cos(away)*80,y:n.y+Math.sin(away)*80}:{x:n.x,y:n.y};
- for(const r of [0,16,32,48])for(const [dx,dy]of [[0,r],[r,0],[-r,0],[0,-r]])if(!this.solid(target.x+dx,target.y+dy,4,n.level||0)&&!this.localThreatAt(target.x+dx,target.y+dy,n.level||0,72))return {x:target.x+dx,y:target.y+dy};
+ // Only a house or rest spot hides a civilian. In the open it stays visible, cowering, and can still be hurt.
+ for(const r of [0,16,32,48])for(const [dx,dy]of [[0,r],[r,0],[-r,0],[0,-r]])if(!this.solid(target.x+dx,target.y+dy,4,n.level||0)&&!this.localThreatAt(target.x+dx,target.y+dy,n.level||0,72))return {x:target.x+dx,y:target.y+dy,cover:!!home};
  return {x:n.x,y:n.y};
 };
 Game.prototype.assessCivilians=function(force=false){
@@ -68,6 +113,7 @@ Game.prototype.assessCivilians=function(force=false){
  for(const n of this.npcs){
   if(!n.dangerState&&dist(n,this.player)>1200)continue;
   if(this.civilianProtected(n)){if(n.dangerState){delete n.dangerState;n.alpha=1;n.phase='post';}continue;}
+  if(n.dangerState?.mode==='fleeing')continue;
   const s=n.dangerState,origin=s?.post||n.post||n,d=field.atActor({...origin,level:n.level||0}),combat=!!this.localThreatAt(n.x,n.y,n.level||0);
   const danger=d.unsafe||combat;
   if(danger){if(!s){n.dangerState={mode:'leaving',post:{x:origin.x,y:origin.y},shelter:this.civilianShelter(n),clearAt:null,blocked:0};n.path=[];}else{s.clearAt=null;if(s.mode==='returning')s.mode='leaving';}
@@ -82,21 +128,22 @@ Game.prototype.stepNpcs=function(dt){
  // The old day/night schedule must not fight a retreat or move a hidden resident.
  try{this.npcs=all.filter(n=>!n.dangerState);dangerStepNpcs.call(this,dt);}finally{this.npcs=all;}
  for(const n of all){const s=n.dangerState;if(!s||this.dialogue?.who===n)continue;
+  if(s.mode==='fleeing'){this.stepCivilianFlight(n,s,dt);continue;}
   if(s.mode==='sheltered'){n.alpha=0;n.anim=0;continue;}
   const target=s.mode==='returning'?s.post:s.shelter,offscreen=dist(n,this.player)>900;
-  if(offscreen){Object.assign(n,target);if(s.mode==='leaving'){s.mode='sheltered';n.alpha=0;}else this.finishCivilianReturn(n);continue;}
+  if(offscreen){Object.assign(n,{x:target.x,y:target.y});if(s.mode!=='leaving')this.finishCivilianReturn(n);else if(s.shelter.cover){s.mode='sheltered';n.alpha=0;}else n.alpha=1;continue;}
   if(s.mode==='returning')n.alpha=Math.min(1,(n.alpha??0)+dt/1.2);
   if(this.localThreatAt(target.x,target.y,n.level||0,72)&&s.mode==='leaving'){s.shelter=this.civilianShelter(n);n.path=[];continue;}
   const before={x:n.x,y:n.y},arrived=dist(n,target)<10||this.walkNpc(n,target,dt);
   s.blocked=dist(before,n)<.01&&!arrived?s.blocked+dt:0;
   // No teleport through walls. Retry a reachable nearby shelter when the path is blocked.
   if(s.blocked>3){n.path=[];if(s.mode==='leaving')s.shelter=this.civilianShelter(n);s.blocked=0;}
-  if(arrived){if(s.mode==='leaving'){n.alpha=Math.max(0,(n.alpha??1)-dt/1.2);if(n.alpha===0){s.mode='sheltered';n.anim=0;}}else this.finishCivilianReturn(n);}
+  if(arrived){if(s.mode==='leaving'){if(!s.shelter.cover){n.alpha=Math.min(1,(n.alpha??1)+dt/1.2);continue;}n.alpha=Math.max(0,(n.alpha??1)-dt/1.2);if(n.alpha===0){s.mode='sheltered';n.anim=0;}}else this.finishCivilianReturn(n);}
  }
 };
 Game.prototype.finishCivilianReturn=function(n){delete n.dangerState;n.alpha=1;n.phase='post';n.lastClock=this.clock;n.anim=0;n.path=[];const h=(this.clock/60)%24;if(n.home&&(h>=22.5||h<6))n.phase='leaving';};
 const dangerCouriers=Game.prototype.stepCouriers;
-Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>!this.npcs.find(n=>n.id===c.id)?.dangerState);dangerCouriers.call(this,minutes);}finally{this.couriers=all;}};
+Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>{const n=this.npcs.find(n=>n.id===c.id);return !n?.dangerState&&!n?.civilian?.dead;});dangerCouriers.call(this,minutes);}finally{this.couriers=all;}};
 
 // Bounded event groups. Stable event/slot IDs prevent save/reload or chunk farming.
 Game.prototype.stepEventGroups=function(dt=0){
@@ -115,7 +162,6 @@ Game.prototype.stepEventGroups=function(dt=0){
    else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id];Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}
   }
  }
- for(const n of this.npcs.filter(n=>n.eventGuard&&!n.batracien&&active.has(n.eventId))){const foe=this.enemies.find(e=>e.world&&!e.dead&&!e.retiring&&(e.level||0)===(n.level||0)&&dist(e,n)<120);if(foe){this.walkNpc(n,foe,.5);if(dist(n,foe)<28&&this.lineClear(n,foe)&&this.time>(n.guardHit||0)){n.guardHit=this.time+2;this.guardStrike(n,foe);}}}
 };
 const dangerBrain=Game.prototype.brain;
 Game.prototype.brain=function(e,p,d,dt,sz){if(e.retiring){e.ai='return';e.wind=e.attack=0;return {engage:false,tx:e.x+(e.x>=p.x?100:-100),ty:e.y+80,keep:0};}return dangerBrain.call(this,e,p,d,dt,sz);};
@@ -142,7 +188,7 @@ Game.prototype.advanceAtlas=function(dt=0){dangerAdvance.call(this,dt);if(!this.
 Game.prototype.journeyThreat=function(s){if(s?.kind!=='move'||s.mode==='boat')return null;return this.worldState.edgeStatus(Atlas.edgeById.get(s.edge),this.clock).events.find(e=>Atlas.EVENT_TYPES[e.type].group&&!Atlas.EVENT_TYPES[e.type].guard);};
 
 const dangerSerialize=Game.prototype.serialize;
-Game.prototype.serialize=function(){const data=dangerSerialize.call(this),ids=new Set(this.worldState.active(this.clock).flatMap(e=>Array.from({length:Atlas.EVENT_TYPES[e.type].group||0},(_,i)=>'incident-'+e.id+'-'+i)));data.atlas.danger={version:1,health:Object.fromEntries(Object.entries(this.incidentHealth||{}).filter(([id])=>ids.has(id)).slice(-128)),civilians:this.npcs.filter(n=>n.dangerState&&!this.civilianProtected(n)).map(n=>({id:n.id,x:n.x,y:n.y,alpha:n.alpha,...n.dangerState}))};return data;};
+Game.prototype.serialize=function(){const data=dangerSerialize.call(this),ids=new Set(this.worldState.active(this.clock).flatMap(e=>Array.from({length:Atlas.EVENT_TYPES[e.type].group||0},(_,i)=>'incident-'+e.id+'-'+i)));data.atlas.danger={version:1,health:Object.fromEntries(Object.entries(this.incidentHealth||{}).filter(([id])=>ids.has(id)).slice(-128)),civilians:this.npcs.filter(n=>n.dangerState&&!this.civilianProtected(n)).map(n=>({id:n.id,x:n.x,y:n.y,alpha:n.alpha,...(n.dangerState.mode==='fleeing'?{mode:'returning',post:n.dangerState.post,shelter:n.dangerState.shelter,clearAt:null}:n.dangerState)}))};return data;};
 Game.prototype.placeCampaignStart=function(){
  // Keep the authored combat layout. Only a new campaign starts farther south
  // on the existing camp path, with Elyne and the fairy still beside the hero.

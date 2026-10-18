@@ -13,7 +13,9 @@ let api, pose;
 function snippet(s,a,b){const i=s.indexOf(a);assert.ok(i>=0,a); const j=s.indexOf(b,i);assert.ok(j>i,b);return s.slice(i,j);}
 const authored=snippet(html,'const SWORD_POSES=','function greatsword(');
 const sandbox={};vm.runInNewContext(authored+'\nthis.getPose=swordPose;',sandbox);pose=sandbox.getPose;
-before(async()=>{api=await loadGame();});
+// The hero no longer draws from the civilian E01 sheet (its outfits come from
+// KALDOR_OUTFITS), so the NPC reference it is compared with is loaded here.
+before(async()=>{api=await loadGame();assert.ok((await api.CIVILIAN_BITMAPS.preload(api.HearthreaverKaldorCivilianArt.appearance)).every(Boolean));});
 
 test('four non-mirrored human drawings, same 80px sprite cell and foot anchor as frogs',()=>{
  assert.equal(Art.cell,80);assert.deepEqual(Art.anchor,{x:40,y:52});assert.deepEqual([...Art.directions],['dos','droite','face','gauche']);
@@ -205,7 +207,8 @@ test('Kaldor overlay build is deterministic in isolation and never races world r
   'scripts/embed-kaldor.cjs','scripts/kaldor-civilian-bridge.js',
   'sprites/kaldor/kaldor-art.js',
   'art/kaldor-preview-template.html','art/kaldor-preview.html',
-  'data/kaldor-manifest.json'
+  'data/kaldor-manifest.json',
+  'data/kaldor-outfits/atlas.json','scripts/kaldor-outfits.js'
  ];
  const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
  try {

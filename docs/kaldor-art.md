@@ -1,5 +1,9 @@
 # Kaldor v4 — vrai personnage humain modulaire, épée et attaques refaites
 
+> Les tenues (pagne de départ et tenues uniques trouvées dans le monde) sont
+> décrites dans [kaldor-outfits.md](kaldor-outfits.md) : le corps vient
+> désormais de `KALDOR_OUTFITS`, la tête et les cheveux restent ceux des PNJ.
+
 **Rendu courant :** le joueur utilise désormais les mêmes morceaux de personnage
 que les PNJ humains (atlas **Aseprite Lua**, et non une imitation JavaScript du
 corps). L’assemblage passe directement par `CIVILIAN_BITMAPS.get()` de

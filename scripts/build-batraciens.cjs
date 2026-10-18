@@ -7,9 +7,13 @@ function edit(file,changes){const p=path.join(root,file);let s=fs.readFileSync(p
 edit('scripts/civilian-runtime.js',[
  ['for(const n of this.npcs){const c=this.ensureCivilian(n);if(!c)continue;const delta=', 'for(const n of this.npcs){if(n.batracien&&!n.batracien.role){this.stepBatracienCivilian(n,dt);continue;}const c=this.ensureCivilian(n);if(!c)continue;const delta=']
 ]);
-edit('scripts/world-danger.js',[
+// PR #4 moves human patrol combat into npc-combat.js and removes this old loop.
+// Accept either authority; never reintroduce the old loop alongside the new one.
+const dangerSource=fs.readFileSync(path.join(root,'scripts/world-danger.js'),'utf8');
+if(dangerSource.includes('this.npcs.filter(n=>n.eventGuard&&active.has(n.eventId))'))edit('scripts/world-danger.js',[
  ['this.npcs.filter(n=>n.eventGuard&&active.has(n.eventId))','this.npcs.filter(n=>n.eventGuard&&!n.batracien&&active.has(n.eventId))']
 ]);
+else if(!dangerSource.includes('this.npcs.filter(n=>n.eventGuard&&!n.batracien&&active.has(n.eventId))')&&!fs.existsSync(path.join(root,'scripts/npc-combat.js')))throw new Error('Human guard combat authority is missing.');
 edit('index.html',[
  ["target(){const e=this.enemies.find(e=>e.id===this.targetId);", "target(){const e=this.combatTargets().find(e=>e.id===this.targetId);"],
  ["for(const e of this.enemies){if(e.dead||(e.kind==='boss'&&!this.bossActive))continue;const range=dist", "for(const e of this.combatTargets()){if(e.dead||!this.sameLevel(e,this.player)||(e.kind==='boss'&&!this.bossActive))continue;const range=dist"],

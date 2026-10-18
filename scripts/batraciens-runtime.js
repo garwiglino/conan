@@ -1,3 +1,4 @@
+// Révision combat/bouclier/raccord PR #4 : Codex / ChatGPT, 2026-10-18. Voir docs/CODEX-BATRACIENS-HANDOFF.md.
 /* Batraciens: palette-only art reuse and bounded, save-stable world integration.
  * This adapter owns only its actors. WorldDanger remains the safety authority.
  * All world displacements/hit tests use feet in game pixels; drawing uses (40,52).
@@ -87,7 +88,7 @@ const Batraciens = (() => {
     if(rec?.post&&validPoint(rec.post)&&dist(rec.post,centre)<240&&!this.solid(rec.post.x,rec.post.y,8,0))n.post={...rec.post};
     if(validSaved&&(rec.dead||partyRec)){Object.assign(n,{x:rec.x,y:rec.y});if([0,1,2,3].includes(rec.dir))n.dir=rec.dir;}
     if(armed){if(this.npcs.filter(n=>n.batracien?.role&&!n.eventId).length>=C.maxWardens)continue;
-     b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=rec?.dead===true||b.hp===0;b.inv=0;b.cooldown=1;
+     b.comboIndex=Number.isInteger(rec?.comboIndex)?clampN(rec.comboIndex,0,2):0;b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=rec?.dead===true||b.hp===0;b.inv=0;b.cooldown=1;
      if(b.dead){b.hp=0;visual(n,'death');b.elapsed=Armed.CLIPS.death.duration/1000;}
      n.name=n.label=({village_guard:'GARDE',channel_sentinel:'SENTINELLE',boat_escort:'ESCORTE',scout:'ÉCLAIREUR',captain:'CHEF'})[role]||'GARDE';n.title=Armed.ROLES[role].label+' de '+site.name;
     }else{if(this.npcs.filter(isCivil).length>=C.maxCivilians)continue;
@@ -112,7 +113,12 @@ const Batraciens = (() => {
  Game.prototype.recruitCompanion=function(n,options){return !isArmed(n)&&oldRecruit.call(this,n,options);};
  const oldNpcMenu=Game.prototype.npcMenu;
  Game.prototype.npcMenu=function(n){const menu=oldNpcMenu.call(this,n);return isArmed(n)?menu.filter(m=>!/rejoindre|compagnon|recruter|voyager ensemble/i.test(m.label||'')):menu;};
- const oldWalkNpc=Game.prototype.walkNpc;
+ const oldWalkNpc=Game.prototype.walkNpc,oldMoveLocked=Game.prototype.npcMoveLocked;
+ Game.prototype.npcMoveLocked=function(n){
+  if(!n?.batracien)return !!oldMoveLocked?.call(this,n);const b=n.batracien;if(b.dead||n.civilian?.dead)return true;
+  if(isCivil(n))return ['seated','cower'].includes(b.action)||locked.has(b.action)&&b.elapsed<duration(n,b.action);
+  return (Armed.isAttack(b.action)||['block','hit'].includes(b.action))&&b.elapsed<duration(n,b.action);
+ };
  Game.prototype.walkNpc=function(n,to,dt){
   if(!n?.batracien)return oldWalkNpc.call(this,n,to,dt);const b=n.batracien;
   if(b.dead||n.civilian?.dead)return false;
@@ -120,8 +126,8 @@ const Batraciens = (() => {
    if(locked.has(b.action)&&b.elapsed<duration(n,b.action))return false;
    if(b.action==='seated'){this.civilianAction(n,'stand_up');return false;}
    if(b.action==='cower'){this.civilianAction(n,'cower_exit');return false;}
-  }else if(['thrust','slash','throw_javelin','block','hit'].includes(b.action)&&b.elapsed<duration(n,b.action))return false;
-  const from={x:n.x,y:n.y};civilianWalk.call(this,n,to,Math.max(0,dt)*(n.dangerState?.mode==='leaving'?2.1:1));const dx=n.x-from.x,dy=n.y-from.y;n.x=from.x;n.y=from.y;this.move(n,dx,dy);if(Math.hypot(n.x-from.x,n.y-from.y)<.001&&Math.hypot(dx,dy)>.001)n.path=[];return dist(n,to)<2;
+  }else if((Armed.isAttack(b.action)||['block','hit'].includes(b.action))&&b.elapsed<duration(n,b.action))return false;
+  const from={x:n.x,y:n.y};civilianWalk.call(this,n,to,Math.max(0,dt)*(n.dangerState?.mode==='leaving'?2.1:n.dangerState?.mode==='fleeing'?(typeof CIVILIAN_FLIGHT==='undefined'?1.6:CIVILIAN_FLIGHT.speed):1));const dx=n.x-from.x,dy=n.y-from.y;n.x=from.x;n.y=from.y;this.move(n,dx,dy);if(Math.hypot(n.x-from.x,n.y-from.y)<.001&&Math.hypot(dx,dy)>.001)n.path=[];return dist(n,to)<2;
  };
  Game.prototype.stepBatracienCivilian=function(n,dt){
   const b=n.batracien,c=this.ensureCivilian(n);if(!c)return;
@@ -138,9 +144,10 @@ const Batraciens = (() => {
   if(dist(n,this.player)>C.activeRadius&&!n.dangerState&&!m)return;
   b.elapsed+=delta;
   if(locked.has(b.action)&&b.elapsed<duration(n,b.action)){syncCivil(n);return;}
-  if(c.moveTime===this.time){visual(n,n.dangerState?.mode==='leaving'?'flee':'walk');syncCivil(n);return;}
+  if(c.moveTime===this.time){visual(n,['leaving','fleeing'].includes(n.dangerState?.mode)?'flee':'walk');syncCivil(n);return;}
   if(n.dangerState){
    if(n.dangerState.mode==='returning'){if(b.action==='cower')visual(n,'cower_exit');else if(b.action!=='cower_exit'||b.elapsed>=duration(n,'cower_exit'))visual(n,'idle');}
+   else if(b.action==='cower_exit'||n.dangerState.mode==='fleeing'&&(n.dangerState.blocked||0)<.5&&!['cower','cower_enter'].includes(b.action))visual(n,'idle');
    else if(!['cower','cower_enter'].includes(b.action))visual(n,'cower_enter');else if(b.action==='cower_enter'&&b.elapsed>=duration(n,'cower_enter'))visual(n,'cower');
    syncCivil(n);return;
   }
@@ -180,12 +187,15 @@ const Batraciens = (() => {
    if(!C.allowedBiomes.includes(cell?.biome)||!['Varan','Tagon','Teremor'].includes(territory)||Atlas.curseCells.has(cell?.id))continue;
    if(n.eventGuard){if(event.type!=='patrol'||hash(n.id+':species')%3===0)continue;}
    else if(!C.hostileEvents.includes(event.type)||n.kind!=='cultist')continue;
-   const role=n.eventGuard?(hash(n.id)%4===0?'captain':hash(n.id)%2?'scout':'channel_sentinel'):(hash(n.id)%3===0?'scout':'raider');
-   const rec=this.batracienCombatRecords[n.id],look=appearance(n.id,'male',rec),b=n.batracien={...look,role,site:site?.id||null,action:'idle',elapsed:0,distance:0,seed:hash(n.id),lastX:n.x,lastY:n.y,cooldown:1,contactDone:false,inv:0};
-   if(n.eventGuard){b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=b.hp===0;n.post={x:n.x,y:n.y};n.name=n.label=({village_guard:'GARDE',channel_sentinel:'SENTINELLE',boat_escort:'ESCORTE',scout:'ÉCLAIREUR',captain:'CHEF'})[role]||'GARDE';n.look='batracien';}
-   else {n.kind='batracien';n.originalKind='cultist';n.speed=24;n.reach=C.combat[role].range;n.r=6;n.damage=1;n.wind=n.attack=n.melee=0;n.homeX=n.x;n.homeY=n.y;if(finite(rec?.hp)&&rec.hp>0)n.hp=clampN(rec.hp,1,n.maxHp);}
+   // Existing bandits remain the incident authority. Equipment is independent of species/pigment.
+   const slot=Number(n.id.match(/-(\d+)$/)?.[1]||0),roles=['raider','scout',hash(event.id)%2?'boat_escort':'captain'];
+   let role=n.eventGuard?(hash(n.id)%4===0?'captain':hash(n.id)%2?'scout':'channel_sentinel'):roles[slot%roles.length];
+   const rec=this.batracienCombatRecords[n.id];if(rec&&roles.includes(rec.role)&&!n.eventGuard)role=rec.role;
+   const look=appearance(n.id,'male',rec),b=n.batracien={...look,role,site:site?.id||null,action:'idle',elapsed:0,distance:0,seed:hash(n.id),lastX:n.x,lastY:n.y,cooldown:1,contactDone:false,inv:0};
+   if(n.eventGuard){b.comboIndex=Number.isInteger(rec?.comboIndex)?clampN(rec.comboIndex,0,2):0;b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=b.hp===0;n.post={x:n.x,y:n.y};n.name=n.label=({village_guard:'GARDE',channel_sentinel:'SENTINELLE',boat_escort:'ESCORTE',scout:'ÉCLAIREUR',captain:'CHEF'})[role]||'GARDE';n.look='batracien';}
+   else {n.kind='batracien';n.originalKind='cultist';n.speed=24;n.reach=C.combat[role].range;n.r=6;n.damage=1;n.wind=n.attack=n.melee=0;n.homeX=n.x;n.homeY=n.y;n.maxHp=C.combat[role].hp;n.hp=clampN(finite(rec?.hp)?rec.hp:(this.incidentHealth?.[n.id]??n.maxHp),.1,n.maxHp);b.comboIndex=Number.isInteger(rec?.comboIndex)?clampN(rec.comboIndex,0,2):0;}
    if(n.eventGuard)this.restoreBatracienRoutine?.(n,rec);
-   if(rec&&['thrust','slash','throw_javelin'].includes(rec.action)&&finite(rec.elapsed)&&rec.elapsed>=0&&rec.elapsed<.72){b.action=rec.action;b.elapsed=rec.elapsed;b.contactDone=rec.contactDone===true;b.lockedDir=[0,1,2,3].includes(rec.lockedDir)?rec.lockedDir:n.dir;b.targetId=typeof rec.targetId==='string'&&rec.targetId.length<128?rec.targetId:null;}
+   if(rec&&Armed.isAttack(rec.action)&&finite(rec.elapsed)&&rec.elapsed>=0&&rec.elapsed<Armed.CLIPS[rec.action].duration/1000){b.action=rec.action;b.elapsed=rec.elapsed;b.contactDone=rec.contactDone===true;b.lockedDir=[0,1,2,3].includes(rec.lockedDir)?rec.lockedDir:n.dir;b.comboIndex=Number.isInteger(rec.comboIndex)?clampN(rec.comboIndex,0,2):0;b.chainCount=Number.isInteger(rec.chainCount)?clampN(rec.chainCount,1,3):1;b.attackSerial=Number.isInteger(rec.attackSerial)?clampN(rec.attackSerial,0,1000000):0;b.targetId=typeof rec.targetId==='string'&&rec.targetId.length<128?rec.targetId:null;}
   }
  };
  const previousGroups=Game.prototype.stepEventGroups;
@@ -194,49 +204,88 @@ const Batraciens = (() => {
  BODY.batracien=BODY.cultist;XP_KILL.batracien=XP_KILL.cultist;
  function combatSpec(n){return C.combat[n.batracien.role];}
  function front(g,n,t,min=.15){const [fx,fy]=g.facing(n.dir);return ((t.x-n.x)*fx+(t.y-n.y)*fy)/Math.max(1,dist(n,t))>min;}
- function alive(n){return n&&!n.dead&&!n.batracien?.dead&&!n.civilian?.dead&&(n.alpha??1)>.5;}
+ function alive(n){return n&&!n.dead&&!n.batracien?.dead&&!n.civilian?.dead&&!n.guardState?.dead&&(n.alpha??1)>.5;}
  function strike(g,n,t){if(!alive(t)||!g.sameLevel(n,t)||!g.lineClear(n,t))return;
-  if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
+  if(t===g.player)g.damagePlayer(1,n);else if(isArmed(t)&&g.npcs.includes(t))g.damageBatracienGuard(t,1,n);else if(g.isHumanGuard?.(t))g.damageHumanGuard(t,1,n);else if(t.civilian)g.damageCivilian(t,1,n);else{g.guardStrike(n,t);if(t.dead&&t.batracien)g.batracienCorpse(t);}
  }
- function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n);visual(n,spec.attack,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;n.wind=spec.contact;n.attack=.72;g.foeSound?.(n,'melee','cultist');}
- function stepAttack(g,n,t,dt){const b=n.batracien,spec=combatSpec(n),before=b.elapsed;b.elapsed+=dt;n.dir=b.lockedDir??n.dir;
-  if(!b.contactDone&&before<spec.contact&&b.elapsed>=spec.contact){b.contactDone=true;
-   if(spec.attack==='throw_javelin'){if(alive(t)&&g.sameLevel(n,t)&&g.lineClear(n,t))g.launchBatracienJavelin(n,t);}
-   else if(alive(t)&&dist(n,t)<=spec.range&&front(g,n,t))strike(g,n,t);
+ function attackRange(n,action=n.batracien.action){return action==='jab'?24:combatSpec(n).range;}
+ function attackContact(n){return Armed.CLIPS[n.batracien.action]?.contact??combatSpec(n).contact;}
+ function attackDuration(n){return Armed.CLIPS[n.batracien.action].duration/1000;}
+ const TACTICS=Object.freeze({village_guard:{chain:2,chance:45},channel_sentinel:{chain:2,chance:35},boat_escort:{chain:2,chance:65},scout:{chain:1,chance:0},raider:{chain:2,chance:40},captain:{chain:3,chance:70}});
+ function fightingTarget(g,n,id){if(id==='player')return !g.dead&&!g.dying&&(g.npcs.includes(n)?g.isHostileBatracien?.(n):!g.safeZone(g.player))?g.player:null;return g.npcs.find(t=>t.id===id&&alive(t))||g.enemies.find(t=>t.id===id&&alive(t));}
+ // Feet travel independently of facing. No speculative path through an unseen obstacle.
+ function combatMove(g,n,t,dt,shield=false){if(!alive(t)||!g.sameLevel(n,t)||!g.lineClear(n,t)||n.stun>0||n.hurt>0||Armed.isAttack(n.batracien?.action)||n.batracien?.action==='block')return 0;
+  const b=n.batracien,d=dist(n,t);if(d<1||d>550)return 0;const ux=(t.x-n.x)/d,uy=(t.y-n.y)/d,spec=combatSpec(n),ideal=b.role==='scout'?70:Math.max(19,spec.range-5),speed=(finite(n.speed)?n.speed:24)*(shield?.42:1);
+  b.footwork=(b.footwork||0)+dt;const sign=(hash(n.id+':footwork')%2?1:-1)*(Math.floor(b.footwork/2.4)%2?-1:1),radial=clampN((d-ideal)/14,-.7,1),lateral=d<ideal+28?.55*sign:0;
+  const vx=ux*radial-uy*lateral,vy=uy*radial+ux*lateral,length=Math.max(1,Math.hypot(vx,vy)),dx=vx/length*speed*dt,dy=vy/length*speed*dt,old={x:n.x,y:n.y};
+  const leash=n.post?(g.isHostileBatracien?.(n)?380:230):null;if(leash&&Math.hypot(n.x+dx-n.post.x,n.y+dy-n.post.y)>leash)return 0;
+  g.move(n,dx,dy);n.dir=g.direction(t.x-n.x,t.y-n.y);return dist(n,old);
+ }
+ function movingGuard(g,n,dt){const b=n.batracien;if(!tickGuard(n,dt))return false;
+  const t=fightingTarget(g,n,b.guardTargetId);if(t&&b.action!=='block'){const moved=combatMove(g,n,t,dt,true);b.distance+=moved;visual(n,moved>.001?'guard_walk':'guard');}return true;
+ }
+ function chainAllowed(g,n,t){const b=n.batracien,p=TACTICS[b.role];return (b.chainCount||1)<p.chain&&alive(t)&&g.sameLevel(n,t)&&g.lineClear(n,t)&&dist(n,t)<=attackRange(n)+4&&front(g,n,t,.25)&&hash(n.id+':chain:'+b.attackSerial+':'+b.chainCount)%100<p.chance;}
+ Game.prototype.batracienCombatMove=function(n,t,dt,shield=false){return combatMove(this,n,t,dt,shield);};
+
+ function startAttack(g,n,t){const b=n.batracien,spec=combatSpec(n),list=Armed.ATTACKS[b.role];
+  const continuation=b.chainQueued&&b.chainTargetId===(t.id||'player');b.chainCount=continuation?(b.chainCount||1)+1:1;if(!continuation)b.attackSerial=(b.attackSerial||0)+1;b.chainQueued=false;
+  const action=b.role==='scout'?(dist(n,t)<28?'jab':'throw_javelin'):list[(b.comboIndex||0)%list.length];
+  b.comboIndex=((b.comboIndex||0)+1)%list.length;visual(n,action,true);b.targetId=t.id||'player';b.lockedDir=g.direction(t.x-n.x,t.y-n.y);n.dir=b.lockedDir;b.cooldown=spec.cooldown;n.wind=attackContact(n);n.attack=attackDuration(n);g.foeSound?.(n,'melee','cultist');
+ }
+ function stepAttack(g,n,t,dt){const b=n.batracien,before=b.elapsed,contact=attackContact(n),total=attackDuration(n);b.elapsed+=dt;n.dir=b.lockedDir??n.dir;
+  if(!b.contactDone&&before<contact&&b.elapsed>=contact){b.contactDone=true;
+   if(b.action==='throw_javelin'){if(alive(t)&&g.sameLevel(n,t)&&g.lineClear(n,t))g.launchBatracienJavelin(n,t);}
+   else if(alive(t)&&dist(n,t)<=attackRange(n)&&front(g,n,t,.25))strike(g,n,t);
+   // A player's parry during contact interrupts the pending recovery immediately.
+   if(n.stun>0){b.chainQueued=false;n.wind=n.attack=0;visual(n,'hit',true);return false;}
   }
-  n.wind=Math.max(0,spec.contact-b.elapsed);n.attack=Math.max(0,.72-b.elapsed);if(b.elapsed>=.72){n.wind=n.attack=0;visual(n,'idle');return false;}return true;
+  n.wind=Math.max(0,contact-b.elapsed);n.attack=Math.max(0,total-b.elapsed);if(b.elapsed>=total){n.wind=n.attack=0;if(chainAllowed(g,n,t)){b.chainQueued=true;b.chainTargetId=t.id||'player';b.cooldown=.14;}else{b.chainQueued=false;b.cooldown=Math.max(b.cooldown,.35);}visual(n,'idle');return false;}return true;
  }
+ function beginGuard(n,t){const b=n.batracien;if(t)b.guardTargetId=t.id||'player';if(!['guard','guard_walk','block'].includes(b.action)){visual(n,'guard',true);b.guardRaise=.10;b.guardHold=.72;b.blockCount=0;}}
+ function tickGuard(n,dt){const b=n.batracien;if(!['guard','guard_walk','block'].includes(b.action))return false;b.guardRaise=Math.max(0,(b.guardRaise||0)-dt);b.guardHold=Math.max(0,(b.guardHold??.72)-dt);b.elapsed+=dt;
+  if(b.action==='block'&&b.elapsed<duration(n,'block'))return true;
+  if(b.guardHold>0&&(b.blockCount||0)<2){visual(n,'guard');return true;}
+  visual(n,'idle');b.cooldown=Math.min(b.cooldown,.12);return false;
+ }
+ // Shared by hostile bandits and local guards: frontal shield, no racial immunity.
+ Game.prototype.tryBatracienBlock=function(n,source){const b=n?.batracien;
+  if(!b?.role||!combatSpec(n).shield||!source||source.unblockable||!alive(n)||n.stun>0||!['guard','guard_walk','block'].includes(b.action)||(b.guardRaise||0)>0||b.guardHold===0||(b.blockCount||0)>=2||!this.sameLevel(n,source)||!this.lineClear(n,source)||!front(this,n,source,.25))return false;
+  if(source===this.player&&source.combo===3){b.guardHold=0;n.stun=.85;n.wind=n.attack=0;visual(n,'hit',true);this.emit('parry');return false;}
+  b.blockCount=(b.blockCount||0)+1;visual(n,'block',true);n.wind=n.attack=0;this.burst(n.x,n.y-14,'#c9d4bc',6);if(source===this.player)this.player.hitPause=.035;this.emit('block');return true;
+ };
+ const nativeGuardStrike=Game.prototype.guardStrike;
+ Game.prototype.guardStrike=function(n,e){if(e?.batracien&&this.tryBatracienBlock(e,n))return;return nativeGuardStrike.call(this,n,e);};
  Game.prototype.stepBatracienEnemy=function(e,dt){
   const b=e.batracien;if(!b||e.dead)return;const before={x:e.x,y:e.y};
   for(const key of ['hurt','flash','stun','cooldown'])e[key]=Math.max(0,(e[key]||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);
   if(!this.sameLevel(e,this.player)||dist(e,this.player)>900){e.wind=e.attack=0;visual(e,'idle');return;}
-  if(e.stun>0){e.wind=e.attack=0;visual(e,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);return;}
+  if(e.stun>0){b.chainQueued=false;e.wind=e.attack=0;visual(e,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);return;}
+  if(['guard','guard_walk','block'].includes(b.action)&&movingGuard(this,e,dt))return;
   if(e.retiring){e.wind=e.attack=0;visual(e,'flee');b.elapsed+=dt;this.move(e,(e.x>=this.player.x?1:-1)*20*dt,16*dt);b.distance+=dist(e,before);return;}
-  if(['thrust','slash','throw_javelin'].includes(b.action)){
+  if(Armed.isAttack(b.action)){
    const target=b.targetId==='player'?this.player:this.npcs.find(n=>n.id===b.targetId);
    if(!alive(target)||(target===this.player&&this.safeZone(target))){visual(e,'idle');e.wind=e.attack=0;return;}
-   const ongoing=stepAttack(this,e,target,dt);e.wind=ongoing?Math.max(0,combatSpec(e).contact-b.elapsed):0;e.attack=ongoing?Math.max(0,.72-b.elapsed):0;return;
+   stepAttack(this,e,target,dt);return;
   }
-  const guard=this.npcs.find(n=>isArmed(n)&&alive(n)&&this.sameLevel(n,e)&&dist(n,e)<110&&this.lineClear(n,e));
+  const guard=this.npcs.find(n=>(isArmed(n)||this.isHumanGuard?.(n))&&alive(n)&&this.sameLevel(n,e)&&dist(n,e)<110&&this.lineClear(n,e));
   const d=dist(e,this.player),br=this.brain(e,this.player,d,dt,this.safeZone(this.player));
   const target=guard||(br.engage?this.player:null);const spec=combatSpec(e);
+  if(b.chainQueued&&(!target||b.chainTargetId!==(target.id||'player')||dist(e,target)>spec.range+4||!this.lineClear(e,target))){b.chainQueued=false;b.cooldown=Math.max(b.cooldown,.4);}
   if(target){e.dir=this.direction(target.x-e.x,target.y-e.y);const td=dist(e,target);
-   if(td<=spec.range&&b.cooldown<=0&&this.lineClear(e,target)){startAttack(this,e,target);e.wind=spec.contact;e.attack=.72;return;}
-   if(td>Math.max(18,spec.range-12)){const dx=target.x-e.x,dy=target.y-e.y;this.move(e,dx/Math.max(1,td)*e.speed*dt,dy/Math.max(1,td)*e.speed*dt);}
+   if(td<=spec.range&&b.cooldown<=0&&this.lineClear(e,target)){startAttack(this,e,target);return;}
+   if(spec.shield&&td<=spec.range+10&&b.cooldown>.25&&front(this,e,target,.25)&&this.lineClear(e,target)){beginGuard(e,target);return;}
+   combatMove(this,e,target,dt);
   }else if(finite(br.tx)&&finite(br.ty)){const dx=br.tx-e.x,dy=br.ty-e.y,dd=Math.hypot(dx,dy);if(dd>5){e.dir=this.direction(dx,dy);this.move(e,dx/dd*e.speed*dt,dy/dd*e.speed*dt);}}
   const moved=dist(e,before);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
  };
  const nativeEnemyDamage=Game.prototype.damageEnemy;
- Game.prototype.damageEnemy=function(n,amount){if(n?.batracien?.role&&this.npcs.includes(n))return this.damageBatracienGuard(n,amount,this.player);return nativeEnemyDamage.call(this,n,amount);};
+ Game.prototype.damageEnemy=function(n,amount){if(n?.batracien?.role&&this.npcs.includes(n))return this.damageBatracienGuard(n,amount,this.player);if(n?.batracien&&this.tryBatracienBlock(n,this.player))return;return nativeEnemyDamage.call(this,n,amount);};
  Game.prototype.damageBatracienGuard=function(n,amount,source){
   const b=n?.batracien;if(!b?.role||!alive(n)||!finite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
   const playerHit=source===this.player;if(!playerHit&&b.inv>0)return false;
   if(playerHit)this.reportBatracienAssault?.(n,source);
   n.kind='batracien';n.r=6;n.maxHp=combatSpec(n).hp;n.hp=b.hp;n.stun=n.stun||0;
-  if(combatSpec(n).shield&&source&&front(this,n,source)&&b.action==='guard'&&n.stun<=0){
-   if(playerHit&&source.combo===3){n.stun=.85;this.emit('parry');}
-   else{visual(n,'block',true);b.inv=.45;n.wind=n.attack=0;this.burst(n.x,n.y-14,'#c9d4bc',6);if(playerHit)this.player.hitPause=.035;this.emit('block');return true;}
-  }
+  if(this.tryBatracienBlock(n,source))return true;
   if(playerHit){nativeEnemyDamage.call(this,n,amount);b.hp=n.hp;b.dead=n.dead===true;}
   else{b.hp=Math.max(0,b.hp-amount);b.dead=b.hp===0;n.hp=b.hp;n.dead=b.dead;n.flash=.075;n.hurt=.38;n.stun=Math.max(n.stun,.38);this.spill(n,source||n,false);this.emit('hit');if(b.dead)this.spill(n,source||n,true);}
   b.inv=.9;b.cooldown=1;n.wind=n.attack=0;visual(n,b.dead?'death':'hit',true);n.path=[];
@@ -247,14 +296,17 @@ const Batraciens = (() => {
   if(!active(this))return;
   for(const n of this.npcs.filter(isArmed)){
    const b=n.batracien;if(dist(n,this.player)>C.activeRadius)continue;const old={x:n.x,y:n.y};b.inv=Math.max(0,(b.inv||0)-dt);b.cooldown=Math.max(0,(b.cooldown||0)-dt);for(const key of ['flash','hurt','stun'])n[key]=Math.max(0,(n[key]||0)-dt);
-   if(n.stun>0){n.wind=n.attack=0;visual(n,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);continue;}
-   if(b.dead){b.elapsed=Math.min(.96,b.elapsed+dt);continue;}
-   if(['hit','block'].includes(b.action)&&b.elapsed<duration(n,b.action)){b.elapsed+=dt;continue;}
+   if(b.dead){n.wind=n.attack=0;if(b.action!=='death')visual(n,'death',true);b.elapsed=Math.min(duration(n,'death'),b.elapsed+dt);continue;}
+   if(n.stun>0){b.chainQueued=false;n.wind=n.attack=0;visual(n,'hit');b.elapsed=Math.min(.79,b.elapsed+dt);continue;}
+   if(b.action==='hit'&&b.elapsed<duration(n,'hit')){b.elapsed+=dt;continue;}
+   if(['guard','guard_walk','block'].includes(b.action)&&movingGuard(this,n,dt))continue;
    const t=this.batracienWardenTarget?.(n)||this.enemies.filter(e=>alive(e)&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<150&&dist(e,n.post||n)<230&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0];
-   if(['thrust','slash','throw_javelin'].includes(b.action)){const target=b.targetId==='player'?(this.isHostileBatracien(n)?this.player:null):this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
+   if(Armed.isAttack(b.action)){const target=b.targetId==='player'?(this.isHostileBatracien(n)?this.player:null):this.enemies.find(e=>e.id===b.targetId);if(!alive(target)||target.retiring)visual(n,'idle');else stepAttack(this,n,target,dt);continue;}
+   if(b.chainQueued&&(!t||b.chainTargetId!==(t.id||'player')||dist(n,t)>combatSpec(n).range+4||!this.lineClear(n,t))){b.chainQueued=false;b.cooldown=Math.max(b.cooldown,.4);}
    if(t){n.ai='chase';n.dir=this.direction(t.x-n.x,t.y-n.y);const s=combatSpec(n);
-    if(dist(n,t)<=s.range){if(b.cooldown<=0)startAttack(this,n,t);else{visual(n,s.shield?'guard':'idle');b.elapsed+=dt;}continue;}
-    this.walkNpc(n,t,dt);
+    if(dist(n,t)<=s.range&&b.cooldown<=0&&this.lineClear(n,t)){startAttack(this,n,t);continue;}
+    if(s.shield&&dist(n,t)<=s.range+10&&b.cooldown>.25){beginGuard(n,t);continue;}
+    combatMove(this,n,t,dt);
    }else if(this.isHostileBatracien?.(n)){n.ai='return';if(dist(n,n.post)>3)this.walkNpc(n,n.post,dt);
    }else if(!n.eventId||this.worldState.active(this.clock).some(e=>e.id===n.eventId)){
     const post=n.post||n;const phase=Math.floor((this.time+(b.seed%12))/8)%4,offset=[[0,0],[24,0],[0,0],[-24,0]][phase],to={x:post.x+offset[0],y:post.y+offset[1]};
@@ -272,9 +324,9 @@ const Batraciens = (() => {
   if(!active(this)){if(this.journey||this.dead||this.dying||this.sleeping)this.batracienMissiles=[];return;}
   for(const s of this.batracienMissiles||[]){const dx=s.vx*dt,dy=s.vy*dt,parts=Math.max(1,Math.ceil(Math.hypot(dx,dy)/3));let wall=1.01;
    for(let j=1;j<=parts;j++)if(this.solid(s.x+dx*j/parts,s.y+dy*j/parts,1,s.level)){wall=j/parts;break;}
-   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)))];let first=null;
+   const targets=s.friendly?this.enemies.filter(e=>alive(e)&&e.world&&!e.friendly&&!e.retiring):s.law?[this.player]:[this.player,...this.npcs.filter(n=>alive(n)&&(n.civilian||isArmed(n)||this.isHumanGuard?.(n)))];let first=null;
    for(const t of targets){if(!this.sameLevel(s,t))continue;const u=swept(s,t,dx,dy);if(u!==null&&u<wall&&(!first||u<first.u)&&this.lineClear(s,t))first={t,u};}
-   if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
+   if(first){if(s.friendly){const n=this.npcs.find(n=>n.id===s.owner);if(n&&alive(n)){this.guardStrike(n,first.t);if(first.t.dead&&first.t.batracien)this.batracienCorpse(first.t);}}else if(first.t===this.player)this.damagePlayer(1,s);else if(isArmed(first.t))this.damageBatracienGuard(first.t,1,s);else if(this.isHumanGuard?.(first.t))this.damageHumanGuard(first.t,1,s);else this.damageCivilian(first.t,1,s);s.life=0;}
    else if(wall<=1)s.life=0;else{s.x+=dx;s.y+=dy;s.life-=dt;}
   }
   this.batracienMissiles=(this.batracienMissiles||[]).filter(s=>s.life>0);
@@ -301,8 +353,8 @@ const Batraciens = (() => {
  Game.prototype.respawn=function(){oldRespawn.call(this);this.batracienMissiles=[];for(const e of this.enemies.filter(e=>e.batracien&&!e.dead)){visual(e,'idle',true);e.batracien.cooldown=1;e.batracien.contactDone=false;}};
  const oldSerialize=Game.prototype.serialize;
  Game.prototype.serialize=function(){const out=oldSerialize.call(this);if(!out.atlas)return out;const records={...this.batracienRecords};
-  for(const n of this.npcs.filter(n=>n.batracien&&!n.eventId)){const b=n.batracien;records[n.id]={id:n.id,site:n.site,sex:b.sex,palette:b.palette,role:b.role,job:b.job,x:n.x,y:n.y,dir:n.dir,post:n.post,hp:n.civilian?.hp??b.hp,dead:n.civilian?.dead??b.dead??false,distance:b.distance,routine:this.saveBatracienRoutine?.(n),hostileUntil:finite(b.hostileUntil)?b.hostileUntil:0};}
-  const incident=[...this.npcs.filter(n=>n.eventId&&n.batracien),...this.enemies.filter(e=>e.eventId&&e.batracien&&!e.dead)].map(n=>({id:n.id,palette:n.batracien.palette,hp:n.batracien.hp??n.hp,action:n.batracien.action,elapsed:n.batracien.elapsed,contactDone:n.batracien.contactDone,lockedDir:n.batracien.lockedDir,targetId:n.batracien.targetId,hostileUntil:n.batracien.hostileUntil||0}));
+  for(const n of this.npcs.filter(n=>n.batracien&&!n.eventId)){const b=n.batracien;records[n.id]={id:n.id,site:n.site,sex:b.sex,palette:b.palette,role:b.role,job:b.job,x:n.x,y:n.y,dir:n.dir,post:n.post,hp:n.civilian?.hp??b.hp,dead:n.civilian?.dead??b.dead??false,distance:b.distance,routine:this.saveBatracienRoutine?.(n),comboIndex:b.comboIndex||0,hostileUntil:finite(b.hostileUntil)?b.hostileUntil:0};}
+  const incident=[...this.npcs.filter(n=>n.eventId&&n.batracien),...this.enemies.filter(e=>e.eventId&&e.batracien&&!e.dead)].map(n=>({id:n.id,role:n.batracien.role,palette:n.batracien.palette,hp:n.batracien.hp??n.hp,action:n.batracien.action,elapsed:n.batracien.elapsed,contactDone:n.batracien.contactDone,lockedDir:n.batracien.lockedDir,targetId:n.batracien.targetId,comboIndex:n.batracien.comboIndex||0,chainCount:n.batracien.chainCount||1,attackSerial:n.batracien.attackSerial||0,hostileUntil:n.batracien.hostileUntil||0}));
   out.atlas.batraciens={version:1,people:Object.values(records).slice(0,128),incidents:incident.slice(-64)};return out;
  };
  function atlasFor(renderer,n){

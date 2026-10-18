@@ -34,6 +34,10 @@ combos et de leurs smears. Les quatre directions et le rendu en JavaScript
 préservent les mêmes dimensions que les batraciens. Voir [la réalisation et
 ses tests](docs/kaldor-art.md) et [l'atelier interactif](art/kaldor-preview.html).
 
+## Froid, chaleur et tenues
+
+La chaleur de la tenue et du casque de Kaldor est comparée à la température ressentie du lieu, selon la saison, l'heure, le vent, la pluie, la neige et l'abri. Sans tenue assez chaude, il grelotte puis **perd vite de la santé** et peut mourir de froid ; un voyage organisé le laisse au pire à 1 PV. Une tenue trop chaude dans la chaleur ne coûte jamais de santé mais **creuse la faim plus vite**. Le HUD, le givre au bord de l'écran, l'inventaire et le panneau du palefrenier l'indiquent. Voir [les règles et les exemples](docs/body-heat.md).
+
 ## Voyages en arrière-plan
 
 Un voyage en cheval, charrette ou bateau continue quand on change d'app ou d'onglet. Il suit l'heure réelle : au retour, le temps passé ailleurs est rattrapé. Si le voyage s'est terminé pendant l'absence, Kaldor est à destination et **le jeu est en pause**, avec la raison de l'arrêt. Sur iPhone, l'app programme une notification **« Arrivé à destination »** à l'heure prévue ; un voyage stoppé en route (passage menacé ou fermé) annonce « Voyage interrompu » et l'étape où Kaldor attend. L'autorisation est demandée au premier départ. Dans un navigateur, le premier départ propose aussi les notifications du site ; sans autorisation (ou depuis l'écran d'accueil d'un iPhone), seule la pause au retour s'applique. **Les notifications iOS demandent une réinstallation depuis Xcode (version 1.4, build 5)** ; sans elle, le voyage continue tout de même et le jeu se met en pause au retour.

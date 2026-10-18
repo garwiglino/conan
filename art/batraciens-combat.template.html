@@ -1,0 +1,74 @@
+<div id="hr-batraciens-combat">
+<style>
+#hr-batraciens-combat{font-family:system-ui,sans-serif;color:light-dark(#292f2c,#e6e7dc);color-scheme:light dark}
+#hr-batraciens-combat *{box-sizing:border-box}
+#hr-batraciens-combat .hr-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+#hr-batraciens-combat .hr-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#hr-batraciens-combat label{display:grid;gap:5px;min-width:0}
+#hr-batraciens-combat button,#hr-batraciens-combat select{font:inherit;color:inherit;background:light-dark(#edf0e8,#29332d);border:1px solid light-dark(#b6bfb0,#5e6d59);border-radius:5px;padding:10px;min-height:44px;max-width:100%}
+#hr-batraciens-combat button[aria-pressed="true"]{background:light-dark(#d2dfc5,#4a5c37)}
+#hr-batraciens-combat canvas{display:block;width:100%;height:300px;image-rendering:pixelated;background:#35434d;border-radius:6px;margin-top:14px}
+#hr-batraciens-combat canvas[data-hr="lineup"]{height:190px}
+#hr-batraciens-combat input[type="range"]{width:100%;min-height:40px;accent-color:light-dark(#576f40,#bacd94)}
+#hr-batraciens-combat .hr-scrub{flex:1;min-width:130px}
+#hr-batraciens-combat .hr-inline{display:flex;gap:8px;align-items:center;min-height:44px}
+#hr-batraciens-combat .hr-detail{min-height:44px;margin:8px 0;overflow-wrap:anywhere}
+#hr-batraciens-combat .hr-title{font-weight:500;margin:0 0 10px}
+@media(max-width:520px){#hr-batraciens-combat .hr-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<div class="hr-title">Hearthreaver · Tenues et combat</div>
+<div class="hr-fields">
+<label>Catégorie<select data-hr="role" aria-label="Catégorie"></select></label>
+<label>Coup<select data-hr="action" aria-label="Coup"></select></label>
+<label>Vue<select data-hr="direction" aria-label="Vue"><option value="1">Droite</option><option value="2" selected>Face</option><option value="3">Gauche</option><option value="0">Dos</option></select></label>
+<label>Peau<select data-hr="palette" aria-label="Couleur de peau"><option value="original">Olive</option><option value="jade">Jade</option><option value="turquoise_sombre">Turquoise</option><option value="ocre_mousse">Ocre mousse</option><option value="ardoise">Ardoise</option></select></label>
+<label>Vitesse<select data-hr="speed" aria-label="Vitesse"><option value="1">Normale</option><option value="0.5">× 0,5</option><option value="0.25">× 0,25</option></select></label>
+</div>
+<canvas data-hr="canvas" role="img" aria-label="Animation native du batracien sélectionné ; témoin de blocage à droite">Animation de combat.</canvas>
+<div class="hr-row"><button type="button" data-hr="play">Pause</button><button type="button" data-hr="next">Image suivante</button><label class="hr-scrub">Image <output data-hr="frame-label">1 / 12</output><input data-hr="frame" type="range" min="0" max="11" value="0" aria-label="Image d’animation"></label></div>
+<div class="hr-row"><label class="hr-inline"><input data-hr="equipment" type="checkbox" checked> Armes et bouclier</label><label class="hr-inline"><input data-hr="smear" type="checkbox" checked> Smear</label><label class="hr-inline"><input data-hr="sequence" type="checkbox" checked> Alterner les coups</label><label class="hr-inline"><input data-hr="pixels" type="checkbox"> Grille de pixels</label></div>
+<div class="hr-row" aria-label="Essais du bouclier"><button type="button" data-hr="front">Frapper de face</button><button type="button" data-hr="rear">Frapper dans le dos</button><button type="button" data-hr="heavy">Coup lourd</button></div>
+<div class="hr-detail" data-hr="status" aria-live="polite">Anticipation</div>
+<div>Repos armé · profils gauche et droit</div><canvas data-hr="lineup" role="img" aria-label="Comparaison simultanée des profils gauche et droit au repos armé"></canvas>
+<script>
+/*__CIVIL_ART__*/
+/*__ARMED_ART__*/
+(()=>{'use strict';
+const root=document.getElementById('hr-batraciens-combat'),$=name=>root.querySelector('[data-hr="'+name+'"]'),A=globalThis.HearthreaverBatraciensCombattants,C=/*__CONFIG__*/;
+const canvas=$('canvas'),ctx=canvas.getContext('2d'),lineup=$('lineup'),lc=lineup.getContext('2d');
+let role='village_guard',action='idle',direction=2,frame=0,elapsed=0,cycle=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,last=0,notice='',test=null,testAge=0,hold=.42;
+const cache=new Map();function drawSprite(r,a,d,f,x,y,zoom,smear=true,target=ctx,loadout=undefined){const palette=$('palette').value,equipment=loadout===undefined?$('equipment').checked:loadout,key=[r,a,d,f,smear,equipment,palette].join('|');let cv=cache.get(key);if(!cv){const im=A.raster({role:r,action:a,dir:d,frame:f,palette,smear,equipment});cv=document.createElement('canvas');cv.width=cv.height=80;const c=cv.getContext('2d'),id=c.createImageData(80,80);id.data.set(im.data);c.putImageData(id,0,0);cache.set(key,cv);if(cache.size>200)cache.delete(cache.keys().next().value);}target.drawImage(cv,Math.round(x)-40*zoom,Math.round(y)-52*zoom,80*zoom,80*zoom);}
+for(const[k,v]of Object.entries(A.ROLES))$('role').add(new Option(v.label,k));$('role').value=role;
+function actions(){const old=$('action').value||'idle';$('action').replaceChildren();for(const a of [...A.ATTACKS[role],'guard','guard_walk','block','idle','walk','hit','death'])$('action').add(new Option(A.CLIPS[a].label,a));action=(A.ATTACKS[role].includes(old)||['idle','walk','guard','block','hit','death'].includes(old))?old:'idle';$('action').value=action;reset();}
+function reset(){elapsed=0;frame=0;cycle=Math.max(0,A.ATTACKS[role].indexOf(action));notice='';test=null;testAge=0;$('frame').max=A.CLIPS[action].frames-1;status();}
+function status(){const c=A.CLIPS[action],phase=A.isAttack(action)?A.combatPose(role,action,direction,frame).phase:c.label;$('frame').max=c.frames-1;$('frame-label').textContent=(frame+1)+' / '+c.frames;$('frame').value=frame;$('status').textContent=notice||A.OUTFITS[role].label+' · '+A.HEADGEAR[role]+' · '+phase+(A.isAttack(action)?' · contact '+Math.round(c.contact*1000)+' ms':'');$('play').textContent=playing?'Pause':'Lecture';const shield=!!A.ROLES[role].offhand;for(const k of ['front','rear','heavy'])$(k).disabled=!shield;}
+$('role').onchange=()=>{role=$('role').value;actions();};$('action').onchange=()=>{action=$('action').value;reset();};$('direction').onchange=()=>{direction=+$('direction').value;test=null;notice='';};$('play').onclick=()=>{playing=!playing;status();};$('next').onclick=()=>{playing=false;test=null;notice='';frame=(frame+1)%A.CLIPS[action].frames;elapsed=A.CLIPS[action].durations.slice(0,frame).reduce((a,b)=>a+b,0)/1000;status();};$('frame').oninput=()=>{playing=false;test=null;notice='';frame=+$('frame').value;elapsed=A.CLIPS[action].durations.slice(0,frame).reduce((a,b)=>a+b,0)/1000;status();};
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),combatSpec=n=>C.combat[n.batracien.role],alive=n=>n&&!n.dead&&!n.batracien?.dead&&!n.civilian?.dead&&(n.alpha??1)>.5,front=(g,n,t,min=.15)=>{const[fX,fY]=g.facing(n.dir);return ((t.x-n.x)*fX+(t.y-n.y)*fY)/Math.max(1,dist(n,t))>min;},visual=(n,a,restart=false)=>{if(n.batracien.action!==a||restart){n.batracien.action=a;n.batracien.elapsed=0;n.batracien.contactDone=false;}},Game={prototype:{}};
+/*__BLOCK_FUNCTION__*/
+const g={player:{x:120,y:100,combo:0,level:0},sameLevel:(a,b)=>(a.level||0)===(b.level||0),lineClear:()=>true,facing:d=>[[0,-1],[1,0],[0,1],[-1,0]][d],burst:()=>{},emit:()=>{}};
+for(const mode of ['front','rear','heavy'])$(mode).onclick=()=>{
+ direction=1;$('direction').value='1';action='guard';$('action').value='guard';frame=0;elapsed=0;
+ // This isolated test calls the shipped game's defense function; world AI is not simulated here.
+ test={x:100,y:100,dir:1,level:0,stun:0,batracien:{role,action:'guard',elapsed:.2,hp:C.combat[role].hp,guardRaise:0,guardHold:.72,blockCount:0}};testAge=0;
+ g.player.x=mode==='rear'?80:120;g.player.combo=mode==='heavy'?3:0;const blocked=Game.prototype.tryBatracienBlock.call(g,test,g.player);
+ if(!blocked){test.batracien.hp--;visual(test,'hit',true);}
+ notice=blocked?'Bloqué de face · aucun dégât':mode==='heavy'?'Garde brisée · étourdissement 850 ms · dégât reçu':'Coup dans le dos · dégât reçu';playing=true;status();
+};
+const resize=()=>{canvas.width=Math.floor(canvas.getBoundingClientRect().width);canvas.height=canvas.width<420?210:canvas.width<620?260:300;canvas.style.height=canvas.height+'px';lineup.width=canvas.width;lineup.height=canvas.width<420?160:190;lineup.style.height=lineup.height+'px';};new ResizeObserver(resize).observe(canvas);resize();actions();
+function render(now){const dt=last?Math.min(.05,(now-last)/1000):0;last=now;const w=canvas.width,h=canvas.height,z=w<420?4:w<620?5:7,ground=h-42,x=Math.round(w*(test?.batracien? .37:.5));
+ ctx.imageSmoothingEnabled=false;ctx.fillStyle='#35434d';ctx.fillRect(0,0,w,h);ctx.fillStyle='#3d4d52';for(let y=38;y<h;y+=24)for(let x=0;x<w;x+=24)if(((x+y)/24|0)%2)ctx.fillRect(x,y,24,24);ctx.fillStyle='#6c796e';ctx.fillRect(0,ground+2,w,1);
+ if(playing){elapsed+=dt*+$('speed').value;if(test)testAge+=dt*+$('speed').value;
+  const c=A.CLIPS[action],total=c.duration/1000;if(A.isAttack(action)&&elapsed>total+hold){elapsed=0;if($('sequence').checked){const list=A.ATTACKS[role];cycle=(cycle+1)%list.length;action=list[cycle];$('action').value=action;}}
+  frame=A.frameAt(action,A.CLIPS[action].loop?elapsed:Math.min(elapsed,A.CLIPS[action].duration/1000-.0001));
+ }
+ let visibleAction=action,visibleFrame=frame;if(test){visibleAction=test.batracien.action;visibleFrame=A.frameAt(visibleAction,testAge);if(testAge>1.35){test=null;notice='';}}
+ ctx.fillStyle='#26353b';ctx.beginPath();ctx.ellipse(x,ground+3,12*z,2*z,0,0,Math.PI*2);ctx.fill();drawSprite(role,visibleAction,direction,visibleFrame,x,ground,z,$('smear').checked);
+ if($('equipment').checked&&!test&&action==='throw_javelin'&&elapsed>=A.CLIPS.throw_javelin.contact&&elapsed<A.CLIPS.throw_javelin.contact+.36){const [fx,fy]=g.facing(direction),travel=8+(elapsed-A.CLIPS.throw_javelin.contact)*112,px=x+fx*travel*z,py=ground-16*z+fy*travel*z;for(let i=-4;i<=4;i++){ctx.fillStyle=i===4?'#cfd5d6':'#a16a44';ctx.fillRect(Math.round(px+fx*i*z),Math.round(py+fy*i*z),z,z);}}
+ if(test){const tx=Math.round(w*.78),tz=Math.max(3,z-2);drawSprite('raider','idle',3,0,tx,ground,tz);if(testAge<.18){ctx.fillStyle='#f3dfa4';const sx=x+7*z,sy=ground-12*z;ctx.fillRect(sx,sy,3*z,z);ctx.fillRect(sx+z,sy-z,z,3*z);}}
+ if($('pixels').checked){ctx.strokeStyle='rgba(220,230,210,.15)';ctx.lineWidth=1;ctx.beginPath();for(let xx=x-24*z;xx<x+24*z;xx+=z){ctx.moveTo(xx+.5,ground-44*z);ctx.lineTo(xx+.5,ground+4*z);}for(let yy=ground-44*z;yy<=ground+4*z;yy+=z){ctx.moveTo(x-24*z,yy+.5);ctx.lineTo(x+24*z,yy+.5);}ctx.stroke();}
+ lc.imageSmoothingEnabled=false;lc.fillStyle='#35434d';lc.fillRect(0,0,lineup.width,lineup.height);[3,1].forEach((d,i)=>{const xx=Math.round((i+.5)*lineup.width/2);drawSprite(role,'idle',d,A.frameAt('idle',elapsed),xx,lineup.height-30,lineup.width<420?4:5,false,lc,true);lc.fillStyle='#eadfc8';lc.font='12px system-ui';lc.textAlign='center';lc.fillText(d===3?'Gauche':'Droite',xx,lineup.height-7);});
+ status();requestAnimationFrame(render);
+}requestAnimationFrame(render);
+})();
+</script>
+</div>
