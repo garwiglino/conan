@@ -244,3 +244,50 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 #menuClose[hidden]{display:none!important}
 #dialogueControls #dlgBye{width:144px;max-width:32%}
 #screen #dialogueControls #dlgNext{width:144px;min-width:144px;margin:0 8px 8px 0}
+/* Codex: world speech bubbles, floating decisions and a unified player sheet. */
+#dialogue:not(.docked){border-radius:7px}
+#dialogue:not(.docked) .dlg-body{height:calc(100% - 4px);max-height:calc(100% - 4px)}
+#dialogue:not(.docked) .tail{display:block}
+#dialogueControls{bottom:calc(env(safe-area-inset-bottom) + 28px);right:calc(env(safe-area-inset-right) + 176px)}
+#screen #dialogueControls #dlgChoices{border:2px solid var(--ui-line);background:#211b15ed;border-radius:4px}
+#dialogueControls #dlgBye{position:fixed!important;right:calc(env(safe-area-inset-right) + 24px)!important;bottom:calc(env(safe-area-inset-bottom) + 44px)!important;left:auto!important;top:auto!important;width:136px;max-width:136px}
+#screen #dialogueControls #dlgNext{position:fixed;right:calc(env(safe-area-inset-right) + 24px);bottom:calc(env(safe-area-inset-bottom) + 44px);margin:0;width:136px;min-width:136px}
+#menuBody.player-overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.85fr);grid-template-rows:auto 1fr;align-items:start;gap:10px;overflow:auto}
+#menuBody.player-overview>.ui-section{min-width:0;width:auto}
+.player-overview [data-kind=character]{grid-column:1;grid-row:1}
+.player-overview [data-kind=items]{grid-column:1;grid-row:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.player-overview [data-kind=items]>.m-sec{grid-column:1/-1}
+.player-overview [data-kind=outfit]{grid-column:2;grid-row:1/4}
+.player-overview [data-kind=climate]{grid-column:1}
+#menuBody.player-overview .inventory-slot{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin:0;padding:8px;background:#171410;border:1px solid var(--ui-line);min-width:0}
+.player-overview .inventory-slot .inv-act{width:100%;min-height:44px}
+#menuBody.player-overview .ward-body{display:flex;flex-direction:column;gap:6px}
+#menuBody.player-overview .ward-mirror{width:100%;display:grid;grid-template-columns:76px 1fr;gap:6px;overflow:visible}
+#menuBody.player-overview .ward-big{width:68px;height:68px;grid-row:1/3}
+#menuBody.player-overview .ward-turn{grid-column:2}
+#menuBody.player-overview .ward-info{grid-column:1/-1;max-height:76px;overflow:auto}
+#menuBody.player-overview .ward-pick{width:100%;overflow:visible}
+#menuBody.player-overview .ward-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
+#menuBody.player-overview .ward-top{padding:0}
+#menuBody.player-overview{grid-template-columns:minmax(0,1fr) minmax(180px,.8fr);grid-template-rows:auto auto auto}
+#menuBody.player-overview [data-kind=character]{display:flex;gap:8px;align-items:center;padding:6px;min-height:76px}
+.player-stats{display:flex;flex-direction:column;gap:4px;min-width:0;font-size:var(--ui-note);overflow-wrap:anywhere}
+.player-stats strong{font-size:var(--ui-reading);color:var(--ui-accent)}
+#menuBody.player-overview [data-kind=character] .ward-big{width:56px;height:56px;flex:none}
+#menuBody.player-overview .ward-mirror{display:flex;flex-direction:column}
+#menuBody.player-overview .ward-info{display:none}
+#menuBody.player-overview .inventory-slot{padding:6px 4px}
+#menuBody.player-overview .inventory-slot>.grow{font-size:var(--ui-note)}
+@media(max-width:740px){#menuBody.player-overview [data-kind=items]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#menu #menuBody.player-overview{grid-auto-rows:max-content;grid-template-rows:max-content max-content max-content;align-content:start;flex:1;min-height:0}
+#menu #menuBody.player-overview{grid-template-rows:auto;align-items:start}
+.player-possession{display:flex;flex-direction:column;gap:8px;min-width:0;grid-column:1;grid-row:1}
+#menuBody.player-overview>.ui-section[data-kind=outfit]{grid-row:1;grid-column:2}
+.player-possession>.ui-section{width:100%;flex:none}
+#menuBody.player-overview [data-kind=items]{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:740px){#menuBody.player-overview [data-kind=items]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Decisions belong to the canvas; advance/farewell belong to the right rail. */
+#screen #dialogueControls{inset:0;display:block;pointer-events:none}
+#screen #dialogueControls #dlgChoices{position:absolute;inset:auto;left:var(--choices-left);bottom:var(--choices-bottom);width:var(--choices-width);pointer-events:auto}
+#screen #dialogueControls #dlgBye,#screen #dialogueControls #dlgNext{position:absolute!important;inset:auto!important;left:var(--action-left)!important;bottom:calc(env(safe-area-inset-bottom) + 44px)!important;width:var(--action-width);min-width:0;max-width:none;margin:0;pointer-events:auto}

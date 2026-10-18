@@ -159,13 +159,8 @@ const KaldorWardrobe=(()=>{
  const ownedHelmets=g=>allHelmets().filter(h=>g.wardrobe.helmets.includes(h.id));
  const plural=(n,word)=>n+' '+word+(n>1?'s':'');
  function inventoryHTML(g){
-  if(!g.wardrobe||view==='tenue')return '';
-  const o=get(g.wardrobe.worn),h=getHelmet(g.wardrobe.helmet);
-  const left=all().length-g.wardrobe.owned.length+allHelmets().length-g.wardrobe.helmets.length;
-  return '<div class="m-sec">Tenue</div><div class="inv-row ward-entry"><canvas class="ward-stage" width="30" height="30" aria-label="Kaldor"></canvas><div class="grow">'+
-   text(o?.label||'')+(h?' · '+text(h.label):'')+' '+pips(g.outfitWarmth(),'Chaleur totale')+'<small>'+plural(ownedOutfits(g).length,'tenue')+' et '+plural(ownedHelmets(g).length,'casque')+
-   (left?' · '+plural(left,'pièce')+' unique'+(left>1?'s':'')+' à trouver sur les mannequins du monde':'')+'.</small></div>'+
-   '<button class="inv-act" data-ward-open>Tenue</button></div>';
+  if(!g.wardrobe)return '';
+  return '<div class="m-sec">Tenue</div>'+tenueHTML(g);
  }
  function tile(kind,piece,on){
   const id=piece?piece.id:'',label=piece?piece.label:'Sans casque';
@@ -217,9 +212,9 @@ const KaldorWardrobe=(()=>{
   };
   requestAnimationFrame(tick);
  }
- function bindTenue(body,g,refresh){
-  body.innerHTML=tenueHTML(g);
-  const title=document.getElementById('menuTitle');if(title)title.textContent='Tenue';
+ function bindTenue(body,g,refresh,inline=false){
+  if(!inline)body.innerHTML=tenueHTML(g);
+  const title=document.getElementById('menuTitle');if(title&&!inline)title.textContent='Tenue';
   for(const cv of body.querySelectorAll('[data-icon]')){
    const id=cv.dataset.icon,c=cv.getContext('2d');
    // Outfits: Kaldor wearing them bareheaded. Helmets alone. No helmet: his bare head and mane.
@@ -242,12 +237,12 @@ const KaldorWardrobe=(()=>{
   for(const b of body.querySelectorAll('[data-turn]'))b.addEventListener('click',()=>{
    dir=DIRS[(DIRS.indexOf(dir)+Number(b.dataset.turn)+4)%4];body.querySelector('.ward-dir').textContent=DIR_NAMES[dir];
   });
-  body.querySelector('[data-ward-back]').addEventListener('click',()=>{view=null;info=null;refresh();});
+  body.querySelector('[data-ward-back]')?.addEventListener('click',()=>{view=null;info=null;refresh();});
   animate(body.querySelector('.ward-big'),true,[23,20]);
  }
  function bindInventory(body,g,refresh){
   style();if(!g.wardrobe)return;
-  if(view==='tenue'){bindTenue(body,g,refresh);return;}
+  if(body.querySelector('.ward')){bindTenue(body,g,refresh,true);return;}
   body.querySelector('[data-ward-open]')?.addEventListener('click',()=>{view='tenue';refresh();body.scrollTop=0;body.querySelector('.ward-tile.on')?.focus({preventScroll:true});});
   const cv=body.querySelector('.ward-stage');if(cv)animate(cv,false,[25,23]);
  }

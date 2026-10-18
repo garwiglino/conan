@@ -23,6 +23,7 @@ const {chromium}=require('playwright'),root=path.resolve(__dirname,'..');
    const overflow=[...document.querySelectorAll('#menuBody,.settings-grid,.world-side,.transport-body,.journey-shell,.ward-pick')].filter(visible).filter(n=>n.scrollWidth>n.clientWidth+1).map(n=>n.id||n.className);
    return {bad,overflow,scroll:[...document.querySelectorAll('#menuBody,.settings-grid,.transport-body,.journey-shell')].filter(visible).map(n=>({element:n.id||n.className,extra:n.scrollHeight-n.clientHeight}))};
   },selectors);
+  if(report.bad.length)await page.screenshot({path:path.join(root,'art/ui-landscape/ui-audit-failure.png')});
   assert.deepEqual(report.bad,[],name);assert.deepEqual(report.overflow,[],name+' horizontal overflow');
   if(shot){const dir=path.join(root,'art/ui-landscape');fs.mkdirSync(dir,{recursive:true});await page.screenshot({path:path.join(dir,name+'.png')});}
   results.push({name,...report});console.log("PASS "+name);
@@ -36,9 +37,12 @@ const {chromium}=require('playwright'),root=path.resolve(__dirname,'..');
   await check(prefix+'-game',['#btnMenu','#btnWorld','#btnParty','[data-key=attack]','[data-key=guard]','[data-key=dodge]','[data-key=interact]'],shot);
   assert.equal(await page.locator('#btnWorld').count(),1);assert.equal(await page.locator('#menuMap').count(),1);
   await page.evaluate(()=>{const g=ui.game,n=g.npcs.find(n=>n.id==='elyne');if(n)g.recruitCompanion(n);ui.openMenu('bag');});
-  for(const i of [3,0,1,2]){await page.click('#inventoryTab'+i);await check(prefix+'-inventory-'+i,['#menuResume','#inventoryTab'+i],shot&&i===3);}
-  await page.evaluate(()=>{ui.game.wardrobe.owned=ui.KaldorWardrobe.all().map(o=>o.id);ui.game.wardrobe.helmets=ui.KaldorWardrobe.helmets().map(o=>o.id);});
-  await page.click('#inventoryTab1');await page.click('[data-ward-open]');await check(prefix+'-wardrobe',['#menuResume','[data-ward-back]','[data-turn="-1"]','[data-turn="1"]'],shot);
+  await check(prefix+'-player-overview',['#menuResume','.player-overview [data-kind="character"]','.ward-big'],shot);
+  assert.equal(await page.locator('.ui-inventory-nav').count(),0);
+  await page.evaluate(()=>{ui.game.wardrobe.owned=ui.KaldorWardrobe.all().map(o=>o.id);ui.game.wardrobe.helmets=ui.KaldorWardrobe.helmets().map(o=>o.id);ui.selectMenuTab('bag');});
+  await check(prefix+'-wardrobe',['#menuResume','[data-turn="-1"]','[data-turn="1"]'],shot);
+  await page.locator('[data-wear="corsaire"]').click();assert.equal(await page.evaluate(()=>ui.game.wardrobe.worn),'corsaire');
+  await page.locator('[data-helm="casque-cornes"]').click();assert.equal(await page.evaluate(()=>ui.game.wardrobe.helmet),'casque-cornes');
   await page.click('#btnHelp');await check(prefix+'-help',['#menuResume','#menuBody summary'],shot);
   await page.click('#btnQuests');await check(prefix+'-journal',['#menuResume'],shot);
   await page.click('#btnOptions');await check(prefix+'-settings-game',['#menuResume','#optionsHome'],shot);await page.click('#menuResume');
