@@ -1,15 +1,19 @@
 {
   "designPopulation": 5450000,
   "speciesCounts": {
-    "goblin": 496080,
-    "human": 4680898,
-    "orc": 177780,
+    "ape_folk": 171916,
+    "batracien": 184596,
+    "goblin": 497095,
+    "human": 4324150,
+    "orc": 177001,
     "serpentfolk": 95242
   },
   "speciesPct": {
-    "goblin": 9.1,
-    "human": 85.89,
-    "orc": 3.26,
+    "ape_folk": 3.15,
+    "batracien": 3.39,
+    "goblin": 9.12,
+    "human": 79.34,
+    "orc": 3.25,
     "serpentfolk": 1.75
   }
 }

@@ -7,9 +7,7 @@ Sources : `docs/world-bible/01-geopolitique.md`, `04-danger-et-evenements.md`,
 `data/batraciens/communities.json`.
 
 Les batraciens sont des habitants de Varan, Tagon et de certains lieux humides de
-Teremor. Ils ne forment pas un État ou une alliance militaire raciale. La bible
-à quatre espèces n'a toujours pas de recensement batracien distinct : ne pas en
-déduire une population ou une diplomatie chiffrée. Les neuf acteurs diplomatiques
+Teremor. Ils ne forment pas un État ou une alliance militaire raciale. La bible v2 distingue désormais les batraciens dans le recensement à six espèces ; ces chiffres de conception ne représentent pas des effectifs militaires ni une diplomatie raciale. Les neuf acteurs diplomatiques
 existants ne comprennent aucune « faction batracienne » souveraine.
 
 Les réseaux criminels de la bible ne définissent pas une espèce exclusive.

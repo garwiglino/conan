@@ -1,24 +1,31 @@
 {
-"schema":1,"version":"1.0.0","status":"production_design_not_runtime_activation","calendarDays":96,"expectedRegions":14,"expectedSites":83,
-"species":["human","goblin","orc","serpentfolk"],"territoryOrder":["Igea","Teremor","Sarak","Varan","Tagon"],
+"schema":2,"version":"2.0.0","status":"production_design_not_runtime_activation","calendarDays":96,"expectedRegions":14,"expectedSites":83,
+"species":[
+  "human",
+  "goblin",
+  "orc",
+  "serpentfolk",
+  "batracien",
+  "ape_folk"
+],"territoryOrder":["Igea","Teremor","Sarak","Varan","Tagon"],
 "relationsFile":"relations.json","eventsFile":"events.json",
 "factions":[["teremor","Couronne de Teremor","sovereign","teremor"],["sylverive","Cités de Sylverive","chartered_cities","teremor"],["igea","Autorités d'Igea","limited_coordination",null],["sarak","Monarchie de Sarak","sovereign","sarak"],["varan","Cités de Varan","limited_coordination",null],["tagon","Ports de Tagon","limited_coordination",null],["darg","Darg","clan_agreement",null],["kesh","Kesh","clan",null],["enclaves","Enclaves serpentines","contact_defaults_not_alliance",null]],
 "regionColumns":["id","territory","designPopulation","namedSettlementPct","ruralSpeciesPct","townSpeciesPct","authority","specialties","disputes"],
 "regions":[
-[1,"Igea",180000,8,[87,10,3,0],[93,6,1,0],"igea",["fish","wool","timber","resin"],["concessions","garrison"]],
-[2,"Igea",140000,6,[81,7,12,0],[90,6,4,0],"igea",["iron_ore","building_stone","wool"],["concessions","garrison"]],
-[3,"Igea",190000,7,[65,10,25,0],[80,8,12,0],"igea",["iron_ore","pack_animals","wool"],["concessions","pasture"]],
-[4,"Teremor",620000,12,[88,11,1,0],[91,8,1,0],"teremor",["timber","resin","grain","honey"],["contribution","forestry"]],
-[5,"Teremor",900000,14,[91,8,1,0],[94,5,1,0],"teremor",["grain","legumes","flax","flour"],["contribution"]],
-[6,"Teremor",580000,22,[89,8,3,0],[90,7,3,0],"sylverive",["cloth","tools","rope","boats"],["contribution","port_access"]],
-[7,"Teremor",780000,12,[90,9,1,0],[93,6,1,0],"teremor",["grain","meat","leather","legumes"],["contribution"]],
-[8,"Sarak",270000,10,[73,14,12,1],[87,9,4,0],"sarak",["copper_ore","building_stone","pack_animals"],["water","pasture","concessions"]],
-[9,"Sarak",220000,9,[78,18,4,0],[86,11,3,0],"sarak",["salt","dates","pack_animals"],["water","kesh_restitution"]],
-[10,"Sarak",460000,14,[88,9,2,1],[93,6,1,0],"sarak",["grain","dates","cotton","dyes"],["water","pasture"]],
-[11,"Varan",230000,12,[76,12,2,10],[91,7,2,0],"varan",["tin_ore","timber","resin","rice"],["port_access","enclave_access"]],
-[12,"Varan",290000,11,[70,10,2,18],[92,6,2,0],"varan",["rice","medicinal","timber","tin_ore"],["port_access","enclave_access"]],
-[13,"Tagon",320000,16,[89,6,2,3],[93,5,2,0],"tagon",["fish","fiber","rope","boats"],["port_access","forestry"]],
-[14,"Tagon",270000,13,[85,7,2,6],[92,6,2,0],"tagon",["naval_timber","fiber","aromatics","fruit"],["forestry","enclave_access"]]
+[1,"Igea",180000,8,[87,10,3,0,0,0],[93,6,1,0,0,0],"igea",["fish","wool","timber","resin"],["concessions","garrison"]],
+[2,"Igea",140000,6,[81,7,12,0,0,0],[90,6,4,0,0,0],"igea",["iron_ore","building_stone","wool"],["concessions","garrison"]],
+[3,"Igea",190000,7,[65,10,25,0,0,0],[80,8,12,0,0,0],"igea",["iron_ore","pack_animals","wool"],["concessions","pasture"]],
+[4,"Teremor",620000,12,[81,11,1,0,3,4],[87,8,1,0,2,2],"teremor",["timber","resin","grain","honey"],["contribution","forestry"]],
+[5,"Teremor",900000,14,[90.75,8,1,0,0.25,0],[93.5,5,1,0,0.25,0.25],"teremor",["grain","legumes","flax","flour"],["contribution"]],
+[6,"Teremor",580000,22,[88.0,8,3,0,0.5,0.5],[87,7,3,0,1,2],"sylverive",["cloth","tools","rope","boats"],["contribution","port_access"]],
+[7,"Teremor",780000,12,[88,9,1,0,1,1],[92.0,6,1,0,0.5,0.5],"teremor",["grain","meat","leather","legumes"],["contribution"]],
+[8,"Sarak",270000,10,[73,14,12,1,0,0],[86.75,9,4,0,0,0.25],"sarak",["copper_ore","building_stone","pack_animals"],["water","pasture","concessions"]],
+[9,"Sarak",220000,9,[78,18,4,0,0,0],[85.75,11,3,0,0,0.25],"sarak",["salt","dates","pack_animals"],["water","kesh_restitution"]],
+[10,"Sarak",460000,14,[87.5,9,2,1,0,0.5],[92,6,1,0,0,1],"sarak",["grain","dates","cotton","dyes"],["water","pasture"]],
+[11,"Varan",230000,12,[54,12,2,10,18,4],[77,7,2,0,12,2],"varan",["tin_ore","timber","resin","rice"],["port_access","enclave_access"]],
+[12,"Varan",290000,11,[42,10,2,18,20,8],[72,6,2,0,16,4],"varan",["rice","medicinal","timber","tin_ore"],["port_access","enclave_access"]],
+[13,"Tagon",320000,16,[71,6,2,3,8,10],[79,5,2,0,6,8],"tagon",["fish","fiber","rope","boats"],["port_access","forestry"]],
+[14,"Tagon",270000,13,[51,7,2,6,10,24],[70,6,2,0,8,14],"tagon",["naval_timber","fiber","aromatics","fruit"],["forestry","enclave_access"]]
 ],
 "resourceColumns":["id","label","kind","territoryLevel","inputAlternatives","season","renewal","storageDays"],
 "resources":[
@@ -78,7 +85,262 @@
 ["glass","Verre","processed","13322",[["sand","limestone","firewood"]],"specialist_workshop","production",999]
 ],
 "regionalOverrides":{"2":{"grain":1,"vegetables":1,"fruit":0,"timber":1,"naval_timber":0},"8":{"water":1,"grain":1,"timber":1},"9":{"water":1,"timber":0,"naval_timber":0,"iron_ore":1,"tin_ore":0},"10":{"water":3,"grain":4,"cotton":4},"11":{"tin_ore":5},"12":{"tin_ore":3},"14":{"naval_timber":5}},
-"settlementOverrides":{},
+"settlementOverrides":{
+  "55": {
+    "speciesPct": [
+      46,
+      6,
+      2,
+      0,
+      8,
+      38
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "62": {
+    "speciesPct": [
+      42,
+      6,
+      2,
+      0,
+      6,
+      44
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "40": {
+    "speciesPct": [
+      55,
+      6,
+      2,
+      0,
+      12,
+      25
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "3": {
+    "speciesPct": [
+      64,
+      6,
+      2,
+      0,
+      6,
+      22
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "27": {
+    "speciesPct": [
+      70,
+      6,
+      2,
+      0,
+      10,
+      12
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "61": {
+    "speciesPct": [
+      64,
+      6,
+      2,
+      0,
+      10,
+      18
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "50": {
+    "speciesPct": [
+      69,
+      5,
+      2,
+      0,
+      10,
+      14
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "51": {
+    "speciesPct": [
+      81,
+      5,
+      2,
+      0,
+      4,
+      8
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "75": {
+    "speciesPct": [
+      52,
+      6,
+      2,
+      0,
+      28,
+      12
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "77": {
+    "speciesPct": [
+      52,
+      6,
+      2,
+      0,
+      22,
+      18
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "10": {
+    "speciesPct": [
+      68,
+      6,
+      2,
+      0,
+      18,
+      6
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "73": {
+    "speciesPct": [
+      66,
+      7,
+      2,
+      0,
+      22,
+      3
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "74": {
+    "speciesPct": [
+      65,
+      7,
+      2,
+      0,
+      22,
+      4
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "76": {
+    "speciesPct": [
+      68,
+      7,
+      2,
+      0,
+      20,
+      3
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "25": {
+    "speciesPct": [
+      75,
+      8,
+      1,
+      0,
+      8,
+      8
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "19": {
+    "speciesPct": [
+      84,
+      8,
+      1,
+      0,
+      1,
+      6
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "32": {
+    "speciesPct": [
+      84,
+      8,
+      1,
+      0,
+      1,
+      6
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "46": {
+    "speciesPct": [
+      87,
+      8,
+      1,
+      0,
+      1,
+      3
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "38": {
+    "speciesPct": [
+      87.0,
+      6,
+      1,
+      0,
+      4,
+      2
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "42": {
+    "speciesPct": [
+      84,
+      7,
+      3,
+      0,
+      1,
+      5
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "2": {
+    "speciesPct": [
+      90.0,
+      6,
+      1,
+      0,
+      1,
+      2
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  },
+  "5": {
+    "speciesPct": [
+      91,
+      6,
+      1,
+      0,
+      0,
+      2
+    ],
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés."
+  }
+},
 "budgets":{"newArmedPerRegionDay":2,"newArmedWorldDay":8,"activeSameCauseTypeTarget":1,"runtimeActorCaps":"inherit_existing_world-danger.js"},
-"measurementNotes":{"territoryLevel":"Five digits in territoryOrder; natural potential or workshop capacity, not spawn probability.","storageDays":"Design horizon in game days; 999 means no spoilage model yet, 0 requires a dedicated quality/live-animal model, not instant destruction.","population":"Design residents, not currently rendered actors; named settlements plus hinterland conserve the regional total.","recipes":"Alternative material dependency sets, not balanced mass yields. Co-products and non-playable secondary inputs require an explicit future adapter.","magic":"No unlimited food, transport or labor substitution.","militaryAid":"No automatic mutual war obligation; all assistance requires a bounded mandate."}
+"measurementNotes":{
+  "territoryLevel": "Five digits in territoryOrder; natural potential or workshop capacity, not spawn probability.",
+  "storageDays": "Design horizon in game days; 999 means no spoilage model yet, 0 requires a dedicated quality/live-animal model, not instant destruction.",
+  "population": "Design residents, not currently rendered actors; named settlements plus hinterland conserve the regional total.",
+  "recipes": "Alternative material dependency sets, not balanced mass yields. Co-products and non-playable secondary inputs require an explicit future adapter.",
+  "magic": "No unlimited food, transport or labor substitution.",
+  "militaryAid": "No automatic mutual war obligation; all assistance requires a bounded mandate.",
+  "demographyRevision": "v2 explicitly separates batraciens and ape_folk from the former human design envelope; every region retains its exact total. This is a design reclassification, not a runtime spawn or a retcon of individual identities.",
+  "speciesOrder": "human, goblin, orc, serpentfolk, batracien, ape_folk; all six always present, including zeros."
+}
+,
+"peopleFile":"ape-folk.json",
+"demographyRevision":{"baselineVersion":"1.0.0","baselineSHA256":"0c52f03b43c05a2a29555d258f2703a80ee09a52845e1fd8d189654bc1cd8cb6","method":"explicit_reclassification_within_unchanged_regional_design_totals","oldSpecies":["human","goblin","orc","serpentfolk"],"newSpecies":["human","goblin","orc","serpentfolk","batracien","ape_folk"],"baselineRegions":[{"id":1,"designPopulation":180000,"ruralSpeciesPct":[87,10,3,0],"townSpeciesPct":[93,6,1,0]},{"id":2,"designPopulation":140000,"ruralSpeciesPct":[81,7,12,0],"townSpeciesPct":[90,6,4,0]},{"id":3,"designPopulation":190000,"ruralSpeciesPct":[65,10,25,0],"townSpeciesPct":[80,8,12,0]},{"id":4,"designPopulation":620000,"ruralSpeciesPct":[88,11,1,0],"townSpeciesPct":[91,8,1,0]},{"id":5,"designPopulation":900000,"ruralSpeciesPct":[91,8,1,0],"townSpeciesPct":[94,5,1,0]},{"id":6,"designPopulation":580000,"ruralSpeciesPct":[89,8,3,0],"townSpeciesPct":[90,7,3,0]},{"id":7,"designPopulation":780000,"ruralSpeciesPct":[90,9,1,0],"townSpeciesPct":[93,6,1,0]},{"id":8,"designPopulation":270000,"ruralSpeciesPct":[73,14,12,1],"townSpeciesPct":[87,9,4,0]},{"id":9,"designPopulation":220000,"ruralSpeciesPct":[78,18,4,0],"townSpeciesPct":[86,11,3,0]},{"id":10,"designPopulation":460000,"ruralSpeciesPct":[88,9,2,1],"townSpeciesPct":[93,6,1,0]},{"id":11,"designPopulation":230000,"ruralSpeciesPct":[76,12,2,10],"townSpeciesPct":[91,7,2,0]},{"id":12,"designPopulation":290000,"ruralSpeciesPct":[70,10,2,18],"townSpeciesPct":[92,6,2,0]},{"id":13,"designPopulation":320000,"ruralSpeciesPct":[89,6,2,3],"townSpeciesPct":[93,5,2,0]},{"id":14,"designPopulation":270000,"ruralSpeciesPct":[85,7,2,6],"townSpeciesPct":[92,6,2,0]}]}
 }

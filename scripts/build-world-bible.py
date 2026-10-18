@@ -7,7 +7,7 @@ import argparse, copy, hashlib, heapq, itertools, json, math, re, sys
 from collections import defaultdict
 from pathlib import Path
 
-SPECIES = ('human', 'goblin', 'orc', 'serpentfolk')
+SPECIES = ('human', 'goblin', 'orc', 'serpentfolk', 'batracien', 'ape_folk')
 ARMED = {'bandit_ambush','mining_interception','pasture_retaliation','kesh_raid','local_occupation','siege'}
 FOOD = {'Igea':['grain','fish','meat'], 'Teremor':['grain','legumes','vegetables'], 'Sarak':['grain','dates','legumes'], 'Varan':['rice','tubers','fish'], 'Tagon':['rice','tubers','fish']}
 KITS = {'Igea':'snow','Teremor':'temperate','Sarak':'arid','Varan':'marsh','Tagon':'jungle'}
@@ -46,7 +46,7 @@ def event_chance(rule: dict, signals: dict, hours: float=1) -> float:
     return -math.expm1(-rule['lambdaPerEligibleDay']*hours/24)
 
 def validate(source: dict) -> dict:
-    require(source.get('schema')==1 and tuple(source['species'])==SPECIES,'Schéma/espèces incompatible')
+    require(source.get('schema')==2 and tuple(source['species'])==SPECIES,'Schéma/espèces incompatible')
     factions=unique([dict(zip(('id','name','kind','sovereign'),r)) for r in source['factions']])
     regions=unique(table(source['regions'],source['regionColumns']))
     resources=unique(table(source['resources'],source['resourceColumns']))
@@ -60,7 +60,7 @@ def validate(source: dict) -> dict:
         require(r['territory'] in source['territoryOrder'] and r['authority'] in factions,'Région/autorité inconnue')
         require(isinstance(r['designPopulation'],int) and r['designPopulation']>0 and 0<r['namedSettlementPct']<100,'Population régionale')
         for k in ('ruralSpeciesPct','townSpeciesPct'):
-            require(len(r[k])==4 and all(isinstance(v,(int,float)) and math.isfinite(v) and v>=0 for v in r[k]) and sum(r[k])==100,'Pourcentages : '+str(r['id']))
+            require(len(r[k])==len(SPECIES) and all(isinstance(v,(int,float)) and math.isfinite(v) and v>=0 for v in r[k]) and sum(r[k])==100,'Pourcentages : '+str(r['id']))
         require(set(r['specialties'])<=resources.keys(),'Spécialité inconnue')
         require(set(r['disputes'])<=source['disputes'].keys(),'Contentieux régional inconnu')
     for r in resources.values():
@@ -200,15 +200,84 @@ def urban_mix(region,site,seed):
 
 def rural_clusters(region,counts):
     remaining=list(counts);clusters=[]
-    for i,fraction,native_share in [(1,.65,.70),(2,.75,.80),(3,.95,.95)]:
+    for i,fraction,native_share in [(1,.65,.70),(2,.75,.80),(3,.95,.95),(4,.85,.75),(5,.85,.75)]:
         native=math.floor(counts[i]*fraction)
         if not native:continue
         other=min(remaining[0],round(native*(1-native_share)/native_share))
-        values=[0]*4;values[0]=other;values[i]=native
+        values=[0]*len(SPECIES);values[0]=other;values[i]=native
         remaining[0]-=other;remaining[i]-=native
-        clusters.append({'id':f'rural-{region["id"]}-{SPECIES[i]}','kind':'unplaced_habitat_distribution_not_new_city','coordinates':None,'counts':dict(zip(SPECIES,values)),'speciesPct':percentages(values),'placementRequirements':['safe_water','food_or_regular_supply','lawful_or_contested_land_right','shelter','verified_walkable_ground']+(['thermal_habitat'] if i==3 else [])})
+        clusters.append({'id':f'rural-{region["id"]}-{SPECIES[i]}','kind':'unplaced_habitat_distribution_not_new_city','coordinates':None,'counts':dict(zip(SPECIES,values)),'speciesPct':percentages(values),'placementRequirements':['safe_water','food_or_regular_supply','lawful_or_contested_land_right','shelter','verified_walkable_ground']+(['thermal_habitat'] if i==3 else ['wetland_water_access'] if i==4 else ['dry_walkable_ground','forest_or_garden_access','seasonal_clothing'] if i==5 else [])})
     require(all(x>=0 for x in remaining),'Population rurale négative')
     return {'mixedAndDispersedCounts':dict(zip(SPECIES,remaining)),'concentratedHabitatGroups':clusters}
+
+def compile_ape_folk(authored,result,data,matrix):
+    a=copy.deepcopy(authored);sites={s['atlasId']:s for s in result['settlements']}
+    require(a['id']=='ape_folk' and a['globalFaction'] is None and a['hostilityBySpecies'] is False,'Les hommes-singes ne sont pas une faction raciale')
+    communities=unique(a['communities']);structures=unique(a['structures']);activities=unique(a['activities']);roles=unique(a['roles'])
+    require({r['actor'] for r in a['relations']}==set(data['factions']) and len(a['relations'])==len(data['factions']),'Contacts politiques incomplets')
+    require({r['species'] for r in a['speciesContacts']}==set(SPECIES)-{'ape_folk'},'Contacts entre espèces incomplets')
+    for rel in a['relations']:
+        require(set(rel['trade'])<=data['resources'].keys(),'Ressource de relation inconnue')
+        require(rel['automaticWar'] is False and all(rel[k] for k in ('apeWants','otherWants','escalation','offramp')),'Relation sans intérêts ou conflit racial')
+        require(rel['dispute']=='none' or rel['dispute'] in result['disputes'],'Contentieux de contact inconnu')
+    for st in structures.values():
+        require(set(st['materials'])<=data['resources'].keys(),'Matériaux de structure inconnus')
+        require(len(st['footprintTiles'])==2 and all(isinstance(n,int) and n>0 for n in st['footprintTiles']) and st['tilePixels']==16,'Empreinte de structure invalide')
+        require(st['status']=='to_author','Bâtiment non construit déclaré actif')
+    for act in activities.values():
+        require(set(act['resources'])<=data['resources'].keys(),'Ressource d’activité inconnue')
+        require(act['workspace'] in structures or act['workspace'] in ('ground','safe_path','escape_path'),'Poste de travail inconnu')
+        require(act['sexes']==['male','female'] and act['allTones'] is True and act['productionIsAutomatic'] is False,'Activité discriminatoire ou production fictive')
+        require(act['status'] in ('implemented','to_create') and act['priority'] in (0,1,2,3),'Statut d’activité invalide')
+    implemented={x['id'] for x in activities.values() if x['status']=='implemented'}
+    require(implemented=={'idle','walk','flee','talk'}==set(a['art']['implementedClips']),'Animations déclarées prêtes sans source')
+    for role in roles.values():
+        require(set(role['activities'])<=activities.keys() and set(role['structures'])<=structures.keys(),'Métier avec activité/structure inconnue')
+        require(role['sexes']==['male','female'] and role['allTones'],'Restriction de métier non justifiée')
+    for c in communities.values():
+        require(set(c['regions'])<=data['regions'].keys() and set(c['goods'])<=data['resources'].keys() and not c['sharedSpeciesCommand'],'Communauté hors référence ou commandement racial')
+        require(c['siteIds'] and len(c['siteIds'])==len(set(c['siteIds'])),'Localités de communauté dupliquées')
+        for sid in c['siteIds']:
+            require(sid in sites,'Localité de communauté inconnue : '+sid)
+            require(sites[sid]['regionId'] in c['regions'] and sites[sid]['speciesCounts']['ape_folk']>0,'Communauté sans habitants ou hors région : '+sid)
+        c['namedSitesApeResidents']=sum(sites[sid]['speciesCounts']['ape_folk'] for sid in c['siteIds'])
+        c['populationNote']='Named-site residents only, not a total for the rural community and not a quota of spawned actors.'
+    seen=set()
+    for st in a['settlements']:
+        sid=st['siteId'];require(sid in sites and sid not in seen,'Implantation inconnue/dupliquée : '+sid);seen.add(sid)
+        s=sites[sid];require(st['communityId'] in communities and sid in communities[st['communityId']]['siteIds'],'Rattachement local invalide')
+        require(st['name']==s['name'] and st['regionId']==s['regionId'],'Nom/région modifié sans atlas')
+        require(st['runtimeSiteId']=='town-'+sid,'Alias runtime de localité invalide')
+        st.update(territory=s['territory'],designApeResidents=s['speciesCounts']['ape_folk'],designApePct=s['speciesPct']['ape_folk'],designBatracienPct=s['speciesPct']['batracien'],atlasRouteIds=s['atlasRouteIds'],coordinates={'x':s['x'],'y':s['y']},buildingsPlaced=False,runtimeActorsSpawned=False)
+    require(seen=={sid for c in communities.values() for sid in c['siteIds']},'Implantations et communautés désaccordées')
+    a['routeOptions']=[]
+    for intent in a['routeIntents']:
+        f,t=intent['fromSiteId'],intent['toSiteId'];require(f in seen and t in seen,'Itinéraire hors implantations')
+        path=matrix[f].get(t)
+        a['routeOptions'].append({**intent,**(path or {}),'graphStatus':'existing_path_requires_stock_contract_and_safety' if path else 'unavailable_no_route_invented'})
+        if path and sites[f]['territory']!=sites[t]['territory'] and ('Tagon' in (sites[f]['territory'],sites[t]['territory']) or 'Varan' in (sites[f]['territory'],sites[t]['territory'])):
+            require(path['requiresBoat'],'Un voyage vers une île ne peut devenir une marche')
+    for binding in a['eventBindings']:
+        require(binding['rule'] in data['rules'] and binding['communityId'] in communities,'Événement ou communauté inconnu')
+        require(binding['dispute']=='none' or binding['dispute'] in result['disputes'],'Contentieux local inconnu')
+        eligible=sorted(set(data['rules'][binding['rule']]['regions'])&set(communities[binding['communityId']]['regions']))
+        require(eligible and binding['requires'] and binding['resolution'],'Événement hors région ou sans cause/issue')
+        require(binding['runtimeEnabled'] is False and binding['createsNewEventType'] is False,'Activation de moteur non autorisée par données de conception')
+        binding['eligibleRegionIds']=eligible
+    a['demography']={'worldApeResidents':result['world']['speciesCounts']['ape_folk'],'worldApePct':result['world']['speciesPct']['ape_folk'],'territories':[{'territory':t['name'],'apeResidents':t['speciesCounts']['ape_folk'],'apePctOfTerritory':t['speciesPct']['ape_folk'],'shareOfAllApeResidents':round(100*t['speciesCounts']['ape_folk']/result['world']['speciesCounts']['ape_folk'],2)} for t in result['territories']]}
+    return a
+
+def ape_activities_md(a):
+    lines=['# Hommes-singes — programme de fabrication généré','','Source : `ape-folk.json`. Quatre animations disponibles ; les autres lignes sont à fabriquer ou à raccorder. Les activités ne créent aucun stock automatiquement.','','| Priorité | ID | Activité | État | Accessoires | Poste | Repères de contact |','|---|---|---|---|---|---|---|']
+    for x in sorted(a['activities'],key=lambda x:(x['priority'],x['family'],x['id'])):
+        lines.append('| P'+str(x['priority'])+' | `'+x['id']+'` | '+md(x['label'])+' | '+x['status']+' | '+(', '.join(x['props']) or '—')+' | '+x['workspace']+' | '+(', '.join(x['markers']) or '—')+' |')
+    lines+=['','## Tenues et fonctions','','| Fonction | Activités | Structures | Tenue à dessiner |','|---|---|---|---|']
+    for r in a['roles']:lines.append('| '+md(r['label'])+' | '+', '.join(r['activities'])+' | '+', '.join(r['structures'])+' | '+md(r['outfitBrief'])+' |')
+    lines+=['','## Implantations existantes, quartiers à construire','','| Localité | ID atlas / runtime | Communauté | Hommes-singes % | Batraciens % | Résidents hommes-singes de conception |','|---|---|---|---:|---:|---:|']
+    for s in a['settlements']:lines.append('| '+md(s['name'])+' | '+s['siteId']+' / '+s['runtimeSiteId']+' | '+s['communityId']+' | '+str(s['designApePct'])+' | '+str(s['designBatracienPct'])+' | '+str(s['designApeResidents'])+' |')
+    lines+=['','## Structures à fabriquer','','| Structure | Empreinte en tuiles de 16 px | Matériaux | Condition de placement |','|---|---|---|---|']
+    for s in a['structures']:lines.append('| '+md(s['label'])+' | '+' × '.join(map(str,s['footprintTiles']))+' | '+', '.join(s['materials'])+' | '+md(s['placement'])+' |')
+    return '\n'.join(lines)+'\n'
 
 def compile_world(atlas,source):
     data=validate(source);regs=data['regions'];resources=data['resources'];rules=data['rules']
@@ -243,7 +312,7 @@ def compile_world(atlas,source):
             override=source.get('settlementOverrides',{}).get(s['atlasId'],{})
             require(set(override)<={'speciesPct','focus','designRole','note'},'Dérogation interdite : '+s['atlasId'])
             mix=override.get('speciesPct',urban_mix(reg,s,atlas.get('seed',0)))
-            require(len(mix)==4 and min(mix)>=0 and sum(mix)==100,'Pourcentages de dérogation')
+            require(len(mix)==len(SPECIES) and min(mix)>=0 and sum(mix)==100,'Pourcentages de dérogation')
             counts=allocate(pop,mix);all_counts=[a+b for a,b in zip(all_counts,counts)]
             levels=regional_resources[rid];focuses=[r for r in reg['specialties'] if levels[r]>0 and (r!='boats' or s['waterfront']=='ocean_port')]
             focus=override.get('focus',focuses[stable(s['atlasId']+':focus')%len(focuses)])
@@ -293,7 +362,9 @@ def compile_world(atlas,source):
     relations=[]
     for r in data['relations']:
         relations.append({**r,'id':'--'.join(sorted((r['a'],r['b']))),'automaticMilitaryAssistance':False,'speciesHostility':False,'localMandateRequired':True})
-    return {'settlements':sites,'regions':aggregates,'territories':territories,'world':{'designPopulation':sum(world_counts),'speciesCounts':dict(zip(SPECIES,world_counts)),'speciesPct':percentages(world_counts)},'resources':list(resources.values()),'relations':relations,'events':list(rules.values()),'networks':source['networks'],'disputes':source['disputes'],'routes':routes,'warnings':sorted(set(warnings))}
+    result={'settlements':sites,'regions':aggregates,'territories':territories,'world':{'designPopulation':sum(world_counts),'speciesCounts':dict(zip(SPECIES,world_counts)),'speciesPct':percentages(world_counts)},'resources':list(resources.values()),'relations':relations,'events':list(rules.values()),'networks':source['networks'],'disputes':source['disputes'],'routes':routes,'warnings':sorted(set(warnings))}
+    if source.get('apeFolk'):result['apeFolk']=compile_ape_folk(source['apeFolk'],result,data,matrix)
+    return result
 
 def jtext(value):return json.dumps(value,ensure_ascii=False,indent=2,sort_keys=True)+'\n'
 def md(value):return str(value).replace('|','/').replace('\n',' ')
@@ -303,7 +374,11 @@ def outputs(result,hashes):
     for name in ('settlements','regions','territories','world','resources','relations','events','networks','disputes','routes'):
         out['data/world/bible/generated/'+name+'.json']=jtext(result[name])
     counts={'sites':len(result['settlements']),'regions':len(result['regions']),'resources':len(result['resources']),'relations':len(result['relations']),'eventRules':len(result['events']),'networks':len(result['networks']),'routes':len(result['routes'])}
-    manifest={'schema':1,'status':'validated_design_not_runtime_activation','inputSHA256':hashes,'counts':counts,'warnings':result['warnings'],'preserved':['atlas_coordinates','atlas_names','atlas_ids','runtime_HTML','save_data'],'checks':['source_references','complete_pair_matrix','population_conservation','percentage_totals','resource_dependency_DAG','cause_required_for_events','deterministic_output']}
+    manifest={'schema':2,'status':'validated_design_not_runtime_activation','inputSHA256':hashes,'counts':counts,'warnings':result['warnings'],'preserved':['atlas_coordinates','atlas_names','atlas_ids','runtime_HTML','save_data'],'checks':['source_references','complete_pair_matrix','population_conservation','percentage_totals','resource_dependency_DAG','cause_required_for_events','deterministic_output']}
+    if 'apeFolk' in result:
+        a=result['apeFolk'];out['data/world/bible/generated/ape-folk.json']=jtext(a)
+        counts.update(apeCommunities=len(a['communities']),apeActivities=len(a['activities']),apeRoles=len(a['roles']),apeStructures=len(a['structures']))
+        out['docs/world-bible/generated/ape-activities.md']=ape_activities_md(a)
     out['data/world/bible/generated/manifest.json']=jtext(manifest)
     lines=['# Registre des localités — généré','', 'Source : atlas réel + bible. Les rôles, populations et productions sont de conception ; aucun bâtiment n’est déclaré déjà construit.','']
     for s in result['settlements']:
@@ -313,7 +388,7 @@ def outputs(result,hashes):
             if options:lines.append('- '+res+' : '+', '.join(f'{o["siteId"]} ({o["distanceM"]/1000:.1f} km'+('; bateau' if o['requiresBoat'] else '; terre')+')' for o in options)+'. Stock et contrat à vérifier.')
         lines += [f'Besoins sans fournisseur spécialisé affecté : {", ".join(s["unassignedSupplyNeeds"]) or "aucun"}. Vérifier production domestique/arrière-pays ou ajouter un contrat ; ne pas créer une cargaison fictive.',s['note'],'']
     out['docs/world-bible/generated/settlements.md']='\n'.join(lines)+'\n'
-    lines=['# Démographie pondérée — générée','','Toutes les valeurs sont des choix de conception. Résidents nommés + arrière-pays = population régionale. Les pourcentages affichés sont arrondis par plus forts restes à 0,01 point et totalisent 100 %.','','| Territoire / région | Population | Humains % | Gobelins % | Orques % | Hommes-serpents % |','|---|---:|---:|---:|---:|---:|']
+    lines=['# Démographie pondérée — générée','','Toutes les valeurs sont des choix de conception. Résidents nommés + arrière-pays = population régionale. Les pourcentages affichés sont arrondis par plus forts restes à 0,01 point et totalisent 100 %.','','| Territoire / région | Population | Humains % | Gobelins % | Orques % | Hommes-serpents % | Batraciens % | Hommes-singes % |','|---|---:|---:|---:|---:|---:|---:|---:|']
     for r in result['territories']+result['regions']+[dict(result['world'],name='MONDE')]:lines.append('| '+md(r['name'])+' | '+str(r['designPopulation'])+' | '+' | '.join(f'{r["speciesPct"][sp]:.2f}' for sp in SPECIES)+' |')
     lines+=['','Les groupes ruraux concentrés sont détaillés dans `regions.json`. Ce sont des distributions à implanter, pas de nouvelles villes déjà placées. Les visiteurs ne sont pas comptés comme résidents.']
     out['docs/world-bible/generated/demography.md']='\n'.join(lines)+'\n'
@@ -328,7 +403,7 @@ def outputs(result,hashes):
 
 def load(root):
     paths=['data/world/atlas.json','data/world/bible/source.json'];source=json.loads((root/paths[1]).read_text())
-    for field in ('relationsFile','eventsFile'):
+    for field in ('relationsFile','eventsFile','peopleFile'):
         filename=source[field];require(Path(filename).name==filename,'Chemin de référence non local')
         path='data/world/bible/'+filename;paths.append(path);extra=json.loads((root/path).read_text())
         for k,v in extra.items():

@@ -9,6 +9,8 @@
       "3"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 8,
       "human": 91,
       "orc": 1,
@@ -91,12 +93,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 288,
       "human": 3276,
       "orc": 36,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 8.0,
       "human": 91.0,
       "orc": 1.0,
@@ -229,6 +235,8 @@
       "2"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 5,
       "human": 94,
       "orc": 1,
@@ -310,12 +318,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 180,
       "human": 3384,
       "orc": 36,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 5.0,
       "human": 94.0,
       "orc": 1.0,
@@ -435,6 +447,8 @@
       "2"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 5,
       "human": 94,
       "orc": 1,
@@ -517,12 +531,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 180,
       "human": 3384,
       "orc": 36,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 5.0,
       "human": 94.0,
       "orc": 1.0,
@@ -655,6 +673,8 @@
       "3"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 6,
       "human": 93,
       "orc": 1,
@@ -736,12 +756,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 216,
       "human": 3348,
       "orc": 36,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 6.0,
       "human": 93.0,
       "orc": 1.0,
@@ -861,6 +885,8 @@
       "120"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 8,
       "human": 88,
       "orc": 4,
@@ -942,12 +968,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 672,
       "human": 7392,
       "orc": 336,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 8.0,
       "human": 88.0,
       "orc": 4.0,
@@ -1080,6 +1110,8 @@
       "4"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 7,
       "human": 81,
       "orc": 12,
@@ -1162,12 +1194,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 465,
       "human": 5387,
       "orc": 798,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 6.99,
       "human": 81.01,
       "orc": 12.0,
@@ -1300,6 +1336,8 @@
       "4"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 8,
       "human": 80,
       "orc": 12,
@@ -1382,12 +1420,16 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 532,
       "human": 5320,
       "orc": 798,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 8.0,
       "human": 80.0,
       "orc": 12.0,
@@ -1519,8 +1561,10 @@
       "5"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 2,
       "goblin": 10,
-      "human": 89,
+      "human": 85,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -1540,6 +1584,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -1603,14 +1648,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 212,
+      "batracien": 213,
       "goblin": 1063,
-      "human": 9460,
+      "human": 9035,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.0,
+      "batracien": 2.0,
       "goblin": 10.0,
-      "human": 89.0,
+      "human": 85.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -1735,8 +1784,10 @@
       "9"
     ],
     "authoredSpeciesPct": {
-      "goblin": 9,
-      "human": 90,
+      "ape_folk": 6,
+      "batracien": 1,
+      "goblin": 8,
+      "human": 84,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -1756,6 +1807,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -1787,7 +1839,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "teremor",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -1819,14 +1871,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
-      "goblin": 957,
-      "human": 9566,
+      "ape_folk": 638,
+      "batracien": 106,
+      "goblin": 850,
+      "human": 8929,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 9.0,
-      "human": 90.0,
+      "ape_folk": 6.0,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 84.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -1950,8 +2006,10 @@
       "10"
     ],
     "authoredSpeciesPct": {
-      "goblin": 10,
-      "human": 89,
+      "ape_folk": 8,
+      "batracien": 8,
+      "goblin": 8,
+      "human": 75,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -1971,6 +2029,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2002,7 +2061,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "teremor",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -2034,14 +2093,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
-      "goblin": 1063,
-      "human": 9460,
+      "ape_folk": 850,
+      "batracien": 850,
+      "goblin": 851,
+      "human": 7972,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 10.0,
-      "human": 89.0,
+      "ape_folk": 8.0,
+      "batracien": 8.0,
+      "goblin": 8.0,
+      "human": 75.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -2168,8 +2231,10 @@
       "7"
     ],
     "authoredSpeciesPct": {
-      "goblin": 6,
-      "human": 93,
+      "ape_folk": 6,
+      "batracien": 1,
+      "goblin": 8,
+      "human": 84,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -2189,6 +2254,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2219,7 +2285,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "teremor",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -2253,14 +2319,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
-      "goblin": 638,
-      "human": 9885,
+      "ape_folk": 638,
+      "batracien": 106,
+      "goblin": 850,
+      "human": 8929,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 93.0,
+      "ape_folk": 6.0,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 84.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -2367,8 +2437,10 @@
       "9"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 2,
       "goblin": 8,
-      "human": 91,
+      "human": 87,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -2388,6 +2460,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2451,14 +2524,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 213,
+      "batracien": 213,
       "goblin": 850,
-      "human": 9672,
+      "human": 9246,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.0,
+      "batracien": 2.0,
       "goblin": 8.0,
-      "human": 91.0,
+      "human": 87.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -2585,8 +2662,10 @@
       "6"
     ],
     "authoredSpeciesPct": {
-      "goblin": 6,
-      "human": 93,
+      "ape_folk": 3,
+      "batracien": 1,
+      "goblin": 8,
+      "human": 87,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -2606,6 +2685,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2637,7 +2717,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "teremor",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -2669,14 +2749,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
-      "goblin": 638,
-      "human": 9884,
+      "ape_folk": 319,
+      "batracien": 106,
+      "goblin": 850,
+      "human": 9247,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 93.0,
+      "ape_folk": 3.0,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 87.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -2803,8 +2887,10 @@
       "8"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 2,
       "goblin": 6,
-      "human": 93,
+      "human": 89,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -2824,6 +2910,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2888,14 +2975,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 212,
+      "batracien": 213,
       "goblin": 638,
-      "human": 9884,
+      "human": 9459,
       "orc": 106,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.0,
+      "batracien": 2.0,
       "goblin": 6.0,
-      "human": 93.0,
+      "human": 89.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -3001,8 +3092,10 @@
       "25"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5,
-      "human": 94,
+      "human": 93.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -3082,14 +3175,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 630,
-      "human": 11844,
+      "human": 11781,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -3194,8 +3291,10 @@
       "22"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 4,
-      "human": 95,
+      "human": 94.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -3275,14 +3374,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 504,
-      "human": 11970,
+      "human": 11907,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 4.0,
-      "human": 95.0,
+      "human": 94.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -3389,8 +3492,10 @@
       "22"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 3,
-      "human": 96,
+      "human": 95.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -3472,14 +3577,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 378,
-      "human": 12096,
+      "human": 12033,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 3.0,
-      "human": 96.0,
+      "human": 95.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -3585,8 +3694,10 @@
       "27"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5,
-      "human": 94,
+      "human": 93.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -3667,14 +3778,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 630,
-      "human": 11844,
+      "human": 11781,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -3800,8 +3915,10 @@
       "23"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 6,
-      "human": 93,
+      "human": 92.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -3882,14 +3999,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 756,
-      "human": 11718,
+      "human": 11655,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 6.0,
-      "human": 93.0,
+      "human": 92.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -3994,8 +4115,10 @@
       "19"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 4,
-      "human": 95,
+      "human": 94.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -4075,14 +4198,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 504,
-      "human": 11970,
+      "human": 11907,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 4.0,
-      "human": 95.0,
+      "human": 94.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -4189,8 +4316,10 @@
       "26"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5,
-      "human": 94,
+      "human": 93.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -4271,14 +4400,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 630,
-      "human": 11844,
+      "human": 11781,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -4406,8 +4539,10 @@
       "28"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 6,
-      "human": 93,
+      "human": 92.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -4487,14 +4622,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 756,
-      "human": 11718,
+      "human": 11655,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 6.0,
-      "human": 93.0,
+      "human": 92.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -4601,8 +4740,10 @@
       "26"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5,
-      "human": 94,
+      "human": 93.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -4683,14 +4824,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 630,
-      "human": 11844,
+      "human": 11781,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -4798,8 +4943,10 @@
       "28"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5,
-      "human": 94,
+      "human": 93.5,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -4880,14 +5027,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 31,
+      "batracien": 32,
       "goblin": 630,
-      "human": 11844,
+      "human": 11781,
       "orc": 126,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.25,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.5,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -4992,8 +5143,10 @@
       "46"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 8,
-      "human": 89,
+      "human": 86,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -5077,15 +5230,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 510,
-      "human": 5678,
-      "orc": 192,
+      "human": 5487,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 7.99,
-      "human": 89.0,
-      "orc": 3.01,
+      "ape_folk": 2.01,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 86.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -5231,8 +5388,10 @@
       "52"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -5316,14 +5475,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -5470,8 +5633,10 @@
       "60"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -5555,14 +5720,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -5691,8 +5860,10 @@
       "55"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -5776,14 +5947,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -5911,8 +6086,10 @@
       "50"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -5996,14 +6173,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -6131,8 +6312,10 @@
       "57"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -6215,14 +6398,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -6349,8 +6536,10 @@
       "60"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -6434,14 +6623,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -6587,8 +6780,10 @@
       "57"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 5,
-      "human": 92,
+      "human": 89,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -6672,14 +6867,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 319,
-      "human": 5870,
+      "human": 5678,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 5.0,
-      "human": 92.01,
+      "human": 89.0,
       "orc": 2.99,
       "serpentfolk": 0.0
     },
@@ -6827,8 +7026,10 @@
       "54"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 8,
-      "human": 89,
+      "human": 86,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -6912,15 +7113,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 510,
-      "human": 5678,
-      "orc": 192,
+      "human": 5487,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 7.99,
-      "human": 89.0,
-      "orc": 3.01,
+      "ape_folk": 2.01,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 86.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -7047,8 +7252,10 @@
       "50"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 8,
-      "human": 89,
+      "human": 86,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -7131,15 +7338,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 510,
-      "human": 5678,
-      "orc": 192,
+      "human": 5487,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 7.99,
-      "human": 89.0,
-      "orc": 3.01,
+      "ape_folk": 2.01,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 86.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -7263,8 +7474,10 @@
       "63"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 9,
-      "human": 88,
+      "human": 85,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -7348,15 +7561,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 574,
-      "human": 5614,
-      "orc": 192,
+      "human": 5423,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 9.0,
-      "human": 87.99,
-      "orc": 3.01,
+      "human": 85.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -7484,8 +7701,10 @@
       "54"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -7569,14 +7788,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -7705,9 +7928,11 @@
       "62"
     ],
     "authoredSpeciesPct": {
-      "goblin": 5,
-      "human": 91,
-      "orc": 4,
+      "ape_folk": 5,
+      "batracien": 1,
+      "goblin": 7,
+      "human": 84,
+      "orc": 3,
       "serpentfolk": 0
     },
     "authority": "sylverive",
@@ -7762,7 +7987,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "sylverive",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -7795,15 +8020,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
-      "goblin": 319,
-      "human": 5806,
-      "orc": 255,
+      "ape_folk": 319,
+      "batracien": 64,
+      "goblin": 447,
+      "human": 5359,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 5.0,
-      "human": 91.0,
-      "orc": 4.0,
+      "ape_folk": 5.0,
+      "batracien": 1.0,
+      "goblin": 7.01,
+      "human": 84.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -7984,8 +8213,10 @@
       "62"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 7,
-      "human": 90,
+      "human": 87,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -8069,14 +8300,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 127,
+      "batracien": 64,
       "goblin": 447,
-      "human": 5742,
+      "human": 5551,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 1.99,
+      "batracien": 1.0,
       "goblin": 7.01,
-      "human": 90.0,
+      "human": 87.01,
       "orc": 2.99,
       "serpentfolk": 0.0
     },
@@ -8224,8 +8459,10 @@
       "58"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 9,
-      "human": 88,
+      "human": 85,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -8309,15 +8546,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 574,
-      "human": 5614,
-      "orc": 192,
+      "human": 5423,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 9.0,
-      "human": 87.99,
-      "orc": 3.01,
+      "human": 85.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -8445,8 +8686,10 @@
       "48"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 9,
-      "human": 88,
+      "human": 85,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -8530,15 +8773,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 574,
-      "human": 5614,
-      "orc": 192,
+      "human": 5423,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 9.0,
-      "human": 87.99,
-      "orc": 3.01,
+      "human": 85.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -8686,8 +8933,10 @@
       "63"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 7,
-      "human": 90,
+      "human": 87,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -8770,14 +9019,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 127,
+      "batracien": 64,
       "goblin": 447,
-      "human": 5742,
+      "human": 5551,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 1.99,
+      "batracien": 1.0,
       "goblin": 7.01,
-      "human": 90.0,
+      "human": 87.01,
       "orc": 2.99,
       "serpentfolk": 0.0
     },
@@ -8905,8 +9158,10 @@
       "59"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 9,
-      "human": 88,
+      "human": 85,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -8989,15 +9244,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 574,
-      "human": 5614,
-      "orc": 192,
+      "human": 5423,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 9.0,
-      "human": 87.99,
-      "orc": 3.01,
+      "human": 85.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -9122,8 +9381,10 @@
       "61"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 91,
+      "human": 88,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -9207,14 +9468,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 383,
-      "human": 5806,
+      "human": 5614,
       "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.01,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 91.0,
+      "human": 87.99,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -9361,8 +9626,10 @@
       "56"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 8,
-      "human": 89,
+      "human": 86,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -9446,15 +9713,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 128,
+      "batracien": 64,
       "goblin": 510,
-      "human": 5678,
-      "orc": 192,
+      "human": 5487,
+      "orc": 191,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 7.99,
-      "human": 89.0,
-      "orc": 3.01,
+      "ape_folk": 2.01,
+      "batracien": 1.0,
+      "goblin": 8.0,
+      "human": 86.0,
+      "orc": 2.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -9600,8 +9871,10 @@
       "72"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 5,
-      "human": 94,
+      "human": 93.0,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -9619,6 +9892,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -9680,14 +9954,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 67,
+      "batracien": 67,
       "goblin": 668,
-      "human": 12570,
+      "human": 12436,
       "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -9792,8 +10070,10 @@
       "68"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 5,
-      "human": 94,
+      "human": 93.0,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -9811,6 +10091,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -9872,14 +10153,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 67,
+      "batracien": 67,
       "goblin": 668,
-      "human": 12570,
+      "human": 12436,
       "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -9986,9 +10271,11 @@
       "70"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 2,
+      "batracien": 1,
       "goblin": 6,
-      "human": 92,
-      "orc": 2,
+      "human": 90.0,
+      "orc": 1,
       "serpentfolk": 0
     },
     "authority": "teremor",
@@ -10005,6 +10292,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -10040,7 +10328,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "teremor",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -10074,15 +10362,19 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 267,
+      "batracien": 134,
       "goblin": 802,
-      "human": 12302,
-      "orc": 268,
+      "human": 12035,
+      "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 2.0,
+      "batracien": 1.0,
       "goblin": 6.0,
-      "human": 92.0,
-      "orc": 2.0,
+      "human": 90.0,
+      "orc": 1.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -10265,8 +10557,10 @@
       "72"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 6,
-      "human": 93,
+      "human": 92.0,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -10284,6 +10578,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -10345,14 +10640,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 67,
+      "batracien": 67,
       "goblin": 802,
-      "human": 12435,
+      "human": 12301,
       "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 6.0,
-      "human": 93.0,
+      "human": 92.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -10458,8 +10757,10 @@
       "71"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 95,
+      "ape_folk": 2,
+      "batracien": 4,
+      "goblin": 6,
+      "human": 87.0,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -10477,6 +10778,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -10506,7 +10808,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "teremor",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -10540,14 +10842,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
-      "goblin": 535,
-      "human": 12702,
+      "ape_folk": 267,
+      "batracien": 535,
+      "goblin": 802,
+      "human": 11633,
       "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.0,
-      "human": 95.0,
+      "ape_folk": 2.0,
+      "batracien": 4.0,
+      "goblin": 6.0,
+      "human": 87.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -10654,8 +10960,10 @@
       "69"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 7,
-      "human": 92,
+      "human": 91.0,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -10673,6 +10981,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -10735,14 +11044,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 67,
+      "batracien": 67,
       "goblin": 936,
-      "human": 12301,
+      "human": 12167,
       "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 7.0,
-      "human": 92.0,
+      "human": 91.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -10866,8 +11179,10 @@
       "67"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 5,
-      "human": 94,
+      "human": 93.0,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -10885,6 +11200,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -10947,14 +11263,18 @@
     },
     "sovereign": "teremor",
     "speciesCounts": {
+      "ape_folk": 67,
+      "batracien": 67,
       "goblin": 668,
-      "human": 12569,
+      "human": 12435,
       "orc": 134,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.5,
+      "batracien": 0.5,
       "goblin": 5.0,
-      "human": 94.0,
+      "human": 93.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -11082,8 +11402,10 @@
       "85"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 7,
-      "human": 89,
+      "human": 88.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -11170,14 +11492,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 9,
+      "batracien": 0,
       "goblin": 236,
-      "human": 3004,
+      "human": 2995,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.27,
+      "batracien": 0.0,
       "goblin": 6.99,
-      "human": 89.01,
+      "human": 88.74,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -11326,8 +11652,10 @@
       "87"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 11,
-      "human": 85,
+      "human": 84.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -11414,14 +11742,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 9,
+      "batracien": 0,
       "goblin": 371,
-      "human": 2869,
+      "human": 2860,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.27,
+      "batracien": 0.0,
       "goblin": 10.99,
-      "human": 85.01,
+      "human": 84.74,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -11568,8 +11900,10 @@
       "86"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 8,
-      "human": 88,
+      "human": 87.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -11654,14 +11988,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 8,
+      "batracien": 0,
       "goblin": 270,
-      "human": 2970,
+      "human": 2962,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.24,
+      "batracien": 0.0,
       "goblin": 8.0,
-      "human": 88.0,
+      "human": 87.76,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -11807,8 +12145,10 @@
       "83"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 9,
-      "human": 87,
+      "human": 86.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -11893,14 +12233,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 8,
+      "batracien": 0,
       "goblin": 304,
-      "human": 2936,
+      "human": 2928,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.24,
+      "batracien": 0.0,
       "goblin": 9.01,
-      "human": 86.99,
+      "human": 86.75,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -12045,8 +12389,10 @@
       "81"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 7,
-      "human": 89,
+      "human": 88.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -12131,14 +12477,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 9,
+      "batracien": 0,
       "goblin": 236,
-      "human": 3004,
+      "human": 2995,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.27,
+      "batracien": 0.0,
       "goblin": 6.99,
-      "human": 89.01,
+      "human": 88.74,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -12281,8 +12631,10 @@
       "78"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 7,
-      "human": 89,
+      "human": 88.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -12367,14 +12719,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 9,
+      "batracien": 0,
       "goblin": 236,
-      "human": 3004,
+      "human": 2995,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.27,
+      "batracien": 0.0,
       "goblin": 6.99,
-      "human": 89.01,
+      "human": 88.74,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -12517,8 +12873,10 @@
       "81"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 7,
-      "human": 89,
+      "human": 88.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -12605,14 +12963,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 9,
+      "batracien": 0,
       "goblin": 236,
-      "human": 3004,
+      "human": 2995,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.27,
+      "batracien": 0.0,
       "goblin": 6.99,
-      "human": 89.01,
+      "human": 88.74,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -12757,8 +13119,10 @@
       "85"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 10,
-      "human": 86,
+      "human": 85.75,
       "orc": 4,
       "serpentfolk": 0
     },
@@ -12843,14 +13207,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
-      "goblin": 337,
-      "human": 2903,
+      "ape_folk": 8,
+      "batracien": 0,
+      "goblin": 338,
+      "human": 2894,
       "orc": 135,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 9.99,
-      "human": 86.01,
+      "ape_folk": 0.24,
+      "batracien": 0.0,
+      "goblin": 10.01,
+      "human": 85.75,
       "orc": 4.0,
       "serpentfolk": 0.0
     },
@@ -12994,8 +13362,10 @@
       "93"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 10,
-      "human": 87,
+      "human": 86.75,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -13075,14 +13445,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 10,
+      "batracien": 0,
       "goblin": 396,
-      "human": 3445,
+      "human": 3435,
       "orc": 119,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.0,
       "goblin": 10.0,
-      "human": 86.99,
+      "human": 86.74,
       "orc": 3.01,
       "serpentfolk": 0.0
     },
@@ -13205,8 +13579,10 @@
       "92"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 9,
-      "human": 88,
+      "human": 87.75,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -13286,15 +13662,19 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 10,
+      "batracien": 0,
       "goblin": 356,
-      "human": 3485,
+      "human": 3475,
       "orc": 119,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.0,
       "goblin": 8.99,
-      "human": 88.01,
-      "orc": 3.0,
+      "human": 87.75,
+      "orc": 3.01,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -13423,8 +13803,10 @@
       "91"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 12,
-      "human": 85,
+      "human": 84.75,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -13504,14 +13886,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 10,
+      "batracien": 0,
       "goblin": 475,
-      "human": 3366,
+      "human": 3356,
       "orc": 119,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.0,
       "goblin": 11.99,
-      "human": 85.0,
+      "human": 84.75,
       "orc": 3.01,
       "serpentfolk": 0.0
     },
@@ -13636,8 +14022,10 @@
       "93"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 10,
-      "human": 87,
+      "human": 86.75,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -13717,14 +14105,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 10,
+      "batracien": 0,
       "goblin": 396,
-      "human": 3445,
+      "human": 3435,
       "orc": 119,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.0,
       "goblin": 10.0,
-      "human": 86.99,
+      "human": 86.74,
       "orc": 3.01,
       "serpentfolk": 0.0
     },
@@ -13847,8 +14239,10 @@
       "88"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0,
       "goblin": 13,
-      "human": 84,
+      "human": 83.75,
       "orc": 3,
       "serpentfolk": 0
     },
@@ -13928,14 +14322,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 10,
+      "batracien": 0,
       "goblin": 515,
-      "human": 3326,
+      "human": 3316,
       "orc": 119,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.25,
+      "batracien": 0.0,
       "goblin": 13.01,
-      "human": 83.99,
+      "human": 83.74,
       "orc": 3.0,
       "serpentfolk": 0.0
     },
@@ -14065,8 +14463,10 @@
       "95"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 1,
+      "batracien": 0,
       "goblin": 4,
-      "human": 95,
+      "human": 94,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -14149,14 +14549,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 161,
+      "batracien": 0,
       "goblin": 644,
-      "human": 15295,
+      "human": 15134,
       "orc": 161,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 1.0,
+      "batracien": 0.0,
       "goblin": 4.0,
-      "human": 95.0,
+      "human": 94.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -14293,9 +14697,11 @@
       "94"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 94,
-      "orc": 2,
+      "ape_folk": 2,
+      "batracien": 0,
+      "goblin": 6,
+      "human": 91,
+      "orc": 1,
       "serpentfolk": 0
     },
     "authority": "sarak",
@@ -14343,7 +14749,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "sarak",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -14377,15 +14783,19 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
-      "goblin": 644,
-      "human": 15134,
-      "orc": 322,
+      "ape_folk": 322,
+      "batracien": 0,
+      "goblin": 966,
+      "human": 14651,
+      "orc": 161,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.0,
-      "human": 94.0,
-      "orc": 2.0,
+      "ape_folk": 2.0,
+      "batracien": 0.0,
+      "goblin": 6.0,
+      "human": 91.0,
+      "orc": 1.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -14521,8 +14931,10 @@
       "96"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 1,
+      "batracien": 0,
       "goblin": 7,
-      "human": 92,
+      "human": 91,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -14605,14 +15017,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 161,
+      "batracien": 0,
       "goblin": 1127,
-      "human": 14812,
+      "human": 14651,
       "orc": 161,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 1.0,
+      "batracien": 0.0,
       "goblin": 7.0,
-      "human": 92.0,
+      "human": 91.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -14748,8 +15164,10 @@
       "96"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 1,
+      "batracien": 0,
       "goblin": 6,
-      "human": 93,
+      "human": 92,
       "orc": 1,
       "serpentfolk": 0
     },
@@ -14829,14 +15247,18 @@
     },
     "sovereign": "sarak",
     "speciesCounts": {
+      "ape_folk": 161,
+      "batracien": 0,
       "goblin": 966,
-      "human": 14973,
+      "human": 14812,
       "orc": 161,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 1.0,
+      "batracien": 0.0,
       "goblin": 6.0,
-      "human": 93.0,
+      "human": 92.0,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -14959,8 +15381,10 @@
       "97"
     ],
     "authoredSpeciesPct": {
-      "goblin": 6,
-      "human": 92,
+      "ape_folk": 3,
+      "batracien": 22,
+      "goblin": 7,
+      "human": 66,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -15012,7 +15436,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "varan",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -15044,14 +15468,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 552,
-      "human": 8464,
+      "ape_folk": 276,
+      "batracien": 2024,
+      "goblin": 644,
+      "human": 6072,
       "orc": 184,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 92.0,
+      "ape_folk": 3.0,
+      "batracien": 22.0,
+      "goblin": 7.0,
+      "human": 66.0,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -15158,8 +15586,10 @@
       "98"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 4,
+      "batracien": 22,
       "goblin": 7,
-      "human": 91,
+      "human": 65,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -15210,7 +15640,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "varan",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -15242,14 +15672,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 368,
+      "batracien": 2024,
       "goblin": 644,
-      "human": 8372,
+      "human": 5980,
       "orc": 184,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 4.0,
+      "batracien": 22.0,
       "goblin": 7.0,
-      "human": 91.0,
+      "human": 65.0,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -15349,8 +15783,10 @@
       "99"
     ],
     "authoredSpeciesPct": {
-      "goblin": 6,
-      "human": 92,
+      "ape_folk": 3,
+      "batracien": 20,
+      "goblin": 7,
+      "human": 68,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -15402,7 +15838,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "varan",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -15434,14 +15870,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 552,
-      "human": 8464,
+      "ape_folk": 276,
+      "batracien": 1840,
+      "goblin": 644,
+      "human": 6256,
       "orc": 184,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 92.0,
+      "ape_folk": 3.0,
+      "batracien": 20.0,
+      "goblin": 7.0,
+      "human": 68.0,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -15550,9 +15990,11 @@
       "130"
     ],
     "authoredSpeciesPct": {
-      "goblin": 7,
-      "human": 90,
-      "orc": 3,
+      "ape_folk": 6,
+      "batracien": 18,
+      "goblin": 6,
+      "human": 68,
+      "orc": 2,
       "serpentfolk": 0
     },
     "authority": "varan",
@@ -15607,7 +16049,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "varan",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -15641,15 +16083,19 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 744,
-      "human": 9571,
-      "orc": 319,
+      "ape_folk": 638,
+      "batracien": 1914,
+      "goblin": 638,
+      "human": 7231,
+      "orc": 213,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 7.0,
-      "human": 90.0,
-      "orc": 3.0,
+      "ape_folk": 6.0,
+      "batracien": 18.0,
+      "goblin": 6.0,
+      "human": 68.0,
+      "orc": 2.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -15811,8 +16257,10 @@
       "102"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 94,
+      "ape_folk": 12,
+      "batracien": 28,
+      "goblin": 6,
+      "human": 52,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -15863,7 +16311,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "varan",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -15895,14 +16343,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 425,
-      "human": 9995,
+      "ape_folk": 1276,
+      "batracien": 2977,
+      "goblin": 638,
+      "human": 5529,
       "orc": 213,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.0,
-      "human": 94.0,
+      "ape_folk": 12.0,
+      "batracien": 28.0,
+      "goblin": 6.0,
+      "human": 52.0,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -16008,8 +16460,10 @@
       "102"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 94,
+      "ape_folk": 18,
+      "batracien": 22,
+      "goblin": 6,
+      "human": 52,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -16060,7 +16514,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "varan",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -16092,14 +16546,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 425,
-      "human": 9995,
+      "ape_folk": 1914,
+      "batracien": 2339,
+      "goblin": 638,
+      "human": 5529,
       "orc": 213,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.0,
-      "human": 94.0,
+      "ape_folk": 18.0,
+      "batracien": 22.0,
+      "goblin": 6.0,
+      "human": 52.0,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -16208,9 +16666,11 @@
       "132"
     ],
     "authoredSpeciesPct": {
-      "goblin": 6,
-      "human": 91,
-      "orc": 3,
+      "ape_folk": 14,
+      "batracien": 10,
+      "goblin": 5,
+      "human": 69,
+      "orc": 2,
       "serpentfolk": 0
     },
     "authority": "tagon",
@@ -16262,7 +16722,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -16296,15 +16756,19 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 1536,
-      "human": 23296,
-      "orc": 768,
+      "ape_folk": 3584,
+      "batracien": 2560,
+      "goblin": 1280,
+      "human": 17664,
+      "orc": 512,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 91.0,
-      "orc": 3.0,
+      "ape_folk": 14.0,
+      "batracien": 10.0,
+      "goblin": 5.0,
+      "human": 69.0,
+      "orc": 2.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -16445,8 +16909,10 @@
       "103"
     ],
     "authoredSpeciesPct": {
-      "goblin": 6,
-      "human": 92,
+      "ape_folk": 8,
+      "batracien": 4,
+      "goblin": 5,
+      "human": 81,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -16496,7 +16962,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -16528,14 +16994,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 1536,
-      "human": 23552,
+      "ape_folk": 2048,
+      "batracien": 1024,
+      "goblin": 1280,
+      "human": 20736,
       "orc": 512,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 92.0,
+      "ape_folk": 8.0,
+      "batracien": 4.0,
+      "goblin": 5.0,
+      "human": 81.0,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -16663,9 +17133,11 @@
       "130"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 93,
-      "orc": 3,
+      "ape_folk": 12,
+      "batracien": 10,
+      "goblin": 6,
+      "human": 70,
+      "orc": 2,
       "serpentfolk": 0
     },
     "authority": "tagon",
@@ -16683,6 +17155,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -16717,7 +17190,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -16751,15 +17224,19 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 201,
-      "human": 4664,
-      "orc": 150,
+      "ape_folk": 602,
+      "batracien": 501,
+      "goblin": 301,
+      "human": 3511,
+      "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.01,
-      "human": 93.0,
-      "orc": 2.99,
+      "ape_folk": 12.0,
+      "batracien": 9.99,
+      "goblin": 6.0,
+      "human": 70.01,
+      "orc": 2.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -16902,8 +17379,10 @@
       "109"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 94,
+      "ape_folk": 22,
+      "batracien": 6,
+      "goblin": 6,
+      "human": 64,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -16921,6 +17400,7 @@
     ],
     "eventRuleIds": [
       "bandit_ambush",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -16952,7 +17432,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -16984,14 +17464,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 201,
-      "human": 4714,
+      "ape_folk": 1103,
+      "batracien": 301,
+      "goblin": 301,
+      "human": 3210,
       "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.01,
-      "human": 94.0,
+      "ape_folk": 22.0,
+      "batracien": 6.0,
+      "goblin": 6.0,
+      "human": 64.01,
       "orc": 1.99,
       "serpentfolk": 0.0
     },
@@ -17099,8 +17583,10 @@
       "111"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 25,
+      "batracien": 12,
       "goblin": 6,
-      "human": 92,
+      "human": 55,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -17118,6 +17604,7 @@
     ],
     "eventRuleIds": [
       "bandit_ambush",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -17149,7 +17636,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -17182,15 +17669,19 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 1253,
+      "batracien": 602,
       "goblin": 301,
-      "human": 4613,
+      "human": 2758,
       "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 24.99,
+      "batracien": 12.01,
       "goblin": 6.0,
-      "human": 92.0,
-      "orc": 2.0,
+      "human": 55.01,
+      "orc": 1.99,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -17296,8 +17787,10 @@
       "108"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 14,
+      "batracien": 8,
       "goblin": 4,
-      "human": 94,
+      "human": 72,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -17315,6 +17808,7 @@
     ],
     "eventRuleIds": [
       "bandit_ambush",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -17378,14 +17872,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 702,
+      "batracien": 401,
       "goblin": 201,
-      "human": 4713,
+      "human": 3610,
       "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 14.0,
+      "batracien": 8.0,
       "goblin": 4.01,
-      "human": 94.0,
+      "human": 72.0,
       "orc": 1.99,
       "serpentfolk": 0.0
     },
@@ -17492,8 +17990,10 @@
       "111"
     ],
     "authoredSpeciesPct": {
+      "ape_folk": 38,
+      "batracien": 8,
       "goblin": 6,
-      "human": 92,
+      "human": 46,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -17511,6 +18011,7 @@
     ],
     "eventRuleIds": [
       "bandit_ambush",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -17542,7 +18043,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -17574,14 +18075,18 @@
     },
     "sovereign": null,
     "speciesCounts": {
+      "ape_folk": 1905,
+      "batracien": 401,
       "goblin": 301,
-      "human": 4613,
+      "human": 2307,
       "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 37.99,
+      "batracien": 8.0,
       "goblin": 6.0,
-      "human": 92.0,
+      "human": 46.01,
       "orc": 2.0,
       "serpentfolk": 0.0
     },
@@ -17688,8 +18193,10 @@
       "107"
     ],
     "authoredSpeciesPct": {
-      "goblin": 4,
-      "human": 94,
+      "ape_folk": 18,
+      "batracien": 10,
+      "goblin": 6,
+      "human": 64,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -17707,6 +18214,7 @@
     ],
     "eventRuleIds": [
       "bandit_ambush",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -17738,7 +18246,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -17771,15 +18279,19 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 201,
-      "human": 4713,
+      "ape_folk": 903,
+      "batracien": 501,
+      "goblin": 301,
+      "human": 3209,
       "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 4.01,
-      "human": 94.0,
-      "orc": 1.99,
+      "ape_folk": 18.01,
+      "batracien": 9.99,
+      "goblin": 6.0,
+      "human": 64.0,
+      "orc": 2.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {
@@ -17886,8 +18398,10 @@
       "110"
     ],
     "authoredSpeciesPct": {
-      "goblin": 8,
-      "human": 90,
+      "ape_folk": 44,
+      "batracien": 6,
+      "goblin": 6,
+      "human": 42,
       "orc": 2,
       "serpentfolk": 0
     },
@@ -17905,6 +18419,7 @@
     ],
     "eventRuleIds": [
       "bandit_ambush",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -17936,7 +18451,7 @@
       "water"
     ],
     "networkBindingStatus": "existing_graph_within_300m",
-    "note": "Rôle de conception déterministe ; le bâti et les stocks du jeu ne sont pas modifiés.",
+    "note": "Révision démographique explicite v2 : voisinages mixtes ; ni nouvelle ville ni quota de PNJ affichés.",
     "patrolAuthority": "tagon",
     "placementRequirements": [
       "preserve_atlas_coordinates",
@@ -17968,15 +18483,19 @@
     },
     "sovereign": null,
     "speciesCounts": {
-      "goblin": 401,
-      "human": 4513,
+      "ape_folk": 2206,
+      "batracien": 301,
+      "goblin": 301,
+      "human": 2106,
       "orc": 100,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 8.0,
-      "human": 90.01,
-      "orc": 1.99,
+      "ape_folk": 44.0,
+      "batracien": 6.0,
+      "goblin": 6.0,
+      "human": 42.0,
+      "orc": 2.0,
       "serpentfolk": 0.0
     },
     "supplierOptions": {

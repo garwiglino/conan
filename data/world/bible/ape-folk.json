@@ -1,0 +1,2682 @@
+{
+  "schema": 1,
+  "apeFolk": {
+    "schema": 1,
+    "id": "ape_folk",
+    "label": "Hommes-singes",
+    "author": "Codex / ChatGPT",
+    "status": "authored_design_not_runtime_spawning",
+    "species": "ape_folk",
+    "globalFaction": null,
+    "hostilityBySpecies": false,
+    "populationBasis": "included_in_six_species_census_not_added_on_top",
+    "sexPolicy": "same_jobs_rights_equipment_and_clips_for_adults_of_both_sexes",
+    "tonePolicy": "five_natural_tones_stable_per_actor_not_faction_or_moral_markers",
+    "art": {
+      "module": "sprites/hommes-singes/homme-singe.js",
+      "nativeCell": [
+        48,
+        48
+      ],
+      "nativeAnchor": [
+        24,
+        36
+      ],
+      "engineCell": [
+        80,
+        80
+      ],
+      "engineAnchor": [
+        40,
+        52
+      ],
+      "tones": [
+        "brun",
+        "ebene",
+        "cendre",
+        "roux",
+        "sable"
+      ],
+      "sexes": [
+        "male",
+        "female"
+      ],
+      "implementedClips": [
+        "idle",
+        "walk",
+        "flee",
+        "talk"
+      ],
+      "body": "bipedal_mammal",
+      "furIsColdImmunity": false
+    },
+    "settlements": [
+      {
+        "siteId": "3",
+        "name": "Coralbourg",
+        "runtimeSiteId": "town-3",
+        "communityId": "ape-palmeraie",
+        "regionId": 14,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "27",
+        "name": "Anse-des-Palmes",
+        "runtimeSiteId": "town-27",
+        "communityId": "ape-palmeraie",
+        "regionId": 14,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "40",
+        "name": "Santalune",
+        "runtimeSiteId": "town-40",
+        "communityId": "ape-palmeraie",
+        "regionId": 14,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "55",
+        "name": "Relais-des-Lianes",
+        "runtimeSiteId": "town-55",
+        "communityId": "ape-palmeraie",
+        "regionId": 14,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "61",
+        "name": "Rive-de-Corail",
+        "runtimeSiteId": "town-61",
+        "communityId": "ape-palmeraie",
+        "regionId": 14,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "62",
+        "name": "Palmehaute",
+        "runtimeSiteId": "town-62",
+        "communityId": "ape-palmeraie",
+        "regionId": 14,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "50",
+        "name": "Bourg-des-Coquilles",
+        "runtimeSiteId": "town-50",
+        "communityId": "ape-coralune",
+        "regionId": 13,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "51",
+        "name": "Havre-des-Épices",
+        "runtimeSiteId": "town-51",
+        "communityId": "ape-coralune",
+        "regionId": 13,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "10",
+        "name": "Port-des-Veilleurs",
+        "runtimeSiteId": "town-10",
+        "communityId": "ape-rosebrume",
+        "regionId": 12,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "73",
+        "name": "Bac-des-Roseaux",
+        "runtimeSiteId": "town-73",
+        "communityId": "ape-rosebrume",
+        "regionId": 11,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "74",
+        "name": "Tourbeclaire",
+        "runtimeSiteId": "town-74",
+        "communityId": "ape-rosebrume",
+        "regionId": 11,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "75",
+        "name": "Brume-aux-Saules",
+        "runtimeSiteId": "town-75",
+        "communityId": "ape-rosebrume",
+        "regionId": 12,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "76",
+        "name": "Pont-des-Joncs",
+        "runtimeSiteId": "town-76",
+        "communityId": "ape-rosebrume",
+        "regionId": 11,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "77",
+        "name": "Refuge-des-Aulnes",
+        "runtimeSiteId": "town-77",
+        "communityId": "ape-rosebrume",
+        "regionId": 12,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "19",
+        "name": "Fort-des-Ronces",
+        "runtimeSiteId": "town-19",
+        "communityId": "ape-boisclair",
+        "regionId": 4,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "25",
+        "name": "Val-des-Mousses",
+        "runtimeSiteId": "town-25",
+        "communityId": "ape-boisclair",
+        "regionId": 4,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "32",
+        "name": "Col-des-Cèdres",
+        "runtimeSiteId": "town-32",
+        "communityId": "ape-boisclair",
+        "regionId": 4,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "38",
+        "name": "Bois-de-Lune",
+        "runtimeSiteId": "town-38",
+        "communityId": "ape-boisclair",
+        "regionId": 7,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "46",
+        "name": "Ormerive",
+        "runtimeSiteId": "town-46",
+        "communityId": "ape-boisclair",
+        "regionId": 4,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "2",
+        "name": "Aulneport",
+        "runtimeSiteId": "town-2",
+        "communityId": "ape-quais",
+        "regionId": 7,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "5",
+        "name": "Port-Sarak",
+        "runtimeSiteId": "town-5",
+        "communityId": "ape-quais",
+        "regionId": 10,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      },
+      {
+        "siteId": "42",
+        "name": "Branchebasse",
+        "runtimeSiteId": "town-42",
+        "communityId": "ape-quais",
+        "regionId": 6,
+        "status": "neighborhood_and_hinterland_design_not_constructed",
+        "placement": "safe_walkable_dry_ground_with_water_access_not_deep_swamp_or_cursed_ground"
+      }
+    ],
+    "communities": [
+      {
+        "id": "ape-palmeraie",
+        "label": "Maisonnées de Palmeraie",
+        "regions": [
+          14
+        ],
+        "siteIds": [
+          "3",
+          "27",
+          "40",
+          "55",
+          "61",
+          "62"
+        ],
+        "authority": "assemblées de foyers et délégués révocables aux coupes et réserves",
+        "interests": "droits de verger, renouvellement des bois, paiement des livraisons",
+        "needs": "débouchés des ports, outils, sel, étoffes",
+        "internalDisagreement": "producteurs favorables aux avances contre foyers voulant vendre sans exclusivité",
+        "goods": [
+          "fruit",
+          "tubers",
+          "fiber",
+          "resin",
+          "naval_timber",
+          "aromatics"
+        ],
+        "habitat": "forest_garden",
+        "sharedSpeciesCommand": false
+      },
+      {
+        "id": "ape-coralune",
+        "label": "Ateliers de Coralune",
+        "regions": [
+          13
+        ],
+        "siteIds": [
+          "50",
+          "51"
+        ],
+        "authority": "maisons de métier et assemblées des quais, soumises à la juridiction portuaire",
+        "interests": "salaires, places de quai, contrôle des avances et réparation des bateaux",
+        "needs": "fer travaillé, vivres et contrats d’embarquement",
+        "internalDisagreement": "armateurs et ouvriers divergent sur le coût des escortes",
+        "goods": [
+          "rope",
+          "fiber",
+          "boats",
+          "fish",
+          "provisions"
+        ],
+        "habitat": "port_courtyard",
+        "sharedSpeciesCommand": false
+      },
+      {
+        "id": "ape-rosebrume",
+        "label": "Foyers des terres hautes de Varan",
+        "regions": [
+          11,
+          12
+        ],
+        "siteIds": [
+          "10",
+          "73",
+          "74",
+          "75",
+          "76",
+          "77"
+        ],
+        "authority": "conseils de voisinage distincts pour chaque habitat, médiateurs des chemins secs",
+        "interests": "jardins et chemins hors crue, collecte consentie, accès direct au marché",
+        "needs": "poterie, poisson conservé, sel, outils et traversées entretenues",
+        "internalDisagreement": "désaccord entre avances portuaires et vente directe ; conflits précis de limites de collecte",
+        "goods": [
+          "tubers",
+          "fruit",
+          "resin",
+          "medicinal",
+          "fiber",
+          "pottery"
+        ],
+        "habitat": "raised_dry_ground",
+        "sharedSpeciesCommand": false
+      },
+      {
+        "id": "ape-boisclair",
+        "label": "Foyers forestiers de Boisclair",
+        "regions": [
+          4,
+          7
+        ],
+        "siteIds": [
+          "19",
+          "25",
+          "32",
+          "38",
+          "46"
+        ],
+        "authority": "foyers propriétaires ou tenanciers, droits de coupe inscrits devant autorité locale",
+        "interests": "usages forestiers, greniers, sécurité des enfants et des voyageurs",
+        "needs": "métal, céréales, laine et reconnaissance des usages anciens",
+        "internalDisagreement": "contrats de coupe royale contre droits plus anciens ; pas sécession raciale",
+        "goods": [
+          "timber",
+          "honey",
+          "wax",
+          "resin",
+          "grain",
+          "leather"
+        ],
+        "habitat": "temperate_ground_house",
+        "sharedSpeciesCommand": false
+      },
+      {
+        "id": "ape-quais",
+        "label": "Maisons établies des quais",
+        "regions": [
+          6,
+          7,
+          10
+        ],
+        "siteIds": [
+          "2",
+          "5",
+          "42"
+        ],
+        "authority": "associations indépendantes de résidents ou d’atelier, pas une diaspora gouvernée de loin",
+        "interests": "statut de résident libre, salaire, droit de famille et recours local",
+        "needs": "logement, contrats, outils, vivres et transport régulier",
+        "internalDisagreement": "désaccords de dette et de citoyenneté au cas par cas",
+        "goods": [
+          "tools",
+          "cloth",
+          "rope",
+          "provisions"
+        ],
+        "habitat": "mixed_urban_house",
+        "sharedSpeciesCommand": false
+      }
+    ],
+    "relations": [
+      {
+        "actor": "teremor",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "droits d’usage et titre de résidence",
+        "otherWants": "approvisionnement légal, taxes et entretien des chemins",
+        "trade": [
+          "timber",
+          "resin",
+          "honey",
+          "tools"
+        ],
+        "dispute": "forestry",
+        "escalation": "coupes hors concession ou suppression d’un accès attesté",
+        "offramp": "bornage contradictoire, quota de coupe et paiement",
+        "automaticWar": false
+      },
+      {
+        "actor": "sylverive",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "salaires, logements et liberté de changer de donneur d’ordre",
+        "otherWants": "cordages et ateliers fiables, contributions prévues",
+        "trade": [
+          "rope",
+          "cloth",
+          "tools"
+        ],
+        "dispute": "contribution",
+        "escalation": "retenue abusive d’une paie ou saisie hors mandat",
+        "offramp": "audit et arbitrage dans la charte de la cité",
+        "automaticWar": false
+      },
+      {
+        "actor": "igea",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "protection des rares voyageurs et contrats saisonniers",
+        "otherWants": "livraisons tenues et respect des passages",
+        "trade": [
+          "wool",
+          "tools",
+          "provisions"
+        ],
+        "dispute": "concessions",
+        "escalation": "engagement minier ou de transport rompu dans une vallée nommée",
+        "offramp": "paiement, refuge chauffé et retour sous contrat",
+        "automaticWar": false
+      },
+      {
+        "actor": "sarak",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "eau et statut libre des résidents et voyageurs",
+        "otherWants": "taxes de marché et contrats de transport fiables",
+        "trade": [
+          "salt",
+          "cloth",
+          "tools",
+          "provisions"
+        ],
+        "dispute": "water",
+        "escalation": "saisie abusive d’un document de liberté ou quota d’eau rompu",
+        "offramp": "recours local, restitution et partage mesuré",
+        "automaticWar": false
+      },
+      {
+        "actor": "varan",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "collecte consentie, chemins secs, vente et statut de personne libre",
+        "otherWants": "paiement des installations et contrats d’avance",
+        "trade": [
+          "resin",
+          "medicinal",
+          "tubers",
+          "tools"
+        ],
+        "dispute": "enclave_access",
+        "escalation": "collecte forcée, dette falsifiée ou accès interrompu",
+        "offramp": "restitution et accord avec les seuls titulaires du lieu",
+        "automaticWar": false
+      },
+      {
+        "actor": "tagon",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "vergers, replantation, paiement des bois et possibilité de vente directe",
+        "otherWants": "bois sélectionné, fret, entretien et cordages réguliers",
+        "trade": [
+          "naval_timber",
+          "fiber",
+          "rope",
+          "fruit"
+        ],
+        "dispute": "forestry",
+        "escalation": "coupe d’arbres non cédés ou saisie d’un chargement identifié",
+        "offramp": "quota et replantation financés, compensation et accès à un quai",
+        "automaticWar": false
+      },
+      {
+        "actor": "darg",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "contrats d’escorte et bêtes payés, passage hors jardins",
+        "otherWants": "paiement, relais et respect des troupeaux",
+        "trade": [
+          "pack_animals",
+          "wool",
+          "grain",
+          "tools"
+        ],
+        "dispute": "pasture",
+        "escalation": "dégât de troupeau ou bête retenue sans accord",
+        "offramp": "calendrier de passage et indemnisation des signataires",
+        "automaticWar": false
+      },
+      {
+        "actor": "kesh",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "marchands libres admis, poursuite des ravisseurs identifiés",
+        "otherWants": "accès des membres non poursuivis et contrats payés",
+        "trade": [
+          "pottery",
+          "cloth",
+          "tools"
+        ],
+        "dispute": "kesh_restitution",
+        "escalation": "raid attribué à une bande précise, jamais au clan entier",
+        "offramp": "restitution et justice ciblée contre les seuls auteurs",
+        "automaticWar": false
+      },
+      {
+        "actor": "enclaves",
+        "scope": "contact_framework_local_signatories_only",
+        "apeWants": "limites des vergers, sentiers et collectes négociées",
+        "otherWants": "eau et sites de mémoire sans intrusion",
+        "trade": [
+          "medicinal",
+          "resin",
+          "pottery",
+          "tools"
+        ],
+        "dispute": "enclave_access",
+        "escalation": "collecte ou creusement franchissant une limite connue",
+        "offramp": "retrait et consentement de l’enclave concernée",
+        "automaticWar": false
+      }
+    ],
+    "speciesContacts": [
+      {
+        "species": "human",
+        "relation": "voisins, employeurs, associés ou agents selon le lieu ; aucune autorité humaine universelle"
+      },
+      {
+        "species": "goblin",
+        "relation": "artisanat, agriculture et échange ; Kesh ne représente pas tous les gobelins"
+      },
+      {
+        "species": "orc",
+        "relation": "éleveurs, artisans et escortes ; Darg ne représente pas tous les orques"
+      },
+      {
+        "species": "serpentfolk",
+        "relation": "droits d’eau et de collecte négociés avec chaque enclave, sans empire commun"
+      },
+      {
+        "species": "batracien",
+        "relation": "complémentarité entre chemins secs/vergers et batellerie/riz/filets ; rivalités possibles de quai, pas concurrence raciale obligatoire"
+      }
+    ],
+    "structures": [
+      {
+        "id": "house",
+        "label": "Maison de cour",
+        "footprintTiles": [
+          4,
+          4
+        ],
+        "materials": [
+          "timber",
+          "fiber",
+          "clay",
+          "rope"
+        ],
+        "placement": "sol drainé, accès au puits, entrée praticable, foyer séparé du stockage",
+        "use": "sleep_and_family",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "garden",
+        "label": "Jardin-verger",
+        "footprintTiles": [
+          6,
+          5
+        ],
+        "materials": [
+          "tools",
+          "water"
+        ],
+        "placement": "terre fertile non pavée, réserve de graines, irrigation vérifiée",
+        "use": "food_growing",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "granary",
+        "label": "Grenier ventilé sur soubassement",
+        "footprintTiles": [
+          4,
+          3
+        ],
+        "materials": [
+          "timber",
+          "rope",
+          "pottery"
+        ],
+        "placement": "abrité des crues et de la pluie, réserve indépendante des exports",
+        "use": "food_storage",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "fiber_yard",
+        "label": "Cour de fibres et cordages",
+        "footprintTiles": [
+          5,
+          4
+        ],
+        "materials": [
+          "fiber",
+          "timber",
+          "tools"
+        ],
+        "placement": "longue aire de torsion libre, abri de séchage",
+        "use": "weaving_and_rope",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "wood_yard",
+        "label": "Atelier du bois",
+        "footprintTiles": [
+          6,
+          4
+        ],
+        "materials": [
+          "timber",
+          "tools",
+          "iron"
+        ],
+        "placement": "billot, chevalet et zone dangereuse hors passage",
+        "use": "woodworking",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "kiln",
+        "label": "Poterie et four",
+        "footprintTiles": [
+          4,
+          4
+        ],
+        "materials": [
+          "clay",
+          "firewood",
+          "water"
+        ],
+        "placement": "atelier à nuisance distinct de l’habitat et accès au combustible",
+        "use": "pottery",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "quay",
+        "label": "Petit quai partagé",
+        "footprintTiles": [
+          6,
+          3
+        ],
+        "materials": [
+          "timber",
+          "rope",
+          "tools"
+        ],
+        "placement": "vraie rive navigable et raccord au graphe, aucune barque à terre",
+        "use": "boat_service",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "market",
+        "label": "Auvent de marché",
+        "footprintTiles": [
+          4,
+          3
+        ],
+        "materials": [
+          "timber",
+          "cloth",
+          "rope"
+        ],
+        "placement": "route existante, contrôle des balances et circulation civile",
+        "use": "trade_and_records",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "meeting",
+        "label": "Cour commune et bancs",
+        "footprintTiles": [
+          5,
+          4
+        ],
+        "materials": [
+          "timber",
+          "building_stone"
+        ],
+        "placement": "sol libre, point de refuge proche, accueil de voisins d’autres espèces",
+        "use": "social_and_mediation",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "watch",
+        "label": "Poste de veille",
+        "footprintTiles": [
+          3,
+          3
+        ],
+        "materials": [
+          "timber",
+          "tools",
+          "arms"
+        ],
+        "placement": "mandat, stock de vivres, chemin de relève et champ de vue réel",
+        "use": "guard",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "shelter",
+        "label": "Refuge fermé et couvert",
+        "footprintTiles": [
+          4,
+          4
+        ],
+        "materials": [
+          "timber",
+          "clay",
+          "cloth"
+        ],
+        "placement": "point de repli atteignable sans traverser le danger ; pas de téléportation",
+        "use": "refuge",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      },
+      {
+        "id": "forest_platform",
+        "label": "Plateforme forestière facultative",
+        "footprintTiles": [
+          3,
+          3
+        ],
+        "materials": [
+          "timber",
+          "rope"
+        ],
+        "placement": "solide support et étage/collision/accès réel requis avant utilisation",
+        "use": "deferred_vertical_access",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": true
+      },
+      {
+        "id": "outlaw_camp",
+        "label": "Bivouac d’une bande identifiée",
+        "footprintTiles": [
+          4,
+          3
+        ],
+        "materials": [
+          "timber",
+          "cloth",
+          "rope"
+        ],
+        "placement": "hors des refuges civils et à distance de sécurité ; seulement si incident et bande existants",
+        "use": "incident_group_camp",
+        "status": "to_author",
+        "tilePixels": 16,
+        "camera": "existing_top_down_three_quarter_not_isometric",
+        "climbRequired": false
+      }
+    ],
+    "activities": [
+      {
+        "id": "idle",
+        "label": "Repos debout",
+        "family": "life",
+        "priority": 0,
+        "status": "implemented",
+        "props": [],
+        "resources": [],
+        "workspace": "ground",
+        "markers": [],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "walk",
+        "label": "Marche",
+        "family": "life",
+        "priority": 0,
+        "status": "implemented",
+        "props": [],
+        "resources": [],
+        "workspace": "ground",
+        "markers": [
+          "foot_contacts"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "flee",
+        "label": "Course de fuite",
+        "family": "life",
+        "priority": 0,
+        "status": "implemented",
+        "props": [],
+        "resources": [],
+        "workspace": "escape_path",
+        "markers": [
+          "foot_contacts"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "talk",
+        "label": "Parler et écouter",
+        "family": "social",
+        "priority": 0,
+        "status": "implemented",
+        "props": [],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "startle",
+        "label": "Réagir à une alerte",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [],
+        "resources": [],
+        "workspace": "ground",
+        "markers": [
+          "interrupt_work"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "sit_down",
+        "label": "S’asseoir",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "bench"
+        ],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [
+          "seat_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "seated",
+        "label": "Repos assis",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "bench"
+        ],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "stand_up",
+        "label": "Se relever",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "bench"
+        ],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [
+          "release_seat"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "eat",
+        "label": "Manger une portion",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "bowl"
+        ],
+        "resources": [
+          "provisions"
+        ],
+        "workspace": "house",
+        "markers": [
+          "consume_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "drink",
+        "label": "Boire",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "gourd"
+        ],
+        "resources": [
+          "water"
+        ],
+        "workspace": "house",
+        "markers": [
+          "consume_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "carry",
+        "label": "Porter une charge",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "crate",
+          "basket"
+        ],
+        "resources": [],
+        "workspace": "safe_path",
+        "markers": [
+          "two_hand_grip",
+          "foot_contacts"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "put_down",
+        "label": "Poser et reprendre une charge",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [
+          "crate",
+          "basket"
+        ],
+        "resources": [],
+        "workspace": "granary",
+        "markers": [
+          "release_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "hit",
+        "label": "Blessure et interruption",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [],
+        "resources": [],
+        "workspace": "ground",
+        "markers": [
+          "cancel_action"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "death",
+        "label": "Mort persistante",
+        "family": "life",
+        "priority": 0,
+        "status": "to_create",
+        "props": [],
+        "resources": [],
+        "workspace": "ground",
+        "markers": [
+          "no_duplicate_corpse"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "shelter",
+        "label": "Se replier, attendre puis revenir",
+        "family": "behavior",
+        "priority": 0,
+        "status": "to_create",
+        "props": [],
+        "resources": [],
+        "workspace": "shelter",
+        "markers": [
+          "safe_arrival",
+          "calm_before_return"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "sleep",
+        "label": "Dormir au foyer ou à la halte",
+        "family": "life",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "mat"
+        ],
+        "resources": [],
+        "workspace": "house",
+        "markers": [
+          "bed_reserved"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "greet",
+        "label": "Saluer ou remercier",
+        "family": "social",
+        "priority": 1,
+        "status": "to_create",
+        "props": [],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "mourn",
+        "label": "Veillée et funérailles",
+        "family": "social",
+        "priority": 2,
+        "status": "to_create",
+        "props": [],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [
+          "existing_person_event"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "harvest_fruit",
+        "label": "Cueillir fruits et aromates",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "basket",
+          "hook"
+        ],
+        "resources": [
+          "fruit",
+          "aromatics"
+        ],
+        "workspace": "garden",
+        "markers": [
+          "reach_target",
+          "collect_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "hoe",
+        "label": "Biner et entretenir les jardins",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "hoe"
+        ],
+        "resources": [
+          "tubers",
+          "vegetables"
+        ],
+        "workspace": "garden",
+        "markers": [
+          "ground_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "sow",
+        "label": "Planter et semer",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "seed_bag"
+        ],
+        "resources": [
+          "grain",
+          "tubers"
+        ],
+        "workspace": "garden",
+        "markers": [
+          "plant_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "cut_fiber",
+        "label": "Récolter des fibres",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "knife",
+          "bundle"
+        ],
+        "resources": [
+          "fiber"
+        ],
+        "workspace": "garden",
+        "markers": [
+          "cut_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "weave",
+        "label": "Tresser nattes et paniers",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "basket",
+          "fiber_bundle"
+        ],
+        "resources": [
+          "fiber"
+        ],
+        "workspace": "fiber_yard",
+        "markers": [
+          "hand_crossing"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "rope",
+        "label": "Tordre des cordages",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "rope_rack"
+        ],
+        "resources": [
+          "fiber",
+          "rope"
+        ],
+        "workspace": "fiber_yard",
+        "markers": [
+          "twist_cycle"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "resin",
+        "label": "Recueillir de la résine",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "scraper",
+          "pot"
+        ],
+        "resources": [
+          "resin"
+        ],
+        "workspace": "wood_yard",
+        "markers": [
+          "tap_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "prune",
+        "label": "Élaguer et entretenir le verger",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "pruning_blade"
+        ],
+        "resources": [
+          "fruit",
+          "timber"
+        ],
+        "workspace": "garden",
+        "markers": [
+          "cut_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "hew",
+        "label": "Débiter du bois au billot",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "axe",
+          "log"
+        ],
+        "resources": [
+          "timber"
+        ],
+        "workspace": "wood_yard",
+        "markers": [
+          "tool_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "saw",
+        "label": "Scier au chevalet",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "saw",
+          "sawhorse"
+        ],
+        "resources": [
+          "timber"
+        ],
+        "workspace": "wood_yard",
+        "markers": [
+          "tool_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "joinery",
+        "label": "Assembler et réparer",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "mallet",
+          "pegs"
+        ],
+        "resources": [
+          "timber",
+          "tools"
+        ],
+        "workspace": "wood_yard",
+        "markers": [
+          "tool_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "cook",
+        "label": "Cuire et préparer les repas",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "pot",
+          "ladle"
+        ],
+        "resources": [
+          "tubers",
+          "grain",
+          "fish",
+          "provisions"
+        ],
+        "workspace": "house",
+        "markers": [
+          "stir_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "ledger",
+        "label": "Compter, écrire et peser",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "ledger",
+          "scale"
+        ],
+        "resources": [
+          "tools"
+        ],
+        "workspace": "market",
+        "markers": [
+          "mark_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "load",
+        "label": "Charger, décharger et arrimer",
+        "family": "work",
+        "priority": 1,
+        "status": "to_create",
+        "props": [
+          "crate",
+          "rope"
+        ],
+        "resources": [
+          "rope"
+        ],
+        "workspace": "quay",
+        "markers": [
+          "hand_over_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "honey",
+        "label": "Récolter miel et cire",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "smoker",
+          "hive",
+          "jar"
+        ],
+        "resources": [
+          "honey",
+          "wax"
+        ],
+        "workspace": "garden",
+        "markers": [
+          "collect_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "medicinal",
+        "label": "Trier et préparer des remèdes",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "mortar",
+          "herbs"
+        ],
+        "resources": [
+          "medicinal"
+        ],
+        "workspace": "house",
+        "markers": [
+          "mix_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "pottery",
+        "label": "Tourner et façonner une poterie",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "wheel",
+          "clay_lump"
+        ],
+        "resources": [
+          "clay",
+          "pottery"
+        ],
+        "workspace": "kiln",
+        "markers": [
+          "hand_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "net",
+        "label": "Réparer les filets ou pêcher",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "net",
+          "needle"
+        ],
+        "resources": [
+          "fiber",
+          "fish"
+        ],
+        "workspace": "quay",
+        "markers": [
+          "real_water_or_repair"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "row",
+        "label": "Ramer ou mener une petite embarcation",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "oar",
+          "boat"
+        ],
+        "resources": [
+          "boats"
+        ],
+        "workspace": "quay",
+        "markers": [
+          "water_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "repair_boat",
+        "label": "Calfater et réparer une coque",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "mallet",
+          "caulking_tool",
+          "resin_pot"
+        ],
+        "resources": [
+          "resin",
+          "naval_timber",
+          "rope"
+        ],
+        "workspace": "quay",
+        "markers": [
+          "tool_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "stitch",
+        "label": "Coudre cuir et vêtements",
+        "family": "work",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "needle",
+          "cloth"
+        ],
+        "resources": [
+          "cloth",
+          "leather"
+        ],
+        "workspace": "fiber_yard",
+        "markers": [
+          "needle_contact"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "bandage",
+        "label": "Soigner un blessé",
+        "family": "care",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "bandage"
+        ],
+        "resources": [
+          "cloth",
+          "medicinal"
+        ],
+        "workspace": "shelter",
+        "markers": [
+          "care_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "negotiate",
+        "label": "Négocier et arbitrer",
+        "family": "social",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "ledger"
+        ],
+        "resources": [],
+        "workspace": "meeting",
+        "markers": [
+          "named_parties"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "surrender",
+        "label": "Rendre les armes",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "weapon"
+        ],
+        "resources": [],
+        "workspace": "ground",
+        "markers": [
+          "drop_once"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "armed_idle",
+        "label": "Repos armé et orientation",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "weapon"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "watch",
+        "markers": [],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "armed_walk",
+        "label": "Pas armés face à une cible",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "weapon"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "safe_path",
+        "markers": [
+          "foot_contacts",
+          "facing_independent"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "warn",
+        "label": "Sommation et ralliement",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "weapon"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "watch",
+        "markers": [
+          "local_witness"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "guard_raise",
+        "label": "Lever le bouclier",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "shield"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "watch",
+        "markers": [
+          "guard_ready"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "guard_hold",
+        "label": "Tenir la garde en mouvement",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "shield"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "frontal_only"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "block",
+        "label": "Encaisser un coup au bouclier",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "shield"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "blocked_once",
+          "no_blood"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "guard_break",
+        "label": "Garde brisée et étourdissement",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "shield"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "stun",
+          "cancel_attack"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "spear_thrust",
+        "label": "Estoc de lance",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "spear"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "single_contact",
+          "active_smear"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "staff_sweep",
+        "label": "Balayage de bâton ou de hampe",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "staff"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "single_contact",
+          "active_smear"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "axe_chop",
+        "label": "Frappe de hache ou massue",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "axe"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "single_contact",
+          "active_smear"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "blade_cut",
+        "label": "Taille et revers courts",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "blade"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "single_contact",
+          "active_smear"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "throw_stone",
+        "label": "Lancer d’une pierre ou d’un javelot",
+        "family": "combat",
+        "priority": 2,
+        "status": "to_create",
+        "props": [
+          "stone",
+          "javelin"
+        ],
+        "resources": [
+          "arms"
+        ],
+        "workspace": "ground",
+        "markers": [
+          "release_projectile",
+          "swept_collision"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      },
+      {
+        "id": "climb",
+        "label": "Monter par accès forestier aménagé",
+        "family": "deferred",
+        "priority": 3,
+        "status": "to_create",
+        "props": [
+          "ladder",
+          "rope"
+        ],
+        "resources": [],
+        "workspace": "forest_platform",
+        "markers": [
+          "real_navigation_edge",
+          "no_teleport"
+        ],
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "fourDirections": true,
+        "requiresBodyArtApproval": false,
+        "productionIsAutomatic": false
+      }
+    ],
+    "roles": [
+      {
+        "id": "gardener",
+        "label": "Cultivateur et verger",
+        "activities": [
+          "hoe",
+          "sow",
+          "harvest_fruit",
+          "prune"
+        ],
+        "structures": [
+          "garden",
+          "granary"
+        ],
+        "outfitBrief": "toile légère, tablier court, panier ; chapeau optionnel",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "fiber_worker",
+        "label": "Fibres, paniers et cordages",
+        "activities": [
+          "cut_fiber",
+          "weave",
+          "rope"
+        ],
+        "structures": [
+          "fiber_yard"
+        ],
+        "outfitBrief": "tablier souple, manches dégagées ; pas de casque",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "forest_worker",
+        "label": "Bois, résine et ruchers",
+        "activities": [
+          "resin",
+          "hew",
+          "saw",
+          "honey"
+        ],
+        "structures": [
+          "wood_yard",
+          "garden"
+        ],
+        "outfitBrief": "cuir de travail, ceinture d’outils ; couvre-chef selon tâche",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "carpenter",
+        "label": "Charpente et réparation navale",
+        "activities": [
+          "joinery",
+          "repair_boat"
+        ],
+        "structures": [
+          "wood_yard",
+          "quay"
+        ],
+        "outfitBrief": "tablier renforcé et outils à portée ; pas de bouclier permanent",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "porter",
+        "label": "Portage et chargement",
+        "activities": [
+          "carry",
+          "load",
+          "put_down"
+        ],
+        "structures": [
+          "granary",
+          "quay"
+        ],
+        "outfitBrief": "veste courte, sangle de portage et sandales adaptées",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "trader",
+        "label": "Marché et écritures",
+        "activities": [
+          "ledger",
+          "negotiate"
+        ],
+        "structures": [
+          "market"
+        ],
+        "outfitBrief": "étoffe propre, bourse, tablette ou registre",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "potter",
+        "label": "Poterie",
+        "activities": [
+          "pottery"
+        ],
+        "structures": [
+          "kiln"
+        ],
+        "outfitBrief": "tablier de toile sans manches flottantes près du four",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "healer",
+        "label": "Préparations et soins",
+        "activities": [
+          "medicinal",
+          "bandage"
+        ],
+        "structures": [
+          "house",
+          "shelter"
+        ],
+        "outfitBrief": "pochettes et étoffe propre ; aucune magie automatique",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "cook",
+        "label": "Cuisine et réserve",
+        "activities": [
+          "cook",
+          "eat"
+        ],
+        "structures": [
+          "house",
+          "granary"
+        ],
+        "outfitBrief": "tablier et couvre-chef de travail optionnel",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "boat_worker",
+        "label": "Filets et navigation",
+        "activities": [
+          "net",
+          "row",
+          "load"
+        ],
+        "structures": [
+          "quay"
+        ],
+        "outfitBrief": "veste courte, corde et protection de pluie",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "tailor",
+        "label": "Couture et entretien",
+        "activities": [
+          "stitch"
+        ],
+        "structures": [
+          "fiber_yard"
+        ],
+        "outfitBrief": "tablier, aiguille, cuir ou étoffe selon commande",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "delegate",
+        "label": "Médiation et mémoire",
+        "activities": [
+          "talk",
+          "ledger",
+          "negotiate",
+          "mourn"
+        ],
+        "structures": [
+          "meeting"
+        ],
+        "outfitBrief": "tenue civile locale, signe de mandat discret et révocable",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "warden",
+        "label": "Garde de communauté",
+        "activities": [
+          "armed_idle",
+          "armed_walk",
+          "warn",
+          "guard_raise",
+          "guard_hold",
+          "block",
+          "guard_break",
+          "spear_thrust"
+        ],
+        "structures": [
+          "watch"
+        ],
+        "outfitBrief": "protection courte de cuir, lance et bouclier ; casque ouvert facultatif",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "escort",
+        "label": "Escorte de convoi",
+        "activities": [
+          "armed_walk",
+          "guard_hold",
+          "block",
+          "blade_cut",
+          "surrender"
+        ],
+        "structures": [
+          "watch",
+          "quay"
+        ],
+        "outfitBrief": "cuir et toile, lame courte et bouclier ; mandat limité au convoi",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "scout",
+        "label": "Éclaireur de chemins",
+        "activities": [
+          "armed_walk",
+          "warn",
+          "staff_sweep",
+          "throw_stone"
+        ],
+        "structures": [
+          "watch"
+        ],
+        "outfitBrief": "tenue légère, bâton, sac de pierres ou javelots ; pas de bouclier par défaut",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      },
+      {
+        "id": "brigand",
+        "label": "Membre d’une bande identifiée",
+        "activities": [
+          "armed_walk",
+          "axe_chop",
+          "blade_cut",
+          "throw_stone",
+          "surrender"
+        ],
+        "structures": [
+          "outlaw_camp"
+        ],
+        "outfitBrief": "équipement accessible au groupe, pas d’uniforme racial du crime",
+        "sexes": [
+          "male",
+          "female"
+        ],
+        "allTones": true,
+        "alignment": "incident_and_person_not_species",
+        "status": "to_author_outfits_and_routines"
+      }
+    ],
+    "eventBindings": [
+      {
+        "id": "ape-palmeraie-smuggling_interception",
+        "dispute": "forestry",
+        "rule": "smuggling_interception",
+        "communityId": "ape-palmeraie",
+        "requires": "bois hors limite consenti et acheteur identifié",
+        "resolution": "restitution, contrôle des coupes, indemnisation",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-boisclair-labour_dispute",
+        "dispute": "forestry",
+        "rule": "labour_dispute",
+        "communityId": "ape-boisclair",
+        "requires": "salaires, droit d’usage ou sécurité de travail contestés",
+        "resolution": "audit, réparation et paiement",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-coralune-port_seizure",
+        "dispute": "port_access",
+        "rule": "port_seizure",
+        "communityId": "ape-coralune",
+        "requires": "titre de saisie et navire ou cargaison identifiés",
+        "resolution": "recours, indemnité ou restitution",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-rosebrume-smuggling_interception",
+        "dispute": "enclave_access",
+        "rule": "smuggling_interception",
+        "communityId": "ape-rosebrume",
+        "requires": "collecte non consentie sur terrain borné",
+        "resolution": "retrait et accord avec le titulaire",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-quais-fiscal_checkpoint",
+        "dispute": "contribution",
+        "rule": "fiscal_checkpoint",
+        "communityId": "ape-quais",
+        "requires": "ordre ciblé et comptes de cargaison contestés",
+        "resolution": "recours et contrôle du mandat",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-palmeraie-bandit_ambush",
+        "dispute": "none",
+        "rule": "bandit_ambush",
+        "communityId": "ape-palmeraie",
+        "requires": "bande locale identifiée, cible présente et couvert praticable",
+        "resolution": "fuite, secours, défaite ou arrestation",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-rosebrume-missing_person",
+        "dispute": "none",
+        "rule": "missing_person",
+        "communityId": "ape-rosebrume",
+        "requires": "personne existante et cause enregistrée, accident ou crime",
+        "resolution": "recherche, secours et choix de retour",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-rosebrume-weather_hazard",
+        "dispute": "none",
+        "rule": "weather_hazard",
+        "communityId": "ape-rosebrume",
+        "requires": "crue ou tempête réellement mesurée au lieu",
+        "resolution": "refuge, réparation et retour après calme",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-coralune-caravan",
+        "dispute": "none",
+        "rule": "caravan",
+        "communityId": "ape-coralune",
+        "requires": "stock excédentaire, demande et trajet existants",
+        "resolution": "transfert unique à l’arrivée",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      },
+      {
+        "id": "ape-boisclair-patrol",
+        "dispute": "none",
+        "rule": "patrol",
+        "communityId": "ape-boisclair",
+        "requires": "mandat, effectif, solde et itinéraire financés",
+        "resolution": "relève ou fin de mandat",
+        "runtimeEnabled": false,
+        "createsNewEventType": false,
+        "armedOnlyAfterActualViolenceOrMandate": true
+      }
+    ],
+    "activationGates": [
+      "approved_body_and_palette",
+      "all_civilian_lifecycle_clips",
+      "job_props_and_surfaces",
+      "safe_placement_220px_from_threat",
+      "real_routes_and_same_floor",
+      "local_refuge_and_return",
+      "deterministic_saved_identity_sex_tone_job",
+      "persistent_death_no_civilian_XP",
+      "weapon_contacts_and_swept_projectiles_before_armed_spawns",
+      "existing_runtime_event_registry_adapter",
+      "no_species_wide_reputation",
+      "no_automatic_economic_rewards"
+    ],
+    "routeIntents": [
+      {
+        "fromSiteId": "55",
+        "toSiteId": "62",
+        "purpose": "vergers et fibres",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "40",
+        "toSiteId": "27",
+        "purpose": "bois et contrat portuaire",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "50",
+        "toSiteId": "51",
+        "purpose": "cordages et marché côtier",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "75",
+        "toSiteId": "77",
+        "purpose": "jardins et collectes autorisées",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "73",
+        "toSiteId": "74",
+        "purpose": "poterie et réparation",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "25",
+        "toSiteId": "19",
+        "purpose": "marché et surveillance locale",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "25",
+        "toSiteId": "38",
+        "purpose": "échange entre foyers tempérés",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "42",
+        "toSiteId": "2",
+        "purpose": "atelier et débouché portuaire",
+        "status": "requires_existing_graph_not_new_route"
+      },
+      {
+        "fromSiteId": "5",
+        "toSiteId": "27",
+        "purpose": "commerce sous contrat avec traversée obligatoire",
+        "status": "requires_existing_graph_not_new_route"
+      }
+    ]
+  }
+}

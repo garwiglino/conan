@@ -20,7 +20,7 @@ Point d'entrée de la bible de production. Direction retenue : heroic fantasy ad
 - [Registres JSON](data/world/bible/generated/) : localités, régions, territoires, monde, ressources, relations, événements, réseaux, litiges et routes.
 - [Manifeste et empreintes des sources](data/world/bible/generated/manifest.json).
 
-La première compilation validée contient 83 localités, 14 régions, 145 routes, 54 ressources, 36 relations, 17 règles d'événements et 7 familles de réseaux clandestins. Le manifeste initial ne signale aucun accès au graphe ou position/frontière à revoir. Cette vérification porte sur le rattachement des données, pas sur la construction des quartiers ou la navigabilité testée manuellement de chaque mètre du monde.
+La compilation courante contient 83 localités, 14 régions, 133 routes, 54 ressources, 36 relations, 17 règles d'événements et 7 familles de réseaux clandestins. Le manifeste initial ne signale aucun accès au graphe ou position/frontière à revoir. Cette vérification porte sur le rattachement des données, pas sur la construction des quartiers ou la navigabilité testée manuellement de chaque mètre du monde.
 
 ## Sources éditables
 
@@ -28,7 +28,7 @@ La première compilation validée contient 83 localités, 14 régions, 145 route
 
 `data/world/bible/relations.json` décrit chaque paire politique, les intérêts des deux parties, les échanges, les désaccords, les escalades et les issues. `data/world/bible/events.json` définit motifs, auteurs, cibles, régions, conditions, durées et cooldowns, ainsi que les réseaux locaux.
 
-Les tableaux compacts disposent de colonnes déclarées dans chaque fichier. `settlementOverrides` permet une décision artistique/narrative particulière par identifiant réel, sans renommer ni déplacer la localité. Une correction de pourcentage conserve les quatre espèces et un total de 100. Ne pas modifier à la main les registres dérivés.
+Les tableaux compacts disposent de colonnes déclarées dans chaque fichier. `settlementOverrides` permet une décision artistique/narrative particulière par identifiant réel, sans renommer ni déplacer la localité. Une correction de pourcentage conserve les six espèces et un total de 100. Ne pas modifier à la main les registres dérivés.
 
 ## Validation reproductible
 
@@ -38,7 +38,7 @@ python3 scripts/build-world-bible.py
 python3 scripts/build-world-bible.py --check
 ```
 
-Les 17 tests de régression couvrent conservation des populations, pourcentages, identifiants, matrice diplomatique, dépendances des ressources, séparation lac/port océanique, impossibilité d'un incident sans cause, transitions non aléatoires, reproductibilité et absence de fournisseurs fictifs lorsque le graphe n'existe pas.
+Les 24 tests de régression couvrent conservation des populations, pourcentages, identifiants, matrice diplomatique, dépendances des ressources, séparation lac/port océanique, impossibilité d'un incident sans cause, transitions non aléatoires, reproductibilité et absence de fournisseurs fictifs lorsque le graphe n'existe pas.
 
 Le workflow [World bible](.github/workflows/world-bible.yml) effectue ces contrôles puis publie les registres dérivés par un push ordinaire, jamais forcé. Il ne modifie pas les sources de l'atlas, le HTML jouable, l'app iOS ou les sauvegardes. Les empreintes du manifeste permettent de savoir si les registres correspondent encore aux sources courantes.
 
@@ -56,4 +56,8 @@ Sylverive reste un ensemble de cités à charte sous la souveraineté de Teremor
 
 ## Extension jouable : batraciens
 
-[Implantations, palettes, métiers et règles de combat des batraciens](docs/batraciens.md). Cette extension du moteur ajoute des acteurs à 14 localités compatibles, sans renommer les lieux ni remplacer les quêtes. Elle ne réécrit pas les pourcentages démographiques à quatre espèces de la bible ; leur extension doit faire l’objet d’une révision explicite des sources de conception.
+[Implantations, palettes, métiers et règles de combat des batraciens](docs/batraciens.md). Cette extension du moteur ajoute des acteurs à 14 localités compatibles, sans renommer les lieux ni remplacer les quêtes. La révision 2.0 du recensement distingue désormais les batraciens et les hommes-singes, sans modifier les acteurs existants.
+
+## Hommes-singes
+
+[Communautés et intérêts](docs/world-bible/06-hommes-singes.md), [programme de fabrication](docs/world-bible/generated/ape-activities.md) et [audit des branches](docs/world-bible/07-audit-branches.md). Cinq ensembles locaux, 22 sites existants, 16 fonctions et 13 structures. Sur 55 activités référencées, quatre clips sont déjà implémentés ; les costumes, les autres animations et les apparitions en jeu restent à construire. Le peuple ne constitue pas une dixième faction souveraine.

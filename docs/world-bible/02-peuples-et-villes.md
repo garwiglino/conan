@@ -2,7 +2,7 @@
 
 ## Ce que mesurent les pourcentages
 
-Les pourcentages de cette bible sont des cibles de conception, pas des recensements découverts dans le code. Quatre espèces démographiques : `human`, `goblin`, `orc`, `serpentfolk`. Les fées, squelettes animés, gardiens, animaux, visiteurs et soldats de passage sont exclus du dénominateur des résidents permanents.
+Les pourcentages de cette bible sont des cibles de conception, pas des recensements découverts dans le code. Six espèces démographiques depuis la révision du 18 octobre 2026 : `human`, `goblin`, `orc`, `serpentfolk`, `batracien`, `ape_folk`. Les fées, squelettes animés, gardiens, animaux, visiteurs et soldats de passage sont exclus du dénominateur des résidents permanents.
 
 La population est comptée à trois échelles : localité nommée, arrière-pays, région. Le total régional égale les résidents des localités plus ceux des habitats non nommés. Le total territorial additionne les régions, sans compter Sylverive une seconde fois comme un autre territoire. Les pourcentages territoriaux et mondiaux sont calculés sur les effectifs, jamais par moyenne simple de pourcentages de villages.
 
@@ -12,24 +12,26 @@ Un pourcentage de résidents n'est ni un quota d'ennemis, ni une proportion de g
 
 ## Répartition des arrière-pays
 
-Ordre : humains / gobelins / orques / hommes-serpents. Les colonnes totalisent 100 % pour chaque ligne. Les localités urbaines utilisent leur propre profil, généralement plus humain ; le compilateur publie le résultat combiné exact.
+Ordre : humains / gobelins / orques / hommes-serpents / batraciens / hommes-singes. Les colonnes totalisent 100 % pour chaque ligne. Les localités urbaines utilisent leur propre profil, généralement plus humain ; le compilateur publie le résultat combiné exact.
 
 | Région | Répartition rurale (%) | Implantation à dessiner |
 |---|---|---|
-| Pâlerive | 87 / 10 / 3 / 0 | Vallées habitées, pêche, petites exploitations et communautés mixtes |
-| Haut-Givre | 81 / 7 / 12 / 0 | Habitats concentrés dans les accès viables ; vastes espaces non peuplés |
-| Givreval | 65 / 10 / 25 / 0 | Communautés orques regroupées dans les piémonts et vallées, non uniformes |
-| Boisclair | 88 / 11 / 1 / 0 | Villages forestiers et agricoles ; communautés gobelines anciennes |
-| Valdorne | 91 / 8 / 1 / 0 | Bassins agricoles denses, bourgs de marché et domaines |
-| Sylverive | 89 / 8 / 3 / 0 | Arrière-pays portuaires, artisans, marins établis et réseaux familiaux |
-| Aulneval | 90 / 9 / 1 / 0 | Cultures, élevage, bourgs d'échange et habitats dispersés |
-| Roche-Sèche | 73 / 14 / 12 / 1 | Districts de production, pistes secondaires et habitats chauds protégés |
-| Sables-Rouges | 78 / 18 / 4 / 0 | Oasis et reliefs habités ; implantation principale de certaines communautés de Kesh |
-| Safrane | 88 / 9 / 2 / 1 | Bassins irrigués et marchés ; enclaves rares disposant d'eau |
-| Brumeraie | 76 / 12 / 2 / 10 | Cités d'accès, villages et enclaves intérieures séparées |
-| Rosebrume | 70 / 10 / 2 / 18 | Communautés serpentines plus nombreuses mais concentrées dans des habitats adaptés |
-| Coralune | 89 / 6 / 2 / 3 | Côtes et arrière-pays cultivés ; petites communautés de contact |
-| Palmeraie | 85 / 7 / 2 / 6 | Habitats forestiers, exploitations et enclaves isolées |
+| Pâlerive | 87 / 10 / 3 / 0 / 0 / 0 | Vallées habitées, pêche, petites exploitations et communautés mixtes |
+| Haut-Givre | 81 / 7 / 12 / 0 / 0 / 0 | Habitats concentrés dans les accès viables ; vastes espaces non peuplés |
+| Givreval | 65 / 10 / 25 / 0 / 0 / 0 | Communautés orques regroupées dans les piémonts et vallées, non uniformes |
+| Boisclair | 81 / 11 / 1 / 0 / 3 / 4 | Villages forestiers et agricoles ; communautés gobelines anciennes |
+| Valdorne | 90.75 / 8 / 1 / 0 / 0.25 / 0 | Bassins agricoles denses, bourgs de marché et domaines |
+| Sylverive | 88 / 8 / 3 / 0 / 0.5 / 0.5 | Arrière-pays portuaires, artisans, marins établis et réseaux familiaux |
+| Aulneval | 88 / 9 / 1 / 0 / 1 / 1 | Cultures, élevage, bourgs d'échange et habitats dispersés |
+| Roche-Sèche | 73 / 14 / 12 / 1 / 0 / 0 | Districts de production, pistes secondaires et habitats chauds protégés |
+| Sables-Rouges | 78 / 18 / 4 / 0 / 0 / 0 | Oasis et reliefs habités ; implantation principale de certaines communautés de Kesh |
+| Safrane | 87.5 / 9 / 2 / 1 / 0 / 0.5 | Bassins irrigués et marchés ; enclaves rares disposant d'eau |
+| Brumeraie | 54 / 12 / 2 / 10 / 18 / 4 | Cités d'accès, villages et enclaves intérieures séparées |
+| Rosebrume | 42 / 10 / 2 / 18 / 20 / 8 | Communautés serpentines plus nombreuses mais concentrées dans des habitats adaptés |
+| Coralune | 71 / 6 / 2 / 3 / 8 / 10 | Côtes et arrière-pays cultivés ; petites communautés de contact |
+| Palmeraie | 51 / 7 / 2 / 6 / 10 / 24 | Habitats forestiers, exploitations et enclaves isolées |
+
+La révision démographique distingue explicitement les deux nouvelles catégories dans l’ancienne enveloppe humaine de conception ; les populations régionales et mondiales restent identiques. Les proportions antérieures sont conservées dans `source.json.demographyRevision`.
 
 Zéro signifie absence de communauté permanente dans cette catégorie de la première version ; ce n'est pas une interdiction physique de voyage. Les hommes-serpents ont une contrainte thermique réelle, contrairement aux limites surtout sociales, foncières ou économiques des autres espèces.
 
@@ -42,6 +44,10 @@ Zéro signifie absence de communauté permanente dans cette catégorie de la pre
 **Orques :** noyaux importants en Givreval et au nord de Sarak, hameaux et individus ailleurs. Leurs économies comprennent élevage, cultures, métallurgie et services armés. Les orques urbains n'adoptent pas obligatoirement le costume pastoral de Darg. Le passage d'un troupeau ne transforme pas la répartition permanente d'un bourg.
 
 **Hommes-serpents :** enclaves de l'intérieur chaud de Varan, quelques habitats à Tagon et sites spécifiques de Sarak. Eau, chaleur et aménagement adapté sont requis. Leurs contacts dans une ville peuvent être temporaires ; la présence d'une enclave régionale ne force pas une population urbaine serpentine. Aucun empire secret commun.
+
+**Batraciens :** communautés humides de Varan et de Tagon, voisinages de Teremor et petites présences de marché. Les acteurs jouables existants restent distincts des effectifs de conception ; aucune augmentation de leur nombre par la compilation.
+
+**Hommes-singes :** noyau principal de Tagon, surtout Palmeraie ; habitats drainés de Varan, foyers forestiers de Teremor et petites maisons établies de Sarak. Aucun noyau résident permanent en Igea dans cette révision. [Communautés, intérêts et programme complet](06-hommes-singes.md).
 
 Le générateur crée des indications d'implantation rurale, non des apparitions automatiques. Toute nouvelle enclave doit avoir accès à l'eau, à la nourriture, à des échanges et à un abri adapté. Son emplacement détaillé reste un objet d'aménagement à placer sur un sol vérifié, pas un déplacement de la ville voisine.
 

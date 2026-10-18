@@ -36,11 +36,7 @@ aux 14 localités existantes listées ci-dessous. Ce sont des habitants jouables
 additionnels, pas un remplacement des humains, des donneurs de quêtes ou des
 palefreniers. Les 83 points de localité et leurs noms ne sont pas déplacés.
 
-La répartition est une première implantation explicite, dérivée des milieux
-humides, des ressources et de la navigation de la bible. Elle **n'altère pas
-silencieusement ses tableaux démographiques à quatre espèces** : une future
-révision de ces recensements doit nommer les batraciens séparément et recalculer
-les totaux. Aucune faction, alliance ou guerre mondiale nouvelle n'est créée.
+La répartition jouable est dérivée des milieux humides, des ressources et de la navigation de la bible. Depuis la révision démographique explicite du 18 octobre 2026, les batraciens et les hommes-singes disposent de catégories séparées dans la bible à six espèces, avec populations totales conservées. Les 73 acteurs batraciens restent un échantillon jouable identifié ; compiler la bible n’en ajoute aucun. Voir [la révision](world-bible/06-hommes-singes.md).
 
 | Territoire | Localité (ID stable) | Métiers des deux résidents historiques | Garde |
 |---|---|---|---|

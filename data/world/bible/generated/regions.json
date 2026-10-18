@@ -70,6 +70,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 10764,
             "human": 4613,
             "orc": 0,
@@ -85,6 +87,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -94,6 +98,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 931,
             "orc": 3726,
@@ -109,6 +115,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 19.99,
             "orc": 80.01,
@@ -117,6 +125,8 @@
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 0,
+        "batracien": 0,
         "goblin": 5796,
         "human": 138528,
         "orc": 1242,
@@ -125,18 +135,24 @@
     },
     "ruralPopulation": 165600,
     "ruralSpeciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 16560,
       "human": 144072,
       "orc": 4968,
       "serpentfolk": 0
     },
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 17424,
       "human": 157464,
       "orc": 5112,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 9.68,
       "human": 87.48,
       "orc": 2.84,
@@ -215,6 +231,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 5987,
             "human": 2566,
             "orc": 0,
@@ -230,6 +248,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -239,6 +259,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 2961,
             "orc": 11844,
@@ -254,6 +276,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -262,6 +286,8 @@
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 0,
+        "batracien": 0,
         "goblin": 3225,
         "human": 101069,
         "orc": 3948,
@@ -270,18 +296,24 @@
     },
     "ruralPopulation": 131600,
     "ruralSpeciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 9212,
       "human": 106596,
       "orc": 15792,
       "serpentfolk": 0
     },
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 9884,
       "human": 113988,
       "orc": 16128,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 7.06,
       "human": 81.42,
       "orc": 11.52,
@@ -360,6 +392,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 11485,
             "human": 4922,
             "orc": 0,
@@ -375,6 +409,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -384,6 +420,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 8283,
             "orc": 33131,
@@ -399,6 +437,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -407,6 +447,8 @@
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 0,
+        "batracien": 0,
         "goblin": 6185,
         "human": 101650,
         "orc": 11044,
@@ -415,18 +457,24 @@
     },
     "ruralPopulation": 176700,
     "ruralSpeciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 17670,
       "human": 114855,
       "orc": 44175,
       "serpentfolk": 0
     },
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 18667,
       "human": 125562,
       "orc": 45771,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 9.82,
       "human": 66.09,
       "orc": 24.09,
@@ -505,6 +553,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 39010,
             "human": 16719,
             "orc": 0,
@@ -520,6 +570,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -529,6 +581,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1023,
             "orc": 4092,
@@ -544,36 +598,106 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
             "serpentfolk": 0.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 13912,
+            "goblin": 0,
+            "human": 4637,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-4-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 18550,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 6183,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-4-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.0,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 3274,
+        "batracien": 2456,
         "goblin": 21006,
-        "human": 462386,
+        "human": 413374,
         "orc": 1364,
         "serpentfolk": 0
       }
     },
     "ruralPopulation": 545600,
     "ruralSpeciesCounts": {
+      "ape_folk": 21824,
+      "batracien": 16368,
       "goblin": 60016,
-      "human": 480128,
+      "human": 441936,
       "orc": 5456,
       "serpentfolk": 0
     },
     "speciesCounts": {
-      "goblin": 65863,
-      "human": 547939,
+      "ape_folk": 24906,
+      "batracien": 18175,
+      "goblin": 65968,
+      "human": 504753,
       "orc": 6198,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 10.62,
-      "human": 88.38,
+      "ape_folk": 4.02,
+      "batracien": 2.93,
+      "goblin": 10.64,
+      "human": 81.41,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -649,6 +773,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 40248,
             "human": 17249,
             "orc": 0,
@@ -664,6 +790,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -673,6 +801,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1451,
             "orc": 5805,
@@ -688,36 +818,75 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
             "serpentfolk": 0.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 1644,
+            "goblin": 0,
+            "human": 548,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-5-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 0,
+        "batracien": 291,
         "goblin": 21672,
-        "human": 685640,
+        "human": 683157,
         "orc": 1935,
         "serpentfolk": 0
       }
     },
     "ruralPopulation": 774000,
     "ruralSpeciesCounts": {
+      "ape_folk": 0,
+      "batracien": 1935,
       "goblin": 61920,
-      "human": 704340,
+      "human": 702405,
       "orc": 7740,
       "serpentfolk": 0
     },
     "speciesCounts": {
+      "ape_folk": 310,
+      "batracien": 2255,
       "goblin": 67968,
-      "human": 823032,
+      "human": 820467,
       "orc": 9000,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.04,
+      "batracien": 0.25,
       "goblin": 7.55,
-      "human": 91.45,
+      "human": 91.16,
       "orc": 1.0,
       "serpentfolk": 0.0
     },
@@ -794,6 +963,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 23524,
             "human": 10082,
             "orc": 0,
@@ -809,6 +980,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -818,6 +991,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 2545,
             "orc": 10179,
@@ -833,37 +1008,107 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
             "serpentfolk": 0.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 1922,
+            "goblin": 0,
+            "human": 641,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-6-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 74.99,
+            "goblin": 0.0,
+            "human": 25.01,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 1922,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 641,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-6-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 74.99,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.01,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 340,
+        "batracien": 340,
         "goblin": 12668,
-        "human": 390009,
+        "human": 384203,
         "orc": 3393,
         "serpentfolk": 0
       }
     },
     "ruralPopulation": 452400,
     "ruralSpeciesCounts": {
+      "ape_folk": 2262,
+      "batracien": 2262,
       "goblin": 36192,
-      "human": 402636,
+      "human": 398112,
       "orc": 13572,
       "serpentfolk": 0
     },
     "speciesCounts": {
-      "goblin": 45124,
-      "human": 517412,
-      "orc": 17464,
+      "ape_folk": 5011,
+      "batracien": 3542,
+      "goblin": 45252,
+      "human": 508803,
+      "orc": 17392,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 7.78,
-      "human": 89.21,
-      "orc": 3.01,
+      "ape_folk": 0.86,
+      "batracien": 0.61,
+      "goblin": 7.8,
+      "human": 87.73,
+      "orc": 3.0,
       "serpentfolk": 0.0
     },
     "territory": "Teremor"
@@ -938,6 +1183,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 40154,
             "human": 17209,
             "orc": 0,
@@ -953,6 +1200,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -962,6 +1211,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1287,
             "orc": 5148,
@@ -977,37 +1228,107 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
             "serpentfolk": 0.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 5834,
+            "goblin": 0,
+            "human": 1945,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-7-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 5834,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 1945,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-7-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.0,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 1030,
+        "batracien": 1030,
         "goblin": 21622,
-        "human": 599264,
+        "human": 581646,
         "orc": 1716,
         "serpentfolk": 0
       }
     },
     "ruralPopulation": 686400,
     "ruralSpeciesCounts": {
+      "ape_folk": 6864,
+      "batracien": 6864,
       "goblin": 61776,
-      "human": 617760,
+      "human": 604032,
       "orc": 6864,
       "serpentfolk": 0
     },
     "speciesCounts": {
-      "goblin": 66855,
-      "human": 705209,
-      "orc": 7936,
+      "ape_folk": 7733,
+      "batracien": 7868,
+      "goblin": 67122,
+      "human": 689475,
+      "orc": 7802,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 8.57,
-      "human": 90.41,
-      "orc": 1.02,
+      "ape_folk": 0.99,
+      "batracien": 1.01,
+      "goblin": 8.61,
+      "human": 88.39,
+      "orc": 1.0,
       "serpentfolk": 0.0
     },
     "territory": "Teremor"
@@ -1084,6 +1405,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 22113,
             "human": 9477,
             "orc": 0,
@@ -1099,6 +1422,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -1108,6 +1433,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 5467,
             "orc": 21870,
@@ -1123,6 +1450,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -1132,6 +1461,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 121,
             "orc": 0,
@@ -1148,6 +1479,8 @@
             "thermal_habitat"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 4.98,
             "orc": 0.0,
@@ -1156,6 +1489,8 @@
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 0,
+        "batracien": 0,
         "goblin": 11907,
         "human": 162325,
         "orc": 7290,
@@ -1164,20 +1499,26 @@
     },
     "ruralPopulation": 243000,
     "ruralSpeciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 34020,
       "human": 177390,
       "orc": 29160,
       "serpentfolk": 2430
     },
     "speciesCounts": {
-      "goblin": 36246,
-      "human": 201084,
+      "ape_folk": 69,
+      "batracien": 0,
+      "goblin": 36247,
+      "human": 201014,
       "orc": 30240,
       "serpentfolk": 2430
     },
     "speciesPct": {
+      "ape_folk": 0.03,
+      "batracien": 0.0,
       "goblin": 13.42,
-      "human": 74.48,
+      "human": 74.45,
       "orc": 11.2,
       "serpentfolk": 0.9
     },
@@ -1254,6 +1595,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 23423,
             "human": 10038,
             "orc": 0,
@@ -1269,6 +1612,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -1278,6 +1623,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1501,
             "orc": 6006,
@@ -1293,6 +1640,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 19.99,
             "orc": 80.01,
@@ -1301,6 +1650,8 @@
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 0,
+        "batracien": 0,
         "goblin": 12613,
         "human": 144617,
         "orc": 2002,
@@ -1309,20 +1660,26 @@
     },
     "ruralPopulation": 200200,
     "ruralSpeciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 36036,
       "human": 156156,
       "orc": 8008,
       "serpentfolk": 0
     },
     "speciesCounts": {
+      "ape_folk": 50,
+      "batracien": 0,
       "goblin": 38174,
-      "human": 173223,
+      "human": 173173,
       "orc": 8603,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.02,
+      "batracien": 0.0,
       "goblin": 17.35,
-      "human": 78.74,
+      "human": 78.72,
       "orc": 3.91,
       "serpentfolk": 0.0
     },
@@ -1399,6 +1756,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 23142,
             "human": 9918,
             "orc": 0,
@@ -1414,6 +1773,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -1423,6 +1784,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1483,
             "orc": 5934,
@@ -1438,6 +1801,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 19.99,
             "orc": 80.01,
@@ -1447,6 +1812,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 198,
             "orc": 0,
@@ -1463,37 +1830,78 @@
             "thermal_habitat"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 5.01,
             "orc": 0.0,
             "serpentfolk": 94.99
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 1681,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 560,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-10-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.01,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 24.99,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 297,
+        "batracien": 0,
         "goblin": 12462,
-        "human": 336529,
+        "human": 333991,
         "orc": 1978,
         "serpentfolk": 198
       }
     },
     "ruralPopulation": 395600,
     "ruralSpeciesCounts": {
+      "ape_folk": 1978,
+      "batracien": 0,
       "goblin": 35604,
-      "human": 348128,
+      "human": 346150,
       "orc": 7912,
       "serpentfolk": 3956
     },
     "speciesCounts": {
-      "goblin": 38985,
-      "human": 408342,
-      "orc": 8717,
+      "ape_folk": 2783,
+      "batracien": 0,
+      "goblin": 39307,
+      "human": 405398,
+      "orc": 8556,
       "serpentfolk": 3956
     },
     "speciesPct": {
-      "goblin": 8.48,
-      "human": 88.77,
-      "orc": 1.89,
+      "ape_folk": 0.6,
+      "batracien": 0.0,
+      "goblin": 8.55,
+      "human": 88.13,
+      "orc": 1.86,
       "serpentfolk": 0.86
     },
     "territory": "Sarak"
@@ -1569,6 +1977,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 15787,
             "human": 6766,
             "orc": 0,
@@ -1584,6 +1994,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -1593,6 +2005,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 759,
             "orc": 3036,
@@ -1608,6 +2022,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -1617,6 +2033,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1012,
             "orc": 0,
@@ -1633,36 +2051,106 @@
             "thermal_habitat"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 5.0,
             "orc": 0.0,
             "serpentfolk": 95.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 30967,
+            "goblin": 0,
+            "human": 10322,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-11-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 6881,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 2294,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-11-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.0,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 1215,
+        "batracien": 5465,
         "goblin": 8501,
-        "human": 145287,
+        "human": 88143,
         "orc": 1012,
         "serpentfolk": 1012
       }
     },
     "ruralPopulation": 202400,
     "ruralSpeciesCounts": {
+      "ape_folk": 8096,
+      "batracien": 36432,
       "goblin": 24288,
-      "human": 153824,
+      "human": 109296,
       "orc": 4048,
       "serpentfolk": 20240
     },
     "speciesCounts": {
-      "goblin": 26036,
-      "human": 179124,
+      "ape_folk": 9016,
+      "batracien": 42320,
+      "goblin": 26220,
+      "human": 127604,
       "orc": 4600,
       "serpentfolk": 20240
     },
     "speciesPct": {
-      "goblin": 11.32,
-      "human": 77.88,
+      "ape_folk": 3.92,
+      "batracien": 18.4,
+      "goblin": 11.4,
+      "human": 55.48,
       "orc": 2.0,
       "serpentfolk": 8.8
     },
@@ -1739,6 +2227,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 16776,
             "human": 7190,
             "orc": 0,
@@ -1754,6 +2244,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -1763,6 +2255,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 968,
             "orc": 3871,
@@ -1778,6 +2272,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -1787,6 +2283,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 2323,
             "orc": 0,
@@ -1803,37 +2301,107 @@
             "thermal_habitat"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 5.0,
             "orc": 0.0,
             "serpentfolk": 95.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 43877,
+            "goblin": 0,
+            "human": 14626,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-12-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 17550,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 5850,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-12-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.0,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 3098,
+        "batracien": 7743,
         "goblin": 9034,
-        "human": 170189,
+        "human": 77445,
         "orc": 1291,
         "serpentfolk": 2323
       }
     },
     "ruralPopulation": 258100,
     "ruralSpeciesCounts": {
+      "ape_folk": 20648,
+      "batracien": 51620,
       "goblin": 25810,
-      "human": 180670,
+      "human": 108402,
       "orc": 5162,
       "serpentfolk": 46458
     },
     "speciesCounts": {
-      "goblin": 27404,
-      "human": 210231,
-      "orc": 5907,
+      "ape_folk": 24476,
+      "batracien": 58850,
+      "goblin": 27724,
+      "human": 126691,
+      "orc": 5801,
       "serpentfolk": 46458
     },
     "speciesPct": {
-      "goblin": 9.45,
-      "human": 72.49,
-      "orc": 2.04,
+      "ape_folk": 8.44,
+      "batracien": 20.29,
+      "goblin": 9.56,
+      "human": 43.69,
+      "orc": 2.0,
       "serpentfolk": 16.02
     },
     "territory": "Varan"
@@ -1909,6 +2477,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 10483,
             "human": 4493,
             "orc": 0,
@@ -1924,6 +2494,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -1933,6 +2505,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 1008,
             "orc": 4032,
@@ -1948,6 +2522,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -1957,6 +2533,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 403,
             "orc": 0,
@@ -1973,37 +2551,107 @@
             "thermal_habitat"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 5.0,
             "orc": 0.0,
             "serpentfolk": 95.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 18278,
+            "goblin": 0,
+            "human": 6093,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-13-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 22848,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 7616,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-13-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.0,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 4032,
+        "batracien": 3226,
         "goblin": 5645,
-        "human": 233328,
+        "human": 171235,
         "orc": 1344,
         "serpentfolk": 404
       }
     },
     "ruralPopulation": 268800,
     "ruralSpeciesCounts": {
+      "ape_folk": 26880,
+      "batracien": 21504,
       "goblin": 16128,
-      "human": 239232,
+      "human": 190848,
       "orc": 5376,
       "serpentfolk": 8064
     },
     "speciesCounts": {
-      "goblin": 19200,
-      "human": 286080,
-      "orc": 6656,
+      "ape_folk": 32512,
+      "batracien": 25088,
+      "goblin": 18688,
+      "human": 229248,
+      "orc": 6400,
       "serpentfolk": 8064
     },
     "speciesPct": {
-      "goblin": 6.0,
-      "human": 89.4,
-      "orc": 2.08,
+      "ape_folk": 10.16,
+      "batracien": 7.84,
+      "goblin": 5.84,
+      "human": 71.64,
+      "orc": 2.0,
       "serpentfolk": 2.52
     },
     "territory": "Tagon"
@@ -2079,6 +2727,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 10687,
             "human": 4580,
             "orc": 0,
@@ -2094,6 +2744,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 70.0,
             "human": 30.0,
             "orc": 0.0,
@@ -2103,6 +2755,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 881,
             "orc": 3523,
@@ -2118,6 +2772,8 @@
             "verified_walkable_ground"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 20.0,
             "orc": 80.0,
@@ -2127,6 +2783,8 @@
         {
           "coordinates": null,
           "counts": {
+            "ape_folk": 0,
+            "batracien": 0,
             "goblin": 0,
             "human": 705,
             "orc": 0,
@@ -2143,37 +2801,107 @@
             "thermal_habitat"
           ],
           "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 0.0,
             "goblin": 0.0,
             "human": 5.0,
             "orc": 0.0,
             "serpentfolk": 95.0
           }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 0,
+            "batracien": 19966,
+            "goblin": 0,
+            "human": 6655,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-14-batracien",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "wetland_water_access"
+          ],
+          "speciesPct": {
+            "ape_folk": 0.0,
+            "batracien": 75.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
+        },
+        {
+          "coordinates": null,
+          "counts": {
+            "ape_folk": 47919,
+            "batracien": 0,
+            "goblin": 0,
+            "human": 15973,
+            "orc": 0,
+            "serpentfolk": 0
+          },
+          "id": "rural-14-ape_folk",
+          "kind": "unplaced_habitat_distribution_not_new_city",
+          "placementRequirements": [
+            "safe_water",
+            "food_or_regular_supply",
+            "lawful_or_contested_land_right",
+            "shelter",
+            "verified_walkable_ground",
+            "dry_walkable_ground",
+            "forest_or_garden_access",
+            "seasonal_clothing"
+          ],
+          "speciesPct": {
+            "ape_folk": 75.0,
+            "batracien": 0.0,
+            "goblin": 0.0,
+            "human": 25.0,
+            "orc": 0.0,
+            "serpentfolk": 0.0
+          }
         }
       ],
       "mixedAndDispersedCounts": {
+        "ape_folk": 8457,
+        "batracien": 3524,
         "goblin": 5756,
-        "human": 193499,
+        "human": 91005,
         "orc": 1175,
         "serpentfolk": 705
       }
     },
     "ruralPopulation": 234900,
     "ruralSpeciesCounts": {
+      "ape_folk": 56376,
+      "batracien": 23490,
       "goblin": 16443,
-      "human": 199665,
+      "human": 119799,
       "orc": 4698,
       "serpentfolk": 14094
     },
     "speciesCounts": {
-      "goblin": 18250,
-      "human": 232208,
-      "orc": 5448,
+      "ape_folk": 65050,
+      "batracien": 26498,
+      "goblin": 18450,
+      "human": 140510,
+      "orc": 5398,
       "serpentfolk": 14094
     },
     "speciesPct": {
-      "goblin": 6.76,
-      "human": 86.0,
-      "orc": 2.02,
+      "ape_folk": 24.09,
+      "batracien": 9.82,
+      "goblin": 6.83,
+      "human": 52.04,
+      "orc": 2.0,
       "serpentfolk": 5.22
     },
     "territory": "Tagon"

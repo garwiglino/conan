@@ -1,6 +1,6 @@
 # Hearthreaver — Bible du monde
 
-Version de conception 1.0 — 16 octobre 2026.
+Version de conception 2.0 — 18 octobre 2026. Révision explicite à six espèces, incluant batraciens et hommes-singes.
 
 Cette bible formalise la direction approuvée : sword-and-sorcery adulte, noms sobres, sociétés fonctionnelles, intérêts contradictoires et conflits limités. Elle remplace les propositions antérieures de guerre générale Teremor–Sylverive et d'alliances automatiques entre territoires.
 
@@ -11,8 +11,10 @@ Cette bible formalise la direction approuvée : sword-and-sorcery adulte, noms s
 3. `03-ressources-et-echanges.md` : catalogue matériel, distribution, production, besoins, chaînes et commerce.
 4. `04-danger-et-evenements.md` : événements causaux, cibles, fréquence, patrouilles, embuscades et contrat d'intégration.
 5. `05-societes-et-criminalite.md` : droit, corruption, contrebande, captivité et conséquences sociales.
-6. `data/world/bible/source.json` : paramètres numériques et référentiels structurés.
-7. `scripts/build-world-bible.py` : compilation déterministe, vérification et export des fiches de toutes les localités de l'atlas.
+6. `06-hommes-singes.md` : communautés, intérêts, structures, relations et programme de fabrication.
+7. `data/world/bible/ape-folk.json` : référentiel validé des activités, métiers, implantations et contacts.
+8. `data/world/bible/source.json` : paramètres numériques et référentiels structurés.
+9. `scripts/build-world-bible.py` : compilation déterministe, vérification et export des fiches de toutes les localités de l'atlas.
 
 Les documents définissent le sens des champs. Les paramètres chiffrés de `source.json` sont la source des calculs. Les fichiers du répertoire `data/world/bible/generated/` et les registres Markdown produits sont dérivés : on corrige la source ou une dérogation de localité, puis on reconstruit.
 
@@ -57,3 +59,7 @@ python3 scripts/build-world-bible.py --check
 La compilation génère un manifeste lié au SHA-256 de l'atlas, une fiche par localité, les agrégats démographiques pondérés, la matrice complète des relations, la distribution régionale des ressources et les événements applicables par site/route. Elle ne modifie ni `atlas.json`, ni `index.html`, ni le jeu iOS.
 
 Tout ajout ultérieur d'espèce, ressource, faction, ville ou événement doit disposer d'un identifiant stable, d'une définition sociale ou matérielle, d'un rattachement géographique, de relations explicites et d'une validation des références. Le générateur n'est pas autorisé à attribuer arbitrairement une guerre à un nouvel acteur.
+
+## Révision hommes-singes
+
+L’audit des 16 branches distantes est conservé dans [le rapport](07-audit-branches.md) et dans `data/world/bible/branch-audit.json`. Le total de 5 450 000 habitants de conception reste inchangé. Le générateur publie aussi `generated/ape-folk.json` et [le catalogue des 55 activités, 16 fonctions et 13 structures](generated/ape-activities.md). Quatre clips de base sont implémentés ; les autres éléments restent à fabriquer. Aucun nouvel acteur n’apparaît automatiquement dans les HTML.

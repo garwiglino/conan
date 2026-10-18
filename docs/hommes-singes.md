@@ -24,7 +24,7 @@ Le module expose `draw(ctx, {action, dir, frame, x, y, layer, format})`, `frameA
 
 `node --test tests/homme-singe.test.cjs` : quatre tests réussis, couvrant les 96 poses, la connexion des pixels, l’alpha binaire, les appuis, les boucles, la translation native/moteur et la conservation exacte des quatre grilles au repos. Atelier contrôlé dans Chromium : quatre animations, quatre vues, pause, pas à pas et isolation des calques.
 
-Aucun PNG embarqué dans le module de personnage, aucun miroir ni rotation d’image, aucun remplacement des PNJ approuvés. Les costumes de métiers, le combat, les factions et les apparitions en jeu restent à réaliser ultérieurement. La bible démographique actuelle ne définit pas encore l’implantation de cette espèce.
+Aucun PNG embarqué dans le module de personnage, aucun miroir ni rotation d’image, aucun remplacement des PNJ approuvés. Les costumes de métiers, le combat, les factions et les apparitions en jeu restent à réaliser ultérieurement. La bible de production définit maintenant son implantation : [communautés et intérêts](world-bible/06-hommes-singes.md) et [programme de fabrication](world-bible/generated/ape-activities.md). Cela n’active pas encore de nouveaux acteurs.
 
 ## Appuis et balancement de tête
 

@@ -1,0 +1,2343 @@
+{
+  "date": "2026-10-18",
+  "author": "Codex / ChatGPT",
+  "branches": [
+    {
+      "branch": "origin/claude/combats-wo67x6",
+      "commit": "19719504673d4d0d5a7e5d7d5da78ca7fda7d07e",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "aac91940c43eed1f8558e381df7e32a0ee3cc373"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "b3a6b2354a0d18e0c2c36c57d2e4f7944fea4749"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "4facd5b26d091fcf67738a1125f85c41b39acc37"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/claude/monde-hearthreaver-u5vlhh",
+      "commit": "c0328a83a0f8e5b87ec2c418cd262cfc2102aa85",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "79e9e0fa1dbf8194550af4f9f8e55c827ad8d8dc"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/body-heat.md",
+          "blob": "e472661f68a954ab45f958ace7198bc7e9fb55b7"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7"
+        },
+        {
+          "path": "docs/kaldor-outfits.md",
+          "blob": "acb08a6903f78849ae85f7d30f6949d32ee90e29"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "a7b092f4b7b01711047b84ff9e05cf791622e1c3"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/claude/project-thread-247o81",
+      "commit": "ee591ad5a862579c43c269bbe668e2224ff2d507",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "aac91940c43eed1f8558e381df7e32a0ee3cc373"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7"
+        },
+        {
+          "path": "docs/kaldor-outfits.md",
+          "blob": "5dba2abab455ae32228766b8cadda77b42576bde"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "4facd5b26d091fcf67738a1125f85c41b39acc37"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/claude/voyage-arriere-plan-kq5ovn",
+      "commit": "175e8e1b282f65bbe0d31c8fc934c2a33425fe05",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "1ea90fb7d830ac8c5c1d991819219bdd10c63bf9"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "94cf6b88e0f13fba24488e0404a54c6e588edb71"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "291adc21c7252d452d887430c2e1063e58207776"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/codex/dialogue-ergonomics",
+      "commit": "88a4d5779ab35b46474f55512ae8ad52db40cfd9",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "79e9e0fa1dbf8194550af4f9f8e55c827ad8d8dc"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/CODEX-BATRACIENS-HANDOFF.md",
+          "blob": "8ad09f10c24efb0d1fe97ba8b5a570407a7e75bf"
+        },
+        {
+          "path": "docs/batraciens-belligerants.md",
+          "blob": "d633d9e4b0260774a8f0eb4f2b143cd93368875f"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "1b2b1ac185c3dc431423ceca480fccdfc2f23bda"
+        },
+        {
+          "path": "docs/body-heat.md",
+          "blob": "e472661f68a954ab45f958ace7198bc7e9fb55b7"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/ergonomie-dialogues.md",
+          "blob": "7410084f0cdc1a5e3a91caf12f2b3c5239333772"
+        },
+        {
+          "path": "docs/interface-paysage.md",
+          "blob": "32434f55fbd5ac7a3afe63ad924d61f0ea2222cf"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7"
+        },
+        {
+          "path": "docs/kaldor-outfits.md",
+          "blob": "acb08a6903f78849ae85f7d30f6949d32ee90e29"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "a7b092f4b7b01711047b84ff9e05cf791622e1c3"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/codex/hearthreaver-menu-feedback",
+      "commit": "ad27b704920716867998b5d97705f25dd1ce8a9d",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "68cf4b93aa072111344b805099dcaf4876b98264"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/codex/hearthreaver-quest-delivery",
+      "commit": "a904f61c7a8e888b9b1e76c04ba0a9aa63374c69",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "0a8d4168b3023ce08861b24d2b0aa4277ddcbf3e"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/codex/hearthreaver-readability",
+      "commit": "8d13a8485bca584e380c50f2cb4c0bd6e3d9814c",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "83d8cde8e9d51e66a6af47d4a4a3c95a86fb128f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/codex/landscape-ui",
+      "commit": "dc0b28c4083835e93b98442bc27494b6ea982584",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "79e9e0fa1dbf8194550af4f9f8e55c827ad8d8dc"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/CODEX-BATRACIENS-HANDOFF.md",
+          "blob": "8ad09f10c24efb0d1fe97ba8b5a570407a7e75bf"
+        },
+        {
+          "path": "docs/batraciens-belligerants.md",
+          "blob": "d633d9e4b0260774a8f0eb4f2b143cd93368875f"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "1b2b1ac185c3dc431423ceca480fccdfc2f23bda"
+        },
+        {
+          "path": "docs/body-heat.md",
+          "blob": "e472661f68a954ab45f958ace7198bc7e9fb55b7"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/interface-paysage.md",
+          "blob": "32434f55fbd5ac7a3afe63ad924d61f0ea2222cf"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7"
+        },
+        {
+          "path": "docs/kaldor-outfits.md",
+          "blob": "acb08a6903f78849ae85f7d30f6949d32ee90e29"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "a7b092f4b7b01711047b84ff9e05cf791622e1c3"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/codex/world-bubbles-player-sheet",
+      "commit": "acedadb95109db377058e30bbe4da433fd5fe525",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "79e9e0fa1dbf8194550af4f9f8e55c827ad8d8dc"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/CODEX-BATRACIENS-HANDOFF.md",
+          "blob": "8ad09f10c24efb0d1fe97ba8b5a570407a7e75bf"
+        },
+        {
+          "path": "docs/batraciens-belligerants.md",
+          "blob": "d633d9e4b0260774a8f0eb4f2b143cd93368875f"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "1b2b1ac185c3dc431423ceca480fccdfc2f23bda"
+        },
+        {
+          "path": "docs/body-heat.md",
+          "blob": "e472661f68a954ab45f958ace7198bc7e9fb55b7"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/ergonomie-dialogues.md",
+          "blob": "e3c6ed6804e767c273716cbbb5846d121f2ff593"
+        },
+        {
+          "path": "docs/interface-paysage.md",
+          "blob": "32434f55fbd5ac7a3afe63ad924d61f0ea2222cf"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7"
+        },
+        {
+          "path": "docs/kaldor-outfits.md",
+          "blob": "acb08a6903f78849ae85f7d30f6949d32ee90e29"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "a7b092f4b7b01711047b84ff9e05cf791622e1c3"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/integration/batraciens-palettes",
+      "commit": "be69fad19df68ab636dee18c7abefe054987c98d",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "12492b2f081cf29eb6ab962fbf0f0271b2582acd"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "0abc9c323e115714980e51f7302e5166cfc47173"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "e9985c8386e51b6190af0e4545ba7ef23d0cbce8"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/integration/batraciens-social",
+      "commit": "3e4c888b6c36631fff7f56d73293a76d21cb388e",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "4fb6c19b18d04e0a262cd893815b6787e0f3d647"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "e9985c8386e51b6190af0e4545ba7ef23d0cbce8"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/integration/kaldor-art-v2",
+      "commit": "2156bb4211ee7072f691fe29efef99a7a66bca83",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "4fb6c19b18d04e0a262cd893815b6787e0f3d647"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "a05219707ea6f2d4b0bb122bfa63163920b0d555"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "e9985c8386e51b6190af0e4545ba7ef23d0cbce8"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/integration/kaldor-longhair-holster",
+      "commit": "ce518ea6bdc05a0d161b51a8b029d72480f270f8",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "4fb6c19b18d04e0a262cd893815b6787e0f3d647"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "e9985c8386e51b6190af0e4545ba7ef23d0cbce8"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/integration/kaldor-v3",
+      "commit": "65c37d450a6f11132d90ea11e01acd474bb3ffd8",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "2a9c0dd035cb9064524208f351872e86d61854b3"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "513d60e18c404cbe1fa47bbf2429267a89104289"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "94cf6b88e0f13fba24488e0404a54c6e588edb71"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "e9985c8386e51b6190af0e4545ba7ef23d0cbce8"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    },
+    {
+      "branch": "origin/main",
+      "commit": "d212ef9549f410aaafee80de3f6dd14bc3e6f3ac",
+      "authoredFiles": [
+        {
+          "path": "README.md",
+          "blob": "79e9e0fa1dbf8194550af4f9f8e55c827ad8d8dc"
+        },
+        {
+          "path": "WORLD.md",
+          "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f"
+        },
+        {
+          "path": "audio/LISEZMOI.md",
+          "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79"
+        },
+        {
+          "path": "data/world/bible/events.json",
+          "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea"
+        },
+        {
+          "path": "data/world/bible/relations.json",
+          "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2"
+        },
+        {
+          "path": "data/world/bible/source.json",
+          "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d"
+        },
+        {
+          "path": "docs/CODEX-BATRACIENS-HANDOFF.md",
+          "blob": "8ad09f10c24efb0d1fe97ba8b5a570407a7e75bf"
+        },
+        {
+          "path": "docs/batraciens-belligerants.md",
+          "blob": "d633d9e4b0260774a8f0eb4f2b143cd93368875f"
+        },
+        {
+          "path": "docs/batraciens.md",
+          "blob": "1b2b1ac185c3dc431423ceca480fccdfc2f23bda"
+        },
+        {
+          "path": "docs/body-heat.md",
+          "blob": "e472661f68a954ab45f958ace7198bc7e9fb55b7"
+        },
+        {
+          "path": "docs/civilians.md",
+          "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782"
+        },
+        {
+          "path": "docs/climate-audio.md",
+          "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43"
+        },
+        {
+          "path": "docs/ergonomie-dialogues.md",
+          "blob": "e3c6ed6804e767c273716cbbb5846d121f2ff593"
+        },
+        {
+          "path": "docs/interface-paysage.md",
+          "blob": "32434f55fbd5ac7a3afe63ad924d61f0ea2222cf"
+        },
+        {
+          "path": "docs/kaldor-art.md",
+          "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7"
+        },
+        {
+          "path": "docs/kaldor-outfits.md",
+          "blob": "acb08a6903f78849ae85f7d30f6949d32ee90e29"
+        },
+        {
+          "path": "docs/world-bible/01-geopolitique.md",
+          "blob": "935732f10e615f66fdcc614accedde343bf3c3bc"
+        },
+        {
+          "path": "docs/world-bible/02-peuples-et-villes.md",
+          "blob": "bd8559d54b557614299e4309f32273101f0b9bb0"
+        },
+        {
+          "path": "docs/world-bible/03-ressources-et-echanges.md",
+          "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446"
+        },
+        {
+          "path": "docs/world-bible/04-danger-et-evenements.md",
+          "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2"
+        },
+        {
+          "path": "docs/world-bible/05-societes-et-criminalite.md",
+          "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4"
+        },
+        {
+          "path": "docs/world-bible/README.md",
+          "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67"
+        },
+        {
+          "path": "docs/world-danger.md",
+          "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc"
+        },
+        {
+          "path": "docs/world.md",
+          "blob": "a7b092f4b7b01711047b84ff9e05cf791622e1c3"
+        },
+        {
+          "path": "sprites/LISEZMOI.md",
+          "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f"
+        },
+        {
+          "path": "sprites/personnages/LISEZMOI.md",
+          "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6"
+        }
+      ]
+    }
+  ],
+  "uniqueAuthoredBlobs": 45,
+  "speciesMentions": [],
+  "sources": [
+    {
+      "blob": "aac91940c43eed1f8558e381df7e32a0ee3cc373",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/project-thread-247o81"
+      ],
+      "headings": [
+        "# Hearthreaver — Le retour de Kaldor",
+        "## Kaldor v3 — cheveux longs et épée dans le dos",
+        "## Voyages en arrière-plan",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Cycle du ciel et météo",
+        "## Introduction du studio",
+        "## Sources du menu",
+        "## Crédits",
+        "## Batraciens en jeu"
+      ]
+    },
+    {
+      "blob": "b19e4bf37b01855540c70e50c150d91cc6aa182f",
+      "paths": [
+        "WORLD.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Hearthreaver — Univers, populations et géopolitique",
+        "## Consulter le résultat",
+        "## Registres calculés sur la carte du dépôt",
+        "## Sources éditables",
+        "## Validation reproductible",
+        "## Limites explicites et passage à la fabrication",
+        "## Règles à préserver lors des prochaines modifications",
+        "## Extension jouable : batraciens"
+      ]
+    },
+    {
+      "blob": "4a2b90ae34eee07a0aae830f3e7b4d5217becc79",
+      "paths": [
+        "audio/LISEZMOI.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/hearthreaver-menu-feedback",
+        "origin/codex/hearthreaver-quest-delivery",
+        "origin/codex/hearthreaver-readability",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Mort du colosse"
+      ]
+    },
+    {
+      "blob": "42c1fc3783b4ce7da2af0a29edac13b02bb637ea",
+      "paths": [
+        "data/world/bible/events.json"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": []
+    },
+    {
+      "blob": "6a563ea9fb827e5993ca5f354fd83a40a5971fb2",
+      "paths": [
+        "data/world/bible/relations.json"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": []
+    },
+    {
+      "blob": "953ecf795d0c4f680a46b3ecf422f285abd0b46d",
+      "paths": [
+        "data/world/bible/source.json"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": []
+    },
+    {
+      "blob": "513d60e18c404cbe1fa47bbf2429267a89104289",
+      "paths": [
+        "docs/batraciens.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3"
+      ],
+      "headings": [
+        "# Batraciens — intégration jouable et palettes",
+        "## Contrat graphique",
+        "## Implantations",
+        "## Vie civile et sauvegardes",
+        "## Gardes et groupes hostiles",
+        "## Construction et contrôles",
+        "## Vie locale, déplacements et réponse aux agressions",
+        "### Agression et garde locale",
+        "### Blessures et sang"
+      ]
+    },
+    {
+      "blob": "fb7c914f6b490e5df3d7e026ed4c73366f0ef782",
+      "paths": [
+        "docs/civilians.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Animated human civilians"
+      ]
+    },
+    {
+      "blob": "b88f45110f4de973a8fe30346c504115ce3c4b43",
+      "paths": [
+        "docs/climate-audio.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Climat et ambiances de Hearthreaver",
+        "## Audio",
+        "## Références de conception",
+        "## Danger des itinéraires",
+        "## Reprise et mixage révisés",
+        "## Cohérence des décors",
+        "## Mixage et pas",
+        "### Neige continue, température et respiration",
+        "### Direction de la neige et empreintes"
+      ]
+    },
+    {
+      "blob": "b3a6b2354a0d18e0c2c36c57d2e4f7944fea4749",
+      "paths": [
+        "docs/kaldor-art.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6"
+      ],
+      "headings": [
+        "# Kaldor v4 — vrai personnage humain modulaire, épée et attaques refaites",
+        "# Archives : Kaldor v3 — barbare à cheveux longs, locomotion stable, épée dans le dos",
+        "## Personnage et animations",
+        "## Rengainage automatique dans le dos",
+        "## Construction, isolation et tests"
+      ]
+    },
+    {
+      "blob": "935732f10e615f66fdcc614accedde343bf3c3bc",
+      "paths": [
+        "docs/world-bible/01-geopolitique.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# 01 — Géopolitique, institutions et relations",
+        "## Cadre politique",
+        "## Teremor : une couronne qui doit gouverner",
+        "## Sylverive : des cités à charte",
+        "## Igea : concessions, usages et protection",
+        "## Sarak : bassins agricoles et accords saisonniers",
+        "## Varan : ports et arrière-pays",
+        "## Tagon : navigation et ressources forestières",
+        "## Darg, Kesh et les enclaves",
+        "## Relations et application locale",
+        "## Succession, serments et croyances",
+        "## Situation initiale"
+      ]
+    },
+    {
+      "blob": "bd8559d54b557614299e4309f32273101f0b9bb0",
+      "paths": [
+        "docs/world-bible/02-peuples-et-villes.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# 02 — Peuples, démographie, villes et sprites",
+        "## Ce que mesurent les pourcentages",
+        "## Répartition des arrière-pays",
+        "## Habitats et concentration",
+        "## Comment chaque localité reçoit une fiche",
+        "## Règles de placement et de construction",
+        "## Mobilité, absence et retour",
+        "## Traduction en sprites"
+      ]
+    },
+    {
+      "blob": "467df13fd9c7fc12d82649dee7c8f511c9fa8446",
+      "paths": [
+        "docs/world-bible/03-ressources-et-echanges.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# 03 — Ressources, production, échanges et dépendances",
+        "## Mesures et principes",
+        "## Catalogue matériel de référence",
+        "## Distribution géographique",
+        "## Circuits d'échange",
+        "## Prix, stocks et pénuries : contrat de simulation",
+        "## Renouvellement et conflits écologiques",
+        "## Raccord avec les ressources jouables existantes"
+      ]
+    },
+    {
+      "blob": "76e92f8e1279b0fc984b08cfaf3ceb599cd457a2",
+      "paths": [
+        "docs/world-bible/04-danger-et-evenements.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# 04 — Danger local, événements et récurrence",
+        "## Audit et frontière d'intégration",
+        "## Quatre dimensions indépendantes",
+        "## Qui patrouille et pourquoi",
+        "## Catalogue causal des incidents",
+        "## Récurrence mesurée",
+        "## Saison, heure et motif",
+        "## État persistant et causalité",
+        "## Civils, transports et réputation",
+        "## Tests obligatoires avant activation dans le jeu"
+      ]
+    },
+    {
+      "blob": "6827f5f7df1579c620eb4dcaa3e814e141b61be4",
+      "paths": [
+        "docs/world-bible/05-societes-et-criminalite.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# 05 — Sociétés, droit, corruption et activités clandestines",
+        "## Juridictions, pas moralités nationales",
+        "## Autorité et opposition",
+        "## Réseaux locaux de conception",
+        "## Contrebande : le droit dépend du lieu",
+        "## Captivité et trafic de personnes",
+        "## Prostitution et établissements",
+        "## Jouabilité et conséquences"
+      ]
+    },
+    {
+      "blob": "60d2036fea1dc6609b89758d55ed6498c36e1d67",
+      "paths": [
+        "docs/world-bible/README.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Hearthreaver — Bible du monde",
+        "## Ordre de lecture et sources",
+        "## Géographie et compatibilité",
+        "## Invariants",
+        "## État livré et état du jeu",
+        "## Construction et vérification"
+      ]
+    },
+    {
+      "blob": "7ec0bdab66f5a9451afc1d4394efb8d2907812cc",
+      "paths": [
+        "docs/world-danger.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Local danger and event lifecycle",
+        "## Spatial rules",
+        "## Residents and services",
+        "## Encounters and travel",
+        "## Persistence and cost"
+      ]
+    },
+    {
+      "blob": "4facd5b26d091fcf67738a1125f85c41b39acc37",
+      "paths": [
+        "docs/world.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/project-thread-247o81"
+      ],
+      "headings": [
+        "# Monde de Kaldor — prototype intégré",
+        "## Géographie et échelle",
+        "## Pays, routes et frontières naturelles",
+        "### Anciennes sauvegardes",
+        "## Terrain, atlas procédural et limites",
+        "## Direction artistique et fabrication des biomes",
+        "## Début et compagnons",
+        "## Lieu et navigation",
+        "## Transports",
+        "## Chronique locale et connaissances des PNJ",
+        "## Événements",
+        "## Vérification et reconstruction",
+        "## Planche de transport et vérification",
+        "## Brouillard de guerre",
+        "### Provisions facultatives et retour de voyage",
+        "### Cohérence des réserves et des haltes",
+        "### Réseau et présentation du voyage"
+      ]
+    },
+    {
+      "blob": "3477a18011e11c2e473ff8c26b77e50c72c4ca0f",
+      "paths": [
+        "sprites/LISEZMOI.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/hearthreaver-menu-feedback",
+        "origin/codex/hearthreaver-quest-delivery",
+        "origin/codex/hearthreaver-readability",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Planches de casse"
+      ]
+    },
+    {
+      "blob": "7303fbd20b9f81aaf9b46137c67a70c95cdf49a6",
+      "paths": [
+        "sprites/personnages/LISEZMOI.md"
+      ],
+      "branches": [
+        "origin/claude/combats-wo67x6",
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/hearthreaver-menu-feedback",
+        "origin/codex/hearthreaver-quest-delivery",
+        "origin/codex/hearthreaver-readability",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3",
+        "origin/main"
+      ],
+      "headings": [
+        "# Planches des personnages",
+        "## Gardien Aseprite v3",
+        "## Prêtre Aseprite v4"
+      ]
+    },
+    {
+      "blob": "79e9e0fa1dbf8194550af4f9f8e55c827ad8d8dc",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Hearthreaver — Le retour de Kaldor",
+        "## Kaldor v3 — cheveux longs et épée dans le dos",
+        "## Froid, chaleur et tenues",
+        "## Voyages en arrière-plan",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Cycle du ciel et météo",
+        "## Introduction du studio",
+        "## Sources du menu",
+        "## Crédits",
+        "## Batraciens en jeu"
+      ]
+    },
+    {
+      "blob": "e472661f68a954ab45f958ace7198bc7e9fb55b7",
+      "paths": [
+        "docs/body-heat.md"
+      ],
+      "branches": [
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Froid, chaleur et tenues",
+        "## Plage de confort de chaque chaleur",
+        "## Température ressentie",
+        "## Le froid",
+        "## La chaleur",
+        "## Ce que voit le joueur",
+        "## Tests"
+      ]
+    },
+    {
+      "blob": "76bab15fc688b6089e526d2105a2aaf9a30d77f7",
+      "paths": [
+        "docs/kaldor-art.md"
+      ],
+      "branches": [
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/claude/project-thread-247o81",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Kaldor v4 — vrai personnage humain modulaire, épée et attaques refaites",
+        "# Archives : Kaldor v3 — barbare à cheveux longs, locomotion stable, épée dans le dos",
+        "## Personnage et animations",
+        "## Rengainage automatique dans le dos",
+        "## Construction, isolation et tests"
+      ]
+    },
+    {
+      "blob": "acb08a6903f78849ae85f7d30f6949d32ee90e29",
+      "paths": [
+        "docs/kaldor-outfits.md"
+      ],
+      "branches": [
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Tenues et casques de Kaldor — garde-robe, mannequins et habillage",
+        "## Les onze tenues",
+        "## Les cinq casques",
+        "## En jeu",
+        "## Fichiers",
+        "### Ajouter une tenue",
+        "### Ajouter un casque"
+      ]
+    },
+    {
+      "blob": "a7b092f4b7b01711047b84ff9e05cf791622e1c3",
+      "paths": [
+        "docs/world.md"
+      ],
+      "branches": [
+        "origin/claude/monde-hearthreaver-u5vlhh",
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Monde de Kaldor — prototype intégré",
+        "## Géographie et échelle",
+        "## Pays, routes et frontières naturelles",
+        "### Anciennes sauvegardes",
+        "## Terrain, atlas procédural et limites",
+        "## Direction artistique et fabrication des biomes",
+        "## Début et compagnons",
+        "## Lieu et navigation",
+        "## Transports",
+        "## Chronique locale et connaissances des PNJ",
+        "## Événements",
+        "## Vérification et reconstruction",
+        "## Planche de transport et vérification",
+        "## Brouillard de guerre",
+        "### Provisions facultatives et retour de voyage",
+        "### Cohérence des réserves et des haltes",
+        "### Réseau et présentation du voyage"
+      ]
+    },
+    {
+      "blob": "5dba2abab455ae32228766b8cadda77b42576bde",
+      "paths": [
+        "docs/kaldor-outfits.md"
+      ],
+      "branches": [
+        "origin/claude/project-thread-247o81"
+      ],
+      "headings": [
+        "# Tenues et casques de Kaldor — garde-robe, mannequins et habillage",
+        "## Les onze tenues",
+        "## Les cinq casques",
+        "## En jeu",
+        "## Fichiers",
+        "### Ajouter une tenue",
+        "### Ajouter un casque"
+      ]
+    },
+    {
+      "blob": "1ea90fb7d830ac8c5c1d991819219bdd10c63bf9",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/claude/voyage-arriere-plan-kq5ovn"
+      ],
+      "headings": [
+        "# Hearthreaver — Le retour de Kaldor",
+        "## Kaldor v3 — cheveux longs et épée dans le dos",
+        "## Voyages en arrière-plan",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Cycle du ciel et météo",
+        "## Introduction du studio",
+        "## Sources du menu",
+        "## Crédits",
+        "## Batraciens en jeu"
+      ]
+    },
+    {
+      "blob": "11f59acf7491c5a85eeb8158eecee8deaefbf069",
+      "paths": [
+        "WORLD.md"
+      ],
+      "branches": [
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3"
+      ],
+      "headings": [
+        "# Hearthreaver — Univers, populations et géopolitique",
+        "## Consulter le résultat",
+        "## Registres calculés sur la carte du dépôt",
+        "## Sources éditables",
+        "## Validation reproductible",
+        "## Limites explicites et passage à la fabrication",
+        "## Règles à préserver lors des prochaines modifications",
+        "## Extension jouable : batraciens"
+      ]
+    },
+    {
+      "blob": "94cf6b88e0f13fba24488e0404a54c6e588edb71",
+      "paths": [
+        "docs/kaldor-art.md"
+      ],
+      "branches": [
+        "origin/claude/voyage-arriere-plan-kq5ovn",
+        "origin/integration/kaldor-v3"
+      ],
+      "headings": [
+        "# Kaldor v3 — barbare à cheveux longs, locomotion stable, épée dans le dos",
+        "## Personnage et animations",
+        "## Rengainage automatique dans le dos",
+        "## Construction, isolation et tests"
+      ]
+    },
+    {
+      "blob": "291adc21c7252d452d887430c2e1063e58207776",
+      "paths": [
+        "docs/world.md"
+      ],
+      "branches": [
+        "origin/claude/voyage-arriere-plan-kq5ovn"
+      ],
+      "headings": [
+        "# Monde de Kaldor — prototype intégré",
+        "## Géographie et échelle",
+        "## Terrain, atlas procédural et limites",
+        "## Direction artistique et fabrication des biomes",
+        "## Début et compagnons",
+        "## Lieu et navigation",
+        "## Transports",
+        "## Chronique locale et connaissances des PNJ",
+        "## Événements",
+        "## Vérification et reconstruction",
+        "## Planche de transport et vérification",
+        "## Brouillard de guerre",
+        "### Provisions facultatives et retour de voyage",
+        "### Cohérence des réserves et des haltes",
+        "### Réseau et présentation du voyage"
+      ]
+    },
+    {
+      "blob": "8ad09f10c24efb0d1fe97ba8b5a570407a7e75bf",
+      "paths": [
+        "docs/CODEX-BATRACIENS-HANDOFF.md"
+      ],
+      "branches": [
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Transmission à Claude — batraciens, 18 octobre 2026",
+        "## Ajouts réalisés par Codex dans cette session",
+        "## Sources à conserver lors de l'intégration",
+        "## Raccord à la PR de Claude nº 4",
+        "## Validation à reproduire",
+        "## Correctif Codex — repos armés et profils",
+        "## Ajouts Codex — coiffes, déplacement face à la cible et enchaînements",
+        "## Consolidation du 18 octobre 2026 — Codex / ChatGPT"
+      ]
+    },
+    {
+      "blob": "d633d9e4b0260774a8f0eb4f2b143cd93368875f",
+      "paths": [
+        "docs/batraciens-belligerants.md"
+      ],
+      "branches": [
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Batraciens — belligérants et révision du combat",
+        "## Ce que le lore établit",
+        "## Composition des bandes existantes",
+        "## Répertoire de combat v2",
+        "## Bouclier partagé",
+        "## Aperçu et validation"
+      ]
+    },
+    {
+      "blob": "1b2b1ac185c3dc431423ceca480fccdfc2f23bda",
+      "paths": [
+        "docs/batraciens.md"
+      ],
+      "branches": [
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Batraciens — intégration jouable et palettes",
+        "## Contrat graphique",
+        "## Implantations",
+        "## Vie civile et sauvegardes",
+        "## Gardes et groupes hostiles",
+        "## Construction et contrôles",
+        "## Vie locale, déplacements et réponse aux agressions",
+        "### Agression et garde locale",
+        "### Blessures et sang",
+        "## Révision de combat v2 — 18 octobre 2026",
+        "## Tenues armées v3 et raccord du bouclier"
+      ]
+    },
+    {
+      "blob": "7410084f0cdc1a5e3a91caf12f2b3c5239333772",
+      "paths": [
+        "docs/ergonomie-dialogues.md"
+      ],
+      "branches": [
+        "origin/codex/dialogue-ergonomics"
+      ],
+      "headings": [
+        "# Dialogues et ergonomie — correctif Codex / ChatGPT",
+        "## Commandes conservées ou retirées",
+        "## Noms des personnages",
+        "## Vérification"
+      ]
+    },
+    {
+      "blob": "32434f55fbd5ac7a3afe63ad924d61f0ea2222cf",
+      "paths": [
+        "docs/interface-paysage.md"
+      ],
+      "branches": [
+        "origin/codex/dialogue-ergonomics",
+        "origin/codex/landscape-ui",
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Interface paysage téléphone — Codex / ChatGPT",
+        "## Écrans",
+        "## Reconstruction et vérification",
+        "## Résultats de validation"
+      ]
+    },
+    {
+      "blob": "68cf4b93aa072111344b805099dcaf4876b98264",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/codex/hearthreaver-menu-feedback"
+      ],
+      "headings": [
+        "# Hearthreaver — Le Temple du Serpent",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Sources du menu",
+        "## Crédits"
+      ]
+    },
+    {
+      "blob": "0a8d4168b3023ce08861b24d2b0aa4277ddcbf3e",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/codex/hearthreaver-quest-delivery"
+      ],
+      "headings": [
+        "# Hearthreaver — Le Temple du Serpent",
+        "## Quêtes et repos",
+        "## Sources du menu",
+        "## Crédits"
+      ]
+    },
+    {
+      "blob": "83d8cde8e9d51e66a6af47d4a4a3c95a86fb128f",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/codex/hearthreaver-readability"
+      ],
+      "headings": [
+        "# Hearthreaver — Le Temple du Serpent",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Sources du menu",
+        "## Crédits"
+      ]
+    },
+    {
+      "blob": "e3c6ed6804e767c273716cbbb5846d121f2ff593",
+      "paths": [
+        "docs/ergonomie-dialogues.md"
+      ],
+      "branches": [
+        "origin/codex/world-bubbles-player-sheet",
+        "origin/main"
+      ],
+      "headings": [
+        "# Dialogues et ergonomie — correctif Codex / ChatGPT",
+        "## Commandes conservées ou retirées",
+        "## Noms des personnages",
+        "## Vérification",
+        "## Révision demandée : bulles dans le monde et fiche joueur",
+        "### Ancrages définitifs des choix (correction utilisateur)"
+      ]
+    },
+    {
+      "blob": "12492b2f081cf29eb6ab962fbf0f0271b2582acd",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/integration/batraciens-palettes"
+      ],
+      "headings": [
+        "# Hearthreaver — Le retour de Kaldor",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Cycle du ciel et météo",
+        "## Introduction du studio",
+        "## Sources du menu",
+        "## Crédits",
+        "## Batraciens en jeu"
+      ]
+    },
+    {
+      "blob": "0abc9c323e115714980e51f7302e5166cfc47173",
+      "paths": [
+        "docs/batraciens.md"
+      ],
+      "branches": [
+        "origin/integration/batraciens-palettes"
+      ],
+      "headings": [
+        "# Batraciens — intégration jouable et palettes",
+        "## Contrat graphique",
+        "## Implantations",
+        "## Vie civile et sauvegardes",
+        "## Gardes et groupes hostiles",
+        "## Construction et contrôles"
+      ]
+    },
+    {
+      "blob": "e9985c8386e51b6190af0e4545ba7ef23d0cbce8",
+      "paths": [
+        "docs/world.md"
+      ],
+      "branches": [
+        "origin/integration/batraciens-palettes",
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster",
+        "origin/integration/kaldor-v3"
+      ],
+      "headings": [
+        "# Monde de Kaldor — prototype intégré",
+        "## Géographie et échelle",
+        "## Terrain, atlas procédural et limites",
+        "## Direction artistique et fabrication des biomes",
+        "## Début et compagnons",
+        "## Lieu et navigation",
+        "## Transports",
+        "## Chronique locale et connaissances des PNJ",
+        "## Événements",
+        "## Vérification et reconstruction",
+        "## Planche de transport et vérification",
+        "## Brouillard de guerre",
+        "### Provisions facultatives et retour de voyage",
+        "### Cohérence des réserves et des haltes",
+        "### Réseau et présentation du voyage"
+      ]
+    },
+    {
+      "blob": "4fb6c19b18d04e0a262cd893815b6787e0f3d647",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/integration/batraciens-social",
+        "origin/integration/kaldor-art-v2",
+        "origin/integration/kaldor-longhair-holster"
+      ],
+      "headings": [
+        "# Hearthreaver — Le retour de Kaldor",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Cycle du ciel et météo",
+        "## Introduction du studio",
+        "## Sources du menu",
+        "## Crédits",
+        "## Batraciens en jeu"
+      ]
+    },
+    {
+      "blob": "a05219707ea6f2d4b0bb122bfa63163920b0d555",
+      "paths": [
+        "docs/kaldor-art.md"
+      ],
+      "branches": [
+        "origin/integration/kaldor-art-v2"
+      ],
+      "headings": [
+        "# Kaldor — art pixel JavaScript v2",
+        "## Objectif",
+        "## Contrat technique",
+        "## Garanties sur le moteur"
+      ]
+    },
+    {
+      "blob": "2a9c0dd035cb9064524208f351872e86d61854b3",
+      "paths": [
+        "README.md"
+      ],
+      "branches": [
+        "origin/integration/kaldor-v3"
+      ],
+      "headings": [
+        "# Hearthreaver — Le retour de Kaldor",
+        "## Kaldor v3 — cheveux longs et épée dans le dos",
+        "## Quêtes et repos",
+        "## Menu, sons et vibrations",
+        "## Cycle du ciel et météo",
+        "## Introduction du studio",
+        "## Sources du menu",
+        "## Crédits",
+        "## Batraciens en jeu"
+      ]
+    }
+  ]
+}

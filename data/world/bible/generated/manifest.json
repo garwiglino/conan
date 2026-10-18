@@ -9,6 +9,10 @@
     "deterministic_output"
   ],
   "counts": {
+    "apeActivities": 55,
+    "apeCommunities": 5,
+    "apeRoles": 16,
+    "apeStructures": 13,
     "eventRules": 17,
     "networks": 7,
     "regions": 14,
@@ -19,10 +23,11 @@
   },
   "inputSHA256": {
     "data/world/atlas.json": "2a51f857b9981f04eb5c242a25f3c7aa7a64be2cdb5bcf5ef12c0d4759294be6",
-    "data/world/bible/events.json": "c3aaf7b87bdd0110f019a10704576ed44c1dd1c3b655736582f1f5faf149098f",
+    "data/world/bible/ape-folk.json": "68796f71676d20a7ecfbae2ee2e39843582268ec86e9d29bc39122c1a23765c1",
+    "data/world/bible/events.json": "98f60f7061a344de068bcebfeb6251874353411da629c5ee9e985de911320d7f",
     "data/world/bible/relations.json": "2cf44abe5e9de6b76b61c1fff9930a5b1ad549a09fb8d9bb5a0346d0f58d0995",
-    "data/world/bible/source.json": "0c52f03b43c05a2a29555d258f2703a80ee09a52845e1fd8d189654bc1cd8cb6",
-    "scripts/build-world-bible.py": "0c908a69b7fbeaaa58fc0318b07b03e805269f8b8568833a9c061b41e98fdc1c"
+    "data/world/bible/source.json": "5ee7e4791c9a0e413885ae4987165904e890efe893829be106a1a11b18bbdf7d",
+    "scripts/build-world-bible.py": "06036a23a0425a52a949c2165f58ae5dda622aabd57950dd94ff3102360a14cb"
   },
   "preserved": [
     "atlas_coordinates",
@@ -31,7 +36,7 @@
     "runtime_HTML",
     "save_data"
   ],
-  "schema": 1,
+  "schema": 2,
   "status": "validated_design_not_runtime_activation",
   "warnings": []
 }

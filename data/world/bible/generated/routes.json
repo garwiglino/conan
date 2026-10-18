@@ -193,6 +193,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -228,6 +229,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -263,6 +265,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -298,6 +301,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -333,6 +337,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -368,6 +373,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -403,6 +409,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -438,6 +445,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -473,6 +481,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2312,6 +2321,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2345,6 +2355,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2378,6 +2389,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2411,6 +2423,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2444,6 +2457,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2477,6 +2491,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2510,6 +2525,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2543,6 +2559,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -2576,6 +2593,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3760,6 +3778,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3795,6 +3814,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3830,6 +3850,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3865,6 +3886,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3900,6 +3922,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3935,6 +3958,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -3970,6 +3994,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -4005,6 +4030,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "port_seizure",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -4423,6 +4449,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",
@@ -4537,6 +4564,7 @@
     "eventRuleIds": [
       "bandit_ambush",
       "fiscal_checkpoint",
+      "labour_dispute",
       "shortage",
       "caravan",
       "patrol",

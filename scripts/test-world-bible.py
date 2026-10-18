@@ -36,7 +36,11 @@ def fixture():
 class Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.source=source_data();cls.atlas=fixture();cls.result=b.compile_world(cls.atlas,cls.source)
+        cls.source=source_data();cls.atlas=fixture()
+        # Synthetic geography uses different site IDs and region membership.
+        # Real-site overrides are covered separately against the actual atlas.
+        cls.source['settlementOverrides']={}
+        cls.result=b.compile_world(cls.atlas,cls.source)
     def test_reference_tables(self):
         d=b.validate(self.source);self.assertEqual((len(d['regions']),len(d['resources']),len(d['relations']),len(d['rules'])),(14,54,36,17))
     def test_named_coverage_and_identity(self):
@@ -108,4 +112,52 @@ class Tests(unittest.TestCase):
         a=copy.deepcopy(self.atlas);a['routes']=[];r=b.compile_world(a,self.source)
         self.assertTrue(all(not any(s['supplierOptions'].values()) for s in r['settlements']))
         self.assertTrue(all(s['networkBindingStatus']=='requires_access_review' for s in r['settlements']))
+class ApeIntegrationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.atlas,cls.source,cls.hashes=b.load(ROOT);cls.result=b.compile_world(cls.atlas,cls.source)
+    def test_six_species_and_conserved_design_population(self):
+        self.assertEqual(tuple(self.source['species']),b.SPECIES)
+        baseline={r['id']:r for r in self.source['demographyRevision']['baselineRegions']}
+        for row in self.source['regions']:
+            old=baseline[row[0]];self.assertEqual(row[2],old['designPopulation'])
+            for index,key in [(4,'ruralSpeciesPct'),(5,'townSpeciesPct')]:
+                self.assertEqual(row[index][1:4],old[key][1:4])
+                self.assertAlmostEqual(old[key][0]-row[index][0],sum(row[index][4:]))
+        self.assertEqual(self.result['world']['designPopulation'],5450000)
+        self.assertGreater(self.result['world']['speciesCounts']['ape_folk'],0)
+        self.assertGreater(self.result['world']['speciesCounts']['batracien'],0)
+    def test_existing_sites_and_no_runtime_spawning(self):
+        sites={s['atlasId']:s for s in self.result['settlements']}
+        for st in self.result['apeFolk']['settlements']:
+            self.assertEqual(st['name'],sites[st['siteId']]['name']);self.assertGreater(st['designApeResidents'],0)
+            self.assertFalse(st['runtimeActorsSpawned']);self.assertFalse(st['buildingsPlaced'])
+        self.assertEqual(len(sites),83);self.assertFalse(self.result['warnings'])
+    def test_primary_distribution_is_tagon_not_global_hostility(self):
+        a=self.result['apeFolk'];self.assertIsNone(a['globalFaction']);self.assertFalse(a['hostilityBySpecies'])
+        tagon=next(t for t in a['demography']['territories'] if t['territory']=='Tagon')
+        self.assertGreater(tagon['shareOfAllApeResidents'],50)
+        self.assertEqual(next(t for t in a['demography']['territories'] if t['territory']=='Igea')['apeResidents'],0)
+    def test_activity_assets_are_not_claimed_as_finished(self):
+        a=self.result['apeFolk'];self.assertEqual(len(a['activities']),55)
+        self.assertEqual({x['id'] for x in a['activities'] if x['status']=='implemented'},{'idle','walk','flee','talk'})
+        self.assertTrue(all(x['sexes']==['male','female'] and x['allTones'] for x in a['activities']))
+        for role in a['roles']:self.assertTrue(role['outfitBrief'])
+    def test_references_and_causes_reject_invalid_extensions(self):
+        for change in ('site','resource','activity','actor','event'):
+            s=copy.deepcopy(self.source);a=s['apeFolk']
+            if change=='site':a['communities'][0]['siteIds'].append('missing-site')
+            if change=='resource':a['structures'][0]['materials'].append('missing-resource')
+            if change=='activity':a['roles'][0]['activities'].append('missing-activity')
+            if change=='actor':a['relations'].pop()
+            if change=='event':a['eventBindings'][0]['rule']='missing-rule'
+            with self.subTest(change=change),self.assertRaises(ValueError):b.compile_world(self.atlas,s)
+    def test_no_walk_across_sea_and_no_duplicate_event_types(self):
+        a=self.result['apeFolk'];path=next(p for p in a['routeOptions'] if p['fromSiteId']=='5' and p['toSiteId']=='27')
+        self.assertTrue(path['requiresBoat']);self.assertGreater(path['distanceM'],0)
+        self.assertTrue(all(not e['runtimeEnabled'] and not e['createsNewEventType'] and e['eligibleRegionIds'] for e in a['eventBindings']))
+    def test_compiler_remains_deterministic_with_extension(self):
+        self.assertEqual(self.result,b.compile_world(self.atlas,self.source))
+        self.assertIn('data/world/bible/ape-folk.json',self.hashes)
+
 if __name__=='__main__':unittest.main(verbosity=2)

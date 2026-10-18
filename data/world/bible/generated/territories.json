@@ -8,12 +8,16 @@
       3
     ],
     "speciesCounts": {
+      "ape_folk": 0,
+      "batracien": 0,
       "goblin": 45975,
       "human": 397014,
       "orc": 67011,
       "serpentfolk": 0
     },
     "speciesPct": {
+      "ape_folk": 0.0,
+      "batracien": 0.0,
       "goblin": 9.01,
       "human": 77.85,
       "orc": 13.14,
@@ -30,15 +34,19 @@
       7
     ],
     "speciesCounts": {
-      "goblin": 245810,
-      "human": 2593592,
-      "orc": 40598,
+      "ape_folk": 37960,
+      "batracien": 31840,
+      "goblin": 246310,
+      "human": 2523498,
+      "orc": 40392,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 8.53,
-      "human": 90.06,
-      "orc": 1.41,
+      "ape_folk": 1.32,
+      "batracien": 1.11,
+      "goblin": 8.55,
+      "human": 87.62,
+      "orc": 1.4,
       "serpentfolk": 0.0
     }
   },
@@ -51,15 +59,19 @@
       10
     ],
     "speciesCounts": {
-      "goblin": 113405,
-      "human": 782649,
-      "orc": 47560,
+      "ape_folk": 2902,
+      "batracien": 0,
+      "goblin": 113728,
+      "human": 779585,
+      "orc": 47399,
       "serpentfolk": 6386
     },
     "speciesPct": {
-      "goblin": 11.94,
-      "human": 82.38,
-      "orc": 5.01,
+      "ape_folk": 0.31,
+      "batracien": 0.0,
+      "goblin": 11.97,
+      "human": 82.06,
+      "orc": 4.99,
       "serpentfolk": 0.67
     }
   },
@@ -71,15 +83,19 @@
       12
     ],
     "speciesCounts": {
-      "goblin": 53440,
-      "human": 389355,
-      "orc": 10507,
+      "ape_folk": 33492,
+      "batracien": 101170,
+      "goblin": 53944,
+      "human": 254295,
+      "orc": 10401,
       "serpentfolk": 66698
     },
     "speciesPct": {
-      "goblin": 10.28,
-      "human": 74.87,
-      "orc": 2.02,
+      "ape_folk": 6.44,
+      "batracien": 19.46,
+      "goblin": 10.37,
+      "human": 48.9,
+      "orc": 2.0,
       "serpentfolk": 12.83
     }
   },
@@ -91,15 +107,19 @@
       14
     ],
     "speciesCounts": {
-      "goblin": 37450,
-      "human": 518288,
-      "orc": 12104,
+      "ape_folk": 97562,
+      "batracien": 51586,
+      "goblin": 37138,
+      "human": 369758,
+      "orc": 11798,
       "serpentfolk": 22158
     },
     "speciesPct": {
-      "goblin": 6.35,
-      "human": 87.84,
-      "orc": 2.05,
+      "ape_folk": 16.54,
+      "batracien": 8.74,
+      "goblin": 6.29,
+      "human": 62.67,
+      "orc": 2.0,
       "serpentfolk": 3.76
     }
   }

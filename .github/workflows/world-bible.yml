@@ -7,6 +7,7 @@ on:
       - data/world/bible/source.json
       - data/world/bible/relations.json
       - data/world/bible/events.json
+      - data/world/bible/ape-folk.json
       - scripts/build-world-bible.py
       - scripts/test-world-bible.py
       - .github/workflows/world-bible.yml
