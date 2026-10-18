@@ -4645,6 +4645,7 @@ const createWorldAtlas = (raw) => {
   rain:{name:'Pluie soutenue',category:'Météo'},snow:{name:'Chutes de neige',category:'Météo'},fog:{name:'Brouillard',category:'Météo'},drought:{name:'Sécheresse',category:'Météo'}
  };
  // Declarative incident policy shared by travel, local encounters and civilians.
+ Object.assign(EVENT_TYPES,{crime_scene:{name:'Morts découvertes',category:'Vie locale'},massacre:{name:'Massacre signalé',category:'Vie locale',risk:1}});
  Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true,civilianPrey:true});
  Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'cultist',evacuate:true});
  Object.assign(EVENT_TYPES.siege,{group:3,enemy:'cultist',risk:3,evacuate:true});
@@ -4661,6 +4662,7 @@ const createWorldAtlas = (raw) => {
    this.nextId=Math.max(Number.isInteger(saved.nextId)?saved.nextId:1,...this.events.map(e=>(Number(e.serial)||0)+1));this.lastHour=Number.isInteger(saved.lastHour)?saved.lastHour:Math.floor(this.clock/60);this.knowledge={};this.journal=Array.isArray(saved.journal)?saved.journal.filter(j=>j&&typeof j.text==='string').slice(-120):[];this.newsDistances=new Map();
    for(const [id,book]of Object.entries(saved.knowledge||{})){if(!book||typeof book!=='object')continue;this.knowledge[id]={};for(const [key,k]of Object.entries(book))if(this.events.some(e=>e.id===key)&&k&&Number.isFinite(k.heard))this.knowledge[id][key]={...k,at:Number.isFinite(k.at)?k.at:k.heard,resolved:Number.isFinite(k.resolved)?k.resolved:null,source:typeof k.source==='string'?k.source:'Voyageurs'};}
    if(typeof WORLD_BIBLE!=='undefined'&&typeof createWorldSimulation==='function')this.simulation=createWorldSimulation(Atlas,WORLD_BIBLE,this,saved.simulation);
+   if(typeof createWorldJustice==='function')this.justice=createWorldJustice(Atlas,this,saved.justice);
   }
   add(type,target,at,duration=0,extra={}){if(!EVENT_TYPES[type]||!eventTarget(target)||!Number.isFinite(at))return null;
    const settles={truce:['siege','occupation'],purified:['curse'],victory:['bandits','occupation','siege'],repair:['bridge','flood','landslide','avalanche','fire']};if(settles[type]&&!extra.expiry)for(const e of this.active(at))if(e.target===target&&settles[type].includes(e.type)&&(type!=='repair'||!extra.position||Math.hypot(extra.position.x-e.x,extra.position.y-e.y)<=40))this.resolve(e.id,at);
@@ -4715,7 +4717,7 @@ const createWorldAtlas = (raw) => {
   share(from,to,clock){const source=this.knowledge[from]||{},dest=this.knowledge[to]||(this.knowledge[to]={});let changed=false;for(const [id,k]of Object.entries(source)){const e=this.events.find(e=>e.id===id);if(!e||EVENT_TYPES[e.type].private)continue;if(!dest[id]||k.resolved!==null&&dest[id].resolved===null){dest[id]={...k,heard:clock,source:'Voyageur de relais'};changed=true;}}if(changed)this.revision++;}
   news(id,clock=this.clock){const book=this.knowledge[id]||{};return this.events.filter(e=>book[e.id]).sort((a,b)=>b.at-a.at).slice(0,8).map(e=>{const k=book[e.id],resolved=k.resolved!==null;return {id:e.id,type:e.type,target:e.target,title:e.title,text:(resolved?'Situation terminée : ':'')+e.title+' — '+eventTarget(e.target).name+'.'+(e.detail?' '+e.detail:''),source:k.source,at:e.at,heard:k.heard,resolved,uncertain:!resolved&&clock-k.at>1440};});}
   recordNews(id,clock=this.clock){for(const n of this.news(id,clock)){const key=n.id+':'+n.resolved;if(!this.journal.some(j=>j.key===key))this.journal.push({...n,key,npc:id});}this.journal=this.journal.slice(-120);this.revision++;}
-  serialize(){return {schema:this.schema,campaign:this.campaign,revision:this.revision,clock:this.clock,events:this.events,knowledge:this.knowledge,journal:this.journal,lastHour:this.lastHour,nextId:this.nextId,...(this.simulation?{simulation:this.simulation.serialize()}: {})};}
+  serialize(){return {schema:this.schema,campaign:this.campaign,revision:this.revision,clock:this.clock,events:this.events,knowledge:this.knowledge,journal:this.journal,lastHour:this.lastHour,nextId:this.nextId,...(this.simulation?{simulation:this.simulation.serialize()}: {}),...(this.justice?{justice:this.justice.serialize()}: {})};}
  }
  class LocationTracker{
   constructor(){this.current=null;this.pending=null;this.age=0;this.last=null;}
@@ -5787,7 +5789,7 @@ Game.prototype.restAtRelay=function(){return !this.dangerAt(this.player.x,this.p
 const dangerTalk=Game.prototype.talkTo;
 Game.prototype.talkTo=function(n){if(!n||!this.npcPresent(n))return false;return dangerTalk.call(this,n);};
 
-Game.prototype.civilianProtected=function(n){return n.id==='fairy'||n.eventGuard||this.party?.some(c=>c.id===n.id);};
+Game.prototype.civilianProtected=function(n){return n.id==='fairy'||n.eventGuard||n.convoyGuard||this.party?.some(c=>c.id===n.id);};
 // A struck or witnessing civilian runs from the attacker on foot and stays visible,
 // so it can still be caught. Shelter/return follow once the attacker is out of reach.
 const CIVILIAN_FLIGHT=Object.freeze({speed:1.6,calm:4,safe:220,lost:3,look:56,witness:150});
@@ -6017,7 +6019,7 @@ Renderer.prototype.npcDraw=function(n){
 /* Human civilians consume world-danger's placement, retreat and return states.
    No independent danger field, hostile AI or civilian attack action is introduced. */
 const CIVILIAN_JOB_NAMES={hoe:'CULTIVATEUR',sow:'PAYSAN',craft:'ARTISAN',pottery:'POTIER',weave:'VANNIER',stir:'TEINTURIER',net:'FILETIER',groom:'PALEFRENIER',load:'CARAVANIER',rope:'BATELIER',ledger:'MAÎTRE DE PORT',carry:'PORTEUR'};
-const civilianEligible=n=>n.id!=='fairy'&&!n.eventGuard;
+const civilianEligible=n=>n.id!=='fairy'&&!n.eventGuard&&!n.convoyGuard;
 const civilianDuration=id=>(CIVILIAN_ART.clips[id]?.durations||[1000]).reduce((a,b)=>a+b,0)/1000;
 Game.prototype.ensureCivilian=function(n,record){
  if(!civilianEligible(n))return null;if(n.civilian)return n.civilian;
@@ -10419,7 +10421,7 @@ const NpcCombat=(()=>{
   guard:{hp:8,reach:26,windup:.36,cooldown:1.4,damage:1,sight:150,leash:230,pursuit:380,view:220,anger:180,witness:220,active:700,speed:1.25},
   foe:{sight:110,memory:6,leash:240,active:700}
  });
- const human=n=>!!n?.eventGuard&&!n.batracien;
+ const human=n=>!!(n?.eventGuard||n?.convoyGuard)&&!n.batracien;
  BODY.guard=BODY.npc;
  Game.prototype.isHumanGuard=function(n){return human(n);};
  Game.prototype.ensureHumanGuard=function(n){
@@ -10487,7 +10489,7 @@ const NpcCombat=(()=>{
   for(const n of this.npcs){
    if(!human(n))continue;const s=this.ensureHumanGuard(n);if(s.dead)continue;
    for(const k of ['flash','hurt','stun','cooldown','attack'])n[k]=Math.max(0,(n[k]||0)-dt);s.inv=Math.max(0,s.inv-dt);
-   if(dist(n,p)>C.guard.active||!events.has(n.eventId)&&!n.guardRetiring||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
+   if(dist(n,p)>C.guard.active||!n.convoyGuard&&!events.has(n.eventId)&&!n.guardRetiring||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
    if(n.stun>0||n.hurt>0){n.wind=0;continue;}
    if(n.wind>0){n.wind-=dt;n.anim=0;if(n.wind<=0){n.wind=0;
      const foe=s.strikeId==='player'?p:this.enemies.find(e=>e.id===s.strikeId&&!e.dead);
@@ -10496,7 +10498,7 @@ const NpcCombat=(()=>{
     continue;}
    if(n.attack>0){n.anim=0;continue;}
    const t=this.humanGuardTarget(n,s);
-   if(!t){if(dist(n,n.post)>4)this.walkNpc(n,n.post,dt);else n.anim=0;continue;}
+   if(!t){if(!n.convoyGuard&&dist(n,n.post)>4)this.walkNpc(n,n.post,dt);else n.anim=0;continue;}
    const d=dist(n,t);n.dir=this.direction(t.x-n.x,t.y-n.y);
    if(d<=C.guard.reach&&n.cooldown<=0&&this.lineClear(n,t)){n.wind=n.windup=C.guard.windup;s.strikeId=t===p?'player':t.id;n.anim=0;this.foeSound(n,'melee','cultist');continue;}
    if(d>C.guard.reach-6)this.walkNpc(n,t,dt*C.guard.speed);else n.anim=0;
@@ -10631,7 +10633,7 @@ const WorldSociety=(()=>{
  };
  Game.prototype.populateRoadTraffic=function(){
   const state=this.ensureWorldSociety();
-  for(const n of this.npcs.filter(n=>n.roadTraffic&&dist(n,this.player)>C.unload&&!member(this,n)&&this.dialogue?.who!==n&&!n.dangerState&&!n.worldChat)){
+  for(const n of this.npcs.filter(n=>n.roadTraffic&&dist(n,this.player)>C.unload&&!member(this,n)&&this.dialogue?.who!==n&&!n.dangerState&&!n.worldChat&&!n.justiceReport&&!this.worldState.justice?.pending(n.id,this.clock).length&&!this.worldState.justice?.discoveries(n.id).length)){
    state.records.set(n.id,snapshot(this,n));this.npcs=this.npcs.filter(a=>a!==n);this.atlasNpcs=this.atlasNpcs.filter(a=>a!==n);
   }
   this.advanceDistantRoadTraffic();
@@ -10845,6 +10847,8 @@ const WorldSociety=(()=>{
 const WorldDialogue=(()=>{
  'use strict';
  const reports={
+  crime_scene:'des morts ont été découverts. Les gens cherchent encore ce qui s’est passé.',
+  massacre:'plusieurs personnes ont été tuées. La garde a été prévenue ; les nouvelles sont encore incomplètes.',
   bandits:'des brigands arrêtent les voyageurs. Je ne partirais pas seul.',
   patrol:'des gardes font la ronde. C’est plutôt rassurant, mais garde les yeux ouverts.',
   siege:'la place est assiégée. Évite de t’en approcher pour le moment.',
@@ -10908,6 +10912,7 @@ const WORLD_BIBLE={"resources":[{"id":"water","inputAlternatives":[],"kind":"nat
  */
 function createWorldSimulation(A,B,W,saved){
  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),finite=Number.isFinite;
+ const pacing=typeof WorldPacing!=='undefined'?WorldPacing:require('./world-pacing.js'),controlledCargo=new Set();
  const resources=new Map(B.resources.map(r=>[r.id,r])),profiles=new Map(B.settlements.map(s=>['town-'+s.atlasId,s])),regions=new Map(B.regions.map(r=>[r.id,r]));
  const foods=['grain','legumes','rice','tubers','dates','fish','meat'];
  const validState=saved?.version===1&&finite(saved.clock)&&saved.clock<=W.clock;
@@ -10950,12 +10955,16 @@ function createWorldSimulation(A,B,W,saved){
  function take(site,id,amount){const n=Math.min(stock(site,id),Math.max(0,amount));site.stock[id]=stock(site,id)-n;return n;}
  function route(from,to){return A.findPath(from,to,{mode:'cart',allowBoat:true,clock:state.clock,state:W});}
  function minutes(path){return path.reduce((n,s)=>n+s.length/A.modes[s.mode].metresPerMinute,0);}
+ function cargoRate(c,leg){return leg.mode==='boat'?A.modes.boat.metresPerMinute:c.landRate||A.modes[leg.mode].metresPerMinute;}
+ function cargoPosition(c){const leg=c.path[c.leg];if(!leg){const n=A.byId[c.status==='returning'?c.from:c.to];return {x:n.x,y:n.y};}const a=A.vertices.get(leg.from),b=A.vertices.get(leg.to),t=clamp(c.progress*cargoRate(c,leg)/Math.max(.001,leg.length),0,1);return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}
+ function cargoUnits(c){if(!Array.isArray(c.units))c.units=Array.from({length:c.crew||2},(_,i)=>({id:c.id+'-crew-'+i,role:'crew',hp:6}));return c.units;}
  function addShipment(from,to,id,amount){
   const a=state.sites[from],b=state.sites[to];if(!a||!b||from===to||amount<=0||state.shipments.filter(s=>['travel','returning'].includes(s.status)).length>=24)return null;
-  if(!resources.has(id)||!finite(amount)||a.workers<2)return null;
-  const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-(a.needs[id]||1)*a.reserveDays));if(qty<=0)return null;
+  if(!resources.has(id)||!finite(amount)||a.workers<2||a.guardAvailable<2||a.treasury<6||stock(a,'provisions')<4)return null;
+  const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-(a.needs[id]||1)*a.reserveDays-(id==='provisions'?4:0)));if(qty<=0)return null;
   const price=Math.max(1,Math.ceil(qty*.5));if(b.treasury<price)return null;
-  take(a,id,qty);b.treasury-=price;a.workers-=2;const cargo={id:'cargo-'+state.serial++,from,to,resource:id,amount:qty,paid:price,path:path.map(p=>({...p})),leg:0,progress:0,status:'travel',depart:state.clock,clock:state.clock,crew:2,staffReserved:true,delivered:false,news:JSON.parse(JSON.stringify(state.channels[from]||{}))};
+  take(a,id,qty);take(a,'provisions',4);b.treasury-=price;a.workers-=2;a.guardAvailable-=2;a.treasury-=6;const cargo={id:'cargo-'+state.serial++,from,to,resource:id,amount:qty,originalAmount:qty,lost:0,paid:price,path:path.map(p=>({...p})),leg:0,progress:0,status:'travel',depart:state.clock,clock:state.clock,crew:2,guards:2,staffReserved:true,guardReserved:true,landRate:pacing.metresPerMinute(pacing.civilianWalk),delivered:false,news:JSON.parse(JSON.stringify(state.channels[from]||{}))};
+  cargoUnits(cargo);for(let i=0;i<2;i++)cargo.units.push({id:cargo.id+'-guard-'+i,role:'guard',hp:8,hostileUntil:0});
   state.shipments.push(cargo);history('cargo_departure',{id:cargo.id,from,to,resource:id,amount:qty});return cargo;
  }
  function produce(site,day,sky){
@@ -10977,20 +10986,30 @@ function createWorldSimulation(A,B,W,saved){
   for(const [id,r]of resources)if(r.storageDays>0&&r.storageDays<999)take(site,id,stock(site,id)*day/Math.max(1,r.storageDays)*.1);
   site.distress=clamp(site.distress+(deficiency?deficiency*day*3:-day*.4),0,10);site.treasury+=site.population*day*.3;
  }
- function progressCargo(c,dt){
-  if(!['travel','returning'].includes(c.status))return;let remaining=dt;
-  for(let guard=0;remaining>1e-7&&guard<128;guard++){
+ function progressCargo(c,dt,local=false,at=state.clock){
+  if(!['travel','returning'].includes(c.status)||!local&&controlledCargo.has(c.id))return;
+  // Unloading the scene is not a victory over the attackers. Keep a suspended
+  // encounter suspended until its physical actors can actually resume safely.
+  if(!local&&c.encounter){c.clock=Math.max(c.clock||0,at);return;}
+  const units=cargoUnits(c);if(!units.some(u=>u.role==='crew'&&u.hp>0)&&(!c.delivered||!units.some(u=>u.hp>0))){c.status='abandoned';c.abandonedAt=at;history('cargo_abandoned',{id:c.id},at);return;}
+  let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
+  for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<128;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){if(c.staffReserved){state.sites[c.from].workers+=c.crew;c.staffReserved=false;}c.status='delivered';history('cargo_crew_return',{id:c.id});break;}
-    const site=state.sites[c.to];site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=c.paid;c.delivered=true;c.arrived=state.clock;
+    if(c.status==='returning'){if(c.staffReserved){state.sites[c.from].workers+=units.filter(u=>u.role==='crew'&&u.hp>0).length;c.staffReserved=false;}if(c.guardReserved){state.sites[c.from].guardAvailable+=units.filter(u=>u.role==='guard'&&u.hp>0).length;c.guardReserved=false;}c.status='delivered';history('cargo_crew_return',{id:c.id},at);break;}
+    const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at;
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to});event('caravan',c.to,{detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720);
     c.status='returning';c.path=c.path.slice().reverse().map(p=>({...p,from:p.to,to:p.from}));c.leg=0;c.progress=0;break;
    }
    const edge=A.edgeById.get(leg.edge);if(!edge){c.waiting='route_migration';break;}const status=W.edgeStatus(edge,state.clock);if(status.closed||status.events.some(e=>A.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;break;}c.waiting=null;
-   const length=leg.length/A.modes[leg.mode].metresPerMinute,step=Math.min(remaining,length-c.progress);c.progress+=step;remaining-=step;if(c.progress>=length-1e-7){c.leg++;c.progress=0;}
-  }c.clock=state.clock;
+   const length=leg.length/cargoRate(c,leg),step=Math.min(remaining,length-c.progress);c.progress+=step;remaining-=step;if(c.progress>=length-1e-7){c.leg++;c.progress=0;}
+  }c.clock=Math.max(c.clock||0,at);
  }
+ function damageCargoUnit(c,id,hp,hostileUntil=0){const u=cargoUnits(c).find(u=>u.id===id);if(!u||!finite(hp)||hp<0)return false;const alive=u.hp>0;u.hp=clamp(hp,0,u.role==='guard'?8:6);u.hostileUntil=hostileUntil;
+  if(alive&&u.hp===0){if(u.role==='guard')state.sites[c.from].guardPool=Math.max(0,state.sites[c.from].guardPool-1);history('cargo_casualty',{id:c.id,person:id,role:u.role});}
+  if(!c.delivered&&!cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)){c.status='abandoned';c.abandonedAt=W.clock;}return true;
+ }
+ function loseCargo(c,amount,reason='loss'){if(c.delivered||!finite(amount)||amount<=0)return 0;const n=Math.min(c.amount,amount);c.amount-=n;c.lost=(c.lost||0)+n;history('cargo_loss',{id:c.id,resource:c.resource,amount:n,reason});return n;}
  function resolveWork(work,dt){
   if(work.status!=='working')return;const site=state.sites[work.site],e=W.events.find(e=>e.id===work.event);
   if(!site||!e||e.resolved!==null){if(site&&work.staffReserved){site.workers+=work.crew;work.staffReserved=false;}work.status='ended';return;}
@@ -11019,24 +11038,24 @@ function createWorldSimulation(A,B,W,saved){
  }
  function mandate(){
   for(const site of Object.values(state.sites)){
-   const node=A.byId[site.id],incident=W.active(state.clock).find(e=>['bandits','occupation'].includes(e.type)&&Math.hypot(e.x-node.x,e.y-node.y)<1000);
-   const jurisdiction=incident&&state.sites[A.nearestSite(incident.x,incident.y).id];
+   const node=A.byId[site.id],wanted=W.justice?.effect(site.id,null,state.clock),last=W.justice?.state.sightings[site.id],incident=W.active(state.clock).find(e=>(['bandits','occupation','massacre','crime_scene'].includes(e.type)||e.type==='missing'&&e.missingMission)&&Math.hypot(e.x-node.x,e.y-node.y)<1000)||(wanted?.wanted?{id:'warrant-'+site.jurisdiction,target:site.id,x:last?.x??node.x,y:last?.y??node.y,warrant:true}:null);
+   const jurisdiction=incident?.warrant?site:incident&&state.sites[A.nearestSite(incident.x,incident.y).id];
    if(!incident||jurisdiction?.authority!==site.authority||site.guardAvailable<2||site.treasury<12||stock(site,'provisions')<4||state.missions.some(m=>m.site===site.id&&m.status==='active'))continue;
    const road=A.roadById[incident.target]||A.closestRoad(incident.x,incident.y)?.road;if(!road||road.type==='searoutes')continue;
    if(W.active(state.clock).some(e=>e.type==='patrol'&&e.target===road.id&&Math.hypot(e.x-incident.x,e.y-incident.y)<80))continue;
    site.guardAvailable-=2;site.treasury-=12;take(site,'provisions',4);const e=event('patrol',road.id,{source:site.authority,position:{x:incident.x,y:incident.y}},1440);
-   if(e){e.authority=site.authority;e.mandateSite=site.id;e.mandate='protect_travellers';state.missions.push({id:'mandate-'+state.serial++,event:e.id,site:site.id,road:road.id,crew:2,until:state.clock+1440,status:'active'});}
+   if(e){e.authority=site.authority;e.mandateSite=site.id;e.mandate=incident.warrant?'search_last_seen':'protect_travellers';if(incident.warrant){e.lastKnownAt=last?.at??state.clock;e.caseIds=wanted.cases.filter(c=>c.servedAt===null&&c.wantedUntil>state.clock).map(c=>c.id);}state.missions.push({id:'mandate-'+state.serial++,event:e.id,site:site.id,road:road.id,crew:2,until:state.clock+1440,status:'active'});}
   }
  }
  function institutions(){
-  for(const m of state.missions)if(m.status==='active'&&state.clock>=m.until){const active=W.active(state.clock).find(e=>e.id===m.event);if(active)W.resolve(active.id,state.clock);const casualties=m.casualties||0;state.sites[m.site].guardAvailable+=Math.max(0,m.crew-casualties);state.sites[m.site].guardPool-=casualties;m.status='returned';history('patrol_return',{id:m.id,site:m.site,casualties});}
+  for(const m of state.missions)if(m.status==='active'&&state.clock>=m.until){const active=W.active(state.clock).find(e=>e.id===m.event);if(active)W.resolve(active.id,state.clock);const casualties=m.casualties||0;state.sites[m.site].guardAvailable+=Math.max(0,m.crew-casualties);state.sites[m.site].guardPool-=casualties;m.status='returned';history('patrol_return',{id:m.id,site:m.site,casualties});if(casualties){const missing=event('missing',m.site,{source:'Poste local',detail:casualties+' membres de la patrouille attendue ne sont pas rentrés.'},1440);if(missing)missing.missingMission=m.id;}}
   // An identified local band needs a base, members and exposed real traffic.
   for(const cargo of state.shipments.filter(c=>c.status==='travel'&&!c.waiting)){
    const leg=cargo.path[cargo.leg];if(!leg)continue;const road=A.roadById[leg.road],profile=B.routes.find(r=>'road-'+r.atlasRouteId===road?.id);if(!profile)continue;
    const candidate=B.networks.find(n=>n.rule==='bandit_ambush'&&n.regions.some(r=>profile.regions.includes(r)));if(!candidate)continue;
    const key='band-'+candidate.id,previous=state.cooldowns[key]??-Infinity;if(state.clock-previous<4320||W.active(state.clock).some(e=>e.target===road.id&&['patrol','bandits'].includes(e.type)))continue;
    const base=Object.values(state.sites).find(s=>profiles.get(s.id)?.criminalNetworks.includes(candidate.id));if(!base||base.distress<1.5)continue;
-   const e=event('bandits',road.id,{source:'Voyageurs',position:A.atDistance(road,road.length*.5)},1440);if(e){e.groupId=candidate.id;e.objective='cargo_or_toll';e.victimCargo=cargo.id;e.home=base.id;state.cooldowns[key]=state.clock;history('band_ambush',{event:e.id,group:candidate.id,cargo:cargo.id});}
+   const e=event('bandits',road.id,{source:'Voyageurs',position:cargoPosition(cargo)},1440);if(e){e.groupId=candidate.id;e.objective='cargo_or_toll';e.victimCargo=cargo.id;e.home=base.id;state.cooldowns[key]=state.clock;history('band_ambush',{event:e.id,group:candidate.id,cargo:cargo.id});}
   }
  }
  function advance(clock,weather=()=>({})){if(!finite(clock)||clock<state.clock)return;const begin=Math.floor(state.clock/60),end=Math.floor(clock/60);
@@ -11047,7 +11066,7 @@ function createWorldSimulation(A,B,W,saved){
    for(const site of Object.values(state.sites)){const node=A.byId[site.id],sky=weather(state.clock,node.x,node.y)||{};produce(site,1/24,sky);
     for(const [type,condition]of [['rain',(sky.rain||0)>.35],['snow',(sky.snow||0)>.35],['fog',(sky.fog||0)>.6]]){const old=W.active(state.clock).find(e=>e.type===type&&e.target===site.id);if(condition&&!old)event(type,site.id,{source:'Habitants de '+node.name});else if(!condition&&old)W.resolve(old.id,state.clock);}
    }
-   for(const c of state.shipments)progressCargo(c,60);causalEvents();
+   for(const c of state.shipments)progressCargo(c,Math.max(0,state.clock-(c.clock??state.clock-60)));causalEvents();
    if(hour%6===2)dispatch();if(hour%6===0){mandate();institutions();}
    // A crossing reopens only after its water has actually subsided.
    for(const e of W.active(state.clock))if(e.type==='flood'){const sky=weather(state.clock,e.x,e.y)||{};e.waterLevel=clamp((e.waterLevel??1)+(sky.rain||0)*.35-.16,0,2);if(e.waterLevel<.2)W.resolve(e.id,state.clock);}
@@ -11066,7 +11085,7 @@ function createWorldSimulation(A,B,W,saved){
  function price(id,resource='provisions'){const s=state.sites[id];if(!s)return 1;const cover=stock(s,resource)/Math.max(1,s.needs[resource]||1);return clamp(2-cover/3,.65,3);}
  function purchase(id,food,water){const s=state.sites[id];if(!s||!finite(food)||!finite(water)||food<0||water<0||stock(s,'provisions')<food||stock(s,'water')<water)return false;take(s,'provisions',food);take(s,'water',water);history('player_purchase',{site:id,food,water});return true;}
  for(const e of W.active(state.clock))publish(e);
- return {state,advance,learn,price,purchase,addShipment,publish,stock,history,serialize:()=>JSON.parse(JSON.stringify(state))};
+ return {state,advance,learn,price,purchase,addShipment,publish,stock,history,cargoPosition,cargoRate,cargoUnits,damageCargoUnit,loseCargo,controlCargo:(id,on)=>on?controlledCargo.add(id):controlledCargo.delete(id),catchUpCargo:(c,at=W.clock)=>{if(state.shipments.includes(c)&&finite(at)&&at>(c.clock??at)&&!controlledCargo.has(c.id))progressCargo(c,at-c.clock,false,at);},stepCargo:(c,minutes,at=W.clock)=>{if(state.shipments.includes(c)&&finite(minutes)&&minutes>=0)progressCargo(c,minutes,true,at);},serialize:()=>JSON.parse(JSON.stringify(state))};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldSimulation;
 
@@ -11122,6 +11141,304 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldSimulat
    if(this.clock>=c.criticalUntil){const w=Atlas.toWorld(n.x,n.y),site=s.state.sites[n.site]||s.state.sites[Atlas.nearestSite(w.x,w.y).id];if(site&&s.stock(site,'medicinal')>=1&&s.stock(site,'provisions')>=1){site.stock.medicinal--;site.stock.provisions--;c.critical=false;c.hp=3;delete n.dangerState;this.civilianAction(n,'idle');s.history('person_recovered',{person:n.id});for(const st of this.stations)if(st.originalActor===n){delete st.actor.reliefPost;st.actor=n;delete st.originalActor;}}else c.criticalUntil=this.clock+360;}
   }
  };
+})();
+
+/* Codex / ChatGPT — local evidence and temporary justice, not a racial reputation.
+ * This model accepts observed facts only. It never discovers the culprit by itself.
+ * Times are world minutes. A filed statement is immutable even if its author dies.
+ */
+function createWorldJustice(A,W,saved){
+ 'use strict';
+ saved||={};
+ const finite=Number.isFinite,day=1440;
+ const rules=Object.freeze({assault:{weight:1,wanted:day,penalty:2*day},grave_injury:{weight:3,wanted:2*day,penalty:4*day},murder:{weight:6,wanted:4*day,penalty:7*day}});
+ const state={version:1,serial:1,cases:[],sentences:[],scenes:[],sightings:{}};
+ if(saved?.version===1){
+  state.serial=Number.isInteger(saved.serial)&&saved.serial>0?saved.serial:1;
+  for(const c of Array.isArray(saved.cases)?saved.cases:[]){
+   if(!c||typeof c.id!=='string'||!A.byId[c.site]||typeof c.jurisdiction!=='string'||typeof c.victim!=='string'||!rules[c.kind]||![c.at,c.lastAt].every(finite)||c.reportedAt!==null&&![c.reportedAt,c.wantedUntil,c.penaltyUntil].every(finite)||!c.witnesses||typeof c.witnesses!=='object')continue;
+   const witnesses={};for(const [id,k]of Object.entries(c.witnesses))if(k&&finite(k.seenAt)&&(k.filedAt===null||finite(k.filedAt)))witnesses[id]={...k,seenAt:k.seenAt,filedAt:k.filedAt,seenCount:Math.max(1,k.seenCount||1),filedCount:Math.max(0,k.filedCount??(k.filedAt===null?0:1)),kind:rules[k.kind]?k.kind:c.kind,dead:!!k.dead};
+   state.cases.push({...c,witnesses,knownKind:rules[c.knownKind]?c.knownKind:c.reportedAt!==null?c.kind:null,reportedAt:finite(c.reportedAt)?c.reportedAt:null,servedAt:finite(c.servedAt)?c.servedAt:null,attacks:Math.max(1,Math.floor(c.attacks)||1),intimidation:!!c.intimidation});
+  }
+  state.sentences=(Array.isArray(saved.sentences)?saved.sentences:[]).filter(s=>s&&typeof s.id==='string'&&A.byId[s.site]&&[s.at,s.releaseAt,s.money].every(finite)&&s.money>=0).map(s=>({...s}));
+  for(const s of Array.isArray(saved.scenes)?saved.scenes:[]){if(!s||typeof s.id!=='string'||!A.byId[s.site]||![s.at,s.lastAt,s.x,s.y].every(finite)||!Array.isArray(s.victims))continue;
+   const victims=s.victims.filter(v=>v&&typeof v.id==='string'&&[v.x,v.y,v.at].every(finite)).map(v=>({...v})),discoveries={};
+   for(const [id,k]of Object.entries(s.discoveries||{}))if(k&&finite(k.at)&&Array.isArray(k.victims))discoveries[id]={...k,victims:k.victims.filter(id=>victims.some(v=>v.id===id))};
+   state.scenes.push({...s,victims,discoveries,reportedVictims:(s.reportedVictims||[]).filter(id=>victims.some(v=>v.id===id))});
+  }
+  state.serial=Math.max(state.serial,...state.cases.map(c=>(Number(c.serial)||0)+1),...state.sentences.map(c=>(Number(c.serial)||0)+1),...state.scenes.map(c=>(Number(c.serial)||0)+1));
+  for(const [id,k]of Object.entries(saved.sightings||{}))if(A.byId[id]&&k&&[k.x,k.y,k.at].every(finite))state.sightings[id]={...k};
+ }
+ function localSite(id){const s=W.simulation?.state.sites[id];return s?{id,jurisdiction:s.jurisdiction}:A.byId[id]?{id,jurisdiction:'local-'+id}:null;}
+ function record({victim,site,kind='assault',witnesses=[],position=null,at=W.clock}){
+  const s=localSite(site);if(!s||typeof victim!=='string'||!rules[kind]||!finite(at))return null;
+  let c=state.cases.find(c=>c.victim===victim&&c.jurisdiction===s.jurisdiction&&c.servedAt===null&&at>=c.lastAt&&at-c.lastAt<=30);
+  if(!c){const serial=state.serial++;c={id:'crime-'+serial,serial,victim,site,jurisdiction:s.jurisdiction,at,lastAt:at,kind,attacks:0,witnesses:{},reportedAt:null,servedAt:null,intimidation:false,parents:[]};state.cases.push(c);}
+  c.attacks++;c.lastAt=at;if(rules[kind].weight>rules[c.kind].weight)c.kind=kind;
+  // Attacking a known witness is a new observed act, not proof supplied by magic.
+  for(const prior of state.cases)if(prior!==c&&prior.witnesses[victim]&&at-prior.lastAt<=7*day){c.intimidation=true;if(!c.parents.includes(prior.id))c.parents.push(prior.id);}
+  for(const id of [...new Set(witnesses)])if(typeof id==='string'){
+   const k=c.witnesses[id]||(c.witnesses[id]={seenAt:at,filedAt:null,seenCount:0,filedCount:0,kind,dead:false});if(k.dead)continue;k.seenCount++;k.seenAt=at;if(rules[kind].weight>rules[k.kind].weight)k.kind=kind;
+   if(position&&[position.x,position.y].every(finite))k.position={x:position.x,y:position.y,at};
+  }
+  return c;
+ }
+ function file(caseId,witness,at=W.clock){
+  const c=state.cases.find(c=>c.id===caseId),k=c?.witnesses[witness];if(!k||k.dead||k.filedCount>=k.seenCount||!finite(at)||at<k.seenAt||at-k.seenAt>7*day)return false;
+  k.filedAt??=at;k.filedCount=k.seenCount;k.lastFiledAt=at;if(c.reportedAt===null)c.reportedAt=at;
+  if(!c.knownKind||rules[k.kind].weight>rules[c.knownKind].weight)c.knownKind=k.kind;c.knownIntimidation=c.knownIntimidation||c.intimidation;
+  // A statement submitted late in the week cannot extend a warrant forever.
+  const limit=k.seenAt+7*day;c.wantedUntil=Math.max(c.wantedUntil||0,Math.min(limit,at+rules[c.knownKind].wanted));c.penaltyUntil=Math.max(c.penaltyUntil||0,Math.min(limit,at+rules[c.knownKind].penalty));
+  if(k.position)sighting(c.site,k.position,witness,k.position.at,at);
+  return true;
+ }
+ function witnessDied(id){for(const c of state.cases)if(c.witnesses[id])c.witnesses[id].dead=true;for(const s of state.scenes)if(s.discoveries[id])s.discoveries[id].dead=true;}
+ function pending(id,at=W.clock){return state.cases.filter(c=>c.witnesses[id]&&!c.witnesses[id].dead&&c.witnesses[id].filedCount<c.witnesses[id].seenCount&&at-c.witnesses[id].seenAt<=7*day);}
+ function effect(site,person=null,at=W.clock){
+  const s=localSite(site);if(!s)return {wanted:false,score:0,price:1,refuse:false,until:0,cases:[]};
+  const known=state.cases.filter(c=>c.jurisdiction===s.jurisdiction&&(c.reportedAt!==null&&c.reportedAt<=at||person&&c.witnesses[person]&&c.witnesses[person].seenAt<=at));
+  let score=0,until=0;for(const c of known){const personal=person&&c.witnesses[person],kind=personal&&rules[personal.kind].weight>rules[c.knownKind||personal.kind].weight?personal.kind:c.knownKind||personal?.kind||c.kind,end=c.reportedAt===null?(personal?.seenAt??c.lastAt)+rules[kind].penalty:c.penaltyUntil;if(end<=at)continue;const span=rules[kind].penalty;score+=(rules[kind].weight+((c.reportedAt!==null?c.knownIntimidation:c.intimidation)?2:0))*Math.min(1,(end-at)/span);until=Math.max(until,end);}
+  score=Math.min(12,score);return {wanted:known.some(c=>c.reportedAt!==null&&c.servedAt===null&&c.wantedUntil>at),score,price:1+Math.min(.75,score*.12),refuse:score>=.5,until,cases:known};
+ }
+ function sentence(site,money,at=W.clock){
+  const s=localSite(site);if(!s||!finite(money)||money<0||!finite(at))return null;
+  const cases=state.cases.filter(c=>c.jurisdiction===s.jurisdiction&&c.reportedAt!==null&&c.reportedAt<=at&&c.servedAt===null&&c.wantedUntil>at);if(!cases.length)return null;
+  const weight=Math.min(12,cases.reduce((n,c)=>n+rules[c.knownKind||c.kind].weight+(c.knownIntimidation?2:0),0)),minutes=Math.min(1440,240+weight*120),rate=Math.min(.5,.12+weight*.04),fine=Math.min(Math.floor(money),Math.ceil(6+money*rate));
+  const serial=state.serial++,snt={id:'sentence-'+serial,serial,site,at,releaseAt:at+minutes,minutes,money:fine,caseIds:cases.map(c=>c.id)};
+  for(const c of cases){c.servedAt=at;c.sentence=snt.id;}state.sentences.push(snt);return snt;
+ }
+ function death({victim,site,x,y,level=0,at=W.clock}){
+  if(typeof victim!=='string'||!localSite(site)||![x,y,at].every(finite)||state.scenes.some(s=>s.victims.some(v=>v.id===victim)))return null;
+  let s=state.scenes.find(s=>s.site===site&&s.level===level&&at>=s.lastAt&&at-s.lastAt<=120&&Math.hypot(s.x-x,s.y-y)<=24);
+  if(!s){const serial=state.serial++;s={id:'scene-'+serial,serial,site,jurisdiction:localSite(site).jurisdiction,x,y,level,at,lastAt:at,victims:[],discoveries:{},reportedVictims:[],reportedAt:null};state.scenes.push(s);}
+  s.victims.push({id:victim,x,y,at});s.lastAt=at;return s;
+ }
+ function discover(sceneId,person,visible,at=W.clock){
+  const s=state.scenes.find(s=>s.id===sceneId);if(!s||typeof person!=='string'||!finite(at)||at<s.at||!Array.isArray(visible))return false;
+  const ids=visible.filter(id=>s.victims.some(v=>v.id===id&&v.at<=at));if(!ids.length)return false;
+  const k=s.discoveries[person]||(s.discoveries[person]={at,victims:[],filedAt:null,filedCount:0,dead:false});if(k.dead)return false;
+  let changed=false;for(const id of ids)if(!k.victims.includes(id)){k.victims.push(id);changed=true;}return changed;
+ }
+ function discoveries(person){return state.scenes.filter(s=>{const k=s.discoveries[person];return k&&!k.dead&&k.victims.length>(k.filedCount||0);});}
+ function fileDiscovery(sceneId,person,at=W.clock){
+  const s=state.scenes.find(s=>s.id===sceneId),k=s?.discoveries[person];if(!k||k.dead||!finite(at)||at<k.at||k.victims.length<=(k.filedCount||0))return false;
+  k.filedAt=at;k.filedCount=k.victims.length;s.reportedAt??=at;s.reportedVictims=[...new Set([...s.reportedVictims,...k.victims])];return true;
+ }
+ function sighting(site,position,person,at=W.clock,knownAt=W.clock){if(!localSite(site)||!position||![position.x,position.y,at].every(finite)||!effect(site,null,Math.max(knownAt,at)).wanted)return false;const old=state.sightings[site];if(old&&old.at>at)return false;state.sightings[site]={x:position.x,y:position.y,at,by:person};return true;}
+ return {state,rules,localSite,record,file,witnessDied,pending,effect,sentence,death,discover,discoveries,fileDiscovery,sighting,serialize:()=>JSON.parse(JSON.stringify(state))};
+}
+if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice;
+
+/* Codex / ChatGPT — actual witnesses, local sanctions and bounded custody.
+ * No instant national bounty, invented witness or off-screen killing of a witness.
+ */
+(()=>{
+ 'use strict';
+ const alive=n=>n&&!n.dead&&!n.civilian?.dead&&!n.batracien?.dead&&!n.guardState?.dead&&(n.alpha??1)>.5&&n.phase!=='away';
+ const law=g=>g.worldState?.justice;
+ const playerSource=(g,s)=>s===g.player||typeof s?.owner==='string'&&['player','kaldor'].includes(s.owner);
+ const dead=n=>!!(n?.dead||n?.civilian?.dead||n?.batracien?.dead||n?.guardState?.dead);
+ Game.prototype.justiceSite=function(n=this.player){
+  if(n!==this.player&&(n?.eventGuard||n?.batracien?.role)){const e=this.worldState.events.find(e=>e.id===n.eventId),id=e?.mandateSite||n.site||n.batracien?.site;if(law(this)?.localSite(id))return id;}
+  const w=Atlas.toWorld(n.x,n.y),sites=Atlas.nodes.filter(s=>s.rest);return sites.reduce((a,b)=>!a||Math.hypot(b.x-w.x,b.y-w.y)<Math.hypot(a.x-w.x,a.y-w.y)?b:a,null)?.id;
+ };
+ Game.prototype.isJusticeGuard=function(n){return alive(n)&&(!!n.eventGuard||n.convoyGuard&&this.worldState.simulation?.state.sites[n.site]?.authority===this.worldState.simulation?.state.sites[this.justiceSite(n)]?.authority||!!n.batracien?.role&&!n.eventId&&['village_guard','channel_sentinel','boat_escort','scout','captain'].includes(n.batracien.role));};
+ Game.prototype.justiceEffect=function(n=null){return law(this)?.effect(this.justiceSite(n||this.player),n?.id,this.clock)||{wanted:false,refuse:false,price:1,score:0};};
+ Game.prototype.justiceWitnesses=function(victim){
+  return this.npcs.filter(n=>alive(n)&&n.id!=='fairy'&&!this.party.some(c=>c.id===n.id)&&this.sameLevel(n,victim)&&dist(n,victim)<=180&&(n===victim||this.lineClear(n,victim)&&this.lineClear(n,this.player))).map(n=>({id:n.id,guard:this.isJusticeGuard(n),site:this.justiceSite(n)}));
+ };
+ Game.prototype.recordJusticeViolence=function(n,witnesses){
+  const j=law(this);if(!j)return;const kind=dead(n)?'murder':n.civilian?.critical||Math.min(n.civilian?.hp??Infinity,n.guardState?.hp??Infinity,n.batracien?.hp??Infinity)<=1?'grave_injury':'assault';
+  const site=this.justiceSite(n),c=j.record({victim:n.id,site,kind,witnesses:witnesses.map(w=>w.id),position:Atlas.toWorld(this.player.x,this.player.y),at:this.clock});if(!c)return;
+  if(dead(n))j.witnessDied(n.id);
+  for(const w of witnesses){const actor=this.npcs.find(a=>a.id===w.id);if(w.guard&&alive(actor)&&j.localSite(w.site)?.jurisdiction===c.jurisdiction)this.fileJusticeStatement(c.id,w.id);}
+  this.worldState.simulation?.history('violence_recorded',{case:c.id,kind,site,witnesses:witnesses.map(w=>w.id)});this.emit('save');
+ };
+ Game.prototype.recordJusticeDeath=function(n){
+  const j=law(this),w=Atlas.toWorld(n.x,n.y),site=this.justiceSite(n);if(!j)return;
+  const scene=j.death({victim:n.id,site,x:w.x,y:w.y,level:n.level||0,at:this.clock});if(!scene)return;
+  // A missing worker is not replaced at reload, and losses lower actual capacity.
+  const s=this.worldState.simulation?.state.sites[n.site||n.batracien?.site];if(s&&(n.resident||n.batracien&&!n.eventId)){
+   s.losses||={};if(!s.losses[n.id]){s.losses[n.id]={at:this.clock};if(!n.batracien?.role){const living=Math.max(1,s.population-Object.keys(s.losses).length+1);s.workers=Math.max(0,s.workers-1);for(const key of Object.keys(s.needs))s.needs[key]*=(living-1)/living;}else{s.guardPool=Math.max(0,s.guardPool-1);s.guardAvailable=Math.min(s.guardAvailable,s.guardPool);}}
+  }
+  this.worldState.simulation?.history('violent_death',{person:n.id,site,scene:scene.id});
+ };
+ // Wrap accepted damage, rather than an attack input or a blocked/expired hitbox.
+ for(const name of ['damageCivilian','damageHumanGuard','damageBatracienGuard']){
+  const native=Game.prototype[name];Game.prototype[name]=function(n,amount,source){
+   const culpable=playerSource(this,source)&&alive(n)&&Number.isFinite(amount)&&amount>0,witnesses=culpable?this.justiceWitnesses(n):null,result=native.call(this,n,amount,source);
+   const attempt=!result&&culpable&&n.civilian?.critical&&this.sameLevel(n,this.player)&&dist(n,this.player)<60&&this.lineClear(n,this.player)&&this.clock>=(n.justiceAttemptAfter||0);
+   if(result&&culpable||attempt){if(attempt)n.justiceAttemptAfter=this.clock+1;this.recordJusticeViolence(n,witnesses);if(source!==this.player||attempt)this.reportBatracienAssault(n,this.player);}
+   if(result&&dead(n)){law(this)?.witnessDied(n.id);this.recordJusticeDeath(n);this.emit('save');}return result;
+  };
+ }
+ Game.prototype.fileJusticeStatement=function(id,witness,at=this.clock){const j=law(this),c=j?.state.cases.find(c=>c.id===id),first=c?.reportedAt===null;if(!j?.file(id,witness,at))return false;
+  this.worldState.simulation?.history('statement_filed',{case:id,witness,site:c.site});if(first)this.emit('notice',{title:'Une agression a été signalée',text:'Les autorités de '+Atlas.byId[c.site].name+' te recherchent. Éloigne-toi ou rends-toi à une garde locale.'});this.emit('save');return true;
+ };
+ Game.prototype.fileJusticeDiscovery=function(id,person){
+  const j=law(this);if(!j?.fileDiscovery(id,person,this.clock))return false;const s=j.state.scenes.find(s=>s.id===id),mass=s.reportedVictims.length>=3;
+  if(mass&&s.event){const old=this.worldState.events.find(e=>e.id===s.event);if(old?.type==='crime_scene')this.worldState.resolve(old.id,this.clock);}
+  const e=this.worldState.add(mass?'massacre':'crime_scene',s.site,this.clock,1440,{position:s,source:'Habitants de '+Atlas.byId[s.site].name,detail:s.reportedVictims.length+' morts signalés ; auteur non déduit de la seule découverte.'});if(e)s.event=e.id;
+  this.worldState.simulation?.history('bodies_reported',{scene:s.id,person,count:s.reportedVictims.length,site:s.site});this.emit('save');return true;
+ };
+ Game.prototype.discoverJusticeScenes=function(){
+  const j=law(this);if(!j||this._justiceScanWorld===this.worldState&&this.time<(this._justiceScanAt||0))return;this._justiceScanWorld=this.worldState;this._justiceScanAt=this.time+.5;for(const s of j.state.scenes){if(s.reportedVictims.length>=s.victims.length)continue;
+   for(const n of this.npcs){if(!alive(n)||n.id==='fairy'||n.civilian?.critical||this.party.some(c=>c.id===n.id)||(n.level||0)!==s.level)continue;
+    const centre=Atlas.toGame(s.x,s.y);if(dist(n,centre)>24*16+100)continue;
+    const visible=s.victims.filter(v=>{const p=Atlas.toGame(v.x,v.y);p.level=s.level;return dist(n,p)<100&&this.lineClear(n,p);}).map(v=>v.id);
+    if(!j.discover(s.id,n.id,visible,this.clock))continue;this.cancelWorldConversation(n);n.justiceDiscoverySay={at:this.time,text:visible.length>=3?'Des morts… Il faut prévenir la garde !':'Qu’est-ce qui s’est passé ici ? Il faut prévenir quelqu’un.'};
+    if(this.isJusticeGuard(n))this.fileJusticeDiscovery(s.id,n.id);
+    else if(!n.dangerState){const p=Atlas.toGame(s.x,s.y);p.level=s.level;p.id=s.id;this.startCivilianFlight(n,p);}
+   }
+  }
+ };
+ Game.prototype.stepJusticeWitnesses=function(dt,at=this.clock){
+  const j=law(this);if(!j||this._justiceCustody||!j.state.cases.length&&!j.state.scenes.length)return;this.discoverJusticeScenes();
+  const contacts=this.npcs.filter(n=>alive(n)&&!n.civilian?.critical&&(this.isJusticeGuard(n)||this.stations.some(s=>s.actor===n)));
+  for(const n of this.npcs){if(dead(n)){j.witnessDied(n.id);delete n.justiceReport;continue;}if(!alive(n)||n.civilian?.critical||this.party.some(c=>c.id===n.id))continue;
+   const cases=j.pending(n.id,at),scenes=j.discoveries(n.id);if(!cases.length&&!scenes.length){delete n.justiceReport;continue;}
+   const contact=contacts.filter(a=>a!==n&&this.sameLevel(a,n)&&(scenes.length||cases.some(c=>j.localSite(this.justiceSite(a))?.jurisdiction===c.jurisdiction))&&dist(n,a)<540).sort((a,b)=>dist(n,a)-dist(n,b)).find(a=>dist(n,a)<44?this.lineClear(n,a):!this.solid(a.x,a.y+18,5,0));
+   if(!contact){delete n.justiceReport;continue;}
+   if(dist(n,contact)<44&&this.lineClear(n,contact)){for(const c of cases)if(c.jurisdiction===j.localSite(this.justiceSite(contact))?.jurisdiction)this.fileJusticeStatement(c.id,n.id,at);for(const s of scenes)this.fileJusticeDiscovery(s.id,n.id);delete n.justiceReport;continue;}
+   if(n.dangerState||n.hurt||n.stun||this.dialogue?.who===n)continue;
+   this.cancelWorldConversation?.(n);n.justiceReport={contact:contact.id};this.walkNpc(n,{x:contact.x,y:contact.y+18},dt);
+  }
+ };
+ const npcs=Game.prototype.stepNpcs;
+ Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filter(n=>!n.justiceReport);npcs.call(this,dt);}finally{this.npcs=all;}this.stepJusticeWitnesses(dt);};
+ const guards=Game.prototype.stepHumanGuards;
+ Game.prototype.stepHumanGuards=function(dt){guards.call(this,dt);const j=law(this);if(!j||this._justiceCustody)return;for(const n of this.npcs)if(this.isJusticeGuard(n)&&this.sameLevel(n,this.player)&&dist(n,this.player)<220&&this.lineClear(n,this.player))j.sighting(this.justiceSite(n),Atlas.toWorld(this.player.x,this.player.y),n.id,this.clock);};
+ const advance=Game.prototype.advanceAtlas;
+ Game.prototype.advanceAtlas=function(dt=0){const before=this.atlasLastClock??this.clock,minutes=this.clock-before,j=law(this);if(this._justiceCustody||minutes<2||!j?.state.cases.length)return advance.call(this,dt);
+  // Sleep/transport time does not freeze an already observed witness. Use a
+  // bounded, collision-checked local path, never an instant statement timer.
+  this.discoverJusticeScenes();
+  const eligible=this.npcs.filter(n=>alive(n)&&!n.civilian?.critical&&j.pending(n.id,before).length&&(this.journey||this.sleeping||minutes>10||dist(n,this.player)>900));
+  for(const n of eligible){if(n.dangerState&&dist(n,this.player)>300&&!this.localThreatAt(n.x,n.y,n.level||0,120))delete n.dangerState;if(n.civilian){n.civilian.elapsed+=WorldPacing.realSeconds(minutes);if(n.civilian.action==='seated')this.civilianAction(n,'idle');}}
+  this.stepJusticeWitnesses(0,before);
+  for(const n of eligible){const contact=this.npcs.find(a=>a.id===n.justiceReport?.contact);if(!contact||n.dangerState)continue;let remaining=WorldPacing.realSeconds(minutes),moved=0;
+   for(let i=0;i<100&&remaining>0&&dist(n,contact)>=44;i++){const old={x:n.x,y:n.y};this.walkNpc(n,{x:contact.x,y:contact.y+18},Math.min(remaining,1));const distance=dist(old,n);if(distance<.001)break;moved+=distance;remaining-=distance/WorldPacing.civilianWalk;}
+   if(dist(n,contact)<44&&this.lineClear(n,contact)){const at=before+Math.min(minutes,moved/(WorldPacing.civilianWalk*WorldPacing.dayRealSeconds/1440));for(const c of j.pending(n.id,at))if(c.jurisdiction===j.localSite(this.justiceSite(contact))?.jurisdiction)this.fileJusticeStatement(c.id,n.id,at);delete n.justiceReport;}
+  }advance.call(this,dt);
+ };
+ // Keep a witness's reporting goal from fighting ordinary stroll/road/courier AI.
+ for(const name of ['stepRoadTraffic','stepWorldLocal','stepBatracienRoutine']){const native=Game.prototype[name];Game.prototype[name]=function(n,...args){if(n.justiceReport&&!n.dangerState)return name==='stepBatracienRoutine'?true:undefined;return native.call(this,n,...args);};}
+ const couriers=Game.prototype.stepCouriers;
+ Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>!this.npcs.find(n=>n.id===c.id)?.justiceReport);return couriers.call(this,minutes);}finally{this.couriers=all;}};
+ const speech=Game.prototype.worldSpeech;
+ Game.prototype.worldSpeech=function(){const lines=speech.call(this);if(this.dialogue||this.journey||this.sleeping||this.dead||this.dying)return lines;for(const n of this.npcs)if(alive(n)&&n.justiceDiscoverySay&&this.time-n.justiceDiscoverySay.at<3.1&&this.sameLevel(n,this.player)&&dist(n,this.player)<260)lines.push({actor:n,text:n.justiceDiscoverySay.text,until:n.justiceDiscoverySay.at+3.1});return lines.slice(0,2);};
+ for(const name of ['isHostileHumanGuard','isHostileBatracien']){const native=Game.prototype[name];Game.prototype[name]=function(n){if(this._justiceCustody)return false;return native.call(this,n)||!!(this.isJusticeGuard(n)&&law(this)?.effect(this.justiceSite(n),null,this.clock).wanted);};}
+ for(const name of ['atlasNews','npcDirections']){const native=Game.prototype[name];Game.prototype[name]=function(n){if(this.justiceEffect(n).refuse)return ['Après ce qui s’est passé, je ne te donnerai pas de renseignements. Laisse passer du temps et n’aggrave pas ton cas.'];return native.call(this,n);};}
+ const quote=Game.prototype.supplyQuote;
+ Game.prototype.supplyQuote=function(...args){const q=quote.apply(this,args);if(q){const e=this.justiceEffect();return {...q,cost:Math.ceil(q.cost*e.price),justiceMarkup:e.price};}return q;};
+ const plan=Game.prototype.planJourney;
+ Game.prototype.planJourney=function(...args){const p=plan.apply(this,args);if(p){const e=this.justiceEffect();p.cost=Math.ceil(p.cost*e.price);p.justiceMarkup=e.price;}return p;};
+ Game.prototype.canJusticeArrest=function(n){return !this._justiceCustody&&!this.dead&&!this.dying&&this.isJusticeGuard(n)&&this.sameLevel(n,this.player)&&dist(n,this.player)<64&&this.lineClear(n,this.player)&&!!law(this)?.effect(this.justiceSite(n),null,this.clock).wanted;};
+ const mechanism=Game.prototype.mechanismContext;
+ Game.prototype.mechanismContext=function(){if(!this.player.attack&&!this.player.dash){const guard=this.npcs.filter(n=>this.canJusticeArrest(n)&&dist(n,this.player)<48).sort((a,b)=>dist(a,this.player)-dist(b,this.player))[0];if(guard)return {kind:'talk',npc:guard,text:'E  SE RENDRE À LA GARDE'};}return mechanism.call(this);};
+ const talk=Game.prototype.talkTo;
+ Game.prototype.talkTo=function(n){if(!this.canJusticeArrest(n))return talk.call(this,n);
+  this.cancelWorldConversation(n);this.talk(n.name||'LA GARDE',['Tu es recherché ici. Pose ton arme. Le poste tranchera ton affaire.'],n,n.head||40,null,{prompt:'Que fais-tu ?',options:[{label:'Se rendre',act:()=>this.arrestByJustice(n),end:true},{label:'Refuser et partir',lines:['Alors garde tes distances. Nous ne laisserons pas passer ça.'],end:true}]});return true;
+ };
+ const menu=Game.prototype.npcMenu;
+ Game.prototype.npcMenu=function(n){const m=menu.call(this,n);if(this.justiceEffect(n).refuse){const side=m.filter(o=>o.end||o.panel||o.mark||/voyag|embar|provision/i.test(o.label));side.unshift({label:'Parler de ma situation',lines:['Ici, les gens se méfient de toi. La garde peut régler les poursuites. Pour la confiance, il faudra du temps sans nouvel incident.']});return side;}return m;};
+ const playerDamage=Game.prototype.damagePlayer,die=Game.prototype.die;
+ Game.prototype.damagePlayer=function(amount,source){const n=source?.owner?this.npcs.find(n=>n.id===source.owner):source,old=this._justiceLethalGuard;this._justiceLethalGuard=this.canJusticeArrest(n)?n:null;try{return playerDamage.call(this,amount,source);}finally{this._justiceLethalGuard=old;}};
+ Game.prototype.die=function(){if(this._justiceLethalGuard&&this.arrestByJustice(this._justiceLethalGuard))return;return die.call(this);};
+ Game.prototype.arrestByJustice=function(guard){
+  if(!this.canJusticeArrest(guard))return false;const site=this.justiceSite(guard),j=law(this),sentence=j.sentence(site,this.player.coins,this.clock);if(!sentence)return false;
+  const p=this.player,water=this.supplies.water,food=this.supplies.food,fatigue=this.supplies.fatigue,hp=p.hp,people=this.party.map(c=>({c,hp:c.hp,hunger:c.hunger,down:c.down}));
+  this._justiceCustody=true;this.dialogue=null;this.journey=null;this.sleeping=null;this.transportSession=this.pendingTransport=null;this.player.coins-=sentence.money;
+  p.attack=p.attackBuffer=p.attackCD=p.dash=p.comboWindow=p.riposte=p.parry=0;p.guard=false;this.targetId=null;this.shots=[];this.footprints=[];
+  try{this.clock=sentence.releaseAt;this.advanceAtlas(0);}finally{this._justiceCustody=false;}
+  // Custody is a paid time skip, not free healing, confiscation of quest gear or
+  // starvation of companions while their player is unable to act.
+  Object.assign(this.supplies,{water,food,fatigue});p.hp=hp>0?hp:1;for(const r of people)Object.assign(r.c,{hp:r.hp,hunger:r.hunger,down:r.down});
+  for(const n of this.npcs){if(j.localSite(this.justiceSite(n))?.jurisdiction!==j.localSite(site)?.jurisdiction)continue;
+   if(n.guardState){n.guardState.hostileUntil=0;n.guardState.strikeId=null;}if(n.batracien?.role){n.batracien.hostileUntil=0;n.provoked=false;n.ai='idle';}if(n.eventGuard||n.batracien?.role)n.wind=n.attack=0;
+  }
+  const landing=this.stationLanding(site)||{x:guard.post?.x??guard.x,y:(guard.post?.y??guard.y)+24};this.placeSafely(landing.x,landing.y);p.inv=Math.max(p.inv||0,3);p.hurt=p.stun=0;p.moving=false;
+  for(const c of this.party)if(c.status!=='waiting'){const n=this.partyActor(c.id);if(n){n.x=p.x+18;n.y=p.y+18;c.x=n.x;c.y=n.y;}}
+  const s=this.worldState.simulation?.state.sites[site];if(s)s.treasury+=sentence.money;
+  this.worldState.simulation?.history('arrest_and_release',{sentence:sentence.id,site,money:sentence.money,minutes:sentence.minutes});this.updateLocation(0);
+  this.emit('notice',{title:'Arrestation · remise en liberté',text:Math.round(sentence.minutes/60)+' h de retenue et '+sentence.money+' pièces prélevées. Les poursuites locales sont réglées ; la méfiance diminuera avec le temps.'});this.emit('save');return true;
+ };
+ const needs=Game.prototype.advanceNeeds;
+ Game.prototype.advanceNeeds=function(minutes){if(!this._justiceCustody)return needs.call(this,minutes);};
+ const restore=Game.prototype.finishAtlasRestore;
+ Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);for(const n of this.npcs)if(dead(n))law(this)?.witnessDied(n.id);};
+})();
+
+/* Codex / ChatGPT — one cargo, one roster, one position, on and off screen.
+ * Existing human/guard/cart/boat art is deliberately temporary. No new sprites.
+ */
+(()=>{
+ 'use strict';
+ const live=c=>['travel','returning','abandoned'].includes(c.status);
+ const living=n=>n&&!n.dead&&!n.civilian?.dead&&!n.guardState?.dead;
+ const simulation=g=>g.worldState.simulation;
+ Game.prototype.convoyActors=function(c){return this.npcs.filter(n=>n.convoyId===c.id);};
+ Game.prototype.convoyPosition=function(c){const s=simulation(this),p=s.cargoPosition(c);return c.localPosition&&Number.isFinite(c.localPosition.x)&&Number.isFinite(c.localPosition.y)?{...c.localPosition}:Atlas.toGame(p.x,p.y);};
+ Game.prototype.saveConvoyActors=function(c){const s=simulation(this);for(const n of this.convoyActors(c)){const u=s.cargoUnits(c).find(u=>u.id===n.id);if(!u)continue;s.damageCargoUnit(c,n.id,n.convoyGuard?n.guardState?.hp??u.hp:n.civilian?.hp??u.hp,n.guardState?.hostileUntil||0);Object.assign(u,{x:n.x,y:n.y,dir:n.dir});if(n.civilian)u.appearance={...n.civilian.appearance};}};
+ Game.prototype.convoyInDanger=function(c){const actors=this.convoyActors(c),position=this.convoyPosition(c);return actors.some(n=>living(n)&&(n.wind||n.attack||n.hurt||n.dangerState||n.convoyGuard&&(this.isHostileHumanGuard(n)||this.humanGuardTarget(n,this.ensureHumanGuard(n)))))||this.enemies.some(e=>!e.dead&&e.world&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position));};
+ Game.prototype.unloadConvoy=function(c){if(this.convoyInDanger(c))c.encounter=true;this.saveConvoyActors(c);this.npcs=this.npcs.filter(n=>n.convoyId!==c.id);this.atlasNpcs=this.atlasNpcs.filter(n=>n.convoyId!==c.id);simulation(this).controlCargo(c.id,false);};
+ Game.prototype.syncWorldConvoys=function(){
+  const s=simulation(this);if(!s)return;for(const c of s.state.shipments.filter(live))s.catchUpCargo(c,this.clock);const active=s.state.shipments.filter(live),loaded=new Set(this.npcs.filter(n=>n.convoyId).map(n=>n.convoyId));let count=loaded.size;
+  for(const id of loaded){const c=s.state.shipments.find(c=>c.id===id);if(!c)continue;
+   if(!live(c)||c.path[c.leg]?.mode==='boat'||this.journey||this.sleeping||dist(this.convoyPosition(c),this.player)>1500){this.unloadConvoy(c);count--;}
+  }
+  if(this.journey||this.sleeping)return;
+  for(const c of active){const position=this.convoyPosition(c),leg=c.path[c.leg],distance=dist(position,this.player);
+   if(distance>1100||leg?.mode==='boat')continue;
+   // Never let an invisible third caravan pass through the player while actor
+   // budget is occupied. It waits outside the active simulation instead.
+   s.controlCargo(c.id,true);if(this.npcs.some(n=>n.convoyId===c.id)||count>=2)continue;
+   const candidates=[[0,0],[16,0],[-16,0],[0,20],[24,20],[-24,20],[0,-20]];let centre;
+   for(const [x,y]of candidates){const p={x:position.x+x,y:position.y+y};if(!this.solid(p.x,p.y,6,0)){centre=p;break;}}if(!centre)continue;
+   c.localPosition={...centre};
+   for(const [i,u]of s.cargoUnits(c).entries()){
+    if(u.hp<=0||this.atlasDeaths[u.id])continue;const offset=u.role==='guard'?{x:i%2?30:-30,y:24}:{x:i?0:0,y:i?28:0},saved=Number.isFinite(u.x)&&Number.isFinite(u.y)&&dist(u,centre)<200&&!this.solid(u.x,u.y,5,0),p=saved?{x:u.x,y:u.y}:{x:centre.x+offset.x,y:centre.y+offset.y};
+    if(this.solid(p.x,p.y,5,0)){p.x=centre.x;p.y=centre.y;}
+    const n={id:u.id,...p,convoyId:c.id,convoyGuard:u.role==='guard',convoyRole:u.role,site:c.from,post:{...p},world:true,alpha:1,dir:u.dir??2,look:'nomade',head:30,name:u.role==='guard'?'L’ESCORTE':'LE CONVOYEUR',label:u.role==='guard'?'ESCORTE':'CONVOI',title:u.role==='guard'?'Garde du convoi':'Convoyeur vers '+Atlas.byId[c.to].name,civilianJob:'carry',greet:()=>['Nous transportons '+(WORLD_BIBLE.resources.find(r=>r.id===c.resource)?.label||c.resource)+' vers '+Atlas.byId[c.to].name+'.'],topics:()=>[],bye:()=>['Bonne route.']};
+    if(n.convoyGuard){this.ensureHumanGuard(n);n.guardRestored=true;n.guardState.hp=u.hp;n.guardState.hostileUntil=u.hostileUntil||0;}
+    else this.ensureCivilian(n,{hp:u.hp,appearance:u.appearance});this.npcs.push(n);this.atlasNpcs.push(n);
+   }count++;
+  }
+  for(const c of active)if(dist(this.convoyPosition(c),this.player)>1500&&!this.npcs.some(n=>n.convoyId===c.id))s.controlCargo(c.id,false);
+ };
+ Game.prototype.stepWorldConvoys=function(dt){
+  const s=simulation(this);if(!s||this.journey||this.sleeping||this.dialogue||this.dying||this.dead)return;
+  for(const c of s.state.shipments.filter(live)){
+   const actors=this.convoyActors(c);if(!actors.length)continue;this.saveConvoyActors(c);const position=this.convoyPosition(c),crew=actors.filter(n=>!n.convoyGuard&&living(n)),driver=crew.find(n=>!n.dangerState),leg=c.path[c.leg];
+   const danger=this.convoyInDanger(c);if(danger)c.encounter=true;else delete c.encounter;
+   if(danger||!driver||c.status==='abandoned'||crew.some(n=>this.dialogue?.who===n)){s.stepCargo(c,0,this.clock);continue;}
+   if(!leg){s.stepCargo(c,0,this.clock);continue;}
+   const edge=this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock);if(edge.closed||edge.events.some(e=>Atlas.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;s.stepCargo(c,0,this.clock);continue;}c.waiting=null;
+   // A driver who fled must physically return to the wagon before it can move.
+   if(dist(driver,position)>12){this.walkNpc(driver,position,dt);s.stepCargo(c,0,this.clock);continue;}
+   const a=Atlas.toGame(...Atlas.vertices.get(leg.from)),b=Atlas.toGame(...Atlas.vertices.get(leg.to)),dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy),metres=c.progress*s.cargoRate(c,leg),look=Math.min(leg.length,metres+2),goal={x:a.x+dx*look/leg.length,y:a.y+dy*look/leg.length},old={x:driver.x,y:driver.y};
+   this.walkNpc(driver,goal,dt);const projected=clamp(((driver.x-a.x)*dx+(driver.y-a.y)*dy)/Math.max(1,length*length)*leg.length,0,leg.length),delta=Math.max(0,projected-metres);
+   if(dist(driver,b)<2){driver.x=b.x;driver.y=b.y;}
+   const advance=dist(driver,b)<2?Math.max(0,leg.length-metres):delta;s.stepCargo(c,advance/s.cargoRate(c,leg),this.clock);c.localPosition={x:driver.x,y:driver.y};
+   for(const [i,n]of actors.entries())if(n!==driver&&living(n)&&!n.dangerState){const p={x:driver.x+(n.convoyGuard?(i%2?24:-24):0),y:driver.y+(n.convoyGuard?24:28)};n.post={...p};if(!n.convoyGuard||!this.humanGuardTarget(n,this.ensureHumanGuard(n)))this.walkNpc(n,p,dt);}
+   driver.post={x:driver.x,y:driver.y};if(dist(old,driver)<.001)driver.anim=0;this.saveConvoyActors(c);
+  }
+ };
+ const target=Game.prototype.humanGuardTarget;
+ Game.prototype.humanGuardTarget=function(n,state){const t=target.call(this,n,state);if(t||!n.convoyGuard)return t;return this.enemies.filter(e=>!e.dead&&e.world&&!e.retiring&&!e.friendly&&this.sameLevel(n,e)&&dist(n,e)<280&&dist(e,n.post)<380&&this.lineClear(n,e)).sort((a,b)=>dist(a,n)-dist(b,n))[0]||null;};
+ for(const name of ['damageCivilian','damageHumanGuard']){const native=Game.prototype[name];Game.prototype[name]=function(n,...args){const c=n.convoyId&&simulation(this)?.state.shipments.find(c=>c.id===n.convoyId),result=native.call(this,n,...args);if(c&&result){simulation(this).damageCargoUnit(c,n.id,n.convoyGuard?n.guardState.hp:n.civilian.hp,n.guardState?.hostileUntil||0);this.emit('save');}return result;};}
+ const recruit=Game.prototype.recruitCompanion;
+ Game.prototype.recruitCompanion=function(n,...args){return !n?.convoyId&&recruit.call(this,n,...args);};
+ const update=Game.prototype.update;
+ Game.prototype.update=function(dt,input){this.syncWorldConvoys();update.call(this,dt,input);this.stepWorldConvoys(clamp(Number(dt)||0,0,.04));};
+ const advance=Game.prototype.advanceAtlas;
+ Game.prototype.advanceAtlas=function(dt=0){if(this.clock-(this.atlasLastClock??this.clock)>2)for(const c of simulation(this)?.state.shipments||[])if(this.npcs.some(n=>n.convoyId===c.id))this.unloadConvoy(c);return advance.call(this,dt);};
+ const save=Game.prototype.serialize;
+ Game.prototype.serialize=function(){for(const c of simulation(this)?.state.shipments||[])if(this.npcs.some(n=>n.convoyId===c.id)){if(this.convoyInDanger(c))c.encounter=true;this.saveConvoyActors(c);}return save.call(this);};
+ const restore=Game.prototype.finishAtlasRestore;
+ Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);this.syncWorldConvoys();};
+ const props=Renderer.prototype.visibleAtlasProps;
+ Renderer.prototype.visibleAtlasProps=function(){const result=props.call(this),s=simulation(this.g);for(const c of s?.state.shipments.filter(live)||[]){const p=this.g.convoyPosition(c);if(dist(p,this.g.player)<1200&&(!c.delivered||s.cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)))result.push({...p,y:p.y-10,kind:c.path[c.leg]?.mode==='boat'?'transport_boat_side':'transport_cart',world:true,convoyId:c.id});}return result;};
 })();
 
 // END WORLD ATLAS

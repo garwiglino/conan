@@ -53,7 +53,7 @@ Game.prototype.restAtRelay=function(){return !this.dangerAt(this.player.x,this.p
 const dangerTalk=Game.prototype.talkTo;
 Game.prototype.talkTo=function(n){if(!n||!this.npcPresent(n))return false;return dangerTalk.call(this,n);};
 
-Game.prototype.civilianProtected=function(n){return n.id==='fairy'||n.eventGuard||this.party?.some(c=>c.id===n.id);};
+Game.prototype.civilianProtected=function(n){return n.id==='fairy'||n.eventGuard||n.convoyGuard||this.party?.some(c=>c.id===n.id);};
 // A struck or witnessing civilian runs from the attacker on foot and stays visible,
 // so it can still be caught. Shelter/return follow once the attacker is out of reach.
 const CIVILIAN_FLIGHT=Object.freeze({speed:1.6,calm:4,safe:220,lost:3,look:56,witness:150});

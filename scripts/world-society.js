@@ -42,7 +42,7 @@ const WorldSociety=(()=>{
  };
  Game.prototype.populateRoadTraffic=function(){
   const state=this.ensureWorldSociety();
-  for(const n of this.npcs.filter(n=>n.roadTraffic&&dist(n,this.player)>C.unload&&!member(this,n)&&this.dialogue?.who!==n&&!n.dangerState&&!n.worldChat)){
+  for(const n of this.npcs.filter(n=>n.roadTraffic&&dist(n,this.player)>C.unload&&!member(this,n)&&this.dialogue?.who!==n&&!n.dangerState&&!n.worldChat&&!n.justiceReport&&!this.worldState.justice?.pending(n.id,this.clock).length&&!this.worldState.justice?.discoveries(n.id).length)){
    state.records.set(n.id,snapshot(this,n));this.npcs=this.npcs.filter(a=>a!==n);this.atlasNpcs=this.atlasNpcs.filter(a=>a!==n);
   }
   this.advanceDistantRoadTraffic();

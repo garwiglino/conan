@@ -61,18 +61,20 @@ par `world-simulation.test.cjs`, et non seulement par les tests historiques.
 
 ## Points encore ouverts — ne pas annoncer comme terminés
 
-1. Les marchands visibles et les cargaisons économiques ne sont pas encore la
-   même identité physique. La liaison doit empêcher toute livraison pendant un
-   combat local et conserver exactement biens, personnel et progression.
+1. Les convois économiques ont désormais leurs propres convoyeurs et escortes
+   physiques, distincts des marchands ordinaires. Les premiers tests de liaison
+   passent, ainsi que les transitions et la recette navigateur. La récupération
+   des cargaisons abandonnées et la résolution des combats hors écran restent
+   à compléter (voir `world-justice.md`).
 2. Le départ et le retour géographiques des patrouilles restent à raccorder :
    les effectifs et mandats sont persistants, mais la ronde locale n'est pas une
    tournée de plusieurs relais. Pas de bataille automatique hors écran.
 3. Les relations et différends politiques de la bible sont chargés mais ne
    constituent pas encore des décisions diplomatiques opérationnelles. Aucune
    guerre, occupation ou alliance militaire ne doit être inventée par calendrier.
-4. Le droit n'est pas encore un système de justice : il faut une mémoire locale
-   des infractions, des témoignages réels, des procédures et sanctions explicites.
-   L'hostilité momentanée des gardes ne doit pas être présentée comme cela.
+4. Une justice locale avec preuves, arrestation et sanctions temporaires est
+   désormais intégrée ; ses limites et celles des convois sont consignées dans
+   `docs/world-justice.md`. Le vol et les autres procédures restent à compléter.
 5. Péages, vol de cargaisons, rançon et négociation ne sont pas encore des objectifs
    économiques jouables des brigands.
 6. Le transport du joueur utilise encore la réalité globale pour ses choix et

@@ -4,6 +4,8 @@
 const WorldDialogue=(()=>{
  'use strict';
  const reports={
+  crime_scene:'des morts ont été découverts. Les gens cherchent encore ce qui s’est passé.',
+  massacre:'plusieurs personnes ont été tuées. La garde a été prévenue ; les nouvelles sont encore incomplètes.',
   bandits:'des brigands arrêtent les voyageurs. Je ne partirais pas seul.',
   patrol:'des gardes font la ronde. C’est plutôt rassurant, mais garde les yeux ouverts.',
   siege:'la place est assiégée. Évite de t’en approcher pour le moment.',

@@ -180,6 +180,7 @@ const createWorldAtlas = (raw) => {
   rain:{name:'Pluie soutenue',category:'Météo'},snow:{name:'Chutes de neige',category:'Météo'},fog:{name:'Brouillard',category:'Météo'},drought:{name:'Sécheresse',category:'Météo'}
  };
  // Declarative incident policy shared by travel, local encounters and civilians.
+ Object.assign(EVENT_TYPES,{crime_scene:{name:'Morts découvertes',category:'Vie locale'},massacre:{name:'Massacre signalé',category:'Vie locale',risk:1}});
  Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true,civilianPrey:true});
  Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'cultist',evacuate:true});
  Object.assign(EVENT_TYPES.siege,{group:3,enemy:'cultist',risk:3,evacuate:true});
@@ -196,6 +197,7 @@ const createWorldAtlas = (raw) => {
    this.nextId=Math.max(Number.isInteger(saved.nextId)?saved.nextId:1,...this.events.map(e=>(Number(e.serial)||0)+1));this.lastHour=Number.isInteger(saved.lastHour)?saved.lastHour:Math.floor(this.clock/60);this.knowledge={};this.journal=Array.isArray(saved.journal)?saved.journal.filter(j=>j&&typeof j.text==='string').slice(-120):[];this.newsDistances=new Map();
    for(const [id,book]of Object.entries(saved.knowledge||{})){if(!book||typeof book!=='object')continue;this.knowledge[id]={};for(const [key,k]of Object.entries(book))if(this.events.some(e=>e.id===key)&&k&&Number.isFinite(k.heard))this.knowledge[id][key]={...k,at:Number.isFinite(k.at)?k.at:k.heard,resolved:Number.isFinite(k.resolved)?k.resolved:null,source:typeof k.source==='string'?k.source:'Voyageurs'};}
    if(typeof WORLD_BIBLE!=='undefined'&&typeof createWorldSimulation==='function')this.simulation=createWorldSimulation(Atlas,WORLD_BIBLE,this,saved.simulation);
+   if(typeof createWorldJustice==='function')this.justice=createWorldJustice(Atlas,this,saved.justice);
   }
   add(type,target,at,duration=0,extra={}){if(!EVENT_TYPES[type]||!eventTarget(target)||!Number.isFinite(at))return null;
    const settles={truce:['siege','occupation'],purified:['curse'],victory:['bandits','occupation','siege'],repair:['bridge','flood','landslide','avalanche','fire']};if(settles[type]&&!extra.expiry)for(const e of this.active(at))if(e.target===target&&settles[type].includes(e.type)&&(type!=='repair'||!extra.position||Math.hypot(extra.position.x-e.x,extra.position.y-e.y)<=40))this.resolve(e.id,at);
@@ -250,7 +252,7 @@ const createWorldAtlas = (raw) => {
   share(from,to,clock){const source=this.knowledge[from]||{},dest=this.knowledge[to]||(this.knowledge[to]={});let changed=false;for(const [id,k]of Object.entries(source)){const e=this.events.find(e=>e.id===id);if(!e||EVENT_TYPES[e.type].private)continue;if(!dest[id]||k.resolved!==null&&dest[id].resolved===null){dest[id]={...k,heard:clock,source:'Voyageur de relais'};changed=true;}}if(changed)this.revision++;}
   news(id,clock=this.clock){const book=this.knowledge[id]||{};return this.events.filter(e=>book[e.id]).sort((a,b)=>b.at-a.at).slice(0,8).map(e=>{const k=book[e.id],resolved=k.resolved!==null;return {id:e.id,type:e.type,target:e.target,title:e.title,text:(resolved?'Situation terminée : ':'')+e.title+' — '+eventTarget(e.target).name+'.'+(e.detail?' '+e.detail:''),source:k.source,at:e.at,heard:k.heard,resolved,uncertain:!resolved&&clock-k.at>1440};});}
   recordNews(id,clock=this.clock){for(const n of this.news(id,clock)){const key=n.id+':'+n.resolved;if(!this.journal.some(j=>j.key===key))this.journal.push({...n,key,npc:id});}this.journal=this.journal.slice(-120);this.revision++;}
-  serialize(){return {schema:this.schema,campaign:this.campaign,revision:this.revision,clock:this.clock,events:this.events,knowledge:this.knowledge,journal:this.journal,lastHour:this.lastHour,nextId:this.nextId,...(this.simulation?{simulation:this.simulation.serialize()}: {})};}
+  serialize(){return {schema:this.schema,campaign:this.campaign,revision:this.revision,clock:this.clock,events:this.events,knowledge:this.knowledge,journal:this.journal,lastHour:this.lastHour,nextId:this.nextId,...(this.simulation?{simulation:this.simulation.serialize()}: {}),...(this.justice?{justice:this.justice.serialize()}: {})};}
  }
  class LocationTracker{
   constructor(){this.current=null;this.pending=null;this.age=0;this.last=null;}

@@ -1,7 +1,7 @@
 /* Human civilians consume world-danger's placement, retreat and return states.
    No independent danger field, hostile AI or civilian attack action is introduced. */
 const CIVILIAN_JOB_NAMES={hoe:'CULTIVATEUR',sow:'PAYSAN',craft:'ARTISAN',pottery:'POTIER',weave:'VANNIER',stir:'TEINTURIER',net:'FILETIER',groom:'PALEFRENIER',load:'CARAVANIER',rope:'BATELIER',ledger:'MAÎTRE DE PORT',carry:'PORTEUR'};
-const civilianEligible=n=>n.id!=='fairy'&&!n.eventGuard;
+const civilianEligible=n=>n.id!=='fairy'&&!n.eventGuard&&!n.convoyGuard;
 const civilianDuration=id=>(CIVILIAN_ART.clips[id]?.durations||[1000]).reduce((a,b)=>a+b,0)/1000;
 Game.prototype.ensureCivilian=function(n,record){
  if(!civilianEligible(n))return null;if(n.civilian)return n.civilian;

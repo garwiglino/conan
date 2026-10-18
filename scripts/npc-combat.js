@@ -10,7 +10,7 @@ const NpcCombat=(()=>{
   guard:{hp:8,reach:26,windup:.36,cooldown:1.4,damage:1,sight:150,leash:230,pursuit:380,view:220,anger:180,witness:220,active:700,speed:1.25},
   foe:{sight:110,memory:6,leash:240,active:700}
  });
- const human=n=>!!n?.eventGuard&&!n.batracien;
+ const human=n=>!!(n?.eventGuard||n?.convoyGuard)&&!n.batracien;
  BODY.guard=BODY.npc;
  Game.prototype.isHumanGuard=function(n){return human(n);};
  Game.prototype.ensureHumanGuard=function(n){
@@ -78,7 +78,7 @@ const NpcCombat=(()=>{
   for(const n of this.npcs){
    if(!human(n))continue;const s=this.ensureHumanGuard(n);if(s.dead)continue;
    for(const k of ['flash','hurt','stun','cooldown','attack'])n[k]=Math.max(0,(n[k]||0)-dt);s.inv=Math.max(0,s.inv-dt);
-   if(dist(n,p)>C.guard.active||!events.has(n.eventId)&&!n.guardRetiring||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
+   if(dist(n,p)>C.guard.active||!n.convoyGuard&&!events.has(n.eventId)&&!n.guardRetiring||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
    if(n.stun>0||n.hurt>0){n.wind=0;continue;}
    if(n.wind>0){n.wind-=dt;n.anim=0;if(n.wind<=0){n.wind=0;
      const foe=s.strikeId==='player'?p:this.enemies.find(e=>e.id===s.strikeId&&!e.dead);
@@ -87,7 +87,7 @@ const NpcCombat=(()=>{
     continue;}
    if(n.attack>0){n.anim=0;continue;}
    const t=this.humanGuardTarget(n,s);
-   if(!t){if(dist(n,n.post)>4)this.walkNpc(n,n.post,dt);else n.anim=0;continue;}
+   if(!t){if(!n.convoyGuard&&dist(n,n.post)>4)this.walkNpc(n,n.post,dt);else n.anim=0;continue;}
    const d=dist(n,t);n.dir=this.direction(t.x-n.x,t.y-n.y);
    if(d<=C.guard.reach&&n.cooldown<=0&&this.lineClear(n,t)){n.wind=n.windup=C.guard.windup;s.strikeId=t===p?'player':t.id;n.anim=0;this.foeSound(n,'melee','cultist');continue;}
    if(d>C.guard.reach-6)this.walkNpc(n,t,dt*C.guard.speed);else n.anim=0;
