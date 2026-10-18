@@ -21,6 +21,13 @@ const hudStart=html.indexOf('hud(){const c=this.c,g=this.g,p=g.player'),hudEnd=h
 if(hudStart>=0&&hudEnd>=0)html=html.slice(0,hudStart)+"hud(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,s=this.safe,T=this.top;this.travelHudBar();\n  "+html.slice(hudEnd);
 // Sleep and staffed rest obey the same starvation rule; settle clock before healing.
 html=html.replace("this.sleeping=null;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Réveil',text:'Il est '+this.hourText()+'. Tes forces sont revenues.'}","this.sleeping=null;this.advanceAtlas(0);if(this.needs.satiety>0)this.player.hp=this.player.maxHp;this.emit('notice',{title:'Réveil',text:'Il est '+this.hourText()+(this.needs.satiety>0?'. Tes forces sont revenues.':'. La faim empêche de récupérer ta santé.')}");
+// Body heat reads the wardrobe's warmth: its block follows the wardrobe, just before the app.
+const heat='// BEGIN BODY HEAT\n'+read('scripts/body-heat.js')+'\n// END BODY HEAT';
+html=html.includes('// BEGIN BODY HEAT')?html.replace(/\/\/ BEGIN BODY HEAT[\s\S]*?\/\/ END BODY HEAT/,()=>heat):html.replace('// app.js',()=>heat+'\n// app.js');
+// A death by cold names its cause on the death screen.
+once("this.emit('fallen',{over:D.over})","this.emit('fallen',{over:D.over,cause:D.cause})");
+once("overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.'","overlay('TU AS PERDU UNE VIE',ev.cause==='cold'?'Mort de froid':'Vaincu',headLine(game.player.lives)+'<br>'+(ev.cause==='cold'?'Ta tenue ne protégeait pas assez du froid. ':'')+'Avar te rappelle à la dernière stèle allumée.'");
+once("'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.'","(ev.cause==='cold'?'Le froid a eu raison de Kaldor. ':'')+'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.'");
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
 console.log('Embedded world atlas, simulation, streaming terrain, map and travel UI.');

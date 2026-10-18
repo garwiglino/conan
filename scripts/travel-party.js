@@ -61,18 +61,21 @@ Game.prototype.dismissCompanion=function(id){const c=this.party.find(n=>n.id===i
 Game.prototype.advanceNeeds=function(minutes){
  if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;
  // Small deterministic slices preserve the same meal schedule through sleep/travel.
+ // Body heat: an outfit too warm for the heat digs hunger, the cold bites health.
+ const body=this.bodyHeat?.(),hunger=body?.hunger??1;
  for(let remaining=minutes;remaining>1e-7;){const step=Math.min(remaining,30);remaining-=step;
-  const before=this.needs.satiety;this.needs.satiety=Math.max(0,before-step*100/FULL_MEAL_MINUTES);
+  const before=this.needs.satiety;this.needs.satiety=Math.max(0,before-step*hunger*100/FULL_MEAL_MINUTES);
   if((this.needs.autoEat||this.journey)&&this.needs.satiety<50)this.eatRation('kaldor',true);
-  const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/100);
+  const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/(100*hunger));
   if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hungryMinutes/180));}else this.needs.starved=0;
+  this.coldBite?.(step,body);if(this.dying)break;
   for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger;c.hunger=Math.min(100,c.hunger+step*100/FULL_MEAL_MINUTES);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/100)/180);c.down=c.hp<=0;}}
  }
 };
 Game.prototype.journeyNeeds=function(plan){
  const group=this.party.filter(c=>!c.spirit),energy=plan.minutes*100/FULL_MEAL_MINUTES;
- const meals=satiety=>Math.max(0,Math.ceil((energy-satiety+50)/RATION_ENERGY));
- return {food:meals(this.needs.satiety)+group.reduce((n,c)=>n+meals(100-c.hunger),0),water:Math.ceil(plan.minutes*(1+group.length)/480)+1};
+ const meals=(satiety,k=1)=>Math.max(0,Math.ceil((energy*k-satiety+50)/RATION_ENERGY));
+ return {food:meals(this.needs.satiety,this.journeyHunger?.(plan)??1)+group.reduce((n,c)=>n+meals(100-c.hunger),0),water:Math.ceil(plan.minutes*(1+group.length)/480)+1};
 };
 Game.prototype.prepareTransport=function(id){const s=this.stations.find(s=>s.id===id);if(!s||this.journey||this.player.level||dist(s.actor,this.player)>48||!this.lineClear(this.player,s.actor))return false;this.transportSession=s.id;this.pendingTransport=s.id;return true;};
 Game.prototype.currentTransport=function(){const s=this.stations.find(s=>s.id===this.transportSession);if(!s||this.player.level||dist(s.actor,this.player)>48||!this.lineClear(this.player,s.actor))return null;const closed=this.worldState.active(this.clock).some(e=>(e.target===s.site||e.target===Atlas.byId[s.site].town)&&Atlas.EVENT_TYPES[e.type].closed);return closed?null:s;};
