@@ -1,0 +1,1772 @@
+{
+  "version": "2.0.0",
+  "author": "Codex / ChatGPT",
+  "scope": "visual_assets_and_playback_not_world_spawning",
+  "cell": [
+    80,
+    80
+  ],
+  "anchor": [
+    40,
+    52
+  ],
+  "activities": [
+    "idle",
+    "walk",
+    "flee",
+    "talk",
+    "startle",
+    "sit_down",
+    "seated",
+    "stand_up",
+    "eat",
+    "drink",
+    "carry",
+    "put_down",
+    "hit",
+    "death",
+    "shelter",
+    "sleep",
+    "greet",
+    "mourn",
+    "harvest_fruit",
+    "hoe",
+    "sow",
+    "cut_fiber",
+    "weave",
+    "rope",
+    "resin",
+    "prune",
+    "hew",
+    "saw",
+    "joinery",
+    "cook",
+    "ledger",
+    "load",
+    "honey",
+    "medicinal",
+    "pottery",
+    "net",
+    "row",
+    "repair_boat",
+    "stitch",
+    "bandage",
+    "negotiate",
+    "surrender",
+    "armed_idle",
+    "armed_walk",
+    "warn",
+    "guard_raise",
+    "guard_hold",
+    "block",
+    "guard_break",
+    "spear_thrust",
+    "staff_sweep",
+    "axe_chop",
+    "blade_cut",
+    "throw_stone",
+    "climb"
+  ],
+  "roles": [
+    "gardener",
+    "fiber_worker",
+    "forest_worker",
+    "carpenter",
+    "porter",
+    "trader",
+    "potter",
+    "healer",
+    "cook",
+    "boat_worker",
+    "tailor",
+    "delegate",
+    "warden",
+    "escort",
+    "scout",
+    "brigand"
+  ],
+  "tones": [
+    "brun",
+    "ebene",
+    "cendre",
+    "roux",
+    "sable"
+  ],
+  "sexes": [
+    "male",
+    "female"
+  ],
+  "bodySHA256": "4265f7a4ddcfb78de153449dd3923f4000b4c702124e961653b30e99db8f8a2c",
+  "activitiesSHA256": "f16a300e4980cae96007423f72bb3a651102549ac544d7d15add3311d08e7a61",
+  "clips": {
+    "idle": {
+      "label": "Repos debout",
+      "family": "life",
+      "props": [],
+      "workspace": "ground",
+      "markers": [],
+      "frames": 4,
+      "durations": [
+        450,
+        220,
+        350,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.28,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "walk": {
+      "label": "Marche",
+      "family": "life",
+      "props": [],
+      "workspace": "ground",
+      "markers": [],
+      "frames": 8,
+      "durations": [
+        100,
+        90,
+        90,
+        100,
+        100,
+        90,
+        90,
+        100
+      ],
+      "loop": true,
+      "stride": 24,
+      "duration": 0.76,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "flee": {
+      "label": "Course de fuite",
+      "family": "life",
+      "props": [],
+      "workspace": "escape_path",
+      "markers": [],
+      "frames": 8,
+      "durations": [
+        75,
+        65,
+        65,
+        75,
+        75,
+        65,
+        65,
+        75
+      ],
+      "loop": true,
+      "stride": 32,
+      "duration": 0.56,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "talk": {
+      "label": "Parler et écouter",
+      "family": "social",
+      "props": [],
+      "workspace": "meeting",
+      "markers": [],
+      "frames": 4,
+      "durations": [
+        300,
+        120,
+        240,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 0.92,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "startle": {
+      "label": "Réagir à une alerte",
+      "family": "life",
+      "props": [],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "interrupt_work",
+          "frame": 2
+        }
+      ],
+      "frames": 4,
+      "durations": [
+        90,
+        65,
+        110,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.445,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "sit_down": {
+      "label": "S’asseoir",
+      "family": "life",
+      "props": [
+        "bench"
+      ],
+      "workspace": "meeting",
+      "markers": [
+        {
+          "id": "seat_contact",
+          "frame": 2
+        }
+      ],
+      "frames": 5,
+      "durations": [
+        120,
+        100,
+        90,
+        100,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.57,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "seated": {
+      "label": "Repos assis",
+      "family": "life",
+      "props": [
+        "bench"
+      ],
+      "workspace": "meeting",
+      "markers": [],
+      "frames": 4,
+      "durations": [
+        600,
+        240,
+        400,
+        360
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.6,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "stand_up": {
+      "label": "Se relever",
+      "family": "life",
+      "props": [
+        "bench"
+      ],
+      "workspace": "meeting",
+      "markers": [
+        {
+          "id": "release_seat",
+          "frame": 2
+        }
+      ],
+      "frames": 5,
+      "durations": [
+        110,
+        100,
+        90,
+        110,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.59,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "eat": {
+      "label": "Manger une portion",
+      "family": "life",
+      "props": [
+        "bowl"
+      ],
+      "workspace": "house",
+      "markers": [
+        {
+          "id": "consume_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        280,
+        180,
+        180,
+        300,
+        220,
+        180,
+        200,
+        420
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.96,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "drink": {
+      "label": "Boire",
+      "family": "life",
+      "props": [
+        "gourd"
+      ],
+      "workspace": "house",
+      "markers": [
+        {
+          "id": "consume_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        250,
+        180,
+        200,
+        450,
+        300,
+        220,
+        220,
+        350
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 2.17,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "carry": {
+      "label": "Porter une charge",
+      "family": "life",
+      "props": [
+        "crate",
+        "basket"
+      ],
+      "workspace": "safe_path",
+      "markers": [],
+      "frames": 8,
+      "durations": [
+        130,
+        117,
+        117,
+        130,
+        130,
+        117,
+        117,
+        130
+      ],
+      "loop": true,
+      "stride": 24,
+      "duration": 0.988,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "put_down": {
+      "label": "Poser et reprendre une charge",
+      "family": "life",
+      "props": [
+        "crate",
+        "basket"
+      ],
+      "workspace": "granary",
+      "markers": [
+        {
+          "id": "release_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        130,
+        110,
+        120,
+        100,
+        100,
+        140,
+        160,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 1.04,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "hit": {
+      "label": "Blessure et interruption",
+      "family": "life",
+      "props": [],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "cancel_action",
+          "frame": 2
+        }
+      ],
+      "frames": 5,
+      "durations": [
+        55,
+        85,
+        115,
+        120,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.535,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "death": {
+      "label": "Mort persistante",
+      "family": "life",
+      "props": [],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "no_duplicate_corpse",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        80,
+        100,
+        120,
+        100,
+        70,
+        70,
+        100,
+        360
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 1,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "shelter": {
+      "label": "Se replier, attendre puis revenir",
+      "family": "behavior",
+      "props": [],
+      "workspace": "shelter",
+      "markers": [
+        {
+          "id": "safe_arrival",
+          "frame": 4
+        },
+        {
+          "id": "calm_before_return",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        140,
+        130,
+        140,
+        170,
+        200,
+        250,
+        400,
+        600
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 2.03,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": true
+    },
+    "sleep": {
+      "label": "Dormir au foyer ou à la halte",
+      "family": "life",
+      "props": [
+        "mat"
+      ],
+      "workspace": "house",
+      "markers": [
+        {
+          "id": "bed_reserved",
+          "frame": 2
+        }
+      ],
+      "frames": 4,
+      "durations": [
+        700,
+        280,
+        440,
+        350
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.77,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "greet": {
+      "label": "Saluer ou remercier",
+      "family": "social",
+      "props": [],
+      "workspace": "meeting",
+      "markers": [],
+      "frames": 8,
+      "durations": [
+        170,
+        130,
+        160,
+        220,
+        180,
+        150,
+        180,
+        320
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.51,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "mourn": {
+      "label": "Veillée et funérailles",
+      "family": "social",
+      "props": [],
+      "workspace": "meeting",
+      "markers": [
+        {
+          "id": "existing_person_event",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        500,
+        360,
+        420,
+        600,
+        500,
+        360,
+        420,
+        700
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 3.86,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "harvest_fruit": {
+      "label": "Cueillir fruits et aromates",
+      "family": "work",
+      "props": [
+        "basket",
+        "hook"
+      ],
+      "workspace": "garden",
+      "markers": [
+        {
+          "id": "reach_target",
+          "frame": 4
+        },
+        {
+          "id": "collect_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        220,
+        150,
+        140,
+        230,
+        170,
+        150,
+        160,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.52,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "hoe": {
+      "label": "Biner et entretenir les jardins",
+      "family": "work",
+      "props": [
+        "hoe"
+      ],
+      "workspace": "garden",
+      "markers": [
+        {
+          "id": "ground_contact",
+          "frame": 3
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        220,
+        170,
+        150,
+        90,
+        160,
+        200,
+        220,
+        290
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.5,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "sow": {
+      "label": "Planter et semer",
+      "family": "work",
+      "props": [
+        "seed_bag"
+      ],
+      "workspace": "garden",
+      "markers": [
+        {
+          "id": "plant_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        200,
+        160,
+        180,
+        220,
+        180,
+        160,
+        200,
+        320
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.62,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "cut_fiber": {
+      "label": "Récolter des fibres",
+      "family": "work",
+      "props": [
+        "knife",
+        "bundle"
+      ],
+      "workspace": "garden",
+      "markers": [
+        {
+          "id": "cut_contact",
+          "frame": 3
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        120,
+        75,
+        120,
+        160,
+        180,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.235,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "weave": {
+      "label": "Tresser nattes et paniers",
+      "family": "work",
+      "props": [
+        "basket",
+        "fiber_bundle"
+      ],
+      "workspace": "fiber_yard",
+      "markers": [
+        {
+          "id": "hand_crossing",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        180,
+        150,
+        170,
+        200,
+        180,
+        150,
+        170,
+        240
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.44,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "rope": {
+      "label": "Tordre des cordages",
+      "family": "work",
+      "props": [
+        "rope_rack"
+      ],
+      "workspace": "fiber_yard",
+      "markers": [
+        {
+          "id": "twist_cycle",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        160,
+        140,
+        160,
+        180,
+        160,
+        140,
+        160,
+        200
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.3,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "resin": {
+      "label": "Recueillir de la résine",
+      "family": "work",
+      "props": [
+        "scraper",
+        "pot"
+      ],
+      "workspace": "wood_yard",
+      "markers": [
+        {
+          "id": "tap_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        200,
+        150,
+        130,
+        110,
+        150,
+        180,
+        200,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.38,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "prune": {
+      "label": "Élaguer et entretenir le verger",
+      "family": "work",
+      "props": [
+        "pruning_blade"
+      ],
+      "workspace": "garden",
+      "markers": [
+        {
+          "id": "cut_contact",
+          "frame": 3
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        220,
+        160,
+        140,
+        75,
+        130,
+        170,
+        200,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.375,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "hew": {
+      "label": "Débiter du bois au billot",
+      "family": "work",
+      "props": [
+        "axe",
+        "log"
+      ],
+      "workspace": "wood_yard",
+      "markers": [
+        {
+          "id": "tool_contact",
+          "frame": 3
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        250,
+        180,
+        130,
+        70,
+        170,
+        220,
+        250,
+        340
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.61,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "saw": {
+      "label": "Scier au chevalet",
+      "family": "work",
+      "props": [
+        "saw",
+        "sawhorse"
+      ],
+      "workspace": "wood_yard",
+      "markers": [
+        {
+          "id": "tool_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        130,
+        110,
+        120,
+        150,
+        130,
+        110,
+        120,
+        170
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.04,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "joinery": {
+      "label": "Assembler et réparer",
+      "family": "work",
+      "props": [
+        "mallet",
+        "pegs"
+      ],
+      "workspace": "wood_yard",
+      "markers": [
+        {
+          "id": "tool_contact",
+          "frame": 3
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        200,
+        140,
+        100,
+        65,
+        120,
+        160,
+        180,
+        240
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.205,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "cook": {
+      "label": "Cuire et préparer les repas",
+      "family": "work",
+      "props": [
+        "pot",
+        "ladle"
+      ],
+      "workspace": "house",
+      "markers": [
+        {
+          "id": "stir_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        250,
+        210,
+        220,
+        240,
+        250,
+        210,
+        220,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.9,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "ledger": {
+      "label": "Compter, écrire et peser",
+      "family": "work",
+      "props": [
+        "ledger",
+        "scale"
+      ],
+      "workspace": "market",
+      "markers": [
+        {
+          "id": "mark_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        200,
+        140,
+        160,
+        190,
+        180,
+        140,
+        170,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.48,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "load": {
+      "label": "Charger, décharger et arrimer",
+      "family": "work",
+      "props": [
+        "crate",
+        "rope"
+      ],
+      "workspace": "quay",
+      "markers": [
+        {
+          "id": "hand_over_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        130,
+        120,
+        100,
+        110,
+        110,
+        100,
+        120,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.95,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "honey": {
+      "label": "Récolter miel et cire",
+      "family": "work",
+      "props": [
+        "smoker",
+        "hive",
+        "jar"
+      ],
+      "workspace": "garden",
+      "markers": [
+        {
+          "id": "collect_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        280,
+        210,
+        240,
+        300,
+        260,
+        220,
+        250,
+        350
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 2.11,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "medicinal": {
+      "label": "Trier et préparer des remèdes",
+      "family": "work",
+      "props": [
+        "mortar",
+        "herbs"
+      ],
+      "workspace": "house",
+      "markers": [
+        {
+          "id": "mix_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        180,
+        150,
+        160,
+        180,
+        180,
+        150,
+        160,
+        220
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.38,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "pottery": {
+      "label": "Tourner et façonner une poterie",
+      "family": "work",
+      "props": [
+        "wheel",
+        "clay_lump"
+      ],
+      "workspace": "kiln",
+      "markers": [
+        {
+          "id": "hand_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        230,
+        200,
+        220,
+        250,
+        230,
+        200,
+        220,
+        290
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.84,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "net": {
+      "label": "Réparer les filets ou pêcher",
+      "family": "work",
+      "props": [
+        "net",
+        "needle"
+      ],
+      "workspace": "quay",
+      "markers": [
+        {
+          "id": "real_water_or_repair",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        220,
+        160,
+        190,
+        230,
+        210,
+        160,
+        190,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.66,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "row": {
+      "label": "Ramer ou mener une petite embarcation",
+      "family": "work",
+      "props": [
+        "oar",
+        "boat"
+      ],
+      "workspace": "quay",
+      "markers": [
+        {
+          "id": "water_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        200,
+        140,
+        130,
+        150,
+        220,
+        250,
+        230,
+        240
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.56,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "repair_boat": {
+      "label": "Calfater et réparer une coque",
+      "family": "work",
+      "props": [
+        "mallet",
+        "caulking_tool",
+        "resin_pot"
+      ],
+      "workspace": "quay",
+      "markers": [
+        {
+          "id": "tool_contact",
+          "frame": 3
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        220,
+        150,
+        110,
+        75,
+        140,
+        190,
+        210,
+        270
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.365,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "stitch": {
+      "label": "Coudre cuir et vêtements",
+      "family": "work",
+      "props": [
+        "needle",
+        "cloth"
+      ],
+      "workspace": "fiber_yard",
+      "markers": [
+        {
+          "id": "needle_contact",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        220,
+        150,
+        170,
+        200,
+        220,
+        150,
+        180,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.57,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "bandage": {
+      "label": "Soigner un blessé",
+      "family": "care",
+      "props": [
+        "bandage"
+      ],
+      "workspace": "shelter",
+      "markers": [
+        {
+          "id": "care_once",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        260,
+        190,
+        220,
+        260,
+        240,
+        190,
+        230,
+        340
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.93,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "negotiate": {
+      "label": "Négocier et arbitrer",
+      "family": "social",
+      "props": [
+        "ledger"
+      ],
+      "workspace": "meeting",
+      "markers": [
+        {
+          "id": "named_parties",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        300,
+        180,
+        240,
+        340,
+        280,
+        180,
+        250,
+        420
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 2.19,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "surrender": {
+      "label": "Rendre les armes",
+      "family": "combat",
+      "props": [
+        "weapon"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "drop_once",
+          "frame": 2
+        }
+      ],
+      "frames": 5,
+      "durations": [
+        120,
+        100,
+        140,
+        180,
+        300
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.84,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "armed_idle": {
+      "label": "Repos armé et orientation",
+      "family": "combat",
+      "props": [
+        "weapon"
+      ],
+      "workspace": "watch",
+      "markers": [],
+      "frames": 4,
+      "durations": [
+        450,
+        220,
+        350,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.28,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "armed_walk": {
+      "label": "Pas armés face à une cible",
+      "family": "combat",
+      "props": [
+        "weapon"
+      ],
+      "workspace": "safe_path",
+      "markers": [],
+      "frames": 8,
+      "durations": [
+        115,
+        103,
+        103,
+        115,
+        115,
+        103,
+        103,
+        115
+      ],
+      "loop": true,
+      "stride": 24,
+      "duration": 0.872,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "warn": {
+      "label": "Sommation et ralliement",
+      "family": "combat",
+      "props": [
+        "weapon"
+      ],
+      "workspace": "watch",
+      "markers": [
+        {
+          "id": "local_witness",
+          "frame": 2
+        }
+      ],
+      "frames": 4,
+      "durations": [
+        160,
+        120,
+        160,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 0.7,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "guard_raise": {
+      "label": "Lever le bouclier",
+      "family": "combat",
+      "props": [
+        "shield"
+      ],
+      "workspace": "watch",
+      "markers": [
+        {
+          "id": "guard_ready",
+          "frame": 2
+        }
+      ],
+      "frames": 4,
+      "durations": [
+        35,
+        35,
+        40,
+        70
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.18,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "guard_hold": {
+      "label": "Tenir la garde en mouvement",
+      "family": "combat",
+      "props": [
+        "shield"
+      ],
+      "workspace": "ground",
+      "markers": [],
+      "frames": 4,
+      "durations": [
+        240,
+        180,
+        240,
+        180
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 0.84,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "block": {
+      "label": "Encaisser un coup au bouclier",
+      "family": "combat",
+      "props": [
+        "shield"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "blocked_once",
+          "frame": 3
+        },
+        {
+          "id": "no_blood",
+          "frame": 3
+        }
+      ],
+      "frames": 6,
+      "durations": [
+        35,
+        45,
+        55,
+        65,
+        65,
+        75
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.34,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "guard_break": {
+      "label": "Garde brisée et étourdissement",
+      "family": "combat",
+      "props": [
+        "shield"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "stun",
+          "frame": 2
+        },
+        {
+          "id": "cancel_attack",
+          "frame": 2
+        }
+      ],
+      "frames": 5,
+      "durations": [
+        45,
+        65,
+        110,
+        150,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.55,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": false
+    },
+    "spear_thrust": {
+      "label": "Estoc de lance",
+      "family": "combat",
+      "props": [
+        "spear"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 5
+        }
+      ],
+      "frames": 12,
+      "durations": [
+        120,
+        100,
+        90,
+        80,
+        65,
+        35,
+        35,
+        65,
+        80,
+        110,
+        130,
+        170
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 1.08,
+      "activeFrames": [
+        5,
+        6
+      ],
+      "contact": 0.455,
+      "navigationRequired": false
+    },
+    "staff_sweep": {
+      "label": "Balayage de bâton ou de hampe",
+      "family": "combat",
+      "props": [
+        "staff"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 5
+        }
+      ],
+      "frames": 12,
+      "durations": [
+        130,
+        110,
+        100,
+        85,
+        70,
+        35,
+        40,
+        65,
+        90,
+        115,
+        140,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 1.16,
+      "activeFrames": [
+        5,
+        6
+      ],
+      "contact": 0.495,
+      "navigationRequired": false
+    },
+    "axe_chop": {
+      "label": "Frappe de hache ou massue",
+      "family": "combat",
+      "props": [
+        "axe"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 5
+        }
+      ],
+      "frames": 12,
+      "durations": [
+        180,
+        150,
+        130,
+        110,
+        80,
+        35,
+        45,
+        90,
+        130,
+        160,
+        190,
+        240
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 1.54,
+      "activeFrames": [
+        5,
+        6
+      ],
+      "contact": 0.65,
+      "navigationRequired": false
+    },
+    "blade_cut": {
+      "label": "Taille et revers courts",
+      "family": "combat",
+      "props": [
+        "blade"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 5
+        }
+      ],
+      "frames": 12,
+      "durations": [
+        105,
+        90,
+        80,
+        70,
+        60,
+        30,
+        35,
+        55,
+        70,
+        95,
+        115,
+        145
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 0.95,
+      "activeFrames": [
+        5,
+        6
+      ],
+      "contact": 0.405,
+      "navigationRequired": false
+    },
+    "throw_stone": {
+      "label": "Lancer d’une pierre ou d’un javelot",
+      "family": "combat",
+      "props": [
+        "stone",
+        "javelin"
+      ],
+      "workspace": "ground",
+      "markers": [
+        {
+          "id": "release_projectile",
+          "frame": 5
+        }
+      ],
+      "frames": 12,
+      "durations": [
+        140,
+        115,
+        100,
+        90,
+        75,
+        35,
+        40,
+        80,
+        100,
+        130,
+        150,
+        190
+      ],
+      "loop": false,
+      "stride": null,
+      "duration": 1.245,
+      "activeFrames": [
+        5,
+        6
+      ],
+      "contact": 0.52,
+      "navigationRequired": false
+    },
+    "climb": {
+      "label": "Monter par accès forestier aménagé",
+      "family": "deferred",
+      "props": [
+        "ladder",
+        "rope"
+      ],
+      "workspace": "forest_platform",
+      "markers": [
+        {
+          "id": "real_navigation_edge",
+          "frame": 4
+        },
+        {
+          "id": "no_teleport",
+          "frame": 4
+        }
+      ],
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        160,
+        230,
+        180,
+        140,
+        160,
+        230
+      ],
+      "loop": true,
+      "stride": null,
+      "duration": 1.42,
+      "activeFrames": [],
+      "contact": null,
+      "navigationRequired": true
+    }
+  },
+  "simulationNotes": {
+    "rootMotion": "game_owned",
+    "contacts": "eventsBetween supplies unique contact or release markers",
+    "navigation": [
+      "climb_requires_real_access",
+      "shelter_requires_safe_arrival"
+    ],
+    "outfitsDoNotDefineFaction": true
+  }
+}
