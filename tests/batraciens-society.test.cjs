@@ -35,7 +35,9 @@ test('all six trade routes use existing foot edges in both directions and no sea
 });
 test('road travel stops at closures rather than cutting across terrain',()=>{
  const g=game(),n=g.npcs.find(n=>n.id==='resident-batracien-town-55-4'),r=n.batracien.routine,route=S.route(n.id),s=route.segments[0];g.solid=()=>false;g.lineClear=()=>true;r.wait=0;r.approach=false;r.progress=160;Object.assign(n,S.roadPoint(route,0,r.progress));Object.assign(g.player,{x:n.x+80,y:n.y+80});
- g.worldState.add('flood',s.road,g.clock,300);const p={x:n.x,y:n.y};g.stepBatracienRoutine(n,.04);assert.equal(n.x,p.x);assert.equal(n.y,p.y);assert.equal(r.progress,160);assert.equal(n.batracien.action,'idle');
+ const edge=api.Atlas.edgeById.get(s.edge),a=api.Atlas.vertices.get(edge.a),b=api.Atlas.vertices.get(edge.b);
+ g.worldState.add('flood',s.road,g.clock,300,{position:{x:(a[0]+b[0])/2,y:(a[1]+b[1])/2}});assert.equal(g.worldState.edgeStatus(edge,g.clock).closed,true);
+ const p={x:n.x,y:n.y};g.stepBatracienRoutine(n,.04);assert.equal(n.x,p.x);assert.equal(n.y,p.y);assert.equal(r.progress,160);assert.equal(n.batracien.action,'idle');
 });
 test('road coordinates and palette survive reload; malformed path indices and arbitrary warps are rejected',()=>{
  const g=game(),n=g.npcs.find(n=>n.id==='resident-batracien-town-55-4'),r=n.batracien.routine,route=S.route(n.id);r.edge=0;r.progress=1600;r.approach=false;r.wait=0;const p=S.roadPoint(route,0,1600);Object.assign(n,p);n.post={...p};assert.equal(g.solid(n.x,n.y,6,0),false);
@@ -45,7 +47,7 @@ test('road coordinates and palette survive reload; malformed path indices and ar
 test('direct player assault makes only nearby witnesses hostile, targetable and able to retaliate in a village',()=>{
  const g=game(),{guard}=arena(g),far=g.npcs.find(n=>n.batracien?.role&&n.site==='town-73');const hp=g.player.hp;
  assert.equal(g.isHostileBatracien(guard),false);g.damageBatracienGuard(guard,1,g.player);assert.equal(g.isHostileBatracien(guard),true);assert.equal(g.isHostileBatracien(far),false);
- g.targetId=guard.id;assert.equal(g.target(),guard);assert.ok(g.combatTargets().includes(guard));assert.equal(g.talkTo(guard),false);
+ g.targetId=guard.id;assert.equal(g.target(),guard);assert.ok(g.combatTargets().includes(guard));assert.equal(g.talkTo(guard),true);assert.ok(g.dialogue.menu.options.some(o=>o.label==='Se rendre'));g.dialogue=null;
  g.inSafe=()=>({x:g.player.x,y:g.player.y});for(let i=0;i<120;i++){g.time+=.04;g.stepBatracienWardens(.04);}assert.ok(g.player.hp<hp);
 });
 test('nearby civilian injury or a fatal first hit triggers witnesses, including a human civilian',()=>{
@@ -78,9 +80,10 @@ test('civilians bleed and leave stains using enemy blood FX, without XP or dupli
  const g=game(),{civil}=arena(g);const xp=g.player.xp,kills=g.player.kills;g.damageCivilian(civil,99,g.player);
  assert.equal(g.bloodFX.length,2);assert.equal(g.bloodFX[0].fatal,false);assert.equal(g.bloodFX[1].fatal,true);assert.equal(g.bloodFX[1].bone,false);g.updateEffects(.5);assert.ok(g.blood.length>0);assert.equal(g.player.xp,xp);assert.equal(g.player.kills,kills);assert.ok(!g.remains.some(r=>r.x===civil.x&&r.y===civil.y));
 });
-test('anger survives saves, expires by world clock and cannot become permanent through malformed data',()=>{
+test('anger survives saves, local warrants outlast anger, and both expire by world clock',()=>{
  const g=game(),{guard}=arena(g);g.damageBatracienGuard(guard,1,g.player);const save=json(g.serialize()),copy=new api.Game(save),n=copy.npcs.find(a=>a.id===guard.id);assert.ok(copy.isHostileBatracien(n));assert.equal(n.batracien.hp,guard.batracien.hp);
- copy.clock=n.batracien.hostileUntil+.01;assert.equal(copy.isHostileBatracien(n),false);assert.ok(!copy.combatTargets().includes(n));
+ copy.clock=n.batracien.hostileUntil+.01;assert.equal(copy.justiceEffect(n).wanted,true);assert.equal(copy.isHostileBatracien(n),true);
+ copy.clock=Math.max(...copy.worldState.justice.state.cases.map(c=>c.wantedUntil))+.01;assert.equal(copy.justiceEffect(n).wanted,false);assert.equal(copy.isHostileBatracien(n),false);assert.ok(!copy.combatTargets().includes(n));
  const row=save.atlas.batraciens.people.find(a=>a.id===guard.id);row.hostileUntil=Infinity;const bad=new api.Game(save);assert.ok(Number.isFinite(bad.npcs.find(a=>a.id===guard.id).batracien.hostileUntil));
 });
 test('one real sword swing damages an angry guard once through the shared enemy target loop',()=>{
