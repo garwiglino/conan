@@ -1,6 +1,10 @@
 {
-  "version": 3,
-  "authored": "JavaScript",
+  "version": 4,
+  "authored": "Aseprite human NPC modules + JavaScript sword",
+  "npcCell": [
+    48,
+    48
+  ],
   "cell": [
     80,
     80
@@ -9,6 +13,10 @@
     40,
     52
   ],
+  "outfit": "E01-masculin-terre",
+  "head": "masculin-adulte",
+  "hair": "masculin-hair-14",
+  "walkFrames": 8,
   "bladeScale": 1.02,
   "holsterDelaySeconds": 3.7,
   "holsterDurationSeconds": 0.33,
@@ -33,6 +41,7 @@
     "draw_walk"
   ],
   "fingerprints": {
-    "art": "07f32600b7c662b64b623f24e73f0adc24fd2404b74562663c42251b73074ef7"
+    "legacyArt": "07f32600b7c662b64b623f24e73f0adc24fd2404b74562663c42251b73074ef7",
+    "humanBridge": "20d1557c78b59b8d98684a6df294f955106cb93c5ccb84ab69ef4a2f5095bc63"
   }
 }

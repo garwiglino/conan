@@ -70,14 +70,40 @@ test('all four attacks show multiple poses with a smear on contact frames',()=>{
  }
 });
 
-test('CharacterAtlas actually uses replacement art and preserves hero hit flash',()=>{
+test('CharacterAtlas now composes Kaldor from actual NPC male head, body, hands, hair and walk poses',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(human.appearance.sex,'masculin');
+ assert.equal(human.appearance.outfit,'E01-masculin-terre');
+ assert.equal(human.appearance.age,'adulte');
+ assert.equal(human.appearance.beard,null);
+ assert.equal(human.appearance.moustache,null);
+ assert.deepEqual(api.CIVILIAN_ART.clips.walk.durations.length,8);
+ assert.equal(await human.preload(),true);
+ assert.equal(human.ready(),true);
  const atlas=new api.CharacterAtlas();
  for(let dir=0;dir<4;dir++){
-  const hero=atlas.get('hero',dir,'walk',2,false,0),body=Art.raster({dir,state:'walk',frame:2,swordPose:pose});
-  assert.deepEqual(shot(hero.getContext('2d')),Buffer.from(body.data));
-  const hit=atlas.get('hero',dir,'walk',2,true,0);
-  assert.notDeepEqual(shot(hero.getContext('2d')),shot(hit.getContext('2d')));
+  const npc=api.CIVILIAN_BITMAPS.get(human.appearance,'walk',dir,2);
+  assert.ok(npc,'Missing native NPC frame '+dir);
+  const hero=atlas.get('hero',dir,'sheathed_walk',2,false,0);
+  assert.ok(hero);
+  const a=shot(hero.getContext('2d')),b=shot(npc.getContext('2d'));
+  let exactHair=0;
+  for(let y=25;y<=35;y++)for(let x=34;x<=44;x++){
+   const i=(y*80+x)*4;
+   if(b[i+3]===255&&a.slice(i,i+4).equals(b.slice(i,i+4)))exactHair++;
+  }
+  assert.ok(exactHair>=8,'real NPC head/hair pixels are not reused at direction '+dir);
+  const legacy=Art.raster({dir,state:'sheathed_walk',frame:2,swordPose:pose});
+  assert.notDeepEqual(a,Buffer.from(legacy.data),'old Kaldor painter still active');
+  const flash=atlas.get('hero',dir,'sheathed_walk',2,true,0);
+  assert.notDeepEqual(a,shot(flash.getContext('2d')));
  }
+ const standing={x:100,y:100,moving:true};
+ human.gaitFrame(standing);
+ standing.x+=3;
+ const step=human.gaitFrame(standing);
+ for(let k=0;k<10;k++)assert.equal(human.gaitFrame(standing),step,'animation advances against a wall');
+ assert.equal(human.frameAt('walk',0,24),human.frameAt('walk',0,0),'full gait stride repeats');
 });
 
 test('world renderer and iOS carry identical source with same save contract',()=>{
@@ -86,6 +112,10 @@ test('world renderer and iOS carry identical source with same save contract',()=
  assert.ok(html.includes("HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose)"));
  assert.ok(html.includes("HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)"));
  assert.ok(ios.includes("HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose)"));
+ assert.ok(html.includes('HearthreaverKaldorCivilianArt.nativeFrame'));
+ assert.ok(ios.includes('HearthreaverKaldorCivilianArt.nativeFrame'));
+ assert.ok(html.includes('E01-masculin-terre'));
+ assert.ok(ios.includes('E01-masculin-terre'));
  const game=new api.Game();const saved=game.serialize();assert.equal(saved.version,1);
  const ctx=canvas.createCanvas(80,80).getContext('2d');
  const p=game.player;game.player.x=40;game.player.y=52;game.player.dir=2;new api.CharacterAtlas().draw(ctx,'hero',p,0);
@@ -167,20 +197,36 @@ test('guard draws from the back without changing input state, old saves and deat
  assert.equal(response.state,'idle');
 });
 
-test('Kaldor overlay is deterministic, rebuilds without duplication and keeps web/iOS in sync',()=>{
- const cp=require('node:child_process');const main=path.join(root,'index.html');
- const sha=x=>crypto.createHash('sha256').update(fs.readFileSync(x)).digest('hex');
- const before=sha(main),first=sha(path.join(root,'art/kaldor-preview.html'));
- cp.execFileSync(process.execPath,['scripts/embed-kaldor.cjs'],{cwd:root,stdio:'pipe'});
- assert.equal(sha(main),before);
- assert.equal(sha(path.join(root,'art/kaldor-preview.html')),first);
- const current=fs.readFileSync(main,'utf8');
- assert.equal(current.split('// BEGIN KALDOR JAVASCRIPT PIXEL ART').length,2);
- assert.equal(current.split('HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)').length,2);
- const ios=fs.readFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),'utf8');
- assert.ok(ios.includes('Kaldor, long-haired barbarian'));
+test('Kaldor overlay build is deterministic in isolation and never races world renderer tests',()=>{
+ const cp=require('node:child_process'),os=require('node:os');
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'kaldor-build-'));
+ const toCopy=[
+  'index.html','ios/Hearthreaver/Game/index.html',
+  'scripts/embed-kaldor.cjs','scripts/kaldor-civilian-bridge.js',
+  'sprites/kaldor/kaldor-art.js',
+  'art/kaldor-preview-template.html','art/kaldor-preview.html',
+  'data/kaldor-manifest.json'
+ ];
+ const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+ try {
+  for(const rel of toCopy){
+   const dest=path.join(tmp,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});
+   fs.copyFileSync(path.join(root,rel),dest);
+  }
+  const a=hash(path.join(tmp,'index.html')),b=hash(path.join(tmp,'art/kaldor-preview.html'));
+  for(let round=0;round<2;round++){
+   cp.execFileSync(process.execPath,['scripts/embed-kaldor.cjs'],{cwd:tmp,stdio:'pipe'});
+   assert.equal(hash(path.join(tmp,'index.html')),a,'non-idempotent HTML in pass '+round);
+   assert.equal(hash(path.join(tmp,'art/kaldor-preview.html')),b,'non-idempotent preview in pass '+round);
+  }
+  const built=fs.readFileSync(path.join(tmp,'index.html'),'utf8');
+  assert.equal(built.split('// BEGIN KALDOR JAVASCRIPT PIXEL ART').length,2);
+  assert.equal(built.split('HearthreaverKaldorArt.weaponVisual(actor,time,state,frame)').length,2);
+  assert.ok(built.includes('HearthreaverKaldorCivilianArt.nativeFrame'));
+  const ios=fs.readFileSync(path.join(tmp,'ios/Hearthreaver/Game/index.html'),'utf8');
+  assert.equal(ios.slice(ios.indexOf('<script>')),built.slice(built.indexOf('<script>')));
+ } finally {fs.rmSync(tmp,{recursive:true,force:true});}
 });
-
 
 test('sword holsters after 3.7 seconds idle or moving and draws on renewed attack',()=>{
  const a={attack:0,moving:true,anim:0,dir:2};
@@ -222,7 +268,9 @@ test('hurt, melee and object use keep a holstered sword on the back without chan
  }
 });
 
-test('the real CharacterAtlas draws the sheathed hero after timeout, even without player movement',()=>{
+test('the real CharacterAtlas draws modular human head, hands and sheathed sword with stable gait',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
  const atlas=new api.CharacterAtlas(),cv=canvas.createCanvas(80,80),ctx=cv.getContext('2d');
  const actor={x:40,y:52,dir:2,attack:0,attackCD:0,guard:false,moving:false,anim:0,flash:0,hurt:0,dash:0,combo:0};
  atlas.draw(ctx,'hero',actor,0);
@@ -231,10 +279,132 @@ test('the real CharacterAtlas draws the sheathed hero after timeout, even withou
  assert.equal(actor.kaldorWeapon.mode,'stowing');
  ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.2);
  assert.equal(actor.kaldorWeapon.mode,'sheathed');
- assert.deepEqual(shot(ctx),Buffer.from(Art.raster({dir:2,state:'sheathed_idle',frame:Art.idleFrame(4.2),swordPose:pose}).data));
+ const expectedIdle=human.nativeFrame(2,'sheathed_idle',human.frameAt('idle',4.2));
+ assert.deepEqual(shot(ctx),shot(expectedIdle.getContext('2d')));
  actor.anim=2;actor.moving=true;
  ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.35);
- assert.deepEqual(shot(ctx),Buffer.from(Art.raster({dir:2,state:'sheathed_walk',frame:2,swordPose:pose}).data));
- actor.attack=.18;actor.combo=2;ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.4);
+ // Animation driven by real distance, not an arbitrary actor.anim counter.
+ const expectedWalk=human.nativeFrame(2,'sheathed_walk',0);
+ assert.deepEqual(shot(ctx),shot(expectedWalk.getContext('2d')));
+ actor.x+=3;
+ ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.40);
+ const nextStep=human.gaitFrame(actor);
+ const expectedStep=human.nativeFrame(2,'sheathed_walk',nextStep);
+ assert.deepEqual(shot(actor._img.getContext('2d')),shot(expectedStep.getContext('2d')));
+ actor.attack=.18;actor.combo=2;ctx.clearRect(0,0,80,80);atlas.draw(ctx,'hero',actor,4.5);
  assert.equal(actor.kaldorWeapon.mode,'drawn');assert.ok(actor._img);
+});
+
+
+test('profile gait plays the human strides forwards, face and back views keep atlas order',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ // Atlas profile strides are stored backwards (planted foot sliding forward).
+ for(const dir of [1,3]){
+  assert.deepEqual([0,1,2,7].map(f=>human.pose('walk',f,dir).frame),[0,7,6,1]);
+  assert.deepEqual([0,1].map(f=>human.pose('sheathed_walk',f,dir).frame),[0,7]);
+ }
+ for(const dir of [0,2])assert.deepEqual([0,1,2,7].map(f=>human.pose('walk',f,dir).frame),[0,1,2,7]);
+});
+
+test('attacks hold the sword in both hands, along the exact gameplay blade direction',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ const steel=new Set(['154,166,171','214,220,220','251,251,239']),skin=new Set(['248,176,122','200,116,62']);
+ for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
+  const hashes=new Set();
+  for(let frame=1;frame<=5;frame++){
+   const im=human.nativeFrame(dir,'attack',frame,combo,pose);
+   assert.ok(im,`${dir}:${combo}:${frame}`);
+   const d=shot(im.getContext('2d'));hashes.add(crypto.createHash('sha256').update(d).digest('hex'));
+   const at=(x,y)=>{const i=(Math.round(y+52)*80+Math.round(x+40))*4;return d[i+3]?[d[i],d[i+1],d[i+2]].join(','):'';};
+   const p=human.attackPose(dir,frame,combo,pose);
+   // Strike, contact and follow-through keep the swept gameplay direction;
+   // wind-up and recovery are free drawings.
+   if(frame>=2&&frame<=4){
+    const [x,y,vx,vy]=pose(dir,frame,combo),l=Math.hypot(vx,vy);
+    assert.ok(Math.abs(p.blade[0]-vx/l)<1e-9&&Math.abs(p.blade[1]-vy/l)<1e-9,'blade follows swordPose '+dir+':'+combo+':'+frame);
+   }
+   if(!p.front)continue;
+   let blade=0;for(let r=5;r<=11;r++)if(steel.has(at(p.hand[0]+p.blade[0]*r,p.hand[1]+p.blade[1]*r)))blade++;
+   assert.ok(blade>=4,`blade not drawn from the grip ${dir}:${combo}:${frame}`);
+   let hands=0;for(let y=-1;y<=1;y++)for(let x=-1;x<=1;x++)if(skin.has(at(p.hand[0]+x,p.hand[1]+y)))hands++;
+   assert.ok(hands>=2,`no hand on the grip ${dir}:${combo}:${frame}`);
+  }
+  assert.equal(hashes.size,5,`attack ${dir}:${combo} repeats a drawing`);
+ }
+});
+
+test('sword, harness and scabbard never paint over the NPC eyes, nose and mouth',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ for(const state of ['idle','sheathed_idle','walk','sheathed_walk']){
+  const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,state.replace('sheathed_',''),2,0).getContext('2d'));
+  const hero=shot(human.nativeFrame(2,state,0,0,pose).getContext('2d'));
+  for(let y=36;y<=42;y++)for(let x=36;x<=44;x++){
+   const i=(y*80+x)*4;assert.deepEqual([...hero.slice(i,i+4)],[...npc.slice(i,i+4)],`${state} face pixel ${x},${y}`);
+  }
+ }
+});
+
+const STEEL=new Set(['154,166,171','214,220,220','251,251,239']);
+const rgbAt=(d,x,y)=>{const i=(y*80+x)*4;return d[i+3]?[d[i],d[i+1],d[i+2]].join(','):'';};
+
+test('the sword in hand is held point up in every view, while idle, walking and after a blow',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ for(let dir=0;dir<4;dir++){
+  for(let combo=0;combo<4;combo++)assert.ok(human.attackPose(dir,5,combo,pose).blade[1]<-.6,`recovery guard ${dir}:${combo}`);
+  for(const [state,n] of [['idle',4],['walk',8]])for(let f=0;f<n;f++){
+   const d=shot(human.nativeFrame(dir,state,f,0,pose).getContext('2d'));
+   let top=80,bottom=0,count=0;
+   for(let y=0;y<80;y++)for(let x=0;x<80;x++)if(STEEL.has(rgbAt(d,x,y))){count++;top=Math.min(top,y);bottom=Math.max(bottom,y);}
+   assert.ok(count>=4,`${state} ${dir}:${f} shows the blade`);
+   // Steel only above the hips, the tip above the shoulders.
+   assert.ok(bottom<=46&&top<=40,`${state} ${dir}:${f} blade points up (${top}..${bottom})`);
+  }
+ }
+});
+
+test('seen from the back, the swing stays behind the hair and body except the overhead wind-up',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ // Interior of the back-view silhouette, eroded by the 2px head lean.
+ const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,'idle',0,0).getContext('2d'));
+ const solid=(x,y)=>npc[(y*80+x)*4+3]>0;
+ const inside=(x,y)=>{for(let j=-2;j<=2;j++)for(let i=-2;i<=2;i++)if(!solid(x+i,y+j))return false;return true;};
+ for(let combo=0;combo<4;combo++)for(let frame=1;frame<=5;frame++){
+  const overhead=combo===3&&frame===1;
+  assert.equal(human.attackPose(0,frame,combo,pose).front,overhead,`front ${combo}:${frame}`);
+  if(overhead)continue;
+  const d=shot(human.nativeFrame(0,'attack',frame,combo,pose).getContext('2d'));
+  for(let y=2;y<78;y++)for(let x=2;x<78;x++)
+   assert.ok(!(inside(x,y)&&STEEL.has(rgbAt(d,x,y))),`steel over the back ${combo}:${frame} at ${x},${y}`);
+ }
+ for(let f=0;f<4;f++){
+  const d=shot(human.nativeFrame(0,'idle',f,0,pose).getContext('2d'));
+  for(let y=2;y<78;y++)for(let x=2;x<78;x++)assert.ok(!(inside(x,y)&&STEEL.has(rgbAt(d,x,y))),`idle steel over the back ${f}`);
+ }
+});
+
+test('scabbard and harness on the back move with the body through the walk and idle',async()=>{
+ const human=api.HearthreaverKaldorCivilianArt;
+ assert.equal(await human.preload(),true);
+ for(let dir=0;dir<4;dir++)for(const [state,n] of [['sheathed_walk',8],['sheathed_idle',4]]){
+  const gaps=new Set(),heads=new Set();
+  for(let f=0;f<n;f++){
+   const p=human.pose(state,f,dir);
+   const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,p.action,dir,p.frame).getContext('2d'));
+   const hero=shot(human.nativeFrame(dir,state,f,0,pose).getContext('2d'));
+   let head=-1,gear=-1;
+   for(let y=0;y<80&&(head<0||gear<0);y++)for(let x=0;x<80;x++){
+    const i=(y*80+x)*4;
+    if(head<0&&npc[i+3])head=y;
+    if(gear<0&&(hero[i]!==npc[i]||hero[i+1]!==npc[i+1]||hero[i+2]!==npc[i+2]||hero[i+3]!==npc[i+3]))gear=y;
+   }
+   heads.add(head);gaps.add(gear-head);
+  }
+  assert.ok(heads.size>1,`${state} ${dir}: the body bobs`);
+  assert.equal(gaps.size,1,`${state} ${dir}: the hilt keeps its place on the shoulders`);
+ }
 });
