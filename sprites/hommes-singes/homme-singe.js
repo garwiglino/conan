@@ -149,7 +149,9 @@ function frameAt(action,time=0,distance){const clip=CLIPS[action];if(!clip)throw
 function pose(action,frame,dir){
  const walk=action==='walk'||action==='flee',g=walk?GAIT[frame]:{},side=dir==='droite'||dir==='gauche',q=dir==='gauche'?-1:1,fast=action==='flee'?1.5:1;
  const step=Math.round((g.step||0)*fast),bob=walk?Math.max(-1,Math.min(1,g.bob||0)):0,breath=action==='idle'&&[1,2].includes(frame)?-1:0,gesture=action==='talk'?[0,1,2,1][frame]:0;
- return {step,bob,breath,gesture,side,q,lift:g.lift||0,blink:action==='idle'&&frame===2};
+ // Stance travels backward relative to the facing direction; swing returns forward.
+ const headShift=breath+(walk?[0,0,-1,-1,0,0,-1,-1][frame]:0);
+ return {step,bob,breath,headShift,gesture,side,q,lift:-(g.lift||0),blink:action==='idle'&&frame===2};
 }
 
 function renderLayers(action='idle',dir='face',frame=0){
@@ -158,11 +160,11 @@ function renderLayers(action='idle',dir='face',frame=0){
  for(const [name,pixels]of Object.entries(source)){
   let dx=0,dy=v.bob;
   if(name.endsWith('Leg')){const sign=name==='leftLeg'?1:-1;dx=v.side?Math.round(sign*v.step/2)*v.q:0;dy=sign*v.lift>0?-(Math.abs(v.lift)+(v.step===0?1:0)):0;}
-  if(name==='head')dy+=v.breath;
+  if(name==='head')dy+=v.headShift;
   const minY=Math.min(...pixels.map(p=>p[1])),maxY=Math.max(...pixels.map(p=>p[1]));
   const moved=pixels.map(([x,y,key])=>{
    let px=x+dx,py=y+dy;
-   if(name.endsWith('Arm')){const sign=name==='leftArm'?1:-1,t=(y-minY)/Math.max(1,maxY-minY),swing=v.step*sign;
+   if(name.endsWith('Arm')){const sign=name==='leftArm'?1:-1,t=(y-minY)/Math.max(1,maxY-minY),swing=-v.step*sign;
     px+=Math.round((v.side?swing*v.q:sign*Math.abs(swing)*.3)*t);py+=Math.round((v.side?-Math.abs(swing)*.25:swing*.4)*t);
     if(name==='rightArm'&&v.gesture){px-=Math.round(v.q*v.gesture*t);py-=Math.round(v.gesture*t);}
    }
@@ -176,7 +178,7 @@ function renderLayers(action='idle',dir='face',frame=0){
  }
  layers.neck=[];
  // A hidden fur bridge keeps the head and shoulders joined during breathing.
- if(v.breath){const side=dir==='droite'||dir==='gauche',x0=side?23:21,x1=side?27:28;for(let y=23+v.bob+v.breath;y<=26+v.bob;y++)for(let x=x0;x<=x1;x++)layers.neck.push([x,y,'H']);}
+ if(v.headShift){const side=dir==='droite'||dir==='gauche',x0=side?23:21,x1=side?27:28;for(let y=23+v.bob+v.headShift;y<=26+v.bob;y++)for(let x=x0;x<=x1;x++)layers.neck.push([x,y,'H']);}
  // Foreground hands are never painted behind the chest; canonical idle stays exact.
  const order=['neck','leftLeg','rightLeg','torso','cloth','head','leftArm','rightArm'];
  return {layers,order,anchor:[24,36],dir,action,frame};

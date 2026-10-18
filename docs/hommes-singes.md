@@ -25,3 +25,7 @@ Le module expose `draw(ctx, {action, dir, frame, x, y, layer, format})`, `frameA
 `node --test tests/homme-singe.test.cjs` : quatre tests réussis, couvrant les 96 poses, la connexion des pixels, l’alpha binaire, les appuis, les boucles, la translation native/moteur et la conservation exacte des quatre grilles au repos. Atelier contrôlé dans Chromium : quatre animations, quatre vues, pause, pas à pas et isolation des calques.
 
 Aucun PNG embarqué dans le module de personnage, aucun miroir ni rotation d’image, aucun remplacement des PNJ approuvés. Les costumes de métiers, le combat, les factions et les apparitions en jeu restent à réaliser ultérieurement. La bible démographique actuelle ne définit pas encore l’implantation de cette espèce.
+
+## Appuis et balancement de tête
+
+Révision après validation du rendu JavaScript : la tête suit un décalage vertical indépendant d’un pixel, répété à chaque demi-foulée, avec raccord de cou couvert. Les phases de lever des pieds ont été inversées : le pied posé pousse vers l’arrière par rapport à la direction regardée, puis revient vers l’avant en l’air. Les bras balancent en opposition aux jambes. Les dessins et la pose de repos canonique restent inchangés. Un cinquième test vérifie ce sens d’appui sur les deux profils, en marche et en course, ainsi que le mouvement indépendant de la tête.

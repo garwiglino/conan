@@ -16,3 +16,17 @@ test('native-to-engine translation preserves exactly the approved 16px offset',(
 test('the canonical idle preserves every indexed source pixel in all four independent views',()=>{
  for(const dir of A.directions){const expected=createCanvas(48,48),c=expected.getContext('2d'),rows=A.SOURCE_VIEWS[dir],offset=dir==='face'||dir==='dos'?14:16;rows.forEach((row,y)=>[...row].forEach((key,x)=>{if(key!=='.'){c.fillStyle=A.PALETTE[key];c.fillRect(x+offset,y+11,1,1);}}));const actual=createCanvas(48,48);A.draw(actual.getContext('2d'),{dir});assert.deepEqual(actual.getContext('2d').getImageData(0,0,48,48).data,c.getImageData(0,0,48,48).data);}
 });
+test('profile stance pushes backward while the airborne foot returns forward, with opposite arm swing',()=>{
+ const center=p=>p.reduce((n,a)=>n+a[0],0)/p.length;
+ for(const dir of ['droite','gauche'])for(const action of ['walk','flee']){
+  const q=dir==='droite'?1:-1,frames=Array.from({length:8},(_,f)=>A.renderLayers(action,dir,f));
+  const stance=frames.slice(0,5).map(r=>center(r.layers.leftLeg.filter(p=>p[1]===36)));
+  assert.ok(stance.every(Number.isFinite),'stance foot stays planted through the backward stroke');
+  assert.ok((stance[0]-stance[4])*q>0,'ground stroke is opposite facing');
+  for(const f of [5,6])assert.ok(Math.max(...frames[f].layers.leftLeg.map(p=>p[1]))<36,'left foot returns in air');
+  const arm0=center(frames[0].layers.rightArm),arm4=center(frames[4].layers.rightArm);
+  assert.ok((arm0-arm4)*q>0,'right arm counterbalances left stance leg');
+  const offsets=frames.map(r=>Math.min(...r.layers.head.map(p=>p[1]))-Math.min(...r.layers.torso.map(p=>p[1])));
+  assert.ok(new Set(offsets).size>=2,'head has its own restrained bob');
+ }
+});
