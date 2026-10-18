@@ -2,6 +2,10 @@
 
 Ajouts réalisés par Codex / ChatGPT pour transmission à Claude.
 
+L'atelier utilise `activitiesFor(role)` : activités du métier, vie commune et réactions au danger. Les civils n'ont ni attaques ni garde armée ; fuite, blessure, mort et reddition restent disponibles. Les fonctions armées proposent leurs attaques compatibles avec leur équipement et la garde au bouclier uniquement si elles en portent un. Un civil désarmé ne fait pas apparaître de lame à sa mort ou à sa reddition.
+
+Les accessoires de travail suivent la profondeur : les charges, bols, livres et fils sont occultés par le corps dans la vue de dos. Les outils sont partagés entre avant et arrière selon la profondeur de leur poignée et de leur extrémité. Les doigts visibles couvrent la poignée, tandis que la face externe du bouclier masque sa main. Des tests vérifient les pixels de chevauchements réels pour empêcher les accessoires arrière de traverser le corps.
+
 Le module `sprites/hommes-singes/activites.js` complète le corps validé sans modifier ses sources. Il couvre les 55 entrées du catalogue, les 16 fonctions, les deux silhouettes et les cinq pelages. Les activités constituent des ressources visuelles ; elles n'activent pas automatiquement de nouveaux PNJ ni de nouveaux comportements dans le monde.
 
 Les bras articulés réemploient les pixels du modèle initial et une portée limitée par leur longueur native. Les membres et équipements éloignés passent derrière le corps selon la vue ; les smears suivent la profondeur de l'arme. Les mains restent attachées aux outils. Les animations de combat récupèrent progressivement vers la pose de repos.

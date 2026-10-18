@@ -61,6 +61,21 @@ const CLIPS={};for(const [id,spec]of Object.entries(SPECS)){
  CLIPS[id]={...spec,frames:durations.length,durations,loop,stride:Base.CLIPS[id]?.stride||(id==='armed_walk'||id==='carry'?24:null),duration:durations.reduce((a,b)=>a+b,0)/1000,markers,activeFrames:ATTACKS.has(id)?[5,6]:[],contact:ATTACKS.has(id)?durations.slice(0,5).reduce((a,b)=>a+b,0)/1000:null,navigationRequired:id==='climb'||id==='shelter'};
 }
 function clip(id){if(!CLIPS[id])throw new RangeError('Activité inconnue : '+id);return CLIPS[id];}
+function activitiesFor(role){
+ if(!ROLE_INFO[role])throw new RangeError('Fonction inconnue');
+ const own=ROLE_INFO[role].activities,armed=!!OUTFITS[role].weapon;
+ return Object.keys(CLIPS).filter(id=>{
+  if(CLIPS[id].family==='combat'){
+   if(id==='surrender')return true;
+   if(!armed)return false;
+   if(['armed_idle','armed_walk','warn'].includes(id))return true;
+   if(['guard_raise','guard_hold','block','guard_break'].includes(id))return !!OUTFITS[role].shield;
+   if(id==='blade_cut'&&OUTFITS[role].weapon!=='blade')return false;
+   return own.includes(id);
+  }
+  return own.includes(id)||!['work','care'].includes(CLIPS[id].family);
+ });
+}
 function frameAt(id,seconds=0,distance){const c=clip(id),total=c.duration*1000;let ms=distance!==undefined&&c.stride?((distance%c.stride+c.stride)%c.stride)*total/c.stride:Math.max(0,seconds)*1000;if(c.loop)ms%=total;else ms=Math.min(ms,total-.000001);for(let f=0;f<c.frames;f++){ms-=c.durations[f];if(ms<0)return f;}return c.frames-1;}
 function eventsBetween(id,before,after){const c=clip(id);if(!Number.isFinite(before)||!Number.isFinite(after)||after<before)throw RangeError('Intervalle invalide');const events=[];const first=c.loop?Math.max(0,Math.floor(before/c.duration)):0,last=c.loop?Math.floor(after/c.duration):0;if(last-first>128)throw RangeError('Découper le rattrapage temporel');for(let cycle=first;cycle<=last;cycle++)for(const m of c.markers){const t=cycle*c.duration+c.durations.slice(0,m.frame).reduce((a,b)=>a+b,0)/1000;if(t>before&&t<=after)events.push({...m,time:t,cycle});}return events;}
 const round=Math.round,lerp=(a,b,t)=>a+(b-a)*t;
@@ -204,7 +219,12 @@ function prop(buffer,kind,x,y,phase=0){
  if(kind==='cloth'||kind==='bandage'){buffer.rect(x-4,y-2,9,5,LINEN[0]);buffer.rect(x-3,y-2,7,4,LINEN[2]);buffer.line(x-3,y+1,x+3,y+1,LINEN[1]);}
 }
 function shield(buffer,hand,dir,role,impact=0){const side=dir==='droite'||dir==='gauche',x=hand[0],y=hand[1],o=OUTFITS[role]||OUTFITS.warden,rx=side?3:5;buffer.ellipse(x,y,rx,7,INK);buffer.ellipse(x,y,rx-1,6,o.cloth[1]);buffer.line(x,y-5,x,y+5,o.trim[1]);buffer.line(x-rx+1,y,x+rx-1,y,o.trim[1]);buffer.ellipse(x,y,1,2,METAL[1]);if(impact){buffer.line(x-4,y-6,x-6,y-8,LINEN[2]);buffer.line(x+4,y-4,x+7,y-6,LINEN[2]);}}
-function workstation(back,front,id,dir,f){const P=(l,d,h)=>project(dir,l,d,h),pt=P(0,14,0),x=pt[0],y=pt[1];
+function workstation(rear,near,id,dir,f){
+ // Positive forward depth is in front only when facing the camera.
+ // Seats/ladders are behind the actor; work surfaces and trees are ahead.
+ const front=dir==='dos'?rear:near;
+ const back=['harvest_fruit','prune','resin','honey'].includes(id)?front:dir==='dos'&&['sit_down','seated','stand_up','eat','drink','mourn','ledger','weave','pottery','stitch','climb'].includes(id)?near:rear;
+ const P=(l,d,h)=>project(dir,l,d,h),pt=P(0,14,0),x=pt[0],y=pt[1];
  if(['sit_down','seated','stand_up','eat','drink','mourn','ledger','weave','pottery','stitch'].includes(id)){const b=P(0,-2,1);back.rect(b[0]-9,b[1]-1,19,3,WOOD[0]);back.rect(b[0]-8,b[1]-2,17,2,WOOD[2]);back.rect(b[0]-7,b[1]+2,2,4,WOOD[1]);back.rect(b[0]+5,b[1]+2,2,4,WOOD[1]);}
  if(['hoe','sow','cut_fiber','harvest_fruit','prune'].includes(id)){for(let n=-8;n<=8;n+=4){const a=P(n,16,0);front.line(a[0]-2,a[1],a[0]+2,a[1],WOOD[0]);front.line(a[0],a[1],a[0],a[1]-3,'#738449');}}
  if(['harvest_fruit','prune','resin','honey'].includes(id)){const trunk=P(8,14,0),top=P(8,14,28);back.line(...trunk,...top,INK,5);back.line(...trunk,...top,WOOD[1],3);back.line(top[0]-6,top[1]+5,top[0]+5,top[1]+2,WOOD[1],3);if(id!=='resin'){back.ellipse(top[0],top[1]-1,9,4,'#4c6337');for(const dl of [-5,2,6]){const a=P(8+dl,14,28);back.ellipse(a[0],a[1]+1,1,1,'#cb8d4b');}}if(id==='honey'){const h=P(7,14,13);back.ellipse(h[0],h[1],4,5,WOOD[0]);for(let i=-3;i<=3;i+=2)back.line(h[0]-3,h[1]+i,h[0]+3,h[1]+i,WOOD[2]);}}
@@ -223,7 +243,7 @@ function equipmentFor(id,role,pose,f,dir,options){let kind=null,tip=null;const r
  if(['carry','load','put_down'].includes(id))return {kind:'crate',central:true,tip:null};
  if(id==='spear_thrust')kind='spear';if(id==='staff_sweep')kind='staff';if(id==='axe_chop')kind=outfit?.weapon==='club'?'club':'axe';if(id==='blade_cut')kind='blade';if(id==='throw_stone')kind=role==='scout'?'javelin':'stone';
  if(['armed_idle','armed_walk','warn','guard_raise','guard_hold','block','guard_break'].includes(id))kind=outfit?.weapon||'spear';
- if(id==='surrender'||id==='death')return {kind:null,dropped:outfit?.weapon||'blade'};
+ if(id==='surrender'||id==='death')return {kind:null,dropped:outfit?.weapon||null};
  if(kind){tip=pose.tip||[r[0],r[1]+4,r[2]+(kind==='spear'||kind==='javelin'?21:kind==='blade'?10:kind==='club'?10:8)];
   if(id==='hoe')tip=[r[0],18,[12,18,20,0,4,8,12,12][f%8]];
   if(id==='hew')tip=[r[0],16,[35,32,24,1,4,12,25,32][f%8]];
@@ -239,11 +259,21 @@ function equipmentFor(id,role,pose,f,dir,options){let kind=null,tip=null;const r
  }
  return {kind,tip,released:id==='throw_stone'&&f>=5};
 }
+function cameraDepth(dir,point){return dir==='face'?point[1]:dir==='dos'?-point[1]:dir==='droite'?point[0]:-point[0];}
+function depthTool(rear,front,kind,hand,tip,worldHand,worldTip,dir,frame){
+ const pixels=new Pixels();tool(pixels,kind,hand,tip,frame);
+ const dx=tip[0]-hand[0],dy=tip[1]-hand[1],length2=dx*dx+dy*dy;
+ const a=cameraDepth(dir,worldHand),b=cameraDepth(dir,worldTip);
+ for(const [x,y,color]of pixels.values()){
+  const t=length2?Math.max(0,Math.min(1,((x-hand[0])*dx+(y-hand[1])*dy)/length2)):0;
+  (lerp(a,b,t)<0?rear:front).set(x,y,color);
+ }
+}
 function renderLayers(options={}){
  const {action='idle',dir:direction='face',frame=0,sex='male',tone='brun',role=null,equipment=true,outfit=true,scene=true,smear=true}=options,dir=Base.directionName(direction),c=clip(action);
  if(!Number.isInteger(frame)||frame<0||frame>=c.frames)throw RangeError('Frame hors limite');if(role&&!OUTFITS[role])throw RangeError('Fonction inconnue');
  const pal=Base.paletteFor(tone),armed=c.family==='combat',walking=['walk','flee','armed_walk','carry'].includes(action),baseAction=walking?(action==='flee'?'flee':'walk'):action==='talk'?'talk':'idle',baseFrame=frame%Base.CLIPS[baseAction].durations.length,base=Base.renderLayers(baseAction,dir,baseFrame,sex),simple=Object.hasOwn(Base.CLIPS,action),pose=armed&&action!=='surrender'?combatPose(action,frame,role):actionPose(action,frame);
- const L={rearProps:new Pixels(),rearArms:new Pixels(),rearEquipment:new Pixels(),body:new Pixels(),clothing:new Pixels(),headgear:new Pixels(),arms:new Pixels(),equipment:new Pixels(),frontProps:new Pixels(),smear:new Pixels(),rearSmear:new Pixels(),effects:new Pixels()};
+ const L={rearProps:new Pixels(),rearArms:new Pixels(),rearEquipment:new Pixels(),body:new Pixels(),clothing:new Pixels(),headgear:new Pixels(),arms:new Pixels(),grips:new Pixels(),equipment:new Pixels(),frontProps:new Pixels(),smear:new Pixels(),rearSmear:new Pixels(),effects:new Pixels()};
  const projectedR=project(dir,...pose.right),projectedL=project(dir,...pose.left);let hands={right:projectedR,left:projectedL},elbows={},headOffset=[0,0];
  if(scene)workstation(L.rearProps,L.frontProps,action,dir,frame);
  // Restore hidden trunk volume only when moving arms away from the approved body.
@@ -257,21 +287,26 @@ function renderLayers(options={}){
  if(outfit&&role){outfitDetails(L.clothing,role,pose,dir);const minHeadY=Math.min(...base.layers.head.map(p=>p[1]))+16;headOffset=simple?[0,minHeadY-(sex==='female'?28:27)]:[round(pose.lean*(dir==='gauche'?-1:1)),pose.crouch+(pose.head||0)+minHeadY-(sex==='female'?28:27)];if(!pose.fall)headgear(L.headgear,OUTFITS[role].hat,dir,headOffset,role);}
  const eq=equipmentFor(action,role,pose,frame,dir,options);let tip=eq.tip?project(dir,...eq.tip):null;
  if(equipment){
-  if(eq.central)prop(L.equipment,'crate',round((hands.left[0]+hands.right[0])/2),round((hands.left[1]+hands.right[1])/2),frame);
-  else if(eq.kind&&!eq.released)tool(dir==='dos'||dir==='gauche'?L.rearEquipment:L.equipment,eq.kind,hands.right,tip||[hands.right[0],hands.right[1]-8],frame);
-  if(['weave','net','rope','stitch','pottery'].includes(action)){L.equipment.line(...hands.left,...hands.right,action==='net'?LINEN[0]:LINEN[1]);if(action==='stitch')prop(L.equipment,'cloth',...hands.left,frame);}
-  if(action==='eat')prop(L.equipment,'bowl',...hands.left,frame);
+  const heldLayer=cameraDepth(dir,[0,(pose.left[1]+pose.right[1])/2,0])<0?L.rearEquipment:L.equipment;
+  if(eq.central)prop(heldLayer,'crate',round((hands.left[0]+hands.right[0])/2),round((hands.left[1]+hands.right[1])/2),frame);
+  else if(eq.kind&&!eq.released)depthTool(L.rearEquipment,L.equipment,eq.kind,hands.right,tip||[hands.right[0],hands.right[1]-8],pose.right,eq.tip||pose.right,dir,frame);
+  if(['weave','net','rope','stitch','pottery'].includes(action)){heldLayer.line(...hands.left,...hands.right,action==='net'?LINEN[0]:LINEN[1]);if(action==='stitch')prop(heldLayer,'cloth',...hands.left,frame);}
+  if(action==='eat')prop(cameraDepth(dir,pose.left)<0?L.rearEquipment:L.equipment,'bowl',...hands.left,frame);
   const hasShield=OUTFITS[role]?.shield||['guard_raise','guard_hold','block','guard_break'].includes(action);
   if(hasShield&&armed&&!['surrender'].includes(action))shield(dir==='dos'||dir==='droite'?L.rearEquipment:L.equipment,hands.left,dir,role,action==='block'&&frame<=2);
   if(eq.dropped&&frame>=(action==='death'?4:2)){const a=project(dir,11,9,0);tool(L.frontProps,eq.dropped,a,[a[0]+10,a[1]+1],frame);}
+  // Only the visible fingers cover the held tool. Shields keep their outer face.
+  for(const side of ['right','left'])if(cameraDepth(dir,pose[side])>=0&&!(side==='left'&&hasShield&&armed)){
+   const h=hands[side];for(const [x,y,color]of L.arms.values())if(Math.abs(x-h[0])<=2&&Math.abs(y-h[1])<=2)L.grips.set(x,y,color);
+  }
  }
  if(smear&&ATTACKS.has(action)&&c.activeFrames.includes(frame)&&equipment&&action!=='throw_stone'){
   const smearLayer=dir==='dos'||dir==='gauche'?L.rearSmear:L.smear;const prior=combatPose(action,Math.max(0,frame-1),role),previous=project(dir,...prior.tip),current=tip,mid=[round((previous[0]+current[0])/2),round((previous[1]+current[1])/2)-1];smearLayer.line(...previous,...mid,LINEN[1],3);smearLayer.line(...mid,...current,LINEN[2],2);smearLayer.line(...previous,...current,METAL[2]);
  }
  if(action==='sow'&&frame>=3&&frame<=5){const a=project(dir,3,15,0);L.effects.set(a[0]+frame-4,a[1],LINEN[2]);}
  if(action==='honey'&&frame%2){const a=hands.right;L.effects.rect(a[0],a[1]-9-frame%3,2,1,'#a4aba2');}
- const hidden=!!pose.hidden;if(hidden)for(const k of ['body','clothing','headgear','arms','rearArms','rearEquipment','equipment'])L[k]=new Pixels();
- return {width:80,height:80,layers:Object.fromEntries(Object.entries(L).map(([k,v])=>[k,v.values()])),order:['rearProps','rearSmear','rearEquipment','rearArms','body','clothing','headgear','arms','frontProps','smear','equipment','effects'],metadata:{action,dir,frame,sex,tone,role,hands,elbows,toolTip:tip,tool:equipment?eq.kind:null,toolReleased:!!eq.released,active:c.activeFrames.includes(frame),visible:!hidden,markers:c.markers.filter(m=>m.frame===frame).map(m=>m.id),contact:c.contact,navigationRequired:c.navigationRequired,rootMotion:false,clippedPixels:Object.values(L).reduce((a,v)=>a+v.outside,0)}};
+ const hidden=!!pose.hidden;if(hidden)for(const k of ['body','clothing','headgear','arms','grips','rearArms','rearEquipment','equipment'])L[k]=new Pixels();
+ return {width:80,height:80,layers:Object.fromEntries(Object.entries(L).map(([k,v])=>[k,v.values()])),order:['rearProps','rearSmear','rearEquipment','rearArms','body','clothing','headgear','frontProps','arms','smear','equipment','grips','effects'],metadata:{action,dir,frame,sex,tone,role,hands,elbows,toolTip:tip,tool:equipment?eq.kind:null,toolReleased:!!eq.released,active:c.activeFrames.includes(frame),visible:!hidden,markers:c.markers.filter(m=>m.frame===frame).map(m=>m.id),contact:c.contact,navigationRequired:c.navigationRequired,rootMotion:false,clippedPixels:Object.values(L).reduce((a,v)=>a+v.outside,0)}};
 }
 function raster(options={}){const r=renderLayers(options),data=new Uint8ClampedArray(80*80*4),which=options.layer?[options.layer]:r.order;for(const name of which){if(!r.layers[name])throw RangeError('Calque inconnu');for(const [x,y,color]of r.layers[name]){const n=parseInt(color.slice(1),16),i=(y*80+x)*4;data[i]=n>>16;data[i+1]=n>>8&255;data[i+2]=n&255;data[i+3]=255;}}return {width:80,height:80,data,metadata:r.metadata};}
 function draw(ctx,options={}){const r=renderLayers(options);ctx.imageSmoothingEnabled=false;const x=round(options.x||0),y=round(options.y||0);for(const name of options.layer?[options.layer]:r.order){if(!r.layers[name])throw RangeError('Calque inconnu');for(const [px,py,color]of r.layers[name]){ctx.fillStyle=color;ctx.fillRect(x+px,y+py,1,1);}}return r.metadata;}
@@ -284,5 +319,5 @@ function tryBlock({role,state,actor,source,sameLevel,lineClear,unblockable=false
  const dir=Base.directionName(actor.dir??2),v={face:[0,1],dos:[0,-1],droite:[1,0],gauche:[-1,0]}[dir],dx=source.x-actor.x,dy=source.y-actor.y,len=Math.hypot(dx,dy)||1;if((v[0]*dx+v[1]*dy)/len<=.25)return {blocked:false};
  if(heavy||source.combo===3){state.guardHold=0;state.action='guard_break';actor.stun=.85;return {blocked:false,guardBreak:true,stun:.85};}state.blockCount=(state.blockCount||0)+1;state.action='block';return {blocked:true,blood:false,impactRecovery:.34};
 }
-return {VERSION:'2.0.0',Base,SPECS,ROLE_INFO,OUTFITS,CLIPS,frameAt,eventsBetween,project,renderLayers,raster,draw,Atlas,tryBlock,isAttack:id=>ATTACKS.has(id)};
+return {VERSION:'2.0.0',Base,SPECS,ROLE_INFO,OUTFITS,CLIPS,activitiesFor,frameAt,eventsBetween,project,renderLayers,raster,draw,Atlas,tryBlock,isAttack:id=>ATTACKS.has(id)};
 });

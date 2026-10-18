@@ -1,4 +1,13 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');const A=require('../sprites/hommes-singes/activites');
+test('civilian functions expose danger reactions without armed attacks or shields',()=>{
+ for(const [role,outfit]of Object.entries(A.OUTFITS)){
+  const allowed=A.activitiesFor(role);assert.ok(allowed.includes('flee'));assert.ok(allowed.includes('hit'));
+  if(!outfit.weapon){assert.ok(allowed.every(id=>!A.isAttack(id)));assert.ok(!allowed.includes('armed_idle'));assert.ok(!allowed.includes('guard_hold'));
+   for(const action of ['death','surrender']){const r=A.renderLayers({role,action,frame:A.CLIPS[action].frames-1,scene:false});assert.equal(r.layers.frontProps.length,0,'unarmed civilian must not drop a sword');}
+  }
+ }
+ assert.ok(!A.activitiesFor('gardener').includes('pottery'));assert.ok(A.activitiesFor('warden').includes('spear_thrust'));assert.ok(!A.activitiesFor('brigand').includes('blade_cut'));
+});
 test('all activity poses preserve canvas bounds and depth ordering in both silhouettes',()=>{
  let count=0;
  for(const sex of ['male','female'])for(const dir of ['face','dos','gauche','droite'])for(const [action,c]of Object.entries(A.CLIPS))for(let frame=0;frame<c.frames;frame++){
@@ -27,5 +36,27 @@ test('weapon smears follow the weapon depth, and combat returns to rest',()=>{
  const strike=A.renderLayers({action,frame:5,dir,role:'warden'});assert.ok(strike.layers[dir==='dos'||dir==='gauche'?'rearSmear':'smear'].length>0);
  const end=A.renderLayers({action,frame:11,dir,role:'warden'}),rest=A.renderLayers({action:'armed_idle',frame:0,dir,role:'warden'});
  assert.deepEqual(end.metadata.hands,rest.metadata.hands);
+ }
+});
+test('rear activity props cannot paint through the actor when viewed from behind',()=>{
+ for(const action of ['carry','cook','pottery','weave','rope','bandage','harvest_fruit']){
+  const options={action,frame:3,dir:'dos',role:'gardener'},r=A.renderLayers(options),image=A.raster(options);
+  const character=new Map();for(const layer of ['body','clothing','headgear'])for(const [x,y,color]of r.layers[layer])character.set(y*80+x,color);
+  let overlaps=0;for(const layer of ['rearProps','rearEquipment'])for(const [x,y]of r.layers[layer]){
+   const color=character.get(y*80+x);if(!color)continue;
+   // Exclude genuinely foreground seat bars and other visible character layers.
+   if(['frontProps','arms','equipment','grips','effects'].some(k=>r.layers[k].some(p=>p[0]===x&&p[1]===y)))continue;
+   const n=parseInt(color.slice(1),16),i=(y*80+x)*4;
+   assert.deepEqual([...image.data.slice(i,i+3)],[n>>16,n>>8&255,n&255],action+' accessory visible through body');overlaps++;
+  }
+  assert.ok(overlaps>0,action+' exercises an actual occlusion');
+ }
+});
+test('fingers cover handles, and forward work surfaces precede the near arm',()=>{
+ for(const action of ['hoe','carry','cook','saw']){
+  const r=A.renderLayers({action,frame:3,dir:'face',role:'gardener'});
+  assert.ok(r.order.indexOf('frontProps')<r.order.indexOf('arms'));
+  assert.ok(r.order.indexOf('equipment')<r.order.indexOf('grips'));
+  assert.ok(r.layers.grips.length>0,action+' has visible fingers');
  }
 });
