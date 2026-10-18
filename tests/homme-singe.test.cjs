@@ -12,3 +12,7 @@ test('walk cycles move both limbs, keep a planted foot and wrap exactly',()=>{
  for(const clip of Object.keys(A.CLIPS)){const period=A.CLIPS[clip].durations.reduce((a,b)=>a+b,0)/1000;assert.equal(A.frameAt(clip,0),A.frameAt(clip,period));}
 });
 test('native-to-engine translation preserves exactly the approved 16px offset',()=>{const native=createCanvas(48,48),engine=createCanvas(80,80);A.draw(native.getContext('2d'));A.draw(engine.getContext('2d'),{format:'engine'});assert.deepEqual(engine.getContext('2d').getImageData(16,16,48,48).data,native.getContext('2d').getImageData(0,0,48,48).data);});
+
+test('the canonical idle preserves every indexed source pixel in all four independent views',()=>{
+ for(const dir of A.directions){const expected=createCanvas(48,48),c=expected.getContext('2d'),rows=A.SOURCE_VIEWS[dir],offset=dir==='face'||dir==='dos'?14:16;rows.forEach((row,y)=>[...row].forEach((key,x)=>{if(key!=='.'){c.fillStyle=A.PALETTE[key];c.fillRect(x+offset,y+11,1,1);}}));const actual=createCanvas(48,48);A.draw(actual.getContext('2d'),{dir});assert.deepEqual(actual.getContext('2d').getImageData(0,0,48,48).data,c.getImageData(0,0,48,48).data);}
+});
