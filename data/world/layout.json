@@ -1,0 +1,22 @@
+{
+  "id": "pays-20",
+  "note": "Monde resserré, version Équilibré : distances Azgaar divisées par 20, un pays par région, routes d'environ 30 minutes à pied entre pays voisins, frontières naturelles ailleurs.",
+  "scale": 20,
+  "raster": 25,
+  "paysRadius": { "base": 1000, "perSqrtSettlement": 550 },
+  "paysGap": 2200,
+  "linkTarget": 7000,
+  "fringe": 1500,
+  "settlementSpacing": 1200,
+  "biomeReach": 500,
+  "settlementWaterClearance": 60,
+  "campClearance": 140,
+  "templeDistance": 1100,
+  "portReach": 3200,
+  "portInland": 110,
+  "corridor": { "road": 600, "trail": 250, "access": 350, "wild": 350 },
+  "wild": { "radius": 2200, "minDistance": 2500, "maxDistance": 7000 },
+  "border": { "amplitude": 260, "wavelength": 700, "share": 0.45 },
+  "blend": 60,
+  "maskStep": 150
+}

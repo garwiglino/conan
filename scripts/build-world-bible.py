@@ -123,20 +123,22 @@ def point_inside(poly,x,y):
 
 class TerrainIndex:
     def __init__(self,atlas):
-        self.buckets=defaultdict(list)
+        # A compact layout divides every distance by its scale; buckets follow.
+        self.buckets=defaultdict(list);self.size=64000/((atlas.get('layout') or {}).get('scale') or 1);size=self.size
         for c in atlas.get('cells',[]):
             if not isinstance(c,list) or len(c)<10 or not c[3]:continue
             poly=c[9]
             if not isinstance(poly,list) or len(poly)<6 or len(poly)%2:continue
-            for gx in range(math.floor(min(poly[::2])/64000),math.floor(max(poly[::2])/64000)+1):
-                for gy in range(math.floor(min(poly[1::2])/64000),math.floor(max(poly[1::2])/64000)+1):self.buckets[gx,gy].append(c)
+            for gx in range(math.floor(min(poly[::2])/size),math.floor(max(poly[::2])/size)+1):
+                for gy in range(math.floor(min(poly[1::2])/size),math.floor(max(poly[1::2])/size)+1):self.buckets[gx,gy].append(c)
     def region_at(self,x,y):
-        for c in self.buckets.get((math.floor(x/64000),math.floor(y/64000)),[]):
+        for c in self.buckets.get((math.floor(x/self.size),math.floor(y/self.size)),[]):
             if point_inside(c[9],x,y):return int(c[6])
         return None
 
 def transport(atlas,sites,region_map):
     terrain=TerrainIndex(atlas);graph=defaultdict(list);vpos={};routes=[];by_site=defaultdict(list);binding={};aliases={}
+    own_vertex={str(s['id']):s['vertex'] for s in atlas.get('sites',[]) if isinstance(s,dict) and s.get('vertex') is not None}
     for s in sites:
         for alias in [s['atlasId'],str(s.get('sourceId','')),s['atlasId'].removeprefix('bourg-').removeprefix('town-')]:
             if alias:aliases[alias]=s['atlasId']
@@ -162,8 +164,9 @@ def transport(atlas,sites,region_map):
             if reg in region_map:rr.add(reg)
         routes.append({'atlasRouteId':rid,'name':r.get('name',rid),'mode':'boat' if sea else 'land','lengthM':round(length,1),'regions':sorted(rr),'siteIds':sorted(touching),'_keys':set(keys)})
     for s in sites:
-        exact='c:'+str(s.get('cell'))
-        if s.get('cell') is not None and exact in graph:binding[s['atlasId']]=exact
+        # Compact atlases give each settlement its own route vertex; older ones share the cell.
+        key=own_vertex.get(s['atlasId'],s.get('cell'));exact='c:'+str(key)
+        if key is not None and exact in graph:binding[s['atlasId']]=exact
         if s['atlasId'] not in binding and vpos:
             k=min(vpos,key=lambda k:math.dist(vpos[k],(s['x'],s['y'])))
             if math.dist(vpos[k],(s['x'],s['y']))<=300:binding[s['atlasId']]=k

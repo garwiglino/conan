@@ -567,14 +567,14 @@
     },
     "speciesCounts": {
       "goblin": 65863,
-      "human": 547725,
-      "orc": 6412,
+      "human": 547939,
+      "orc": 6198,
       "serpentfolk": 0
     },
     "speciesPct": {
       "goblin": 10.62,
-      "human": 88.34,
-      "orc": 1.04,
+      "human": 88.38,
+      "orc": 1.0,
       "serpentfolk": 0.0
     },
     "territory": "Teremor"
@@ -855,15 +855,15 @@
       "serpentfolk": 0
     },
     "speciesCounts": {
-      "goblin": 45125,
-      "human": 517284,
-      "orc": 17591,
+      "goblin": 45124,
+      "human": 517412,
+      "orc": 17464,
       "serpentfolk": 0
     },
     "speciesPct": {
       "goblin": 7.78,
-      "human": 89.19,
-      "orc": 3.03,
+      "human": 89.21,
+      "orc": 3.01,
       "serpentfolk": 0.0
     },
     "territory": "Teremor"
@@ -1486,14 +1486,14 @@
     },
     "speciesCounts": {
       "goblin": 38985,
-      "human": 408181,
-      "orc": 8878,
+      "human": 408342,
+      "orc": 8717,
       "serpentfolk": 3956
     },
     "speciesPct": {
-      "goblin": 8.47,
-      "human": 88.74,
-      "orc": 1.93,
+      "goblin": 8.48,
+      "human": 88.77,
+      "orc": 1.89,
       "serpentfolk": 0.86
     },
     "territory": "Sarak"
@@ -1996,14 +1996,14 @@
     },
     "speciesCounts": {
       "goblin": 19200,
-      "human": 285824,
-      "orc": 6912,
+      "human": 286080,
+      "orc": 6656,
       "serpentfolk": 8064
     },
     "speciesPct": {
       "goblin": 6.0,
-      "human": 89.32,
-      "orc": 2.16,
+      "human": 89.4,
+      "orc": 2.08,
       "serpentfolk": 2.52
     },
     "territory": "Tagon"
@@ -2166,14 +2166,14 @@
     },
     "speciesCounts": {
       "goblin": 18250,
-      "human": 232158,
-      "orc": 5498,
+      "human": 232208,
+      "orc": 5448,
       "serpentfolk": 14094
     },
     "speciesPct": {
       "goblin": 6.76,
-      "human": 85.98,
-      "orc": 2.04,
+      "human": 86.0,
+      "orc": 2.02,
       "serpentfolk": 5.22
     },
     "territory": "Tagon"

@@ -30,15 +30,15 @@
       7
     ],
     "speciesCounts": {
-      "goblin": 245811,
-      "human": 2593250,
-      "orc": 40939,
+      "goblin": 245810,
+      "human": 2593592,
+      "orc": 40598,
       "serpentfolk": 0
     },
     "speciesPct": {
-      "goblin": 8.54,
-      "human": 90.04,
-      "orc": 1.42,
+      "goblin": 8.53,
+      "human": 90.06,
+      "orc": 1.41,
       "serpentfolk": 0.0
     }
   },
@@ -52,14 +52,14 @@
     ],
     "speciesCounts": {
       "goblin": 113405,
-      "human": 782488,
-      "orc": 47721,
+      "human": 782649,
+      "orc": 47560,
       "serpentfolk": 6386
     },
     "speciesPct": {
       "goblin": 11.94,
-      "human": 82.37,
-      "orc": 5.02,
+      "human": 82.38,
+      "orc": 5.01,
       "serpentfolk": 0.67
     }
   },
@@ -92,14 +92,14 @@
     ],
     "speciesCounts": {
       "goblin": 37450,
-      "human": 517982,
-      "orc": 12410,
+      "human": 518288,
+      "orc": 12104,
       "serpentfolk": 22158
     },
     "speciesPct": {
       "goblin": 6.35,
-      "human": 87.79,
-      "orc": 2.1,
+      "human": 87.84,
+      "orc": 2.05,
       "serpentfolk": 3.76
     }
   }
