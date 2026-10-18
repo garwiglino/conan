@@ -25,10 +25,16 @@ replaceOnce("if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(act
 // Putting an outfit on: the dressing pose replaces the hero's idle while it plays.
 replaceOnce("frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}const im=this.get(",
  "frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}if(kind==='hero'){const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time);if(dressed){state=dressed.state;frame=dressed.frame;}}const im=this.get(");
-// Wardrobe in the inventory tab and the take action on a mannequin.
-replaceOnce("Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>';","Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>'+KaldorWardrobe.inventoryHTML(g);");
+// Wardrobe: the Tenue row right under the character, its screen bound after the drink button.
+html=html.replace("Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>'+KaldorWardrobe.inventoryHTML(g);","Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>';"); // first wardrobe build
+replaceOnce("Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+'<div class=\"m-sec\">Objets</div>","Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+KaldorWardrobe.inventoryHTML(g)+'<div class=\"m-sec\">Objets</div>");
 replaceOnce("$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});","$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});KaldorWardrobe.bindInventory(body,g,()=>{handleEvents();renderMenu();});");
-replaceOnce("sleep:['moon','DORMIR']}","sleep:['moon','DORMIR'],outfit:['hand','PRENDRE']}");
+// Take action on a mannequin or helmet post.
+html=html.replace("sleep:['moon','DORMIR'],outfit:['hand','PRENDRE']}","sleep:['moon','DORMIR']}"); // first wardrobe build
+replaceOnce("sleep:['moon','DORMIR']}","sleep:['moon','DORMIR'],outfit:['hand','PRENDRE'],helmet:['hand','PRENDRE']}");
+// The Tenue screen closes with another tab or a reopened menu; Escape goes back to the inventory.
+replaceOnce("menuTab=tab;if(tab==='quests')game.quests.fresh=false;","KaldorWardrobe.leave();menuTab=tab;if(tab==='quests')game.quests.fresh=false;");
+replaceOnce("if(menuTab==='options'&&e.code==='Escape')selectMenuTab(menuPrevious,true);else closeMenu();","if(menuTab==='options'&&e.code==='Escape')selectMenuTab(menuPrevious,true);else if(menuTab==='bag'&&e.code==='Escape'&&KaldorWardrobe.leave())renderMenu();else closeMenu();");
 // Slightly shorter sword from the ONE authoritative pose used by both hit sweep
 // and v3 art. The authored four combo trajectories remain entirely unchanged.
 replaceOnce('return [p[0],p[1],p[2]*1.1,p[3]*1.1];','return [p[0],p[1],p[2]*1.02,p[3]*1.02];');
@@ -63,5 +69,5 @@ if(poseStart<0||poseEnd<0)throw Error('Kaldor: authored sword pose source missin
 const marker='/*__KALDOR_POSE_CODE__*/',template=fs.readFileSync(path.join(root,'art/kaldor-preview-template.html'),'utf8');
 if(template.split(marker).length!==2)throw Error('Kaldor: preview marker not unique');
 write('art/kaldor-preview.html',template.replace(marker,html.slice(poseStart,poseEnd)));
-write('data/kaldor-manifest.json',JSON.stringify({version:4,authored:'Aseprite human NPC modules + JavaScript sword',npcCell:[48,48],cell:[80,80],anchor:[40,52],outfit:'pagne-noue',outfits:Object.keys(JSON.parse(outfitData).outfits),head:'masculin-adulte',hair:'masculin-hair-14',walkFrames:8,bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{legacyArt:crypto.createHash('sha256').update(source).digest('hex'),humanBridge:crypto.createHash('sha256').update(humanBridge).digest('hex'),outfits:crypto.createHash('sha256').update(outfitData).digest('hex'),wardrobe:crypto.createHash('sha256').update(wardrobe).digest('hex')}},null,2)+'\n');
-console.log('Kaldor v5 rebuilt, wardrobe of '+Object.keys(JSON.parse(outfitData).outfits).length+' outfits — actual modular NPC human head/hair/body/8-step gait + authoritative sword.');
+write('data/kaldor-manifest.json',JSON.stringify({version:5,authored:'Aseprite human NPC modules + JavaScript sword',npcCell:[48,48],cell:[80,80],anchor:[40,52],outfit:'pagne-noue',outfits:Object.keys(JSON.parse(outfitData).outfits),helmets:Object.keys(JSON.parse(outfitData).helmets||{}),head:'masculin-adulte',hair:'masculin-hair-14',walkFrames:8,bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{legacyArt:crypto.createHash('sha256').update(source).digest('hex'),humanBridge:crypto.createHash('sha256').update(humanBridge).digest('hex'),outfits:crypto.createHash('sha256').update(outfitData).digest('hex'),wardrobe:crypto.createHash('sha256').update(wardrobe).digest('hex')}},null,2)+'\n');
+console.log('Kaldor v5 rebuilt, wardrobe of '+Object.keys(JSON.parse(outfitData).outfits).length+' outfits and '+Object.keys(JSON.parse(outfitData).helmets||{}).length+' helmets — actual modular NPC human head/hair/body/8-step gait + authoritative sword.');

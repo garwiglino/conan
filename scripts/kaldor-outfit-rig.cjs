@@ -2,8 +2,9 @@
  * Node port of the civilian Aseprite Lua rig (poses.lua, animer.lua warp and
  * tool, finaliser.lua foreground): the same static 4-direction layered
  * source gives the same frames, pixel for pixel (tests/kaldor-outfits).
- * Hero additions: the 'dress' clip (whole arms raised to hand targets) and
- * outfit sources written as pixel grids in art/kaldor-tenues/.
+ * Hero additions: the 'dress' and 'helm' clips (whole arms raised to hand
+ * targets) and outfit and helmet sources written as pixel grids in
+ * art/kaldor-tenues/ and art/kaldor-casques/.
  */
 'use strict';
 const W=80,H=80;
@@ -44,6 +45,13 @@ clip('dress',false,[140,110,170,120,150,110,180,160],[
  {breath:1,reach:{front:[[33,37],[46,37]],side:[[43,35]]}},
  {breath:1,reach:{front:[[34,38],[45,38]],side:[[44,37]]}},
  {sit:2,lean:1},{sit:1,arms:1},{breath:1,arms:2},{}]);
+// Hero only: a helmet lifted onto the head (or off it) with both hands,
+// pressed down on the hair, then the arms drop.
+clip('helm',false,[130,160,170,130,170],[
+ {breath:-1,reach:{front:[[36,42],[43,42]],side:[[42,43]]}},
+ {reach:{front:[[32,35],[47,35]],side:[[44,33]]}},
+ {breath:1,reach:{front:[[33,36],[46,36]],side:[[43,35]]}},
+ {breath:1,arms:1},{}]);
 
 // ---- animer.lua ----
 function role(name){

@@ -12,6 +12,9 @@
  * KALDOR_OUTFITS (scripts/build-kaldor-outfits.cjs, same rig as the NPCs);
  * the head and hair stay the civilian modules. wear() switches the outfit and
  * the 'dress' clip pulls the new garment over his head.
+ * Helmets (v5): three planes like the NPC headgear modules, the nape behind
+ * the head, the helmet over the hair and a mask that erases the hair under
+ * it. wearHelmet() switches it and the 'helm' clip lifts it onto his head.
  */
 (function(root,factory){
  'use strict';
@@ -27,12 +30,15 @@
   hair:'14',color:'brun',hat:null,beard:null,moustache:null
  });
  const START_OUTFIT='pagne-noue';
- const worn={outfit:START_OUTFIT,previous:null};
+ // previous: what he wore before the last change ({outfit, helmet}), shown
+ // until the swap frame of the dress or helm clip.
+ const worn={outfit:START_OUTFIT,helmet:null,previous:null};
  const foot=Object.freeze({x:40,y:52});
  const cache=new Map(),strides=new WeakMap(),layerCache=new Map(),sheets=new Map();
  let loading=null,loaded=false,failed=false;
  const OUTFITS=()=>typeof KALDOR_OUTFITS!=='undefined'?KALDOR_OUTFITS:null;
  const outfitData=id=>OUTFITS()?.outfits?.[id]||null;
+ const helmetData=id=>id&&OUTFITS()?.helmets?.[id]||null;
  const headId=appearance.sex+'-'+appearance.age,hairId=appearance.sex+'-hair-'+appearance.hair;
  const valid=()=>typeof CIVILIAN_ART!=='undefined'&&typeof CIVILIAN_BITMAPS!=='undefined'&&
   !!outfitData(worn.outfit)&&!!CIVILIAN_ART.modules?.[headId]&&!!CIVILIAN_ART.modules?.[hairId];
@@ -44,12 +50,14 @@
   im.src='data:image/png;base64,'+asset.png;sheets.set(key,e);return e;
  }
  function sheetsOf(o){return {body:sheet(o.id,o.asset),fore:sheet(o.id+'-front',o.foreground),bare:sheet(o.id+'-bare',o.bare),stand:sheet(o.id+'-stand',o.stand)};}
+ const helmetSheet=h=>sheet('casque:'+h.id,h.asset);
  function preload(){
   if(!valid())return Promise.resolve(false);
   if(loading)return loading;
   const modules=[headId,hairId].map(id=>sheet(id,CIVILIAN_ART.modules[id].asset).promise);
   const outfits=Object.values(OUTFITS().outfits).flatMap(o=>Object.values(sheetsOf(o)).map(e=>e.promise));
-  loading=Promise.all([...modules,...outfits])
+  const helmets=Object.values(OUTFITS().helmets||{}).map(h=>helmetSheet(h).promise);
+  loading=Promise.all([...modules,...outfits,...helmets])
    .then(values=>{loaded=values.every(Boolean);failed=!loaded;return loaded;})
    .catch(()=>{loaded=false;failed=true;return false;});
   return loading;
@@ -175,8 +183,8 @@
  }
 
  // ---- Separate NPC layers, so the head, hair and torso can move apart. ----
- function layers(action,dir,frame,outfit=worn.outfit){
-  const key=[outfit,action,dir,frame].join(':');
+ function layers(action,dir,frame,outfit=worn.outfit,helmet=worn.helmet){
+  const key=[outfit,helmet,action,dir,frame].join(':');
   if(layerCache.has(key))return layerCache.get(key);
   const A=CIVILIAN_ART,o=outfitData(outfit),d=[2,1,0,3][dir];
   if(!o||!o.frames[action])return null;
@@ -191,7 +199,7 @@
   const headImage=image(sheet(headId,A.modules[headId].asset)),hairImage=image(sheet(hairId,A.modules[hairId].asset));
   if(!bodyImage||!foreImage||!bareImage||!headImage||!hairImage)return null;
   // Hero-only clips reuse the rest head, moved like the rig moves a head.
-  const hero=!A.moduleFrames[action],[hx,hy]=hero?OUTFITS().dress.head[d][frame]:[0,0];
+  const hero=!A.moduleFrames[action],[hx,hy]=hero?OUTFITS()[action].head[d][frame]:[0,0];
   const base=hero?A.moduleFrames.idle[d]:A.moduleFrames[action][d]+frame,index=o.frames[action][d]+frame;
   const out={
    body:tile(o.asset,bodyImage,index),
@@ -199,16 +207,33 @@
    bare:tile(o.bare,bareImage,index),
    head:tile(A.modules[headId].asset,headImage,base,hx,hy),
    hair:[0,1,2].map(p=>tile(A.modules[hairId].asset,hairImage,base+p*A.moduleCount,hx,hy)),
-   headFirst:!!o.headFirst,fold:o.torso==='fold'
+   headFirst:!!o.headFirst,fold:o.torso==='fold',hat:null,mask:null
   };
+  // Helmet planes, animated with the same clips as the outfit bodies.
+  const h=helmetData(helmet);
+  if(h){
+   const helmImage=image(helmetSheet(h));if(!helmImage)return null;
+   const at=h.frames[action][d]+frame;
+   out.hat=[0,1].map(p=>tile(h.asset,helmImage,p*h.count+at));
+   out.mask=tile(h.asset,helmImage,2*h.count+at);
+  }
   layerCache.set(key,out);while(layerCache.size>48)layerCache.delete(layerCache.keys().next().value);
   return out;
  }
- // The same stack as CivilianAtlas.get for Kaldor's head, hair and outfit.
+ // A hair plane at (tx,ty) with the helmet mask at the head (hx,hy) erased,
+ // as CivilianAtlas.get masks the hair under an NPC's headgear.
+ function hairOn(c,L,p,tx=0,ty=0,hx=tx,hy=ty){
+  if(!L.mask){c.drawImage(L.hair[p],tx,ty);return;}
+  const [cv,k]=canvas80();k.drawImage(L.hair[p],tx,ty);
+  k.globalCompositeOperation='destination-out';k.drawImage(L.mask,hx,hy);c.drawImage(cv,0,0);
+ }
+ // The same stack as CivilianAtlas.get for Kaldor's head, hair, outfit and
+ // helmet (nape behind the head, helmet over the front hair).
  function human(L){
   const [out,c]=canvas80();
-  c.drawImage(L.hair[0],0,0);if(L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.body,0,0);
-  c.drawImage(L.hair[1],0,0);if(!L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.fore,0,0);c.drawImage(L.hair[2],0,0);
+  hairOn(c,L,0);if(L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.body,0,0);
+  hairOn(c,L,1);if(L.hat)c.drawImage(L.hat[0],0,0);if(!L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.fore,0,0);
+  hairOn(c,L,2);if(L.hat)c.drawImage(L.hat[1],0,0);
   return out;
  }
  // Fold the two baked NPC hands into the torso: Kaldor's hands are on the grip.
@@ -437,14 +462,16 @@
  function stack(c,L,legs,dir,head=[0,0],hair=[0,0],shift=[0,0]){
   const at=(img,dx,dy)=>c.drawImage(img,dx,dy);
   const [hx,hy]=head,[tx,ty]=[hx+hair[0],hy+hair[1]];
-  at(L.hair[0],tx,ty);
+  hairOn(c,L,0,tx,ty,hx,hy);
   if(L.headFirst)at(L.head,hx,hy);
   at(torso(legs,dir,shift[0]),0,0);
-  at(L.hair[1],tx,ty);
+  hairOn(c,L,1,tx,ty,hx,hy);
+  if(L.hat)at(L.hat[0],hx,hy);
   if(!L.headFirst)at(L.head,hx,hy);
   at(legs.fore,0,0);
   c.save();c.translate(40+shift[0],52+shift[1]);gear(c,dir);c.restore();
-  at(L.hair[2],tx,ty);
+  hairOn(c,L,2,tx,ty,hx,hy);
+  if(L.hat)at(L.hat[1],hx,hy);
  }
  const paintAt=(c,g)=>{c.save();c.translate(40,52);g.paint(c);c.restore();};
  function attackFrame(dir,frame,combo,swordPose){
@@ -496,13 +523,13 @@
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
-  const key=[worn.outfit,worn.previous,dir,state,frame,combo,!!flash].join(':');
+  const key=[worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
   if(cache.has(key)){
    const value=cache.get(key);cache.delete(key);cache.set(key,value);return value;
   }
   let out;dressArms(outfitData(worn.outfit));
-  if(state==='dress'){
-   out=dressFrame(dir,Math.max(0,Math.min(clip('dress').durations.length-1,frame|0)));
+  if(state==='dress'||state==='helm'){
+   out=dressFrame(dir,Math.max(0,Math.min(clip(state).durations.length-1,frame|0)),state);
    if(!out)return null;
   }else if(state==='attack'){
    out=attackFrame(dir,Math.max(0,Math.min(5,frame)),combo,swordPose);
@@ -535,48 +562,76 @@
   cache.set(key,out);while(cache.size>192)cache.delete(cache.keys().next().value);
   return out;
  }
- // Putting an outfit on: the old one until the garment is over the head, then
- // the new one; the sword stays in its scabbard on the back.
- function dressFrame(dir,frame){
-  const D=OUTFITS().dress,next=outfitData(worn.outfit),now=frame<D.swap&&outfitData(worn.previous)?worn.previous:worn.outfit;
-  const L=layers('dress',dir,frame,now);if(!L)return null;
-  const [out,c]=canvas80(),d=[2,1,0,3][dir],shift=bodyShift('dress',dir,frame);
+ // Putting an outfit on ('dress'): the old one until the garment is over the
+ // head, then the new one. Changing helmets ('helm'): the old helmet until
+ // both hands hold the new one at the head. The sword stays on the back.
+ function dressFrame(dir,frame,id='dress'){
+  const D=OUTFITS()[id],next=outfitData(worn.outfit),before=frame<D.swap&&worn.previous;
+  const outfit=id==='dress'&&before&&outfitData(worn.previous.outfit)?worn.previous.outfit:worn.outfit;
+  const helmet=id==='helm'&&before?worn.previous.helmet:worn.helmet;
+  const L=layers(id,dir,frame,outfit,helmetData(helmet)?helmet:null);if(!L)return null;
+  const [out,c]=canvas80(),d=[2,1,0,3][dir],shift=bodyShift(id,dir,frame);
   const onBody=paint=>{c.save();c.translate(40+shift[0],52+shift[1]);paint();c.restore();};
   if(dir!==0)onBody(()=>scabbard(c,dir));
-  c.drawImage(L.hair[0],0,0);if(L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.body,0,0);
-  c.drawImage(L.hair[1],0,0);if(!L.headFirst)c.drawImage(L.head,0,0);
-  onBody(()=>gear(c,dir));c.drawImage(L.hair[2],0,0);
+  hairOn(c,L,0);if(L.headFirst)c.drawImage(L.head,0,0);c.drawImage(L.body,0,0);
+  hairOn(c,L,1);if(L.hat)c.drawImage(L.hat[0],0,0);if(!L.headFirst)c.drawImage(L.head,0,0);
+  onBody(()=>gear(c,dir));hairOn(c,L,2);if(L.hat)c.drawImage(L.hat[1],0,0);
   if(dir===0)onBody(()=>scabbard(c,dir));
   // Raised arms and the garment are in front of the hair.
-  for(const [x,y,k] of D.cloth[d][frame]){c.fillStyle=k===3?INK:'#'+next.cloth[k];c.fillRect(x,y,1,1);}
+  if(D.cloth)for(const [x,y,k] of D.cloth[d][frame]){c.fillStyle=k===3?INK:'#'+next.cloth[k];c.fillRect(x,y,1,1);}
   c.drawImage(L.fore,0,0);
   return out;
  }
- const dressMs=()=>clip('dress')?.durations.reduce((a,b)=>a+b,0)||0;
+ const clipMs=id=>clip(id)?.durations.reduce((a,b)=>a+b,0)||0;
  function wear(id){
   if(!outfitData(id))return false;
-  if(id!==worn.outfit){worn.previous=worn.outfit;worn.outfit=id;}
+  if(id!==worn.outfit){worn.previous={outfit:worn.outfit,helmet:worn.helmet};worn.outfit=id;}
   return true;
  }
- // Engine hook: the dressing pose replaces idle while it plays; moving,
- // fighting or being hit ends it at once.
+ // null takes the helmet off.
+ function wearHelmet(id){
+  if(id!==null&&!helmetData(id))return false;
+  if(id!==worn.helmet){worn.previous={outfit:worn.outfit,helmet:worn.helmet};worn.helmet=id;}
+  return true;
+ }
+ // Engine hook: the dressing pose (dress or helm clip) replaces idle while it
+ // plays; moving, fighting or being hit ends it at once.
  function dressLook(actor,time){
   const d=actor?.dressing;if(!d)return null;
-  const t=time-d.t0;
-  if(actor.moving||actor.attack>0||actor.dash>0||actor.hurt>0||actor.guard||actor.melee>0||t<0||t*1000>=dressMs()){actor.dressing=null;return null;}
-  return {state:'dress',frame:frameAt('dress',t)};
+  const t=time-d.t0,id=d.clip==='helm'?'helm':'dress';
+  if(actor.moving||actor.attack>0||actor.dash>0||actor.hurt>0||actor.guard||actor.melee>0||t<0||t*1000>=clipMs(id)){actor.dressing=null;return null;}
+  return {state:id,frame:frameAt(id,t)};
  }
- // Kaldor in any outfit for menus and the mannequin of a found outfit.
- function portrait(id,dir=2,state='sheathed_idle',frame=0){
-  const keep={...worn};worn.outfit=id;worn.previous=null;
+ // Kaldor in any outfit and helmet, for menus: portrait('id') or
+ // portrait({outfit, helmet}); a bare id shows the outfit without helmet.
+ function portrait(look,dir=2,state='sheathed_idle',frame=0){
+  const keep={...worn};
+  if(typeof look==='string')look={outfit:look,helmet:null};
+  worn.outfit=look.outfit||worn.outfit;worn.helmet=look.helmet===undefined?worn.helmet:look.helmet;worn.previous=null;
   try{return nativeFrame(dir,state,frame);}finally{Object.assign(worn,keep);}
  }
- // Mannequin pieces (stand sheet): 0 the garment without legs, 1 its boots.
+ // Kaldor's bare head and mane at rest, seen from the front ("no helmet").
+ function bareHead(){
+  const key='head:'+worn.outfit;if(layerCache.has(key))return layerCache.get(key);
+  const L=layers('idle',2,0,worn.outfit,null);if(!L)return null;
+  const [out,c]=canvas80();c.drawImage(L.hair[0],0,0);c.drawImage(L.head,0,0);c.drawImage(L.hair[1],0,0);c.drawImage(L.hair[2],0,0);
+  layerCache.set(key,out);return out;
+ }
+ // Kaldor bareheaded in an outfit, at rest and seen from the front (wardrobe icon).
+ function figure(id){
+  const key='figure:'+id;if(layerCache.has(key))return layerCache.get(key);
+  const L=layers('idle',2,0,id,null);if(!L)return null;
+  const out=human(L);layerCache.set(key,out);return out;
+ }
+ // Mannequin pieces. Outfit (stand sheet): 0 the garment without legs, 1 its
+ // boots. Helmet: its nape and helmet planes at rest, seen from the front.
  function garment(id,part=0){
-  const o=outfitData(id),e=o&&sheetsOf(o).stand;if(!e?.ready)return null;
   const key='stand:'+id+':'+part;if(layerCache.has(key))return layerCache.get(key);
+  const o=outfitData(id),h=!o&&helmetData(id),e=o?sheetsOf(o).stand:h&&helmetSheet(h);if(!e?.ready)return null;
   const cv=document.createElement('canvas');cv.width=cv.height=80;
-  const i=o.stand.tiles[part];cv.getContext('2d').drawImage(e.image,(i%16)*48,Math.floor(i/16)*48,48,48,16,16,48,48);
+  const c=cv.getContext('2d'),put=(asset,i)=>c.drawImage(e.image,(asset.tiles[i]%16)*48,Math.floor(asset.tiles[i]/16)*48,48,48,16,16,48,48);
+  if(o)put(o.stand,part);
+  else for(const p of [0,1])put(h.asset,p*h.count+h.frames.idle[0]);
   layerCache.set(key,cv);return cv;
  }
  function clear(){cache.clear();layerCache.clear();shiftCache.clear();}
@@ -585,10 +640,12 @@
   const s=attackSpec(dir,frame,combo);
   return {hand:[...s.h],blade:bladeDir(dir,frame,combo,swordPose),front:s.z!==0};
  }
- return Object.freeze({version:4,appearance,anchor:foot,
+ return Object.freeze({version:5,appearance,anchor:foot,
   preload,ready,frameAt,gaitFrame,remap,pose,nativeFrame,attackPose,clear,
-  wear,dressLook,portrait,garment,dressDuration:()=>dressMs()/1000,
-  outfit:()=>worn.outfit,outfits:()=>Object.values(OUTFITS()?.outfits||{}).map(({id,label,warmth,description,place,cloth})=>({id,label,warmth,description,place,cloth})),
+  wear,wearHelmet,dressLook,portrait,garment,bareHead,figure,dressDuration:(id='dress')=>clipMs(id)/1000,
+  outfit:()=>worn.outfit,helmet:()=>worn.helmet,
+  outfits:()=>Object.values(OUTFITS()?.outfits||{}).map(({id,label,warmth,description,place,cloth})=>({id,label,warmth,description,place,cloth})),
+  helmets:()=>Object.values(OUTFITS()?.helmets||{}).map(({id,label,warmth,description,place,closed})=>({id,label,warmth,description,place,closed})),
   stats:()=>({ready:loaded,failed,loading:!!loading,frames:cache.size})
  });
 });
