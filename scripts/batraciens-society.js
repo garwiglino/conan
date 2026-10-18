@@ -180,7 +180,7 @@ const BatracienSociety = (() => {
  const draw=Renderer.prototype.npcDraw;
  Renderer.prototype.npcDraw=function(n){draw.call(this,n);if(!alive(n)||this.g.isHostileBatracien(n)||!n._img||this.cam&&(n.x<this.cam.x-80||n.x>this.cam.x+this.W+80||n.y<this.cam.y-80||n.y>this.cam.y+this.H+80))return;
   const c=this.c;if(n.flash>0){c.save();c.globalAlpha=.35;c.globalCompositeOperation='lighter';c.drawImage(n._img,Math.round(n.x)-40,Math.round(n.y)-52);c.restore();}
-  const r=n.batracien?.routine;if(r?.partner&&this.g.time<r.chatUntil){const turn=Math.floor((this.g.time-(r.chatStarted||0))/1.5)%2,first=n.id<r.partner;
+  const r=n.batracien?.routine;if(!n.worldChat&&r?.partner&&this.g.time<r.chatUntil){const turn=Math.floor((this.g.time-(r.chatStarted||0))/1.5)%2,first=n.id<r.partner;
    if(first===(turn===0)){const line=first?'Bonne route.':'Prends soin de toi.',w=textW(c,line)+8,x=Math.round(n.x-w/2),y=Math.round(n.y)-43;c.save();box(c,x,y-2,w,12,PAL.ink);text(c,line,x+4,y,'#fff0be');c.restore();}}
 
  };

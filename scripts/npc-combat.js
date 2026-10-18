@@ -75,7 +75,7 @@ const NpcCombat=(()=>{
   for(const n of this.npcs){
    if(!human(n))continue;const s=this.ensureHumanGuard(n);if(s.dead)continue;
    for(const k of ['flash','hurt','stun','cooldown','attack'])n[k]=Math.max(0,(n[k]||0)-dt);s.inv=Math.max(0,s.inv-dt);
-   if(dist(n,p)>C.guard.active||!events.has(n.eventId)||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
+   if(dist(n,p)>C.guard.active||!events.has(n.eventId)&&!n.guardRetiring||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
    if(n.stun>0||n.hurt>0){n.wind=0;continue;}
    if(n.wind>0){n.wind-=dt;n.anim=0;if(n.wind<=0){n.wind=0;
      const foe=s.strikeId==='player'?p:this.enemies.find(e=>e.id===s.strikeId&&!e.dead);
@@ -98,14 +98,14 @@ const NpcCombat=(()=>{
   if(!e.world||e.retiring||e.friendly||e.batracien||e.kind==='boss'||e.guardTime>0)return false;
   // A wind-up, punch or sceptre blow aimed at Kaldor finishes with the original rules.
   if(e.move&&!e.foeMove||e.wind>0&&!e.foeWind||e.melee>0&&!e.foeMelee)return false;
-  const p=this.player,F=C.foe,K=AI[e.kind]||AI.skeleton,list=fighters(this);
+  const p=this.player,F=C.foe,K=AI[e.kind]||AI.skeleton,list=[...fighters(this),...(this.worldBanditVictims?.(e)||[])];
   let foe=e.foeId?list.find(n=>n.id===e.foeId):null;
   if(foe&&(!this.sameLevel(e,foe)||dist(e,foe)>F.leash||this.time-(e.foeAt||0)>F.memory))foe=null;
   if(!foe)foe=list.filter(n=>this.sameLevel(e,n)&&dist(e,n)<F.sight&&this.lineClear(e,n)).sort((a,b)=>dist(a,e)-dist(b,e))[0]||null;
   const busy=e.foeMove&&e.move||e.foeWind&&e.wind>0||e.foeMelee&&e.melee>0;
   if(!foe&&!busy){e.foeId=null;return false;}
   if(foe&&!busy){const dp=this.sameLevel(e,p)&&!this.dying&&!this.dead?dist(e,p):Infinity;if(dp<=dist(e,foe)&&(e.ai==='chase'||dp<K.feel))return false;}
-  if(foe){if(e.foeId!==foe.id)e.foeId=foe.id;if(dist(e,foe)<F.sight&&this.lineClear(e,foe))e.foeAt=this.time;}
+  if(foe){if(e.foeId!==foe.id){e.foeId=foe.id;if(foe.civilian&&!foe.eventGuard&&!foe.batracien?.role){this.startCivilianFlight(foe,e);this.alarmWitnesses(foe,e);}}if(dist(e,foe)<F.sight&&this.lineClear(e,foe))e.foeAt=this.time;}
   const t=foe,d=t?dist(e,t):Infinity,hx=t?t.x-e.x:0,hy=t?t.y-e.y:0;
   if(e.kind==='guardian'){
    if(e.move){const M=CO_MOVES[e.move];e.mt+=dt;let f=0;while(f<5&&e.mt>=M.f[f+1])f++;e.mframe=f;

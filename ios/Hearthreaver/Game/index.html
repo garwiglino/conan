@@ -4636,7 +4636,7 @@ const createWorldAtlas = (raw) => {
   rain:{name:'Pluie soutenue',category:'Météo'},snow:{name:'Chutes de neige',category:'Météo'},fog:{name:'Brouillard',category:'Météo'},drought:{name:'Sécheresse',category:'Météo'}
  };
  // Declarative incident policy shared by travel, local encounters and civilians.
- Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true});
+ Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true,civilianPrey:true});
  Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'cultist',evacuate:true});
  Object.assign(EVENT_TYPES.siege,{group:3,enemy:'cultist',risk:3,evacuate:true});
  Object.assign(EVENT_TYPES.curse,{group:2,enemy:'skeleton',evacuate:true});
@@ -5874,13 +5874,19 @@ Game.prototype.stepEventGroups=function(dt=0){
  const field=this.ensureDanger();field.refresh();const active=new Set(field.events.map(e=>e.id));
  for(const e of this.enemies){if(e.eventId&&!active.has(e.eventId))e.retiring=true;if(e.retiring)e.retireAge=(e.retireAge||0)+dt;}
  this.enemies=this.enemies.filter(e=>!e.retiring||dist(e,this.player)<600&&(e.retireAge||0)<12);
- const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!active.has(n.eventId)){n.alpha=Math.max(0,(n.alpha??1)-dt);if(n.alpha===0)this.npcs=this.npcs.filter(a=>a!==n);}
+ const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!active.has(n.eventId)){
+  n.guardRetiring=true;this.cancelWorldConversation?.(n);
+  const state=this.ensureHumanGuard?.(n),fighting=state&&this.humanGuardTarget?.(n,state)||n.wind>0||n.attack>0;
+  if(fighting){n.alpha=1;continue;}
+  if(dist(n,this.player)<300){const a=Math.atan2(n.y-this.player.y,n.x-this.player.x);this.walkNpc(n,{x:n.x+Math.cos(a)*48,y:n.y+Math.sin(a)*48},dt);n.post={x:n.x,y:n.y};continue;}
+  n.alpha=Math.max(0,(n.alpha??1)-dt);if(n.alpha===0)this.npcs=this.npcs.filter(a=>a!==n);
+ }
  if(field.groupRevision===this.worldState.revision&&field.groupMinute===Math.floor(this.clock)&&this.time-(field.groupTick||0)<1)return;
  field.groupRevision=this.worldState.revision;field.groupMinute=Math.floor(this.clock);field.groupTick=this.time;
  for(const event of field.events){const rule=Atlas.EVENT_TYPES[event.type],count=rule.group||0;if(!count)continue;const centre=Atlas.toGame(event.x,event.y);if(dist(centre,this.player)>1100)continue;
   for(let i=0;i<count;i++){const id='incident-'+event.id+'-'+i;if(this.atlasDeaths[id]||this.enemies.some(e=>e.id===id)||this.npcs.some(n=>n.id===id))continue;
    if(rule.guard?this.npcs.filter(n=>n.eventGuard).length>=8:this.enemies.filter(e=>e.eventId&&!e.dead).length>=24)break;
-   let pos;for(let j=0;j<24;j++){const angle=(i/count+j/24)*Math.PI*2,r=rule.guard?80+j*8:220+j*12,q={x:centre.x+Math.cos(angle)*r,y:centre.y+Math.sin(angle)*r};if(dist(q,this.player)>300&&!this.solid(q.x,q.y,7,0)&&(rule.guard||!this.inSafe(q.x,q.y)&&this.canPlaceHostile(q))){pos=q;break;}}
+   let pos;for(let j=0;j<24;j++){const angle=(i/count+j/24)*Math.PI*2,r=rule.guard?80+j*8:220+j*12,q=this.incidentRoadPosition?.(event,i,j)||{x:centre.x+Math.cos(angle)*r,y:centre.y+Math.sin(angle)*r};if(dist(q,this.player)>300&&!this.solid(q.x,q.y,7,0)&&(rule.guard||!this.inSafe(q.x,q.y)&&this.canPlaceHostile(q))){pos=q;break;}}
    if(!pos)continue;
    if(rule.guard)this.npcs.push({id,eventId:event.id,eventGuard:true,...pos,look:'nomade',dir:2,head:40,alpha:1,name:'LA GARDE',label:'GARDE',title:'Patrouille du relais',greet:()=>['Nous sécurisons ce passage.'],topics:()=>[],bye:()=>['Reste sur tes gardes.']});
    else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id];Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}
@@ -10382,7 +10388,7 @@ const BatracienSociety = (() => {
  const draw=Renderer.prototype.npcDraw;
  Renderer.prototype.npcDraw=function(n){draw.call(this,n);if(!alive(n)||this.g.isHostileBatracien(n)||!n._img||this.cam&&(n.x<this.cam.x-80||n.x>this.cam.x+this.W+80||n.y<this.cam.y-80||n.y>this.cam.y+this.H+80))return;
   const c=this.c;if(n.flash>0){c.save();c.globalAlpha=.35;c.globalCompositeOperation='lighter';c.drawImage(n._img,Math.round(n.x)-40,Math.round(n.y)-52);c.restore();}
-  const r=n.batracien?.routine;if(r?.partner&&this.g.time<r.chatUntil){const turn=Math.floor((this.g.time-(r.chatStarted||0))/1.5)%2,first=n.id<r.partner;
+  const r=n.batracien?.routine;if(!n.worldChat&&r?.partner&&this.g.time<r.chatUntil){const turn=Math.floor((this.g.time-(r.chatStarted||0))/1.5)%2,first=n.id<r.partner;
    if(first===(turn===0)){const line=first?'Bonne route.':'Prends soin de toi.',w=textW(c,line)+8,x=Math.round(n.x-w/2),y=Math.round(n.y)-43;c.save();box(c,x,y-2,w,12,PAL.ink);text(c,line,x+4,y,'#fff0be');c.restore();}}
 
  };
@@ -10467,7 +10473,7 @@ const NpcCombat=(()=>{
   for(const n of this.npcs){
    if(!human(n))continue;const s=this.ensureHumanGuard(n);if(s.dead)continue;
    for(const k of ['flash','hurt','stun','cooldown','attack'])n[k]=Math.max(0,(n[k]||0)-dt);s.inv=Math.max(0,s.inv-dt);
-   if(dist(n,p)>C.guard.active||!events.has(n.eventId)||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
+   if(dist(n,p)>C.guard.active||!events.has(n.eventId)&&!n.guardRetiring||(n.alpha??1)<1){n.wind=0;n.anim=0;continue;}
    if(n.stun>0||n.hurt>0){n.wind=0;continue;}
    if(n.wind>0){n.wind-=dt;n.anim=0;if(n.wind<=0){n.wind=0;
      const foe=s.strikeId==='player'?p:this.enemies.find(e=>e.id===s.strikeId&&!e.dead);
@@ -10490,14 +10496,14 @@ const NpcCombat=(()=>{
   if(!e.world||e.retiring||e.friendly||e.batracien||e.kind==='boss'||e.guardTime>0)return false;
   // A wind-up, punch or sceptre blow aimed at Kaldor finishes with the original rules.
   if(e.move&&!e.foeMove||e.wind>0&&!e.foeWind||e.melee>0&&!e.foeMelee)return false;
-  const p=this.player,F=C.foe,K=AI[e.kind]||AI.skeleton,list=fighters(this);
+  const p=this.player,F=C.foe,K=AI[e.kind]||AI.skeleton,list=[...fighters(this),...(this.worldBanditVictims?.(e)||[])];
   let foe=e.foeId?list.find(n=>n.id===e.foeId):null;
   if(foe&&(!this.sameLevel(e,foe)||dist(e,foe)>F.leash||this.time-(e.foeAt||0)>F.memory))foe=null;
   if(!foe)foe=list.filter(n=>this.sameLevel(e,n)&&dist(e,n)<F.sight&&this.lineClear(e,n)).sort((a,b)=>dist(a,e)-dist(b,e))[0]||null;
   const busy=e.foeMove&&e.move||e.foeWind&&e.wind>0||e.foeMelee&&e.melee>0;
   if(!foe&&!busy){e.foeId=null;return false;}
   if(foe&&!busy){const dp=this.sameLevel(e,p)&&!this.dying&&!this.dead?dist(e,p):Infinity;if(dp<=dist(e,foe)&&(e.ai==='chase'||dp<K.feel))return false;}
-  if(foe){if(e.foeId!==foe.id)e.foeId=foe.id;if(dist(e,foe)<F.sight&&this.lineClear(e,foe))e.foeAt=this.time;}
+  if(foe){if(e.foeId!==foe.id){e.foeId=foe.id;if(foe.civilian&&!foe.eventGuard&&!foe.batracien?.role){this.startCivilianFlight(foe,e);this.alarmWitnesses(foe,e);}}if(dist(e,foe)<F.sight&&this.lineClear(e,foe))e.foeAt=this.time;}
   const t=foe,d=t?dist(e,t):Infinity,hx=t?t.x-e.x:0,hy=t?t.y-e.y:0;
   if(e.kind==='guardian'){
    if(e.move){const M=CO_MOVES[e.move];e.mt+=dt;let f=0;while(f<5&&e.mt>=M.f[f+1])f++;e.mframe=f;
@@ -10565,6 +10571,277 @@ const NpcCombat=(()=>{
   if(this.g.isHostileHumanGuard(n))text(c,'!',n.x-2,n.y-46,'#edb279');
  };
  return Object.freeze({config:C});
+})();
+
+/* Codex / ChatGPT — shared local life, road traffic and witnessed encounters.
+ * Uses the existing road graph, event policies, knowledge and combat systems.
+ * No species hostility, off-screen damage rolls or forced encounter spawns.
+ */
+const WorldSociety=(()=>{
+ 'use strict';
+ const C=Object.freeze({trafficLimit:8,window:2048,load:1050,unload:1500,spawn:360,chatRange:62,chatCooldown:32,chatLimit:2,perception:140});
+ const alive=n=>n&&!n.dead&&!n.civilian?.dead&&!n.batracien?.dead&&!n.guardState?.dead&&(n.alpha??1)>.8&&n.phase!=='away';
+ const member=(g,n)=>g.party?.some(c=>c.id===n.id);
+ const calm=(g,n)=>alive(n)&&!member(g,n)&&!n.dangerState&&!n.wind&&!n.attack&&!n.hurt&&!n.stun&&!g.npcMoveLocked?.(n)&&!g.isHostileHumanGuard?.(n)&&!g.isHostileBatracien?.(n);
+ const land=road=>road&&road.type!=='searoutes';
+ const finite=Number.isFinite;
+ function routePoint(s,p){const t=clamp(p/Math.max(1,s.length),0,1);return {x:s.a.x+(s.b.x-s.a.x)*t,y:s.a.y+(s.b.y-s.a.y)*t};}
+ function descriptor(road,index,window){
+  const segment=road?.segments[index];if(!land(road)||!segment||!Number.isInteger(index)||index<0||!Number.isInteger(window)||window<0)return null;
+  const a=Atlas.toGame(segment.a[0],segment.a[1]),b=Atlas.toGame(segment.b[0],segment.b[1]),length=dist(a,b),start=window*C.window,end=Math.min(length,start+C.window);
+  if(end-start<=0||length<32)return null;const s={a,b,length};return {a:routePoint(s,start),b:routePoint(s,end),length:end-start,edge:[segment.a[2],segment.b[2]].sort().join('|'),road:road.id,index,window};
+ }
+ function roadOpen(g,n,s,point){
+  const status=g.worldState.edgeStatus(Atlas.edgeById.get(s.edge),g.clock);
+  return !status.closed&&!status.events.some(e=>Atlas.EVENT_TYPES[e.type].evacuate)&&!g.solid(point.x,point.y,5,n?.level||0)&&!g.dangerAt(point.x,point.y,n?.level||0).unsafe;
+ }
+ function snapshot(g,n){const r=n.roadTraffic;return {id:n.id,road:r.road,index:r.originIndex??r.index,window:r.originWindow??r.window,cursorIndex:r.index,cursorWindow:r.window,slot:r.slot,progress:r.progress,sign:r.sign,hp:n.civilian?.hp??6,dead:!!n.civilian?.dead,appearance:n.civilian?.appearance?{...n.civilian.appearance}:undefined,clock:g.clock};}
+ Game.prototype.ensureWorldSociety=function(){return this.society||(this.society={records:new Map(),nextTraffic:0,nextChat:this.time+10,nextPerception:0});};
+ Game.prototype.incidentRoadPosition=function(event,slot,attempt){
+  if(!Atlas.EVENT_TYPES[event.type]?.guard)return null;
+  const road=Atlas.roadById[event.target];if(!land(road))return null;
+  const s=road.segments.reduce((best,s)=>{const q=Atlas.project(event.x,event.y,s.a,s.b);return !best||q.d<best.distance?{s,distance:q.d}:best;},null)?.s;if(!s)return null;
+  const a=Atlas.toGame(s.a[0],s.a[1]),b=Atlas.toGame(s.b[0],s.b[1]),length=dist(a,b),centre=Atlas.toGame(event.x,event.y),dx=b.x-a.x,dy=b.y-a.y;
+  const progress=clamp(((centre.x-a.x)*dx+(centre.y-a.y)*dy)/Math.max(1,length*length),0,1)*length;
+  return routePoint({a,b,length},clamp(progress+(slot%2?1:-1)*(70+attempt*14),0,length));
+ };
+ Game.prototype.roadTrafficSpawn=function(road,index,window,slot){
+  if(!descriptor(road,index,window))return null;const state=this.ensureWorldSociety(),id='road-person-'+road.id+'-'+index+'-'+window+'-'+slot,seed=civilianHash(id),record=state.records.get(id),s=descriptor(road,record?.cursorIndex??index,record?.cursorWindow??window);if(!s)return null;
+  if(record?.dead||this.atlasDeaths[id]||this.npcs.some(n=>n.id===id))return null;
+  const progress=record?.progress??s.length*(slot===0?.28:.72),pos=routePoint(s,progress),d=dist(pos,this.player);
+  if(d<C.spawn||d>C.load||this.npcs.some(n=>alive(n)&&dist(n,pos)<28)||!roadOpen(this,null,s,pos)||this.localThreatAt(pos.x,pos.y,0,220))return null;
+  const trader=seed%3===0,n={id,...pos,post:{...pos},world:true,alpha:1,dir:2,look:'nomade',head:30,name:trader?'MARCHAND':'VOYAGEUR',label:trader?'MARCHAND':'VOYAGEUR',title:trader?'Marchand de passage':'Voyageur de la route',civilianJob:trader?'carry':'idle',roadTraffic:{...s,originIndex:index,originWindow:window,slot,progress,sign:record?.sign===-1?-1:1,wait:0,blocked:0},
+   greet:()=>trader?['Je fais la tournée des relais. Tu cherches quelque chose ?']:['Toi aussi, tu fais la route ?'],topics:()=>[],bye:()=>['Bonne route.']};
+  this.ensureCivilian(n,record);n.civilian.restClock=0;this.npcs.push(n);this.atlasNpcs.push(n);return n;
+ };
+ Game.prototype.populateRoadTraffic=function(){
+  const state=this.ensureWorldSociety();
+  for(const n of this.npcs.filter(n=>n.roadTraffic&&dist(n,this.player)>C.unload&&!member(this,n)&&this.dialogue?.who!==n&&!n.dangerState&&!n.worldChat)){
+   state.records.set(n.id,snapshot(this,n));this.npcs=this.npcs.filter(a=>a!==n);this.atlasNpcs=this.atlasNpcs.filter(a=>a!==n);
+  }
+  while(state.records.size>512)state.records.delete(state.records.keys().next().value);
+  // A traveller keeps its identity after crossing a streaming window or reloading.
+  for(const r of state.records.values()){
+   if(r.dead||this.npcs.filter(n=>n.roadTraffic).length>=C.trafficLimit)continue;
+   const road=Atlas.roadById[r.road],s=descriptor(road,r.cursorIndex??r.index,r.cursorWindow??r.window);if(s&&dist(routePoint(s,r.progress),this.player)<=C.load)this.roadTrafficSpawn(road,r.index,r.window,r.slot);
+  }
+  if(this.player.level)return;const w=Atlas.toWorld(this.player.x,this.player.y),near=Atlas.closestRoad(w.x,w.y);
+  if(!land(near?.road)||near.d>48)return;const road=near.road,index=road.segments.indexOf(near.segment),a=Atlas.toGame(near.segment.a[0],near.segment.a[1]),b=Atlas.toGame(near.segment.b[0],near.segment.b[1]),dx=b.x-a.x,dy=b.y-a.y;
+  const p=clamp(((this.player.x-a.x)*dx+(this.player.y-a.y)*dy)/Math.max(1,dx*dx+dy*dy),0,1)*dist(a,b),window=Math.floor(p/C.window);
+  for(const k of [window,window-1,window+1])for(let slot=0;slot<2;slot++){
+   if(this.npcs.filter(n=>n.roadTraffic).length>=C.trafficLimit)return;
+   this.roadTrafficSpawn(road,index,k,slot);
+  }
+ };
+ Game.prototype.stepRoadTraffic=function(n,dt){
+  const r=n.roadTraffic;if(!r||!alive(n)||member(this,n)||n.dangerState||n.worldChat||this.dialogue?.who===n)return;
+  if(r.wait>0){r.wait=Math.max(0,r.wait-dt);n.anim=0;return;}
+  const point=routePoint(r,clamp(r.progress+r.sign*40,0,r.length));
+  if(!roadOpen(this,n,r,point)){r.wait=2;n.anim=0;return;}
+  const before={x:n.x,y:n.y};this.walkNpc(n,point,dt*(n.label==='MARCHAND'?.85:1));const moved=dist(before,n);
+  r.blocked=moved<.01?r.blocked+dt:0;if(r.blocked>2){n.path=[];r.wait=2;r.blocked=0;}
+  const dx=r.b.x-r.a.x,dy=r.b.y-r.a.y;r.progress=clamp(((n.x-r.a.x)*dx+(n.y-r.a.y)*dy)/Math.max(1,dx*dx+dy*dy)*r.length,0,r.length);n.post={x:n.x,y:n.y};
+  if(dist(n,r.sign>0?r.b:r.a)<10){
+   const road=Atlas.roadById[r.road];let next=descriptor(road,r.index,r.window+r.sign);
+   if(!next){const index=r.index+r.sign,segment=road.segments[index],window=r.sign>0?0:segment?Math.max(0,Math.ceil(segment.length*16/C.window)-1):0;next=descriptor(road,index,window);}
+   if(next){const originIndex=r.originIndex,originWindow=r.originWindow;Object.assign(r,next,{originIndex,originWindow,progress:r.sign>0?0:next.length});n.path=[];}
+   else{r.sign*=-1;r.wait=15+civilianHash(n.id)%20;}
+  }
+ };
+ Game.prototype.stepRoadPatrol=function(n,dt){
+  if(!n.eventGuard||!calm(this,n)||n.worldChat||dist(n,this.player)>700||this.dialogue?.who===n)return;
+  const event=this.worldState.active(this.clock).find(e=>e.id===n.eventId);if(!event)return;
+  const state=this.ensureHumanGuard(n);if(this.humanGuardTarget(n,state))return;
+  let route=n.roadPatrol;
+  if(!route){const w=Atlas.toWorld(n.x,n.y),near=Atlas.closestRoad(w.x,w.y);if(!land(near?.road)||near.d>80)return;
+   const a=Atlas.toGame(near.segment.a[0],near.segment.a[1]),b=Atlas.toGame(near.segment.b[0],near.segment.b[1]),length=dist(a,b),dx=b.x-a.x,dy=b.y-a.y;
+   const progress=clamp(((n.x-a.x)*dx+(n.y-a.y)*dy)/Math.max(1,length*length),0,1)*length;
+   route=n.roadPatrol={a:routePoint({a,b,length},Math.max(0,progress-180)),b:routePoint({a,b,length},Math.min(length,progress+180)),sign:civilianHash(n.id)%2?1:-1};
+  }
+  const goal=route.sign>0?route.b:route.a;if(this.solid(goal.x,goal.y,5,n.level||0))return;
+  this.walkNpc(n,goal,dt*.9);n.post={x:n.x,y:n.y};if(dist(n,goal)<10)route.sign*=-1;
+ };
+ Game.prototype.cancelWorldConversation=function(n){
+  const chat=n?.worldChat;if(!chat)return;const other=this.npcs.find(a=>a.id===chat.partner);
+  for(const a of [n,other])if(a?.worldChat&&(a===n||a.worldChat.partner===n.id)){delete a.worldChat;a.chatAfter=this.time+C.chatCooldown;a.path=[];if(a.civilian&&!a.civilian.dead&&(a.batracien?.action||a.civilian.action)==='talk')this.civilianAction(a,'idle');}
+  if(n.batracien?.routine?.partner)frogCancel.call(this,n);
+ };
+ Game.prototype.startWorldConversation=function(a,b){
+  if(a===b||this.dialogue||![a,b].every(n=>calm(this,n)&&!n.worldChat&&!(n.batracien?.routine?.partner)&&this.time>=(n.chatAfter||0))||!this.sameLevel(a,b)||dist(a,b)<18||dist(a,b)>C.chatRange||!this.lineClear(a,b))return false;
+  if(this.localThreatAt(a.x,a.y,a.level||0)||this.localThreatAt(b.x,b.y,b.level||0)||this.dangerAt(a.x,a.y,a.level||0).unsafe||this.dangerAt(b.x,b.y,b.level||0).unsafe)return false;
+  for(const n of [a,b]){const w=Atlas.toWorld(n.x,n.y);this.worldState.learn(n.id,w.x,w.y,this.clock,{role:n.roadTraffic?'courier':'resident'});}
+  const lines=this.worldConversationLines(a,b),until=this.time+6.8;
+  for(const [n,other,turn]of [[a,b,0],[b,a,1]]){n.worldChat={partner:other.id,start:this.time,until,turn,line:lines[turn]};n.path=[];n.anim=0;n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk');}
+  this.worldState.share(a.id,b.id,this.clock);this.worldState.share(b.id,a.id,this.clock);return true;
+ };
+ Game.prototype.worldConversationLines=function(a,b){
+  const recent=this.worldState.news(a.id,this.clock).find(n=>!n.resolved&&!n.uncertain);
+  if(recent?.type==='bandits')return ['On parle de brigands sur la route.','Alors je vais attendre une escorte.'];
+  if(a.eventGuard||b.eventGuard)return ['Vous avez croisé du monde sur le chemin ?','Quelques voyageurs. Rien vu de suspect.'];
+  const pairs=[['Tu repars déjà ?','Oui, je voudrais arriver avant la nuit.'],['Le marché était bon ?','Assez pour payer la prochaine halte.'],['Tu as pu réparer cette sangle ?','Ça tiendra. Enfin, jusqu’au relais.'],['Tu prends la même route ?','Un bout de chemin, oui.'],['Garde un peu d’eau pour la montée.','J’en ai rempli une gourde au relais.']];
+  return pairs[(civilianHash(a.id+b.id)+Math.floor(this.clock/60))%pairs.length];
+ };
+ Game.prototype.stepWorldConversations=function(){
+  for(const n of this.npcs){const chat=n.worldChat;if(!chat)continue;const other=this.npcs.find(a=>a.id===chat.partner);
+   if(!alive(n)||!alive(other)||n.dangerState||other.dangerState||n.hurt||other.hurt||n.wind||other.wind||this.time>=chat.until||dist(n,other)>C.chatRange||!this.sameLevel(n,other)||!this.lineClear(n,other)||this.localThreatAt(n.x,n.y,n.level||0)||this.dialogue){this.cancelWorldConversation(n);continue;}
+   n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk');
+  }
+  const state=this.ensureWorldSociety();if(this.time<state.nextChat||this.dialogue)return;state.nextChat=this.time+2;
+  const active=this.npcs.filter(n=>n.worldChat&&n.worldChat.turn===0).length;if(active>=C.chatLimit)return;
+  const people=this.npcs.filter(n=>calm(this,n)&&n.id!=='fairy'&&!n.worldChat&&this.time>=(n.chatAfter||0)&&dist(n,this.player)<380).sort((a,b)=>civilianHash(a.id+Math.floor(this.clock/30))-civilianHash(b.id+Math.floor(this.clock/30)));
+  for(const n of people){const other=people.find(a=>a!==n&&dist(n,a)<=C.chatRange&&dist(n,a)>=18);if(other&&this.startWorldConversation(n,other))break;}
+ };
+ Game.prototype.worldBanditVictims=function(e){
+  if(!e.world||e.retiring||!e.eventId||!alive(e))return [];
+  const event=this.worldState.active(this.clock).find(v=>v.id===e.eventId);
+  if(!event||!Atlas.EVENT_TYPES[event.type].civilianPrey)return [];
+  return this.npcs.filter(n=>n.civilian&&alive(n)&&!n.eventGuard&&!n.batracien?.role&&!member(this,n)&&!this.civilianProtected(n)&&this.sameLevel(e,n)&&dist(e,n)<140&&this.lineClear(e,n));
+ };
+ Game.prototype.stepWorldPerception=function(){
+  const state=this.ensureWorldSociety();if(this.time<state.nextPerception)return;state.nextPerception=this.time+.35;
+  for(const n of this.npcs){if(!n.civilian||!alive(n)||this.civilianProtected(n)||dist(n,this.player)>700)continue;
+   const e=this.localThreatAt(n.x,n.y,n.level||0,C.perception);if(e){this.cancelWorldConversation(n);if(n.dangerState?.mode!=='fleeing')this.startCivilianFlight(n,e);}
+  }
+ };
+ Game.prototype.stepWorldLocal=function(n,dt){
+  if(!n.resident||n.batracien||n.roadTraffic||!calm(this,n)||n.worldChat||this.dialogue?.who===n||dist(n,this.player)>650)return;
+  const h=((this.clock/60)%24+24)%24;if(h<6||h>=22)return;
+  const s=n.localLife||(n.localLife={after:this.time+10+civilianHash(n.id)%20,cycle:0,goal:null});
+  if(!s.goal){if(this.time<s.after)return;s.cycle++;
+   const people=this.npcs.filter(a=>a!==n&&alive(a)&&!a.eventGuard&&dist(n,a)<120&&dist(a,n.post)<100);
+   const other=people[(civilianHash(n.id)+s.cycle)%Math.max(1,people.length)];
+   const angle=(civilianHash(n.id)+s.cycle*3)%16*Math.PI/8,target=other?{x:other.x+26*Math.cos(angle),y:other.y+26*Math.sin(angle)}:{x:n.post.x+44*Math.cos(angle),y:n.post.y+44*Math.sin(angle)};
+   if(this.solid(target.x,target.y,5,0)||this.dangerAt(target.x,target.y).unsafe||this.npcs.some(a=>a!==n&&alive(a)&&dist(a,target)<18)||this.stations.some(a=>dist(a.actor,target)<30)||[...this.chests,...this.levers,...this.steles].some(a=>dist(a,target)<28)){s.after=this.time+12;return;}
+   s.goal=target;s.until=this.time+8;
+  }
+  if(dist(n,s.goal)<5||this.time>s.until){s.goal=null;s.after=this.time+18+civilianHash(n.id)%15;n.path=[];return;}
+  this.walkNpc(n,s.goal,dt*.8);
+ };
+ const move=Game.prototype.walkNpc;
+ Game.prototype.walkNpc=function(n,to,dt){if(n.worldChat&&!n.dangerState&&this.dialogue?.who!==n){n.anim=0;return false;}return move.call(this,n,to,dt);};
+ const talk=Game.prototype.talkTo;
+ Game.prototype.talkTo=function(n){this.cancelWorldConversation(n);return talk.call(this,n);};
+ const flight=Game.prototype.startCivilianFlight;
+ Game.prototype.startCivilianFlight=function(n,source){this.cancelWorldConversation(n);return flight.call(this,n,source);};
+ const injury=Game.prototype.damageCivilian;
+ Game.prototype.damageCivilian=function(n,amount,source){
+  const result=injury.call(this,n,amount,source);if(result){this.cancelWorldConversation(n);if(n.roadTraffic&&n.civilian?.dead)this.atlasDeaths[n.id]=true;}return result;
+ };
+ const frogRoutine=Game.prototype.stepBatracienRoutine;
+ Game.prototype.stepBatracienRoutine=function(n,dt){if(n.worldChat&&this.time>=n.worldChat.until)this.cancelWorldConversation(n);return n.worldChat&&!n.dangerState?true:frogRoutine.call(this,n,dt);};
+ const frogCancel=Game.prototype.cancelBatracienConversation;
+ Game.prototype.cancelBatracienConversation=function(n){this.cancelWorldConversation(n);return frogCancel.call(this,n);};
+ const frogChat=Game.prototype.startBatracienConversation;
+ Game.prototype.startBatracienConversation=function(a,b){
+  if(a.worldChat||b.worldChat||!frogChat.call(this,a,b))return false;const lines=this.worldConversationLines(a,b),until=this.time+6.8;
+  for(const [n,other,turn]of [[a,b,0],[b,a,1]]){n.worldChat={partner:other.id,start:this.time,until,turn,line:lines[turn]};n.batracien.routine.chatUntil=until;}
+  return true;
+ };
+ const courierStep=Game.prototype.stepCouriers;
+ Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>!this.npcs.find(n=>n.id===c.id)?.worldChat);return courierStep.call(this,minutes);}finally{this.couriers=all;}};
+ const step=Game.prototype.update;
+ Game.prototype.update=function(dt,input){
+  const running=!this.dialogue&&!this.journey&&!this.sleeping&&!this.dying&&!this.dead&&!this.won;step.call(this,dt,input);
+  if(!running||this.journey)return;dt=clamp(Number(dt)||0,0,.04);const state=this.ensureWorldSociety();
+  if(this.time>=state.nextTraffic){state.nextTraffic=this.time+2;this.populateRoadTraffic();}
+  this.stepWorldPerception();this.stepWorldConversations();
+  for(const n of this.npcs){if(n.roadTraffic)this.stepRoadTraffic(n,dt);if(n.eventGuard)this.stepRoadPatrol(n,dt);this.stepWorldLocal(n,dt);}
+  this.stepCivilianAnimations(dt);for(const n of this.npcs)if(n.worldChat)this.civilianAction(n,'talk');
+ };
+ const save=Game.prototype.serialize;
+ Game.prototype.serialize=function(){const data=save.call(this);if(!data.atlas)return data;const state=this.ensureWorldSociety(),records=new Map(state.records);for(const n of this.npcs)if(n.roadTraffic)records.set(n.id,snapshot(this,n));data.atlas.society={version:1,traffic:[...records.values()].slice(-512)};return data;};
+ const restore=Game.prototype.finishAtlasRestore;
+ Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);const state=this.ensureWorldSociety();
+  if(saved?.atlas?.society?.version!==1||this.layoutMigrated)return;
+  for(const r of (Array.isArray(saved.atlas.society.traffic)?saved.atlas.society.traffic:[]).slice(-512)){
+   const road=Atlas.roadById[r?.road],s=descriptor(road,r?.cursorIndex??r?.index,r?.cursorWindow??r?.window);
+   if(!s||!descriptor(road,r.index,r.window)||![0,1].includes(r.slot)||r.id!=='road-person-'+r.road+'-'+r.index+'-'+r.window+'-'+r.slot||!finite(r.progress)||r.progress<0||r.progress>s.length||![-1,1].includes(r.sign)||!finite(r.hp)||r.hp<0||r.hp>6)continue;
+   state.records.set(r.id,{...r,dead:r.dead===true||r.hp===0});
+  }
+ };
+ // Bubbles are optional overheard speech: never a modal, voice beep or notification.
+ Game.prototype.worldSpeech=function(){
+  if(this.dialogue||this.journey||this.sleeping||this.dead||this.dying)return [];
+  const lines=[];for(const n of this.npcs){const s=n.worldChat;if(!s||!alive(n)||n.dangerState||!this.sameLevel(n,this.player)||dist(n,this.player)>260)continue;
+   const age=this.time-s.start;if(age<s.turn*3.3||age>=s.turn*3.3+3.1)continue;lines.push({actor:n,text:s.line,until:s.until});
+  }return lines.slice(0,C.chatLimit);
+ };
+ const frame=Renderer.prototype.frame;
+ Renderer.prototype.frame=function(){const result=frame.call(this),g=this.g;if(!this.cam||!g.worldSpeech)return result;
+  const c=this.c,k=this.k||1,used=[];this.worldSpeechRects=used;c.save();c.setTransform(k,0,0,k,0,0);
+  for(const speech of g.worldSpeech()){
+   const n=speech.actor,x=Math.round(n.x-this.cam.x),heroX=g.player.x-this.cam.x,head=Math.round(this.top+n.y-this.cam.y-(n.head||40)-9-(n.level?12:0)),max=Math.min(156,this.W-24,Math.max(80,(x<heroX?heroX:this.W-heroX)-30)),words=speech.text.split(' '),rows=[];let line='';
+   for(const word of words){const next=line?line+' '+word:word;if(textW(c,next)>max-12&&line){rows.push(line);line=word;}else line=next;}if(line)rows.push(line);if(rows.length>2)continue;
+   const width=Math.max(...rows.map(s=>textW(c,s)))+12,height=rows.length*10+8,left=Math.round(clamp(x-width/2,8,this.W-width-8)),top=head-height;
+   const hero={x:g.player.x-this.cam.x-11,y:this.top+g.player.y-this.cam.y-44,w:22,h:44};
+   if(x<8||x>this.W-8||top<this.top+6||top+height>this.H-12||[hero,...used].some(r=>left<r.x+r.w+6&&left+width>r.x-6&&top<r.y+r.h+6&&top+height>r.y-6))continue;
+   used.push({x:left,y:top,w:width,h:height});c.globalAlpha=.94;box(c,left-1,top-1,width+2,height+2,'#30291f');box(c,left,top,width,height,'#e8d7b2');box(c,x-1,top+height,3,2,'#30291f');
+   rows.forEach((row,i)=>text(c,row,left+6,top+4+i*10,'#30291f'));
+  }c.restore();return result;
+ };
+ return Object.freeze({config:C,descriptor,routePoint});
+})();
+
+/* Codex / ChatGPT — spoken reports retain the existing knowledge/rumour limits.
+ * The journal keeps precise event records; people speak about what they heard.
+ */
+const WorldDialogue=(()=>{
+ 'use strict';
+ const reports={
+  bandits:'des brigands arrêtent les voyageurs. Je ne partirais pas seul.',
+  patrol:'des gardes font la ronde. C’est plutôt rassurant, mais garde les yeux ouverts.',
+  siege:'la place est assiégée. Évite de t’en approcher pour le moment.',
+  occupation:'des hommes armés tiennent le passage. Mieux vaut se renseigner avant d’y aller.',
+  truce:'les deux camps ont cessé de se battre. Pourvu que ça tienne.',
+  border:'on ne laisse plus passer les gens comme avant. Demande au poste avant de faire le détour.',
+  flood:'l’eau a coupé le passage. Attends qu’elle baisse.',landslide:'des pierres sont tombées sur le chemin. On ne passe plus.',
+  avalanche:'la neige a emporté une partie du chemin. Ce serait imprudent d’y aller.',fire:'un incendie a coupé le passage. Tiens-toi à l’écart.',
+  bridge:'le pont est abîmé. Ne compte pas le traverser.',repair:'le passage est de nouveau praticable.',
+  shortage:'on manque de provisions. Les prix ont dû grimper.',caravan:'une caravane est arrivée. Il devrait y avoir du ravitaillement.',
+  market:'le marché se tient. C’est le moment de refaire tes provisions.',festival:'on prépare une fête. Ça changera un peu les idées aux gens.',
+  missing:'quelqu’un a disparu. Les proches cherchent encore des nouvelles.',funeral:'on enterre un habitant. Les gens n’ont pas le cœur à parler.',
+  ruler:'il y a eu un changement à la tête du pouvoir. On verra ce que ça donnera.',
+  storm:'les bateaux restent à quai à cause du mauvais temps.',delay:'les départs ont du retard. Prévois de patienter.',relay:'le relais est fermé. Ne pars pas en comptant y dormir.',
+  curse:'les gens ont vu des choses inquiétantes. Même les habitués évitent le coin.',purified:'les manifestations ont cessé. Les gens osent revenir.',
+  liberated:'des captifs ont été libérés. Il y en avait qui n’espéraient plus sortir.',victory:'le groupe qui menaçait le passage a été défait.',
+  theft:'il y a eu un vol. Garde ta bourse près de toi.',rescued:'des gens ont reçu de l’aide. Ça aurait pu mal finir.',discovery:'un passage a été découvert. Ça pourrait raccourcir la route.',
+  rain:'il pleut depuis un moment. Les chemins doivent être bien lourds.',snow:'la neige tombe. Prends de quoi te couvrir si tu y vas.',
+  fog:'on n’y voit pas loin avec ce brouillard. Reste sur le chemin.',drought:'l’eau commence à manquer. Remplis tes gourdes dès que tu peux.',
+  injury:'une blessure demande des soins. On ferait bien de faire une halte.',exhaustion:'la fatigue commence à peser. Il faut se reposer.',trust:'le voyage nous a rapprochés. On peut compter les uns sur les autres.'
+ };
+ function place(event){const road=Atlas.roadById[event.target],site=Atlas.byId[event.target];return road?'Sur « '+road.name+' », ':site?'Du côté de '+site.name+', ':'Dans les environs, ';}
+ function spoken(event){
+  const ended={bandits:'on dit que les brigands ne tiennent plus le passage.',patrol:'la ronde des gardes est terminée.',siege:'le siège est terminé. Les nouvelles recommencent à circuler.',occupation:'l’occupation a pris fin, à ce qu’on m’a dit.',bridge:'le passage a été rétabli, d’après les dernières nouvelles.',flood:'on peut de nouveau passer, à ce qu’on m’a dit.',shortage:'le ravitaillement a repris.',storm:'les bateaux peuvent de nouveau partir.'};
+  let line=event.resolved?place(event)+(ended[event.type]||'on m’a dit que les choses étaient rentrées dans l’ordre.'):place(event)+(reports[event.type]||'il s’est passé quelque chose. Je n’en sais pas assez pour te conseiller.');
+  if(event.uncertain)return line+' Mais ça date ; je ne sais pas si c’est encore le cas.';
+  if(event.resolved)return line;
+  if(event.source==='Témoin direct')return line+' Je l’ai vu moi-même.';
+  if(/garde/i.test(event.source||''))return line+' C’est un garde qui en a parlé.';
+  return line;
+ }
+ const learn=Game.prototype.atlasNews;
+ Game.prototype.atlasNews=function(n){
+  learn.call(this,n);const news=this.worldState.news(n.id,this.clock),w=Atlas.toWorld(n.x,n.y);
+  const priority=e=>(!e.resolved&&['bandits','siege','occupation','curse','bridge','border','flood','avalanche','fire','landslide'].includes(e.type)?100:0)+(!e.uncertain?10:0)-Math.hypot((Atlas.byId[e.target]||{}).x-w.x||0,(Atlas.byId[e.target]||{}).y-w.y||0)/10000;
+  news.sort((a,b)=>priority(b)-priority(a)||b.at-a.at);
+  return news.length?news.slice(0,3).map(spoken):['Pas grand-chose de neuf à te raconter. Si tu pars loin, demande aussi aux gens du prochain relais.'];
+ };
+ Game.prototype.npcDirections=function(n){
+  const w=Atlas.toWorld(n.x,n.y),site=Atlas.byId[n.site]||Atlas.nearestSite(w.x,w.y),book=this.worldState.news(n.id,this.clock);
+  const roads=Atlas.roads.filter(r=>r.type!=='searoutes'&&Atlas.roadCells(r).some(c=>c.region===site.region));
+  roads.sort((a,b)=>Math.min(...a.pts.map(p=>Math.hypot(p[0]-w.x,p[1]-w.y)))-Math.min(...b.pts.map(p=>Math.hypot(p[0]-w.x,p[1]-w.y))));
+  const lines=roads.slice(0,3).map(r=>{
+   const known=book.filter(e=>e.target===r.id&&!e.resolved),fresh=known.filter(e=>!e.uncertain),closed=fresh.find(e=>Atlas.EVENT_TYPES[e.type].closed),risk=clamp(r.danger+fresh.reduce((sum,e)=>sum+(Atlas.EVENT_TYPES[e.type].risk||0),0),0,5),prefix='Pour « '+r.name+' », ';
+   if(closed)return prefix+'on m’a signalé un passage coupé. Renseigne-toi au relais avant de t’engager.';
+   if(fresh.some(e=>e.type==='bandits'))return prefix+'évite de partir seul : des voyageurs y ont été arrêtés par des brigands.';
+   if(risk>=3)return prefix+'c’est un trajet exposé. Je chercherais de la compagnie pour le faire.';
+   if(fresh.some(e=>e.type==='patrol'))return prefix+'les gardes passent en ce moment. Profite de leur ronde si tu peux.';
+   if(known.some(e=>e.uncertain))return prefix+'j’ai entendu des histoires, mais rien de récent. Demande à quelqu’un qui en revient.';
+   if(risk>=2)return prefix+'reste sur le chemin et évite de traîner après la tombée du jour.';
+   return prefix+'je n’ai rien entendu d’inquiétant récemment. Ça ne veut pas dire qu’il ne peut rien arriver.';
+  });return lines.length?lines:['Je connais surtout les abords d’ici. Un voyageur au relais pourra mieux te guider.'];
+ };
+ return Object.freeze({spoken});
 })();
 
 // END WORLD ATLAS

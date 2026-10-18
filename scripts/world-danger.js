@@ -150,13 +150,19 @@ Game.prototype.stepEventGroups=function(dt=0){
  const field=this.ensureDanger();field.refresh();const active=new Set(field.events.map(e=>e.id));
  for(const e of this.enemies){if(e.eventId&&!active.has(e.eventId))e.retiring=true;if(e.retiring)e.retireAge=(e.retireAge||0)+dt;}
  this.enemies=this.enemies.filter(e=>!e.retiring||dist(e,this.player)<600&&(e.retireAge||0)<12);
- const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!active.has(n.eventId)){n.alpha=Math.max(0,(n.alpha??1)-dt);if(n.alpha===0)this.npcs=this.npcs.filter(a=>a!==n);}
+ const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!active.has(n.eventId)){
+  n.guardRetiring=true;this.cancelWorldConversation?.(n);
+  const state=this.ensureHumanGuard?.(n),fighting=state&&this.humanGuardTarget?.(n,state)||n.wind>0||n.attack>0;
+  if(fighting){n.alpha=1;continue;}
+  if(dist(n,this.player)<300){const a=Math.atan2(n.y-this.player.y,n.x-this.player.x);this.walkNpc(n,{x:n.x+Math.cos(a)*48,y:n.y+Math.sin(a)*48},dt);n.post={x:n.x,y:n.y};continue;}
+  n.alpha=Math.max(0,(n.alpha??1)-dt);if(n.alpha===0)this.npcs=this.npcs.filter(a=>a!==n);
+ }
  if(field.groupRevision===this.worldState.revision&&field.groupMinute===Math.floor(this.clock)&&this.time-(field.groupTick||0)<1)return;
  field.groupRevision=this.worldState.revision;field.groupMinute=Math.floor(this.clock);field.groupTick=this.time;
  for(const event of field.events){const rule=Atlas.EVENT_TYPES[event.type],count=rule.group||0;if(!count)continue;const centre=Atlas.toGame(event.x,event.y);if(dist(centre,this.player)>1100)continue;
   for(let i=0;i<count;i++){const id='incident-'+event.id+'-'+i;if(this.atlasDeaths[id]||this.enemies.some(e=>e.id===id)||this.npcs.some(n=>n.id===id))continue;
    if(rule.guard?this.npcs.filter(n=>n.eventGuard).length>=8:this.enemies.filter(e=>e.eventId&&!e.dead).length>=24)break;
-   let pos;for(let j=0;j<24;j++){const angle=(i/count+j/24)*Math.PI*2,r=rule.guard?80+j*8:220+j*12,q={x:centre.x+Math.cos(angle)*r,y:centre.y+Math.sin(angle)*r};if(dist(q,this.player)>300&&!this.solid(q.x,q.y,7,0)&&(rule.guard||!this.inSafe(q.x,q.y)&&this.canPlaceHostile(q))){pos=q;break;}}
+   let pos;for(let j=0;j<24;j++){const angle=(i/count+j/24)*Math.PI*2,r=rule.guard?80+j*8:220+j*12,q=this.incidentRoadPosition?.(event,i,j)||{x:centre.x+Math.cos(angle)*r,y:centre.y+Math.sin(angle)*r};if(dist(q,this.player)>300&&!this.solid(q.x,q.y,7,0)&&(rule.guard||!this.inSafe(q.x,q.y)&&this.canPlaceHostile(q))){pos=q;break;}}
    if(!pos)continue;
    if(rule.guard)this.npcs.push({id,eventId:event.id,eventGuard:true,...pos,look:'nomade',dir:2,head:40,alpha:1,name:'LA GARDE',label:'GARDE',title:'Patrouille du relais',greet:()=>['Nous sécurisons ce passage.'],topics:()=>[],bye:()=>['Reste sur tes gardes.']});
    else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id];Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}

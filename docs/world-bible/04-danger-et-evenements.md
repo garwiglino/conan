@@ -8,6 +8,14 @@ Ce chapitre et le registre `eventRules` définissent leur remplacement, pas une 
 
 Les versions de moteur n'ont pas toutes le même registre : certaines emploient `purified`/`repair`, d'autres `purification`/`reopening`. Utiliser un adaptateur explicite qui vérifie `EVENT_TYPES`; ne jamais envoyer un type inconnu. Le registre de conception garde un `id` stable distinct du `runtimeType`.
 
+Raccordement de la vie locale (18 octobre 2026, Codex / ChatGPT) : les modules
+`world-society.js` et `world-dialogue.js` ajoutent conversations non modales,
+voyageurs sur le graphe terrestre, rondes physiques des patrouilles, choix de
+victimes civiles par les incidents de brigandage et nouvelles parlées fondées sur
+la connaissance du témoin. Voir [Vie locale et rencontres](../world-society.md).
+Ce raccordement utilise les événements actifs ; il ne prétend pas implémenter les
+conditions économiques et diplomatiques de toutes les règles ci-dessous.
+
 ## Quatre dimensions indépendantes
 
 1. Menace physique immédiate : ennemis réels, ligne de vue, étage, projectiles ou danger matériel.

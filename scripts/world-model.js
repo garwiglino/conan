@@ -179,7 +179,7 @@ const createWorldAtlas = (raw) => {
   rain:{name:'Pluie soutenue',category:'Météo'},snow:{name:'Chutes de neige',category:'Météo'},fog:{name:'Brouillard',category:'Météo'},drought:{name:'Sécheresse',category:'Météo'}
  };
  // Declarative incident policy shared by travel, local encounters and civilians.
- Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true});
+ Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true,civilianPrey:true});
  Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'cultist',evacuate:true});
  Object.assign(EVENT_TYPES.siege,{group:3,enemy:'cultist',risk:3,evacuate:true});
  Object.assign(EVENT_TYPES.curse,{group:2,enemy:'skeleton',evacuate:true});
