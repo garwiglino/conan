@@ -13,7 +13,7 @@ once('if(this.gate&&p.y<190&&p.x>320','if(this.gate&&p.y>=0&&p.y<190&&p.x>320');
 once("function updateUI(){$('zone').textContent=game.zone();renderTracker();syncBadge();}","function updateUI(){$('zone').textContent=game.zone();renderTracker();syncBadge();updateWorldUI();}");
 once('!this.bossActive){this.bossActive=true;', '!this.bossActive&&!this.story?.templeFreed){this.bossActive=true;');
 html=html.replace(/g=>g\.won\?\[/g, 'g=>(g.won||g.story?.templeFreed)?[').replace('lines:g.won?[','lines:(g.won||g.story?.templeFreed)?[');
-once('refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();','installWorldUI();refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();');
+if(!html.includes('installWorldUI();'))once('refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();','installWorldUI();refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();');
 html=html.replace('for(const n of this.npcs){if(!n.home)continue;', 'for(const n of this.npcs){if(!n.home||this.party?.some(c=>c.id===n.id))continue;');
 html=html.replaceAll('Remonte la piste au nord jusqu’au camp du Veilleur. Les sceaux sont indiqués en or sur la carte.','Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');
 html=html.replace('Approche de la fée pour quitter la geôle. La carte du monde s’ouvre avec G.','Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');
@@ -28,6 +28,13 @@ html=html.includes('// BEGIN BODY HEAT')?html.replace(/\/\/ BEGIN BODY HEAT[\s\S
 once("this.emit('fallen',{over:D.over})","this.emit('fallen',{over:D.over,cause:D.cause})");
 once("overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.'","overlay('TU AS PERDU UNE VIE',ev.cause==='cold'?'Mort de froid':'Vaincu',headLine(game.player.lives)+'<br>'+(ev.cause==='cold'?'Ta tenue ne protégeait pas assez du froid. ':'')+'Avar te rappelle à la dernière stèle allumée.'");
 once("'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.'","(ev.cause==='cold'?'Le froid a eu raison de Kaldor. ':'')+'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.'");
+// Shared UI overrides follow every legacy stylesheet in both offline builds.
+const uiCSS='/* BEGIN LANDSCAPE DESIGN */\n'+read('scripts/landscape-ui.css')+'\n/* END LANDSCAPE DESIGN */';
+html=html.replace(/\/\* BEGIN LANDSCAPE DESIGN \*\/[\s\S]*?\/\* END LANDSCAPE DESIGN \*\/\s*/,'');
+html=html.replace('</style>',()=>uiCSS+'\n</style>');
+const uiCode='// BEGIN LANDSCAPE DESIGN\n'+read('scripts/landscape-ui.js')+'\n// END LANDSCAPE DESIGN';
+html=html.includes('// BEGIN LANDSCAPE DESIGN')?html.replace(/\/\/ BEGIN LANDSCAPE DESIGN[\s\S]*?\/\/ END LANDSCAPE DESIGN/,()=>uiCode):html.replace('// app.js',()=>uiCode+'\n// app.js');
+html=html.replace(/(?:installWorldUI\(\);|installLandscapeUI\(\);)+(?=refreshTitleMenu\(\);)/, 'installWorldUI();installLandscapeUI();');
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
 console.log('Embedded world atlas, simulation, streaming terrain, map and travel UI.');

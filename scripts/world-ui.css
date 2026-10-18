@@ -46,6 +46,6 @@
 /* Anchor controls to the same gutters that fitScreen assigns to the canvas. */
 #screen.panels-x .console-bar{left:auto!important;right:calc(var(--gr) - var(--pc) + (var(--pc) - 116px)/2)!important;width:116px}
 #screen.panels-x .tracker{left:calc(var(--gl) - var(--pc) + 8px)!important;right:auto!important;width:calc(var(--pc) - 16px)!important;max-width:calc(var(--pc) - 16px)}
-#screen.panels-x .joystick{left:calc(var(--gl) - var(--pc) + (var(--pc) - var(--joy-size))/2)!important}
+#screen.panels-x .joystick:not(.active){left:calc(var(--gl) - var(--pc) + (var(--pc) - var(--joy-size))/2)!important}
 #screen.panels-x .action-pad{right:calc(var(--gr) - var(--pc) + 4px)!important;bottom:calc(env(safe-area-inset-bottom) + 8px)!important}
 @media(max-height:430px){.journey-shell{padding:8px}.journey-shell header{margin-bottom:6px}#screen.panels-x .console-bar{top:calc(env(safe-area-inset-top) + 6px)}#screen.panels-x .tools{gap:3px!important}}

@@ -2,6 +2,14 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
 const {JSDOM}=require('jsdom');
 const read=n=>fs.readFileSync(path.join(__dirname,'../scripts',n),'utf8');
+test('focusing a destination scrolls its list without moving the surrounding form',()=>{
+ const dom=new JSDOM('',{runScripts:'outside-only'}),w=dom.window;try{
+  w.eval(read('travel-select.js'));let focused=null;
+  const ui={list:{scrollTop:20,getBoundingClientRect:()=>({top:100,bottom:180})}},target={focus:options=>focused=options,getBoundingClientRect:()=>({top:190,bottom:234})};
+  w.focusTravelOption(ui,target);assert.equal(focused.preventScroll,true);assert.equal(ui.list.scrollTop,74);
+  target.getBoundingClientRect=()=>({top:78,bottom:122});w.focusTravelOption(ui,target);assert.equal(ui.list.scrollTop,52);
+ }finally{w.close();}
+});
 test('travel destinations use real continent groups and French alphabetical order, including docks',async()=>{
  const {Atlas}=await require('./game-harness.cjs').loadGame();
  const dom=new JSDOM('<select id="dest"></select>',{runScripts:'outside-only'}),w=dom.window;

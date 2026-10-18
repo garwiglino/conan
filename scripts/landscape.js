@@ -9,7 +9,8 @@ function syncLandscape(){
  const gate=$('landscapeGate');gate.hidden=!blocked;document.querySelector('.page').inert=blocked;
  if(blocked){
   landscapeFocus=document.activeElement;keys.clear();resetTouch();
-  if(state==='playing')pause();
+  // Keep paid journeys running through orientation changes, as in background.
+  if(state==='playing'&&game.journey){travelAlerts.schedule(game.leaveJourney());save();}else if(state==='playing')pause();
   sound.tick(false,null);sound.rain(0);sound.ambience({active:false});
   gate.focus({preventScroll:true});
  }else{

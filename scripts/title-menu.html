@@ -8,26 +8,38 @@
 <!-- PANELS -->
 <section class="title-options" id="titleOptions" role="dialog" aria-modal="true" aria-labelledby="optionsTitle" hidden>
  <h2 id="optionsTitle">Options</h2>
+ <div class="settings-grid">
+ <fieldset class="settings-card"><legend>Lecture</legend>
  <div class="text-size-setting">
   <label class="title-volume-label" for="textSize">Taille des textes <output id="textSizeValue" for="textSize">100 %</output></label>
   <input class="title-volume" id="textSize" type="range" min="85" max="125" step="5" value="100" aria-describedby="textSizeHint">
   <div class="text-size-tools"><small id="textSizeHint">85 % à 125 % · aperçu immédiat</small><button class="title-button" id="textSizeReset" type="button">Par défaut</button></div>
  </div>
+ </fieldset>
+ <fieldset class="settings-card"><legend>Audio</legend>
  <div class="title-option-row"><span id="musicLabel">Musique</span><button class="title-button" id="musicToggle" type="button" aria-pressed="true" aria-labelledby="musicLabel musicToggle">Activée</button></div>
- <label class="title-volume-label" for="musicVolume">Volume de la musique <output id="musicVolumeValue" for="musicVolume">100 %</output></label>
- <input class="title-volume" id="musicVolume" type="range" min="0" max="100" step="1" value="100">
+ <label class="title-volume-label" for="musicVolume">Volume <output id="musicVolumeValue" for="musicVolume">100 %</output></label>
+ <input class="title-volume" id="musicVolume" aria-label="Volume de la musique" type="range" min="0" max="100" step="1" value="100">
  <div class="title-option-row"><span id="sfxLabel">Bruitages</span><button class="title-button" id="sfxToggle" type="button" aria-pressed="true" aria-labelledby="sfxLabel sfxToggle">Activés</button></div>
- <label class="title-volume-label" for="sfxVolume">Volume des bruitages <output id="sfxVolumeValue" for="sfxVolume">100 %</output></label>
- <input class="title-volume" id="sfxVolume" type="range" min="0" max="100" step="1" value="100">
+ <label class="title-volume-label" for="sfxVolume">Volume <output id="sfxVolumeValue" for="sfxVolume">100 %</output></label>
+ <input class="title-volume" id="sfxVolume" aria-label="Volume des bruitages" type="range" min="0" max="100" step="1" value="100">
+ </fieldset>
+ <fieldset class="settings-card"><legend>Ambiance</legend>
  <div class="title-option-row"><span id="uiSoundsLabel">Sons de l'interface</span><button class="title-button" id="uiSoundsToggle" type="button" aria-pressed="true" aria-labelledby="uiSoundsLabel uiSoundsToggle">Activés</button></div>
  <label class="title-volume-label" for="environmentVolume">Environnement <output id="environmentVolumeValue" for="environmentVolume">100 %</output></label>
  <input class="title-volume" id="environmentVolume" type="range" min="0" max="100" step="1" value="100" aria-describedby="environmentHint">
- <p class="settings-note" id="environmentHint">Vent, faune et météo. Indépendant des pas, combats et sons d'interface.</p>
  <div class="title-option-row"><span id="hapticsLabel">Vibrations</span><button class="title-button" id="hapticsToggle" type="button" aria-pressed="true" aria-labelledby="hapticsLabel hapticsToggle">Activées</button></div>
+ <details class="settings-info"><summary>Informations</summary>
+ <p class="settings-note" id="environmentHint">Vent, faune et météo. Indépendant des pas, combats et sons d'interface.</p>
  <p class="settings-note" id="hapticsHint"></p>
+ </details>
+ </fieldset>
+ </div>
+ <footer class="settings-actions">
  <button class="title-button" id="full" type="button">Plein écran</button>
  <button class="title-button" id="optionsHome" type="button" data-ui-sound="back" hidden>Menu principal</button>
  <button class="title-button" id="optionsBack" type="button">Retour</button>
+ </footer>
 </section>
 <section class="title-options" id="titleExit" role="dialog" aria-modal="true" aria-labelledby="exitTitle" hidden>
  <h2 id="exitTitle">Session terminée</h2>

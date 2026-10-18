@@ -406,12 +406,238 @@ html{font-size:16px}body{font-size:14px}
 /* Anchor controls to the same gutters that fitScreen assigns to the canvas. */
 #screen.panels-x .console-bar{left:auto!important;right:calc(var(--gr) - var(--pc) + (var(--pc) - 116px)/2)!important;width:116px}
 #screen.panels-x .tracker{left:calc(var(--gl) - var(--pc) + 8px)!important;right:auto!important;width:calc(var(--pc) - 16px)!important;max-width:calc(var(--pc) - 16px)}
-#screen.panels-x .joystick{left:calc(var(--gl) - var(--pc) + (var(--pc) - var(--joy-size))/2)!important}
+#screen.panels-x .joystick:not(.active){left:calc(var(--gl) - var(--pc) + (var(--pc) - var(--joy-size))/2)!important}
 #screen.panels-x .action-pad{right:calc(var(--gr) - var(--pc) + 4px)!important;bottom:calc(env(safe-area-inset-bottom) + 8px)!important}
 @media(max-height:430px){.journey-shell{padding:8px}.journey-shell header{margin-bottom:6px}#screen.panels-x .console-bar{top:calc(env(safe-area-inset-top) + 6px)}#screen.panels-x .tools{gap:3px!important}}
 
 /* END WORLD CSS */
 html,body{overflow:hidden;overscroll-behavior:none;touch-action:pan-x pan-y}body{position:fixed;inset:0}
+/* BEGIN LANDSCAPE DESIGN */
+/* Codex / ChatGPT — one bronze/parchment system, composed for phone landscape.
+   Variables include text scale explicitly; installTextScaling must not scale twice. */
+:root{--ui-ink:#f1e3bd;--ui-muted:#c0af90;--ui-accent:#e5bf67;--ui-line:#856239;--ui-surface:#211a14;--ui-inset:#15110e;--ui-reading:calc(13px * var(--text-scale,1));--ui-note:calc(11px * var(--text-scale,1));--ui-heading:calc(21px * var(--text-scale,1));--ui-section:calc(14px * var(--text-scale,1));--ui-touch:44px;--ui-gap:10px}
+button,input,select,summary{touch-action:manipulation}button,select,input{max-width:100%}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--ui-accent);outline-offset:2px}
+.menu,.world-panel,.world-journey,.title-options{color:var(--ui-ink);font-size:var(--ui-reading);line-height:1.4}
+.menu-body,#menuSettings,.world-side,.party-layout,.transport-body,.transport-help-body,.journey-vitals,.ward-pick{overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--ui-line) var(--ui-inset);scroll-padding:8px;overflow-x:hidden}
+.menu-box,.world-panel,.journey-shell,.title-options{min-width:0;min-height:0}
+.world-panel{border-color:var(--ui-line);background:var(--ui-surface)}
+.world-panel h2,#transportPanel h2,#transportHelp h2,.journey-shell h2,#menuTitle,.title-options h2{font-size:var(--ui-heading);color:var(--ui-accent);line-height:1.15}
+.world-panel p,.world-panel label,.world-panel button,.world-panel select,.world-panel ol,.world-panel .world-stats,#transportPanel p,#transportPanel button,#transportPanel .world-stats,#transportPanel .travel-select-trigger,#transportPanel .travel-select-option,.journey-member,#worldJourneyStep,.journey-shell footer button,.transport-help-body{font-size:var(--ui-reading)}
+.world-panel small,#transportPanel header small,.world-muted,.settings-note,.party-list small,.journey-member span,.journey-resources p,#worldJourneyHint,#worldJourneyClock,#worldProgressText{font-size:var(--ui-note);color:var(--ui-muted);letter-spacing:.2px}
+.world-panel button,.world-panel select,.world-journey button,#menu .inv-act,#menu .q-track,.qp-actions button{min-height:var(--ui-touch);line-height:1.25}
+.world-panel header{flex:none;padding:8px 12px;border-color:var(--ui-line)}
+.world-panel header>div{min-width:0;flex:1}.world-panel header h2{overflow-wrap:anywhere}
+.world-panel header button{flex:none;max-width:40%;white-space:normal}
+.world-panel .world-actions{gap:8px}.world-panel .world-actions button{white-space:normal;min-width:0}
+.world-panel summary{min-height:var(--ui-touch);padding:10px 2px;cursor:pointer;color:var(--ui-accent)}
+.world-check{min-height:var(--ui-touch)}input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--ui-accent)}
+/* Settings: independent cards; the footer never disappears into their scroll. */
+#titleOptions{width:min(1020px,100%);padding:12px;display:flex;flex-direction:column;overflow:hidden;text-align:left;border-image:var(--ui-panel) var(--ui-panel-s) fill/12px/2px stretch}
+#titleOptions h2{margin:0 0 10px;text-align:left;font-family:PixelUI,monospace}
+.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;min-height:0;overflow:auto;padding:2px 4px 6px;touch-action:pan-y}
+.settings-card{min-width:0;margin:0;padding:10px;border:1px solid var(--ui-line);background:var(--ui-inset)}
+.settings-card legend{padding:0 5px;font-size:var(--ui-section);color:var(--ui-accent)}
+#titleOptions .text-size-setting{border:0;padding:0;margin:0}
+#titleOptions .title-volume-label,#titleOptions .title-option-row>span{font-size:var(--ui-reading);line-height:1.35}
+#titleOptions .title-option-row{flex-wrap:nowrap;gap:6px;margin:4px 0}
+#titleOptions .title-option-row .title-button{min-width:0;min-height:44px;padding:6px 10px;font-size:var(--ui-note)}
+#titleOptions .title-volume{height:32px;margin:0 0 5px}
+#titleOptions .settings-note,#titleOptions .text-size-tools small{font-size:var(--ui-note);line-height:1.4;color:var(--ui-muted)}
+#titleOptions .settings-note:empty{display:none}
+#titleOptions .title-button{font-size:var(--ui-reading);min-height:44px;color:var(--ui-ink);text-shadow:none;border-image:var(--ui-dark) var(--ui-dark-s) fill/6px/1px stretch}
+#titleOptions .text-size-tools{flex-wrap:wrap;gap:4px}#titleOptions .text-size-tools .title-button{padding:6px 10px}
+.settings-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;padding:8px 0 0;flex:none;border-top:1px solid var(--ui-line)}
+.settings-actions button{min-width:110px;margin:0!important}
+#menuSettings{padding:0 12px 10px;overflow:hidden;display:flex}
+#menuSettings #titleOptions{padding:0;flex:1;max-width:none;margin:0;border:0;border-image:none;max-height:none}
+/* Menus: section cards use the available width; only the content scrolls. */
+#menu .menu-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start;padding:6px 12px 12px}
+#menu .menu-body>.m-empty{grid-column:1/-1;margin:0;font-size:var(--ui-note)}
+.ui-section{min-width:0;padding:8px 10px;border:1px solid var(--ui-line);background:var(--ui-inset);align-self:start}
+#menu .ui-section>.m-sec{margin:0 0 8px;font-size:var(--ui-section);color:var(--ui-accent)!important;letter-spacing:0}
+#menu .ui-section .inv-row{font-size:var(--ui-reading);gap:8px;padding:8px 0;line-height:1.35;flex-wrap:nowrap}
+#menu .ui-section .inv-row:last-child{border-bottom:0}
+#menu .ui-section .inv-row .grow{min-width:0;overflow-wrap:anywhere}
+#menu .ui-section .inv-row small{font-size:var(--ui-note);line-height:1.4;margin-top:4px}
+#menu .inv-act,#menu .q-track{font-size:var(--ui-reading);padding:6px 10px}
+#menu .q{margin:8px 0;padding:8px 10px}#menu .q-top{font-size:var(--ui-reading);gap:6px}
+#menu .q p{font-size:var(--ui-reading);line-height:1.4;margin:6px 0}
+#menu .q-giver,#menu .q-foot,#menu .q-top b{font-size:var(--ui-note);line-height:1.35}
+#menu .ui-completed{grid-column:1/-1}#menu .ui-completed summary{color:var(--ui-muted);font-size:var(--ui-reading);min-height:44px;padding:10px 0;cursor:pointer}
+#menuBody[data-page=help] .help-line{font-size:var(--ui-reading);line-height:1.5;margin:0}
+#menuBody[data-page=help] .ui-section:first-child{grid-row:span 2}
+#menuBody[data-page=wardrobe]{display:flex;flex-direction:column;overflow:hidden}
+#menuBody .ward{display:flex;flex-direction:column;flex:1;min-height:0}
+#menuBody .ward-body{flex:1;min-height:0;align-items:stretch;gap:12px}
+#menuBody .ward-mirror{width:156px;min-width:0;overflow:auto;padding:2px 4px}
+#menuBody .ward-big{width:102px;height:102px;padding:3px;align-self:center}
+#menuBody .ward-pick{overflow:auto;min-height:0;padding:0 4px 6px}
+#menuBody .ward-info,#menuBody .ward-total{font-size:var(--ui-reading);min-height:0}
+#menuBody .ward-info small,#menuBody .ward-climate,#menuBody .ward-dir{font-size:var(--ui-note)!important;line-height:1.4}
+#menuBody .ward-grid{grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:6px}
+#menuBody .ward-tile{font-size:var(--ui-note);min-height:80px;border-color:var(--ui-line)}
+#menuBody .ward-tile canvas{width:48px;height:48px}#menuBody .ward-tile.on{border-color:var(--ui-accent)}
+#menuBody .ward-tile span{display:block;overflow:visible;min-height:0;overflow-wrap:anywhere}
+#menuBody .ward-tile.locked b{height:48px;line-height:48px}
+/* Short landscape screens: side-by-side title and decisions, safe-area gutters. */
+@media(orientation:landscape) and (max-height:600px){
+ :root{--ui-gap:8px}
+ .screen-overlay.title{--title-pad:12px;overflow:hidden}
+ .screen-overlay.title .overlay-content{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(230px,.8fr);align-items:center;gap:28px;overflow:visible;max-height:100%}
+ .screen-overlay.title #titleBrandWrap{width:100%;margin:0;min-width:0}
+ .screen-overlay.title #mainMenu{width:100%;max-width:300px;gap:8px}
+ .screen-overlay.title #mainMenu>.title-button{font-size:var(--ui-reading)!important;min-height:44px;padding:8px 14px}
+ .screen-overlay.title #menuStatus{font-size:var(--ui-note);margin:0}
+ #titleOptions{max-height:100%;margin:auto}
+ #menu{--menu-rail-width:116px;padding:calc(env(safe-area-inset-top) + 10px) calc(env(safe-area-inset-right) + var(--menu-rail-width) + 28px) calc(env(safe-area-inset-bottom) + 10px) calc(env(safe-area-inset-left) + 12px)}
+ #menu>.menu-box{width:100%;max-width:1060px}
+ #menu .menu-head{padding:6px 12px 2px}#menu .menu-head h3::after{height:3px;margin:4px 0}
+ #menu .menu-rail{top:calc(env(safe-area-inset-top) + 10px);bottom:calc(env(safe-area-inset-bottom) + 10px);right:calc(env(safe-area-inset-right) + 10px);gap:8px;justify-content:space-between}
+ #menu .menu-tabs{gap:6px;min-height:0;overflow:auto;padding:2px}
+ #menu .menu-tabs button{flex:none;min-height:44px;font-size:var(--ui-reading);flex-direction:row;padding:6px 4px;white-space:normal}
+ #menu #menuResume{flex:none;min-height:44px;font-size:var(--ui-reading)}
+ #menuClose{min-width:44px;min-height:44px}#menuMap{min-height:44px;font-size:var(--ui-reading);margin-right:6px}
+ .world-panel{inset:calc(env(safe-area-inset-top) + 8px) calc(env(safe-area-inset-right) + 10px) calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 10px)}
+ .travel-panel,#transportPanel{max-width:1040px;max-height:none}
+ .world-layout{grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr)}
+ .world-map-wrap{min-height:0}.world-side{padding:8px 12px}
+ .world-map-tools{gap:6px;flex-wrap:wrap;max-width:90%}.world-map-tools button{min-width:44px;min-height:44px;font-size:var(--ui-note)}
+ .world-legend{font-size:var(--ui-note);max-width:calc(100% - 12px);line-height:1.4}
+ .world-side>label{margin:6px 0}.world-side select{min-height:44px}
+ .world-side .world-actions{display:grid;grid-template-columns:1fr 1fr}.world-side #worldNearestTransport{grid-column:1/-1;grid-row:2}
+ .party-layout{grid-template-columns:minmax(190px,.85fr) minmax(0,1.4fr);gap:12px;padding:10px 12px;overflow:hidden;flex:1}
+ .party-layout>div{min-height:0;overflow:auto;padding:0 4px}.party-layout h3{font-size:var(--ui-section);margin-bottom:8px}
+ .party-layout p,.party-layout label{font-size:var(--ui-reading)}.party-list button{min-height:48px}.party-news{flex:none;max-height:32%;padding:0 12px}.party-news>summary{padding:8px 0}
+ .transport-body{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,1.25fr);gap:8px 16px;align-content:start;align-items:start;min-height:0}
+ .transport-choices,.transport-summary{min-width:0}.transport-choices>label{margin-bottom:6px}
+ #transportPanel .transport-body{padding:8px 12px}#transportPanel .travel-select{margin:4px 0 6px}
+ #transportPanel .travel-select-trigger,#transportPanel .travel-select-option{min-height:44px;font-size:var(--ui-reading)}
+ .transport-footer{flex:none;border-top:1px solid var(--ui-line);padding:4px 12px 8px;background:var(--ui-surface)}
+ #transportPanel .transport-footer p{margin:4px 0;font-size:var(--ui-note)}
+ #transportPanel .world-actions{margin:4px 0;display:grid;grid-template-columns:1.1fr 1.4fr .8fr}
+ #transportPanel .world-actions button{min-height:44px;font-size:var(--ui-reading)}
+ .travel-select-list{max-height:42dvh}
+ .transport-help-body{columns:2;column-gap:24px}.transport-help-body h3{break-after:avoid;font-size:var(--ui-section);margin-top:0}
+ .world-journey{padding:calc(env(safe-area-inset-top) + 8px) calc(env(safe-area-inset-right) + 12px) calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 12px);overflow:hidden}
+ .journey-shell{width:min(100%,1000px);max-height:100%;padding:10px;display:grid;grid-template-columns:minmax(200px,.9fr) minmax(0,1.2fr);gap:8px 16px}
+ .journey-shell header{margin:0;grid-column:1;border:0}.journey-shell h2{margin:4px 0}.journey-route{grid-column:1;padding:6px 8px}
+ .journey-vitals{grid-column:2;grid-row:1/span 3;max-height:none;min-height:0;overflow:auto;margin:0;align-self:stretch}
+ .journey-member{grid-template-columns:minmax(70px,.8fr) minmax(100px,1fr);gap:6px;padding:8px}
+ .journey-member strong{grid-row:span 2}.journey-member label{grid-template-columns:26px 1fr auto;gap:4px}
+ .journey-resources{grid-column:1}.journey-shell footer{grid-column:1/-1;justify-content:space-between;margin:0;padding-top:6px;border-top:1px solid var(--ui-line)}
+ .journey-shell footer button{min-height:44px;max-width:65%}.journey-shell footer span{min-width:0;font-size:var(--ui-note)}
+ #qpanel{padding:calc(env(safe-area-inset-top) + 10px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 10px) calc(env(safe-area-inset-left) + 16px)}
+ #qpBox{width:min(680px,100%);max-width:680px;max-height:100%;display:flex;flex-direction:column}
+ .qp-head{padding:8px 12px 0}.qp-box h3{font-size:var(--ui-heading);margin:4px 12px}
+ .qp-eyebrow,.qp-sec{font-size:var(--ui-note)}.qp-desc,.qp-obj,.qp-rew{font-size:var(--ui-reading);line-height:1.4}
+ #qpBody{overflow:auto;padding:6px 12px;flex:1;min-height:0}.qp-sec{margin:8px 0 4px}
+ .qp-actions{padding:8px 12px;gap:8px;flex:none}.sl-row,.sl-quick{gap:8px}.sl-quick button{min-height:44px}
+ .screen-overlay:not(.title){padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 12px) calc(env(safe-area-inset-left) + 16px)}
+ .screen-overlay:not(.title) .overlay-content{max-height:100%;overflow:auto;padding:12px 20px}
+ .screen-overlay:not(.title) .overlay-content h2{font-size:var(--ui-heading)!important}
+ .screen-overlay:not(.title) .overlay-content p,.screen-overlay:not(.title) .keyboard-note{font-size:var(--ui-reading)!important}
+ .screen-overlay:not(.title) .start,.screen-overlay:not(.title) .secondary{min-height:44px;font-size:var(--ui-reading)!important;margin-top:6px!important}
+ .notice-stack{max-width:min(320px,42vw)}.notice-card strong,.notice-card span{font-size:var(--ui-note)!important;line-height:1.4}
+ #screen .tools .travel-button,#screen .tools #btnMenu{min-height:44px!important;height:44px!important;font-size:var(--ui-reading)!important}
+ #screen.panels-x .tools{gap:6px!important}
+}
+@media(orientation:landscape) and (max-width:740px){
+ .settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.settings-card:last-child{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;align-items:center}
+ .settings-card:last-child>.settings-note{grid-column:1/-1}
+ #menu{--menu-rail-width:100px}#menu .menu-body{gap:8px;padding:4px 8px 8px}.ui-section{padding:6px 8px}
+ #menu .ui-section .inv-row{flex-wrap:wrap}#menu .ui-section .inv-row .grow{flex-basis:60%}
+ .world-layout{grid-template-columns:minmax(0,1fr) 240px}.world-legend{max-width:96%;font-size:var(--ui-note)}
+ #menuBody .ward-mirror{width:128px}#menuBody .ward-big{width:102px;height:102px}
+ .journey-shell{grid-template-columns:minmax(180px,.9fr) minmax(0,1.2fr);gap:6px 10px}
+}
+@media(orientation:portrait){.settings-grid{grid-template-columns:1fr}#titleOptions{max-height:92dvh}#menu .menu-body{grid-template-columns:1fr}.settings-actions{justify-content:stretch}.settings-actions button{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}.dlg-next::before{animation:none}}
+#titleOptions .settings-info{font-size:var(--ui-note);color:var(--ui-muted)}
+#titleOptions .settings-info summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--ui-accent)}
+#titleOptions .settings-info p{margin:4px 0 8px}
+/* Inventory categories keep every item and action within one short page. */
+#menuBody[data-page=bag]{display:flex;flex-direction:column;gap:8px}
+.ui-inventory-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;position:sticky;top:-6px;z-index:1;background:var(--ui-surface);padding:4px 0;flex:none}
+#menu .ui-inventory-nav button{font-size:var(--ui-note);min-height:44px;white-space:normal;padding:4px}
+#menu .ui-inventory-nav [aria-selected=true]{border-image-source:var(--ui-gold)!important;color:#2a1606!important}
+#menuBody[data-page=bag]>.ui-section{width:100%;flex:none}
+#menu .ui-item-info summary{font-size:var(--ui-note);min-height:32px;display:flex;align-items:center;color:var(--ui-muted);cursor:pointer}
+#menu .ui-item-info summary::before{content:'+';margin-right:6px;color:var(--ui-accent)}
+#menu .ui-item-info[open] summary::before{content:'−'}
+#menuBody[data-page=bag] .ward-stage{width:42px;height:42px}
+#menuBody[data-page=help]{display:flex;flex-direction:column}
+#menuBody[data-page=help]>.ui-section{width:100%;flex:none}
+#menuBody[data-page=help] summary{font-size:var(--ui-reading);min-height:44px;cursor:pointer;color:var(--ui-accent);padding:10px 0}
+#titleOptions .settings-card{padding:8px}
+#titleOptions .settings-card legend{font-size:var(--ui-reading)}
+#titleOptions .title-volume-label{font-size:var(--ui-note)}
+#titleOptions .title-volume{margin-bottom:0}
+.world-sidebar{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;border-left:1px solid var(--ui-line)}
+.world-sidebar .world-side{flex:1;min-height:0;border-left:0}
+.world-map-actions{flex:none;border-top:1px solid var(--ui-line);padding:6px 10px;background:var(--ui-surface)}
+.world-map-actions .world-actions{display:grid;grid-template-columns:1fr 1fr;margin:0;gap:6px}
+.world-map-actions .world-actions button{font-size:var(--ui-note);min-height:44px;padding:6px}
+.world-map-actions #worldNearestTransport{grid-column:auto;grid-row:auto}
+.world-map-actions #worldUntrack{grid-column:1/-1}
+#worldHere,#worldRoute{font-size:var(--ui-note);margin:4px 0;line-height:1.4}
+.world-map-help summary{font-size:var(--ui-note)}
+@media(orientation:landscape) and (max-width:740px){.settings-card:last-child>.settings-info{grid-column:1/-1}}
+#menuBody[data-page=bag] .inv-row>img{width:24px!important;height:24px!important;padding:2px}
+@media(orientation:landscape) and (max-height:600px){
+ #menu{--menu-rail-width:max(116px,calc(116px * var(--text-scale,1)))}
+ #menu .menu-tabs button{font-size:var(--ui-note);gap:4px}
+ #menu .menu-tabs img{width:12px;height:12px;flex:none}
+}
+#screen .dlg-choices{background:#211a14f5;border-top-color:var(--ui-line)}
+#screen .dlg-list .dlg-choice{font-size:var(--ui-reading)!important;min-height:44px;line-height:1.35}
+#screen .dlg-track{background:var(--ui-inset);border-color:var(--ui-line)}
+#screen .dlg-track i{background:var(--ui-accent);border-color:#f1e3bd;box-shadow:inset 0 -2px #a17a41}
+#screen .toast{font-size:var(--ui-reading)!important;line-height:1.4;color:var(--ui-ink)}
+#menuBody .ward-top{flex-wrap:nowrap;align-items:flex-start;gap:8px}
+#menuBody .ward-top>[data-ward-back]{flex:none;font-size:var(--ui-note)}
+#menuBody .ward-total{flex:1;min-width:0;overflow-wrap:anywhere}
+#menuBody .ward-mirror{overflow:hidden;display:flex;flex-direction:column}
+#menuBody .ward-big{flex:none}
+#menuBody .ward-turn{flex:none;min-height:44px}
+#menuBody .ward-info{flex:1;min-height:0;overflow:auto;padding:2px;overscroll-behavior:contain}
+@media(orientation:landscape) and (max-height:350px){#menuBody .ward-big{width:68px;height:68px;padding:2px}#menuBody .ward-top{padding-bottom:4px}}
+.transport-help-body{columns:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;align-content:start}
+.travel-help-topic{min-width:0;align-self:start;padding:4px 10px;background:var(--ui-inset);border:1px solid var(--ui-line)}
+.world-panel .travel-help-topic summary{font-size:var(--ui-reading);line-height:1.35}
+@media(max-width:600px){.transport-help-body{grid-template-columns:1fr}}
+#titleOptions .title-option-row{flex-wrap:wrap}
+#titleOptions .title-option-row>span{min-width:0;overflow-wrap:anywhere}
+@media(orientation:landscape) and (max-width:740px){#titleOptions .settings-card:last-child{display:block}}
+#menuBody .ward-turn{width:100%;justify-content:space-between;gap:4px;flex-wrap:wrap}
+#menuBody .ward-turn .q-track{min-width:44px;width:44px;min-height:44px;padding:4px;flex:none}
+#menuBody .ward-dir{min-width:0;white-space:normal;overflow-wrap:anywhere;flex:1;text-align:center}
+@media(orientation:landscape) and (max-height:600px){
+ .world-journey .journey-shell{height:100%;max-height:100%;grid-template-rows:auto minmax(0,1fr) auto auto}
+ .journey-route{min-height:0;overflow:auto;overscroll-behavior:contain}
+ .journey-shell footer{flex-wrap:nowrap;min-width:0}
+ #screen.panels-x .console-bar{width:calc(var(--pc) - 8px);right:calc(var(--gr) - var(--pc) + 4px)!important}
+ #screen .tools .travel-button,#screen .tools #btnMenu{width:100%!important;white-space:normal;padding:0 2px!important}
+}
+@media(orientation:landscape) and (max-height:600px){
+ #qpBox.sleep #qpBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 16px;align-items:center}
+ #qpBox.sleep .qp-desc{grid-column:1;grid-row:1;font-size:var(--ui-reading)}
+ #qpBox.sleep .qp-sec{grid-column:1;grid-row:2;margin:0}
+ #qpBox.sleep .sl-row{grid-column:1;grid-row:3;margin:0;gap:6px}
+ #qpBox.sleep .sl-val{font-size:var(--ui-section);min-width:0;flex:1}
+ #qpBox.sleep .sl-row button{min-width:44px;min-height:44px;flex:none}
+ #qpBox.sleep .qp-obj{grid-column:2;grid-row:1/span 2;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+ #qpBox.sleep .sl-quick{grid-column:2;grid-row:3;margin:0;gap:4px}
+ #qpBox.sleep .sl-quick button{font-size:var(--ui-note);min-width:0;padding:4px 2px;min-height:44px}
+ #qpBox.sleep .sl-quick small{font-size:var(--ui-note)}
+}
+/* Modal decisions use the whole display, including the control gutters. */
+#qpanel{inset:0}
+#titleOptions .title-option-row>span{font-size:var(--ui-note)}
+#menuBody .ward-grid{grid-template-columns:repeat(auto-fill,minmax(calc(104px * var(--text-scale,1)),1fr))}
+#menuBody .ward-tile span{overflow-wrap:normal;word-break:normal}
+
+/* END LANDSCAPE DESIGN */
 </style>
 </head>
 <body>
@@ -438,26 +664,38 @@ html,body{overflow:hidden;overscroll-behavior:none;touch-action:pan-x pan-y}body
 <div class="screen-overlay title" id="overlay"><canvas id="titleScene" width="640" height="360" aria-hidden="true"></canvas><!-- BEGIN TITLE PANELS -->
 <section class="title-options" id="titleOptions" role="dialog" aria-modal="true" aria-labelledby="optionsTitle" hidden>
  <h2 id="optionsTitle">Options</h2>
+ <div class="settings-grid">
+ <fieldset class="settings-card"><legend>Lecture</legend>
  <div class="text-size-setting">
   <label class="title-volume-label" for="textSize">Taille des textes <output id="textSizeValue" for="textSize">100 %</output></label>
   <input class="title-volume" id="textSize" type="range" min="85" max="125" step="5" value="100" aria-describedby="textSizeHint">
   <div class="text-size-tools"><small id="textSizeHint">85 % à 125 % · aperçu immédiat</small><button class="title-button" id="textSizeReset" type="button">Par défaut</button></div>
  </div>
+ </fieldset>
+ <fieldset class="settings-card"><legend>Audio</legend>
  <div class="title-option-row"><span id="musicLabel">Musique</span><button class="title-button" id="musicToggle" type="button" aria-pressed="true" aria-labelledby="musicLabel musicToggle">Activée</button></div>
- <label class="title-volume-label" for="musicVolume">Volume de la musique <output id="musicVolumeValue" for="musicVolume">100 %</output></label>
- <input class="title-volume" id="musicVolume" type="range" min="0" max="100" step="1" value="100">
+ <label class="title-volume-label" for="musicVolume">Volume <output id="musicVolumeValue" for="musicVolume">100 %</output></label>
+ <input class="title-volume" id="musicVolume" aria-label="Volume de la musique" type="range" min="0" max="100" step="1" value="100">
  <div class="title-option-row"><span id="sfxLabel">Bruitages</span><button class="title-button" id="sfxToggle" type="button" aria-pressed="true" aria-labelledby="sfxLabel sfxToggle">Activés</button></div>
- <label class="title-volume-label" for="sfxVolume">Volume des bruitages <output id="sfxVolumeValue" for="sfxVolume">100 %</output></label>
- <input class="title-volume" id="sfxVolume" type="range" min="0" max="100" step="1" value="100">
+ <label class="title-volume-label" for="sfxVolume">Volume <output id="sfxVolumeValue" for="sfxVolume">100 %</output></label>
+ <input class="title-volume" id="sfxVolume" aria-label="Volume des bruitages" type="range" min="0" max="100" step="1" value="100">
+ </fieldset>
+ <fieldset class="settings-card"><legend>Ambiance</legend>
  <div class="title-option-row"><span id="uiSoundsLabel">Sons de l'interface</span><button class="title-button" id="uiSoundsToggle" type="button" aria-pressed="true" aria-labelledby="uiSoundsLabel uiSoundsToggle">Activés</button></div>
  <label class="title-volume-label" for="environmentVolume">Environnement <output id="environmentVolumeValue" for="environmentVolume">100 %</output></label>
  <input class="title-volume" id="environmentVolume" type="range" min="0" max="100" step="1" value="100" aria-describedby="environmentHint">
- <p class="settings-note" id="environmentHint">Vent, faune et météo. Indépendant des pas, combats et sons d'interface.</p>
  <div class="title-option-row"><span id="hapticsLabel">Vibrations</span><button class="title-button" id="hapticsToggle" type="button" aria-pressed="true" aria-labelledby="hapticsLabel hapticsToggle">Activées</button></div>
+ <details class="settings-info"><summary>Informations</summary>
+ <p class="settings-note" id="environmentHint">Vent, faune et météo. Indépendant des pas, combats et sons d'interface.</p>
  <p class="settings-note" id="hapticsHint"></p>
+ </details>
+ </fieldset>
+ </div>
+ <footer class="settings-actions">
  <button class="title-button" id="full" type="button">Plein écran</button>
  <button class="title-button" id="optionsHome" type="button" data-ui-sound="back" hidden>Menu principal</button>
  <button class="title-button" id="optionsBack" type="button">Retour</button>
+ </footer>
 </section>
 <section class="title-options" id="titleExit" role="dialog" aria-modal="true" aria-labelledby="exitTitle" hidden>
  <h2 id="exitTitle">Session terminée</h2>
@@ -484,11 +722,11 @@ html,body{overflow:hidden;overscroll-behavior:none;touch-action:pan-x pan-y}body
 <section id="worldPanel" class="world-panel" role="dialog" aria-modal="true" aria-labelledby="worldTitle" hidden>
  <header><div><small>CARNET DE VOYAGE</small><h2 id="worldTitle">Les terres inconnues</h2></div><button id="worldClose">Reprendre · Échap</button></header>
  <div class="world-layout"><div class="world-map-wrap"><canvas id="worldCanvas" aria-label="Carte des localités, routes, transports et haltes"></canvas><div class="world-map-tools"><button id="worldZoomIn" aria-label="Agrandir">+</button><button id="worldZoomOut" aria-label="Réduire">−</button><button id="worldFit">Vue générale</button><button id="worldLocate">Kaldor</button></div><p class="world-legend">● Localité · H Transport · ⚓ Port · ⌂ Auberge · △ Halte<br>━━ Route · ┄ Piste / mer · ⚑ Lieu suivi</p></div>
- <div class="world-side"><p id="worldHere" class="world-muted"></p><label>Afficher<select id="worldFilter"><option value="all">Tous les lieux</option><option value="places">Villes et localités</option><option value="transport">Transports et ports</option><option value="rest">Auberges et haltes</option></select></label><label>Lieu<select id="worldDestination"></select></label><p id="worldRoute"></p><div class="world-actions"><button id="worldTrack">Suivre ce lieu</button><button id="worldNearestTransport">Transport le plus proche</button><button id="worldUntrack">Ne plus suivre</button></div><p class="world-muted">Le fanion indique la distance à vol d’oiseau, actualisée au mètre. Zoome pour distinguer les points proches.</p><p class="world-muted">Les terres grisées restent inexplorées. Les lieux visités et le transport indiqué apparaissent ici. Le transport le plus proche est choisi à vol d’oiseau, même encore inconnu. Pour voyager, parle à un transporteur sur place.</p></div></div>
+ <div class="world-sidebar"><div class="world-side"><p id="worldHere" class="world-muted"></p><label>Afficher<select id="worldFilter"><option value="all">Tous les lieux</option><option value="places">Villes et localités</option><option value="transport">Transports et ports</option><option value="rest">Auberges et haltes</option></select></label><label>Lieu<select id="worldDestination"></select></label><p id="worldRoute"></p><details class="world-map-help"><summary>Lire la carte</summary><p class="world-muted">Le fanion indique la distance à vol d’oiseau, actualisée au mètre. Zoome pour distinguer les points proches.</p><p class="world-muted">Les terres grisées restent inexplorées. Les lieux visités et le transport indiqué apparaissent ici. Le transport le plus proche est choisi à vol d’oiseau, même encore inconnu. Pour voyager, parle à un transporteur sur place.</p></details></div><footer class="world-map-actions"><div class="world-actions"><button id="worldTrack">Suivre ce lieu</button><button id="worldNearestTransport">Transport le plus proche</button><button id="worldUntrack">Ne plus suivre</button></div></footer></div></div>
 </section>
 <section id="partyPanel" class="world-panel travel-panel" role="dialog" aria-modal="true" aria-labelledby="partyTitle" hidden><header><div><small>KALDOR ET SES ALLIÉS</small><h2 id="partyTitle">Compagnons</h2></div><button id="partyClose">Reprendre · Échap</button></header><div class="party-layout"><div><p id="partySupplies"></p><label class="world-check"><input id="partyAutoEat" type="checkbox"> Partager automatiquement les rations</label><div id="partyList" class="party-list"></div></div><div id="partyDetail" aria-live="polite"></div></div><details class="party-news"><summary>Nouvelles du monde</summary><div id="worldNews"></div><button id="worldExport">Exporter la chronique</button><details><summary>Événements possibles</summary><p id="worldCatalog"></p></details></details></section>
-<section id="transportPanel" class="world-panel travel-panel" role="dialog" aria-modal="true" aria-labelledby="transportTitle" hidden><header><div><small>VOYAGE AVEC UN TRANSPORTEUR</small><h2 id="transportTitle">Le relais</h2></div><button id="transportHelpOpen" type="button">Comment voyager</button><button id="transportClose">Fermer · Échap</button></header><div class="transport-body"><label>Destination<select id="transportDestination"></select></label><div class="world-fields"><label>Transport<select id="transportMode"></select></label><label>Itinéraire<select id="transportPreference"><option value="fast">Le plus rapide</option><option value="safe">Le plus prudent</option></select></label></div><label class="world-check"><input type="checkbox" id="transportBoat" checked> Autoriser les correspondances en bateau</label><div id="transportRoute" aria-live="polite"></div><p id="transportSupplies"></p><p id="transportAdvice" class="world-muted" aria-live="polite"></p><div class="world-actions"><button id="transportGo">Partir</button><button id="transportBuy">Provisions · 3 jours</button><button id="transportRest">Repos · 8 h</button></div><p id="transportPurchaseHint" class="world-muted" aria-live="polite"></p><p id="transportMessage" aria-live="polite"></p></div></section>
-<section id="transportHelp" class="world-panel travel-panel" role="dialog" aria-modal="true" aria-labelledby="transportHelpTitle" hidden><header><h2 id="transportHelpTitle">Comment voyager</h2><button id="transportHelpClose">Retour</button></header><div class="transport-help-body"><h3>Choisir un relais</h3><p>Les destinations sont les relais des localités. Les quais servent aux correspondances : le transport t’accompagne jusqu’au relais du lieu choisi. Les ruines et les lieux sauvages se rejoignent à pied.</p><h3>Préparer le groupe</h3><p>Choisis le cheval ou la charrette, puis un trajet rapide ou prudent. Autorise le bateau pour atteindre les îles. Tous les compagnons doivent être présents et en état de partir. Le prix du transport est payé une seule fois au départ.</p><h3>Lire le danger</h3><p>Le danger du parcours est une moyenne pondérée par la distance. Le passage le plus dangereux est indiqué séparément. Relief, malédictions, intempéries et événements actifs sont pris en compte au départ ; la situation peut évoluer pendant le trajet. Le trajet prudent équilibre durée et exposition au danger. Les groupes hostiles signalés empêchent le départ sur ce parcours. Si une menace apparaît en route, le transport rejoint la dernière halte sûre. À pied, ces groupes peuvent être affrontés pour sécuriser le passage.</p><h3>Emporter des vivres</h3><p>Les rations indiquées sont conseillées, jamais obligatoires. Tu peux partir avec tes ressources actuelles. Sous 50 % de faim, chaque membre mange une ration et récupère 50 points. La fée n’a pas besoin de nourriture.</p><p>Sans rations, la faim peut atteindre zéro : la santé diminue progressivement. La faim seule laisse Kaldor à 1 PV minimum ; un compagnon peut tomber épuisé. L’eau est suivie sans pénalité de soif.</p><h3>Pendant le voyage</h3><p>La barre suit le temps du trajet, repos et attentes compris. Les jauges montrent les réserves et la santé de chacun. « Faire halte » interrompt sur terre ; en mer, le bateau rejoint un port. La sauvegarde conserve la progression et le paiement.</p><p>Dormir à jeun ne soigne pas. Un compagnon épuisé est transporté jusqu’à la halte et doit être soigné avant le prochain départ.</p></div></section>
+<section id="transportPanel" class="world-panel travel-panel" role="dialog" aria-modal="true" aria-labelledby="transportTitle" hidden><header><div><small>VOYAGE AVEC UN TRANSPORTEUR</small><h2 id="transportTitle">Le relais</h2></div><button id="transportHelpOpen" type="button">Comment voyager</button><button id="transportClose">Fermer · Échap</button></header><div class="transport-body"><div class="transport-choices"><label>Destination<select id="transportDestination"></select></label><div class="world-fields"><label>Transport<select id="transportMode"></select></label><label>Itinéraire<select id="transportPreference"><option value="fast">Le plus rapide</option><option value="safe">Le plus prudent</option></select></label></div><label class="world-check"><input type="checkbox" id="transportBoat" checked> Autoriser les correspondances en bateau</label></div><div class="transport-summary"><div id="transportRoute" aria-live="polite"></div><p id="transportSupplies"></p><p id="transportAdvice" class="world-muted" aria-live="polite"></p></div></div><footer class="transport-footer"><div class="world-actions"><button id="transportGo">Partir</button><button id="transportBuy">Provisions · 3 jours</button><button id="transportRest">Repos · 8 h</button></div><p id="transportPurchaseHint" class="world-muted" aria-live="polite"></p><p id="transportMessage" aria-live="polite"></p></footer></section>
+<section id="transportHelp" class="world-panel travel-panel" role="dialog" aria-modal="true" aria-labelledby="transportHelpTitle" hidden><header><h2 id="transportHelpTitle">Comment voyager</h2><button id="transportHelpClose">Retour</button></header><div class="transport-help-body"><details class="travel-help-topic"><summary>Choisir un relais</summary><p>Les destinations sont les relais des localités. Les quais servent aux correspondances : le transport t’accompagne jusqu’au relais du lieu choisi. Les ruines et les lieux sauvages se rejoignent à pied.</p></details><details class="travel-help-topic"><summary>Préparer le groupe</summary><p>Choisis le cheval ou la charrette, puis un trajet rapide ou prudent. Autorise le bateau pour atteindre les îles. Tous les compagnons doivent être présents et en état de partir. Le prix du transport est payé une seule fois au départ.</p></details><details class="travel-help-topic"><summary>Lire le danger</summary><p>Le danger du parcours est une moyenne pondérée par la distance. Le passage le plus dangereux est indiqué séparément. Relief, malédictions, intempéries et événements actifs sont pris en compte au départ ; la situation peut évoluer pendant le trajet. Le trajet prudent équilibre durée et exposition au danger. Les groupes hostiles signalés empêchent le départ sur ce parcours. Si une menace apparaît en route, le transport rejoint la dernière halte sûre. À pied, ces groupes peuvent être affrontés pour sécuriser le passage.</p></details><details class="travel-help-topic"><summary>Emporter des vivres</summary><p>Les rations indiquées sont conseillées, jamais obligatoires. Tu peux partir avec tes ressources actuelles. Sous 50 % de faim, chaque membre mange une ration et récupère 50 points. La fée n’a pas besoin de nourriture.</p><p>Sans rations, la faim peut atteindre zéro : la santé diminue progressivement. La faim seule laisse Kaldor à 1 PV minimum ; un compagnon peut tomber épuisé. L’eau est suivie sans pénalité de soif.</p></details><details class="travel-help-topic"><summary>Pendant le voyage</summary><p>La barre suit le temps du trajet, repos et attentes compris. Les jauges montrent les réserves et la santé de chacun. « Faire halte » interrompt sur terre ; en mer, le bateau rejoint un port. La sauvegarde conserve la progression et le paiement.</p><p>Dormir à jeun ne soigne pas. Un compagnon épuisé est transporté jusqu’à la halte et doit être soigné avant le prochain départ.</p></details></div></section>
 <section id="worldJourney" class="world-journey" aria-label="Voyage en cours" hidden><div class="journey-shell"><header><small>EN ROUTE</small><h2 id="worldJourneyTo"></h2></header><div class="journey-route"><p id="worldJourneyStep"></p><div class="journey-progress"><progress id="worldProgress" aria-label="Progression du voyage" max="1" value="0"></progress><span id="worldProgressText">0 %</span></div><p id="worldJourneyClock"></p></div><div id="journeyVitals" class="journey-vitals"></div><div class="journey-resources"><p id="journeyStocks"></p><p id="journeyMeal" aria-live="polite"></p></div><footer><button id="worldStop">Faire halte dès que possible</button><span id="worldJourneyHint"></span></footer></div></section>
 
 <!-- END WORLD UI -->
@@ -5114,6 +5352,12 @@ function syncTravelSelect(id){
  ui.button.setAttribute('aria-label',ui.label+' : '+(option?.textContent||'Aucune destination')+(group?.tagName==='OPTGROUP'?' — '+group.label:''));
  ui.button.disabled=ui.select.disabled||!ui.select.options.length;
 }
+function focusTravelOption(ui,target){
+ if(!target)return;target.focus({preventScroll:true});
+ const item=target.getBoundingClientRect(),list=ui.list.getBoundingClientRect();
+ if(item.top<list.top)ui.list.scrollTop+=item.top-list.top;
+ else if(item.bottom>list.bottom)ui.list.scrollTop+=item.bottom-list.bottom;
+}
 function openTravelSelect(ui){
  if(ui.button.disabled)return;if(travelSelectOpen===ui){closeTravelSelect(true);return;}closeTravelSelect();
  ui.list.replaceChildren();
@@ -5126,7 +5370,7 @@ function openTravelSelect(ui){
   }
  }
  ui.list.hidden=false;ui.button.setAttribute('aria-expanded','true');travelSelectOpen=ui;
- const target=ui.list.querySelector('[aria-selected="true"]:not(:disabled)')||ui.list.querySelector('button:not(:disabled)');target?.focus();target?.scrollIntoView?.({block:'nearest'});
+ const target=ui.list.querySelector('[aria-selected="true"]:not(:disabled)')||ui.list.querySelector('button:not(:disabled)');focusTravelOption(ui,target);
 }
 function travelSelectKeydown(e){
  const ui=travelSelectOpen||[...travelSelects.values()].find(n=>n.button===document.activeElement);if(!ui)return false;
@@ -5138,7 +5382,7 @@ function travelSelectKeydown(e){
  if(e.key==='ArrowDown')next=(current+1)%options.length;
  if(e.key==='ArrowUp')next=(current-1+options.length)%options.length;
  if(e.key==='Home')next=0;if(e.key==='End')next=options.length-1;
- if(next<0)return false;e.preventDefault();e.stopImmediatePropagation();options[next]?.focus();options[next]?.scrollIntoView?.({block:'nearest'});return true;
+ if(next<0)return false;e.preventDefault();e.stopImmediatePropagation();focusTravelOption(ui,options[next]);return true;
 }
 function installTravelSelects(){
  for(const [id,label]of [['transportDestination','Destination'],['transportMode','Transport'],['transportPreference','Itinéraire']]){
@@ -5171,7 +5415,7 @@ function refreshPartyPanel(){const g=game,c=g.party.find(c=>c.id===partySelected
 }
 function openTransportPanel(){const s=game.currentTransport();if(!s){game.pendingTransport=null;return;}game.dialogue=null;syncDialogue();if(!travelOpen('transport'))return;game.pendingTransport=null;$('transportTitle').textContent=Atlas.byId[s.site].name;$('transportMode').innerHTML=s.modes.map(m=>'<option value="'+m+'">'+Atlas.modes[m].name+'</option>').join('');$('transportDestination').innerHTML=travelDestinationOptions(game.travelDestinations().filter(n=>n.id!==s.site));const tracked=game.mapPlaces.find(n=>n.id===game.navigation);const trackedSite=tracked&&Atlas.byId[tracked.siteId],destination=trackedSite?.town||trackedSite?.id;if(destination!==s.site&&[...$('transportDestination').options].some(o=>o.value===destination))$('transportDestination').value=destination;$('transportMessage').textContent='';refreshTransportPanel();$('transportClose').focus();}
 function refreshTransportPanel(){for(const id of ['transportDestination','transportMode','transportPreference'])syncTravelSelect(id);const g=game;transportPreview=g.planJourney($('transportDestination').value,{mode:$('transportMode').value,preference:$('transportPreference').value,allowBoat:$('transportBoat').checked});const p=transportPreview,need=p?g.journeyNeeds(p):null,threat=p&&p.stages.some(s=>g.journeyThreat(s)),ready=p&&!threat&&g.player.coins>=p.cost;
- $('transportRoute').innerHTML=p?'<div class="world-stats">'+(p.distance/1000).toFixed(1).replace('.',',')+' km · '+atlasDuration(p.minutes)+' · '+p.cost+' pièces</div><p>'+ (p.boat?'Traversée maritime et correspondances incluses.':'Parcours terrestre.')+' Danger du parcours : '+p.danger.toFixed(1).replace('.',',')+'/5 · Passage le plus dangereux : '+p.maxDanger.toFixed(1).replace('.',',')+'/5.</p><p>Rations conseillées : '+need.food+'</p>'+(g.journeyClimateText?'<p>'+atlasEscape(g.journeyClimateText(p))+'</p>':'')+'<details><summary>Étapes, haltes et danger</summary><p>Passage le plus dangereux : '+atlasEscape(Atlas.roadById[p.dangerLegs.reduce((a,b)=>b.peak>a.peak?b:a).road].name)+'.</p><p>État actuel du monde au départ. '+atlasEscape([...new Set(p.dangerLegs.flatMap(l=>l.reasons))].join(' · ')||'Aucun incident actif sur ce parcours.')+'</p><ol>'+p.stages.map(s=>'<li>'+atlasEscape(s.label)+' · '+atlasDuration(s.minutes)+'</li>').join('')+'</ol></details>':'<p>Aucun itinéraire disponible avec ce transport. Choisis un autre lieu ou autorise les bateaux.</p>';
+ $('transportRoute').innerHTML=p?'<div class="world-stats">'+(p.distance/1000).toFixed(1).replace('.',',')+' km · '+atlasDuration(p.minutes)+' · '+p.cost+' pièces</div><p>'+ 'Danger moyen : '+p.danger.toFixed(1).replace('.',',')+'/5 · Pic : '+p.maxDanger.toFixed(1).replace('.',',')+'/5.</p><p>Rations conseillées : '+need.food+'</p>'+(g.journeyClimateText?'<p>'+atlasEscape(g.journeyClimateText(p))+'</p>':'')+'<details><summary>Étapes, haltes et danger</summary><p>'+(p.boat?'Traversée maritime et correspondances incluses.':'Parcours terrestre.')+'</p><p>Passage le plus dangereux : '+atlasEscape(Atlas.roadById[p.dangerLegs.reduce((a,b)=>b.peak>a.peak?b:a).road].name)+'.</p><p>État actuel du monde au départ. '+atlasEscape([...new Set(p.dangerLegs.flatMap(l=>l.reasons))].join(' · ')||'Aucun incident actif sur ce parcours.')+'</p><ol>'+p.stages.map(s=>'<li>'+atlasEscape(s.label)+' · '+atlasDuration(s.minutes)+'</li>').join('')+'</ol></details>':'<p>Aucun itinéraire disponible avec ce transport. Choisis un autre lieu ou autorise les bateaux.</p>';
  $('transportSupplies').textContent=g.player.coins+' pièces · '+Math.floor(g.supplies.food)+' rations · '+g.supplies.water.toFixed(1)+' gourdes';$('transportGo').disabled=!ready;const missing=p&&g.supplies.food<need.food;$('transportGo').textContent=missing?'Partir avec ressources actuelles':'Partir';$('transportAdvice').textContent=!p?'':threat?'Un groupe hostile bloque ce trajet. Choisis un autre itinéraire ou attends.':g.player.coins<p.cost?'Il manque '+(p.cost-g.player.coins)+' pièces pour le transport.':missing?'Réserves conseillées manquantes : '+Math.max(0,need.food-Math.floor(g.supplies.food))+' rations.':'Réserves suffisantes.';const quote=g.supplyQuote(g.journeySupplyDays(p));$('transportBuy').textContent=quote?'Acheter '+quote.food+' rations · '+quote.cost+' pièces':'Ravitaillement indisponible';$('transportBuy').disabled=!quote||(!quote.food&&!quote.water)||g.player.coins<quote.cost;$('transportPurchaseHint').textContent=quote&&p&&g.player.coins>=quote.cost&&g.player.coins-quote.cost<p.cost?'Cet achat ne laissera pas assez de pièces pour payer le voyage. Tu peux partir sans acheter.':quote&&p&&g.supplies.food+quote.food<need.food?'Le trajet dépasse la capacité de 999 rations. Prévois une halte intermédiaire pour te ravitailler.':'';
 }
 function worldVisiblePlaces(){const filter=$('worldFilter').value;return game.mapPlaces.filter(n=>game.canTrackPlace(n)&&(filter==='all'||n.category===filter)&&(n.id===atlasSelected||n.id===game.navigation||filter!=='all'||n.category==='places'&&n.kind!=='dock'||atlasMapView.zoom>=64/Atlas.scale));}
@@ -10729,6 +10973,49 @@ const BodyHeat=(()=>{
 })();
 
 // END BODY HEAT
+// BEGIN LANDSCAPE DESIGN
+// Codex / ChatGPT: shared menu composition. Move existing nodes so their events,
+// focus targets and wardrobe canvases retain their identity.
+let inventorySection='Objets';
+function composeMenuSections(body,page){
+ body.dataset.page=body.querySelector('.ward')?'wardrobe':page;
+ if(body.querySelector('.ward')||body.querySelector(':scope > .ui-section'))return;
+ const fragment=document.createDocumentFragment();let section=null;
+ for(const node of [...body.children]){
+  if(node.classList.contains('m-sec')){
+   const completed=page==='quests'&&node.textContent.trim()==='Accomplies',folded=completed||page==='help';
+   section=document.createElement(folded?'details':'section');section.className='ui-section';section.dataset.section=node.textContent.trim();
+   if(folded){const summary=document.createElement('summary');summary.textContent=node.textContent;section.append(summary);if(completed)section.classList.add('ui-completed');}
+   else section.append(node);
+   fragment.append(section);
+  }else if(section)section.append(node);else fragment.append(node);
+ }
+ body.replaceChildren(fragment);
+ if(page==='bag'){
+  const sections=[...body.querySelectorAll(':scope > .ui-section')],nav=document.createElement('nav');nav.className='ui-inventory-nav';nav.setAttribute('aria-label','Rubriques de l’inventaire');nav.setAttribute('role','tablist');
+  const activate=(value,focus=false)=>{inventorySection=value;for(const [i,s]of sections.entries()){const on=s.dataset.section===value;s.hidden=!on;const b=nav.children[i];b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus();}body.scrollTop=0;};
+  for(const [i,s]of sections.entries()){
+   const b=document.createElement('button');b.type='button';b.className='q-track';b.id='inventoryTab'+i;b.textContent=s.dataset.section;b.setAttribute('role','tab');s.id='inventorySection'+i;s.setAttribute('role','tabpanel');s.setAttribute('aria-labelledby',b.id);b.setAttribute('aria-controls',s.id);b.onclick=()=>activate(s.dataset.section);nav.append(b);
+  }
+  nav.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const at=sections.findIndex(s=>s.dataset.section===inventorySection),n=e.key==='Home'?0:e.key==='End'?sections.length-1:(at+(e.key==='ArrowRight'?1:-1)+sections.length)%sections.length;e.preventDefault();activate(sections[n].dataset.section,true);};
+  body.prepend(nav);activate(sections.some(s=>s.dataset.section===inventorySection)?inventorySection:sections[0]?.dataset.section);
+  // Long item explanations stay available without hiding the action below them.
+  for(const small of body.querySelectorAll('.inv-row:not(.body-heat) .grow > small'))if(small.textContent.length>60&&!small.querySelector('.xpbar')){
+   if(small.closest('[data-section="Personnage"]'))continue;
+   const detail=document.createElement('details'),summary=document.createElement('summary');detail.className='ui-item-info';summary.textContent='Détails';small.before(detail);detail.append(summary,small);
+  }
+ }
+}
+function installLandscapeUI(){
+ const render=renderMenu;
+ renderMenu=function(){
+  render();if(menuTab!=='options')composeMenuSections($('menuBody'),menuTab);
+  const target=menuTab==='options'?$('menuSettings'):$('menuBody');
+  target.setAttribute('role','tabpanel');target.setAttribute('aria-labelledby',document.querySelector('.menu-tabs .on')?.id||'menuTitle');
+ };
+}
+
+// END LANDSCAPE DESIGN
 // app.js
 installTextScaling();
 const $=id=>document.getElementById(id),KEY='conan-serpent-v1';
@@ -10747,7 +11034,7 @@ function syncLandscape(){
  const gate=$('landscapeGate');gate.hidden=!blocked;document.querySelector('.page').inert=blocked;
  if(blocked){
   landscapeFocus=document.activeElement;keys.clear();resetTouch();
-  // A journey goes on while the device is turned, like when the app is hidden.
+  // Keep paid journeys running through orientation changes, as in background.
   if(state==='playing'&&game.journey){travelAlerts.schedule(game.leaveJourney());save();}else if(state==='playing')pause();
   sound.tick(false,null);sound.rain(0);sound.ambience({active:false});
   gate.focus({preventScroll:true});
@@ -11138,7 +11425,7 @@ if(saved&&!game.won)$('start').innerHTML='CONTINUER <span>↵</span>';
 if(saved&&!game.won)$('newGame').hidden=false;
 if(!storageWorks)$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';
 BITMAPS.promise.then(()=>{if(BITMAPS.ready)renderer.characters.cache.clear();});
-installWorldUI();refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();
+installWorldUI();installLandscapeUI();refreshTitleMenu();syncTitleOptions();syncLandscape();updateUI();
 const studioIntro=new StudioIntro($('studioIntro'),$('overlay'),{reduced:reduceMotion.matches,wake(){sound.unlock();sound.tick(!document.hidden,'title');},finished(){(landscapeBlocked?$('landscapeGate'):$('menuNew')).focus({preventScroll:true});}});
 requestAnimationFrame(frame);
 
