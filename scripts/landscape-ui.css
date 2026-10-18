@@ -286,3 +286,8 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 .player-possession>.ui-section{width:100%;flex:none}
 #menuBody.player-overview [data-kind=items]{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:740px){#menuBody.player-overview [data-kind=items]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Decisions belong to the canvas; advance/farewell belong to the right rail. */
+#screen #dialogueControls{inset:0;display:block;pointer-events:none}
+#screen #dialogueControls #dlgChoices{position:absolute;inset:auto;left:var(--choices-left);bottom:var(--choices-bottom);width:var(--choices-width);pointer-events:auto}
+#screen #dialogueControls #dlgBye,#screen #dialogueControls #dlgNext{position:absolute!important;inset:auto!important;left:var(--action-left)!important;bottom:calc(env(safe-area-inset-bottom) + 44px)!important;width:var(--action-width);min-width:0;max-width:none;margin:0;pointer-events:auto}

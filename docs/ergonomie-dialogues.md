@@ -72,3 +72,7 @@ Les répliques restent des bulles avec pointe, ancrées au locuteur et contraint
 La fiche Inventaire regroupe désormais portrait animé, niveau, santé, têtes, argent et XP en haut à gauche, les objets en cases en dessous, le climat à leur suite, et la tenue à droite. Les vêtements et casques se changent directement dans cette même fenêtre, avec les animations existantes. Les onglets internes et l’aller-retour Inventaire/Tenue sont supprimés. Le contenu garde un défilement contenu pour les collections longues et les écrans très courts.
 
 Vérification de cette révision : trois conversations réelles (568×320 à 125 %, 844×390 à 100 %, 932×430 à 125 %) ; audit des écrans sur les trois formats, avec changement effectif de vêtement et de casque dans la fiche ; tests ciblés des menus, de la tenue et des métriques de dialogue réussis. Captures de la fiche et des conversations dans `art/ui-landscape/`.
+
+### Ancrages définitifs des choix (correction utilisateur)
+
+L’encart des choix est centré horizontalement dans le rectangle réel du canvas et collé à son bord inférieur, sans marge basse. Les actions Au revoir et Suite sont des éléments frères de cet encart, positionnés dans la colonne de droite, et ne dépendent plus de sa position. La géométrie se recalcule avec celle du canvas après un changement de taille. Les trois conversations réelles vérifient explicitement le centrage, le contact avec le bas du canvas et la présence du bouton dans la colonne de droite.

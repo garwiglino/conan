@@ -702,6 +702,11 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 #menuBody.player-overview [data-kind=items]{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:740px){#menuBody.player-overview [data-kind=items]{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+/* Decisions belong to the canvas; advance/farewell belong to the right rail. */
+#screen #dialogueControls{inset:0;display:block;pointer-events:none}
+#screen #dialogueControls #dlgChoices{position:absolute;inset:auto;left:var(--choices-left);bottom:var(--choices-bottom);width:var(--choices-width);pointer-events:auto}
+#screen #dialogueControls #dlgBye,#screen #dialogueControls #dlgNext{position:absolute!important;inset:auto!important;left:var(--action-left)!important;bottom:calc(env(safe-area-inset-bottom) + 44px)!important;width:var(--action-width);min-width:0;max-width:none;margin:0;pointer-events:auto}
+
 /* END LANDSCAPE DESIGN */
 </style>
 </head>
@@ -11110,7 +11115,14 @@ Renderer.prototype.bubble=function(){
  const shown=Math.floor(Math.min(d.shown??1e9,value.length)),a=document.getElementById('dialogueShown'),b=document.getElementById('dialogueRest');
  if(a.textContent!==value.slice(0,shown))a.textContent=value.slice(0,shown);if(b.textContent!==value.slice(shown))b.textContent=value.slice(shown);
  el.classList.toggle('scrollable',body.scrollHeight>body.clientHeight+1);
- if(controls){controls.hidden=false;controls.style.setProperty('--conversation-footer',layout.footerHeight+'px');}
+ if(controls){
+  controls.hidden=false;controls.style.setProperty('--conversation-footer',layout.footerHeight+'px');
+  const gameLeft=r.left-sr.left,gameRight=r.right-sr.left,gameBottom=r.bottom-sr.top,gutter=sr.width-safe.r-gameRight;
+  const actionWidth=Math.min(136,Math.max(76,gutter-16)),actionCenter=gutter>=90?gameRight+gutter/2:sr.width-safe.r-actionWidth/2-12;
+  controls.style.setProperty('--choices-left',(gameLeft+12)+'px');controls.style.setProperty('--choices-width',Math.max(1,r.width-24)+'px');
+  controls.style.setProperty('--choices-bottom',(sr.height-gameBottom)+'px');
+  controls.style.setProperty('--action-left',(actionCenter-actionWidth/2)+'px');controls.style.setProperty('--action-width',actionWidth+'px');
+ }
  // Keep a fixed envelope for this speaker, anchored above the world sprite.
  const scale=r.width/this.W,w=d.who,ax=r.left-sr.left+((w?.x??this.cam.x+this.W/2)-this.cam.x)*scale;
  const feet=r.top-sr.top+(this.top+(w?.y??this.cam.y+60)-(w?.level?12:0)-this.cam.y)*scale;
@@ -11142,18 +11154,18 @@ Renderer.prototype.npcNameplate=function(n){
  c.font=m.font+'px PixelUI, monospace';c.textBaseline='top';c.fillStyle=near?'#fff0c9':'#d7c8a7';c.fillText(m.copy,x+5/m.scale,y+3/m.scale);c.restore();
 };
 function focusDialogueChoice(index){
- const target=document.querySelector('#dlgChoices [data-choice-index="'+index+'"]');if(!target)return;
+ const target=document.querySelector('#dialogueControls [data-choice-index="'+index+'"]');if(!target)return;
  target.focus({preventScroll:true});const list=document.getElementById('dlgList');
  if(list.contains(target)){const a=target.getBoundingClientRect(),b=list.getBoundingClientRect();if(a.top<b.top)list.scrollTop+=a.top-b.top;else if(a.bottom>b.bottom)list.scrollTop+=a.bottom-b.bottom;}
 }
 function installInteractionUI(){
  const screen=document.getElementById('screen'),band=document.getElementById('dlgChoices'),bye=document.getElementById('dlgBye'),next=document.getElementById('dlgNext');
- const controls=document.createElement('div');controls.id='dialogueControls';controls.hidden=true;controls.setAttribute('aria-label','Commandes de dialogue');screen.append(controls);controls.append(band,next);band.append(bye);
+ const controls=document.createElement('div');controls.id='dialogueControls';controls.hidden=true;controls.setAttribute('aria-label','Commandes de dialogue');screen.append(controls);controls.append(band,bye,next);
  const label=document.createElement('span');label.className='dialogue-next-label';next.append(label);
  const sync=syncDialogue;syncDialogue=function(){
   sync();const d=state==='playing'?game.dialogue:null;controls.hidden=!d||!!d.waitPanel;
   label.textContent=next.classList.contains('end')?'Terminer':'Suite';
-  for(const button of band.querySelectorAll('[data-choice-index]')){const selected=Number(button.dataset.choiceIndex)===choiceSel;button.classList.toggle('sel',selected);button.setAttribute('tabindex',selected?'0':'-1');}
+  for(const button of controls.querySelectorAll('[data-choice-index]')){const selected=Number(button.dataset.choiceIndex)===choiceSel;button.classList.toggle('sel',selected);button.setAttribute('tabindex',selected?'0':'-1');}
  };
  const resume=run;run=function(){resume();syncDialogue();};
  const title=showTitle;showTitle=function(){title();syncDialogue();};
