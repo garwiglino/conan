@@ -85,7 +85,9 @@ par `world-simulation.test.cjs`, et non seulement par les tests historiques.
 8. Peuplement physique des six espèces, vrais ateliers, besoins personnels,
    emplois du temps et relations sociales durables restent à compléter. Ne pas
    confondre un stock de ville avec un atelier animé ayant réellement produit.
-9. Les événements et faits ne sont plus évincés arbitrairement. Prévoir un archivage
+9. Les événements et connaissances persistants ne sont plus évincés après les
+   512 derniers événements. Le journal discuté reste limité à 120 entrées et
+   le journal technique économique à 1 000. Prévoir un archivage
    indexé des faits anciens résolus pour les très longues campagnes, sans effacer
    les incidents actifs, morts, mandats ou conséquences persistantes.
 

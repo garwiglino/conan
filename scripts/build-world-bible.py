@@ -268,10 +268,10 @@ def compile_ape_folk(authored,result,data,matrix):
     return a
 
 def ape_activities_md(a):
-    lines=['# Hommes-singes — programme de fabrication généré','','Source : `ape-folk.json`. Quatre animations disponibles ; les autres lignes sont à fabriquer ou à raccorder. Les activités ne créent aucun stock automatiquement.','','| Priorité | ID | Activité | État | Accessoires | Poste | Repères de contact |','|---|---|---|---|---|---|---|']
+    lines=['# Hommes-singes — programme de fabrication généré','','Source : `ape-folk.json`. Les statuts ci-dessous conservent le plan initial de conception (quatre animations de base marquées `implemented`) ; ils ne recensent pas les ressources visuelles livrées depuis. Le module `sprites/hommes-singes/activites.js` couvre désormais les 55 activités et 16 fonctions : voir [les tenues et activités](../../hommes-singes-activites.md) et `data/hommes-singes/activities-manifest.json`. Les structures, routines et apparitions en jeu restent à intégrer. Les activités ne créent aucun stock automatiquement.','','| Priorité | ID | Activité | État du plan initial | Accessoires | Poste | Repères de contact |','|---|---|---|---|---|---|---|']
     for x in sorted(a['activities'],key=lambda x:(x['priority'],x['family'],x['id'])):
         lines.append('| P'+str(x['priority'])+' | `'+x['id']+'` | '+md(x['label'])+' | '+x['status']+' | '+(', '.join(x['props']) or '—')+' | '+x['workspace']+' | '+(', '.join(x['markers']) or '—')+' |')
-    lines+=['','## Tenues et fonctions','','| Fonction | Activités | Structures | Tenue à dessiner |','|---|---|---|---|']
+    lines+=['','## Tenues et fonctions','','Les tenues sont disponibles dans le module visuel ; les descriptions suivantes restent les consignes de conception.','','| Fonction | Activités | Structures | Description de tenue |','|---|---|---|---|']
     for r in a['roles']:lines.append('| '+md(r['label'])+' | '+', '.join(r['activities'])+' | '+', '.join(r['structures'])+' | '+md(r['outfitBrief'])+' |')
     lines+=['','## Implantations existantes, quartiers à construire','','| Localité | ID atlas / runtime | Communauté | Hommes-singes % | Batraciens % | Résidents hommes-singes de conception |','|---|---|---|---:|---:|---:|']
     for s in a['settlements']:lines.append('| '+md(s['name'])+' | '+s['siteId']+' / '+s['runtimeSiteId']+' | '+s['communityId']+' | '+str(s['designApePct'])+' | '+str(s['designBatracienPct'])+' | '+str(s['designApeResidents'])+' |')

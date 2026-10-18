@@ -27,7 +27,7 @@
     "data/world/bible/events.json": "98f60f7061a344de068bcebfeb6251874353411da629c5ee9e985de911320d7f",
     "data/world/bible/relations.json": "2cf44abe5e9de6b76b61c1fff9930a5b1ad549a09fb8d9bb5a0346d0f58d0995",
     "data/world/bible/source.json": "5ee7e4791c9a0e413885ae4987165904e890efe893829be106a1a11b18bbdf7d",
-    "scripts/build-world-bible.py": "06036a23a0425a52a949c2165f58ae5dda622aabd57950dd94ff3102360a14cb"
+    "scripts/build-world-bible.py": "e0164459b8b3e59eae847fe70298137e6b5f03b0768b50f7910e1e45dc6fc050"
   },
   "preserved": [
     "atlas_coordinates",

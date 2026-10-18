@@ -1,5 +1,9 @@
 # 05 — Sociétés, droit, corruption et activités clandestines
 
+## État de l’intégration
+
+La justice locale jouable dispose de témoins, dépositions, derniers signalements, recherche, reddition, arrestation et sanctions temporaires. Ces mécanismes sont décrits dans [Justice locale et convois](../world-justice.md). Le vol, la contrebande, les rançons, les procédures de statut personnel et les autres situations décrites ici restent des objectifs de conception ; ce chapitre ne les annonce pas toutes jouables.
+
 ## Juridictions, pas moralités nationales
 
 Une juridiction possède des règles sur la personne libre, la captivité, la dette, la circulation, le travail et le commerce. Elle dispose aussi d'une capacité limitée à les faire respecter. Séparer règle publique, pratique locale, dérogation, abus individuel, protection politique et incapacité matérielle.

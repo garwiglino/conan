@@ -1,6 +1,6 @@
 # 06 — Hommes-singes : communautés, intérêts et fabrication
 
-Intégration de conception : Codex / ChatGPT, 18 octobre 2026. Référentiel : `data/world/bible/ape-folk.json`, démographie de `source.json`, compilateur de la bible et atlas courant. Le corps masculin, la base féminine, les cinq teintes et les quatre animations de base sont réalisés ; les métiers et les bâtiments ci-dessous constituent le programme de production, pas des apparitions déjà activées.
+Intégration de conception : Codex / ChatGPT, 18 octobre 2026. Référentiel : `data/world/bible/ape-folk.json`, démographie de `source.json`, compilateur de la bible et atlas courant. Le corps masculin, la base féminine, les cinq teintes et les quatre animations de base sont réalisés. Le module `sprites/hommes-singes/activites.js` ajoute désormais les ressources visuelles des 55 activités et 16 fonctions ; voir [les tenues et activités](../hommes-singes-activites.md). Les bâtiments, les routines et l’intégration des acteurs au monde restent à réaliser.
 
 ## Place dans le monde
 
@@ -96,7 +96,7 @@ Les rapports avec humains, gobelins, orques, hommes-serpents et batraciens sont 
 
 ## Gardes, escortes et actes criminels
 
-Les équipements à préparer sont : garde de communauté à lance et bouclier, escorte à lame courte et bouclier, éclaireur léger au bâton et au lancer, individu de bande avec matériel obtenu localement. Un chef est une responsabilité dans une unité, pas une nouvelle espèce de combattant ou une palette rouge.
+Les équipements visuels disponibles pour les rôles armés comprennent : garde de communauté à lance et bouclier, escorte à lame courte et bouclier, éclaireur léger au bâton et au lancer, individu de bande avec matériel obtenu localement. Un chef est une responsabilité dans une unité, pas une nouvelle espèce de combattant ou une palette rouge.
 
 Le poste de Relais-des-Lianes pourra protéger l’accès à ses réserves et à sa voie de marché ; l’escorte de Bourg-des-Coquilles pourra couvrir un convoi signé. Les instances devront recevoir un identifiant, un commandant ou donneur d’ordre, une solde, un itinéraire et une fin de mission avant activation. Sans ces éléments, pas de gardes gratuits ajoutés sur la carte.
 
@@ -112,13 +112,13 @@ Les constructions suivent la caméra et la lumière du jeu, sur tuiles de 16 pix
 
 La plupart des routines sont au sol ou sur soubassement accessible. Pas de ville entière suspendue dans une canopée décorative. L’escalade est P3 : elle exige un accès navigable réel, une hauteur, des collisions, un point d’arrivée libre et une règle de fuite compatible. Le simple dessin d’une corde ne permet pas de franchir un obstacle.
 
-## Activités à produire et ordre de travail
+## Activités visuelles disponibles et raccordements restants
 
-La [liste exhaustive générée](generated/ape-activities.md) contient **55 entrées**, **16 fonctions** et les **13 structures** :
+La [liste exhaustive générée](generated/ape-activities.md) contient **55 entrées**, **16 fonctions** et les **13 structures**. Ses statuts et les priorités ci-dessous conservent le plan initial ; les animations et tenues sont maintenant couvertes par le module visuel. L’ordre reste utile pour raccorder les comportements, leurs postes et leurs conséquences :
 
-1. **P0, vie sûre :** finir alerte, assise/relevé, repas, boisson, portage et pose de charge, blessure, mort et repli/retour. Les quatre clips existants restent la base.
-2. **P1, travail quotidien :** jardins et vergers, fibres, vannerie, cordages, résine, taille/scie/assemblage, cuisine, chargement et registres ; ajouter sommeil et salutations.
-3. **P2, spécialités et combats :** ruchers, préparations médicinales, poterie, filets, rame, coque, couture, soins, médiation, veillée ; puis répertoire armé complet, bouclier, impacts, garde brisée, reddition et lancer.
+1. **P0, vie sûre :** raccorder alerte, assise/relevé, repas, boisson, portage et pose de charge, blessure, mort et repli/retour aux états persistants et aux lieux réels.
+2. **P1, travail quotidien :** raccorder jardins et vergers, fibres, vannerie, cordages, résine, taille/scie/assemblage, cuisine, chargement et registres ; intégrer sommeil et salutations aux routines.
+3. **P2, spécialités et combats :** relier ruchers, préparations médicinales, poterie, filets, rame, coque, couture, soins, médiation et veillée à leurs postes et effets ; raccorder le répertoire armé à l’IA, aux collisions et aux dégâts.
 4. **P3, accès vertical :** escalade aménagée, uniquement après validation du moteur et du bâti.
 
 Chaque boucle de travail possède prise de main, outil, surface et repère de contact. Les outils et objets reposent sur des calques distincts. Les vêtements suivent le tronc, les poignets et la tête ; ils ne remplacent pas un membre et ne changent pas avec le pelage. Même couverture des quatre vues, des deux bases et des cinq teintes.

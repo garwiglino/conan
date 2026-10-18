@@ -36,21 +36,23 @@ plus vite. Le code est dans `scripts/body-heat.js`.
 - Jusqu'à 2 °C sous la plage de sa tenue, Kaldor **grelotte** sans perdre de
   santé.
 - Au-delà, il perd **un demi-cœur (1 PV)** toutes les `120 / (écart − 2)`
-  minutes de jeu. Une minute de jeu dure deux tiers de seconde.
+  minutes du calendrier. En exploration normale, une minute du calendrier dure 2,5 secondes réelles (journée de 60 minutes réelles) ; sommeil et voyage organisé accélèrent cette avance.
 - À 0 PV, il **meurt de froid** : l'écran de mort l'indique (« Mort de
   froid ») et coûte une tête comme une défaite. Avar le ramène réchauffé :
-  pendant 90 minutes de jeu (une minute réelle) le froid ne le blesse pas, le
+  pendant 90 minutes du calendrier (3 min 45 s réelles en exploration normale) le froid ne le blesse pas, le
   temps de changer de tenue ou de rejoindre un feu.
 - En **voyage** organisé (cheval, charrette, bateau), le froid ronge la santé
   mais ne tue pas : Kaldor arrive au pire avec 1 PV.
 
+Les pertes dépendent du ressenti et de la santé restante. Pour éviter de confondre les anciennes durées réelles avec l’horloge actuelle, les exemples donnent le débit à température constante, après le répit d’Avar :
+
 | Exemple (hiver, en pleine nature) | Ressenti | Effet |
 | --- | --- | --- |
-| Pagne à Roche-Blanche | −25 °C | mort en 25 s environ |
-| Brigandine à Veille-Boréale | −16 °C | mort en 80 s environ |
-| Pagne à Clairval, à l'aube | −3 °C | mort en 90 s environ |
+| Pagne à Roche-Blanche | −25 °C | 1 PV perdu toutes les 9,7 s réelles environ |
+| Brigandine à Veille-Boréale | −16 °C | 1 PV perdu toutes les 30 s réelles |
+| Pagne à Clairval, à l'aube | −3 °C | 1 PV perdu toutes les 33,3 s réelles environ |
 | Brigandine à Clairval, à l'aube | −3 °C | à l'aise |
-| Peau de l'ours à Val-des-Neiges | −16 °C | perte très lente, 2 PV par jour |
+| Peau de l'ours à Val-des-Neiges | −16 °C | grelotte sans perte de santé (écart de 2 °C) |
 | Pelisse à Roche-Blanche | −25 °C | aucune perte |
 
 ## La chaleur

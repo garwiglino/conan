@@ -1,6 +1,8 @@
 # Hearthreaver — Univers, populations et géopolitique
 
-Point d'entrée de la bible de production. Direction retenue : heroic fantasy adulte, noms sobres, institutions crédibles, conflits limités et récurrents ; aucune espèce assimilée automatiquement à une faction hostile.
+Pour les fonctionnalités réellement intégrées et leurs limites, consulter [l’état réel du jeu](docs/etat-du-jeu.md). La bible ci-dessous décrit le cadre de production et les données de conception.
+
+Direction retenue : heroic fantasy adulte, noms sobres, institutions crédibles, conflits limités et récurrents ; aucune espèce assimilée automatiquement à une faction hostile.
 
 ## Consulter le résultat
 
@@ -46,9 +48,9 @@ Le workflow [World bible](.github/workflows/world-bible.yml) effectue ces contr�
 
 Les rôles et populations sont des choix de conception. Les productions indiquent une capacité envisagée, pas un stock déjà simulé. Les fournisseurs sont des options reliées au graphe ; leurs stocks et contrats doivent être confirmés avant de créer une livraison. L'eau, le combustible et les productions domestiques sans fournisseur spécialisé sont à raccorder à l'arrière-pays et aux infrastructures du site, pas à une cargaison inventée.
 
-Les implantations rurales concentrées sont comptabilisées mais ne sont pas de nouvelles villes placées automatiquement. Les dépôts et ateliers particuliers doivent être positionnés sur des terrains compatibles lors de la construction. Les modèles et animations des nouvelles espèces restent à fabriquer avec les ancrages artistiques approuvés.
+Les implantations rurales concentrées sont comptabilisées mais ne sont pas de nouvelles villes placées automatiquement. Les dépôts et ateliers particuliers doivent être positionnés sur des terrains compatibles lors de la construction. Les humains et batraciens disposent de leur intégration ; les ressources visuelles des hommes-singes sont disponibles mais leurs acteurs et routines ne peuplent pas encore le monde. Les éléments manquants des autres espèces restent à fabriquer avec les ancrages artistiques approuvés.
 
-Le moteur temps réel existant n'est pas remplacé par cette mise à jour de conception. Le chapitre 04 précise les conditions de son raccordement : supprimer les déclenchements calendaires génériques correspondants, fournir les vrais signaux de campagne, conserver les règles de sécurité, distinguer les mandats sélectifs et disposer des acteurs/animations corrects. Ne pas annoncer une diplomatie simulée ou une économie équilibrée seulement parce que la bible a passé sa validation de données.
+Compiler la bible ne remplace pas à lui seul le moteur temps réel. Le jeu embarqué charge toutefois désormais ses profils via `scripts/embed-world.cjs` et attache `world-simulation.js` : stocks, contrats, pénuries, réparations financées et mandats locaux sont raccordés. La justice locale et les convois physiques sont également intégrés. Le chapitre 04 reste le contrat pour les règles supplémentaires ; diplomatie opérationnelle, mandats sélectifs complets et économie équilibrée sur une longue campagne restent à achever. Voir [le monde vivant](docs/living-world-integration.md) et [la justice et les convois](docs/world-justice.md).
 
 ## Règles à préserver lors des prochaines modifications
 
@@ -60,4 +62,4 @@ Sylverive reste un ensemble de cités à charte sous la souveraineté de Teremor
 
 ## Hommes-singes
 
-[Communautés et intérêts](docs/world-bible/06-hommes-singes.md), [programme de fabrication](docs/world-bible/generated/ape-activities.md) et [audit des branches](docs/world-bible/07-audit-branches.md). Cinq ensembles locaux, 22 sites existants, 16 fonctions et 13 structures. Sur 55 activités référencées, quatre clips sont déjà implémentés ; les costumes, les autres animations et les apparitions en jeu restent à construire. Le peuple ne constitue pas une dixième faction souveraine.
+[Communautés et intérêts](docs/world-bible/06-hommes-singes.md), [programme de fabrication](docs/world-bible/generated/ape-activities.md) et [audit des branches](docs/world-bible/07-audit-branches.md). Cinq ensembles locaux, 22 sites existants, 16 fonctions et 13 structures. Les ressources visuelles couvrent désormais les 55 activités et 16 fonctions, pour deux silhouettes et cinq pelages ; voir [les tenues et activités](docs/hommes-singes-activites.md). Les 13 structures, les routines et les apparitions en jeu restent à intégrer. Le peuple ne constitue pas une dixième faction souveraine.

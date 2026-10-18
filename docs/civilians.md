@@ -26,7 +26,11 @@ animation drift when a path is blocked. Danger and hits interrupt occupations.
 
 Ordinary resident deaths persist and disable conversation, collision and hiring.
 Main quest givers and transport operators retain at least one health point, to
-avoid removing the only quest or route service. Party members retain the game's
+avoid removing the only quest or route service. The embedded `world-life-runtime.js`
+also places severely injured essential actors in a persistent critical state:
+movement and service stop, recovery needs food and medicine, and a transport
+replacement can walk to the post after six campaign hours. See
+[living-world integration](living-world-integration.md). Party members retain the game's
 existing down/healing rules and use the fall animation when down. Civilian damage
 never grants XP or kills to the player. Appearance and resident deaths are saved
 under `atlas.civilians`; old saves receive deterministic appearances.

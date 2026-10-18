@@ -96,8 +96,9 @@ lui devient connue qu'avec le délai de propagation déjà géré par le monde.
 
 La géopolitique causale complète décrite par la bible reste en cours.
 Le nouveau raccordement `world-simulation.js` remplace les déclencheurs calendaires
-dans le jeu embarqué et apporte stocks, contrats et mandats financés. Il ne faut
-pas le confondre avec une diplomatie, une justice ou un peuplement déjà complets.
+dans le jeu embarqué et apporte stocks, contrats et mandats financés. La justice locale et les convois physiques sont également intégrés (voir
+[leur état et leurs limites](world-justice.md)). La diplomatie opérationnelle,
+le code pénal complet et le peuplement restent à compléter.
 État exact, unités économiques et points encore ouverts :
 [`living-world-integration.md`](living-world-integration.md).
 

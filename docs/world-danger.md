@@ -11,6 +11,12 @@ affect their site and outskirts. Off-road risk derives from biome, elevation,
 weather and curse. It is no longer a fixed 3. Route planning retains the existing
 edge risk model and applies the same registry's risk modifiers.
 
+The embedded game now attaches `world-simulation.js`: shortages, funded patrols,
+shipments, flood recession and paid repairs use campaign state. The historical
+calendar generator in the standalone model is bypassed. Not every event type has
+an autonomous causal trigger yet. See [the current game state](etat-du-jeu.md)
+and [living-world integration](living-world-integration.md).
+
 Physical enemies are a separate, immediate local input: within 180 game pixels,
 on the same level and with line of sight, even an idle enemy makes the area unsafe.
 A dead enemy, friendly actor or inactive boss does not. Retreating enemies remain
@@ -48,10 +54,14 @@ Known hostile groups block transport departure before payment. Newly appearing
 groups are checked within each journey simulation slice and stop transport at its
 last reached stop. This uses real incidents, not random unavoidable damage.
 
-Truces resolve sieges/occupations; purifications resolve manifestations. Expiration
-of a physical blockage records a reopening without cancelling unrelated blockages.
+Truces resolve sieges/occupations; purifications resolve manifestations. In the
+standalone historical model, expiration of a physical blockage records a reopening
+without cancelling unrelated blockages. In the embedded causal simulation,
+structural damage has no automatic expiry: paid work with actual materials must
+complete; floods require the water level to recede.
 Duplicate active incidents of the same type and target are coalesced. Snow news
-uses actual snowfall; avalanche generation requires snowy conditions.
+uses actual snowfall. Snowy conditions remain a prerequisite of the design rule
+for avalanches; the embedded simulation does not yet generate them autonomously.
 
 ## Persistence and cost
 

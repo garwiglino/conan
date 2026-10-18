@@ -2,7 +2,9 @@
 
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
 
-Le héros est **Kaldor « the Flamebearer »**. Capturé puis emmené loin de chez lui, il s’éveille dans une geôle gobeline. Une fée l’accompagne ; il doit protéger Elyne jusqu’au Refuge des Veilleurs avant de retrouver Clairfoyer. Le Temple du Serpent reste une étape de cette aventure.
+Le héros est **Kaldor « the Flamebearer »**. Dans la version jouable actuelle, il commence au Campement des Exilés avec la fée ; Elyne, à proximité, rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. La prison de test a été retirée.
+
+[État réel du jeu : fonctionnalités intégrées, ressources disponibles et limites](docs/etat-du-jeu.md).
 
 Le bouton **Monde** ou la touche **G** ouvre la carte : Igea, Teremor et Sarak constituent un seul continent, Varan et Tagon deux îles plus petites. La carte Azgaar est resserrée au vingtième (72 × 48 km) : chaque région forme un pays habité, relié à ses voisins par une route d’environ 15 à 30 minutes de marche, et des frontières naturelles ferment le reste. Le terrain à une tuile par mètre est chargé autour du joueur ; les 83 localités sont pour cette première passe des relais de test. Itinéraires, voyages par cheval/charrette/bateau, provisions, lieux stables et chronique des nouvelles connues par chaque PNJ sont intégrés. [Fonctionnement, événements et limites de cette première passe](docs/world.md).
 
@@ -60,7 +62,7 @@ Les vibrations sont courtes et espacées : sélection d’interface, dégâts re
 
 ## Cycle du ciel et météo
 
-La lumière commence à baisser à **16 h**. Le crépuscule s’étend de **18 h à 23 h**, la nuit de **23 h à 5 h**, et l’aube de **5 h à 9 h**. Les couleurs, les braseros, les ambiances et la musique évoluent progressivement avec ce cycle. Une journée dure seize minutes de jeu.
+La lumière commence à baisser à **16 h**. Le crépuscule s’étend de **18 h à 23 h**, la nuit de **23 h à 5 h**, et l’aube de **5 h à 9 h**. Les couleurs, les braseros, les ambiances et la musique évoluent progressivement avec ce cycle. Une journée du calendrier dure **60 minutes réelles** en exploration normale. Les voyages organisés et le sommeil accélèrent le calendrier.
 
 Les fronts météo sont indépendants de l’heure : ciel sec, pluie fine, pluie moyenne soutenue, grosses averses sans tonnerre ou épisodes orageux. **Une pluie ne finit pas forcément en orage.** Les cellules orageuses peuvent être brèves puis laisser la pluie continuer. Les changements d’intensité et les nuages se fondent progressivement ; les anciennes sauvegardes restent compatibles.
 

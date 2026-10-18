@@ -43,9 +43,9 @@ Les chiffres de population de l'atlas sont conservés comme données historiques
 
 ## État livré et état du jeu
 
-Cette mise à jour constitue une bible de production et un référentiel compilable/validable. Elle ne prétend pas avoir construit les intérieurs des villes, dessiné les nouvelles espèces, équilibré une économie jouée pendant des centaines d'heures ni remplacé silencieusement le moteur d'événements embarqué dans les HTML web/iOS.
+La bible constitue un référentiel de conception compilable. Le jeu embarqué en utilise désormais les profils pour une simulation économique causale : stocks, contrats, pénuries, réparations et patrouilles financées. Justice locale, convois physiques et vie locale sont intégrés. Les intérieurs des villes, la diplomatie opérationnelle et le peuplement complet restent à construire ; l’économie n’est pas déclarée équilibrée sur de très longues campagnes. Voir [l’état réel du jeu](../etat-du-jeu.md) pour la distinction entre jeu, ressources visuelles et conception.
 
-Les branches anciennes du moteur emploient des schémas d'atlas et des noms d'événements différents. Le contrat d'intégration les distingue ; l'adaptateur doit lire le registre effectif et refuser un type absent plutôt que deviner. Les données narratives peuvent être utilisées immédiatement pour la conception. L'activation dans la simulation doit passer les contrôles du chapitre 04 et les tests de sauvegarde, voyage et sécurité existants.
+Les branches anciennes du moteur emploient des schémas d'atlas et des noms d'événements différents. Le contrat d'intégration les distingue ; l'adaptateur doit lire le registre effectif et refuser un type absent plutôt que deviner. Les données narratives restent utilisables pour la conception. Toute activation supplémentaire doit passer les contrôles du chapitre 04 et les tests de sauvegarde, voyage et sécurité existants. La compilation de la bible seule ne réembarque pas le jeu : cette étape passe par `scripts/embed-world.cjs`.
 
 ## Construction et vérification
 
@@ -62,4 +62,4 @@ Tout ajout ultérieur d'espèce, ressource, faction, ville ou événement doit d
 
 ## Révision hommes-singes
 
-L’audit des 16 branches distantes est conservé dans [le rapport](07-audit-branches.md) et dans `data/world/bible/branch-audit.json`. Le total de 5 450 000 habitants de conception reste inchangé. Le générateur publie aussi `generated/ape-folk.json` et [le catalogue des 55 activités, 16 fonctions et 13 structures](generated/ape-activities.md). Quatre clips de base sont implémentés ; les autres éléments restent à fabriquer. Aucun nouvel acteur n’apparaît automatiquement dans les HTML.
+L’audit des 16 branches distantes est conservé dans [le rapport](07-audit-branches.md) et dans `data/world/bible/branch-audit.json`. Le total de 5 450 000 habitants de conception reste inchangé. Le générateur publie aussi `generated/ape-folk.json` et [le catalogue des 55 activités, 16 fonctions et 13 structures](generated/ape-activities.md). Au-delà des quatre clips de base, le module visuel couvre désormais les 55 activités et 16 fonctions, les deux silhouettes et les cinq pelages ; voir [les tenues et activités](../hommes-singes-activites.md). Les statuts du catalogue conservent le plan initial de conception. Les structures et comportements restent à intégrer, et aucun nouvel acteur homme-singe n’apparaît automatiquement dans les HTML.

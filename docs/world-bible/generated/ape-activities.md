@@ -1,8 +1,8 @@
 # Hommes-singes — programme de fabrication généré
 
-Source : `ape-folk.json`. Quatre animations disponibles ; les autres lignes sont à fabriquer ou à raccorder. Les activités ne créent aucun stock automatiquement.
+Source : `ape-folk.json`. Les statuts ci-dessous conservent le plan initial de conception (quatre animations de base marquées `implemented`) ; ils ne recensent pas les ressources visuelles livrées depuis. Le module `sprites/hommes-singes/activites.js` couvre désormais les 55 activités et 16 fonctions : voir [les tenues et activités](../../hommes-singes-activites.md) et `data/hommes-singes/activities-manifest.json`. Les structures, routines et apparitions en jeu restent à intégrer. Les activités ne créent aucun stock automatiquement.
 
-| Priorité | ID | Activité | État | Accessoires | Poste | Repères de contact |
+| Priorité | ID | Activité | État du plan initial | Accessoires | Poste | Repères de contact |
 |---|---|---|---|---|---|---|
 | P0 | `shelter` | Se replier, attendre puis revenir | to_create | — | shelter | safe_arrival, calm_before_return |
 | P0 | `carry` | Porter une charge | to_create | crate, basket | safe_path | two_hand_grip, foot_contacts |
@@ -62,7 +62,9 @@ Source : `ape-folk.json`. Quatre animations disponibles ; les autres lignes sont
 
 ## Tenues et fonctions
 
-| Fonction | Activités | Structures | Tenue à dessiner |
+Les tenues sont disponibles dans le module visuel ; les descriptions suivantes restent les consignes de conception.
+
+| Fonction | Activités | Structures | Description de tenue |
 |---|---|---|---|
 | Cultivateur et verger | hoe, sow, harvest_fruit, prune | garden, granary | toile légère, tablier court, panier ; chapeau optionnel |
 | Fibres, paniers et cordages | cut_fiber, weave, rope | fiber_yard | tablier souple, manches dégagées ; pas de casque |
