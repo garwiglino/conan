@@ -1,0 +1,19 @@
+// Codex / ChatGPT — reproducible comparison against the actual shipped NPCs.
+const fs=require('node:fs'),path=require('node:path'),{createCanvas,loadImage}=require('@napi-rs/canvas');
+const root=path.resolve(__dirname,'..'),A=require('../sprites/hommes-singes/homme-singe.js'),B=require('../sprites/batraciens/batraciens-complet.js'),C=require('../data/civilians/atlas.json');
+(async()=>{
+ const out=path.join(root,'art/hommes-singes');fs.mkdirSync(out,{recursive:true});
+ const outfit=C.outfits['E01-masculin-lin-use'],body=C.modules['masculin-adulte'],hair=C.modules['masculin-hair-01'];
+ const images=new Map();for(const asset of [outfit.asset,outfit.foreground,body.asset,hair.asset])images.set(asset,await loadImage(Buffer.from(asset.png,'base64')));
+ function human(c,action,d,f){const stamp=(a,i)=>{const n=a.tiles[i];c.drawImage(images.get(a),n%16*48,Math.floor(n/16)*48,48,48,0,0,48,48);};const m=(a,plane=0)=>stamp(a.asset,C.moduleFrames[action][d]+f+plane*C.moduleCount);
+ m(hair,0);if(outfit.headFirst)m(body);stamp(outfit.asset,outfit.frames[action][d]+f);m(hair,1);if(!outfit.headFirst)m(body);stamp(outfit.foreground,outfit.frames[action][d]+f);m(hair,2);}
+ const refs={},frames={};for(const action of Object.keys(A.CLIPS)){const count=A.CLIPS[action].durations.length;frames[action]={};for(const kind of ['human','frog','ape']){const cv=createCanvas(48*count,48*4),c=cv.getContext('2d');for(let d=0;d<4;d++)for(let f=0;f<count;f++){
+ const cell=createCanvas(48,48),ctx=cell.getContext('2d');if(kind==='human')human(ctx,action,d,f);else if(kind==='frog'){const clip=action==='flee'?'walk':action,frame=f%B.CLIPS[clip].frames,im=B.raster({sex:'male',action:clip,dir:A.directions[d],frame,format:'native'}),data=ctx.createImageData(48,48);data.data.set(im.data);ctx.putImageData(data,0,0);}else A.draw(ctx,{action,dir:A.directions[d],frame:f});c.drawImage(cell,f*48,d*48);
+ }const png=cv.toBuffer('image/png');fs.writeFileSync(path.join(out,kind+'-'+action+'.png'),png);frames[action][kind]=cv.toDataURL();}}
+ const sheet=createCanvas(960,720),c=sheet.getContext('2d');c.imageSmoothingEnabled=false;c.fillStyle='#17151b';c.fillRect(0,0,960,720);c.fillStyle='#efd099';c.font='22px monospace';c.fillText('HEARTHREAVER · HOMME-SINGE · BASE ORIGINALE',24,32);c.font='14px monospace';c.fillStyle='#bca989';c.fillText('Codex / ChatGPT · pixel natif · calques articulés · sans costume de métier',24,58);
+ for(let d=0;d<4;d++){const cv=createCanvas(48,48);A.draw(cv.getContext('2d'),{dir:A.directions[d]});c.fillStyle='#29272b';c.fillRect(16+d*236,80,224,228);c.drawImage(cv,24+d*236,80,216,216);c.fillStyle='#efd099';c.fillText(A.directions[d].toUpperCase(),40+d*236,294);}
+ c.fillText('MÊME ÉCHELLE ×5 · ANCRAGES IDENTIQUES',24,344);for(const [i,kind]of ['human','frog','ape'].entries()){const img=await loadImage(frames.idle[kind]);c.drawImage(img,0,0,48,48,50+i*300,350,240,240);c.fillStyle='#efd099';c.fillText(['HUMAIN DU DÉPÔT','BATRACIEN DU DÉPÔT','HOMME-SINGE'][i],65+i*300,572);}
+ const layers=A.renderLayers().order;c.fillText('MEMBRES INDÉPENDANTS / ORDRE DE PROFONDEUR',24,612);layers.forEach((name,i)=>{const cv=createCanvas(48,48);A.draw(cv.getContext('2d'),{layer:name});c.drawImage(cv,i*105,606,96,96);c.font='10px monospace';c.fillText(name,i*105+8,706);});fs.writeFileSync(path.join(out,'design-base.png'),sheet.toBuffer('image/png'));
+ const source=fs.readFileSync(path.join(root,'sprites/hommes-singes/homme-singe.js'),'utf8'),template=fs.readFileSync(path.join(root,'art/hommes-singes/preview.template.html'),'utf8');fs.writeFileSync(path.join(out,'preview.html'),template.replace('/* SPRITE_SOURCE */',()=>source).replace('/* REFERENCES */',()=>JSON.stringify(frames)));
+ console.log('Built layered ape preview and native comparison sheets.');
+})().catch(e=>{console.error(e);process.exitCode=1;});
