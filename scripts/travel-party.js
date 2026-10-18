@@ -94,7 +94,8 @@ Game.prototype.navigationInfo=function(){const site=this.mapPlaces.find(n=>n.id=
 const travelNpcPresent=Game.prototype.npcPresent;
 Game.prototype.npcPresent=function(n){return this.party?.some(c=>c.id===n.id)||travelNpcPresent.call(this,n);};
 const travelSolid=Game.prototype.solid;
-Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&this.atlasProps.some(o=>{const radius={transport_horse:16,transport_cart:22,transport_hitch:18,transport_inn:24}[o.kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-(o.kind==='transport_inn'?24:10)&&y-r<o.y+1;}))return true;return travelSolid.call(this,x,y,r,level);};
+const TRANSPORT_PROP_RADII={transport_horse:16,transport_cart:22,transport_hitch:18,transport_inn:24};
+Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level)for(const o of this.atlasProps){if(Math.abs(x-o.x)>24+r||Math.abs(y-o.y)>24+r)continue;const radius=TRANSPORT_PROP_RADII[o.kind];if(radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-(o.kind==='transport_inn'?24:10)&&y-r<o.y+1)return true;}return travelSolid.call(this,x,y,r,level);};
 
 Game.prototype.travelDestinations=function(){return this.stations.filter(s=>Atlas.byId[s.site].kind!=='dock').map(s=>Atlas.byId[s.site]);};
 Game.prototype.stationLanding=function(id){const station=this.stations.find(s=>s.site===id);if(!station)return null;const a=station.actor;for(const [dx,dy]of [[0,18],[18,0],[-18,0],[0,-18],[24,24],[-24,24],[24,-24],[-24,-24]]){const p={x:a.x+dx,y:a.y+dy};if(!this.solid(p.x,p.y,5,0)&&this.lineClear(p,a))return p;}return null;};

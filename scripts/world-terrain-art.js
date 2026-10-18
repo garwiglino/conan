@@ -50,12 +50,18 @@ function createWorldTerrainArt(atlas, ramps) {
   return {x,y,t:atlas.terrain(x,y),parts:parts.length?parts:[{family:'desert',weight:1}],cell:atlas.cellAt(x+.5,y+.5),shore,shoreX:gradient(1,0),shoreY:gradient(0,1)};
  }
 
- function distanceField(mat,w,h,water){const D=new Uint16Array(w*h).fill(320);for(let i=0;i<D.length;i++)if((mat[i]===3)===water)D[i]=0;for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x;let d=D[i];if(x)d=Math.min(d,D[i-1]+10);if(y){d=Math.min(d,D[i-w]+10);if(x)d=Math.min(d,D[i-w-1]+14);if(x<w-1)d=Math.min(d,D[i-w+1]+14);}D[i]=d;}for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;let d=D[i];if(x<w-1)d=Math.min(d,D[i+1]+10);if(y<h-1){d=Math.min(d,D[i+w]+10);if(x)d=Math.min(d,D[i+w-1]+14);if(x<w-1)d=Math.min(d,D[i+w+1]+14);}D[i]=d;}return D;}
+ function* distanceField(mat,w,h,water){
+  const D=new Uint16Array(w*h).fill(320);
+  for(let y=0;y<h;y++){for(let x=0;x<w;x++){const i=y*w+x;if((mat[i]===3)===water)D[i]=0;}if(y%16===15)yield;}
+  for(let y=0;y<h;y++){for(let x=0;x<w;x++){const i=y*w+x;let d=D[i];if(x)d=Math.min(d,D[i-1]+10);if(y){d=Math.min(d,D[i-w]+10);if(x)d=Math.min(d,D[i-w-1]+14);if(x<w-1)d=Math.min(d,D[i-w+1]+14);}D[i]=d;}if(y%16===15)yield;}
+  for(let y=h-1;y>=0;y--){for(let x=w-1;x>=0;x--){const i=y*w+x;let d=D[i];if(x<w-1)d=Math.min(d,D[i+1]+10);if(y<h-1){d=Math.min(d,D[i+w]+10);if(x)d=Math.min(d,D[i+w-1]+14);if(x<w-1)d=Math.min(d,D[i+w+1]+14);}D[i]=d;}if(y%16===0)yield;}
+  return D;
+ }
  // Public rectangular renderer also makes overlapping-chunk tests possible.
- function render(x0,y0,width=512,height=512,clock=480){
+ function* renderSteps(x0,y0,width=512,height=512,clock=480){
   const PAD=32,ox=x0-PAD,oy=y0-PAD,w=width+PAD*2,h=height+PAD*2,N=w*h;
   const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
-  for(let y=0;y<th;y++)for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));
+  for(let y=0;y<th;y++){for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));if(y%4===3)yield;}
   // Sample thermal cover once per tile/biome, never once per pixel.
   for(const tile of meta)for(const p of tile.parts)p.cover=atlas.visualSnowCover(p.biome,tile.cell?.height||20,clock);
   const info=(x,y)=>meta[(Math.floor(y/16)-ty0)*tw+Math.floor(x/16)-tx0];
@@ -64,7 +70,7 @@ function createWorldTerrainArt(atlas, ramps) {
   // Shared route segments: continuous curves, intersections and carriage ruts.
   const roadTiles=meta.map(m=>atlas.roadIndex.near(m.x+.5,m.y+.5).filter(s=>s.r.type!=='searoutes'&&atlas.project(m.x+.5,m.y+.5,s.a,s.b).d<s.r.width/2+2));
   const mat=new Uint8Array(N),roadDistance=new Float32Array(N).fill(99),roadWidth=new Float32Array(N),roadAngle=new Float32Array(N);
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  for(let y=0;y<h;y++){for(let x=0;x<w;x++){
    const px=ox+x,py=oy+y,i=y*w+x,m=info(px,py),a=category(m.t),lx=mod(px,16),ly=mod(py,16);let v=a,best=99;
    const n=edge(px,py)*.75+edge2(px,py)*.25;
    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const b=category(info(px+dx*16,py+dy*16).t);if(a===b||a===1||b===1)continue;const ex=dx<0?lx+.5:dx>0?15.5-lx:0,ey=dy<0?ly+.5:dy>0?15.5-ly:0,d=Math.hypot(ex,ey);let off=-99;if(a===3||b===3)off=(n-.5)*6*(a===3?1:-1);else if(a===8||b===8)off=(n-.45)*4*(a===8?1:-1);else if(a===2)off=(n-.3)*6;if(d<best&&d<off){v=b;best=d;}}
@@ -75,13 +81,13 @@ function createWorldTerrainArt(atlas, ramps) {
    if(v===1)v=0;
    if(rw&&rd<rw+(n-.5)*5&&(v===0||v===2))v=1;
    mat[i]=v;
-  }
-  const dW=distanceField(mat,w,h,true),dL=distanceField(mat,w,h,false);
+  }if(y%4===3)yield;}
+  const dW=yield* distanceField(mat,w,h,true),dL=yield* distanceField(mat,w,h,false);
   const ds=new Uint8Array(N),dn=new Uint8Array(N),dl=new Uint8Array(N),dr=new Uint8Array(N);
-  for(let x=0;x<w;x++){let r=0;for(let y=h-1;y>=0;y--){const i=y*w+x;ds[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let y=0;y<h;y++){const i=y*w+x;dn[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
-  for(let y=0;y<h;y++){let r=0;for(let x=0;x<w;x++){const i=y*w+x;dl[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let x=w-1;x>=0;x--){const i=y*w+x;dr[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
+  for(let x=0;x<w;x++){if(x%16===15)yield;let r=0;for(let y=h-1;y>=0;y--){const i=y*w+x;ds[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let y=0;y<h;y++){const i=y*w+x;dn[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
+  for(let y=0;y<h;y++){if(y%16===15)yield;let r=0;for(let x=0;x<w;x++){const i=y*w+x;dl[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let x=w-1;x>=0;x--){const i=y*w+x;dr[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
   const data=new Uint8ClampedArray(width*height*4),surface=new Uint8Array(width*height);
-  for(let y=PAD;y<h-PAD;y++)for(let x=PAD;x<w-PAD;x++){
+  for(let y=PAD;y<h-PAD;y++){for(let x=PAD;x<w-PAD;x++){
    const px=ox+x,py=oy+y,i=y*w+x,m=mat[i],tile=info(px,py),n=broad(px,py),np=patch(px,py),f=fine(px,py),rand=atlas.random(px,py,5),up=atlas.random(px,py-1,5),dw=dW[i]/10;
    // Patch selection is ordered independently of the containing macro cell.
    // A forest/snow border therefore contains snowdrifts and exposed moss,
@@ -149,8 +155,10 @@ function createWorldTerrainArt(atlas, ramps) {
    if(m!==8)for(let j=1;j<=4;j++)if(mat[i-j*w]===8){L-=j<=2?1.6:.7;break;}
    const floor=Math.floor(L),fraction=clamp(((L-floor)-.5)*5+.5,0,1),q=clamp(floor+(fraction>bayer[mod(py,4)*4+mod(px,4)]?1:0),0,P.length-1),col=P[q],o=((y-PAD)*width+x-PAD)*4;data[o]=col[0];data[o+1]=col[1];data[o+2]=col[2];data[o+3]=255;surface[o/4]=tile.t===5?5:m;
   }
+  if(y%4===3)yield;}
   return {data,width,height,surface};
  }
- return {render,noise,family,profiles,colors};
+ function render(...args){const steps=renderSteps(...args);let next;do{next=steps.next();}while(!next.done);return next.value;}
+ return {render,renderSteps,noise,family,profiles,colors};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldTerrainArt;

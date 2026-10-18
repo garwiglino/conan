@@ -4596,7 +4596,7 @@ const createWorldAtlas = (raw) => {
  }
  const BLEND=layout?.blend||800;
  function environment(x,y){const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}const own={biome:c.biome,cursed:curseCells.has(c.id),weight:1};if(nearest&&nearest.d<BLEND){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);if(other){const weight=.5*(1-nearest.d/BLEND);own.weight=1-weight;return {biome:c.biome,mix:[own,{biome:other.biome,cursed:curseCells.has(other.id),weight}]};}}return {biome:c.biome,mix:[own]};}
- function propAt(x,y,t,clock=480){const c=cellAt(x+.5,y+.5);if(!c)return null;let kind;
+ function propAt(x,y,t,clock=480){if(t!==4&&(t!==0||random(x,y,41)>=.06))return null;const c=cellAt(x+.5,y+.5);if(!c)return null;let kind;
   const blend=environment(x+.5,y+.5),sample=blend.mix.length>1&&random(x,y,49)<blend.mix[1].weight?blend.mix[1]:blend.mix[0],biome=sample?.biome??c.biome,snow=snowCover(biome,c.height,clock)>.3;
   const r=random(x,y,40),v=Math.floor(random(x,y,44)*3);
   if(t===4)kind=sample?.cursed?(r<.65?'world_cursed':'world_dead_cursed'):biome===11?'world_boulder_1':biome===10?(snow?'world_boulder_1':'world_boulder_0'):biome===9?(r<.8?(snow?'world_pine_1':'world_pine_0'):(snow?'world_boulder_1':'world_boulder_2')):[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(r*5)]:biome===8?(snow?'world_oak_winter':r<.55?'world_cypress':'world_oak_'+v):[5,7].includes(biome)?(r<.3?'palm':r<.85?'world_jungle':'world_boulder_2'):biome===12?(r<.7?'world_cypress':'world_boulder_2'):[3,4].includes(biome)?(r<.4?'shrub':'world_boulder_0'):(r<.86?(snow?'world_oak_winter':'world_oak_'+v):(snow?'world_boulder_1':'world_boulder_2'));
@@ -4729,14 +4729,15 @@ const createWorldAtlas = (raw) => {
   }
  }
  class ChunkStore{
-  constructor(max=48){this.max=max;this.cache=new Map();this.clock=480;}
+  constructor(max=48){this.max=max;this.cache=new Map();this.samples=new Map();this.clock=480;}
   setClock(clock){if(Number.isFinite(clock))this.clock=clock;}
-  get(cx,cy){const key=cx+','+cy,snowKey=chunkSnowKey(cx,cy,this.clock,true);let c=this.cache.get(key);if(c&&c.snowKey===snowKey){this.cache.delete(key);this.cache.set(key,c);return c;}const tiles=c?.tiles||new Uint8Array(CHUNK*CHUNK),props=[];for(let y=0;y<CHUNK;y++)for(let x=0;x<CHUNK;x++){const wx=cx*CHUNK+x,wy=cy*CHUNK+y,t=c?tiles[y*CHUNK+x]:terrain(wx,wy);tiles[y*CHUNK+x]=t;if(!core(wx,wy)){const p=propAt(wx,wy,t,this.clock);if(p)props.push(p);}}c={key,cx,cy,tiles,props,snowKey,glints:c?.glints};this.cache.set(key,c);while(this.cache.size>this.max)this.cache.delete(this.cache.keys().next().value);return c;}
-  tile(x,y){x=Math.floor(x);y=Math.floor(y);const cx=Math.floor(x/CHUNK),cy=Math.floor(y/CHUNK);return this.get(cx,cy).tiles[(y-cy*CHUNK)*CHUNK+x-cx*CHUNK];}
+  get(cx,cy){const key=cx+','+cy,snowKey=chunkSnowKey(cx,cy,this.clock,true);let c=this.cache.get(key);if(c&&c.snowKey===snowKey){this.cache.delete(key);this.cache.set(key,c);return c;}const tiles=c?.tiles||this.samples.get(key)||new Uint8Array(CHUNK*CHUNK).fill(255),props=[];this.samples.delete(key);for(let y=0;y<CHUNK;y++)for(let x=0;x<CHUNK;x++){const wx=cx*CHUNK+x,wy=cy*CHUNK+y,t=tiles[y*CHUNK+x]!==255?tiles[y*CHUNK+x]:terrain(wx,wy);tiles[y*CHUNK+x]=t;if(!core(wx,wy)){const p=propAt(wx,wy,t,this.clock);if(p)props.push(p);}}c={key,cx,cy,tiles,props,snowKey,glints:c?.glints};this.cache.set(key,c);while(this.cache.size>this.max)this.cache.delete(this.cache.keys().next().value);return c;}
+  tile(x,y){x=Math.floor(x);y=Math.floor(y);const cx=Math.floor(x/CHUNK),cy=Math.floor(y/CHUNK);const key=cx+','+cy,index=(y-cy*CHUNK)*CHUNK+x-cx*CHUNK,cached=this.cache.get(key);if(cached)return cached.tiles[index];let tiles=this.samples.get(key);if(!tiles){tiles=new Uint8Array(CHUNK*CHUNK).fill(255);this.samples.set(key,tiles);while(this.samples.size>this.max)this.samples.delete(this.samples.keys().next().value);}if(tiles[index]===255)tiles[index]=terrain(x,y);return tiles[index];}
  }
  function localPath(start,end,free,max=2200){const sx=Math.floor(start.x/16),sy=Math.floor(start.y/16),tx=Math.floor(end.x/16),ty=Math.floor(end.y/16),key=(x,y)=>x+','+y,q=new Heap(),best=new Map([[key(sx,sy),0]]),prev=new Map();q.push({x:sx,y:sy,g:0,cost:0});let count=0;
+  if(Math.abs(tx-sx)>36||Math.abs(ty-sy)>36)return [];const walkable=new Map();
   while(q.size&&count++<max){const n=q.pop(),k=key(n.x,n.y);if(n.g!==best.get(k))continue;if(n.x===tx&&n.y===ty){const path=[{x:end.x,y:end.y}];let p=k;while(prev.has(p)){const u=prev.get(p);if(u.x!==sx||u.y!==sy)path.unshift({x:u.x*16+8,y:u.y*16+8});p=key(u.x,u.y);}return path;}
-   for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36||!free(x*16+8,y*16+8))continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
+   for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36)continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;if(!walkable.has(k2))walkable.set(k2,!!free(x*16+8,y*16+8));if(!walkable.get(k2))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
  return {layout,scale,passable,roadCells,vertexOf,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
@@ -4747,7 +4748,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;
    clock and revision; queued writes cannot overtake each other. */
 class WorldJournalStore {
  constructor(env=globalThis){this.env=env;this.pending=null;this.writing=false;this.status='memory';this.lastKey='';this.error=null;}
- write(world){const data=world.serialize(),key=data.campaign+':'+data.revision+':'+Math.floor(data.clock);if(key===this.lastKey)return;this.lastKey=key;const text=JSON.stringify(data);try{this.env.localStorage?.setItem('hearthreaver-world-events',text);this.status='local';}catch(e){this.error=String(e);this.status='memory';}this.pending=text;this.flush();}
+ write(world,snapshot=null){const header=snapshot||world,key=header.campaign+':'+header.revision+':'+Math.floor(header.clock);if(key===this.lastKey)return;const data=snapshot||world.serialize();this.lastKey=key;const text=JSON.stringify(data);try{this.env.localStorage?.setItem('hearthreaver-world-events',text);this.status='local';}catch(e){this.error=String(e);this.status='memory';}this.pending=text;this.flush();}
  async flush(){if(this.writing||!this.pending)return;this.writing=true;try{const storage=this.env.navigator?.storage;if(!storage?.getDirectory)return;const root=await storage.getDirectory();while(this.pending){const text=this.pending;this.pending=null;const file=await root.getFileHandle('hearthreaver-world-events.json',{create:true}),stream=await file.createWritable();await stream.write(text);await stream.close();this.status='file';}}catch(e){this.error=String(e);}finally{this.writing=false;}}
  readFor(world){try{const raw=JSON.parse(this.env.localStorage?.getItem('hearthreaver-world-events')||'null');if(raw?.schema===world.schema&&raw.campaign===world.campaign&&raw.revision>world.revision&&raw.clock<=world.clock)return raw;}catch{}return null;}
  async readFileFor(world){try{const root=await this.env.navigator.storage.getDirectory(),file=await root.getFileHandle('hearthreaver-world-events.json'),data=JSON.parse(await(await file.getFile()).text());return data?.schema===world.schema&&data.campaign===world.campaign&&data.revision>world.revision&&data.clock<=world.clock?data:null;}catch{return null;}}
@@ -4813,8 +4814,10 @@ Game.prototype.tile=function(x,y){if(!this.atlas||atlasCore(x/16,y/16))return at
 Game.prototype.coreLocation=function(){const p=this.player,x=p.x/16,y=p.y/16;if(p.level)return {title:'Camp du Veilleur',detail:'Passerelle · étage 1'};if(!atlasCore(x,y))return null;let title=regionAt(x,y).name,detail='Terres sauvages';if(Math.hypot(x-23.5,y-55.5)<7){title='Campement des Exilés';detail='Lieu de halte';}else{let best=null;for(let i=0;i<this.world.trails.length;i++){const r=this.world.trails[i];for(let k=1;k<r.pts.length;k++){const d=Atlas.project(x,y,r.pts[k-1],r.pts[k]).d;if(d<=r.w/2+2+(this.coreRoute===i?3:0)&&(!best||d<best.d))best={i,d};}}this.coreRoute=best?.i??null;if(best)detail=ATLAS_TRAIL_NAMES[best.i]||'Piste du campement';}return {title,detail,territory:'Sarak'};};
 Game.prototype.updateLocation=function(dt=0){const w=Atlas.toWorld(this.player.x,this.player.y);return this.location.update(w.x,w.y,dt,{level:this.player.level||0,override:this.coreLocation()});};
 Game.prototype.atlasContext=function(){if(this.player.level)return null;const w=Atlas.toWorld(this.player.x,this.player.y);return Atlas.siteAt(w.x,w.y,7);};
+const ATLAS_PROP_RADII={world_cart:16,column:6,column_b:6,barrel:6,crates:9,jar:5,world_sign:2,palm:5,world_oak_0:5,world_pine_0:5,world_pine_1:5,world_cypress:6,world_oak_winter:5,world_boulder_0:7,world_boulder_1:7};
+function atlasPropCollision(props,x,y,r){for(const o of props){if(Math.abs(x-o.x)>32+r||Math.abs(y-o.y)>40+r)continue;const kind=o.kind.replace(/^snow_/,'');if(kind==='tent'||kind==='transport_inn'){if(Math.abs(x-o.x)<21+r&&y+r>o.y-24&&y-r<o.y+5)return true;}else{const radius=ATLAS_PROP_RADII[kind];if(radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-10&&y-r<o.y+2)return true;}}return false;}
 const atlasSolid=Game.prototype.solid;
-Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore(x/16,y/16)){const w=Atlas.toWorld(x,y);if([...this.atlasProps,...this.prisonProps||[]].some(o=>{if(Math.abs(x-o.x)>32+r||Math.abs(y-o.y)>40+r)return false;const kind=o.kind.replace(/^snow_/,'');if(kind==='tent'||kind==='transport_inn')return Math.abs(x-o.x)<21+r&&y+r>o.y-24&&y-r<o.y+5;const radius={world_cart:16,column:6,column_b:6,barrel:6,crates:9,jar:5,world_sign:2,palm:5,world_oak_0:5,world_pine_0:5,world_pine_1:5,world_cypress:6,world_oak_winter:5,world_boulder_0:7,world_boulder_1:7}[kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-10&&y-r<o.y+2;}))return true;
+Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore(x/16,y/16)){const w=Atlas.toWorld(x,y);if(atlasPropCollision(this.atlasProps,x,y,r)||atlasPropCollision(this.prisonProps||[],x,y,r))return true;
  for(const e of this.worldState.active(this.clock)){if(!Atlas.EVENT_TYPES[e.type].closed||!Atlas.roadById[e.target]||Atlas.roadById[e.target].type==='searoutes')continue;const route=Atlas.roadById[e.target];if(Math.hypot(w.x-e.x,w.y-e.y)<route.width/2+1+r/16)return true;}}
  return atlasSolid.call(this,x,y,r,level);};
 const atlasNpcMenu=Game.prototype.npcMenu;
@@ -4868,7 +4871,7 @@ Game.prototype.populateAtlas=function(){const p=this.player,w=Atlas.toWorld(p.x,
 const atlasDamageEnemy=Game.prototype.damageEnemy;Game.prototype.damageEnemy=function(e,...args){const result=atlasDamageEnemy.call(this,e,...args);if(e.world&&e.dead)this.atlasDeaths[e.id]=true;return result;};
 const atlasEmit=Game.prototype.emit;Game.prototype.emit=function(type,data={}){if(type==='win'&&this.worldState){this.won=false;this.bossActive=false;this.story.templeFreed=true;this.worldState.add('victory','camp',this.clock,0,{source:'Kaldor',witnesses:['veilleur','fairy','elyne'],detail:'Le temple du Serpent a été libéré.'});atlasEmit.call(this,'notice',{title:'Le temple est libéré',text:'Les terres restent à explorer.'});atlasEmit.call(this,'save');return;}return atlasEmit.call(this,type,data);};
 const atlasUpdate=Game.prototype.update;Game.prototype.update=function(dt,input){if(this.journey){this.stepJourney(Math.min(dt,.04));return;}const x=this.player.x,y=this.player.y;this.populateAtlas();atlasUpdate.call(this,dt,input);this.atlasMeters+=Math.hypot(this.player.x-x,this.player.y-y)/16;this.advanceAtlas(dt);this.updateLocation(dt);};
-const atlasSerialize=Game.prototype.serialize;Game.prototype.serialize=function(){const saved=atlasSerialize.call(this);if(!this.atlas)return saved;const deaths=Object.entries(this.atlasDeaths).slice(-5000);for(const e of this.enemies)if(e.world&&!e.eventId)this.wildHealth[e.id]={hp:e.hp,dead:e.dead,x:e.x,y:e.y};saved.atlas={wildHealth:this.wildHealth,version:2,layout:Atlas.layout?.id,needs:{...this.needs},formerCompanions:this.formerCompanions,party:this.party.map(c=>({...c})),world:this.worldState.serialize(),supplies:{...this.supplies},story:{...this.story},companion:{...this.companion,x:this.escortActor.x,y:this.escortActor.y},deaths:Object.fromEntries(deaths),discovered:[...this.discovered],metres:this.atlasMeters,mounted:this.mounted,serial:this.journeySerial,navigation:this.navigation,checkpoint:this.worldCheckpoint,journey:this.journey?JSON.parse(JSON.stringify(this.journey)):null,couriers:JSON.parse(JSON.stringify(this.couriers))};this.worldStore.write(this.worldState);return saved;};
+const atlasSerialize=Game.prototype.serialize;Game.prototype.serialize=function(){const saved=atlasSerialize.call(this);if(!this.atlas)return saved;const deaths=Object.entries(this.atlasDeaths).slice(-5000);for(const e of this.enemies)if(e.world&&!e.eventId)this.wildHealth[e.id]={hp:e.hp,dead:e.dead,x:e.x,y:e.y};saved.atlas={wildHealth:this.wildHealth,version:2,layout:Atlas.layout?.id,needs:{...this.needs},formerCompanions:this.formerCompanions,party:this.party.map(c=>({...c})),world:this.worldState.serialize(),supplies:{...this.supplies},story:{...this.story},companion:{...this.companion,x:this.escortActor.x,y:this.escortActor.y},deaths:Object.fromEntries(deaths),discovered:[...this.discovered],metres:this.atlasMeters,mounted:this.mounted,serial:this.journeySerial,navigation:this.navigation,checkpoint:this.worldCheckpoint,journey:this.journey?JSON.parse(JSON.stringify(this.journey)):null,couriers:JSON.parse(JSON.stringify(this.couriers))};this.worldStore.write(this.worldState,saved.atlas.world);return saved;};
 
 const atlasMechanismContext=Game.prototype.mechanismContext;
 Game.prototype.mechanismContext=function(){const c=atlasMechanismContext.call(this);if(c?.kind==='talk'&&['fairy','elyne'].includes(c.npc.id)){const other=this.npcs.filter(n=>!['fairy','elyne'].includes(n.id)&&this.npcPresent(n)&&dist(n,this.player)<24).sort((a,b)=>dist(a,this.player)-dist(b,this.player))[0];if(other)return {kind:'talk',npc:other,text:'E  PARLER À '+other.label};}return c;};
@@ -4969,7 +4972,8 @@ Game.prototype.navigationInfo=function(){const site=this.mapPlaces.find(n=>n.id=
 const travelNpcPresent=Game.prototype.npcPresent;
 Game.prototype.npcPresent=function(n){return this.party?.some(c=>c.id===n.id)||travelNpcPresent.call(this,n);};
 const travelSolid=Game.prototype.solid;
-Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&this.atlasProps.some(o=>{const radius={transport_horse:16,transport_cart:22,transport_hitch:18,transport_inn:24}[o.kind];return radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-(o.kind==='transport_inn'?24:10)&&y-r<o.y+1;}))return true;return travelSolid.call(this,x,y,r,level);};
+const TRANSPORT_PROP_RADII={transport_horse:16,transport_cart:22,transport_hitch:18,transport_inn:24};
+Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level)for(const o of this.atlasProps){if(Math.abs(x-o.x)>24+r||Math.abs(y-o.y)>24+r)continue;const radius=TRANSPORT_PROP_RADII[o.kind];if(radius&&Math.abs(x-o.x)<radius+r&&y+r>o.y-(o.kind==='transport_inn'?24:10)&&y-r<o.y+1)return true;}return travelSolid.call(this,x,y,r,level);};
 
 Game.prototype.travelDestinations=function(){return this.stations.filter(s=>Atlas.byId[s.site].kind!=='dock').map(s=>Atlas.byId[s.site]);};
 Game.prototype.stationLanding=function(id){const station=this.stations.find(s=>s.site===id);if(!station)return null;const a=station.actor;for(const [dx,dy]of [[0,18],[18,0],[-18,0],[0,-18],[24,24],[-24,24],[24,-24],[-24,-24]]){const p={x:a.x+dx,y:a.y+dy};if(!this.solid(p.x,p.y,5,0)&&this.lineClear(p,a))return p;}return null;};
@@ -5120,12 +5124,18 @@ function createWorldTerrainArt(atlas, ramps) {
   return {x,y,t:atlas.terrain(x,y),parts:parts.length?parts:[{family:'desert',weight:1}],cell:atlas.cellAt(x+.5,y+.5),shore,shoreX:gradient(1,0),shoreY:gradient(0,1)};
  }
 
- function distanceField(mat,w,h,water){const D=new Uint16Array(w*h).fill(320);for(let i=0;i<D.length;i++)if((mat[i]===3)===water)D[i]=0;for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x;let d=D[i];if(x)d=Math.min(d,D[i-1]+10);if(y){d=Math.min(d,D[i-w]+10);if(x)d=Math.min(d,D[i-w-1]+14);if(x<w-1)d=Math.min(d,D[i-w+1]+14);}D[i]=d;}for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;let d=D[i];if(x<w-1)d=Math.min(d,D[i+1]+10);if(y<h-1){d=Math.min(d,D[i+w]+10);if(x)d=Math.min(d,D[i+w-1]+14);if(x<w-1)d=Math.min(d,D[i+w+1]+14);}D[i]=d;}return D;}
+ function* distanceField(mat,w,h,water){
+  const D=new Uint16Array(w*h).fill(320);
+  for(let y=0;y<h;y++){for(let x=0;x<w;x++){const i=y*w+x;if((mat[i]===3)===water)D[i]=0;}if(y%16===15)yield;}
+  for(let y=0;y<h;y++){for(let x=0;x<w;x++){const i=y*w+x;let d=D[i];if(x)d=Math.min(d,D[i-1]+10);if(y){d=Math.min(d,D[i-w]+10);if(x)d=Math.min(d,D[i-w-1]+14);if(x<w-1)d=Math.min(d,D[i-w+1]+14);}D[i]=d;}if(y%16===15)yield;}
+  for(let y=h-1;y>=0;y--){for(let x=w-1;x>=0;x--){const i=y*w+x;let d=D[i];if(x<w-1)d=Math.min(d,D[i+1]+10);if(y<h-1){d=Math.min(d,D[i+w]+10);if(x)d=Math.min(d,D[i+w-1]+14);if(x<w-1)d=Math.min(d,D[i+w+1]+14);}D[i]=d;}if(y%16===0)yield;}
+  return D;
+ }
  // Public rectangular renderer also makes overlapping-chunk tests possible.
- function render(x0,y0,width=512,height=512,clock=480){
+ function* renderSteps(x0,y0,width=512,height=512,clock=480){
   const PAD=32,ox=x0-PAD,oy=y0-PAD,w=width+PAD*2,h=height+PAD*2,N=w*h;
   const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
-  for(let y=0;y<th;y++)for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));
+  for(let y=0;y<th;y++){for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));if(y%4===3)yield;}
   // Sample thermal cover once per tile/biome, never once per pixel.
   for(const tile of meta)for(const p of tile.parts)p.cover=atlas.visualSnowCover(p.biome,tile.cell?.height||20,clock);
   const info=(x,y)=>meta[(Math.floor(y/16)-ty0)*tw+Math.floor(x/16)-tx0];
@@ -5134,7 +5144,7 @@ function createWorldTerrainArt(atlas, ramps) {
   // Shared route segments: continuous curves, intersections and carriage ruts.
   const roadTiles=meta.map(m=>atlas.roadIndex.near(m.x+.5,m.y+.5).filter(s=>s.r.type!=='searoutes'&&atlas.project(m.x+.5,m.y+.5,s.a,s.b).d<s.r.width/2+2));
   const mat=new Uint8Array(N),roadDistance=new Float32Array(N).fill(99),roadWidth=new Float32Array(N),roadAngle=new Float32Array(N);
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  for(let y=0;y<h;y++){for(let x=0;x<w;x++){
    const px=ox+x,py=oy+y,i=y*w+x,m=info(px,py),a=category(m.t),lx=mod(px,16),ly=mod(py,16);let v=a,best=99;
    const n=edge(px,py)*.75+edge2(px,py)*.25;
    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const b=category(info(px+dx*16,py+dy*16).t);if(a===b||a===1||b===1)continue;const ex=dx<0?lx+.5:dx>0?15.5-lx:0,ey=dy<0?ly+.5:dy>0?15.5-ly:0,d=Math.hypot(ex,ey);let off=-99;if(a===3||b===3)off=(n-.5)*6*(a===3?1:-1);else if(a===8||b===8)off=(n-.45)*4*(a===8?1:-1);else if(a===2)off=(n-.3)*6;if(d<best&&d<off){v=b;best=d;}}
@@ -5145,13 +5155,13 @@ function createWorldTerrainArt(atlas, ramps) {
    if(v===1)v=0;
    if(rw&&rd<rw+(n-.5)*5&&(v===0||v===2))v=1;
    mat[i]=v;
-  }
-  const dW=distanceField(mat,w,h,true),dL=distanceField(mat,w,h,false);
+  }if(y%4===3)yield;}
+  const dW=yield* distanceField(mat,w,h,true),dL=yield* distanceField(mat,w,h,false);
   const ds=new Uint8Array(N),dn=new Uint8Array(N),dl=new Uint8Array(N),dr=new Uint8Array(N);
-  for(let x=0;x<w;x++){let r=0;for(let y=h-1;y>=0;y--){const i=y*w+x;ds[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let y=0;y<h;y++){const i=y*w+x;dn[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
-  for(let y=0;y<h;y++){let r=0;for(let x=0;x<w;x++){const i=y*w+x;dl[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let x=w-1;x>=0;x--){const i=y*w+x;dr[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
+  for(let x=0;x<w;x++){if(x%16===15)yield;let r=0;for(let y=h-1;y>=0;y--){const i=y*w+x;ds[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let y=0;y<h;y++){const i=y*w+x;dn[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
+  for(let y=0;y<h;y++){if(y%16===15)yield;let r=0;for(let x=0;x<w;x++){const i=y*w+x;dl[i]=r=mat[i]===8?Math.min(32,r+1):0;}r=0;for(let x=w-1;x>=0;x--){const i=y*w+x;dr[i]=r=mat[i]===8?Math.min(32,r+1):0;}}
   const data=new Uint8ClampedArray(width*height*4),surface=new Uint8Array(width*height);
-  for(let y=PAD;y<h-PAD;y++)for(let x=PAD;x<w-PAD;x++){
+  for(let y=PAD;y<h-PAD;y++){for(let x=PAD;x<w-PAD;x++){
    const px=ox+x,py=oy+y,i=y*w+x,m=mat[i],tile=info(px,py),n=broad(px,py),np=patch(px,py),f=fine(px,py),rand=atlas.random(px,py,5),up=atlas.random(px,py-1,5),dw=dW[i]/10;
    // Patch selection is ordered independently of the containing macro cell.
    // A forest/snow border therefore contains snowdrifts and exposed moss,
@@ -5219,9 +5229,11 @@ function createWorldTerrainArt(atlas, ramps) {
    if(m!==8)for(let j=1;j<=4;j++)if(mat[i-j*w]===8){L-=j<=2?1.6:.7;break;}
    const floor=Math.floor(L),fraction=clamp(((L-floor)-.5)*5+.5,0,1),q=clamp(floor+(fraction>bayer[mod(py,4)*4+mod(px,4)]?1:0),0,P.length-1),col=P[q],o=((y-PAD)*width+x-PAD)*4;data[o]=col[0];data[o+1]=col[1];data[o+2]=col[2];data[o+3]=255;surface[o/4]=tile.t===5?5:m;
   }
+  if(y%4===3)yield;}
   return {data,width,height,surface};
  }
- return {render,noise,family,profiles,colors};
+ function render(...args){const steps=renderSteps(...args);let next;do{next=steps.next();}while(!next.done);return next.value;}
+ return {render,renderSteps,noise,family,profiles,colors};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldTerrainArt;
 
@@ -5286,20 +5298,36 @@ function worldArtWorkerSource(){
  return '"use strict";const WorldPacing='+pacing+';const createWorldAtlas='+createWorldAtlas.toString()+';const createWorldTerrainArt='+createWorldTerrainArt.toString()+`;let art=null;
  onmessage=function(e){const m=e.data;if(m.kind==='init'){art=createWorldTerrainArt(createWorldAtlas(m.raw),m.ramps);postMessage({kind:'ready'});return;}if(!art||m.kind!=='render')return;const image=art.render(m.cx*512,m.cy*512,512,512,m.clock??480);postMessage({key:m.key,clock:m.clock??480,snowKey:m.snowKey,cx:m.cx,cy:m.cy,width:image.width,height:image.height,data:image.data},[image.data.buffer]);};`;}
 function WorldArtStream(cache,makeCanvas,environment=globalThis){
- this.clock=480;this.cache=cache;this.pending=new Set();this.jobs=new Map();this.worker=null;this.failed=false;
+ this.clock=480;this.cache=cache;this.pending=new Set();this.jobs=new Map();this.worker=null;this.failed=false;this.running=null;this.wanted=null;
+ const now=()=>environment.performance?.now?.()??Date.now(),later=fn=>(environment.setTimeout||globalThis.setTimeout)(fn,0);
  this.setClock=clock=>{this.clock=clock;};
- this.current=(key,cx,cy)=>{const cv=cache.get(key);return cv&&cv.snowKey===Atlas.chunkSnowKey(cx,cy,this.clock);};
- const put=(key,data,width,height,snowKey)=>{const cv=makeCanvas();cv.width=width;cv.height=height;cv.snowKey=snowKey;const c=cv.getContext('2d'),im=c.createImageData(width,height);im.data.set(data);c.putImageData(im,0,0);cv.trackColors=terrainTrackColors(data,width,height);cache.set(key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);};
+ this.current=(key,cx,cy)=>{const cv=cache.get(key);return cv&&!cv.preview&&cv.snowKey===Atlas.chunkSnowKey(cx,cy,this.clock);};
+ const put=(job,image)=>{if(this.wanted&&!this.wanted.has(job.key)||job.snowKey!==Atlas.chunkSnowKey(job.cx,job.cy,this.clock)||image.clock!==undefined&&image.snowKey===undefined&&image.clock!==this.clock)return;
+  const cv=makeCanvas();cv.width=image.width;cv.height=image.height;cv.snowKey=job.snowKey;const c=cv.getContext('2d'),im=c.createImageData(image.width,image.height);im.data.set(image.data);c.putImageData(im,0,0);cv.trackColors=terrainTrackColors(image.data,image.width,image.height);cache.set(job.key,cv);while(cache.size>32)cache.delete(cache.keys().next().value);
+ };
+ const finish=()=>{if(this.running){this.pending.delete(this.running.key);this.jobs.delete(this.running.key);}this.running=null;};
+ this.pumpFallback=()=>{
+  this.scheduled=false;if(this.worker)return;const job=this.running;if(!job){pump();return;}
+  if(this.wanted&&!this.wanted.has(job.key)||job.snowKey!==Atlas.chunkSnowKey(job.cx,job.cy,this.clock)){finish();pump();return;}
+  job.steps||=WorldTerrainArt.renderSteps(job.cx*512,job.cy*512,512,512,job.clock);
+  const start=now();let next;for(let i=0;i<4;i++){next=job.steps.next();if(next.done){put(job,next.value);finish();break;}if(now()-start>=4)break;}
+  pump();
+ };
+ const pump=()=>{
+  if(!this.running){const job=this.jobs.values().next().value;if(!job)return;job.clock=this.clock;job.snowKey=Atlas.chunkSnowKey(job.cx,job.cy,this.clock);this.running=job;if(this.worker){this.worker.postMessage(job);return;}}
+  if(!this.worker&&!this.scheduled){this.scheduled=true;later(this.pumpFallback);}
+ };
+ this.focus=(cx,cy,visible=[])=>{const wanted=new Set(visible.map(p=>p[0]+','+p[1]));for(let y=cy-1;y<=cy+1;y++)for(let x=cx-1;x<=cx+1;x++)wanted.add(x+','+y);this.wanted=wanted;
+  for(const [key,job]of this.jobs)if(job!==this.running&&!wanted.has(key)){this.jobs.delete(key);this.pending.delete(key);}
+  if(!this.worker&&this.running&&!wanted.has(this.running.key))finish();
+ };
+ this.request=(cx,cy)=>{const key=cx+','+cy;if(this.pending.size>=8||this.pending.has(key)||this.current(key,cx,cy))return;const job={kind:'render',key,clock:this.clock,cx,cy};this.pending.add(key);this.jobs.set(key,job);pump();};
+ this.prefetch=(cx,cy)=>{const jobs=[];for(let y=cy-1;y<=cy+1;y++)for(let x=cx-1;x<=cx+1;x++)jobs.push({x,y,d:Math.hypot(x-cx,y-cy)});jobs.sort((a,b)=>a.d-b.d);for(const j of jobs){if(this.pending.size>=8)break;this.request(j.x,j.y);}};
  if(typeof environment.Worker!=='function'||typeof environment.Blob!=='function'||!environment.URL?.createObjectURL)return;
  let url;const release=()=>{if(url){environment.URL.revokeObjectURL(url);url=null;}};
- try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}
- const job=this.jobs.get(m.key);if(job&&job.clock===(m.clock??480)){this.pending.delete(m.key);this.jobs.delete(m.key);}
- const valid=m.snowKey!==undefined?m.snowKey===Atlas.chunkSnowKey(m.cx,m.cy,this.clock):(m.clock??480)===this.clock;
- if(!valid)return;put(m.key,m.data,m.width,m.height,m.snowKey);
- };this.worker.onerror=()=>{release();this.failed=true;this.pending.clear();this.jobs.clear();this.worker?.terminate();this.worker=null;};this.worker.postMessage({kind:'init',raw:Atlas.raw,ramps:RAMP});}
- catch(e){release();this.failed=true;this.worker?.terminate();this.worker=null;}
- this.request=(cx,cy)=>{const key=cx+','+cy;if(!this.worker||this.pending.size>=8||this.pending.has(key)||this.current(key,cx,cy))return;const job={kind:'render',key,clock:this.clock,snowKey:Atlas.chunkSnowKey(cx,cy,this.clock),cx,cy};this.pending.add(key);this.jobs.set(key,job);this.worker.postMessage(job);};
- this.prefetch=(cx,cy)=>{if(!this.worker)return;const jobs=[];for(let y=cy-1;y<=cy+1;y++)for(let x=cx-1;x<=cx+1;x++)jobs.push({x,y,d:Math.hypot(x-cx,y-cy)});jobs.sort((a,b)=>a.d-b.d);for(const j of jobs){if(this.pending.size>=8)break;this.request(j.x,j.y);}};
+ try{url=environment.URL.createObjectURL(new environment.Blob([worldArtWorkerSource()],{type:'text/javascript'}));this.worker=new environment.Worker(url);this.worker.onmessage=e=>{const m=e.data;if(m.kind==='ready'){release();return;}const job=this.running;if(!job||job.key!==m.key||job.clock!==(m.clock??480))return;put(job,m);finish();pump();};
+  this.worker.onerror=()=>{release();this.failed=true;this.worker?.terminate();this.worker=null;/* Resume the same requested pixels incrementally on the main thread. */pump();};this.worker.postMessage({kind:'init',raw:Atlas.raw,ramps:RAMP});
+ }catch(e){release();this.failed=true;this.worker?.terminate();this.worker=null;}
 }
 
 /* All new game artwork uses the game's native pixel buffer and shared ramps. */
@@ -5309,11 +5337,16 @@ PROPS.world_cursed=function(b){const P=['#24232f','#383744','#51515d','#686975',
 const atlasNpcDraw=Renderer.prototype.npcDraw;
 Renderer.prototype.npcDraw=function(n){if(n.id!=='fairy'){atlasNpcDraw.call(this,n);if(n.id==='elyne'&&this.g.story.recruited&&!this.g.story.delivered&&this.g.companion.hp<10){box(this.c,n.x-10,n.y-45,20,2,'#34252c');box(this.c,n.x-10,n.y-45,2*this.g.companion.hp,2,'#be807b');}return;}const c=this.c,x=Math.round(n.x),y=Math.round(n.y-12+Math.sin(this.g.time*4)*2),wing=Math.sin(this.g.time*18)>0;c.save();c.globalAlpha=.8;pixels(c,wing?['11.....11','122...221','.122.221.','..12221..']:['.........','..1...1..','.122.221.','112222211'],x-4,y-5,{'1':'#b4c5c9','2':'#dee8d0'});c.globalAlpha=1;pixels(c,['..11..','.1221.','..33..','..44..','.4554.','..44..','..66..'],x-3,y-6,{'1':'#745b8d','2':'#f3dfb4','3':'#f5edce','4':'#799b95','5':'#d3e4bb','6':'#aaa5c4'});for(let i=0;i<3;i++){const t=this.g.time+i*2;box(c,x-8-Math.sin(t)*6,y+5+i*3,1,1,i%2?'#b2d1a1':'#b6a1ca');}c.restore();};
 const WorldTerrainArt=createWorldTerrainArt(Atlas,RAMP);
-Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;this.atlasGround=this.atlasGround||new Map();this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));const groundClock=Math.floor(g.clock);this.atlasGroundClock=groundClock;g.atlas.setClock(groundClock);this.atlasArtStream.setClock(groundClock);let refreshed=0;this.refreshColdSiteProps?.(groundClock);const a=Atlas.toWorld(this.cam.x-64,this.cam.y-64),b=Atlas.toWorld(this.cam.x+this.W+64,this.cam.y+this.H+64);this.atlasVisible=[];
+Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;this.atlasGround=this.atlasGround||new Map();this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));const groundClock=Math.floor(g.clock);this.atlasGroundClock=groundClock;g.atlas.setClock(groundClock);this.atlasArtStream.setClock(groundClock);this.refreshColdSiteProps?.(groundClock);const a=Atlas.toWorld(this.cam.x-64,this.cam.y-64),b=Atlas.toWorld(this.cam.x+this.W+64,this.cam.y+this.H+64);this.atlasVisible=[];const centre=Atlas.toWorld(g.player.x,g.player.y),visible=[];for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++)visible.push([cx,cy]);this.atlasArtStream.focus(Math.floor(centre.x/32),Math.floor(centre.y/32),visible);
  for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++){
   const chunk=g.atlas.get(cx,cy),p=Atlas.toGame(cx*32,cy*32);this.atlasVisible.push(chunk);let cv=this.atlasGround.get(chunk.key);
-  const stale=cv&&!this.atlasArtStream.current(chunk.key,cx,cy);if(stale&&this.atlasArtStream.worker)this.atlasArtStream.request(cx,cy);
-  if(!cv||(stale&&!this.atlasArtStream.worker&&refreshed<1)){refreshed++;cv=document.createElement('canvas');cv.width=cv.height=512;const c=cv.getContext('2d'),art=WorldTerrainArt.render(cx*512,cy*512,512,512,groundClock),im=c.createImageData(512,512);im.data.set(art.data);c.putImageData(im,0,0);cv.trackColors=terrainTrackColors(art.data,512,512);cv.snowKey=Atlas.chunkSnowKey(cx,cy,groundClock);this.atlasGround.set(chunk.key,cv);}else{this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);}
+  if(!cv){
+   // The collision tiles are authoritative immediately. Art refines in the worker
+   // (or bounded cooperative slices) without holding up input or simulation.
+   cv=document.createElement('canvas');cv.width=cv.height=512;cv.preview=true;const c=cv.getContext('2d');
+   for(let y=0;y<32;y++)for(let x=0;x<32;x++){const t=chunk.tiles[y*32+x],wx=cx*32+x,wy=cy*32+y,cell=Atlas.cellAt(wx+.5,wy+.5),family=WorldTerrainArt.family({biome:cell?.biome,cursed:Atlas.curseCells.has(cell?.id)}),profile=WorldTerrainArt.profiles[family],snow=Atlas.visualSnowCover(cell?.biome,cell?.height,groundClock)>.5,palette=t===3?WorldTerrainArt.colors.water:t===5?WorldTerrainArt.colors.wood:t===8?WorldTerrainArt.colors[profile.rock]:WorldTerrainArt.colors[snow?'snow':t===1?'road':t===2?'pave':profile.ground];c.fillStyle=palette[4];c.fillRect(x*16,y*16,16,16);}
+  }
+  this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);this.atlasArtStream.request(cx,cy);
   this.c.drawImage(cv,Math.round(p.x),Math.round(p.y));
   // Four sparse native-pixel glint phases, only on genuinely open water.
   if(!chunk.glints){chunk.glints=[];for(let y=1;y<31;y++)for(let x=1;x<31;x++){const i=y*32+x,wx=cx*32+x,wy=cy*32+y;if(chunk.tiles[i]!==3||chunk.tiles[i-1]!==3||chunk.tiles[i+1]!==3||chunk.tiles[i-32]!==3||chunk.tiles[i+32]!==3||Atlas.random(wx,wy,475)<.8)continue;chunk.glints.push({x:p.x+x*16+4+Math.floor(Atlas.random(wx,wy,476)*7),y:p.y+y*16+4+Math.floor(Atlas.random(wx,wy,477)*7),phase:Math.floor(Atlas.random(wx,wy,478)*4)});}}
@@ -5321,7 +5354,7 @@ Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;
 
  }
  while(this.atlasGround.size>32)this.atlasGround.delete(this.atlasGround.keys().next().value);
- this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));this.atlasArtStream.setClock(groundClock);const centre=Atlas.toWorld(g.player.x,g.player.y);this.atlasArtStream.prefetch?.(Math.floor(centre.x/32),Math.floor(centre.y/32));
+ this.atlasArtStream=this.atlasArtStream||new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'));this.atlasArtStream.setClock(groundClock);this.atlasArtStream.prefetch?.(Math.floor(centre.x/32),Math.floor(centre.y/32));
 
 };
 Renderer.prototype.visibleAtlasProps=function(){const g=this.g;const result=[...g.world.props,...(this.atlasVisible||[]).flatMap(c=>c.props),...g.atlasProps,...g.prisonProps];for(const e of g.worldState.active(g.clock)){const r=Atlas.roadById[e.target];if(!Atlas.EVENT_TYPES[e.type].closed||!r||r.type==='searoutes')continue;const p=Atlas.toGame(e.x,e.y);for(let i=-2;i<=2;i++)result.push({x:p.x+i*13,y:p.y+i%2*6,kind:'rock_b',world:true});}return result;};
