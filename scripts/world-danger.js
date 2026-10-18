@@ -148,9 +148,9 @@ Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.c
 // Bounded event groups. Stable event/slot IDs prevent save/reload or chunk farming.
 Game.prototype.stepEventGroups=function(dt=0){
  const field=this.ensureDanger();field.refresh();const active=new Set(field.events.map(e=>e.id));
- for(const e of this.enemies){if(e.eventId&&!active.has(e.eventId))e.retiring=true;if(e.retiring)e.retireAge=(e.retireAge||0)+dt;}
+ for(const e of this.enemies){if(e.campaignGroup)continue;if(e.eventId&&!active.has(e.eventId))e.retiring=true;if(e.retiring)e.retireAge=(e.retireAge||0)+dt;}
  this.enemies=this.enemies.filter(e=>!e.retiring||dist(e,this.player)<600&&(e.retireAge||0)<12);
- const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!active.has(n.eventId)){
+ const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!n.campaignGroup&&!active.has(n.eventId)){
   n.guardRetiring=true;this.cancelWorldConversation?.(n);
   const mission=this.worldState.simulation?.state.missions.find(m=>m.event===n.eventId);if(mission?.status==='returned'){this.npcs=this.npcs.filter(a=>a!==n);continue;}const state=this.ensureHumanGuard?.(n),fighting=state&&this.humanGuardTarget?.(n,state)||n.wind>0||n.attack>0;
   if(mission){mission.engaged=!!fighting;mission.physical=dist(n,this.player)<1500;}if(fighting){n.alpha=1;continue;}
@@ -160,7 +160,7 @@ Game.prototype.stepEventGroups=function(dt=0){
  }
  if(field.groupRevision===this.worldState.revision&&field.groupMinute===Math.floor(this.clock)&&this.time-(field.groupTick||0)<1)return;
  field.groupRevision=this.worldState.revision;field.groupMinute=Math.floor(this.clock);field.groupTick=this.time;
- for(const event of field.events){const rule=Atlas.EVENT_TYPES[event.type],count=event.memberIds?.length??rule.group??0;if(!count)continue;const centre=Atlas.toGame(event.x,event.y);if(dist(centre,this.player)>1100)continue;
+ for(const event of field.events){if(event.managedMovement)continue;const rule=Atlas.EVENT_TYPES[event.type],count=event.memberIds?.length??rule.group??0;if(!count)continue;const centre=Atlas.toGame(event.x,event.y);if(dist(centre,this.player)>1100)continue;
   for(let i=0;i<count;i++){const id='incident-'+event.id+'-'+i;if(this.worldState.simulation?.state.hostiles[id]?.hp===0)this.atlasDeaths[id]=true;if(this.atlasDeaths[id]||this.enemies.some(e=>e.id===id)||this.npcs.some(n=>n.id===id))continue;
    if(rule.guard?this.npcs.filter(n=>n.eventGuard).length>=8:this.enemies.filter(e=>e.eventId&&!e.dead).length>=24)break;
    let pos;for(let j=0;j<24;j++){const angle=(i/count+j/24)*Math.PI*2,r=rule.guard?80+j*8:220+j*12,q=this.incidentRoadPosition?.(event,i,j)||{x:centre.x+Math.cos(angle)*r,y:centre.y+Math.sin(angle)*r};if(dist(q,this.player)>300&&!this.solid(q.x,q.y,7,0)&&(rule.guard||!this.inSafe(q.x,q.y)&&this.canPlaceHostile(q))){pos=q;break;}}

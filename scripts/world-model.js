@@ -180,7 +180,7 @@ const createWorldAtlas = (raw) => {
   rain:{name:'Pluie soutenue',category:'Météo'},snow:{name:'Chutes de neige',category:'Météo'},fog:{name:'Brouillard',category:'Météo'},drought:{name:'Sécheresse',category:'Météo'}
  };
  // Declarative incident policy shared by travel, local encounters and civilians.
- Object.assign(EVENT_TYPES,{crime_scene:{name:'Morts découvertes',category:'Vie locale'},massacre:{name:'Massacre signalé',category:'Vie locale',risk:1}});
+ Object.assign(EVENT_TYPES,{band_movement:{name:'Déplacement armé',category:'Sécurité',private:true},cargo_loss:{name:'Chargement perdu',category:'Commerce'},crime_scene:{name:'Morts découvertes',category:'Vie locale'},massacre:{name:'Massacre signalé',category:'Vie locale',risk:1}});
  Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'bandit',evacuate:true,civilianPrey:true});
  Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'bandit',evacuate:true});
  Object.assign(EVENT_TYPES.siege,{group:3,enemy:'bandit',risk:3,evacuate:true});
@@ -201,8 +201,8 @@ const createWorldAtlas = (raw) => {
   }
   add(type,target,at,duration=0,extra={}){if(!EVENT_TYPES[type]||!eventTarget(target)||!Number.isFinite(at))return null;
    const settles={truce:['siege','occupation'],purified:['curse'],victory:['bandits','occupation','siege'],repair:['bridge','flood','landslide','avalanche','fire']};if(settles[type]&&!extra.expiry)for(const e of this.active(at))if(e.target===target&&settles[type].includes(e.type)&&(type!=='repair'||!extra.position||Math.hypot(extra.position.x-e.x,extra.position.y-e.y)<=40))this.resolve(e.id,at);
-   const duplicate=this.active(at).find(e=>e.type===type&&e.target===target&&(!roadById[target]||!extra.position||Math.hypot(e.x-extra.position.x,e.y-extra.position.y)<=40));if(duplicate&&!EVENT_TYPES[type].private)return duplicate;const route=roadById[target],site=byId[target],p=extra.position|| (route?atDistance(route,route.length*.5):site),serial=this.nextId++;
-   const e={id:'event-'+serial,serial,type,target,at,end:duration>0?at+duration:null,resolved:null,x:p.x,y:p.y,title:EVENT_TYPES[type].name,source:extra.source||'Voyageurs',detail:extra.detail||'',witnesses:Array.isArray(extra.witnesses)?[...new Set(extra.witnesses)]:[]};this.events.push(e);this.revision++;this.simulation?.publish(e);return e;
+   const duplicate=this.active(at).find(e=>e.type===type&&e.target===target&&(!extra.cargoId||e.cargoId===extra.cargoId)&&(!roadById[target]||!extra.position||Math.hypot(e.x-extra.position.x,e.y-extra.position.y)<=40));if(duplicate&&!EVENT_TYPES[type].private)return duplicate;const route=roadById[target],site=byId[target],p=extra.position|| (route?atDistance(route,route.length*.5):site),serial=this.nextId++;
+   const e={id:'event-'+serial,serial,type,target,at,end:duration>0?at+duration:null,resolved:null,x:p.x,y:p.y,title:EVENT_TYPES[type].name,source:extra.source||'Voyageurs',...(extra.cargoId?{cargoId:extra.cargoId}:{}),detail:extra.detail||'',witnesses:Array.isArray(extra.witnesses)?[...new Set(extra.witnesses)]:[]};this.events.push(e);this.revision++;this.simulation?.publish(e);return e;
   }
   resolve(id,at){const e=this.events.find(e=>e.id===id);if(e&&e.resolved===null&&Number.isFinite(at)&&at>=e.at){e.resolved=at;this.revision++;this.simulation?.publish(e);return true;}return false;}
   active(clock=this.clock){if(this._activeClock!==clock||this._activeRevision!==this.revision){this._activeClock=clock;this._activeRevision=this.revision;this._activeEvents=this.events.filter(e=>e.at<=clock&&(e.resolved===null||e.resolved>clock)&&(e.end===null||e.end>clock));}return this._activeEvents;}

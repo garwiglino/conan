@@ -100,12 +100,12 @@ Le jeu embarqué attache `world-simulation.js` à `WorldState`. Son avance rempl
 | Famille | Fonctionnement intégré | Limite actuelle |
 | --- | --- | --- |
 | Économie | Stocks persistants, consommation, intrants, achats et prix locaux ; pénurie quand les réserves alimentaires ou l’eau manquent | Cohortes économiques réduites et paramètres encore à équilibrer ; pas d’ateliers physiques complets |
-| Convois | Réservation des biens, argent, convoyeurs et escortes ; livraison unique puis retour ; acteurs physiques proches | Pas de pillage/récupération complète, bataille navale ou résolution des combats hors écran |
-| Sécurité | Patrouilles financées sous autorité locale ; embuscades liées à un trafic réel et un réseau admissible | Tournées entre relais incomplètes ; rançon et péage pas encore jouables |
+| Convois | Réservation des biens, argent, convoyeurs et escortes ; livraison unique puis retour ; acteurs physiques proches | Prises de cargaisons et récupération financée intégrées ; pas de bataille navale ou de simulateur général de guerre hors écran |
+| Sécurité | Patrouilles financées sous autorité locale ; embuscades liées à un trafic réel et un réseau admissible | Aller et retour sur le graphe, péages réels ; grandes tournées et rançons encore absentes |
 | Terrain | Crues sous forte pluie et réouverture après décrue ; chantiers pour dégâts de pont, éboulement, avalanche ou incendie enregistrés | Tous les types de dégâts n’ont pas encore leur propre déclencheur causal |
 | Justice | Témoins et dépositions, recherche locale, reddition, sanctions financières et détention temporaires | Vol, contrebande et autres procédures de la bible incomplets |
 | Vie locale | Conversations, voyageurs, fuite, repli, retour, blessures et décès persistants ; relève de service | Peuplement complet, besoins et relations durables de chaque habitant à compléter |
-| Météo | Pluie, neige et brouillard locaux selon le climat ; information et effets sur risques et besoins | Les anciens événements calendaires de sécheresse ou tempête maritime ne sont plus générés par cette branche |
+| Météo | Pluie, neige et brouillard locaux selon le climat ; information et effets sur risques et besoins | Tempêtes maritimes issues du climat ; sécheresses et autres conséquences encore partielles |
 | Conflits et malédictions | Le registre et le combat savent traiter certains incidents déjà enregistrés ; libération du temple conservée | Pas de diplomatie opérationnelle, de sièges périodiques ou de quête distribuée de purification |
 
 Fêtes, successions, disparitions et guerres ne sont plus inventées par le calendrier historique. Les 17 règles de la bible définissent des conditions de conception ; elles ne sont pas toutes activées dans le moteur.

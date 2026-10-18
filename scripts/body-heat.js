@@ -35,12 +35,17 @@ const BodyHeat=(()=>{
  }
  const warmthOf=g=>clamp(Math.round(g.outfitWarmth?.()??0),0,3);
 
+ Game.prototype.hearthAt=function(actor=this.player,ignite=false){
+  const w=Atlas.toWorld(actor.x,actor.y),site=Atlas.nearestSite(w.x,w.y),sim=this.worldState.simulation;
+  if(Math.hypot(site.x-w.x,site.y-w.y)<=80)return sim?.systems.hearth(site.id,this.clock)||false;
+  const fire=this.supplies.campfire;if(fire&&fire.until>this.clock&&(fire.remaining??240)>0&&Math.hypot(actor.x-fire.x,actor.y-fire.y)<HEARTH_REACH)return true;
+  if(ignite&&actor===this.player&&(this.supplies.firewood||0)>=1){this.supplies.firewood--;this.supplies.campfire={x:actor.x,y:actor.y,until:this.clock+240,remaining:240};return true;}return false;
+ };
+ Game.prototype.burnCampfire=function(minutes){const fire=this.supplies.campfire;if(fire&&fire.until>this.clock&&Math.hypot(this.player.x-fire.x,this.player.y-fire.y)<HEARTH_REACH){fire.remaining=Math.max(0,(fire.remaining??Math.min(240,fire.until-this.clock))-minutes);if(fire.remaining===0)fire.until=this.clock;}};
  Game.prototype.bodyShelter=function(){
-  if(this.bodyHeatRest||this.sleeping)return 'hearth';
-  if(this.journey){const s=this.journey.plan?.stages?.[this.journey.index];return s?.kind==='rest'?'hearth':s?.kind==='wait'?'village':null;}
-  const p=this.player;if(p.level)return null;if(this.restTent())return 'hearth';
-  for(const list of [this.atlasProps||[],this.world?.props||[]])for(const o of list)if(o.rest&&Math.abs(o.x-p.x)<HEARTH_REACH&&Math.abs(o.y-p.y)<HEARTH_REACH)return 'hearth';
-  if(!this.atlas)return null;const w=Atlas.toWorld(p.x,p.y);return Atlas.siteAt(w.x,w.y)?.rest?'village':null;
+  const p=this.player;if(p.level)return null;
+  const j=this.journey,s=j?.plan?.stages?.[j.index],resting=this.bodyHeatRest||this.sleeping||s?.kind==='rest'||this.restTent()||[...(this.atlasProps||[]),...(this.world?.props||[])].some(o=>o.rest&&Math.abs(o.x-p.x)<HEARTH_REACH&&Math.abs(o.y-p.y)<HEARTH_REACH);
+  if(resting)return this.hearthAt(p,true)?'hearth':'village';if(s?.kind==='wait')return 'village';const w=Atlas.toWorld(p.x,p.y);return Atlas.siteAt(w.x,w.y)?.rest?'village':null;
  };
  // Kaldor's thermal state now: air and felt °C, comfort range, health bite
  // (HP per game minute) and hunger factor.
@@ -69,7 +74,7 @@ const BodyHeat=(()=>{
   if(!member||member.spirit)return null;const actor=this.partyActor(member.id);if(!actor)return null;
   const p=Atlas.toWorld(actor.x,actor.y),sky=worldClimateAt(this.clock,p.x,p.y),outfit=CIVILIAN_ART.outfits[actor.civilian?.appearance?.outfit];
   const warmth=member.coatWorn?3:outfit?.biome==='neige'?3:outfit?.biome==='tempere'?1:0;
-  const shared=this.journey&&member.status==='following'||this.sleeping&&this.nearCompanion(member),shelter=shared?this.bodyShelter():this.atlasProps.some(o=>o.rest&&dist(o,actor)<HEARTH_REACH)?'hearth':Atlas.siteAt(p.x,p.y)?.rest?'village':null;
+  const shared=this.journey&&member.status==='following'||this.sleeping&&this.nearCompanion(member),shelter=shared?this.bodyShelter():this.atlasProps.some(o=>o.rest&&dist(o,actor)<HEARTH_REACH)?(this.hearthAt(actor)?'hearth':'village'):Atlas.siteAt(p.x,p.y)?.rest?'village':null;
   const temperature=felt(sky,shelter);return {felt:temperature,warmth,...judge(temperature,warmth,shelter==='hearth'?Math.min(temperature,sky.temperature):temperature)};
  };
  Game.prototype.companionColdBite=function(member,minutes){const body=this.companionBodyHeat(member);if(!body||member.down)return;member.coldDose=(member.coldDose||0)+body.bite*minutes;const damage=Math.floor(member.coldDose);member.coldDose-=damage;if(damage){member.hp=Math.max(0,member.hp-damage);member.down=member.hp===0;}};
@@ -83,7 +88,7 @@ const BodyHeat=(()=>{
   if(!plan?.stages?.length)return null;
   const warmth=warmthOf(this);let clock=this.clock,minutes=0,hunger=0,min=Infinity,max=-Infinity,bite=0;
   for(const s of plan.stages){
-   const move=s.kind==='move',shelter=s.kind==='rest'?'hearth':s.kind==='wait'?'village':null;
+   const move=s.kind==='move',site=!move&&Atlas.nearestSite(s.x,s.y),fuel=site&&this.worldState.simulation?.stock(this.worldState.simulation.state.sites[site.id],'firewood')>0||this.supplies.firewood>0,shelter=s.kind==='rest'?(fuel?'hearth':'village'):s.kind==='wait'?'village':null;
    for(const u of move?[0,.5,1]:[.5]){
     const x=move?s.from[0]+(s.to[0]-s.from[0])*u:s.x,y=move?s.from[1]+(s.to[1]-s.from[1])*u:s.y,sky=worldClimateAt(clock+s.minutes*u,x,y),f=felt(sky,shelter),heat=shelter==='hearth'?Math.min(f,sky.temperature):f,j=judge(f,warmth,heat);
     min=Math.min(min,f);max=Math.max(max,heat);bite=Math.max(bite,j.bite);if(u===.5)hunger+=s.minutes*j.hunger;

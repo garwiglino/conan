@@ -43,8 +43,7 @@ Une ancienne sauvegarde sans participants reste suspendue jusqu’à observation
 
 Le passage maritime utilise encore le transport abstrait et un bateau provisoire,
 pas une simulation de bataille navale. Les visuels réemploient les humains,
-gardes, charrettes et bateaux existants. Le pillage jouable, la récupération d'un
-convoi abandonné restent à compléter. Le retour des escortes survivantes est intégré.
+gardes, charrettes et bateaux existants. Les bandes prélèvent les biens réellement laissés sans défense ; les équipes financées peuvent récupérer les marchandises restantes. Le règlement exige un signalement de perte. Le pillage général et les rançons restent à construire. Voir [les règles de campagne](campagne-causale.md).
 Le moteur ne crée pas de bataille navale ou d’adversaires inconnus hors écran.
 
 ## Retour des escortes isolées

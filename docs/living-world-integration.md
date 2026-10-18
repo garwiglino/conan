@@ -64,8 +64,7 @@ par `world-simulation.test.cjs`, et non seulement par les tests historiques.
 1. Les convois économiques ont désormais leurs propres convoyeurs et escortes
    physiques, distincts des marchands ordinaires. Les premiers tests de liaison
    passent, ainsi que les transitions et la recette navigateur. La récupération
-   des cargaisons abandonnées reste
-   à compléter ; les combats déjà observés se résolvent hors écran avec pertes persistantes (voir `world-justice.md`).
+   des cargaisons abandonnées est raccordée aux équipes financées et aux trajets ; les combats déjà observés se résolvent hors écran avec pertes persistantes (voir `world-justice.md`).
 2. Les gardes chargés reviennent physiquement au poste ; aucun effectif engagé
    ne redevient disponible pendant le combat. Les tournées entre plusieurs relais
    et les batailles générales hors écran restent à construire.
@@ -74,9 +73,9 @@ par `world-simulation.test.cjs`, et non seulement par les tests historiques.
    guerre, occupation ou alliance militaire ne doit être inventée par calendrier.
 4. Une justice locale avec preuves, arrestation et sanctions temporaires est
    désormais intégrée ; ses limites et celles des convois sont consignées dans
-   `docs/world-justice.md`. Le vol et les autres procédures restent à compléter.
-5. Péages, vol de cargaisons, rançon et négociation ne sont pas encore des objectifs
-   économiques jouables des brigands.
+   `docs/world-justice.md`. Le vol général d’objets, la contrebande et les autres procédures restent à compléter ; les prises de cargaisons sont maintenant comptabilisées.
+5. Les péages et prises de cargaisons financent désormais une caisse et un dépôt réels.
+   Les rançons et la négociation politique restent à construire.
 6. Le transport du joueur sépare désormais conseil fondé sur les nouvelles
    reçues et interception réelle au passage ; les tempêtes suspendent les routes maritimes.
 7. Les courriers et voyageurs batraciens gardent certaines routines distinctes ;
@@ -106,3 +105,5 @@ Compiler les deux variantes avec `node scripts/embed-world.cjs`.
 Les tests historiques qui ajoutaient un incident au milieu d'une longue route
 pour arrêter son premier segment ont été précisés : l'incident est maintenant
 placé sur le segment réellement testé. Il ne ferme plus toute la route par magie.
+
+Mise à jour suivante : [Personnes, institutions et échanges de la campagne](campagne-causale.md) décrit les gardes nommés, trajets de patrouilles, combustible, outils, butin, contrats et population vivante.

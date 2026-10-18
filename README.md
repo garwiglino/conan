@@ -4,7 +4,7 @@ Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile
 
 Le héros est **Kaldor « the Flamebearer »**. Dans la version jouable actuelle, il commence au Campement des Exilés avec la fée ; Elyne, à proximité, rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. La prison de test a été retirée.
 
-[État réel du jeu : fonctionnalités intégrées, ressources disponibles et limites](docs/etat-du-jeu.md). [Registre des corrections de cohérence et vérifications](docs/corrections-coherence.md).
+[État réel du jeu : fonctionnalités intégrées, ressources disponibles et limites](docs/etat-du-jeu.md). [Registre des corrections de cohérence et vérifications](docs/corrections-coherence.md). [Personnes, patrouilles, combustible et échanges causaux](docs/campagne-causale.md).
 
 Le bouton **Monde** ou la touche **G** ouvre la carte : Igea, Teremor et Sarak constituent un seul continent, Varan et Tagon deux îles plus petites. La carte Azgaar est resserrée au vingtième (72 × 48 km) : chaque région forme un pays habité, relié à ses voisins par une route d’environ 15 à 30 minutes de marche, et des frontières naturelles ferment le reste. Le terrain à une tuile par mètre est chargé autour du joueur ; les 83 localités sont pour cette première passe des relais de test. Itinéraires, voyages par cheval/charrette/bateau, provisions, lieux stables et chronique des nouvelles connues par chaque PNJ sont intégrés. [Fonctionnement, événements et limites de cette première passe](docs/world.md).
 

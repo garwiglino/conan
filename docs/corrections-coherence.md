@@ -50,7 +50,7 @@ La prévision d’absence rejoue désormais le moteur de voyage sur une copie is
 
 ## Contenu restant à construire
 
-Les corrections ci-dessus ne construisent pas les quartiers et intérieurs des 83 villes, le peuplement physique complet des six espèces, des métiers dont chaque geste produit un lot, la diplomatie opérationnelle, les péages négociables, le pillage, les rançons et la récupération complète des convois abandonnés. Les tournées de garde entre plusieurs relais et les batailles navales restent également hors de cette implémentation. Ces éléments restent des chantiers de contenu et de systèmes ; ils ne sont pas annoncés comme terminés.
+Les corrections ci-dessus ne construisent pas les quartiers et intérieurs des 83 villes, le peuplement physique complet des six espèces, des métiers dont chaque geste produit un lot, la diplomatie opérationnelle, le marchandage libre, le pillage général de tous les objets et les rançons. Les péages de bandes, prises de cargaisons et récupérations financées sont désormais intégrés. Les tournées de garde entre plusieurs relais et les batailles navales restent également hors de cette implémentation. Ces éléments restent des chantiers de contenu et de systèmes ; ils ne sont pas annoncés comme terminés.
 
 ## Recette reproductible
 
@@ -70,6 +70,12 @@ Résultat de la recette du 18 octobre 2026 : **403 tests JavaScript réussis**, 
 
 ## Correction suivante : escortes privées de convoyeurs
 
-Le retour des gardes survivants d’un convoi abandonné est désormais raccordé au trajet physique et économique, sans déplacement du chariot abandonné. Les gardes ne se libèrent qu’au poste ; leurs blessures, les passages fermés et la sauvegarde sont pris en compte. Les convois sans aucun survivant cessent d’occuper une place active. La récupération des marchandises reste un chantier distinct. Voir les [règles de retour](world-justice.md#retour-des-escortes-isolées).
+Le retour des gardes survivants d’un convoi abandonné est désormais raccordé au trajet physique et économique, sans déplacement du chariot abandonné. Les gardes ne se libèrent qu’au poste ; leurs blessures, les passages fermés et la sauvegarde sont pris en compte. Les convois sans aucun survivant cessent d’occuper une place active. La récupération des marchandises est raccordée dans la passe suivante décrite ci-dessous. Voir les [règles de retour](world-justice.md#retour-des-escortes-isolées).
 
 Validation de cette correction : **47 tests ciblés réussis** (économie, campagne, personnages et convois), dont six nouveaux cas de retour d’escortes, et recette Chromium avec déplacement réel des gardes et chariot immobile, sans erreur JavaScript. L’archive iOS a été régénérée et vérifiée.
+
+## Huit incohérences de fonctionnement suivantes
+
+Les huit points du nouvel audit sont raccordés dans les sources : identité et santé entre affectations, trajets réels des patrouilles, combustible des feux, effet des outils sur les rendements, caisse et butin des bandes, règlement déclaré et récupération des contrats, retrait des menaces vers leur base, et population vivante liée aux besoins et revenus. Les règles, coûts et limites sont consignés dans [la campagne causale](campagne-causale.md). Les limites de contenu antérieures à ces huit raccordements ne doivent pas être utilisées comme état actualisé de ces fonctions.
+
+Validation des huit corrections : **426 tests JavaScript réussis**, dont 17 nouveaux cas sur ces systèmes, **24 tests de bible réussis**, compilation déterministe sans avertissement, recettes Chromium des convois et habitants sans erreur JavaScript et **120 contrôles d’interface paysage réussis**. L’intégration HTML est idempotente, les contenus de jeu web et iOS correspondent et l’archive native contient le HTML vérifié. La recette iOS sur appareil reste distincte de ces contrôles.

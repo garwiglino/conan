@@ -70,7 +70,7 @@ Game.prototype.advanceNeeds=function(minutes){
   if((this.needs.autoEat||this.journey)&&this.needs.satiety<50)this.eatRation('kaldor',true);
   const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/(100*hunger));
   if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hungryMinutes/180));}else this.needs.starved=0;
-  this.coldBite?.(step,body);if(this.dying)break;
+  this.coldBite?.(step,body);this.burnCampfire?.(step);if(this.dying)break;
   for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger,heat=this.companionBodyHeat?.(c)?.hunger??1;c.hunger=Math.min(100,c.hunger+step*heat*100/FULL_MEAL_MINUTES);this.companionColdBite?.(c,step);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/(100*heat))/180);c.down=c.hp<=0;}}
  }
 };

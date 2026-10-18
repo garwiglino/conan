@@ -180,7 +180,7 @@ const Batraciens = (() => {
  Game.prototype.adoptBatracienIncidents=function(){
   collectRecords(this);const activeEvents=new Map(this.worldState.active(this.clock).map(e=>[e.id,e]));
   for(const n of [...this.npcs.filter(n=>n.eventGuard),...this.enemies.filter(e=>e.eventId&&!e.dead)]){
-   if(n.batracien)continue;const event=activeEvents.get(n.eventId);if(!event)continue;
+   if(n.batracien||n.campaignGroup)continue;const event=activeEvents.get(n.eventId);if(!event)continue;
    const point=Atlas.toWorld(n.x,n.y),cell=Atlas.cellAt(point.x,point.y);
    const site=Atlas.byId[event.target]||Atlas.nearestSite(event.x,event.y);
    const territory=site?.territory||Atlas.raw.regions.find(r=>r.id===(site?.region||cell?.region))?.territory;

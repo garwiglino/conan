@@ -104,3 +104,7 @@ ses haltes, le feu d'une halte et le répit après le retour d'Avar, la faim plu
 rapide sans perte de santé dans la chaleur (au plus ×4), le climat et les
 rations du panneau de voyage, les avertissements, le HUD et la ligne *Climat*
 de l'inventaire.
+
+## Combustible réel
+
+Un foyer doit brûler du bois du poste pour réchauffer. Sans combustible, la tente ou le couvert protège du vent mais ne procure plus gratuitement la chaleur du feu. Le bois de bivouac s’achète près d’un transporteur ; un lot porté alimente quatre heures de feu, décomptées aussi pendant le repos accéléré et conservées dans la sauvegarde. Voir les [règles de campagne](campagne-causale.md#chaleur-et-combustible).

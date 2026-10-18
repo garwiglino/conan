@@ -65,8 +65,8 @@ test('a journey through the cold leaves Kaldor at 1 HP, never dead, and says why
  const {Game}=await load();const g=wild(new Game());weather(g,-25);
  g.journey={plan:{stages:[{kind:'move',minutes:600}]},index:0,elapsed:0};g.supplies.food=99;
  g.advanceNeeds(600);assert.equal(g.player.hp,1);assert.equal(g.dying,null);
- // A rest stage sleeps by the fire.
- g.player.hp=5;g.journey.plan.stages[0]={kind:'rest',minutes:600};g._bodyHeat=null;assert.equal(g.bodyShelter(),'hearth');g.advanceNeeds(600);assert.equal(g.player.hp,5);
+ // A rest stage needs enough carried wood to keep its fire burning.
+ g.supplies.firewood=3;g.player.hp=5;g.journey.plan.stages[0]={kind:'rest',minutes:600};g._bodyHeat=null;assert.equal(g.bodyShelter(),'hearth');g.advanceNeeds(600);assert.equal(g.player.hp,5);
 });
 
 test('the fire of a halt and Avar’s return keep the cold away for a while',async()=>{

@@ -70,5 +70,5 @@
  const restore=Game.prototype.finishAtlasRestore;
  Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);this.syncWorldConvoys();};
  const props=Renderer.prototype.visibleAtlasProps;
- Renderer.prototype.visibleAtlasProps=function(){const result=props.call(this),s=simulation(this.g);for(const c of s?.state.shipments.filter(c=>c.abandoned||live(c))||[]){const p=c.abandonedPosition?Atlas.toGame(c.abandonedPosition.x,c.abandonedPosition.y):this.g.convoyPosition(c);if(dist(p,this.g.player)<1200&&(!c.delivered||s.cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)))result.push({...p,y:p.y-10,kind:c.path[c.leg]?.mode==='boat'?'transport_boat_side':'transport_cart',world:true,convoyId:c.id});}return result;};
+ Renderer.prototype.visibleAtlasProps=function(){const result=props.call(this),s=simulation(this.g);for(const c of s?.state.shipments.filter(c=>c.abandoned&&!c.recovered||live(c))||[]){const p=c.abandonedPosition?Atlas.toGame(c.abandonedPosition.x,c.abandonedPosition.y):this.g.convoyPosition(c);if(dist(p,this.g.player)<1200&&(!c.delivered||s.cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)))result.push({...p,y:p.y-10,kind:c.path[c.leg]?.mode==='boat'?'transport_boat_side':'transport_cart',world:true,convoyId:c.id});}return result;};
 })();

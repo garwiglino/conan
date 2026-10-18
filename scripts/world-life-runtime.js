@@ -43,7 +43,7 @@
  const ready=Game.prototype.currentTransport;
  Game.prototype.currentTransport=function(){const s=ready.call(this);return s&&!s.actor.civilian?.critical&&!s.actor.civilian?.dead&&(!s.actor.reliefPost||dist(s.actor,s.actor.reliefPost)<8)?s:null;};
  const advance=Game.prototype.advanceAtlas;
- Game.prototype.advanceAtlas=function(dt=0){for(const m of sim(this)?.state.missions||[]){const guards=this.npcs.filter(n=>n.eventId===m.event&&!n.guardState?.dead);m.physical=guards.some(n=>dist(n,this.player)<1500);m.engaged=guards.some(n=>n.wind>0||n.attack>0||this.humanGuardTarget(n,this.ensureHumanGuard(n)));}advance.call(this,dt);const s=sim(this);if(!s)return;
+ Game.prototype.advanceAtlas=function(dt=0){for(const m of sim(this)?.state.missions||[]){if(m.path)continue;const guards=this.npcs.filter(n=>n.eventId===m.event&&!n.guardState?.dead);m.physical=guards.some(n=>dist(n,this.player)<1500);m.engaged=guards.some(n=>n.wind>0||n.attack>0||this.humanGuardTarget(n,this.ensureHumanGuard(n)));}advance.call(this,dt);const s=sim(this);if(!s)return;
   for(const n of this.npcs){const c=n.civilian;if(!c?.critical)continue;
    const station=this.stations.find(st=>st.actor===n&&!st.originalActor);const careSite=n.site||Atlas.nearestSite(...Object.values(Atlas.toWorld(n.x,n.y))).id;s.requestCare(careSite,n.id);
    if(station&&this.clock>=(c.injuredAt??this.clock)+360){const replacement=this.npcs.find(a=>a!==n&&a.site===station.site&&a.resident&&!a.reliefPost&&!a.batracien?.role&&!a.civilian?.dead&&!a.civilian?.critical&&!a.dangerState&&!this.party.some(p=>p.id===a.id));if(replacement)this.assignWorldRelief(station,replacement);}

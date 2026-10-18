@@ -4,6 +4,7 @@
 const WorldDialogue=(()=>{
  'use strict';
  const reports={
+  cargo_loss:'un chargement a été perdu. Le poste a reçu un signalement.',
   crime_scene:'des morts ont été découverts. Les gens cherchent encore ce qui s’est passé.',
   massacre:'plusieurs personnes ont été tuées. La garde a été prévenue ; les nouvelles sont encore incomplètes.',
   bandits:'des brigands arrêtent les voyageurs. Je ne partirais pas seul.',

@@ -28,7 +28,7 @@
   const scene=j.death({victim:n.id,site,x:w.x,y:w.y,level:n.level||0,at:this.clock});if(!scene)return;
   // A missing worker is not replaced at reload, and losses lower actual capacity.
   const s=this.worldState.simulation?.state.sites[n.site||n.batracien?.site];if(s&&(n.resident||n.batracien&&!n.eventId)){
-   s.losses||={};if(!s.losses[n.id]){s.losses[n.id]={at:this.clock};if(!n.batracien?.role){const living=Math.max(1,s.population-Object.keys(s.losses).length+1);s.workers=Math.max(0,s.workers-1);for(const key of Object.keys(s.needs))s.needs[key]*=(living-1)/living;}else{s.guardPool=Math.max(0,s.guardPool-1);s.guardAvailable=Math.min(s.guardAvailable,s.guardPool);}}
+   this.worldState.simulation.systems.death(s.id,n.id,{role:n.batracien?.role?'guard':'worker'});
   }
   this.worldState.simulation?.history('violent_death',{person:n.id,site,scene:scene.id});
  };
