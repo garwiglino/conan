@@ -14,7 +14,7 @@ function titleLoadGame(){
  catch{$('menuStatus').textContent='Cette sauvegarde ne peut pas être chargée.';}
 }
 function syncTitleOptions(){
- syncTextSettings();
+ syncTextSettings();$('optionsBack').hidden=state==='menu';
  for(const [id,on]of [['musicToggle',sound.musicOn],['sfxToggle',sound.sfxOn],['uiSoundsToggle',sound.uiSoundsOn],['hapticsToggle',haptics.enabled]]){const b=$(id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'Activés':'Désactivés';}
  $('musicToggle').textContent=sound.musicOn?'Activée':'Désactivée';$('hapticsToggle').textContent=haptics.enabled?'Activées':'Désactivées';$('hapticsHint').textContent=haptics.available?'Retours discrets pour les actions importantes.':'Vibrations indisponibles dans cette version de l’app ou ce navigateur.';
  for(const [id,value]of [['musicVolume',sound.musicVolume],['sfxVolume',sound.sfxVolume],['environmentVolume',sound.environmentVolume]]){const n=Math.round(value*100),el=$(id);if(document.activeElement!==el)el.value=n;$(id+'Value').value=n+' %';el.style.setProperty('--level',n+'%');}

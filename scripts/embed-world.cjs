@@ -32,7 +32,7 @@ once("'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle avent
 const uiCSS='/* BEGIN LANDSCAPE DESIGN */\n'+read('scripts/landscape-ui.css')+'\n/* END LANDSCAPE DESIGN */';
 html=html.replace(/\/\* BEGIN LANDSCAPE DESIGN \*\/[\s\S]*?\/\* END LANDSCAPE DESIGN \*\/\s*/,'');
 html=html.replace('</style>',()=>uiCSS+'\n</style>');
-const uiCode='// BEGIN LANDSCAPE DESIGN\n'+read('scripts/landscape-ui.js')+'\n// END LANDSCAPE DESIGN';
+const uiCode='// BEGIN LANDSCAPE DESIGN\n'+read('scripts/landscape-ui.js')+'\n'+read('scripts/interaction-ui.js')+'\n// END LANDSCAPE DESIGN';
 html=html.includes('// BEGIN LANDSCAPE DESIGN')?html.replace(/\/\/ BEGIN LANDSCAPE DESIGN[\s\S]*?\/\/ END LANDSCAPE DESIGN/,()=>uiCode):html.replace('// app.js',()=>uiCode+'\n// app.js');
 html=html.replace(/(?:installWorldUI\(\);|installLandscapeUI\(\);)+(?=refreshTitleMenu\(\);)/, 'installWorldUI();installLandscapeUI();');
 fs.writeFileSync(path.join(root,'index.html'),html);

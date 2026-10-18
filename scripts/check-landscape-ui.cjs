@@ -14,7 +14,7 @@ const {chromium}=require('playwright'),root=path.resolve(__dirname,'..');
  const page=await browser.newPage({viewport:{width:844,height:390},hasTouch:true,deviceScaleFactor:1}),errors=[],results=[];
  page.on('pageerror',e=>errors.push(String(e)));
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>globalThis.ui&&ui.BITMAPS.ready);
- await page.evaluate(()=>{ui.studioIntro.skip();ui.studioIntro.update(2);ui.game.update=()=>{};});await page.waitForTimeout(450);
+ await page.evaluate(()=>{ui.studioIntro.skip();ui.studioIntro.update(2);ui.game.player.spawnFX=0;ui.game.update=()=>{};});await page.waitForTimeout(450);
  async function check(name,selectors,shot=false){
   await page.waitForTimeout(50);
   const report=await page.evaluate(selectors=>{
@@ -41,7 +41,7 @@ const {chromium}=require('playwright'),root=path.resolve(__dirname,'..');
   await page.click('#inventoryTab1');await page.click('[data-ward-open]');await check(prefix+'-wardrobe',['#menuResume','[data-ward-back]','[data-turn="-1"]','[data-turn="1"]'],shot);
   await page.click('#btnHelp');await check(prefix+'-help',['#menuResume','#menuBody summary'],shot);
   await page.click('#btnQuests');await check(prefix+'-journal',['#menuResume'],shot);
-  await page.click('#btnOptions');await check(prefix+'-settings-game',['#menuResume','#optionsBack','#optionsHome'],shot);await page.click('#menuResume');
+  await page.click('#btnOptions');await check(prefix+'-settings-game',['#menuResume','#optionsHome'],shot);await page.click('#menuResume');
   await page.evaluate(()=>ui.openWorldPanel());await check(prefix+'-map',['#worldClose','#worldTrack','#worldNearestTransport','#worldZoomIn','#worldZoomOut'],shot);await page.click('#worldClose');
   await page.evaluate(()=>ui.openPartyPanel());await check(prefix+'-party',['#partyClose'],shot);await page.click('#partyClose');
   await page.evaluate(()=>{const g=ui.game,s=g.stations.find(s=>s.site==='camp');Object.assign(g.player,{x:s.actor.x,y:s.actor.y+14,coins:9999});for(const c of g.party){const a=g.partyActor(c.id);if(a)Object.assign(a,{x:g.player.x+5,y:g.player.y+5,level:0});c.status='following';c.down=false;c.hp=c.maxHp||10;}g.prepareTransport(s.id);ui.openTransportPanel();});
