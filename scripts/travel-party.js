@@ -2,6 +2,7 @@
 const FULL_MEAL_MINUTES=2160,RATION_ENERGY=50;
 const travelNumber=(v,fallback,max=100)=>Number.isFinite(v)?clamp(v,0,max):fallback;
 Game.prototype.initTravelParty=function(saved){
+ this.formerCompanions=saved.formerCompanions&&typeof saved.formerCompanions==='object'?JSON.parse(JSON.stringify(saved.formerCompanions)):{};
  this.needs={satiety:travelNumber(saved.needs?.satiety,100),autoEat:saved.needs?.autoEat!==false,starved:travelNumber(saved.needs?.starved,0,100000),dehydrated:travelNumber(saved.needs?.dehydrated,0,100000)};
  this.mapPlaces=Atlas.nodes.map(n=>({...n,siteId:n.id,category:'places'}));
  this.transportSession=null;this.pendingTransport=null;this.stations=[];
@@ -10,7 +11,7 @@ Game.prototype.initTravelParty=function(saved){
  if(this.story.recruited)this.party.push(Object.assign(this.companion,{id:'elyne',name:'Elyne',permanent:false,maxHp:10}));
  for(const entry of (Array.isArray(saved.party)?saved.party:[]).slice(0,12)){
   if(['fairy','elyne'].includes(entry?.id))continue;const actor=this.npcs.find(n=>n.id===entry.id);if(!actor)continue;
-  const c={id:actor.id,name:actor.title||actor.label,permanent:!!entry.permanent,status:entry.status==='waiting'?'waiting':'following',hp:travelNumber(entry.hp,10,10),maxHp:10,hunger:travelNumber(entry.hunger,0),down:!!entry.down};
+  const c={id:actor.id,name:actor.title||actor.label,permanent:!!entry.permanent,status:entry.status==='waiting'?'waiting':'following',hp:travelNumber(entry.hp,10,10),maxHp:travelNumber(entry.maxHp,10,10)||10,hunger:travelNumber(entry.hunger,0),down:!!entry.down,coatOwned:!!entry.coatOwned,coatWorn:!!entry.coatWorn,coldDose:travelNumber(entry.coldDose,0,1000)};
   if(Number.isFinite(entry.x)&&Number.isFinite(entry.y))Object.assign(actor,{x:entry.x,y:entry.y});this.party.push(c);
  }
  // Every departure has a local person, visible equipment and a graph endpoint.
@@ -38,9 +39,10 @@ Game.prototype.finishTravelRestore=function(saved){
  if(!this.story.recruited&&!saved?.atlas?.party){this.escortActor.x=START.x+36;this.escortActor.y=START.y;}
 };
 Game.prototype.recruitCompanion=function(actor,{permanent=false}={}){
- if(!actor||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
- const member=actor.id==='elyne'?this.companion:{hp:10,hunger:0,down:false};
- actor.alpha=1;actor.phase='post';Object.assign(member,{id:actor.id,name:actor.title||actor.label,permanent,maxHp:10,status:'following'});this.party.push(member);
+ if(!actor||actor.civilian?.critical||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
+ const prior=this.formerCompanions[actor.id],maximum=prior?.maxHp||6,health=Number.isFinite(actor.civilian?.hp)?actor.civilian.hp/6*maximum:maximum;
+ const member=actor.id==='elyne'?this.companion:{...prior,hp:Math.min(prior?.hp??health,health),maxHp:maximum,hunger:prior?.hunger??0,down:health<=0};
+ const job=this.couriers?.find(c=>c.id===actor.id);if(job&&!job.returnTo)job.returnTo={x:actor.x,y:actor.y};actor.alpha=1;actor.phase='post';Object.assign(member,{id:actor.id,name:actor.title||actor.label,permanent,maxHp:actor.id==='elyne'?10:member.maxHp,status:'following'});this.party.push(member);
  if(actor.id==='elyne')this.story.recruited=true;this.emit('notice',{title:'Compagnon de voyage',text:member.name+' rejoint le groupe.'});this.emit('save');return true;
 };
 const travelTalk=Game.prototype.talkTo;
@@ -57,7 +59,7 @@ Game.prototype.eatRation=function(id='kaldor',quiet=false){
 Game.prototype.feedCompanion=function(id='elyne'){return this.eatRation(id);};
 Game.prototype.healCompanion=function(id='elyne'){const c=this.party.find(n=>n.id===id);if(!c||c.spirit||!this.nearCompanion(c)||c.hp>=c.maxHp||this.player.flasks<1)return false;this.player.flasks--;c.hp=c.maxHp;c.down=false;this.emit('save');return true;};
 Game.prototype.setCompanionWaiting=function(id,wait){const c=this.party.find(n=>n.id===id);if(!c||c.spirit||!this.nearCompanion(c)||this.journey)return false;c.status=wait?'waiting':'following';this.footprints=[];this.emit('save');return true;};
-Game.prototype.dismissCompanion=function(id){const c=this.party.find(n=>n.id===id);if(!c||c.permanent||!this.nearCompanion(c)||this.journey)return false;this.party=this.party.filter(n=>n!==c);if(id==='elyne')this.story.recruited=false;this.emit('save');return true;};
+Game.prototype.dismissCompanion=function(id){const c=this.party.find(n=>n.id===id);if(!c||c.permanent||c.down||!this.nearCompanion(c)||this.journey)return false;const n=this.partyActor(id);this.formerCompanions[id]={hp:c.hp,maxHp:c.maxHp,hunger:c.hunger,down:c.down,coatOwned:c.coatOwned,coatWorn:c.coatWorn,coldDose:c.coldDose};if(n?.civilian)n.civilian.hp=c.hp/c.maxHp*6;this.party=this.party.filter(n=>n!==c);if(id==='elyne')this.story.recruited=false;this.emit('save');return true;};
 Game.prototype.advanceNeeds=function(minutes){
  if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;
  // Small deterministic slices preserve the same meal schedule through sleep/travel.
@@ -69,7 +71,7 @@ Game.prototype.advanceNeeds=function(minutes){
   const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/(100*hunger));
   if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hungryMinutes/180));}else this.needs.starved=0;
   this.coldBite?.(step,body);if(this.dying)break;
-  for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger;c.hunger=Math.min(100,c.hunger+step*100/FULL_MEAL_MINUTES);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/100)/180);c.down=c.hp<=0;}}
+  for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger,heat=this.companionBodyHeat?.(c)?.hunger??1;c.hunger=Math.min(100,c.hunger+step*heat*100/FULL_MEAL_MINUTES);this.companionColdBite?.(c,step);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/(100*heat))/180);c.down=c.hp<=0;}}
  }
 };
 Game.prototype.journeyNeeds=function(plan){

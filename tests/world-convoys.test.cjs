@@ -42,9 +42,17 @@ test('sea embarkation unloads foot actors and landing restores only the survivin
  c.path=[{edge:sea.id,road:sea.roads[0],from:sea.a,to:sea.b,length:sea.length,mode:'boat'}];c.leg=0;c.progress=0;g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,0,'no carrier walks across the sea');assert.equal(s.cargoUnits(c).find(u=>u.id===guard.id).hp,0);
  c.path=land;c.leg=0;c.progress=0;delete c.localPosition;const p=g.convoyPosition(c);Object.assign(g.player,{x:p.x+100,y:p.y});g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,3);assert.equal(g.convoyActors(c).some(n=>n.id===guard.id),false);
 });
-test('walking away or saving during an ambush cannot turn a suspended fight into a delivered shipment',()=>{
- const {g,s,c}=stage(),p=g.convoyPosition(c);g.enemies=[{id:'ambusher',x:p.x+60,y:p.y,level:0,world:true,hp:5}];g.stepWorldConvoys(.04);assert.equal(c.encounter,true);const before=c.progress;
- Object.assign(g.player,{x:p.x+3000,y:p.y});g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,0);g.clock+=60;g.worldState.clock=g.clock;g.syncWorldConvoys();assert.equal(c.progress,before);assert.equal(c.delivered,false);
- const copy=new a.Atlas.WorldState(JSON.parse(JSON.stringify(g.worldState.serialize()))),saved=copy.simulation.state.shipments.find(x=>x.id===c.id);copy.advance(copy.clock+600);assert.equal(saved.progress,before);assert.equal(saved.delivered,false);
- g.enemies=[];Object.assign(g.player,{x:p.x+100,y:p.y});g.syncWorldConvoys();g.stepWorldConvoys(.04);assert.ok(c.progress>before);assert.equal(c.encounter,undefined);
+test('off-screen combat persists its participants and resolves with wounds before a shipment resumes',()=>{
+ const {g,s,c}=stage(),p=g.convoyPosition(c);g.enemies=[{id:'ambusher',x:p.x+60,y:p.y,level:0,world:true,hp:5,damage:1}];g.stepWorldConvoys(.04);assert.equal(c.encounter,true);const before=c.progress;
+ Object.assign(g.player,{x:p.x+3000,y:p.y});g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,0);assert.ok(c.encounterState);g.clock+=.1;g.worldState.clock=g.clock;g.syncWorldConvoys();assert.equal(c.progress,before);assert.equal(c.delivered,false);
+ const copy=new a.Atlas.WorldState(JSON.parse(JSON.stringify(g.worldState.serialize()))),saved=copy.simulation.state.shipments.find(x=>x.id===c.id);copy.advance(copy.clock+600);assert.equal(copy.simulation.state.hostiles.ambusher.hp,0);assert.equal(saved.encounter,undefined);assert.ok(copy.simulation.cargoUnits(saved).some(u=>u.role==='guard'&&u.hp<8));assert.ok(saved.delivered);
+});
+test('three nearby shipments all retain physical crews instead of freezing at a display cap',()=>{
+ const {g,s,c,from,to}=stage();from.stock.cloth=200;from.stock.provisions=200;from.treasury=200;to.treasury=200;from.workers=20;from.guardAvailable=20;
+ const extra=[s.addShipment(from.id,to.id,'cloth',10),s.addShipment(from.id,to.id,'cloth',10)];assert.ok(extra.every(Boolean));g.syncWorldConvoys();
+ for(const cargo of [c,...extra])assert.equal(g.convoyActors(cargo).length,4);assert.equal(new Set(g.npcs.filter(n=>n.convoyId).map(n=>n.id)).size,12);
+});
+test('saving a visible fight records its actual participants before any unload',()=>{
+ const {g,c}=stage(),p=g.convoyPosition(c);g.enemies=[{id:'saved-ambusher',x:p.x+60,y:p.y,level:0,world:true,hp:5,damage:1}];
+ const saved=JSON.parse(JSON.stringify(g.serialize())).atlas.world.simulation.shipments.find(x=>x.id===c.id);assert.equal(saved.encounter,true);assert.deepEqual(saved.encounterState.foes,['saved-ambusher']);
 });

@@ -15,7 +15,7 @@ Sources : `index.html`, `scripts/world-model.js`, `scripts/world-runtime.js`, `s
 
 Une journée du calendrier dure **3 600 secondes réelles, soit 60 minutes**, en exploration normale. Une minute du calendrier vaut 2,5 secondes réelles. La marche nominale est de 67 px/s, soit environ 4,19 m/s ; un kilomètre demande environ quatre minutes réelles. Le voyage organisé et le sommeil font avancer le calendrier plus vite.
 
-Faim, eau, fatigue, soins, nourriture des compagnons et choix de tenue sont intégrés. Faim et déshydratation peuvent réduire la santé de Kaldor avec un plancher de 1 PV ; fatigue et déshydratation ralentissent sa marche. Le froid peut le tuer à pied ; en transport organisé il conserve au moins 1 PV. Une tenue trop chaude accélère la faim. Les compagnons peuvent tomber à terre ; la fée reste invulnérable et sans besoins alimentaires. Les effets thermiques ne sont pas encore appliqués aux compagnons.
+Faim, eau, fatigue, soins, nourriture des compagnons et choix de tenue sont intégrés. Faim et déshydratation peuvent réduire la santé de Kaldor avec un plancher de 1 PV ; fatigue et déshydratation ralentissent sa marche. Le froid peut le tuer à pied ; en transport organisé il conserve au moins 1 PV. Une tenue trop chaude accélère la faim. Les compagnons peuvent tomber à terre ; la fée reste invulnérable et sans besoins alimentaires. Les compagnons matériels subissent aussi le froid et la faim liée à une tenue trop chaude ; le panneau permet de leur acheter un manteau réel (2 lots de tissu et 4 pièces au relais).
 
 Cheval, charrette et bateau exigent un transporteur proche et disponible. Les itinéraires suivent le graphe, les modes autorisés et les fermetures locales. Les réserves insuffisantes sont signalées mais ne bloquent pas seules le départ. Le voyage continue pendant une absence d'onglet ou d'application, puis laisse le jeu en pause à l'arrêt ; les notifications dépendent du navigateur, de l'autorisation et du relais natif installé.
 
@@ -25,7 +25,7 @@ Sources : `scripts/world-pacing.js`, `scripts/travel-party.js`, `scripts/world-l
 
 Le jeu embarqué attache `world-simulation.js` à son état mondial. Il utilise des stocks persistants, consommation, capacités de production, intrants de recettes, réserves, trésorerie et personnel disponible. La population économique est une cohorte de campagne réduite ; les 5 450 000 habitants de la bible restent des effectifs de conception.
 
-Les achats débitent les réserves locales. Les expéditions réservent biens, paiement, convoyeurs, escortes et provisions ; la livraison transfère les marchandises une seule fois. Les survivants doivent revenir avant de redevenir disponibles. Près du joueur, les convois ont des acteurs physiques et un chariot provisoire ; blessures, morts et progression sont conservées entre chargement local et déplacement lointain.
+Les achats débitent les réserves locales et créditent la trésorerie du vendeur. Les médicaments et intrants manquants font l’objet de commandes ; les quais partagent le compte de leur port. Les expéditions réservent biens, paiement, convoyeurs, escortes et provisions ; la livraison transfère les marchandises une seule fois. Les survivants doivent revenir avant de redevenir disponibles. Près du joueur, les convois ont des acteurs physiques et un chariot provisoire ; blessures, morts et progression sont conservées entre chargement local et déplacement lointain.
 
 Les pénuries suivent les réserves ; les patrouilles demandent un mandat local et des moyens ; des embuscades peuvent viser un trafic réel sous les conditions du modèle. Les crues suivent la pluie et la décrue. Un pont endommagé, un éboulement, une avalanche ou des dégâts d'incendie déjà enregistrés nécessitent un chantier financé et approvisionné. Cela ne signifie pas que tous ces incidents disposent déjà d'un déclencheur causal autonome.
 
@@ -53,11 +53,13 @@ Les hommes-singes disposent des deux silhouettes, cinq pelages, quatre vues et d
 
 - Pas de diplomatie opérationnelle complète, de guerre ou d'alliance militaire décidée par les acteurs politiques.
 - Pas de peuplement physique complet des six espèces, de villes entièrement bâties ou d'ateliers dont chaque geste produit un bien réel.
-- Pas de bataille navale, de résolution automatique des combats hors écran, de pillage jouable ni de récupération complète des cargaisons abandonnées. Un convoi engagé hors écran peut rester bloqué jusqu'au retour du joueur.
-- Départ et retour géographiques des patrouilles entre plusieurs relais encore incomplets. Vol, rançon, contrebande et ensemble des procédures de la bible restent à développer.
-- Les décisions de transport du joueur utilisent encore l'état global des incidents, au-delà de ce que le transporteur sait effectivement.
+- Pas de bataille navale, de pillage jouable ni de récupération complète des cargaisons abandonnées. Les combats de convois dont les participants ont été observés continuent hors écran avec pertes persistantes ; un ancien combat sauvegardé sans participants attend encore une observation.
+- Les tournées de patrouilles entre plusieurs relais restent incomplètes ; les gardes chargés reviennent à pied avant leur remise à disposition. Vol, rançon, contrebande et ensemble des procédures de la bible restent à développer.
+- Les conseils et refus au départ dépendent des nouvelles reçues par le transporteur ; l’interception en route utilise la réalité du passage effectivement abordé. Les tempêtes maritimes suspendent les traversées.
 - Les événements et connaissances persistants ne sont plus limités aux 512 derniers événements ; le journal discuté reste limité à 120 entrées et le journal technique économique à 1 000. L'archivage des très longues campagnes reste à prévoir.
 
 ## Vérifications disponibles
 
 Les suites de tests décrivent leurs garanties respectives, sans constituer une recette exhaustive sur appareil : `world-simulation.test.cjs`, `world-life-runtime.test.cjs`, `world-convoys.test.cjs`, `world-justice*.test.cjs`, `world-society.test.cjs`, ainsi que les suites de voyage, climat et combat. Les scripts `check-world-society.cjs` et `check-world-convoys.cjs` servent aux recettes navigateur. Les tests de bible et son contrôle déterministe vérifient les données de conception ; leur réussite ne valide pas toutes les fonctionnalités jouables.
+
+Le registre détaillé des corrections et de leurs limites figure dans [Corrections de cohérence](corrections-coherence.md).

@@ -45,7 +45,8 @@ test('bandit incidents can target civilians with real combat; occupations do not
 test('spoken reports remain limited to learned facts, keep uncertainty and omit technical scores',()=>{
  const g=game(),[n]=pair(g),A=a.Atlas,road=A.roads.find(r=>r.type==='roads'),event=g.worldState.add('bandits',road.id,g.clock,0,{source:'Garde des routes'});Object.assign(n,A.toGame(event.x,event.y));
  const lines=g.atlasNews(n).join(' ');assert.match(lines,/brigands/);assert.doesNotMatch(lines,/Source :|jour \d|\/5|danger \d|Situation terminée/);
- assert.doesNotMatch(g.npcDirections(n).join(' '),/\/5|danger \d/);g.clock+=1500;assert.match(g.atlasNews(n).join(' '),/ça date/);
+ assert.doesNotMatch(g.npcDirections(n).join(' '),/\/5|danger \d/);g.clock+=1500;assert.doesNotMatch(g.atlasNews(n).join(' '),/ça date/,'a current observation confirms the old incident');
+ Object.assign(n,A.toGame(event.x+2000,event.y+2000));g.clock+=1500;assert.match(g.atlasNews(n).join(' '),/ça date/,'a distant old report still needs confirmation');
  const other=g.npcs.find(v=>v.id==='elyne');g.worldState.add('injury','camp',g.clock,0,{witnesses:[other.id]});assert.ok(!g.atlasNews(n).join(' ').includes('blessure demande'));
 });
 test('ambient bubbles render in the world and disappear during a player conversation',()=>{

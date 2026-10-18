@@ -186,14 +186,14 @@ const Batraciens = (() => {
    const territory=site?.territory||Atlas.raw.regions.find(r=>r.id===(site?.region||cell?.region))?.territory;
    if(!C.allowedBiomes.includes(cell?.biome)||!['Varan','Tagon','Teremor'].includes(territory)||Atlas.curseCells.has(cell?.id))continue;
    if(n.eventGuard){if(event.type!=='patrol'||hash(n.id+':species')%3===0)continue;}
-   else if(!C.hostileEvents.includes(event.type)||n.kind!=='cultist')continue;
+   else if(!C.hostileEvents.includes(event.type)||!['cultist','bandit'].includes(n.kind))continue;
    // Existing bandits remain the incident authority. Equipment is independent of species/pigment.
    const slot=Number(n.id.match(/-(\d+)$/)?.[1]||0),roles=['raider','scout',hash(event.id)%2?'boat_escort':'captain'];
    let role=n.eventGuard?(hash(n.id)%4===0?'captain':hash(n.id)%2?'scout':'channel_sentinel'):roles[slot%roles.length];
    const rec=this.batracienCombatRecords[n.id];if(rec&&roles.includes(rec.role)&&!n.eventGuard)role=rec.role;
    const look=appearance(n.id,'male',rec),b=n.batracien={...look,role,site:site?.id||null,action:'idle',elapsed:0,distance:0,seed:hash(n.id),lastX:n.x,lastY:n.y,cooldown:1,contactDone:false,inv:0};
    if(n.eventGuard){b.comboIndex=Number.isInteger(rec?.comboIndex)?clampN(rec.comboIndex,0,2):0;b.hp=finite(rec?.hp)?clampN(rec.hp,0,C.combat[role].hp):C.combat[role].hp;b.dead=b.hp===0;n.post={x:n.x,y:n.y};n.name=n.label=({village_guard:'GARDE',channel_sentinel:'SENTINELLE',boat_escort:'ESCORTE',scout:'ÉCLAIREUR',captain:'CHEF'})[role]||'GARDE';n.look='batracien';}
-   else {n.kind='batracien';n.originalKind='cultist';n.speed=24;n.reach=C.combat[role].range;n.r=6;n.damage=1;n.wind=n.attack=n.melee=0;n.homeX=n.x;n.homeY=n.y;n.maxHp=C.combat[role].hp;n.hp=clampN(finite(rec?.hp)?rec.hp:(this.incidentHealth?.[n.id]??n.maxHp),.1,n.maxHp);b.comboIndex=Number.isInteger(rec?.comboIndex)?clampN(rec.comboIndex,0,2):0;}
+   else {n.originalKind=n.kind;n.kind='batracien';n.speed=24;n.reach=C.combat[role].range;n.r=6;n.damage=1;n.wind=n.attack=n.melee=0;n.homeX=n.x;n.homeY=n.y;n.maxHp=C.combat[role].hp;n.hp=clampN(finite(rec?.hp)?rec.hp:(this.incidentHealth?.[n.id]??n.maxHp),.1,n.maxHp);b.comboIndex=Number.isInteger(rec?.comboIndex)?clampN(rec.comboIndex,0,2):0;}
    if(n.eventGuard)this.restoreBatracienRoutine?.(n,rec);
    if(rec&&Armed.isAttack(rec.action)&&finite(rec.elapsed)&&rec.elapsed>=0&&rec.elapsed<Armed.CLIPS[rec.action].duration/1000){b.action=rec.action;b.elapsed=rec.elapsed;b.contactDone=rec.contactDone===true;b.lockedDir=[0,1,2,3].includes(rec.lockedDir)?rec.lockedDir:n.dir;b.comboIndex=Number.isInteger(rec.comboIndex)?clampN(rec.comboIndex,0,2):0;b.chainCount=Number.isInteger(rec.chainCount)?clampN(rec.chainCount,1,3):1;b.attackSerial=Number.isInteger(rec.attackSerial)?clampN(rec.attackSerial,0,1000000):0;b.targetId=typeof rec.targetId==='string'&&rec.targetId.length<128?rec.targetId:null;}
   }

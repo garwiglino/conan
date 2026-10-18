@@ -8,18 +8,18 @@ Game.prototype.journeyScreenLeft=function(until=null){const j=this.journey;if(!j
   if(s.label!==label){if(label!==null)left+=Math.max(minutes/rate,JOURNEY_READ-read);label=s.label;minutes=0;read=i===j.index&&j.readLabel===label?j.readTime||0:0;}
   if(i===stop)return left+(minutes+Math.max(0,until.progress-from))/rate;minutes+=s.minutes-from;}
  return label===null?left:left+Math.max(minutes/rate,JOURNEY_READ-read);};
-// The stops stepJourney would make, checked on a copy of the world events: the event calendar only depends on the clock.
-Game.prototype.forecastJourney=function(){const j=this.journey;if(!j)return null;const stages=j.plan.stages,rate=j.plan.minutes/j.plan.screenSeconds,world=new Atlas.WorldState(this.worldState.serialize()),live=this.worldState,now=this.clock,at=(s,u)=>s.kind==='move'?{x:s.from[0]+(s.to[0]-s.from[0])*u,y:s.from[1]+(s.to[1]-s.from[1])*u}:s;
- let index=j.index,progress=j.progress,lastSafe=j.lastSafe,reason=null;world.weatherAt=live.weatherAt;
- try{this.worldState=world;for(let k=0;k<200000&&index<stages.length;k++){const s=stages[index],w=at(s,progress/s.minutes),land=Atlas.cellAt(w.x,w.y)?.land,site=Atlas.siteAt(w.x,w.y,15),sea=s.kind==='move'&&s.mode==='boat';
-   if(j.cancel&&(!sea&&land||site?.rest&&land)){reason='Voyage interrompu';break;}
-   if(this.journeyThreat(s)){reason='Le transport refuse un passage menacé';break;}
-   if(s.kind==='move'&&world.edgeStatus(Atlas.edgeById.get(s.edge),this.clock).closed&&(!sea||progress===0&&site?.rest&&land)){reason='Le passage vient de fermer';break;}
-   const step=Math.min(rate*JOURNEY_FRAME,60,s.minutes-progress);progress+=step;this.clock+=step;world.advance(this.clock,worldClimateAt);
-   const p=at(s,Math.min(1,progress/s.minutes)),end=Atlas.siteAt(p.x,p.y,10);if(end&&this.stations.some(station=>station.site===end.id))lastSafe=end.id;if(progress>=s.minutes-1e-7){index++;progress=0;}}}
- finally{this.worldState=live;this.clock=now;}
- const place=!reason&&this.stationLanding(j.plan.to)?Atlas.byId[j.plan.to]:this.journeySafeStation({...j,lastSafe});
- return {seconds:this.journeyScreenLeft(reason?{index,progress}:null),arrived:!reason,reason:reason||'Arrivée à destination',place:place?.name||''};};
+// Forecast with the same journey state machine as actual replay. A separate
+// Game owns every mutable record: advice, weather, discoveries, care orders and
+// phase boundaries must not diverge between prediction and arrival.
+Game.prototype.forecastJourney=function(){
+ const journey=this.journey;if(!journey)return null;
+ const copy=new Game(JSON.parse(JSON.stringify(this.serialize())));
+ copy.worldStore={readFor:()=>null,write:()=>{}};copy.clock=this.clock;copy.time=this.time;copy.elapsed=this.elapsed;copy.atlasLastClock=this.atlasLastClock;
+ copy.journey=JSON.parse(JSON.stringify(journey));delete copy.journey.away;delete copy.journey.arrival;delete copy.journey.outcome;copy.journeyReplay=true;copy.events=[];
+ let seconds=0;for(let i=0;copy.journey&&i<200000;i++){copy.stepJourney(JOURNEY_FRAME);seconds+=JOURNEY_FRAME;}
+ const result=copy.events.filter(e=>e.type==='notice').at(-1),reason=result?.title||'Voyage interrompu';
+ return {seconds,arrived:!copy.journey&&reason==='Arrivée à destination',reason,place:result?.text||''};
+};
 // Marks the first departure from the screen and returns what will happen, with its time (ms since epoch).
 Game.prototype.leaveJourney=function(now=Date.now()){const j=this.journey;if(!j)return null;if(!Number.isFinite(j.away)||!Number.isFinite(j.arrival)||!j.outcome){const f=this.forecastJourney();j.away=now;j.arrival=now+Math.ceil(f.seconds*1000);j.outcome={arrived:f.arrived,reason:f.reason,place:f.place};}
  return {at:j.arrival,...j.outcome};};

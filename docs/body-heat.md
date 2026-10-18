@@ -92,7 +92,7 @@ Les pertes dépendent du ressenti et de la santé restante. Pour éviter de conf
   plus rapide. Pendant le voyage, la ligne des repas affiche « Grand froid ·
   santé en baisse » ou « Tenue trop chaude · faim plus rapide ».
 
-Les compagnons ne sont pas concernés pour l'instant.
+Les compagnons matériels utilisent également le climat à leur position, leur tenue et leurs abris. Leur exposition au froid est persistante et peut les mettre à terre ; la chaleur excessive accélère leur faim. La fée reste exemptée. Dans le panneau Compagnons, acheter un manteau au relais consomme 2 lots de tissu du vendeur et 4 pièces, créditées à sa trésorerie ; le vêtement peut ensuite être porté ou retiré sans nouvel achat.
 
 ## Tests
 

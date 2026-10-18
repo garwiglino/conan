@@ -116,7 +116,7 @@ const BatracienSociety = (() => {
    if(r.wait>0){r.wait=Math.max(0,r.wait-minutes*DAY_LEN/1440);continue;}
    if(r.approach){stepRoad(this,n,Math.min(2,minutes*DAY_LEN/1440));continue;}
    const hour=((this.clock/60)%24+24)%24;if(hour<6||hour>=22)continue;
-   let budget=Math.min(6144,minutes*80*16),count=0;
+   let budget=Math.min(6144,minutes*WorldPacing.metresPerMinute(WorldPacing.civilianWalk)*16),count=0;
    while(budget>.01&&count++<128){const path=route(n.id,r.reverse),s=path?.segments[r.edge];if(!s)break;
     const amount=Math.min(48,budget,s.length-r.progress),p=roadPoint(path,r.edge,r.progress+amount);
     if(dist(p,this.player)<1000||!roadOpen(this,s,p))break;

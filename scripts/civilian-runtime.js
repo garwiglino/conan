@@ -16,8 +16,8 @@ Game.prototype.civilianAction=function(n,action,restart=false){const c=this.ensu
 Game.prototype.populateCivilians=function(saved){
  this.civilianRecords??=Object.create(null);this.civilianSites??=new Set();
  if(saved?.civilians?.version===1)for(const row of (Array.isArray(saved.civilians.people)?saved.civilians.people:[]).slice(0,1000))if(row&&typeof row.id==='string'&&/^(resident-|relay-|courier-|veilleur$|zahra$|elyne$)/.test(row.id))this.civilianRecords[row.id]=row;
- for(const site of Atlas.nodes.filter(n=>n.kind==='town'||n.id==='camp')){
-  const centre=Atlas.toGame(site.x,site.y);if(this.civilianSites.has(site.id))continue;
+ for(const site of Atlas.nodes.filter(n=>n.rest&&n.kind!=='dock')){
+  const centre=Atlas.toGame(site.x,site.y);if(this.civilianSites.has(site.id))continue;const observer=saved?.player||this.player;if(site.kind==='relay'&&dist(centre,observer)>1500&&!this.stations?.some(s=>s.site===site.id&&s.actor.civilian?.critical))continue;
   // Place only on real walkable settlement ground, away from enemies and doors.
   let made=0;
   for(let slot=0;slot<2;slot++){

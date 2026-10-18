@@ -181,9 +181,9 @@ const createWorldAtlas = (raw) => {
  };
  // Declarative incident policy shared by travel, local encounters and civilians.
  Object.assign(EVENT_TYPES,{crime_scene:{name:'Morts découvertes',category:'Vie locale'},massacre:{name:'Massacre signalé',category:'Vie locale',risk:1}});
- Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'cultist',evacuate:true,civilianPrey:true});
- Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'cultist',evacuate:true});
- Object.assign(EVENT_TYPES.siege,{group:3,enemy:'cultist',risk:3,evacuate:true});
+ Object.assign(EVENT_TYPES.bandits,{group:3,enemy:'bandit',evacuate:true,civilianPrey:true});
+ Object.assign(EVENT_TYPES.occupation,{group:3,enemy:'bandit',evacuate:true});
+ Object.assign(EVENT_TYPES.siege,{group:3,enemy:'bandit',risk:3,evacuate:true});
  Object.assign(EVENT_TYPES.curse,{group:2,enemy:'skeleton',evacuate:true});
  Object.assign(EVENT_TYPES.patrol,{group:2,guard:true});
  Object.assign(EVENT_TYPES.purified,{risk:-2});
@@ -250,7 +250,7 @@ const createWorldAtlas = (raw) => {
    }if(changed)this.revision++;return book;
   }
   share(from,to,clock){const source=this.knowledge[from]||{},dest=this.knowledge[to]||(this.knowledge[to]={});let changed=false;for(const [id,k]of Object.entries(source)){const e=this.events.find(e=>e.id===id);if(!e||EVENT_TYPES[e.type].private)continue;if(!dest[id]||k.resolved!==null&&dest[id].resolved===null){dest[id]={...k,heard:clock,source:'Voyageur de relais'};changed=true;}}if(changed)this.revision++;}
-  news(id,clock=this.clock){const book=this.knowledge[id]||{};return this.events.filter(e=>book[e.id]).sort((a,b)=>b.at-a.at).slice(0,8).map(e=>{const k=book[e.id],resolved=k.resolved!==null;return {id:e.id,type:e.type,target:e.target,title:e.title,text:(resolved?'Situation terminée : ':'')+e.title+' — '+eventTarget(e.target).name+'.'+(e.detail?' '+e.detail:''),source:k.source,at:e.at,heard:k.heard,resolved,uncertain:!resolved&&clock-k.at>1440};});}
+  news(id,clock=this.clock){const book=this.knowledge[id]||{},priority=e=>book[e.id].resolved===null&&(EVENT_TYPES[e.type].closed||EVENT_TYPES[e.type].group&&!EVENT_TYPES[e.type].guard)?1:0;return this.events.filter(e=>book[e.id]).sort((a,b)=>priority(b)-priority(a)||b.at-a.at).slice(0,8).map(e=>{const k=book[e.id],resolved=k.resolved!==null;return {id:e.id,type:e.type,target:e.target,x:e.x,y:e.y,edge:e.edge,radius:e.radius,title:e.title,text:(resolved?'Situation terminée : ':'')+e.title+' — '+eventTarget(e.target).name+'.'+(e.detail?' '+e.detail:''),source:k.source,at:e.at,heard:k.heard,resolved,uncertain:!resolved&&clock-(k.confirmed??k.heard)>1440};});}
   recordNews(id,clock=this.clock){for(const n of this.news(id,clock)){const key=n.id+':'+n.resolved;if(!this.journal.some(j=>j.key===key))this.journal.push({...n,key,npc:id});}this.journal=this.journal.slice(-120);this.revision++;}
   serialize(){return {schema:this.schema,campaign:this.campaign,revision:this.revision,clock:this.clock,events:this.events,knowledge:this.knowledge,journal:this.journal,lastHour:this.lastHour,nextId:this.nextId,...(this.simulation?{simulation:this.simulation.serialize()}: {}),...(this.justice?{justice:this.justice.serialize()}: {})};}
  }

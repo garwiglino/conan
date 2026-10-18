@@ -268,6 +268,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 #menuBody.player-overview .ward-info{grid-column:1/-1;max-height:76px;overflow:auto}
 #menuBody.player-overview .ward-pick{width:100%;overflow:visible}
 #menuBody.player-overview .ward-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
+#menuBody.player-overview .ward-tile span{overflow-wrap:anywhere}
 #menuBody.player-overview .ward-top{padding:0}
 #menuBody.player-overview{grid-template-columns:minmax(0,1fr) minmax(180px,.8fr);grid-template-rows:auto auto auto}
 #menuBody.player-overview [data-kind=character]{display:flex;gap:8px;align-items:center;padding:6px;min-height:76px}

@@ -31,7 +31,7 @@ const CIVILIAN_THREAT_RADIUS=180,CIVILIAN_SPAWN_MARGIN=220;
 Game.prototype.localThreatAt=function(x,y,level=0,radius=CIVILIAN_THREAT_RADIUS){
  return this.enemies.find(e=>!e.dead&&!e.friendly&&(e.kind!=='boss'||this.bossActive)&&(e.level||0)===level&&Math.hypot(e.x-x,e.y-y)<radius&&(radius<=48||this.lineClear({x,y,level},e)))||null;
 };
-Game.prototype.canPlaceHostile=function(pos){return !this.npcs.some(n=>!this.civilianProtected(n)&&(dist(n,pos)<CIVILIAN_SPAWN_MARGIN||n.post&&dist(n.post,pos)<CIVILIAN_SPAWN_MARGIN||n.dangerState&&dist(n.dangerState.post,pos)<CIVILIAN_SPAWN_MARGIN));};
+Game.prototype.canPlaceHostile=function(pos){return !this.npcs.some(n=>!n.civilian?.dead&&!n.batracien?.dead&&!n.guardState?.dead&&!this.civilianProtected(n)&&(dist(n,pos)<CIVILIAN_SPAWN_MARGIN||n.post&&dist(n.post,pos)<CIVILIAN_SPAWN_MARGIN||n.dangerState&&dist(n.dangerState.post,pos)<CIVILIAN_SPAWN_MARGIN));};
 Game.prototype.ensureDanger=function(){if(!this.danger||this.danger.game!==this)this.danger=new WorldDanger(this);this.worldState.weatherAt=worldClimateAt;return this.danger;};
 Game.prototype.dangerAt=function(x,y,level=0){return this.ensureDanger().atActor({x,y,level});};
 
@@ -152,20 +152,21 @@ Game.prototype.stepEventGroups=function(dt=0){
  this.enemies=this.enemies.filter(e=>!e.retiring||dist(e,this.player)<600&&(e.retireAge||0)<12);
  const guards=this.npcs.filter(n=>n.eventGuard);for(const n of guards)if(!active.has(n.eventId)){
   n.guardRetiring=true;this.cancelWorldConversation?.(n);
-  const state=this.ensureHumanGuard?.(n),fighting=state&&this.humanGuardTarget?.(n,state)||n.wind>0||n.attack>0;
-  if(fighting){n.alpha=1;continue;}
+  const mission=this.worldState.simulation?.state.missions.find(m=>m.event===n.eventId);if(mission?.status==='returned'){this.npcs=this.npcs.filter(a=>a!==n);continue;}const state=this.ensureHumanGuard?.(n),fighting=state&&this.humanGuardTarget?.(n,state)||n.wind>0||n.attack>0;
+  if(mission){mission.engaged=!!fighting;mission.physical=dist(n,this.player)<1500;}if(fighting){n.alpha=1;continue;}
+  if(mission&&dist(n,this.player)<1500){const home=Atlas.toGame(Atlas.byId[mission.site].x,Atlas.byId[mission.site].y),distance=dist(n,home);if(distance>20){const k=Math.min(1,256/distance);this.walkNpc(n,{x:n.x+(home.x-n.x)*k,y:n.y+(home.y-n.y)*k},dt);n.post={x:n.x,y:n.y};continue;}this.npcs=this.npcs.filter(a=>a!==n);mission.physical=this.npcs.some(a=>a.eventId===mission.event);continue;}
   if(dist(n,this.player)<300){const a=Math.atan2(n.y-this.player.y,n.x-this.player.x);this.walkNpc(n,{x:n.x+Math.cos(a)*48,y:n.y+Math.sin(a)*48},dt);n.post={x:n.x,y:n.y};continue;}
   n.alpha=Math.max(0,(n.alpha??1)-dt);if(n.alpha===0)this.npcs=this.npcs.filter(a=>a!==n);
  }
  if(field.groupRevision===this.worldState.revision&&field.groupMinute===Math.floor(this.clock)&&this.time-(field.groupTick||0)<1)return;
  field.groupRevision=this.worldState.revision;field.groupMinute=Math.floor(this.clock);field.groupTick=this.time;
- for(const event of field.events){const rule=Atlas.EVENT_TYPES[event.type],count=rule.group||0;if(!count)continue;const centre=Atlas.toGame(event.x,event.y);if(dist(centre,this.player)>1100)continue;
-  for(let i=0;i<count;i++){const id='incident-'+event.id+'-'+i;if(this.atlasDeaths[id]||this.enemies.some(e=>e.id===id)||this.npcs.some(n=>n.id===id))continue;
+ for(const event of field.events){const rule=Atlas.EVENT_TYPES[event.type],count=event.memberIds?.length??rule.group??0;if(!count)continue;const centre=Atlas.toGame(event.x,event.y);if(dist(centre,this.player)>1100)continue;
+  for(let i=0;i<count;i++){const id='incident-'+event.id+'-'+i;if(this.worldState.simulation?.state.hostiles[id]?.hp===0)this.atlasDeaths[id]=true;if(this.atlasDeaths[id]||this.enemies.some(e=>e.id===id)||this.npcs.some(n=>n.id===id))continue;
    if(rule.guard?this.npcs.filter(n=>n.eventGuard).length>=8:this.enemies.filter(e=>e.eventId&&!e.dead).length>=24)break;
    let pos;for(let j=0;j<24;j++){const angle=(i/count+j/24)*Math.PI*2,r=rule.guard?80+j*8:220+j*12,q=this.incidentRoadPosition?.(event,i,j)||{x:centre.x+Math.cos(angle)*r,y:centre.y+Math.sin(angle)*r};if(dist(q,this.player)>300&&!this.solid(q.x,q.y,7,0)&&(rule.guard||!this.inSafe(q.x,q.y)&&this.canPlaceHostile(q))){pos=q;break;}}
    if(!pos)continue;
    if(rule.guard)this.npcs.push({id,eventId:event.id,eventGuard:true,...pos,look:'nomade',dir:2,head:40,alpha:1,name:'LA GARDE',label:'GARDE',title:'Patrouille du relais',greet:()=>['Nous sécurisons ce passage.'],topics:()=>[],bye:()=>['Reste sur tes gardes.']});
-   else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id];Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}
+   else{const e=enemy(rule.enemy||'cultist',pos.x,pos.y,id),saved=this.incidentHealth?.[id]??this.worldState.simulation?.state.bands[event.bandKey]?.members.find(m=>m.id===event.memberIds?.[i])?.hp;Object.assign(e,{world:true,eventId:event.id});if(Number.isFinite(saved))e.hp=clamp(saved,.1,e.hp);this.enemies.push(e);}
   }
  }
 };
@@ -174,9 +175,9 @@ Game.prototype.brain=function(e,p,d,dt,sz){if(e.retiring){e.ai='return';e.wind=e
 const dangerEnemyDraw=Renderer.prototype.enemy;
 Renderer.prototype.enemy=function(e){this.c.save();if(e.retiring)this.c.globalAlpha*=clamp((12-(e.retireAge||0))/3,0,1);dangerEnemyDraw.call(this,e);this.c.restore();};
 Game.prototype.settleIncident=function(e){
- if(!e.eventId)return;this.incidentHealth??={};this.incidentHealth[e.id]=e.hp;
+ if(!e.eventId)return;const bandEvent=this.worldState.events.find(v=>v.id===e.eventId);this.worldState.simulation?.recordBandHealth(bandEvent,Number(e.id.split('-').at(-1)),e.hp);this.incidentHealth??={};this.incidentHealth[e.id]=e.hp;
  if(!e.dead)return;const event=this.worldState.events.find(v=>v.id===e.eventId),rule=event&&Atlas.EVENT_TYPES[event.type];
- if(rule&&!rule.guard&&this.worldState.active(this.clock).some(v=>v.id===event.id)&&Array.from({length:rule.group},(_,i)=>'incident-'+event.id+'-'+i).every(id=>this.atlasDeaths[id])){
+ if(rule&&!rule.guard&&this.worldState.active(this.clock).some(v=>v.id===event.id)&&Array.from({length:event.memberIds?.length??rule.group},(_,i)=>'incident-'+event.id+'-'+i).every(id=>this.atlasDeaths[id])){
   this.worldState.resolve(event.id,this.clock);this.worldState.add(event.type==='curse'?'purified':'victory',event.target,this.clock,1440,{source:'Témoins locaux',position:event,expiry:true});this.emit('notice',{title:'Passage sécurisé',text:'La menace locale est vaincue. Les habitants pourront revenir.'});
  }
 };
@@ -213,4 +214,12 @@ Game.prototype.finishAtlasRestore=function(saved){dangerRestore.call(this,saved)
   n.dangerState={mode:row.mode,post:{...row.post},shelter:{...row.shelter},clearAt:Number.isFinite(row.clearAt)&&row.clearAt<=this.clock?row.clearAt:null,blocked:0};Object.assign(n,{x:row.x,y:row.y,alpha:clamp(Number(row.alpha)||0,0,1)});
  }
  this.assessCivilians(true);
+};
+
+// Ordinary armed people use the existing human art and melee system; no jade spells.
+const mundaneEnemyBody=Renderer.prototype.enemyBody;
+Renderer.prototype.enemyBody=function(e){if(e.kind!=='bandit')return mundaneEnemyBody.call(this,e);
+ const c=this.c;c.save();this.shadow(e.x,e.y,12);if(this.g.targetId===e.id)this.targetRing(e.x,e.y,13);
+ this.characters.draw(c,'nomade',e,this.g.time);c.save();c.translate(Math.round(e.x),Math.round(e.y));greatsword(c,swordPose(e.dir,e.attack>0?attackFrame(e.attack):0,0));c.restore();
+ if(e.wind>0)text(c,'!',e.x-2,e.y-38,'#edb279');if(e.hp<e.maxHp){box(c,e.x-9,e.y-34,18,3,PAL.ink);box(c,e.x-8,e.y-33,Math.ceil(16*e.hp/e.maxHp),1,'#cda46d');}c.restore();
 };

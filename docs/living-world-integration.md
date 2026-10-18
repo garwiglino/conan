@@ -21,7 +21,7 @@ d'une simulation politique ou démographique complète.
   et circulation des nouvelles avec les cargaisons. Le moteur embarqué remplace
   les incidents tirés selon le modulo des dates par ces causes.
 - Un chargement réserve au départ ses marchandises, deux travailleurs et le
-  paiement en séquestre. Capacité de 80 lots par chargement, 24 convois en mouvement
+  paiement en séquestre. Capacité de 80 lots par chargement, 64 convois en mouvement
   au maximum. Livraison unique ; retour sur le graphe avant libération du personnel.
   Un retour bloqué ne rend ni les ouvriers ni les biens par téléportation.
 - Une pénurie provient des disponibilités alimentaires/eau, et sa fin exige un
@@ -64,11 +64,11 @@ par `world-simulation.test.cjs`, et non seulement par les tests historiques.
 1. Les convois économiques ont désormais leurs propres convoyeurs et escortes
    physiques, distincts des marchands ordinaires. Les premiers tests de liaison
    passent, ainsi que les transitions et la recette navigateur. La récupération
-   des cargaisons abandonnées et la résolution des combats hors écran restent
-   à compléter (voir `world-justice.md`).
-2. Le départ et le retour géographiques des patrouilles restent à raccorder :
-   les effectifs et mandats sont persistants, mais la ronde locale n'est pas une
-   tournée de plusieurs relais. Pas de bataille automatique hors écran.
+   des cargaisons abandonnées reste
+   à compléter ; les combats déjà observés se résolvent hors écran avec pertes persistantes (voir `world-justice.md`).
+2. Les gardes chargés reviennent physiquement au poste ; aucun effectif engagé
+   ne redevient disponible pendant le combat. Les tournées entre plusieurs relais
+   et les batailles générales hors écran restent à construire.
 3. Les relations et différends politiques de la bible sont chargés mais ne
    constituent pas encore des décisions diplomatiques opérationnelles. Aucune
    guerre, occupation ou alliance militaire ne doit être inventée par calendrier.
@@ -77,8 +77,8 @@ par `world-simulation.test.cjs`, et non seulement par les tests historiques.
    `docs/world-justice.md`. Le vol et les autres procédures restent à compléter.
 5. Péages, vol de cargaisons, rançon et négociation ne sont pas encore des objectifs
    économiques jouables des brigands.
-6. Le transport du joueur utilise encore la réalité globale pour ses choix et
-   refus : séparer conseil fondé sur les nouvelles connues et interception réelle.
+6. Le transport du joueur sépare désormais conseil fondé sur les nouvelles
+   reçues et interception réelle au passage ; les tempêtes suspendent les routes maritimes.
 7. Les courriers et voyageurs batraciens gardent certaines routines distinctes ;
    la progression hors écran des humains doit encore être testée au passage des
    fermetures historiques et sur une campagne fortement accélérée.

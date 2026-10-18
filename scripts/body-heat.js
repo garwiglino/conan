@@ -65,6 +65,18 @@ const BodyHeat=(()=>{
    if(p.hp<=0){p.hitX=0;this.die();if(this.dying)this.dying.cause='cold';}
   }
  };
+ Game.prototype.companionBodyHeat=function(member){
+  if(!member||member.spirit)return null;const actor=this.partyActor(member.id);if(!actor)return null;
+  const p=Atlas.toWorld(actor.x,actor.y),sky=worldClimateAt(this.clock,p.x,p.y),outfit=CIVILIAN_ART.outfits[actor.civilian?.appearance?.outfit];
+  const warmth=member.coatWorn?3:outfit?.biome==='neige'?3:outfit?.biome==='tempere'?1:0;
+  const shared=this.journey&&member.status==='following'||this.sleeping&&this.nearCompanion(member),shelter=shared?this.bodyShelter():this.atlasProps.some(o=>o.rest&&dist(o,actor)<HEARTH_REACH)?'hearth':Atlas.siteAt(p.x,p.y)?.rest?'village':null;
+  const temperature=felt(sky,shelter);return {felt:temperature,warmth,...judge(temperature,warmth,shelter==='hearth'?Math.min(temperature,sky.temperature):temperature)};
+ };
+ Game.prototype.companionColdBite=function(member,minutes){const body=this.companionBodyHeat(member);if(!body||member.down)return;member.coldDose=(member.coldDose||0)+body.bite*minutes;const damage=Math.floor(member.coldDose);member.coldDose-=damage;if(damage){member.hp=Math.max(0,member.hp-damage);member.down=member.hp===0;}};
+ Game.prototype.equipCompanionCoat=function(id){const member=this.party.find(c=>c.id===id);if(!member||member.spirit||!this.nearCompanion(member))return false;
+  if(member.coatOwned){member.coatWorn=!member.coatWorn;this.emit('save');return true;}
+  const site=this.worldState.simulation?.state.sites[this.atlasContext()?.id];if(!site||site.stock.cloth<2||this.player.coins<4){this.emit('notice',{title:'Manteau indisponible',text:'Il faut un relais disposant d’étoffes et quatre pièces.'});return false;}site.stock.cloth-=2;site.treasury+=4;this.player.coins-=4;member.coatOwned=member.coatWorn=true;this.emit('save');return true;
+ };
  // Felt range, health risk and hunger factor of a planned journey, sampled
  // along each stage at the hour Kaldor will be there.
  Game.prototype.journeyClimate=function(plan){

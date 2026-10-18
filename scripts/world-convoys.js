@@ -10,20 +10,21 @@
  Game.prototype.convoyPosition=function(c){const s=simulation(this),p=s.cargoPosition(c);return c.localPosition&&Number.isFinite(c.localPosition.x)&&Number.isFinite(c.localPosition.y)?{...c.localPosition}:Atlas.toGame(p.x,p.y);};
  Game.prototype.saveConvoyActors=function(c){const s=simulation(this);for(const n of this.convoyActors(c)){const u=s.cargoUnits(c).find(u=>u.id===n.id);if(!u)continue;s.damageCargoUnit(c,n.id,n.convoyGuard?n.guardState?.hp??u.hp:n.civilian?.hp??u.hp,n.guardState?.hostileUntil||0);Object.assign(u,{x:n.x,y:n.y,dir:n.dir});if(n.civilian)u.appearance={...n.civilian.appearance};}};
  Game.prototype.convoyInDanger=function(c){const actors=this.convoyActors(c),position=this.convoyPosition(c);return actors.some(n=>living(n)&&(n.wind||n.attack||n.hurt||n.dangerState||n.convoyGuard&&(this.isHostileHumanGuard(n)||this.humanGuardTarget(n,this.ensureHumanGuard(n)))))||this.enemies.some(e=>!e.dead&&e.world&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position));};
- Game.prototype.unloadConvoy=function(c){if(this.convoyInDanger(c))c.encounter=true;this.saveConvoyActors(c);this.npcs=this.npcs.filter(n=>n.convoyId!==c.id);this.atlasNpcs=this.atlasNpcs.filter(n=>n.convoyId!==c.id);simulation(this).controlCargo(c.id,false);};
+ Game.prototype.unloadConvoy=function(c){if(this.convoyInDanger(c)){c.encounter=true;const position=this.convoyPosition(c);simulation(this).beginCargoEncounter(c,this.enemies.filter(e=>e.world&&!e.dead&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position)));}this.saveConvoyActors(c);this.npcs=this.npcs.filter(n=>n.convoyId!==c.id);this.atlasNpcs=this.atlasNpcs.filter(n=>n.convoyId!==c.id);simulation(this).controlCargo(c.id,false);};
  Game.prototype.syncWorldConvoys=function(){
-  const s=simulation(this);if(!s)return;for(const c of s.state.shipments.filter(live))s.catchUpCargo(c,this.clock);const active=s.state.shipments.filter(live),loaded=new Set(this.npcs.filter(n=>n.convoyId).map(n=>n.convoyId));let count=loaded.size;
+  const s=simulation(this);if(!s)return;for(const e of this.enemies){const record=s.state.hostiles?.[e.id];if(record){e.hp=Math.min(e.hp,record.hp);if(e.hp<=0){e.dead=true;this.atlasDeaths[e.id]=true;}}}for(const c of s.state.shipments.filter(live))s.catchUpCargo(c,this.clock);const active=s.state.shipments.filter(live),loaded=new Set(this.npcs.filter(n=>n.convoyId).map(n=>n.convoyId));let count=loaded.size;
   for(const id of loaded){const c=s.state.shipments.find(c=>c.id===id);if(!c)continue;
    if(!live(c)||c.path[c.leg]?.mode==='boat'||this.journey||this.sleeping||dist(this.convoyPosition(c),this.player)>1500){this.unloadConvoy(c);count--;}
   }
   if(this.journey||this.sleeping)return;
   for(const c of active){const position=this.convoyPosition(c),leg=c.path[c.leg],distance=dist(position,this.player);
    if(distance>1100||leg?.mode==='boat')continue;
-   // Never let an invisible third caravan pass through the player while actor
-   // budget is occupied. It waits outside the active simulation instead.
-   s.controlCargo(c.id,true);if(this.npcs.some(n=>n.convoyId===c.id)||count>=2)continue;
+   // Every nearby land cargo is materialised. The simulation's global shipment
+   // cap bounds actors; a rendering budget must never freeze the economy.
+   if(this.npcs.some(n=>n.convoyId===c.id))continue;
+   s.controlCargo(c.id,true);
    const candidates=[[0,0],[16,0],[-16,0],[0,20],[24,20],[-24,20],[0,-20]];let centre;
-   for(const [x,y]of candidates){const p={x:position.x+x,y:position.y+y};if(!this.solid(p.x,p.y,6,0)){centre=p;break;}}if(!centre)continue;
+   for(const [x,y]of candidates){const p={x:position.x+x,y:position.y+y};if(!this.solid(p.x,p.y,6,0)){centre=p;break;}}if(!centre){s.controlCargo(c.id,false);continue;}
    c.localPosition={...centre};
    for(const [i,u]of s.cargoUnits(c).entries()){
     if(u.hp<=0||this.atlasDeaths[u.id])continue;const offset=u.role==='guard'?{x:i%2?30:-30,y:24}:{x:i?0:0,y:i?28:0},saved=Number.isFinite(u.x)&&Number.isFinite(u.y)&&dist(u,centre)<200&&!this.solid(u.x,u.y,5,0),p=saved?{x:u.x,y:u.y}:{x:centre.x+offset.x,y:centre.y+offset.y};
@@ -63,7 +64,7 @@
  const advance=Game.prototype.advanceAtlas;
  Game.prototype.advanceAtlas=function(dt=0){if(this.clock-(this.atlasLastClock??this.clock)>2)for(const c of simulation(this)?.state.shipments||[])if(this.npcs.some(n=>n.convoyId===c.id))this.unloadConvoy(c);return advance.call(this,dt);};
  const save=Game.prototype.serialize;
- Game.prototype.serialize=function(){for(const c of simulation(this)?.state.shipments||[])if(this.npcs.some(n=>n.convoyId===c.id)){if(this.convoyInDanger(c))c.encounter=true;this.saveConvoyActors(c);}return save.call(this);};
+ Game.prototype.serialize=function(){for(const c of simulation(this)?.state.shipments||[])if(this.npcs.some(n=>n.convoyId===c.id)){if(this.convoyInDanger(c)){c.encounter=true;const position=this.convoyPosition(c);simulation(this).beginCargoEncounter(c,this.enemies.filter(e=>e.world&&!e.dead&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position)));}this.saveConvoyActors(c);}return save.call(this);};
  const restore=Game.prototype.finishAtlasRestore;
  Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);this.syncWorldConvoys();};
  const props=Renderer.prototype.visibleAtlasProps;
