@@ -9849,8 +9849,8 @@ var KALDOR_OUTFITS={"version":2,"authoring":"Pixel grids + human NPC rig (node p
  * inventory. The Tenue screen of the inventory shows Kaldor and switches his
  * outfit and helmet among those he owns: he then pulls the garment over his
  * head (bridge 'dress' clip) or lifts the helmet onto it ('helm' clip).
- * Warmth (0 to 3) is stored per piece for the cold rules to come: it does not
- * change any gameplay yet. Saved as save.wardrobe {owned, worn, helmets, helmet}.
+ * Warmth (0 to 3) is stored per piece; body-heat.js weighs it against the felt
+ * temperature. Saved as save.wardrobe {owned, worn, helmets, helmet}.
  */
 const KaldorWardrobe=(()=>{
  'use strict';
@@ -9947,7 +9947,7 @@ const KaldorWardrobe=(()=>{
   w.helmet=id;this.player.dressing={t0:this.time,clip:'helm'};this.emit('save');
   return true;
  };
- // Read by the cold rules to come: outfit and helmet together, 0 none to 3
+ // Read by body-heat.js: outfit and helmet together, 0 none to 3
  // dressed for the great cold.
  Game.prototype.outfitWarmth=function(){
   return Math.min(3,(get(this.wardrobe?.worn)?.warmth??0)+(getHelmet(this.wardrobe?.helmet)?.warmth??0));

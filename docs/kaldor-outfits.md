@@ -89,8 +89,9 @@ casque ouvert, les mèches tombent sur les côtés et dans le dos. Vu de face,
 un casque fermé repose sur les épaules ; de dos, la crinière sort dessous.
 
 La **chaleur** (0 à 3) est enregistrée pour chaque pièce. `game.outfitWarmth()`
-additionne la tenue et le casque (au plus 3). Elle ne change encore aucune
-règle : elle est prête pour les effets du froid à venir.
+additionne la tenue et le casque (au plus 3). Face à la température ressentie,
+elle décide si Kaldor perd de la santé au froid ou si sa faim se creuse plus
+vite à la chaleur : voir [froid, chaleur et tenues](body-heat.md).
 
 ## En jeu
 
