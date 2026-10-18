@@ -29,3 +29,13 @@ Aucun PNG embarqué dans le module de personnage, aucun miroir ni rotation d’i
 ## Appuis et balancement de tête
 
 Révision après validation du rendu JavaScript : la tête suit un décalage vertical indépendant d’un pixel, répété à chaque demi-foulée, avec raccord de cou couvert. Les phases de lever des pieds ont été inversées : le pied posé pousse vers l’arrière par rapport à la direction regardée, puis revient vers l’avant en l’air. Les bras balancent en opposition aux jambes. Les dessins et la pose de repos canonique restent inchangés. Un cinquième test vérifie ce sens d’appui sur les deux profils, en marche et en course, ainsi que le mouvement indépendant de la tête.
+
+## Teintes et base féminine
+
+Cinq teintes naturelles (`brun`, `ebene`, `cendre`, `roux`, `sable`) sont disponibles pour les deux bases. Le matériau est stocké avec les pixels : fourrure, peau nue et cuir. Les palettes de peau et de pelage évoluent ensemble, tandis que le cuir et le contour restent stables. `paletteFor(tone)` retourne une palette réutilisable et mise en cache.
+
+`draw(ctx, {sex:'female', tone:'cendre', action:'walk', dir:'face', frame:0})` affiche la base féminine. Elle possède une couronne arrondie, un sourcil adouci, des épaules resserrées de face/dos et un bandeau de poitrine simple ; le museau, les grandes oreilles, les mains et les pieds restent ceux de la même espèce. Pas de maquillage ou de couleur imposée par le sexe. Le rig, les durées, la foulée et les ancrages sont identiques.
+
+`appearanceFor(id, {sex, tone})` peut produire une apparence stable depuis l’identifiant d’un PNJ, avec dérogations explicites. Cette fonction prépare l’intégration ; aucune population en jeu n’est encore ajoutée.
+
+`node scripts/preview-homme-singe-variants.cjs` génère la planche des dix combinaisons. L’atelier complet permet de changer corps et pelage pendant toutes les animations. Sept tests réussis, avec les 192 poses des deux bases, les dix rendus distincts, les matériaux et la stabilité des apparences. Les sélecteurs des dix combinaisons ont aussi été vérifiés dans le navigateur.

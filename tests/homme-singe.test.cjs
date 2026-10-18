@@ -30,3 +30,13 @@ test('profile stance pushes backward while the airborne foot returns forward, wi
   assert.ok(new Set(offsets).size>=2,'head has its own restrained bob');
  }
 });
+test('female poses retain connected pixels and share the validated anchors and gait',()=>{
+ for(const action of Object.keys(A.CLIPS))for(const dir of A.directions)for(let frame=0;frame<A.CLIPS[action].durations.length;frame++){
+  const r=A.renderLayers(action,dir,frame,'female'),points=r.order.flatMap(n=>r.layers[n]),set=new Set(points.map(([x,y])=>x+','+y));for(const [x,y,k]of points)assert.ok(x>=0&&x<48&&y>=0&&y<=36&&A.PALETTE[k]);
+  const q=[set.values().next().value];set.delete(q[0]);for(let i=0;i<q.length;i++){const [x,y]=q[i].split(',').map(Number);for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){const key=[x+dx,y+dy].join(',');if(set.delete(key))q.push(key);}}assert.equal(set.size,0,action+'/'+dir+'/'+frame);
+ }
+});
+test('five material-aware tones preserve leather and outlines; seeded appearances stay stable',()=>{
+ const rendered=new Set();for(const tone of Object.keys(A.TONES))for(const sex of ['male','female']){const cv=createCanvas(48,48),c=cv.getContext('2d');A.draw(c,{tone,sex});rendered.add(cv.toDataURL());const colors=A.paletteFor(tone);assert.equal(colors.O,A.PALETTE.O);assert.equal(colors.cloth,A.PALETTE);}
+ assert.equal(rendered.size,10);for(const id of ['ape-1','ape-2','guard-7'])assert.deepEqual(A.appearanceFor(id),A.appearanceFor(id));assert.deepEqual(A.appearanceFor('ape-1',{sex:'female',tone:'cendre'}),{sex:'female',tone:'cendre'});
+});
