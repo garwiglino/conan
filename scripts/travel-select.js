@@ -16,6 +16,12 @@ function syncTravelSelect(id){
  ui.button.setAttribute('aria-label',ui.label+' : '+(option?.textContent||'Aucune destination')+(group?.tagName==='OPTGROUP'?' — '+group.label:''));
  ui.button.disabled=ui.select.disabled||!ui.select.options.length;
 }
+function focusTravelOption(ui,target){
+ if(!target)return;target.focus({preventScroll:true});
+ const item=target.getBoundingClientRect(),list=ui.list.getBoundingClientRect();
+ if(item.top<list.top)ui.list.scrollTop+=item.top-list.top;
+ else if(item.bottom>list.bottom)ui.list.scrollTop+=item.bottom-list.bottom;
+}
 function openTravelSelect(ui){
  if(ui.button.disabled)return;if(travelSelectOpen===ui){closeTravelSelect(true);return;}closeTravelSelect();
  ui.list.replaceChildren();
@@ -28,7 +34,7 @@ function openTravelSelect(ui){
   }
  }
  ui.list.hidden=false;ui.button.setAttribute('aria-expanded','true');travelSelectOpen=ui;
- const target=ui.list.querySelector('[aria-selected="true"]:not(:disabled)')||ui.list.querySelector('button:not(:disabled)');target?.focus();target?.scrollIntoView?.({block:'nearest'});
+ const target=ui.list.querySelector('[aria-selected="true"]:not(:disabled)')||ui.list.querySelector('button:not(:disabled)');focusTravelOption(ui,target);
 }
 function travelSelectKeydown(e){
  const ui=travelSelectOpen||[...travelSelects.values()].find(n=>n.button===document.activeElement);if(!ui)return false;
@@ -40,7 +46,7 @@ function travelSelectKeydown(e){
  if(e.key==='ArrowDown')next=(current+1)%options.length;
  if(e.key==='ArrowUp')next=(current-1+options.length)%options.length;
  if(e.key==='Home')next=0;if(e.key==='End')next=options.length-1;
- if(next<0)return false;e.preventDefault();e.stopImmediatePropagation();options[next]?.focus();options[next]?.scrollIntoView?.({block:'nearest'});return true;
+ if(next<0)return false;e.preventDefault();e.stopImmediatePropagation();focusTravelOption(ui,options[next]);return true;
 }
 function installTravelSelects(){
  for(const [id,label]of [['transportDestination','Destination'],['transportMode','Transport'],['transportPreference','Itinéraire']]){

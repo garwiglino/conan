@@ -1,0 +1,223 @@
+/* Codex / ChatGPT — one bronze/parchment system, composed for phone landscape.
+   Variables include text scale explicitly; installTextScaling must not scale twice. */
+:root{--ui-ink:#f1e3bd;--ui-muted:#c0af90;--ui-accent:#e5bf67;--ui-line:#856239;--ui-surface:#211a14;--ui-inset:#15110e;--ui-reading:calc(13px * var(--text-scale,1));--ui-note:calc(11px * var(--text-scale,1));--ui-heading:calc(21px * var(--text-scale,1));--ui-section:calc(14px * var(--text-scale,1));--ui-touch:44px;--ui-gap:10px}
+button,input,select,summary{touch-action:manipulation}button,select,input{max-width:100%}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--ui-accent);outline-offset:2px}
+.menu,.world-panel,.world-journey,.title-options{color:var(--ui-ink);font-size:var(--ui-reading);line-height:1.4}
+.menu-body,#menuSettings,.world-side,.party-layout,.transport-body,.transport-help-body,.journey-vitals,.ward-pick{overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--ui-line) var(--ui-inset);scroll-padding:8px;overflow-x:hidden}
+.menu-box,.world-panel,.journey-shell,.title-options{min-width:0;min-height:0}
+.world-panel{border-color:var(--ui-line);background:var(--ui-surface)}
+.world-panel h2,#transportPanel h2,#transportHelp h2,.journey-shell h2,#menuTitle,.title-options h2{font-size:var(--ui-heading);color:var(--ui-accent);line-height:1.15}
+.world-panel p,.world-panel label,.world-panel button,.world-panel select,.world-panel ol,.world-panel .world-stats,#transportPanel p,#transportPanel button,#transportPanel .world-stats,#transportPanel .travel-select-trigger,#transportPanel .travel-select-option,.journey-member,#worldJourneyStep,.journey-shell footer button,.transport-help-body{font-size:var(--ui-reading)}
+.world-panel small,#transportPanel header small,.world-muted,.settings-note,.party-list small,.journey-member span,.journey-resources p,#worldJourneyHint,#worldJourneyClock,#worldProgressText{font-size:var(--ui-note);color:var(--ui-muted);letter-spacing:.2px}
+.world-panel button,.world-panel select,.world-journey button,#menu .inv-act,#menu .q-track,.qp-actions button{min-height:var(--ui-touch);line-height:1.25}
+.world-panel header{flex:none;padding:8px 12px;border-color:var(--ui-line)}
+.world-panel header>div{min-width:0;flex:1}.world-panel header h2{overflow-wrap:anywhere}
+.world-panel header button{flex:none;max-width:40%;white-space:normal}
+.world-panel .world-actions{gap:8px}.world-panel .world-actions button{white-space:normal;min-width:0}
+.world-panel summary{min-height:var(--ui-touch);padding:10px 2px;cursor:pointer;color:var(--ui-accent)}
+.world-check{min-height:var(--ui-touch)}input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--ui-accent)}
+/* Settings: independent cards; the footer never disappears into their scroll. */
+#titleOptions{width:min(1020px,100%);padding:12px;display:flex;flex-direction:column;overflow:hidden;text-align:left;border-image:var(--ui-panel) var(--ui-panel-s) fill/12px/2px stretch}
+#titleOptions h2{margin:0 0 10px;text-align:left;font-family:PixelUI,monospace}
+.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;min-height:0;overflow:auto;padding:2px 4px 6px;touch-action:pan-y}
+.settings-card{min-width:0;margin:0;padding:10px;border:1px solid var(--ui-line);background:var(--ui-inset)}
+.settings-card legend{padding:0 5px;font-size:var(--ui-section);color:var(--ui-accent)}
+#titleOptions .text-size-setting{border:0;padding:0;margin:0}
+#titleOptions .title-volume-label,#titleOptions .title-option-row>span{font-size:var(--ui-reading);line-height:1.35}
+#titleOptions .title-option-row{flex-wrap:nowrap;gap:6px;margin:4px 0}
+#titleOptions .title-option-row .title-button{min-width:0;min-height:44px;padding:6px 10px;font-size:var(--ui-note)}
+#titleOptions .title-volume{height:32px;margin:0 0 5px}
+#titleOptions .settings-note,#titleOptions .text-size-tools small{font-size:var(--ui-note);line-height:1.4;color:var(--ui-muted)}
+#titleOptions .settings-note:empty{display:none}
+#titleOptions .title-button{font-size:var(--ui-reading);min-height:44px;color:var(--ui-ink);text-shadow:none;border-image:var(--ui-dark) var(--ui-dark-s) fill/6px/1px stretch}
+#titleOptions .text-size-tools{flex-wrap:wrap;gap:4px}#titleOptions .text-size-tools .title-button{padding:6px 10px}
+.settings-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;padding:8px 0 0;flex:none;border-top:1px solid var(--ui-line)}
+.settings-actions button{min-width:110px;margin:0!important}
+#menuSettings{padding:0 12px 10px;overflow:hidden;display:flex}
+#menuSettings #titleOptions{padding:0;flex:1;max-width:none;margin:0;border:0;border-image:none;max-height:none}
+/* Menus: section cards use the available width; only the content scrolls. */
+#menu .menu-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start;padding:6px 12px 12px}
+#menu .menu-body>.m-empty{grid-column:1/-1;margin:0;font-size:var(--ui-note)}
+.ui-section{min-width:0;padding:8px 10px;border:1px solid var(--ui-line);background:var(--ui-inset);align-self:start}
+#menu .ui-section>.m-sec{margin:0 0 8px;font-size:var(--ui-section);color:var(--ui-accent)!important;letter-spacing:0}
+#menu .ui-section .inv-row{font-size:var(--ui-reading);gap:8px;padding:8px 0;line-height:1.35;flex-wrap:nowrap}
+#menu .ui-section .inv-row:last-child{border-bottom:0}
+#menu .ui-section .inv-row .grow{min-width:0;overflow-wrap:anywhere}
+#menu .ui-section .inv-row small{font-size:var(--ui-note);line-height:1.4;margin-top:4px}
+#menu .inv-act,#menu .q-track{font-size:var(--ui-reading);padding:6px 10px}
+#menu .q{margin:8px 0;padding:8px 10px}#menu .q-top{font-size:var(--ui-reading);gap:6px}
+#menu .q p{font-size:var(--ui-reading);line-height:1.4;margin:6px 0}
+#menu .q-giver,#menu .q-foot,#menu .q-top b{font-size:var(--ui-note);line-height:1.35}
+#menu .ui-completed{grid-column:1/-1}#menu .ui-completed summary{color:var(--ui-muted);font-size:var(--ui-reading);min-height:44px;padding:10px 0;cursor:pointer}
+#menuBody[data-page=help] .help-line{font-size:var(--ui-reading);line-height:1.5;margin:0}
+#menuBody[data-page=help] .ui-section:first-child{grid-row:span 2}
+#menuBody[data-page=wardrobe]{display:flex;flex-direction:column;overflow:hidden}
+#menuBody .ward{display:flex;flex-direction:column;flex:1;min-height:0}
+#menuBody .ward-body{flex:1;min-height:0;align-items:stretch;gap:12px}
+#menuBody .ward-mirror{width:156px;min-width:0;overflow:auto;padding:2px 4px}
+#menuBody .ward-big{width:102px;height:102px;padding:3px;align-self:center}
+#menuBody .ward-pick{overflow:auto;min-height:0;padding:0 4px 6px}
+#menuBody .ward-info,#menuBody .ward-total{font-size:var(--ui-reading);min-height:0}
+#menuBody .ward-info small,#menuBody .ward-climate,#menuBody .ward-dir{font-size:var(--ui-note)!important;line-height:1.4}
+#menuBody .ward-grid{grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:6px}
+#menuBody .ward-tile{font-size:var(--ui-note);min-height:80px;border-color:var(--ui-line)}
+#menuBody .ward-tile canvas{width:48px;height:48px}#menuBody .ward-tile.on{border-color:var(--ui-accent)}
+#menuBody .ward-tile span{display:block;overflow:visible;min-height:0;overflow-wrap:anywhere}
+#menuBody .ward-tile.locked b{height:48px;line-height:48px}
+/* Short landscape screens: side-by-side title and decisions, safe-area gutters. */
+@media(orientation:landscape) and (max-height:600px){
+ :root{--ui-gap:8px}
+ .screen-overlay.title{--title-pad:12px;overflow:hidden}
+ .screen-overlay.title .overlay-content{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(230px,.8fr);align-items:center;gap:28px;overflow:visible;max-height:100%}
+ .screen-overlay.title #titleBrandWrap{width:100%;margin:0;min-width:0}
+ .screen-overlay.title #mainMenu{width:100%;max-width:300px;gap:8px}
+ .screen-overlay.title #mainMenu>.title-button{font-size:var(--ui-reading)!important;min-height:44px;padding:8px 14px}
+ .screen-overlay.title #menuStatus{font-size:var(--ui-note);margin:0}
+ #titleOptions{max-height:100%;margin:auto}
+ #menu{--menu-rail-width:116px;padding:calc(env(safe-area-inset-top) + 10px) calc(env(safe-area-inset-right) + var(--menu-rail-width) + 28px) calc(env(safe-area-inset-bottom) + 10px) calc(env(safe-area-inset-left) + 12px)}
+ #menu>.menu-box{width:100%;max-width:1060px}
+ #menu .menu-head{padding:6px 12px 2px}#menu .menu-head h3::after{height:3px;margin:4px 0}
+ #menu .menu-rail{top:calc(env(safe-area-inset-top) + 10px);bottom:calc(env(safe-area-inset-bottom) + 10px);right:calc(env(safe-area-inset-right) + 10px);gap:8px;justify-content:space-between}
+ #menu .menu-tabs{gap:6px;min-height:0;overflow:auto;padding:2px}
+ #menu .menu-tabs button{flex:none;min-height:44px;font-size:var(--ui-reading);flex-direction:row;padding:6px 4px;white-space:normal}
+ #menu #menuResume{flex:none;min-height:44px;font-size:var(--ui-reading)}
+ #menuClose{min-width:44px;min-height:44px}#menuMap{min-height:44px;font-size:var(--ui-reading);margin-right:6px}
+ .world-panel{inset:calc(env(safe-area-inset-top) + 8px) calc(env(safe-area-inset-right) + 10px) calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 10px)}
+ .travel-panel,#transportPanel{max-width:1040px;max-height:none}
+ .world-layout{grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr)}
+ .world-map-wrap{min-height:0}.world-side{padding:8px 12px}
+ .world-map-tools{gap:6px;flex-wrap:wrap;max-width:90%}.world-map-tools button{min-width:44px;min-height:44px;font-size:var(--ui-note)}
+ .world-legend{font-size:var(--ui-note);max-width:calc(100% - 12px);line-height:1.4}
+ .world-side>label{margin:6px 0}.world-side select{min-height:44px}
+ .world-side .world-actions{display:grid;grid-template-columns:1fr 1fr}.world-side #worldNearestTransport{grid-column:1/-1;grid-row:2}
+ .party-layout{grid-template-columns:minmax(190px,.85fr) minmax(0,1.4fr);gap:12px;padding:10px 12px;overflow:hidden;flex:1}
+ .party-layout>div{min-height:0;overflow:auto;padding:0 4px}.party-layout h3{font-size:var(--ui-section);margin-bottom:8px}
+ .party-layout p,.party-layout label{font-size:var(--ui-reading)}.party-list button{min-height:48px}.party-news{flex:none;max-height:32%;padding:0 12px}.party-news>summary{padding:8px 0}
+ .transport-body{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,1.25fr);gap:8px 16px;align-content:start;align-items:start;min-height:0}
+ .transport-choices,.transport-summary{min-width:0}.transport-choices>label{margin-bottom:6px}
+ #transportPanel .transport-body{padding:8px 12px}#transportPanel .travel-select{margin:4px 0 6px}
+ #transportPanel .travel-select-trigger,#transportPanel .travel-select-option{min-height:44px;font-size:var(--ui-reading)}
+ .transport-footer{flex:none;border-top:1px solid var(--ui-line);padding:4px 12px 8px;background:var(--ui-surface)}
+ #transportPanel .transport-footer p{margin:4px 0;font-size:var(--ui-note)}
+ #transportPanel .world-actions{margin:4px 0;display:grid;grid-template-columns:1.1fr 1.4fr .8fr}
+ #transportPanel .world-actions button{min-height:44px;font-size:var(--ui-reading)}
+ .travel-select-list{max-height:42dvh}
+ .transport-help-body{columns:2;column-gap:24px}.transport-help-body h3{break-after:avoid;font-size:var(--ui-section);margin-top:0}
+ .world-journey{padding:calc(env(safe-area-inset-top) + 8px) calc(env(safe-area-inset-right) + 12px) calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 12px);overflow:hidden}
+ .journey-shell{width:min(100%,1000px);max-height:100%;padding:10px;display:grid;grid-template-columns:minmax(200px,.9fr) minmax(0,1.2fr);gap:8px 16px}
+ .journey-shell header{margin:0;grid-column:1;border:0}.journey-shell h2{margin:4px 0}.journey-route{grid-column:1;padding:6px 8px}
+ .journey-vitals{grid-column:2;grid-row:1/span 3;max-height:none;min-height:0;overflow:auto;margin:0;align-self:stretch}
+ .journey-member{grid-template-columns:minmax(70px,.8fr) minmax(100px,1fr);gap:6px;padding:8px}
+ .journey-member strong{grid-row:span 2}.journey-member label{grid-template-columns:26px 1fr auto;gap:4px}
+ .journey-resources{grid-column:1}.journey-shell footer{grid-column:1/-1;justify-content:space-between;margin:0;padding-top:6px;border-top:1px solid var(--ui-line)}
+ .journey-shell footer button{min-height:44px;max-width:65%}.journey-shell footer span{min-width:0;font-size:var(--ui-note)}
+ #qpanel{padding:calc(env(safe-area-inset-top) + 10px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 10px) calc(env(safe-area-inset-left) + 16px)}
+ #qpBox{width:min(680px,100%);max-width:680px;max-height:100%;display:flex;flex-direction:column}
+ .qp-head{padding:8px 12px 0}.qp-box h3{font-size:var(--ui-heading);margin:4px 12px}
+ .qp-eyebrow,.qp-sec{font-size:var(--ui-note)}.qp-desc,.qp-obj,.qp-rew{font-size:var(--ui-reading);line-height:1.4}
+ #qpBody{overflow:auto;padding:6px 12px;flex:1;min-height:0}.qp-sec{margin:8px 0 4px}
+ .qp-actions{padding:8px 12px;gap:8px;flex:none}.sl-row,.sl-quick{gap:8px}.sl-quick button{min-height:44px}
+ .screen-overlay:not(.title){padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 12px) calc(env(safe-area-inset-left) + 16px)}
+ .screen-overlay:not(.title) .overlay-content{max-height:100%;overflow:auto;padding:12px 20px}
+ .screen-overlay:not(.title) .overlay-content h2{font-size:var(--ui-heading)!important}
+ .screen-overlay:not(.title) .overlay-content p,.screen-overlay:not(.title) .keyboard-note{font-size:var(--ui-reading)!important}
+ .screen-overlay:not(.title) .start,.screen-overlay:not(.title) .secondary{min-height:44px;font-size:var(--ui-reading)!important;margin-top:6px!important}
+ .notice-stack{max-width:min(320px,42vw)}.notice-card strong,.notice-card span{font-size:var(--ui-note)!important;line-height:1.4}
+ #screen .tools .travel-button,#screen .tools #btnMenu{min-height:44px!important;height:44px!important;font-size:var(--ui-reading)!important}
+ #screen.panels-x .tools{gap:6px!important}
+}
+@media(orientation:landscape) and (max-width:740px){
+ .settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.settings-card:last-child{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;align-items:center}
+ .settings-card:last-child>.settings-note{grid-column:1/-1}
+ #menu{--menu-rail-width:100px}#menu .menu-body{gap:8px;padding:4px 8px 8px}.ui-section{padding:6px 8px}
+ #menu .ui-section .inv-row{flex-wrap:wrap}#menu .ui-section .inv-row .grow{flex-basis:60%}
+ .world-layout{grid-template-columns:minmax(0,1fr) 240px}.world-legend{max-width:96%;font-size:var(--ui-note)}
+ #menuBody .ward-mirror{width:128px}#menuBody .ward-big{width:102px;height:102px}
+ .journey-shell{grid-template-columns:minmax(180px,.9fr) minmax(0,1.2fr);gap:6px 10px}
+}
+@media(orientation:portrait){.settings-grid{grid-template-columns:1fr}#titleOptions{max-height:92dvh}#menu .menu-body{grid-template-columns:1fr}.settings-actions{justify-content:stretch}.settings-actions button{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}.dlg-next::before{animation:none}}
+#titleOptions .settings-info{font-size:var(--ui-note);color:var(--ui-muted)}
+#titleOptions .settings-info summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--ui-accent)}
+#titleOptions .settings-info p{margin:4px 0 8px}
+/* Inventory categories keep every item and action within one short page. */
+#menuBody[data-page=bag]{display:flex;flex-direction:column;gap:8px}
+.ui-inventory-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;position:sticky;top:-6px;z-index:1;background:var(--ui-surface);padding:4px 0;flex:none}
+#menu .ui-inventory-nav button{font-size:var(--ui-note);min-height:44px;white-space:normal;padding:4px}
+#menu .ui-inventory-nav [aria-selected=true]{border-image-source:var(--ui-gold)!important;color:#2a1606!important}
+#menuBody[data-page=bag]>.ui-section{width:100%;flex:none}
+#menu .ui-item-info summary{font-size:var(--ui-note);min-height:32px;display:flex;align-items:center;color:var(--ui-muted);cursor:pointer}
+#menu .ui-item-info summary::before{content:'+';margin-right:6px;color:var(--ui-accent)}
+#menu .ui-item-info[open] summary::before{content:'−'}
+#menuBody[data-page=bag] .ward-stage{width:42px;height:42px}
+#menuBody[data-page=help]{display:flex;flex-direction:column}
+#menuBody[data-page=help]>.ui-section{width:100%;flex:none}
+#menuBody[data-page=help] summary{font-size:var(--ui-reading);min-height:44px;cursor:pointer;color:var(--ui-accent);padding:10px 0}
+#titleOptions .settings-card{padding:8px}
+#titleOptions .settings-card legend{font-size:var(--ui-reading)}
+#titleOptions .title-volume-label{font-size:var(--ui-note)}
+#titleOptions .title-volume{margin-bottom:0}
+.world-sidebar{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;border-left:1px solid var(--ui-line)}
+.world-sidebar .world-side{flex:1;min-height:0;border-left:0}
+.world-map-actions{flex:none;border-top:1px solid var(--ui-line);padding:6px 10px;background:var(--ui-surface)}
+.world-map-actions .world-actions{display:grid;grid-template-columns:1fr 1fr;margin:0;gap:6px}
+.world-map-actions .world-actions button{font-size:var(--ui-note);min-height:44px;padding:6px}
+.world-map-actions #worldNearestTransport{grid-column:auto;grid-row:auto}
+.world-map-actions #worldUntrack{grid-column:1/-1}
+#worldHere,#worldRoute{font-size:var(--ui-note);margin:4px 0;line-height:1.4}
+.world-map-help summary{font-size:var(--ui-note)}
+@media(orientation:landscape) and (max-width:740px){.settings-card:last-child>.settings-info{grid-column:1/-1}}
+#menuBody[data-page=bag] .inv-row>img{width:24px!important;height:24px!important;padding:2px}
+@media(orientation:landscape) and (max-height:600px){
+ #menu{--menu-rail-width:max(116px,calc(116px * var(--text-scale,1)))}
+ #menu .menu-tabs button{font-size:var(--ui-note);gap:4px}
+ #menu .menu-tabs img{width:12px;height:12px;flex:none}
+}
+#screen .dlg-choices{background:#211a14f5;border-top-color:var(--ui-line)}
+#screen .dlg-list .dlg-choice{font-size:var(--ui-reading)!important;min-height:44px;line-height:1.35}
+#screen .dlg-track{background:var(--ui-inset);border-color:var(--ui-line)}
+#screen .dlg-track i{background:var(--ui-accent);border-color:#f1e3bd;box-shadow:inset 0 -2px #a17a41}
+#screen .toast{font-size:var(--ui-reading)!important;line-height:1.4;color:var(--ui-ink)}
+#menuBody .ward-top{flex-wrap:nowrap;align-items:flex-start;gap:8px}
+#menuBody .ward-top>[data-ward-back]{flex:none;font-size:var(--ui-note)}
+#menuBody .ward-total{flex:1;min-width:0;overflow-wrap:anywhere}
+#menuBody .ward-mirror{overflow:hidden;display:flex;flex-direction:column}
+#menuBody .ward-big{flex:none}
+#menuBody .ward-turn{flex:none;min-height:44px}
+#menuBody .ward-info{flex:1;min-height:0;overflow:auto;padding:2px;overscroll-behavior:contain}
+@media(orientation:landscape) and (max-height:350px){#menuBody .ward-big{width:68px;height:68px;padding:2px}#menuBody .ward-top{padding-bottom:4px}}
+.transport-help-body{columns:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;align-content:start}
+.travel-help-topic{min-width:0;align-self:start;padding:4px 10px;background:var(--ui-inset);border:1px solid var(--ui-line)}
+.world-panel .travel-help-topic summary{font-size:var(--ui-reading);line-height:1.35}
+@media(max-width:600px){.transport-help-body{grid-template-columns:1fr}}
+#titleOptions .title-option-row{flex-wrap:wrap}
+#titleOptions .title-option-row>span{min-width:0;overflow-wrap:anywhere}
+@media(orientation:landscape) and (max-width:740px){#titleOptions .settings-card:last-child{display:block}}
+#menuBody .ward-turn{width:100%;justify-content:space-between;gap:4px;flex-wrap:wrap}
+#menuBody .ward-turn .q-track{min-width:44px;width:44px;min-height:44px;padding:4px;flex:none}
+#menuBody .ward-dir{min-width:0;white-space:normal;overflow-wrap:anywhere;flex:1;text-align:center}
+@media(orientation:landscape) and (max-height:600px){
+ .world-journey .journey-shell{height:100%;max-height:100%;grid-template-rows:auto minmax(0,1fr) auto auto}
+ .journey-route{min-height:0;overflow:auto;overscroll-behavior:contain}
+ .journey-shell footer{flex-wrap:nowrap;min-width:0}
+ #screen.panels-x .console-bar{width:calc(var(--pc) - 8px);right:calc(var(--gr) - var(--pc) + 4px)!important}
+ #screen .tools .travel-button,#screen .tools #btnMenu{width:100%!important;white-space:normal;padding:0 2px!important}
+}
+@media(orientation:landscape) and (max-height:600px){
+ #qpBox.sleep #qpBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 16px;align-items:center}
+ #qpBox.sleep .qp-desc{grid-column:1;grid-row:1;font-size:var(--ui-reading)}
+ #qpBox.sleep .qp-sec{grid-column:1;grid-row:2;margin:0}
+ #qpBox.sleep .sl-row{grid-column:1;grid-row:3;margin:0;gap:6px}
+ #qpBox.sleep .sl-val{font-size:var(--ui-section);min-width:0;flex:1}
+ #qpBox.sleep .sl-row button{min-width:44px;min-height:44px;flex:none}
+ #qpBox.sleep .qp-obj{grid-column:2;grid-row:1/span 2;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+ #qpBox.sleep .sl-quick{grid-column:2;grid-row:3;margin:0;gap:4px}
+ #qpBox.sleep .sl-quick button{font-size:var(--ui-note);min-width:0;padding:4px 2px;min-height:44px}
+ #qpBox.sleep .sl-quick small{font-size:var(--ui-note)}
+}
+/* Modal decisions use the whole display, including the control gutters. */
+#qpanel{inset:0}
+#titleOptions .title-option-row>span{font-size:var(--ui-note)}
+#menuBody .ward-grid{grid-template-columns:repeat(auto-fill,minmax(calc(104px * var(--text-scale,1)),1fr))}
+#menuBody .ward-tile span{overflow-wrap:normal;word-break:normal}
