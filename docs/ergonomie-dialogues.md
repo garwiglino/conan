@@ -62,3 +62,13 @@ Résultat final : **24 tests fonctionnels ciblés réussis, 138 contrôles
 sur la matrice paysage réussis et 3 parcours de conversations réelles réussis**,
 sans erreur JavaScript. Le paquet iOS hors ligne est reconstruit avec les
 mêmes corrections que la version web.
+
+## Révision demandée : bulles dans le monde et fiche joueur
+
+Implémentation : Codex / ChatGPT, pour transmission à Claude.
+
+Les répliques restent des bulles avec pointe, ancrées au locuteur et contraintes à la zone visible. Leur enveloppe reste stable entre les lignes et les choix. Les décisions flottent à 28 px du bas (plus zone sûre), avec Au revoir fixé à droite dans la zone des actions. Les noms se placent au-dessus des têtes et tiennent compte de la hauteur du personnage et de son étage.
+
+La fiche Inventaire regroupe désormais portrait animé, niveau, santé, têtes, argent et XP en haut à gauche, les objets en cases en dessous, le climat à leur suite, et la tenue à droite. Les vêtements et casques se changent directement dans cette même fenêtre, avec les animations existantes. Les onglets internes et l’aller-retour Inventaire/Tenue sont supprimés. Le contenu garde un défilement contenu pour les collections longues et les écrans très courts.
+
+Vérification de cette révision : trois conversations réelles (568×320 à 125 %, 844×390 à 100 %, 932×430 à 125 %) ; audit des écrans sur les trois formats, avec changement effectif de vêtement et de casque dans la fiche ; tests ciblés des menus, de la tenue et des métriques de dialogue réussis. Captures de la fiche et des conversations dans `art/ui-landscape/`.

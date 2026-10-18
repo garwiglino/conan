@@ -14,7 +14,7 @@ Renderer.prototype.bubble=function(){
  if(!value||!r.width){el.hidden=true;return;}
  const probe=document.getElementById('safeProbe'),style=probe?getComputedStyle(probe):null,safe={l:parseFloat(style?.paddingLeft)||0,r:parseFloat(style?.paddingRight)||0,t:parseFloat(style?.paddingTop)||0,b:parseFloat(style?.paddingBottom)||0};
  const layout=dialoguePanelGeometry({width:sr.width,height:sr.height,safe,hudBottom:r.top-sr.top+this.top*r.width/this.W});
- el.hidden=false;el.classList.add('docked');el.classList.remove('below');
+ el.hidden=false;el.classList.remove('docked');el.classList.remove('below');
  Object.assign(el.style,{left:Math.round(layout.left)+'px',top:Math.round(layout.top)+'px',width:Math.round(layout.width)+'px',height:Math.round(layout.height)+'px'});
  el.style.setProperty('--bubble-width',layout.width+'px');el.style.setProperty('--bubble-font',(13*textSettings.scale)+'px');el.style.setProperty('--bubble-name-font',(11*textSettings.scale)+'px');
  el.style.setProperty('--bubble-body-height',Math.max(24,layout.height-18)+'px');
@@ -24,7 +24,15 @@ Renderer.prototype.bubble=function(){
  if(a.textContent!==value.slice(0,shown))a.textContent=value.slice(0,shown);if(b.textContent!==value.slice(shown))b.textContent=value.slice(shown);
  el.classList.toggle('scrollable',body.scrollHeight>body.clientHeight+1);
  if(controls){controls.hidden=false;controls.style.setProperty('--conversation-footer',layout.footerHeight+'px');}
- this.bubbleBounds={left:layout.left,top:layout.top,width:layout.width,height:layout.height};
+ // Keep a fixed envelope for this speaker, anchored above the world sprite.
+ const scale=r.width/this.W,w=d.who,ax=r.left-sr.left+((w?.x??this.cam.x+this.W/2)-this.cam.x)*scale;
+ const feet=r.top-sr.top+(this.top+(w?.y??this.cam.y+60)-(w?.level?12:0)-this.cam.y)*scale;
+ const width=Math.min(layout.width,300*textSettings.scale),height=Math.min(layout.height,92*textSettings.scale);
+ const left=clamp(ax-width/2,r.left-sr.left+8,Math.max(r.left-sr.left+8,r.right-sr.left-width-8));
+ const top=clamp(feet-(d.head||w?.head||32)*scale-height-12,layout.top,Math.max(layout.top,sr.height-layout.footerHeight-38-height));
+ Object.assign(el.style,{left:Math.round(left)+'px',top:Math.round(top)+'px',width:width+'px',height:height+'px'});
+ el.style.setProperty('--bubble-width',width+'px');el.style.setProperty('--bubble-body-height',(height-24)+'px');el.style.setProperty('--tail',clamp(ax-left,16,width-16)+'px');
+ this.bubbleBounds={left,top,width,height};
 };
 function npcNameplateMetrics(ctx,label,cssScale=2,textScale=1){
  const scale=Math.max(.5,cssScale),font=10.5*textScale/scale;ctx.save();ctx.font=font+'px PixelUI, monospace';
@@ -40,7 +48,7 @@ Renderer.prototype.npcNameplate=function(n){
   this._nearNameplate=(g.npcs||[]).filter(a=>Math.hypot(a.x-p.x,a.y-p.y)<=56&&a.id!=='fairy'&&(a.level||0)===(p.level||0)&&!a.civilian?.dead&&!a.batracien?.dead&&!a.guardState?.dead&&g.npcPresent?.(a)!==false).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y)||String(a.id).localeCompare(String(b.id)))[0];
  }
  const near=n===this._nearNameplate,mark=g.npcMark?.(n);if(!near&&!['offer','turnin'].includes(mark))return;
- const c=this.c,m=npcNameplateMetrics(c,n.label,this.cssScale||2,textSettings.scale),cam=this.cam||{x:0,y:0},x=clamp(n.x-m.width/2,cam.x+2,cam.x+this.W-m.width-2),y=n.y+4/m.scale;
+ const c=this.c,m=npcNameplateMetrics(c,n.label,this.cssScale||2,textSettings.scale),cam=this.cam||{x:0,y:0},x=clamp(n.x-m.width/2,cam.x+2,cam.x+this.W-m.width-2),y=n.y-(n.level?12:0)-(n.head||28)-m.height-4/m.scale;
  const rect={x,y,w:m.width,h:m.height};
  if(!near&&this._nameplateRects.some(a=>rect.x<a.x+a.w&&rect.x+rect.w>a.x&&rect.y<a.y+a.h&&rect.y+rect.h>a.y))return;
  this._nameplateRects.push(rect);c.save();c.fillStyle='#15110e';c.fillRect(x,y,m.width,m.height);c.strokeStyle=near?'#c9a15b':'#756044';c.lineWidth=1/m.scale;c.strokeRect(x,y,m.width,m.height);

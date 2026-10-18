@@ -659,6 +659,48 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 #menuClose[hidden]{display:none!important}
 #dialogueControls #dlgBye{width:144px;max-width:32%}
 #screen #dialogueControls #dlgNext{width:144px;min-width:144px;margin:0 8px 8px 0}
+/* Codex: world speech bubbles, floating decisions and a unified player sheet. */
+#dialogue:not(.docked){border-radius:7px}
+#dialogue:not(.docked) .dlg-body{height:calc(100% - 4px);max-height:calc(100% - 4px)}
+#dialogue:not(.docked) .tail{display:block}
+#dialogueControls{bottom:calc(env(safe-area-inset-bottom) + 28px);right:calc(env(safe-area-inset-right) + 176px)}
+#screen #dialogueControls #dlgChoices{border:2px solid var(--ui-line);background:#211b15ed;border-radius:4px}
+#dialogueControls #dlgBye{position:fixed!important;right:calc(env(safe-area-inset-right) + 24px)!important;bottom:calc(env(safe-area-inset-bottom) + 44px)!important;left:auto!important;top:auto!important;width:136px;max-width:136px}
+#screen #dialogueControls #dlgNext{position:fixed;right:calc(env(safe-area-inset-right) + 24px);bottom:calc(env(safe-area-inset-bottom) + 44px);margin:0;width:136px;min-width:136px}
+#menuBody.player-overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.85fr);grid-template-rows:auto 1fr;align-items:start;gap:10px;overflow:auto}
+#menuBody.player-overview>.ui-section{min-width:0;width:auto}
+.player-overview [data-kind=character]{grid-column:1;grid-row:1}
+.player-overview [data-kind=items]{grid-column:1;grid-row:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.player-overview [data-kind=items]>.m-sec{grid-column:1/-1}
+.player-overview [data-kind=outfit]{grid-column:2;grid-row:1/4}
+.player-overview [data-kind=climate]{grid-column:1}
+#menuBody.player-overview .inventory-slot{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin:0;padding:8px;background:#171410;border:1px solid var(--ui-line);min-width:0}
+.player-overview .inventory-slot .inv-act{width:100%;min-height:44px}
+#menuBody.player-overview .ward-body{display:flex;flex-direction:column;gap:6px}
+#menuBody.player-overview .ward-mirror{width:100%;display:grid;grid-template-columns:76px 1fr;gap:6px;overflow:visible}
+#menuBody.player-overview .ward-big{width:68px;height:68px;grid-row:1/3}
+#menuBody.player-overview .ward-turn{grid-column:2}
+#menuBody.player-overview .ward-info{grid-column:1/-1;max-height:76px;overflow:auto}
+#menuBody.player-overview .ward-pick{width:100%;overflow:visible}
+#menuBody.player-overview .ward-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
+#menuBody.player-overview .ward-top{padding:0}
+#menuBody.player-overview{grid-template-columns:minmax(0,1fr) minmax(180px,.8fr);grid-template-rows:auto auto auto}
+#menuBody.player-overview [data-kind=character]{display:flex;gap:8px;align-items:center;padding:6px;min-height:76px}
+.player-stats{display:flex;flex-direction:column;gap:4px;min-width:0;font-size:var(--ui-note);overflow-wrap:anywhere}
+.player-stats strong{font-size:var(--ui-reading);color:var(--ui-accent)}
+#menuBody.player-overview [data-kind=character] .ward-big{width:56px;height:56px;flex:none}
+#menuBody.player-overview .ward-mirror{display:flex;flex-direction:column}
+#menuBody.player-overview .ward-info{display:none}
+#menuBody.player-overview .inventory-slot{padding:6px 4px}
+#menuBody.player-overview .inventory-slot>.grow{font-size:var(--ui-note)}
+@media(max-width:740px){#menuBody.player-overview [data-kind=items]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#menu #menuBody.player-overview{grid-auto-rows:max-content;grid-template-rows:max-content max-content max-content;align-content:start;flex:1;min-height:0}
+#menu #menuBody.player-overview{grid-template-rows:auto;align-items:start}
+.player-possession{display:flex;flex-direction:column;gap:8px;min-width:0;grid-column:1;grid-row:1}
+#menuBody.player-overview>.ui-section[data-kind=outfit]{grid-row:1;grid-column:2}
+.player-possession>.ui-section{width:100%;flex:none}
+#menuBody.player-overview [data-kind=items]{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:740px){#menuBody.player-overview [data-kind=items]{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* END LANDSCAPE DESIGN */
 </style>
@@ -10708,13 +10750,8 @@ const KaldorWardrobe=(()=>{
  const ownedHelmets=g=>allHelmets().filter(h=>g.wardrobe.helmets.includes(h.id));
  const plural=(n,word)=>n+' '+word+(n>1?'s':'');
  function inventoryHTML(g){
-  if(!g.wardrobe||view==='tenue')return '';
-  const o=get(g.wardrobe.worn),h=getHelmet(g.wardrobe.helmet);
-  const left=all().length-g.wardrobe.owned.length+allHelmets().length-g.wardrobe.helmets.length;
-  return '<div class="m-sec">Tenue</div><div class="inv-row ward-entry"><canvas class="ward-stage" width="30" height="30" aria-label="Kaldor"></canvas><div class="grow">'+
-   text(o?.label||'')+(h?' · '+text(h.label):'')+' '+pips(g.outfitWarmth(),'Chaleur totale')+'<small>'+plural(ownedOutfits(g).length,'tenue')+' et '+plural(ownedHelmets(g).length,'casque')+
-   (left?' · '+plural(left,'pièce')+' unique'+(left>1?'s':'')+' à trouver sur les mannequins du monde':'')+'.</small></div>'+
-   '<button class="inv-act" data-ward-open>Tenue</button></div>';
+  if(!g.wardrobe)return '';
+  return '<div class="m-sec">Tenue</div>'+tenueHTML(g);
  }
  function tile(kind,piece,on){
   const id=piece?piece.id:'',label=piece?piece.label:'Sans casque';
@@ -10766,9 +10803,9 @@ const KaldorWardrobe=(()=>{
   };
   requestAnimationFrame(tick);
  }
- function bindTenue(body,g,refresh){
-  body.innerHTML=tenueHTML(g);
-  const title=document.getElementById('menuTitle');if(title)title.textContent='Tenue';
+ function bindTenue(body,g,refresh,inline=false){
+  if(!inline)body.innerHTML=tenueHTML(g);
+  const title=document.getElementById('menuTitle');if(title&&!inline)title.textContent='Tenue';
   for(const cv of body.querySelectorAll('[data-icon]')){
    const id=cv.dataset.icon,c=cv.getContext('2d');
    // Outfits: Kaldor wearing them bareheaded. Helmets alone. No helmet: his bare head and mane.
@@ -10791,12 +10828,12 @@ const KaldorWardrobe=(()=>{
   for(const b of body.querySelectorAll('[data-turn]'))b.addEventListener('click',()=>{
    dir=DIRS[(DIRS.indexOf(dir)+Number(b.dataset.turn)+4)%4];body.querySelector('.ward-dir').textContent=DIR_NAMES[dir];
   });
-  body.querySelector('[data-ward-back]').addEventListener('click',()=>{view=null;info=null;refresh();});
+  body.querySelector('[data-ward-back]')?.addEventListener('click',()=>{view=null;info=null;refresh();});
   animate(body.querySelector('.ward-big'),true,[23,20]);
  }
  function bindInventory(body,g,refresh){
   style();if(!g.wardrobe)return;
-  if(view==='tenue'){bindTenue(body,g,refresh);return;}
+  if(body.querySelector('.ward')){bindTenue(body,g,refresh,true);return;}
   body.querySelector('[data-ward-open]')?.addEventListener('click',()=>{view='tenue';refresh();body.scrollTop=0;body.querySelector('.ward-tile.on')?.focus({preventScroll:true});});
   const cv=body.querySelector('.ward-stage');if(cv)animate(cv,false,[25,23]);
  }
@@ -11001,8 +11038,8 @@ const BodyHeat=(()=>{
 // focus targets and wardrobe canvases retain their identity.
 let inventorySection='Objets';
 function composeMenuSections(body,page){
- body.dataset.page=body.querySelector('.ward')?'wardrobe':page;
- if(body.querySelector('.ward')||body.querySelector(':scope > .ui-section'))return;
+ body.dataset.page=page;
+ if(body.querySelector(':scope > .ui-section'))return;
  const fragment=document.createDocumentFragment();let section=null;
  for(const node of [...body.children]){
   if(node.classList.contains('m-sec')){
@@ -11015,15 +11052,24 @@ function composeMenuSections(body,page){
  }
  body.replaceChildren(fragment);
  if(page==='bag'){
-  const sections=[...body.querySelectorAll(':scope > .ui-section')],nav=document.createElement('nav');nav.className='ui-inventory-nav';nav.setAttribute('aria-label','Rubriques de l’inventaire');nav.setAttribute('role','tablist');
-  const activate=(value,focus=false)=>{inventorySection=value;for(const [i,s]of sections.entries()){const on=s.dataset.section===value;s.hidden=!on;const b=nav.children[i];b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus();}body.scrollTop=0;};
-  for(const [i,s]of sections.entries()){
-   const b=document.createElement('button');b.type='button';b.className='q-track';b.id='inventoryTab'+i;b.textContent=s.dataset.section;b.setAttribute('role','tab');s.id='inventorySection'+i;s.setAttribute('role','tabpanel');s.setAttribute('aria-labelledby',b.id);b.setAttribute('aria-controls',s.id);b.onclick=()=>activate(s.dataset.section);nav.append(b);
+  body.classList.add('player-overview');
+  for(const section of body.querySelectorAll(':scope > .ui-section')){
+   section.dataset.kind=({Personnage:'character',Tenue:'outfit',Objets:'items',Climat:'climate'})[section.dataset.section]||'other';
   }
-  nav.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const at=sections.findIndex(s=>s.dataset.section===inventorySection),n=e.key==='Home'?0:e.key==='End'?sections.length-1:(at+(e.key==='ArrowRight'?1:-1)+sections.length)%sections.length;e.preventDefault();activate(sections[n].dataset.section,true);};
-  body.prepend(nav);activate(sections.some(s=>s.dataset.section===inventorySection)?inventorySection:sections[0]?.dataset.section);
+  const character=body.querySelector('[data-kind="character"]'),coins=[...body.querySelectorAll('[data-kind="items"] .inv-row')].find(n=>n.textContent.includes('Pièces d’or'));
+  if(character){
+   const p=game.player,L=game.lvl(),portrait=body.querySelector('.ward-big');
+   character.replaceChildren();const stats=document.createElement('div');stats.className='player-stats';
+   stats.innerHTML='<strong>Kaldor · Niv. '+L.level+'</strong><span>♥ '+p.hp+'/'+p.maxHp+' · Têtes '+(p.lives??LIVES)+' · Or '+p.coins+'</span><small>XP '+L.into+' / '+(L.need||'MAX')+'</small>';
+   if(portrait)character.append(portrait);character.append(stats);if(coins)coins.remove();
+  }
+  for(const row of body.querySelectorAll('[data-kind="items"] .inv-row'))row.classList.add('inventory-slot');
+  const back=body.querySelector('[data-ward-back]');if(back)back.hidden=true;
+  const left=document.createElement('div');left.className='player-possession';
+  for(const kind of ['character','items','climate','other'])for(const section of [...body.querySelectorAll(':scope > .ui-section')])if(section.dataset.kind===kind)left.append(section);
+  body.prepend(left);
   // Long item explanations stay available without hiding the action below them.
-  for(const small of body.querySelectorAll('.inv-row:not(.body-heat) .grow > small'))if(small.textContent.length>60&&!small.querySelector('.xpbar')){
+  for(const small of body.querySelectorAll('[data-kind="items"] .inv-row .grow > small'))if(small.textContent.length>0&&!small.querySelector('.xpbar')){
    if(small.closest('[data-section="Personnage"]'))continue;
    const detail=document.createElement('details'),summary=document.createElement('summary');detail.className='ui-item-info';summary.textContent='Détails';small.before(detail);detail.append(summary,small);
   }
@@ -11055,7 +11101,7 @@ Renderer.prototype.bubble=function(){
  if(!value||!r.width){el.hidden=true;return;}
  const probe=document.getElementById('safeProbe'),style=probe?getComputedStyle(probe):null,safe={l:parseFloat(style?.paddingLeft)||0,r:parseFloat(style?.paddingRight)||0,t:parseFloat(style?.paddingTop)||0,b:parseFloat(style?.paddingBottom)||0};
  const layout=dialoguePanelGeometry({width:sr.width,height:sr.height,safe,hudBottom:r.top-sr.top+this.top*r.width/this.W});
- el.hidden=false;el.classList.add('docked');el.classList.remove('below');
+ el.hidden=false;el.classList.remove('docked');el.classList.remove('below');
  Object.assign(el.style,{left:Math.round(layout.left)+'px',top:Math.round(layout.top)+'px',width:Math.round(layout.width)+'px',height:Math.round(layout.height)+'px'});
  el.style.setProperty('--bubble-width',layout.width+'px');el.style.setProperty('--bubble-font',(13*textSettings.scale)+'px');el.style.setProperty('--bubble-name-font',(11*textSettings.scale)+'px');
  el.style.setProperty('--bubble-body-height',Math.max(24,layout.height-18)+'px');
@@ -11065,7 +11111,15 @@ Renderer.prototype.bubble=function(){
  if(a.textContent!==value.slice(0,shown))a.textContent=value.slice(0,shown);if(b.textContent!==value.slice(shown))b.textContent=value.slice(shown);
  el.classList.toggle('scrollable',body.scrollHeight>body.clientHeight+1);
  if(controls){controls.hidden=false;controls.style.setProperty('--conversation-footer',layout.footerHeight+'px');}
- this.bubbleBounds={left:layout.left,top:layout.top,width:layout.width,height:layout.height};
+ // Keep a fixed envelope for this speaker, anchored above the world sprite.
+ const scale=r.width/this.W,w=d.who,ax=r.left-sr.left+((w?.x??this.cam.x+this.W/2)-this.cam.x)*scale;
+ const feet=r.top-sr.top+(this.top+(w?.y??this.cam.y+60)-(w?.level?12:0)-this.cam.y)*scale;
+ const width=Math.min(layout.width,300*textSettings.scale),height=Math.min(layout.height,92*textSettings.scale);
+ const left=clamp(ax-width/2,r.left-sr.left+8,Math.max(r.left-sr.left+8,r.right-sr.left-width-8));
+ const top=clamp(feet-(d.head||w?.head||32)*scale-height-12,layout.top,Math.max(layout.top,sr.height-layout.footerHeight-38-height));
+ Object.assign(el.style,{left:Math.round(left)+'px',top:Math.round(top)+'px',width:width+'px',height:height+'px'});
+ el.style.setProperty('--bubble-width',width+'px');el.style.setProperty('--bubble-body-height',(height-24)+'px');el.style.setProperty('--tail',clamp(ax-left,16,width-16)+'px');
+ this.bubbleBounds={left,top,width,height};
 };
 function npcNameplateMetrics(ctx,label,cssScale=2,textScale=1){
  const scale=Math.max(.5,cssScale),font=10.5*textScale/scale;ctx.save();ctx.font=font+'px PixelUI, monospace';
@@ -11081,7 +11135,7 @@ Renderer.prototype.npcNameplate=function(n){
   this._nearNameplate=(g.npcs||[]).filter(a=>Math.hypot(a.x-p.x,a.y-p.y)<=56&&a.id!=='fairy'&&(a.level||0)===(p.level||0)&&!a.civilian?.dead&&!a.batracien?.dead&&!a.guardState?.dead&&g.npcPresent?.(a)!==false).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y)||String(a.id).localeCompare(String(b.id)))[0];
  }
  const near=n===this._nearNameplate,mark=g.npcMark?.(n);if(!near&&!['offer','turnin'].includes(mark))return;
- const c=this.c,m=npcNameplateMetrics(c,n.label,this.cssScale||2,textSettings.scale),cam=this.cam||{x:0,y:0},x=clamp(n.x-m.width/2,cam.x+2,cam.x+this.W-m.width-2),y=n.y+4/m.scale;
+ const c=this.c,m=npcNameplateMetrics(c,n.label,this.cssScale||2,textSettings.scale),cam=this.cam||{x:0,y:0},x=clamp(n.x-m.width/2,cam.x+2,cam.x+this.W-m.width-2),y=n.y-(n.level?12:0)-(n.head||28)-m.height-4/m.scale;
  const rect={x,y,w:m.width,h:m.height};
  if(!near&&this._nameplateRects.some(a=>rect.x<a.x+a.w&&rect.x+rect.w>a.x&&rect.y<a.y+a.h&&rect.y+rect.h>a.y))return;
  this._nameplateRects.push(rect);c.save();c.fillStyle='#15110e';c.fillRect(x,y,m.width,m.height);c.strokeStyle=near?'#c9a15b':'#756044';c.lineWidth=1/m.scale;c.strokeRect(x,y,m.width,m.height);

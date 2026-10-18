@@ -251,10 +251,10 @@ test('the Tenue screen lists what Kaldor owns, the pieces left to find, and swit
  const {Game,KaldorWardrobe}=await loadWardrobe();const g=new Game();
  g.wardrobe.owned.push('corsaire');g.wardrobe.helmets.push('casque-cornes');
  const row=KaldorWardrobe.inventoryHTML(g);
- assert.match(row,/data-ward-open/);assert.match(row,/2 tenues et 1 casque/);assert.match(row,/13 pièces uniques à trouver/);
+ assert.doesNotMatch(row,/data-ward-open/);assert.match(row,/Tenues 2\/11/);assert.match(row,/Casques 1\/5/);assert.match(row,/data-wear="corsaire"/);
  assert.equal(KaldorWardrobe.leave(),false,'not open');
  assert.equal(g.wearHelmet('casque-cornes'),true);assert.equal(g.wearOutfit('corsaire'),true);
- assert.match(KaldorWardrobe.inventoryHTML(g),/Tenue du corsaire · Casque à cornes/);
+ assert.match(KaldorWardrobe.inventoryHTML(g),/data-wear="corsaire" aria-pressed="true"/);assert.match(KaldorWardrobe.inventoryHTML(g),/data-helm="casque-cornes" aria-pressed="true"/);
 });
 test('outfit tiles show Kaldor bareheaded in each outfit, within the 24px icon',async()=>{
  const {Art}=await loadWardrobe();const looks=new Set(),worn=Art.outfit();
