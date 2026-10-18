@@ -1,5 +1,7 @@
 /* Bounded streaming cache: keep old art visible until its replacement is ready. */
-function worldArtWorkerSource(){return '"use strict";const createWorldAtlas='+createWorldAtlas.toString()+';const createWorldTerrainArt='+createWorldTerrainArt.toString()+`;let art=null;
+function worldArtWorkerSource(){
+ const pacing='{'+Object.entries(WorldPacing).map(([key,value])=>typeof value==='function'?value.toString():JSON.stringify(key)+':'+JSON.stringify(value)).join(',')+'}';
+ return '"use strict";const WorldPacing='+pacing+';const createWorldAtlas='+createWorldAtlas.toString()+';const createWorldTerrainArt='+createWorldTerrainArt.toString()+`;let art=null;
  onmessage=function(e){const m=e.data;if(m.kind==='init'){art=createWorldTerrainArt(createWorldAtlas(m.raw),m.ramps);postMessage({kind:'ready'});return;}if(!art||m.kind!=='render')return;const image=art.render(m.cx*512,m.cy*512,512,512,m.clock??480);postMessage({key:m.key,clock:m.clock??480,snowKey:m.snowKey,cx:m.cx,cy:m.cy,width:image.width,height:image.height,data:image.data},[image.data.buffer]);};`;}
 function WorldArtStream(cache,makeCanvas,environment=globalThis){
  this.clock=480;this.cache=cache;this.pending=new Set();this.jobs=new Map();this.worker=null;this.failed=false;

@@ -47,3 +47,30 @@ Les sprites de véhicules et escortes restent provisoires, comme demandé.
 Pas de résolution automatique des combats hors écran, de bataille navale,
 de pillage/récupération jouable de cargaison ou de diplomatie militaire complète.
 Les limites du monde vivant restent détaillées dans les documents cités.
+
+## Audit de récupération du soir
+
+Le dépôt distant était toujours à `d212ef9`. La branche locale complète a été
+retrouvée à `bdd4479` ; ses fichiers et son historique sont conservés.
+
+La suite entière a exécuté 377 tests : 371 ont réussi au premier passage et six
+ont échoué. Quatre fixtures historiques exigeaient encore une fermeture de route
+entière, l'impossibilité de parler à une garde recherchante ou l'expiration de la
+recherche avec la seule colère du garde. Elles vérifient désormais le tronçon
+réellement fermé, le choix de reddition et la durée du mandat local. Les deux
+régressions effectives ont été corrigées : le worker terrain embarque aussi
+`WorldPacing`, et les sauvegardes sans horloge explicite gardent la conversion
+historique d'une journée de 960 secondes. Les six tests ont ensuite été rejoués
+avec succès. Le worker a aussi produit des tuiles dans Chromium, sans recours
+au rendu synchrone de secours.
+
+Les 24 tests de bible, son contrôle déterministe, l'intégration HTML web/iOS et
+la reconstruction du paquet iOS passent. Les recettes navigateur des conversations
+et des convois (terrain réel, quatre acteurs, chariot, proche/lointain, blessures,
+arrêt/reprise) ont également réussi. Pas de compilation Xcode ni d'essai iPhone.
+
+Un bundle Git de récupération est préparé avec ses commits et ses objets binaires.
+Son import dans un dépôt séparé reproduit exactement l'arbre source. Le script
+Windows vérifie son SHA-256 et le commit attendu puis effectue un push ordinaire
+sur `main` ; aucune mise à jour forcée. Si le distant a divergé, il publie une
+branche de récupération et s'arrête au lieu d'écraser les nouveaux changements.
