@@ -79,7 +79,7 @@ function createWorldSimulation(A,B,W,saved){
  function route(from,to){return A.findPath(from,to,{mode:'cart',allowBoat:true,clock:state.clock,state:W});}
  function minutes(path){return path.reduce((n,s)=>n+s.length/A.modes[s.mode].metresPerMinute,0);}
  function cargoRate(c,leg){return leg.mode==='boat'?A.modes.boat.metresPerMinute:c.landRate||A.modes[leg.mode].metresPerMinute;}
- function cargoPosition(c){const leg=c.path[c.leg];if(!leg){const n=A.byId[c.status==='returning'?c.from:c.to];return {x:n.x,y:n.y};}const a=A.vertices.get(leg.from),b=A.vertices.get(leg.to),t=clamp(c.progress*cargoRate(c,leg)/Math.max(.001,leg.length),0,1);return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}
+ function cargoPosition(c){const leg=c.path[c.leg];if(!leg){const n=A.byId[c.status==='returning'||c.escortReturned?c.from:c.to];return {x:n.x,y:n.y};}const a=A.vertices.get(leg.from),b=A.vertices.get(leg.to),t=clamp(c.progress*cargoRate(c,leg)/Math.max(.001,leg.length),0,1);return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}
  function cargoUnits(c){if(!Array.isArray(c.units))c.units=Array.from({length:c.crew||2},(_,i)=>({id:c.id+'-crew-'+i,role:'crew',hp:6}));return c.units;}
  function addShipment(from,to,id,amount){
   const a=state.sites[from],b=state.sites[to];if(!a||!b||from===to||amount<=0||state.shipments.filter(s=>['travel','returning'].includes(s.status)).length>=64)return null;
@@ -129,28 +129,39 @@ function createWorldSimulation(A,B,W,saved){
   const ended=fight.clock;delete c.encounter;delete c.encounterState;history('cargo_encounter_resolved',{id:c.id,survivors:cargoUnits(c).filter(u=>u.hp>0).map(u=>u.id)},ended);return ended;
  }
  function recordBandHealth(event,slot,hp){const band=state.bands[event?.bandKey],id=event?.memberIds?.[slot],member=band?.members.find(m=>m.id===id);if(member){member.hp=Math.max(0,hp);member.dead=member.hp<=0;}}
+ function abandonCargo(c){if(c.abandoned)return;c.abandoned=true;c.abandonedAt??=W.clock;c.abandonedPosition=c.localPosition?A.toWorld(c.localPosition.x,c.localPosition.y):cargoPosition(c);c.status='abandoned';history('cargo_abandoned',{id:c.id},c.abandonedAt);}
+ function returnEscort(c){
+  const units=cargoUnits(c);if(units.some(u=>u.role==='crew'&&u.hp>0))return;
+  if(!c.delivered)abandonCargo(c);
+  if(!units.some(u=>u.hp>0)){c.staffReserved=c.guardReserved=false;c.escortReturned=true;c.status=c.abandoned?'abandoned':'delivered';return;}
+  if(c.escortOnly)return;
+  // Retrace only the outbound distance actually travelled. A post-delivery
+  // escort already has a homeward path and must keep its current progress.
+  if(c.status!=='returning'){const leg=c.path[c.leg],progress=leg?leg.length/cargoRate(c,leg)-c.progress:0;c.path=c.path.slice(0,c.leg+1).reverse().map(p=>({...p,from:p.to,to:p.from}));c.leg=0;c.progress=progress;}
+  c.escortOnly=true;c.status='returning';
+ }
  function progressCargo(c,dt,local=false,at=state.clock){
-  if(!['travel','returning'].includes(c.status)||!local&&controlledCargo.has(c.id))return;
+  if(!['travel','returning','abandoned'].includes(c.status)||c.escortReturned||!local&&controlledCargo.has(c.id))return;
   // Resolve recorded opponents before spending the remaining travel time. Legacy
   // encounters with no participants require observation rather than invented losses.
-  if(!local&&c.encounter){const resumed=resolveCargoEncounter(c,at);if(resumed===null){c.clock=Math.max(c.clock||0,at);return;}dt=Math.max(0,at-resumed);}
-  const units=cargoUnits(c);if(!units.some(u=>u.role==='crew'&&u.hp>0)&&(!c.delivered||!units.some(u=>u.hp>0))){c.status='abandoned';c.abandonedAt=at;history('cargo_abandoned',{id:c.id},at);return;}
+  if(c.encounter){if(local){c.clock=Math.max(c.clock||0,at);return;}const resumed=resolveCargoEncounter(c,at);if(resumed===null){c.clock=Math.max(c.clock||0,at);return;}dt=Math.max(0,at-resumed);}
+  returnEscort(c);const units=cargoUnits(c);if(c.escortReturned)return;
   let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
   for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<20000;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){if(c.staffReserved){state.sites[c.from].workers+=units.filter(u=>u.role==='crew'&&u.hp>0).length;c.staffReserved=false;}if(c.guardReserved){state.sites[c.from].guardAvailable+=units.filter(u=>u.role==='guard'&&u.hp>0).length;c.guardReserved=false;}c.status='delivered';history('cargo_crew_return',{id:c.id},at);break;}
+    if(c.status==='returning'){if(c.staffReserved){state.sites[c.from].workers+=units.filter(u=>u.role==='crew'&&u.hp>0).length;c.staffReserved=false;}if(c.guardReserved){state.sites[c.from].guardAvailable+=units.filter(u=>u.role==='guard'&&u.hp>0).length;c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
     const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at-remaining;
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to},at-remaining);event('caravan',c.to,{detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720,at-remaining);
     c.status='returning';c.path=c.path.slice().reverse().map(p=>({...p,from:p.to,to:p.from}));c.leg=0;c.progress=0;continue;
    }
-   const edge=A.edgeById.get(leg.edge);if(!edge){c.waiting='route_migration';break;}const status=W.edgeStatus(edge,state.clock);if(status.closed||status.events.some(e=>A.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;break;}c.waiting=null;
+   const edge=A.edgeById.get(leg.edge);if(!edge){c.waiting='route_migration';break;}const status=W.edgeStatus(edge,at);if(status.closed||status.events.some(e=>A.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;break;}c.waiting=null;
    const length=leg.length/cargoRate(c,leg),step=Math.min(remaining,length-c.progress);c.progress+=step;remaining-=step;if(c.progress>=length-1e-7){c.leg++;c.progress=0;}
   }c.clock=Math.max(c.clock||0,at);
  }
  function damageCargoUnit(c,id,hp,hostileUntil=0){const u=cargoUnits(c).find(u=>u.id===id);if(!u||!finite(hp)||hp<0)return false;const alive=u.hp>0;u.hp=clamp(hp,0,u.role==='guard'?8:6);u.hostileUntil=hostileUntil;
   if(alive&&u.hp===0){if(u.role==='guard')state.sites[c.from].guardPool=Math.max(0,state.sites[c.from].guardPool-1);history('cargo_casualty',{id:c.id,person:id,role:u.role});}
-  if(!c.delivered&&!cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)){c.status='abandoned';c.abandonedAt=W.clock;}return true;
+  if(!c.delivered&&!cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0))abandonCargo(c);return true;
  }
  function loseCargo(c,amount,reason='loss'){if(c.delivered||!finite(amount)||amount<=0)return 0;const n=Math.min(c.amount,amount);c.amount-=n;c.lost=(c.lost||0)+n;history('cargo_loss',{id:c.id,resource:c.resource,amount:n,reason});return n;}
  function resolveWork(work,dt){

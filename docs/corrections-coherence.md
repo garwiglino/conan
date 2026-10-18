@@ -67,3 +67,9 @@ UI_BROWSER_PATH=/usr/bin/chromium node scripts/check-world-society.cjs
 Les suites `tests/world-coherence*.test.cjs` ajoutent des régressions sur les défauts ci-dessus, dont une année de campagne sous climat doux. Un contrôle automatisé ne remplace pas une recette sur appareil iOS.
 
 Résultat de la recette du 18 octobre 2026 : **403 tests JavaScript réussis**, **24 tests de bible réussis**, contrôle déterministe sans avertissement, recettes navigateur des habitants et des convois sans erreur JavaScript et **120 contrôles d’interface paysage réussis**. La régression ciblée des embuscades réelles a également été rejouée après renforcement du test. L’intégration est idempotente ; le contenu de jeu web/iOS correspond et l’archive native contient le HTML embarqué actuel. Le contrôle paysage a aussi corrigé le retour à la ligne des noms de vêtements en texte agrandi.
+
+## Correction suivante : escortes privées de convoyeurs
+
+Le retour des gardes survivants d’un convoi abandonné est désormais raccordé au trajet physique et économique, sans déplacement du chariot abandonné. Les gardes ne se libèrent qu’au poste ; leurs blessures, les passages fermés et la sauvegarde sont pris en compte. Les convois sans aucun survivant cessent d’occuper une place active. La récupération des marchandises reste un chantier distinct. Voir les [règles de retour](world-justice.md#retour-des-escortes-isolées).
+
+Validation de cette correction : **47 tests ciblés réussis** (économie, campagne, personnages et convois), dont six nouveaux cas de retour d’escortes, et recette Chromium avec déplacement réel des gardes et chariot immobile, sans erreur JavaScript. L’archive iOS a été régénérée et vérifiée.

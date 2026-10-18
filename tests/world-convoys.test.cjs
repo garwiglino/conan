@@ -56,3 +56,14 @@ test('saving a visible fight records its actual participants before any unload',
  const {g,c}=stage(),p=g.convoyPosition(c);g.enemies=[{id:'saved-ambusher',x:p.x+60,y:p.y,level:0,world:true,hp:5,damage:1}];
  const saved=JSON.parse(JSON.stringify(g.serialize())).atlas.world.simulation.shipments.find(x=>x.id===c.id);assert.equal(saved.encounter,true);assert.deepEqual(saved.encounterState.foes,['saved-ambusher']);
 });
+test('surviving escorts leave an abandoned wagon on foot, retain wounds across a full save and return only once',()=>{
+ const {g,s,c,from}=stage(),actors=g.convoyActors(c),guards=actors.filter(n=>n.convoyGuard),available=from.guardAvailable;
+ guards[0].guardState.hp=5;for(const n of actors.filter(n=>!n.convoyGuard))g.damageCivilian(n,100,{id:'foe',x:n.x-10,y:n.y,level:0});
+ const wagon={...c.abandonedPosition},start={x:guards[0].x,y:guards[0].y};for(let i=0;i<20;i++){g.clock+=.016;g.stepWorldConvoys(.04);}assert.equal(c.escortOnly,true);assert.equal(from.guardAvailable,available);assert.ok(Math.hypot(guards[0].x-start.x,guards[0].y-start.y)>0);assert.equal(JSON.stringify(c.abandonedPosition),JSON.stringify(wagon));
+ const copy=new a.Game(JSON.parse(JSON.stringify(g.serialize()))),sim=copy.worldState.simulation,saved=sim.state.shipments.find(x=>x.id===c.id);copy.solid=()=>false;copy.enemies=[];copy.lineClear=()=>true;copy.syncWorldConvoys();assert.equal(copy.convoyActors(saved).length,2);assert.equal(sim.cargoUnits(saved).find(u=>u.id===guards[0].id).hp,5);
+ const props=a.Renderer.prototype.visibleAtlasProps.call({g:copy,cam:{x:copy.player.x-300,y:copy.player.y-200},W:600,H:400});const cart=props.find(p=>p.convoyId===c.id);assert.ok(cart);const expected=a.Atlas.toGame(wagon.x,wagon.y);assert.equal(cart.x,expected.x);assert.equal(cart.y,expected.y-10);
+ for(let i=0;i<1000&&!saved.escortReturned;i++){copy.clock+=.016;copy.stepWorldConvoys(.04);}assert.equal(saved.escortReturned,true);assert.equal(saved.status,'abandoned');assert.equal(saved.delivered,false);assert.equal(sim.state.sites[c.from].guardAvailable,available+2);copy.syncWorldConvoys();assert.equal(copy.convoyActors(saved).length,0);assert.equal(JSON.stringify(saved.abandonedPosition),JSON.stringify(wagon));
+});
+test('orphan escorts stay engaged instead of walking home through an active battle',()=>{
+ const {g,c}=stage(),actors=g.convoyActors(c),p=g.convoyPosition(c);for(const n of actors.filter(n=>!n.convoyGuard))g.damageCivilian(n,100,{id:'foe',x:n.x-10,y:n.y,level:0});g.enemies=[{id:'still-fighting',world:true,x:p.x+60,y:p.y,level:0,hp:5,damage:1}];g.stepWorldConvoys(.04);assert.equal(c.status,'abandoned');assert.equal(c.escortOnly,undefined);assert.equal(c.encounter,true);assert.equal(c.guardReserved,true);
+});

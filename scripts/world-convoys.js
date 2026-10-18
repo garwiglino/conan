@@ -3,7 +3,7 @@
  */
 (()=>{
  'use strict';
- const live=c=>['travel','returning','abandoned'].includes(c.status);
+ const live=c=>!c.escortReturned&&['travel','returning','abandoned'].includes(c.status);
  const living=n=>n&&!n.dead&&!n.civilian?.dead&&!n.guardState?.dead;
  const simulation=g=>g.worldState.simulation;
  Game.prototype.convoyActors=function(c){return this.npcs.filter(n=>n.convoyId===c.id);};
@@ -29,7 +29,7 @@
    for(const [i,u]of s.cargoUnits(c).entries()){
     if(u.hp<=0||this.atlasDeaths[u.id])continue;const offset=u.role==='guard'?{x:i%2?30:-30,y:24}:{x:i?0:0,y:i?28:0},saved=Number.isFinite(u.x)&&Number.isFinite(u.y)&&dist(u,centre)<200&&!this.solid(u.x,u.y,5,0),p=saved?{x:u.x,y:u.y}:{x:centre.x+offset.x,y:centre.y+offset.y};
     if(this.solid(p.x,p.y,5,0)){p.x=centre.x;p.y=centre.y;}
-    const n={id:u.id,...p,convoyId:c.id,convoyGuard:u.role==='guard',convoyRole:u.role,site:c.from,post:{...p},world:true,alpha:1,dir:u.dir??2,look:'nomade',head:30,name:u.role==='guard'?'L’ESCORTE':'LE CONVOYEUR',label:u.role==='guard'?'ESCORTE':'CONVOI',title:u.role==='guard'?'Garde du convoi':'Convoyeur vers '+Atlas.byId[c.to].name,civilianJob:'carry',greet:()=>['Nous transportons '+(WORLD_BIBLE.resources.find(r=>r.id===c.resource)?.label||c.resource)+' vers '+Atlas.byId[c.to].name+'.'],topics:()=>[],bye:()=>['Bonne route.']};
+    const n={id:u.id,...p,convoyId:c.id,convoyGuard:u.role==='guard',convoyRole:u.role,site:c.from,post:{...p},world:true,alpha:1,dir:u.dir??2,look:'nomade',head:30,name:u.role==='guard'?'L’ESCORTE':'LE CONVOYEUR',label:u.role==='guard'?'ESCORTE':'CONVOI',title:u.role==='guard'?'Garde du convoi':'Convoyeur vers '+Atlas.byId[c.to].name,civilianJob:'carry',greet:()=>c.escortOnly?['Nos convoyeurs sont tombés. Nous retournons au poste de '+Atlas.byId[c.from].name+'.'+(c.abandoned?' La cargaison reste sur place.':'')]:['Nous transportons '+(WORLD_BIBLE.resources.find(r=>r.id===c.resource)?.label||c.resource)+' vers '+Atlas.byId[c.to].name+'.'],topics:()=>[],bye:()=>['Bonne route.']};
     if(n.convoyGuard){this.ensureHumanGuard(n);n.guardRestored=true;n.guardState.hp=u.hp;n.guardState.hostileUntil=u.hostileUntil||0;}
     else this.ensureCivilian(n,{hp:u.hp,appearance:u.appearance});this.npcs.push(n);this.atlasNpcs.push(n);
    }count++;
@@ -39,8 +39,10 @@
  Game.prototype.stepWorldConvoys=function(dt){
   const s=simulation(this);if(!s||this.journey||this.sleeping||this.dialogue||this.dying||this.dead)return;
   for(const c of s.state.shipments.filter(live)){
-   const actors=this.convoyActors(c);if(!actors.length)continue;this.saveConvoyActors(c);const position=this.convoyPosition(c),crew=actors.filter(n=>!n.convoyGuard&&living(n)),driver=crew.find(n=>!n.dangerState),leg=c.path[c.leg];
+   const actors=this.convoyActors(c);if(!actors.length)continue;this.saveConvoyActors(c);
    const danger=this.convoyInDanger(c);if(danger)c.encounter=true;else delete c.encounter;
+   if(!actors.some(n=>!n.convoyGuard&&living(n)))s.stepCargo(c,0,this.clock);
+   const position=this.convoyPosition(c),crew=actors.filter(n=>!n.convoyGuard&&living(n)),driver=(c.escortOnly?actors.filter(n=>n.convoyGuard&&living(n)):crew).find(n=>!n.dangerState),leg=c.path[c.leg];
    if(danger||!driver||c.status==='abandoned'||crew.some(n=>this.dialogue?.who===n)){s.stepCargo(c,0,this.clock);continue;}
    if(!leg){s.stepCargo(c,0,this.clock);continue;}
    const edge=this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock);if(edge.closed||edge.events.some(e=>Atlas.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;s.stepCargo(c,0,this.clock);continue;}c.waiting=null;
@@ -68,5 +70,5 @@
  const restore=Game.prototype.finishAtlasRestore;
  Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);this.syncWorldConvoys();};
  const props=Renderer.prototype.visibleAtlasProps;
- Renderer.prototype.visibleAtlasProps=function(){const result=props.call(this),s=simulation(this.g);for(const c of s?.state.shipments.filter(live)||[]){const p=this.g.convoyPosition(c);if(dist(p,this.g.player)<1200&&(!c.delivered||s.cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)))result.push({...p,y:p.y-10,kind:c.path[c.leg]?.mode==='boat'?'transport_boat_side':'transport_cart',world:true,convoyId:c.id});}return result;};
+ Renderer.prototype.visibleAtlasProps=function(){const result=props.call(this),s=simulation(this.g);for(const c of s?.state.shipments.filter(c=>c.abandoned||live(c))||[]){const p=c.abandonedPosition?Atlas.toGame(c.abandonedPosition.x,c.abandonedPosition.y):this.g.convoyPosition(c);if(dist(p,this.g.player)<1200&&(!c.delivered||s.cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0)))result.push({...p,y:p.y-10,kind:c.path[c.leg]?.mode==='boat'?'transport_boat_side':'transport_cart',world:true,convoyId:c.id});}return result;};
 })();
