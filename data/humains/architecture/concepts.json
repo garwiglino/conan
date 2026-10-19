@@ -1,0 +1,1345 @@
+{
+  "schema": 1,
+  "status": "concepts_only_not_runtime",
+  "humanNativeHeightPx": 19,
+  "buildingDirections": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "moduleDirections": [
+    "face",
+    "cote"
+  ],
+  "nativeEnvelopeMeaning": "[largeur, profondeur, hauteur], cibles de fabrication non mesurées sur PNG généré",
+  "sources": [
+    "docs/world-bible/01-geopolitique.md",
+    "docs/world-bible/02-peuples-et-villes.md",
+    "docs/world-bible/03-ressources-et-echanges.md",
+    "docs/world-bible/05-societes-et-criminalite.md",
+    "data/world/bible/generated/settlements.json",
+    "docs/humains-postes-concepts.md"
+  ],
+  "artDirectionStatus": "propositions graphiques dérivées du climat et des fonctions ; aucun nouveau canon architectural ou religieux",
+  "boards": [
+    {
+      "id": "01-teremor",
+      "title": "Teremor — habitat tempéré",
+      "kind": "building",
+      "material": "Pierre grise chaude, bois brun, enduit écru, chaume ocre et tuiles terre cuite. Petits volumes chibi médiévaux.",
+      "image": "art/humains/architecture/concepts/01-teremor.png",
+      "items": [
+        {
+          "id": "T01",
+          "label": "Chaumière",
+          "brief": "Petite maison rurale, torchis crème, soubassement pierre, chaume, une porte en façade, cheminée latérale.",
+          "nativeEnvelope": [
+            64,
+            56,
+            64
+          ]
+        },
+        {
+          "id": "T02",
+          "label": "Longère de ferme",
+          "brief": "Habitation rurale allongée, deux volumes sous le même toit, pierre et bois, pas de mobilier ni cultures.",
+          "nativeEnvelope": [
+            96,
+            56,
+            64
+          ]
+        },
+        {
+          "id": "T03",
+          "label": "Maison mitoyenne et boutique",
+          "brief": "Maison urbaine à étage, colombages, tuiles, devanture fermée, murs latéraux aveugles pour mitoyenneté.",
+          "nativeEnvelope": [
+            64,
+            48,
+            88
+          ]
+        },
+        {
+          "id": "T04",
+          "label": "Petit manoir",
+          "brief": "Demeure de domaine, pierre et colombages, deux étages modestes, porte identifiable, aucune armée ou bannière inventée.",
+          "nativeEnvelope": [
+            96,
+            72,
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02-sylverive",
+      "title": "Sylverive — cité et commerce",
+      "kind": "building",
+      "material": "Même famille de matériaux que Teremor, maçonnerie soignée, tuiles brunes, bois foncé et enduit crème. Ports uniquement aux accès confirmés.",
+      "image": "art/humains/architecture/concepts/02-sylverive.png",
+      "items": [
+        {
+          "id": "T05",
+          "label": "Maison de négociant",
+          "brief": "Maison haute à deux étages, rez-de-chaussée en pierre, étage enduit et bois, lucarne, boutique fermée.",
+          "nativeEnvelope": [
+            64,
+            56,
+            96
+          ]
+        },
+        {
+          "id": "T06",
+          "label": "Entrepôt portuaire",
+          "brief": "Grand hangar bois-pierre à toit de tuiles, grandes portes de chargement en façade et arrière, palan fixé au pignon sans cargaison.",
+          "nativeEnvelope": [
+            112,
+            80,
+            80
+          ]
+        },
+        {
+          "id": "T07",
+          "label": "Maison des chartes",
+          "brief": "Maison de conseil civique avec porche central, étage, archives fermées, sans armoiries ni symbole religieux.",
+          "nativeEnvelope": [
+            112,
+            80,
+            96
+          ]
+        },
+        {
+          "id": "T08",
+          "label": "Manufacture textile",
+          "brief": "Atelier collectif de taille artisanale, deux niveaux, fenêtres régulières et évents, pas d’usine industrielle ni machines incluses.",
+          "nativeEnvelope": [
+            112,
+            80,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03-igea",
+      "title": "Igea — habitat et réserves",
+      "kind": "building",
+      "material": "Pierre grise, rondins bruns, bardeaux sombres, isolations sobres. PAS de neige dans cette planche : le froid est saisonnier.",
+      "image": "art/humains/architecture/concepts/03-igea.png",
+      "items": [
+        {
+          "id": "T09",
+          "label": "Maison longue",
+          "brief": "Maison de vallée, murs pierre et rondins, toit pentu en bardeaux sombres, petit sas d’entrée, cheminée. État sans neige.",
+          "nativeEnvelope": [
+            96,
+            64,
+            80
+          ]
+        },
+        {
+          "id": "T10",
+          "label": "Refuge de passage",
+          "brief": "Petit refuge compact, épais soubassement pierre, toit pentu en bois, entrée protégée du vent, état sans neige.",
+          "nativeEnvelope": [
+            64,
+            56,
+            72
+          ]
+        },
+        {
+          "id": "T11",
+          "label": "Grenier surélevé",
+          "brief": "Réserve fermée sur courts piliers de pierre, accès par escalier court aligné avec porte, toit pentu, état sans neige.",
+          "nativeEnvelope": [
+            64,
+            56,
+            72
+          ]
+        },
+        {
+          "id": "T12",
+          "label": "Loge de mineurs",
+          "brief": "Dortoir modeste en pierre et bois, entrée et appentis de stockage vide, toit pentu, état sans neige.",
+          "nativeEnvelope": [
+            96,
+            64,
+            72
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04-sarak",
+      "title": "Sarak — bassins et étapes",
+      "kind": "building",
+      "material": "Enduits sable et argile, pierre ocre, bois sobre, tissus de protection en écru. Pas de désert dessiné, pas de palais oriental cliché.",
+      "image": "art/humains/architecture/concepts/04-sarak.png",
+      "items": [
+        {
+          "id": "T13",
+          "label": "Maison à cour",
+          "brief": "Petite maison compacte d’adobe clair, toit terrasse et parapet bas, entrée ombragée, cour intérieure suggérée par volume, pas de vue du dessus.",
+          "nativeEnvelope": [
+            80,
+            72,
+            56
+          ]
+        },
+        {
+          "id": "T14",
+          "label": "Demeure de bourg",
+          "brief": "Maison urbaine à étage en pierre et enduit sable, petites ouvertures, volets, toit terrasse, pas de coupoles monumentales.",
+          "nativeEnvelope": [
+            72,
+            64,
+            80
+          ]
+        },
+        {
+          "id": "T15",
+          "label": "Relais de caravane",
+          "brief": "Ensemble compact autour d’une cour, portail assez large pour monture, murs adobe et auvent, aucune charrette ni animal.",
+          "nativeEnvelope": [
+            128,
+            96,
+            72
+          ]
+        },
+        {
+          "id": "T16",
+          "label": "Réserve fraîche",
+          "brief": "Grenier en terre crue et pierre, toit terrasse, ouvertures hautes petites, porte abritée, pas de marchandise intégrée.",
+          "nativeEnvelope": [
+            80,
+            64,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05-varan",
+      "title": "Varan — habitats humides",
+      "kind": "building",
+      "material": "Bois brun chaud, pierre moussue seulement en teinte, fibre et bardeaux, aérations. Aucun arbre, marécage ou plateforme de terrain dessiné.",
+      "image": "art/humains/architecture/concepts/05-varan.png",
+      "items": [
+        {
+          "id": "T17",
+          "label": "Maison sur plancher haut",
+          "brief": "Habitation humaine en bois sur poteaux courts, escalier lié à la seule porte, toit à large débord, plancher vide sous maison.",
+          "nativeEnvelope": [
+            72,
+            64,
+            80
+          ]
+        },
+        {
+          "id": "T18",
+          "label": "Maison de bourg drainé",
+          "brief": "Maison humaine sur soubassement de pierre bas, bois ventilé, toit de bardeaux à large débord, porte protégée.",
+          "nativeEnvelope": [
+            80,
+            64,
+            72
+          ]
+        },
+        {
+          "id": "T19",
+          "label": "Halle ventilée",
+          "brief": "Halle de marché couverte, charpente ouverte sur côtés, petits parapets démontables, aucune table ni étal intégré.",
+          "nativeEnvelope": [
+            112,
+            80,
+            72
+          ]
+        },
+        {
+          "id": "T20",
+          "label": "Dépôt surélevé",
+          "brief": "Entrepôt fermé sur fondations hautes, escalier et quai de chargement fixes, toit très débordant, vide, sans eau sous le bâti.",
+          "nativeEnvelope": [
+            112,
+            80,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06-tagon",
+      "title": "Tagon — côtes et arrière-pays",
+      "kind": "building",
+      "material": "Bois brun et miel, soubassement gris chaud, toit fibres paille et bardeaux. Architecture humaine pratique, pas de cabanes perchées attribuées aux hommes-singes.",
+      "image": "art/humains/architecture/concepts/06-tagon.png",
+      "items": [
+        {
+          "id": "T21",
+          "label": "Maison côtière",
+          "brief": "Maison humaine en bois renforcé sur soubassement pierre, toit en fibres serrées, volets, porche court.",
+          "nativeEnvelope": [
+            72,
+            64,
+            72
+          ]
+        },
+        {
+          "id": "T22",
+          "label": "Maison forestière",
+          "brief": "Maison basse en bois et fibres, toit large, débords courts, une annexe couverte vide, aucune végétation.",
+          "nativeEnvelope": [
+            80,
+            64,
+            72
+          ]
+        },
+        {
+          "id": "T23",
+          "label": "Maison des marins",
+          "brief": "Bâtiment collectif humain, étage en bois, galerie étroite en façade, toit en bardeaux et fibres, sans ancres décoratives géantes.",
+          "nativeEnvelope": [
+            112,
+            80,
+            88
+          ]
+        },
+        {
+          "id": "T24",
+          "label": "Dépôt de bois naval",
+          "brief": "Grand hangar ventilé à charpente renforcée et baies hautes, sol absent, aucun tas de bois, aucun bateau.",
+          "nativeEnvelope": [
+            128,
+            80,
+            80
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07-fermes",
+      "title": "Dépendances rurales",
+      "kind": "building",
+      "material": "Base tempérée bois/pierre/chaume et toile ; fonctions réutilisables avec palettes et enveloppes locales, pas de neige.",
+      "image": "art/humains/architecture/concepts/07-fermes.png",
+      "items": [
+        {
+          "id": "B01",
+          "label": "Grange",
+          "brief": "Grande enveloppe agricole bois et pierre, large double porte, toit en chaume, aucun foin ni chariot.",
+          "nativeEnvelope": [
+            112,
+            80,
+            80
+          ]
+        },
+        {
+          "id": "B02",
+          "label": "Étable fermée",
+          "brief": "Bâtiment bois-pierre, porte et ouvertures de ventilation, toiture tuiles, intérieur vide : les stalles déjà créées sont séparées.",
+          "nativeEnvelope": [
+            112,
+            80,
+            72
+          ]
+        },
+        {
+          "id": "B03",
+          "label": "Bergerie",
+          "brief": "Petite enveloppe pastorale en pierre sèche et bois, toit bas protecteur, large entrée, aucune bête ni barrière ajoutée.",
+          "nativeEnvelope": [
+            96,
+            64,
+            64
+          ]
+        },
+        {
+          "id": "B04",
+          "label": "Abri pastoral démontable",
+          "brief": "Abri humain en toile écrue sur ossature bois simple, entrée identifiable, piquets structurels, pas de tapis au sol ni troupeau.",
+          "nativeEnvelope": [
+            80,
+            64,
+            56
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08-echanges",
+      "title": "Marchés et relais",
+      "kind": "building",
+      "material": "Bâti civil humain pratique, mêmes contours et couleurs que les postes. Les étals, lits et tables existent séparément.",
+      "image": "art/humains/architecture/concepts/08-echanges.png",
+      "items": [
+        {
+          "id": "B05",
+          "label": "Halle de marché",
+          "brief": "Charpente ouverte et toiture tuiles, piliers lisibles, espace vide pour les étals indépendants.",
+          "nativeEnvelope": [
+            128,
+            80,
+            80
+          ]
+        },
+        {
+          "id": "B06",
+          "label": "Grenier collectif",
+          "brief": "Réserve publique maçonnée, petites aérations, grande porte, toiture solide, pas de sacs dessinés.",
+          "nativeEnvelope": [
+            112,
+            80,
+            88
+          ]
+        },
+        {
+          "id": "B07",
+          "label": "Auberge-relais",
+          "brief": "Enveloppe à étage bois/pierre, porte abritée et petite annexe, enseigne vide, pas de tables ni de personnages.",
+          "nativeEnvelope": [
+            112,
+            80,
+            96
+          ]
+        },
+        {
+          "id": "B08",
+          "label": "Comptoir d’échange",
+          "brief": "Petit bâtiment de marché en pierre et bois, ouverture de service fermée et porte latérale, aucun registre intégré.",
+          "nativeEnvelope": [
+            80,
+            64,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09-ateliers",
+      "title": "Ateliers à nuisances",
+      "kind": "building",
+      "material": "Pierre aux zones de chaleur, bois ailleurs, toits bruns et tuiles, cheminées modestes. Aucun outil, machine ou poste de travail inclus.",
+      "image": "art/humains/architecture/concepts/09-ateliers.png",
+      "items": [
+        {
+          "id": "B09",
+          "label": "Forge couverte",
+          "brief": "Enveloppe de forge en pierre et charpente ouverte sur façade, cheminée de maçonnerie, espace vide pour forge/enclume indépendantes, pas de feu.",
+          "nativeEnvelope": [
+            96,
+            80,
+            80
+          ]
+        },
+        {
+          "id": "B10",
+          "label": "Atelier de cuisson",
+          "brief": "Poterie/verrerie : enveloppe pierre et bois avec cheminée et évents, annexe de refroidissement vide, fours et tour séparés.",
+          "nativeEnvelope": [
+            112,
+            80,
+            80
+          ]
+        },
+        {
+          "id": "B11",
+          "label": "Tannerie",
+          "brief": "Hangar ouvert ventilé à débord de toit, petit local fermé, aucune cuve, peau, eau ou cadre : postes séparés.",
+          "nativeEnvelope": [
+            112,
+            80,
+            72
+          ]
+        },
+        {
+          "id": "B12",
+          "label": "Atelier de charpente",
+          "brief": "Hangar à bois et charpente ouvert à grandes baies, espace vide pour chevalet et établi, aucune lame industrielle ni roue.",
+          "nativeEnvelope": [
+            128,
+            80,
+            80
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10-alimentation",
+      "title": "Transformation alimentaire",
+      "kind": "building",
+      "material": "Bois, pierre et enduit tempérés. Moulins = projets à placer après validation du vent ou du cours d’eau réel, pas installation automatique.",
+      "image": "art/humains/architecture/concepts/10-alimentation.png",
+      "items": [
+        {
+          "id": "B13",
+          "label": "Moulin à vent",
+          "brief": "Petit moulin-tour de pierre, quatre ailes de bois simples détachables, porte à taille humaine. Ailes structure mécanique indépendante du bâtiment lors de transcription.",
+          "nativeEnvelope": [
+            96,
+            80,
+            128
+          ]
+        },
+        {
+          "id": "B14",
+          "label": "Moulin à eau",
+          "brief": "Maison du moulin pierre et bois, roue à aubes latérale détachable, porte séparée, pas d’eau, pas de rive ni terrain.",
+          "nativeEnvelope": [
+            112,
+            80,
+            88
+          ]
+        },
+        {
+          "id": "B15",
+          "label": "Fournil",
+          "brief": "Petite maison du pain en pierre et enduit, cheminée, porte et fenêtre, aucun four dessiné dans le bâtiment.",
+          "nativeEnvelope": [
+            80,
+            64,
+            72
+          ]
+        },
+        {
+          "id": "B16",
+          "label": "Fumoir et séchoir",
+          "brief": "Petite construction de bois et pierre, évents sous toit, cheminée discrète, porte, aucun poisson/viande ni râtelier intégré.",
+          "nativeEnvelope": [
+            64,
+            56,
+            80
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11-fibres",
+      "title": "Textile et transformations",
+      "kind": "building",
+      "material": "Échelle artisanale préindustrielle, charpente répétable, aucune machine intégrée. Adapter les matériaux au climat sans changer les sockets des postes.",
+      "image": "art/humains/architecture/concepts/11-fibres.png",
+      "items": [
+        {
+          "id": "B17",
+          "label": "Maison des tisserands",
+          "brief": "Petit atelier bois/enduit avec grandes fenêtres, porte et toit tuiles, aucun métier à tisser intégré.",
+          "nativeEnvelope": [
+            96,
+            72,
+            80
+          ]
+        },
+        {
+          "id": "B18",
+          "label": "Teinturerie",
+          "brief": "Enveloppe d’atelier aérée, cheminée discrète, appentis vide, murs enduit et pierre, aucune cuve ni tissu suspendu.",
+          "nativeEnvelope": [
+            96,
+            72,
+            72
+          ]
+        },
+        {
+          "id": "B19",
+          "label": "Corderie",
+          "brief": "Long hangar étroit, charpente répétable sous toiture légère, ouvert sur longueur, aucun cordage ou banc intégré.",
+          "nativeEnvelope": [
+            144,
+            56,
+            64
+          ]
+        },
+        {
+          "id": "B20",
+          "label": "Huilerie et pressoir",
+          "brief": "Enveloppe pierre et bois, large porte et abri latéral, toit tuile, la presse et les produits restent séparés.",
+          "nativeEnvelope": [
+            96,
+            72,
+            72
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12-public",
+      "title": "Vie publique et mémoire",
+      "kind": "building",
+      "material": "Institutions mentionnées ou besoins civils dérivés du lore. Styles proposés à valider, pas de religion nationale inventée.",
+      "image": "art/humains/architecture/concepts/12-public.png",
+      "items": [
+        {
+          "id": "B21",
+          "label": "Maison de conseil",
+          "brief": "Bâtiment administratif modeste à étage, entrée publique et fenêtres régulières, pas de blason inventé.",
+          "nativeEnvelope": [
+            112,
+            80,
+            96
+          ]
+        },
+        {
+          "id": "B22",
+          "label": "Maison de soins",
+          "brief": "Maison basse avec galerie abritée, ouvertures claires, aucune croix religieuse ni lit/personnage.",
+          "nativeEnvelope": [
+            112,
+            80,
+            80
+          ]
+        },
+        {
+          "id": "B23",
+          "label": "Salle de mémoire et rites",
+          "brief": "Petit bâtiment communautaire sobre, pierre et bois, entrée abritée, aucun symbole de culte inventé ni statues.",
+          "nativeEnvelope": [
+            96,
+            80,
+            88
+          ]
+        },
+        {
+          "id": "B24",
+          "label": "Salle commune et refuge",
+          "brief": "Maison commune à grande salle, accès simple et annexe, toiture solide, capacité d’abri civil, vide de mobilier.",
+          "nativeEnvelope": [
+            112,
+            80,
+            80
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13-garde",
+      "title": "Garde et défense habitée",
+      "kind": "building",
+      "material": "Défenses humaines sobres, pierre grise et bois brun, pas d’armoiries ni drapeaux. Garnisons seulement selon mission, budget et stock.",
+      "image": "art/humains/architecture/concepts/13-garde.png",
+      "items": [
+        {
+          "id": "F01",
+          "label": "Poste de garde",
+          "brief": "Petit corps de garde en pierre et bois, entrée abritée, fenêtre étroite, pas de garde dessiné.",
+          "nativeEnvelope": [
+            80,
+            64,
+            80
+          ]
+        },
+        {
+          "id": "F02",
+          "label": "Caserne",
+          "brief": "Bâtiment collectif à étage modeste, entrée centrale et réserve, pierre et bois, pas de campement ni armes intégrées.",
+          "nativeEnvelope": [
+            128,
+            80,
+            96
+          ]
+        },
+        {
+          "id": "F03",
+          "label": "Arsenal",
+          "brief": "Réserve sécurisée basse, pierre et porte ferrée, aérations étroites, toit tuile, sans armes ni râteliers.",
+          "nativeEnvelope": [
+            96,
+            72,
+            80
+          ]
+        },
+        {
+          "id": "F04",
+          "label": "Donjon résidentiel",
+          "brief": "Tour-maison seigneuriale compacte en pierre, deux étages utiles, entrée à hauteur accessible, pas de palais ni château gigantesque.",
+          "nativeEnvelope": [
+            96,
+            80,
+            128
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14-fortifications",
+      "title": "Tours et portes d’enceinte",
+      "kind": "building",
+      "material": "Palisade brun miel et rempart pierre grise. Le dos montre l’accès réel et la galerie, les profils l’épaisseur et les raccords ; jamais quatre copies de la façade.",
+      "image": "art/humains/architecture/concepts/14-fortifications.png",
+      "items": [
+        {
+          "id": "F05",
+          "label": "Tour de guet bois",
+          "brief": "Tour de charpente carrée, plate-forme protégée par toit, escalier court puis échelle intérieure, pas de personne.",
+          "nativeEnvelope": [
+            64,
+            64,
+            128
+          ]
+        },
+        {
+          "id": "F06",
+          "label": "Tour de rempart pierre",
+          "brief": "Tour carrée maçonnée, chemin de ronde crénelé, accès par porte basse, raccord de courtine latéral.",
+          "nativeEnvelope": [
+            80,
+            80,
+            128
+          ]
+        },
+        {
+          "id": "F07",
+          "label": "Porte de palissade",
+          "brief": "Porte charpentée à deux piliers et galerie, passage entièrement OUVERT ; les vantaux séparés seront des modules.",
+          "nativeEnvelope": [
+            112,
+            48,
+            96
+          ]
+        },
+        {
+          "id": "F08",
+          "label": "Porte de rempart",
+          "brief": "Porte maçonnée flanquée de deux petites tours carrées, passage OUVERT avec loge haute, pas de herse dans passage.",
+          "nativeEnvelope": [
+            144,
+            64,
+            128
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15-sites",
+      "title": "Dépendances des districts",
+      "kind": "building",
+      "material": "Architecture de production, indépendante des ressources naturelles et transports ; districts exacts à vérifier avant placement.",
+      "image": "art/humains/architecture/concepts/15-sites.png",
+      "items": [
+        {
+          "id": "X01",
+          "label": "Portail de mine",
+          "brief": "Seulement le bâtiment d’accès indépendant : cadre renforcé en bois, petite couverture de protection et portes, profondeur de galerie suggérée par parois structurelles, aucun rocher ni montagne.",
+          "nativeEnvelope": [
+            80,
+            56,
+            64
+          ]
+        },
+        {
+          "id": "X02",
+          "label": "Loge de carrière",
+          "brief": "Petite loge pierre/bois de district, auvent ouvert vide, aucun gisement ni tas de pierres.",
+          "nativeEnvelope": [
+            80,
+            64,
+            64
+          ]
+        },
+        {
+          "id": "X03",
+          "label": "Hangar des salines",
+          "brief": "Hangar sec ventilé, soubassement pierre, toit simple, portes pour chargement, pas de bassin, sel, eau ou sable.",
+          "nativeEnvelope": [
+            96,
+            72,
+            72
+          ]
+        },
+        {
+          "id": "X04",
+          "label": "Chantier naval couvert",
+          "brief": "Grande charpente ouverte et toit bardeaux, espace vide pour coque future séparée, aucun bateau, eau, cordage ou outil.",
+          "nativeEnvelope": [
+            144,
+            96,
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "id": "16-structures",
+      "title": "Structure et enveloppes",
+      "kind": "module",
+      "material": "Pierre grise chaude, bois brun, enduit crème ou ocre, couvertures cohérentes avec les six familles.",
+      "image": "art/humains/architecture/concepts/16-structures.png",
+      "items": [
+        {
+          "id": "M01",
+          "label": "Panneau colombage",
+          "brief": "Mur répétable enduit écru et ossature bois, extrémités nettes.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M02",
+          "label": "Panneau pierre",
+          "brief": "Mur de maison en blocs gris, répétable sans sol.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M03",
+          "label": "Panneau adobe",
+          "brief": "Mur en terre crue ocre avec couronnement simple.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M04",
+          "label": "Fondation sur poteaux",
+          "brief": "Travée de poteaux courts et poutres porteuses, sans plancher de terrain.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M05",
+          "label": "Poutre de liaison",
+          "brief": "Poutre horizontale avec mortaises d’assemblage.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M06",
+          "label": "Poteau de charpente",
+          "brief": "Poteau vertical avec pied pierre et tête de liaison.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M07",
+          "label": "Pignon de toiture",
+          "brief": "Pignon triangulaire bois/enduit, faîte et base nets.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M08",
+          "label": "Faîtage",
+          "brief": "Segment de faîtage bois/tuiles, extrémités raccordables.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": "17-enceintes",
+      "title": "Murs et chemins de ronde",
+      "kind": "module",
+      "material": "Pierre grise chaude, bois brun, enduit crème ou ocre, couvertures cohérentes avec les six familles.",
+      "image": "art/humains/architecture/concepts/17-enceintes.png",
+      "items": [
+        {
+          "id": "M09",
+          "label": "Palissade droite",
+          "brief": "Segment répétable de pieux avec traverses arrière.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M10",
+          "label": "Courtine droite",
+          "brief": "Segment répétable de rempart pierre et créneaux.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M11",
+          "label": "Terminaison",
+          "brief": "Fin verticale propre de mur ou palissade, aucun bout diagonal.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M12",
+          "label": "Jonction en L",
+          "brief": "Jonction à angle droit de rempart, dessin cardinal sans caméra diagonale.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M13",
+          "label": "Jonction en T",
+          "brief": "Nœud orthogonal d’enceinte, sans branche diagonale.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M14",
+          "label": "Parapet bas",
+          "brief": "Garde-corps plein/crénelé répétable de chemin de ronde.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M15",
+          "label": "Chemin de ronde",
+          "brief": "Plate-forme porteuse et consoles sans sol naturel, segment rectiligne.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M16",
+          "label": "Escalier de rempart",
+          "brief": "Volée de marches structurelles avec palier, hauteur adaptée aux courtes jambes.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": "18-ouvertures",
+      "title": "Portes, fenêtres et protection",
+      "kind": "module",
+      "material": "Pierre grise chaude, bois brun, enduit crème ou ocre, couvertures cohérentes avec les six familles.",
+      "image": "art/humains/architecture/concepts/18-ouvertures.png",
+      "items": [
+        {
+          "id": "M17",
+          "label": "Porte de maison",
+          "brief": "Vantail bois simple fermé, ferrures et huisserie, ouvrant distinct.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M18",
+          "label": "Vantaux de grand portail",
+          "brief": "Deux vantaux massifs indépendants de l’enceinte ; présentation fermée et petite silhouette ouverte en annotation.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M19",
+          "label": "Arc de passage",
+          "brief": "Encadrement de pierre à passage vide, aucun mur autour.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M20",
+          "label": "Fenêtre à volets",
+          "brief": "Huisserie et deux volets bois, version fermée et ouverts indiquée.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M21",
+          "label": "Fenêtre grillagée",
+          "brief": "Cadre pierre et grille fine, noir de baie, pas de barre de prison géante.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M22",
+          "label": "Claustra de ventilation",
+          "brief": "Panneau bois ajouré pour climats humides/chauds.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M23",
+          "label": "Garde-corps de galerie",
+          "brief": "Rambarde de balcon répétable, bois, aucun personnage.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M24",
+          "label": "Auvent",
+          "brief": "Petite toiture sur consoles, bois/toile écrue, sans table ou étal dessous.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": "19-franchissements",
+      "title": "Ponts et accès portuaires",
+      "kind": "module",
+      "material": "Pierre grise chaude, bois brun, enduit crème ou ocre, couvertures cohérentes avec les six familles.",
+      "image": "art/humains/architecture/concepts/19-franchissements.png",
+      "items": [
+        {
+          "id": "M25",
+          "label": "Travée de pont bois",
+          "brief": "Tablier porteur en bois et rambardes, segment vide, sans eau.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M26",
+          "label": "Arche de pont pierre",
+          "brief": "Arche maçonnée structurelle et tablier, aucune rivière.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M27",
+          "label": "Culée de pont",
+          "brief": "Appui maçonné de raccord, aucun relief naturel.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M28",
+          "label": "Quai bois",
+          "brief": "Segment de quai sur pilotis, plateau et poutres, sans eau.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M29",
+          "label": "Quai pierre",
+          "brief": "Face maçonnée de quai et couronnement, sans eau ni terrain.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M30",
+          "label": "Extrémité de jetée",
+          "brief": "Module terminal carré bois et renforts, sans navire ni cordage.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M31",
+          "label": "Escalier d’accostage",
+          "brief": "Petit escalier bois ou pierre fixé au quai, sans eau.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M32",
+          "label": "Rampe de chargement",
+          "brief": "Rampe structurelle courte et rambarde, accès pour chariot séparé.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20-eau-salubrite",
+      "title": "Eau et salubrité — structures seules",
+      "kind": "module",
+      "material": "Pierre grise chaude, bois brun, enduit crème ou ocre, couvertures cohérentes avec les six familles.",
+      "image": "art/humains/architecture/concepts/20-eau-salubrite.png",
+      "items": [
+        {
+          "id": "M33",
+          "label": "Paroi de citerne",
+          "brief": "Segment de maçonnerie étanche et couronnement, sans eau.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M34",
+          "label": "Gouttière et descente",
+          "brief": "Gouttière bois et descente raccordable pour récupération, sans pluie.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M35",
+          "label": "Encadrement de vanne",
+          "brief": "Support maçonné de vanne séparée déjà existante, sans mécanisme ni eau.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M36",
+          "label": "Conduit sur supports",
+          "brief": "Travée de conduit d’irrigation vide, bois/pierre, pas de canal creusé dans le sol.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M37",
+          "label": "Cloison de latrines",
+          "brief": "Cloison d’intimité et porte de cabine sanitaire, module sans fosse ni terrain.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M38",
+          "label": "Grille d’évacuation",
+          "brief": "Cadre d’évacuation en paroi avec grille, pas de dalle de terrain.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M39",
+          "label": "Cheminée",
+          "brief": "Souche maçonnée et chapeau, indépendante, pas de fumée/feu.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M40",
+          "label": "Évent de toiture",
+          "brief": "Petit capot ventilé indépendant, bois et bardeaux.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": "21-toitures-chantier",
+      "title": "Couvertures et assemblages",
+      "kind": "module",
+      "material": "Pierre grise chaude, bois brun, enduit crème ou ocre, couvertures cohérentes avec les six familles.",
+      "image": "art/humains/architecture/concepts/21-toitures-chantier.png",
+      "items": [
+        {
+          "id": "M41",
+          "label": "Toiture terrasse",
+          "brief": "Segment de couverture et parapet adobe, aucun sol de terrain.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M42",
+          "label": "Travée chaume",
+          "brief": "Section répétable de couverture de chaume, bord d’égout droit.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M43",
+          "label": "Travée fibres",
+          "brief": "Section de toit en fibres tropicales, aucun feuillage vivant.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M44",
+          "label": "Travée bardeaux",
+          "brief": "Section de couverture en bois sombre.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M45",
+          "label": "Travée tuiles",
+          "brief": "Section de couverture en tuiles terre cuite.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M46",
+          "label": "Palier extérieur",
+          "brief": "Palier de circulation structurel sur supports et garde-corps, pas de sol naturel.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M47",
+          "label": "Travée échafaudage",
+          "brief": "Deux montants, traverses et plate-forme vide, module répétable.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "id": "M48",
+          "label": "Ossature en chantier",
+          "brief": "Travée de charpente ouverte inachevée, sans outils ni travailleurs.",
+          "nativeEnvelope": [
+            32,
+            32,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": "22-igea-hiver",
+      "title": "Igea — neige saisonnière",
+      "kind": "seasonal",
+      "material": "Garder pierre et bois identiques à la planche Igea sans neige. Neige bleu très pâle seulement en couverture exposée.",
+      "image": "art/humains/architecture/concepts/22-igea-hiver.png",
+      "items": [
+        {
+          "id": "T09-hiver",
+          "label": "Maison longue — hiver",
+          "brief": "Maison de vallée, murs pierre et rondins, toit pentu en bardeaux sombres, petit sas d’entrée, cheminée. État sans neige. Même bâtiment que la planche 03, même porte, proportions et géométrie. Fine neige sur parties exposées de toiture, rebords inactifs ; entrée et circulation dégagées. Pas de neige sur mobilier, pas de sol enneigé.",
+          "nativeEnvelope": [
+            96,
+            64,
+            80
+          ]
+        },
+        {
+          "id": "T10-hiver",
+          "label": "Refuge de passage — hiver",
+          "brief": "Petit refuge compact, épais soubassement pierre, toit pentu en bois, entrée protégée du vent, état sans neige. Même bâtiment que la planche 03, même porte, proportions et géométrie. Fine neige sur parties exposées de toiture, rebords inactifs ; entrée et circulation dégagées. Pas de neige sur mobilier, pas de sol enneigé.",
+          "nativeEnvelope": [
+            64,
+            56,
+            72
+          ]
+        },
+        {
+          "id": "T11-hiver",
+          "label": "Grenier surélevé — hiver",
+          "brief": "Réserve fermée sur courts piliers de pierre, accès par escalier court aligné avec porte, toit pentu, état sans neige. Même bâtiment que la planche 03, même porte, proportions et géométrie. Fine neige sur parties exposées de toiture, rebords inactifs ; entrée et circulation dégagées. Pas de neige sur mobilier, pas de sol enneigé.",
+          "nativeEnvelope": [
+            64,
+            56,
+            72
+          ]
+        },
+        {
+          "id": "T12-hiver",
+          "label": "Loge de mineurs — hiver",
+          "brief": "Dortoir modeste en pierre et bois, entrée et appentis de stockage vide, toit pentu, état sans neige. Même bâtiment que la planche 03, même porte, proportions et géométrie. Fine neige sur parties exposées de toiture, rebords inactifs ; entrée et circulation dégagées. Pas de neige sur mobilier, pas de sol enneigé.",
+          "nativeEnvelope": [
+            96,
+            64,
+            72
+          ]
+        }
+      ]
+    }
+  ]
+}

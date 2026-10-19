@@ -1,0 +1,208 @@
+{
+  "generator": "image_gen.imagegen",
+  "status": "concept_reference_not_runtime_sprite",
+  "referenceFiles": [
+    "art/humains/activites/concepts/postes/humain-echelle.png",
+    "art/humains/activites/concepts/postes/01-ateliers.png"
+  ],
+  "boards": [
+    {
+      "boardId": "01-teremor",
+      "file": "art/humains/architecture/concepts/01-teremor.png",
+      "generationSource": "exec-56f354ce-93eb-400d-97c5-824511a2a39e.png",
+      "sha256": "d1d74ceab26b25ceb1ce0daf3574e28aca9ddc6d6487eeae02bface679334058",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "02-sylverive",
+      "file": "art/humains/architecture/concepts/02-sylverive.png",
+      "generationSource": "exec-40ef300a-5bfc-4f0e-b667-6b45d8b4beaf.png",
+      "sha256": "90ba33594905a2b39df623fae0ebc5c0a4795a6fa86bddc510ce99436c9434a9",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "03-igea",
+      "file": "art/humains/architecture/concepts/03-igea.png",
+      "generationSource": "exec-ad3b9efe-37aa-4bf8-bca8-5ceec6280a97.png",
+      "sha256": "245ef3e177cf0a9ae88835123e31011f1bccc2b3ad35af22c767f8f10e3fc780",
+      "width": 1536,
+      "height": 1024,
+      "revision": 2
+    },
+    {
+      "boardId": "04-sarak",
+      "file": "art/humains/architecture/concepts/04-sarak.png",
+      "generationSource": "exec-f6535a48-754d-457b-b28c-e5ec3035042c.png",
+      "sha256": "3343acda7ea12585760e29c551498f08a6771a3f0c83c64b7722aa87f3764237",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "05-varan",
+      "file": "art/humains/architecture/concepts/05-varan.png",
+      "generationSource": "exec-9b398edf-ec77-40aa-83a0-44e4b56e5d5a.png",
+      "sha256": "0c547602462a1d35b208844bc3cf1e9d3dccac733e61a3c29da642165cc97ba3",
+      "width": 1536,
+      "height": 1024,
+      "revision": 2
+    },
+    {
+      "boardId": "06-tagon",
+      "file": "art/humains/architecture/concepts/06-tagon.png",
+      "generationSource": "exec-cea3507e-48b9-4ebf-9a79-2d2c382bd112.png",
+      "sha256": "0d5a96d8baa50de8038abd06c6c90268ac1b33b8b48b5551867f5062d8d9909e",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "07-fermes",
+      "file": "art/humains/architecture/concepts/07-fermes.png",
+      "generationSource": "exec-7b3328b9-7644-4788-b433-3385182d18a9.png",
+      "sha256": "bb852fc95f28d57ffce23784269755394f6ccee7b1433c5eb8f3cf1e773b5b5b",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "08-echanges",
+      "file": "art/humains/architecture/concepts/08-echanges.png",
+      "generationSource": "exec-319e2e8b-e85b-4edd-b7c7-4fd7d0c56ecd.png",
+      "sha256": "7493e1ec7f5025a5fa067b56274c58d091c0a40fc29e7d1458e6177e834a195a",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "09-ateliers",
+      "file": "art/humains/architecture/concepts/09-ateliers.png",
+      "generationSource": "exec-1f6ec026-76b1-4146-85c0-4062a470c7f0.png",
+      "sha256": "3f04dc77698e735f64fb2c22b2a03fb96b245d25a40e78cd53caa5217fd505c9",
+      "width": 1536,
+      "height": 1024,
+      "revision": 2
+    },
+    {
+      "boardId": "10-alimentation",
+      "file": "art/humains/architecture/concepts/10-alimentation.png",
+      "generationSource": "exec-5c8e5532-fcf5-40c8-b49c-c7ea70750ff2.png",
+      "sha256": "19dc54fd5cb962ff7e4edb64b0c681c45709021e602920c0ad38641dfe707730",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "11-fibres",
+      "file": "art/humains/architecture/concepts/11-fibres.png",
+      "generationSource": "exec-f821ec5b-e0ec-4f22-b492-2c1e9825d7e9.png",
+      "sha256": "72758405928cd4aad5621828bebb2859350a481c1b7d2755709ac46543633d0d",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "12-public",
+      "file": "art/humains/architecture/concepts/12-public.png",
+      "generationSource": "exec-2ab25107-a5fc-4562-b406-38630109b826.png",
+      "sha256": "e1f0bd4c33f594431acf62be2b8797823ee5989fbeb655ef4465b9656d6f7e51",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "13-garde",
+      "file": "art/humains/architecture/concepts/13-garde.png",
+      "generationSource": "exec-8ffbd3ab-0956-4ddc-a573-56e3c4b16fa8.png",
+      "sha256": "d5fa4db0d144decd82741aad4b6131e423a42edede959ca45ec1d6c753620efa",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "14-fortifications",
+      "file": "art/humains/architecture/concepts/14-fortifications.png",
+      "generationSource": "exec-302c6365-d0b0-4adc-8309-84b809952bb1.png",
+      "sha256": "2d20ee91e63b794a7be8305fd446f8c7c3fb3a30a9861a048a6701da6bb1b113",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "15-sites",
+      "file": "art/humains/architecture/concepts/15-sites.png",
+      "generationSource": "exec-5ebd106f-37ac-4cb8-8064-6836232ddf63.png",
+      "sha256": "127de88773db44a12d0486bc9e3cf6d7fb1a3b0ff66e5acb6c8f765a0c432d4b",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "16-structures",
+      "file": "art/humains/architecture/concepts/16-structures.png",
+      "generationSource": "exec-ed279c5a-0ff5-4886-a270-f1a6acceb2ac.png",
+      "sha256": "364304f4fe1121cb35a6eab4e66fc31b22ffb3a6bfeccee761f0a72d747419ad",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "17-enceintes",
+      "file": "art/humains/architecture/concepts/17-enceintes.png",
+      "generationSource": "exec-2fd6fe68-eaba-46b4-8628-9eb38309db2e.png",
+      "sha256": "ea9aca0005cb34d8efb5463262b0b0e5fa1b14a2ebb6efeef8c3eb04c297337b",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "18-ouvertures",
+      "file": "art/humains/architecture/concepts/18-ouvertures.png",
+      "generationSource": "exec-95047e85-20ab-4480-a547-255e605ba58b.png",
+      "sha256": "5d1e0d52412aed95816db4b2155eb06118e2aa41e1e21f916907f6606fd588cb",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "19-franchissements",
+      "file": "art/humains/architecture/concepts/19-franchissements.png",
+      "generationSource": "exec-a860b559-e327-4961-8213-52e792547895.png",
+      "sha256": "29a5dedc2e62a71719196581edf41d1d6f893c335f24d6f07a9042e693502c9a",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "20-eau-salubrite",
+      "file": "art/humains/architecture/concepts/20-eau-salubrite.png",
+      "generationSource": "exec-ed949846-7cb8-4d14-82aa-4fe8a13ca0fe.png",
+      "sha256": "51a2a0fcfe605628d1fba2650de758e4f1341409d104f215c7c302b900abfbe4",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "21-toitures-chantier",
+      "file": "art/humains/architecture/concepts/21-toitures-chantier.png",
+      "generationSource": "exec-1921c25f-7faa-4302-8dde-fe846989ffa8.png",
+      "sha256": "0c882831af1067da52347cb4a9ddf4a23f1418329e23064a1ae493935a9aa168",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "22-igea-hiver",
+      "file": "art/humains/architecture/concepts/22-igea-hiver.png",
+      "generationSource": "exec-a6c01d2f-2c0f-4f1a-b097-3f5816574b02.png",
+      "sha256": "7b5abba1bfaf4d16999b14373e74692d8ee88d30e22df365d7f0d900985001ee",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    }
+  ]
+}

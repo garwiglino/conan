@@ -1,0 +1,4222 @@
+{
+  "schema": 1,
+  "status": "concept_function_coverage_not_settlement_plan",
+  "settlementCount": 83,
+  "territories": {
+    "Igea": 7,
+    "Teremor": 44,
+    "Sarak": 17,
+    "Varan": 6,
+    "Tagon": 9
+  },
+  "maritimeAccessRule": "waterfront=ocean_port dans la bible ; emplacement exact du quai à reprendre depuis le réseau et à vérifier sur terrain",
+  "conditions": {
+    "B13": "vent et dégagement validés",
+    "B14": "débit, rive et accès au cours d’eau réellement vérifiés",
+    "X01": "gisement et concession validés hors place du marché",
+    "X02": "carrière exploitable vérifiée",
+    "X03": "saline ou gisement de sel vérifié",
+    "X04": "accès navigable et activité de chantier validés",
+    "M25-M27": "franchissement réel vérifié, aucun pont déduit du nom",
+    "M33-M36": "captage, bassin et sens amont/aval vérifiés",
+    "T09-hiver-T12-hiver": "enneigement météo/altitude/biome ; pas toute Igea en permanence"
+  },
+  "unnamedHinterlandConcepts": [
+    "T01",
+    "T02",
+    "T09",
+    "T10",
+    "T13",
+    "T17",
+    "T18",
+    "T21",
+    "T22",
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B06",
+    "B12",
+    "X01",
+    "X02",
+    "X03"
+  ],
+  "reusableBuildingFunctions": {
+    "justice_local_hearing": "B21 : salle municipale ; porte et fenêtre sécurisées M17/M21 pour local de garde F01, sans bâtiment de prison imposé à chaque bourg",
+    "concession_records": "B08/B21 : comptoir et archives, pas de nouvelle institution nationale",
+    "licensed_adult_establishment": "T03/T05/B07 : enveloppe urbaine ou auberge, aucun signe de criminalité ou nudité automatique",
+    "seigneurial_complex": "T04/F04/B21 combinables avec annexes, fortifications seulement si justifiées",
+    "ritual_and_memory": "B23 : salle neutre ; symboles et croyances à définir localement",
+    "civilian_refuge": "B24 : salle commune ; lits et soins en objets séparés"
+  },
+  "settlements": [
+    {
+      "atlasId": "63",
+      "name": "Havre-du-Givre",
+      "territory": "Igea",
+      "region": "Pâlerive",
+      "coordinates": {
+        "x": 28897.0,
+        "y": 12031.6
+      },
+      "humanResidents": 3276,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "67",
+      "name": "Pâleval",
+      "territory": "Igea",
+      "region": "Pâlerive",
+      "coordinates": {
+        "x": 25827.6,
+        "y": 11259.0
+      },
+      "humanResidents": 3384,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "68",
+      "name": "Fort-Écho",
+      "territory": "Igea",
+      "region": "Pâlerive",
+      "coordinates": {
+        "x": 27751.3,
+        "y": 11674.7
+      },
+      "humanResidents": 3384,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "72",
+      "name": "Col-des-Loups",
+      "territory": "Igea",
+      "region": "Pâlerive",
+      "coordinates": {
+        "x": 28030.7,
+        "y": 10507.7
+      },
+      "humanResidents": 3348,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "69",
+      "name": "Val-des-Neiges",
+      "territory": "Igea",
+      "region": "Haut-Givre",
+      "coordinates": {
+        "x": 33753.1,
+        "y": 14702.1
+      },
+      "humanResidents": 7392,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "70",
+      "name": "Roche-Blanche",
+      "territory": "Igea",
+      "region": "Givreval",
+      "coordinates": {
+        "x": 39705.8,
+        "y": 14714.7
+      },
+      "humanResidents": 5387,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "71",
+      "name": "Veille-Boréale",
+      "territory": "Igea",
+      "region": "Givreval",
+      "coordinates": {
+        "x": 42454.2,
+        "y": 14606.8
+      },
+      "humanResidents": 5320,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "1",
+      "name": "Clairfoyer",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 18391.8,
+        "y": 16701.5
+      },
+      "humanResidents": 9035,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "19",
+      "name": "Fort-des-Ronces",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 16612.9,
+        "y": 19430.2
+      },
+      "humanResidents": 8929,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "25",
+      "name": "Val-des-Mousses",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 16014.8,
+        "y": 17151.6
+      },
+      "humanResidents": 7972,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "32",
+      "name": "Col-des-Cèdres",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 18946.0,
+        "y": 18807.2
+      },
+      "humanResidents": 8929,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "37",
+      "name": "Lac-des-Aulnes",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 17768.8,
+        "y": 19040.1
+      },
+      "humanResidents": 9246,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "46",
+      "name": "Ormerive",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 18174.9,
+        "y": 17881.7
+      },
+      "humanResidents": 9247,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "56",
+      "name": "Ruisselet",
+      "territory": "Teremor",
+      "region": "Boisclair",
+      "coordinates": {
+        "x": 16930.2,
+        "y": 18181.8
+      },
+      "humanResidents": 9459,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "12",
+      "name": "Rive-du-Cerf",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 25036.5,
+        "y": 15993.1
+      },
+      "humanResidents": 11781,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "16",
+      "name": "Chêne-Creux",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 25175.7,
+        "y": 19997.1
+      },
+      "humanResidents": 11907,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "28",
+      "name": "Bourg-du-Pont",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 25952.2,
+        "y": 18799.1
+      },
+      "humanResidents": 12033,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "30",
+      "name": "Source-Claire",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 27043.5,
+        "y": 19298.1
+      },
+      "humanResidents": 11781,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "39",
+      "name": "Vigie-Verte",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 23884.5,
+        "y": 18127.5
+      },
+      "humanResidents": 11655,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "44",
+      "name": "Hautes-Fougères",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 22690.1,
+        "y": 18243.2
+      },
+      "humanResidents": 11907,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "48",
+      "name": "Pont-des-Fougères",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 24383.2,
+        "y": 16999.7
+      },
+      "humanResidents": 11781,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "59",
+      "name": "Moulin-Vert",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 25075.4,
+        "y": 17979.9
+      },
+      "humanResidents": 11655,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "78",
+      "name": "Val-des-Pins",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 25802.4,
+        "y": 17025.1
+      },
+      "humanResidents": 11781,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "79",
+      "name": "Marchebrune",
+      "territory": "Teremor",
+      "region": "Valdorne",
+      "coordinates": {
+        "x": 26724.0,
+        "y": 17876.8
+      },
+      "humanResidents": 11781,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "11",
+      "name": "Pont-des-Ormes",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 18211.1,
+        "y": 26442.5
+      },
+      "humanResidents": 5487,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "13",
+      "name": "Bois-des-Fées",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 21340.1,
+        "y": 26945.4
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "15",
+      "name": "Port-des-Aulnes",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 22527.3,
+        "y": 23280.5
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "18",
+      "name": "Rive-des-Saules",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 19868.1,
+        "y": 23784.8
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "21",
+      "name": "Val-Fleuri",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 20743.8,
+        "y": 22982.8
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "24",
+      "name": "Auberge-du-Lac",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 19924.9,
+        "y": 25955.6
+      },
+      "humanResidents": 5614,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "29",
+      "name": "Gué-des-Pierres",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 23941.4,
+        "y": 23787.7
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "31",
+      "name": "Bosquet-du-Merle",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 19204.8,
+        "y": 27125.8
+      },
+      "humanResidents": 5678,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "33",
+      "name": "Rive-du-Moulin",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 22969.8,
+        "y": 24404.1
+      },
+      "humanResidents": 5487,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "36",
+      "name": "Pré-des-Roches",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 21777.6,
+        "y": 22343.5
+      },
+      "humanResidents": 5487,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "4",
+      "name": "Sylvehaute",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 18912.4,
+        "y": 24510.6
+      },
+      "humanResidents": 5423,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "41",
+      "name": "Ronceraie",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 22794.1,
+        "y": 25695.6
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "42",
+      "name": "Branchebasse",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 21789.4,
+        "y": 28142.5
+      },
+      "humanResidents": 5359,
+      "designRole": "ocean_port",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "ocean_port",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B19"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32"
+      ],
+      "conditionalNavalConcepts": [
+        "X04",
+        "T24"
+      ],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "43",
+      "name": "Vallombre",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 20328.4,
+        "y": 27609.6
+      },
+      "humanResidents": 5551,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "45",
+      "name": "Clairpré",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 21884.5,
+        "y": 24916.2
+      },
+      "humanResidents": 5423,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B09",
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "47",
+      "name": "Vieux-Chêne",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 21119.4,
+        "y": 25840.6
+      },
+      "humanResidents": 5423,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "49",
+      "name": "Roche-du-Cerf",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 20444.1,
+        "y": 24848.6
+      },
+      "humanResidents": 5551,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "53",
+      "name": "Val-Serein",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 21191.5,
+        "y": 23941.9
+      },
+      "humanResidents": 5423,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B17"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "57",
+      "name": "Basse-Sylve",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 22573.1,
+        "y": 26853.9
+      },
+      "humanResidents": 5614,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "8",
+      "name": "Clairval",
+      "territory": "Teremor",
+      "region": "Sylverive",
+      "coordinates": {
+        "x": 23915.1,
+        "y": 25143.3
+      },
+      "humanResidents": 5487,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "14",
+      "name": "Gué-Clair",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 28828.8,
+        "y": 24828.5
+      },
+      "humanResidents": 12436,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "17",
+      "name": "Mont-Vert",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 29626.2,
+        "y": 22549.2
+      },
+      "humanResidents": 12436,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "2",
+      "name": "Aulneport",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 27569.1,
+        "y": 24894.0
+      },
+      "humanResidents": 12035,
+      "designRole": "ocean_port",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "ocean_port",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B19"
+      ],
+      "optionalProductionConcepts": [
+        "B11",
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32"
+      ],
+      "conditionalNavalConcepts": [
+        "X04",
+        "T24"
+      ],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "26",
+      "name": "Lisière-Rousse",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 30191.2,
+        "y": 24166.8
+      },
+      "humanResidents": 12301,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "38",
+      "name": "Bois-de-Lune",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 27945.5,
+        "y": 23745.4
+      },
+      "humanResidents": 11633,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "64",
+      "name": "Lisière-des-Pins",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 29115.4,
+        "y": 23635.1
+      },
+      "humanResidents": 12167,
+      "designRole": "pastoral_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B02",
+        "B03",
+        "B04",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "80",
+      "name": "Hautes-Lisières",
+      "territory": "Teremor",
+      "region": "Aulneval",
+      "coordinates": {
+        "x": 31374.9,
+        "y": 23969.5
+      },
+      "humanResidents": 12435,
+      "designRole": "pastoral_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "functionalConcepts": [
+        "B02",
+        "B03",
+        "B04",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "35",
+      "name": "Pas-du-Sel",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 47205.2,
+        "y": 20781.4
+      },
+      "humanResidents": 2995,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [
+        "B09"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "60",
+      "name": "Relais-des-Trois-Pierres",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 48137.5,
+        "y": 21650.8
+      },
+      "humanResidents": 2860,
+      "designRole": "metal_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B09"
+      ],
+      "optionalProductionConcepts": [
+        "B09"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "65",
+      "name": "Col-de-Verre",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 48782.5,
+        "y": 20082.2
+      },
+      "humanResidents": 2962,
+      "designRole": "metal_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B09"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "66",
+      "name": "Bourg-des-Acacias",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 46925.3,
+        "y": 22067.8
+      },
+      "humanResidents": 2928,
+      "designRole": "pastoral_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B02",
+        "B03",
+        "B04",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "7",
+      "name": "Oasis-du-Safran",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 47855.9,
+        "y": 22825.3
+      },
+      "humanResidents": 2995,
+      "designRole": "metal_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B09"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "81",
+      "name": "Griseborne",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 46577.4,
+        "y": 19451.2
+      },
+      "humanResidents": 2995,
+      "designRole": "pastoral_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B02",
+        "B03",
+        "B04",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "82",
+      "name": "Rive-Fauve",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 46720.7,
+        "y": 23257.4
+      },
+      "humanResidents": 2995,
+      "designRole": "metal_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B09"
+      ],
+      "optionalProductionConcepts": [
+        "B09"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "83",
+      "name": "Col-des-Cendres",
+      "territory": "Sarak",
+      "region": "Roche-Sèche",
+      "coordinates": {
+        "x": 45630.3,
+        "y": 21576.0
+      },
+      "humanResidents": 2894,
+      "designRole": "pastoral_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B02",
+        "B03",
+        "B04",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01",
+        "X02"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "20",
+      "name": "Relais-des-Dunes",
+      "territory": "Sarak",
+      "region": "Sables-Rouges",
+      "coordinates": {
+        "x": 54798.5,
+        "y": 20186.0
+      },
+      "humanResidents": 3435,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X03"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "22",
+      "name": "Tour-des-Braises",
+      "territory": "Sarak",
+      "region": "Sables-Rouges",
+      "coordinates": {
+        "x": 55496.9,
+        "y": 21161.8
+      },
+      "humanResidents": 3475,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X03"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "23",
+      "name": "Puits-Rouge",
+      "territory": "Sarak",
+      "region": "Sables-Rouges",
+      "coordinates": {
+        "x": 53732.8,
+        "y": 20737.7
+      },
+      "humanResidents": 3356,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X03"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "52",
+      "name": "Oasis-des-Palmes",
+      "territory": "Sarak",
+      "region": "Sables-Rouges",
+      "coordinates": {
+        "x": 54430.2,
+        "y": 21717.1
+      },
+      "humanResidents": 3435,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X03"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "6",
+      "name": "Citadelle-de-Sarak",
+      "territory": "Sarak",
+      "region": "Sables-Rouges",
+      "coordinates": {
+        "x": 52137.0,
+        "y": 20478.7
+      },
+      "humanResidents": 3316,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X03"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "34",
+      "name": "Roche-du-Serpent",
+      "territory": "Sarak",
+      "region": "Safrane",
+      "coordinates": {
+        "x": 51234.5,
+        "y": 26957.1
+      },
+      "humanResidents": 15134,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "5",
+      "name": "Port-Sarak",
+      "territory": "Sarak",
+      "region": "Safrane",
+      "coordinates": {
+        "x": 50190.6,
+        "y": 30572.1
+      },
+      "humanResidents": 14651,
+      "designRole": "ocean_port",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "ocean_port",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B19"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32"
+      ],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "58",
+      "name": "Havre-du-Cuivre",
+      "territory": "Sarak",
+      "region": "Safrane",
+      "coordinates": {
+        "x": 52411.2,
+        "y": 27303.9
+      },
+      "humanResidents": 14651,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [
+        "B13",
+        "B14",
+        "B15",
+        "B16"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "9",
+      "name": "Puits-des-Caravanes",
+      "territory": "Sarak",
+      "region": "Safrane",
+      "coordinates": {
+        "x": 52988.0,
+        "y": 26138.4
+      },
+      "humanResidents": 14812,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T13",
+        "T14",
+        "T15",
+        "T16"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "73",
+      "name": "Bac-des-Roseaux",
+      "territory": "Varan",
+      "region": "Brumeraie",
+      "coordinates": {
+        "x": 38944.8,
+        "y": 38439.4
+      },
+      "humanResidents": 6072,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T17",
+        "T18",
+        "T19",
+        "T20"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "74",
+      "name": "Tourbeclaire",
+      "territory": "Varan",
+      "region": "Brumeraie",
+      "coordinates": {
+        "x": 41530.0,
+        "y": 37288.3
+      },
+      "humanResidents": 5980,
+      "designRole": "food_market",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T17",
+        "T18",
+        "T19",
+        "T20"
+      ],
+      "functionalConcepts": [
+        "B01",
+        "B02",
+        "B05",
+        "B06",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "76",
+      "name": "Pont-des-Joncs",
+      "territory": "Varan",
+      "region": "Brumeraie",
+      "coordinates": {
+        "x": 40797.0,
+        "y": 40241.5
+      },
+      "humanResidents": 6256,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T17",
+        "T18",
+        "T19",
+        "T20"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "10",
+      "name": "Port-des-Veilleurs",
+      "territory": "Varan",
+      "region": "Rosebrume",
+      "coordinates": {
+        "x": 46692.8,
+        "y": 37275.8
+      },
+      "humanResidents": 7231,
+      "designRole": "ocean_port",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "ocean_port",
+      "regionalConcepts": [
+        "T17",
+        "T18",
+        "T19",
+        "T20"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B19"
+      ],
+      "optionalProductionConcepts": [
+        "B12",
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32"
+      ],
+      "conditionalNavalConcepts": [
+        "X04",
+        "T24"
+      ],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "75",
+      "name": "Brume-aux-Saules",
+      "territory": "Varan",
+      "region": "Rosebrume",
+      "coordinates": {
+        "x": 47039.3,
+        "y": 39660.2
+      },
+      "humanResidents": 5529,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T17",
+        "T18",
+        "T19",
+        "T20"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "77",
+      "name": "Refuge-des-Aulnes",
+      "territory": "Varan",
+      "region": "Rosebrume",
+      "coordinates": {
+        "x": 46173.4,
+        "y": 40491.5
+      },
+      "humanResidents": 5529,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T17",
+        "T18",
+        "T19",
+        "T20"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "B12"
+      ],
+      "conditionalDistrictConcepts": [
+        "X01"
+      ],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "50",
+      "name": "Bourg-des-Coquilles",
+      "territory": "Tagon",
+      "region": "Coralune",
+      "coordinates": {
+        "x": 22644.3,
+        "y": 37155.7
+      },
+      "humanResidents": 17664,
+      "designRole": "ocean_port",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "ocean_port",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B19"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32"
+      ],
+      "conditionalNavalConcepts": [
+        "X04",
+        "T24"
+      ],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "51",
+      "name": "Havre-des-Épices",
+      "territory": "Tagon",
+      "region": "Coralune",
+      "coordinates": {
+        "x": 19600.3,
+        "y": 39530.0
+      },
+      "humanResidents": 20736,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "27",
+      "name": "Anse-des-Palmes",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 28879.4,
+        "y": 38279.4
+      },
+      "humanResidents": 3511,
+      "designRole": "ocean_port",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "ocean_port",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B19"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32"
+      ],
+      "conditionalNavalConcepts": [
+        "X04",
+        "T24"
+      ],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "3",
+      "name": "Coralbourg",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 28104.1,
+        "y": 41064.1
+      },
+      "humanResidents": 3210,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "T24"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "40",
+      "name": "Santalune",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 29066.1,
+        "y": 43571.4
+      },
+      "humanResidents": 2758,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "54",
+      "name": "Plage-Dorée",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 29453.5,
+        "y": 41224.8
+      },
+      "humanResidents": 3610,
+      "designRole": "forest_depot",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B06",
+        "B08",
+        "B12"
+      ],
+      "optionalProductionConcepts": [
+        "T24"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "55",
+      "name": "Relais-des-Lianes",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 26274.5,
+        "y": 44373.1
+      },
+      "humanResidents": 2307,
+      "designRole": "administrative_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B08",
+        "B21",
+        "B24"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "61",
+      "name": "Rive-de-Corail",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 26024.3,
+        "y": 43199.5
+      },
+      "humanResidents": 3209,
+      "designRole": "textile_center",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B08",
+        "B17",
+        "B18"
+      ],
+      "optionalProductionConcepts": [
+        "B19"
+      ],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    },
+    {
+      "atlasId": "62",
+      "name": "Palmehaute",
+      "territory": "Tagon",
+      "region": "Palmeraie",
+      "coordinates": {
+        "x": 26662.3,
+        "y": 42183.1
+      },
+      "humanResidents": 2106,
+      "designRole": "exchange_relay",
+      "runtimeKind": "unspecified_in_atlas",
+      "waterfront": "inland",
+      "regionalConcepts": [
+        "T21",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "functionalConcepts": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "optionalProductionConcepts": [],
+      "conditionalDistrictConcepts": [],
+      "coastalConcepts": [],
+      "conditionalNavalConcepts": [],
+      "publicNeeds": [
+        "B22",
+        "B23",
+        "B24"
+      ],
+      "securityConcepts": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "securityStatus": "options uniquement : enceinte/garnison selon mission, ressources et emplacement validés",
+      "placementStatus": "not_placed_concept_coverage_only"
+    }
+  ]
+}
