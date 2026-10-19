@@ -51,11 +51,16 @@ html=html.includes('// BEGIN BODY HEAT')?html.replace(/\/\/ BEGIN BODY HEAT[\s\S
 once("this.emit('fallen',{over:D.over})","this.emit('fallen',{over:D.over,cause:D.cause})");
 once("overlay('TU AS PERDU UNE VIE','Vaincu',headLine(game.player.lives)+'<br>Avar te rappelle à la dernière stèle allumée.'","overlay('TU AS PERDU UNE VIE',ev.cause==='cold'?'Mort de froid':'Vaincu',headLine(game.player.lives)+'<br>'+(ev.cause==='cold'?'Ta tenue ne protégeait pas assez du froid. ':'')+'Avar te rappelle à la dernière stèle allumée.'");
 once("'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.'","(ev.cause==='cold'?'Le froid a eu raison de Kaldor. ':'')+'Tu n’as plus de vies : ta chronique s’achève ici. Une nouvelle aventure t’attend.'");
+// Announce only the current page; unchanged text must not rewrite the live region.
+html=html.replace("const say=d.speaker+' : '+(d.choosing?d.menu.prompt:d.lines[d.index]);", "const say=d.speaker+' : '+game.dialogueText();");
+// Choices stay gated until the whole prompt has been read.
+html=html.replace("next.hidden=!d||d.choosing||!!d.waitPanel;band.hidden=!d||!d.choosing;", "next.hidden=!d||(d.choosing&&!game.dialogueHasMore())||!!d.waitPanel;band.hidden=!d||!d.choosing||game.dialogueHasMore();");
+html=html.replace("if(d.choosing){const n=d.menu.options.length;", "if(d.choosing&&!game.dialogueHasMore()){const n=d.menu.options.length;");
 // Shared UI overrides follow every legacy stylesheet in both offline builds.
 const uiCSS='/* BEGIN LANDSCAPE DESIGN */\n'+read('scripts/landscape-ui.css')+'\n/* END LANDSCAPE DESIGN */';
 html=html.replace(/\/\* BEGIN LANDSCAPE DESIGN \*\/[\s\S]*?\/\* END LANDSCAPE DESIGN \*\/\s*/,'');
 html=html.replace('</style>',()=>uiCSS+'\n</style>');
-const uiCode='// BEGIN LANDSCAPE DESIGN\n'+read('scripts/landscape-ui.js')+'\n'+read('scripts/interaction-ui.js')+'\n// END LANDSCAPE DESIGN';
+const uiCode='// BEGIN LANDSCAPE DESIGN\n'+read('scripts/landscape-ui.js')+'\n'+read('scripts/dialogue-pages.js')+'\n'+read('scripts/interaction-ui.js')+'\n// END LANDSCAPE DESIGN';
 html=html.includes('// BEGIN LANDSCAPE DESIGN')?html.replace(/\/\/ BEGIN LANDSCAPE DESIGN[\s\S]*?\/\/ END LANDSCAPE DESIGN/,()=>uiCode):html.replace('// app.js',()=>uiCode+'\n// app.js');
 html=html.replace(/(?:installWorldUI\(\);|installLandscapeUI\(\);)+(?=refreshTitleMenu\(\);)/, 'installWorldUI();installLandscapeUI();');
 fs.writeFileSync(path.join(root,'index.html'),html);

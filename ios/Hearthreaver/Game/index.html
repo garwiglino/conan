@@ -4877,7 +4877,38 @@ Game.prototype.atlasNews=function(n){const fresh=this.worldStore.readFor(this.wo
 Game.prototype.npcMenu=function(n){const menu=atlasNpcMenu.call(this,n);menu.splice(Math.max(0,menu.length-1),0,{label:'Nouvelles du monde et des routes',lines:this.atlasNews(n),act:()=>{this.worldState.recordNews(n.id,this.clock);this.emit('save');}});if(n.site||n.id==='veilleur'||n.id==='zahra')menu.splice(menu.length-1,0,{label:'Routes et destinations connues',lines:this.npcDirections(n)},{label:'Où trouver un transport ?',lines:['Parle au palefrenier ou au charretier du relais. Pour embarquer, rejoins le batelier sur le quai.']});return menu;};
 Game.prototype.npcDirections=function(n){const w=Atlas.toWorld(n.x,n.y),site=Atlas.byId[n.site]||Atlas.nearestSite(w.x,w.y),known=Atlas.roads.filter(r=>Atlas.roadCells(r).some(c=>c.region===site.region));return known.slice(0,4).map(r=>r.name+' : danger '+clamp(r.danger+this.worldState.news(n.id,this.clock).filter(e=>e.target===r.id&&!e.resolved).reduce((sum,e)=>sum+(Atlas.EVENT_TYPES[e.type].risk||0),0),0,5).toFixed(1).replace('.',',')+'/5'+(this.worldState.news(n.id,this.clock).some(e=>e.target===r.id&&!e.resolved&&Atlas.EVENT_TYPES[e.type].closed)?' ; une fermeture m’a été signalée.':'.'));};
 const atlasWalkNpc=Game.prototype.walkNpc;
-Game.prototype.walkNpc=function(n,to,dt){if(!(dt>0))return Math.hypot(n.x-to.x,n.y-to.y)<2;const key=Math.floor(to.x/16)+','+Math.floor(to.y/16);if(n.pathKey!==key||!n.path?.length){n.pathKey=key;n.path=Atlas.localPath(n,to,(x,y)=>!this.solid(x,y,4,0)&&(!n.dangerState||this.civilianStepSafe(n,x,y)));}const q=n.path?.[0];if(!q)return Math.hypot(n.x-to.x,n.y-to.y)<2;const dx=q.x-n.x,dy=q.y-n.y,d=Math.hypot(dx,dy),step=Math.min(d,(this.party?.some(c=>c.id===n.id)?80:32)*dt);if(!this.solid(n.x+(d?dx/d*step:0),n.y+(d?dy/d*step:0),4,0)&&(!n.dangerState||this.civilianStepSafe(n,n.x+(d?dx/d*step:0),n.y+(d?dy/d*step:0)))){n.x+=d?dx/d*step:0;n.y+=d?dy/d*step:0;n.dir=this.direction(dx,dy);n.anim=(n.anim||0)+step/5.5;}else n.path=[];if(d<=step+.01)n.path.shift();return Math.hypot(n.x-to.x,n.y-to.y)<2;};
+// Sweep the whole segment, including the actor radius: diagonal steering must
+// never skip a narrow wall or cut through the inside of a corner.
+Game.prototype.npcSegmentFree=function(n,from,to){
+ const length=Math.hypot(to.x-from.x,to.y-from.y),steps=Math.max(1,Math.ceil(length/4));
+ for(let i=1;i<=steps;i++){const t=i/steps,x=from.x+(to.x-from.x)*t,y=from.y+(to.y-from.y)*t;
+  if(this.solid(x,y,4,n.level||0)||(n.dangerState&&!this.civilianStepSafe(n,x,y)))return false;
+ }return true;
+};
+Game.prototype.walkNpc=function(n,to,dt){
+ if(!(dt>0))return Math.hypot(n.x-to.x,n.y-to.y)<2;
+ const key=Math.floor(to.x/16)+','+Math.floor(to.y/16);
+ if(n.pathKey!==key||!n.path?.length){
+  n.pathKey=key;const path=Atlas.localPath(n,to,(x,y)=>!this.solid(x,y,4,n.level||0)&&(!n.dangerState||this.civilianStepSafe(n,x,y)));
+  // String-pull only when planning, not for every NPC on every frame.
+  n.path=[];let anchor=n;
+  if(path.length>1&&this.npcSegmentFree(n,n,path[path.length-1]))n.path=[path[path.length-1]];
+  else for(let i=0;i<path.length;){let end=i;while(end+1<path.length&&this.npcSegmentFree(n,anchor,path[end+1]))end++;
+   n.path.push(path[end]);anchor=path[end];i=end+1;
+  }
+ }
+ // A moving target can change its position without leaving its current tile.
+ if(n.path?.length)n.path[n.path.length-1]={x:to.x,y:to.y};
+ let budget=(this.party?.some(c=>c.id===n.id)?80:32)*dt;
+ while(budget>0&&n.path?.length){
+  const q=n.path[0],dx=q.x-n.x,dy=q.y-n.y,d=Math.hypot(dx,dy),step=Math.min(d,budget);
+  const next={x:n.x+(d?dx/d*step:0),y:n.y+(d?dy/d*step:0)};
+  if(!this.npcSegmentFree(n,n,next)){n.path=[];break;}
+  n.x=next.x;n.y=next.y;if(d){n.dir=this.direction(dx,dy);n.anim=(n.anim||0)+step/5.5;}
+  budget-=step;if(d<=step+.01)n.path.shift();else break;
+ }
+ return Math.hypot(n.x-to.x,n.y-to.y)<2;
+};
 Game.prototype.stepParty=function(dt,minutes){const p=this.player,c=this.companion,active=this.story.recruited&&!this.story.delivered;if(this.story.fairy){this.fairyActor.x=p.x-28+Math.sin(this.time*2)*4;this.fairyActor.y=p.y-22;this.fairyActor.level=p.level||0;}
  if(!active)return;if(dist(this.escortActor,p)>1600&&!this.journey&&this.time>(this.partyWaitAt||0)){this.partyWaitAt=this.time+30;this.emit('notice',{title:'Elyne attend',text:'Retourne auprès d’elle avant de poursuivre.'});}
 
@@ -12681,6 +12712,48 @@ function installLandscapeUI(){
  installInteractionUI();
 }
 
+// Pagination belongs to the dialogue state: all input paths consume the current
+// reply completely before an option, a quest panel or the end callback can run.
+Game.prototype.dialoguePageState=function(){
+ const d=this.dialogue;if(!d)return null;
+ const value=String((d.choosing?d.menu.prompt:d.lines[d.index])||'');
+ if(!d.page||d.page.value!==value||d.page.index!==d.index||d.page.choosing!==d.choosing)
+  d.page={value,index:d.index,choosing:d.choosing,start:0,end:value.length,key:null};
+ return d.page;
+};
+Game.prototype.prepareDialoguePage=function(key,fits){
+ const p=this.dialoguePageState();if(!p||p.key===key)return;
+ const d=this.dialogue,oldShown=d.shown??1e9;p.key=key;p.fits=fits;
+ const rest=p.value.slice(p.start),ends=[];
+ for(const match of rest.matchAll(/\s+/g))ends.push(match.index+match[0].length);
+ if(ends.at(-1)!==rest.length)ends.push(rest.length);
+ let lo=0,hi=ends.length;
+ while(lo<hi){const mid=(lo+hi)>>1;if(fits(rest.slice(0,ends[mid])))lo=mid+1;else hi=mid;}
+ let length=lo?ends[lo-1]:0;
+ if(!length&&rest){
+  // An oversized single token still has to be readable. CSS wraps it; split
+  // between Unicode code points only if it cannot fit even on an empty page.
+  const chars=Array.from(rest);lo=1;hi=chars.length;
+  while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(fits(chars.slice(0,mid).join('')))lo=mid;else hi=mid-1;}
+  length=chars.slice(0,lo).join('').length;
+ }
+ p.end=p.start+length;d.shown=Math.min(oldShown,length);
+};
+Game.prototype.dialogueHasMore=function(){const p=this.dialoguePageState();return !!p&&p.end<p.value.length;};
+Game.prototype.dialogueText=function(){const p=this.dialoguePageState();return p?p.value.slice(p.start,p.end):'';};
+{
+ const advance=Game.prototype.advanceDialogue,choose=Game.prototype.choose;
+ Game.prototype.advanceDialogue=function(){
+  const d=this.dialogue;if(!d||d.waitPanel)return;
+  const p=this.dialoguePageState(),length=p.end-p.start;
+  if((d.shown??1e9)<length){d.shown=length;this.emit('dialogue');return;}
+  if(p.end<p.value.length){const key=p.key,fit=p.fits;p.start=p.end;p.end=p.value.length;p.key=null;d.shown=0;if(fit)this.prepareDialoguePage(key,fit);this.emit('dialogue');return;}
+  if(d.choosing)return;
+  advance.call(this);
+ };
+ Game.prototype.choose=function(i){if(this.dialogueHasMore())return;if(this.dialogue?.choosing)delete this.dialogue.page;return choose.call(this,i);};
+}
+
 // Codex / ChatGPT: stable conversation geometry and readable nearby nameplates.
 function dialoguePanelGeometry({width,height,safe={l:0,r:0,t:0,b:0},hudBottom=44}){
  safe={l:0,r:0,t:0,b:0,...safe};
@@ -12693,7 +12766,7 @@ Renderer.prototype.bubble=function(){
  const d=this.g.dialogue,el=document.getElementById('dialogue'),controls=document.getElementById('dialogueControls');
  if(!el?.style)return;
  if(!d||d.waitPanel){el.hidden=true;if(controls)controls.hidden=true;return;}
- const value=(d.choosing?d.menu.prompt:d.lines[d.index])||'',screen=document.getElementById('screen'),cv=document.getElementById('game'),r=cv.getBoundingClientRect(),sr=screen.getBoundingClientRect();
+ let value=this.g.dialogueText(),screen=document.getElementById('screen'),cv=document.getElementById('game'),r=cv.getBoundingClientRect(),sr=screen.getBoundingClientRect();
  if(!value||!r.width){el.hidden=true;return;}
  const probe=document.getElementById('safeProbe'),style=probe?getComputedStyle(probe):null,safe={l:parseFloat(style?.paddingLeft)||0,r:parseFloat(style?.paddingRight)||0,t:parseFloat(style?.paddingTop)||0,b:parseFloat(style?.paddingBottom)||0};
  const layout=dialoguePanelGeometry({width:sr.width,height:sr.height,safe,hudBottom:r.top-sr.top+this.top*r.width/this.W});
@@ -12722,6 +12795,13 @@ Renderer.prototype.bubble=function(){
  const top=clamp(feet-(d.head||w?.head||32)*scale-height-12,layout.top,Math.max(layout.top,sr.height-layout.footerHeight-38-height));
  Object.assign(el.style,{left:Math.round(left)+'px',top:Math.round(top)+'px',width:width+'px',height:height+'px'});
  el.style.setProperty('--bubble-width',width+'px');el.style.setProperty('--bubble-body-height',(height-24)+'px');el.style.setProperty('--tail',clamp(ax-left,16,width-16)+'px');
+ // Measure against the actual DOM font and fixed body, including the name.
+ // The key prevents layout probes during ordinary typewriter frames.
+ const pageKey=[width,height,textSettings.scale,d.speaker,document.fonts?.status].join('|');
+ this.g.prepareDialoguePage(pageKey,copy=>{a.textContent=copy;b.textContent='';return body.scrollHeight<=body.clientHeight+1;});
+ value=this.g.dialogueText();const count=Math.floor(Math.min(d.shown??1e9,value.length));
+ if(a.textContent!==value.slice(0,count))a.textContent=value.slice(0,count);if(b.textContent!==value.slice(count))b.textContent=value.slice(count);
+ el.classList.remove('scrollable');
  this.bubbleBounds={left,top,width,height};
 };
 function npcNameplateMetrics(ctx,label,cssScale=2,textScale=1){
@@ -12755,6 +12835,7 @@ function installInteractionUI(){
  const label=document.createElement('span');label.className='dialogue-next-label';next.append(label);
  const sync=syncDialogue;syncDialogue=function(){
   sync();const d=state==='playing'?game.dialogue:null;controls.hidden=!d||!!d.waitPanel;
+  const more=!!d&&game.dialogueHasMore();if(more){next.hidden=false;next.classList.remove('end');next.setAttribute('aria-label','Suivant');band.hidden=true;bye.hidden=true;}
   label.textContent=next.classList.contains('end')?'Terminer':'Suite';
   for(const button of controls.querySelectorAll('[data-choice-index]')){const selected=Number(button.dataset.choiceIndex)===choiceSel;button.classList.toggle('sel',selected);button.setAttribute('tabindex',selected?'0':'-1');}
  };
@@ -12927,9 +13008,9 @@ window.addEventListener('blur',resetTouch);document.addEventListener('visibility
 $('dialogueNext').addEventListener('click',()=>game.advanceDialogue());$('dlgNext').addEventListener('click',()=>game.advanceDialogue());document.fonts?.load('8px PixelUI');document.fonts?.load('32px Medieval');
 let choiceSel=0,choiceKey='';
 function syncDialogue(){$('screen').classList.toggle('playing',state==='playing');const d=state==='playing'?game.dialogue:null;$('screen').classList.toggle('dialoguing',!!d);$('dialogue').hidden=true;
- const next=$('dlgNext'),band=$('dlgChoices');next.hidden=!d||d.choosing||!!d.waitPanel;band.hidden=!d||!d.choosing;$('dlgBye').hidden=!(d&&d.choosing&&d.menu.options.some(o=>o.end));if(!d){choiceKey='';delete $('dialogue').dataset.line;return;}
+ const next=$('dlgNext'),band=$('dlgChoices');next.hidden=!d||(d.choosing&&!game.dialogueHasMore())||!!d.waitPanel;band.hidden=!d||!d.choosing||game.dialogueHasMore();$('dlgBye').hidden=!(d&&d.choosing&&d.menu.options.some(o=>o.end));if(!d){choiceKey='';delete $('dialogue').dataset.line;return;}
  const last=!d.choosing&&d.index>=d.lines.length-1&&(!d.menu||d.after==='end');next.classList.toggle('end',last);next.setAttribute('aria-label',last?'Terminer':'Suivant');
- const say=d.speaker+' : '+(d.choosing?d.menu.prompt:d.lines[d.index]);if($('dlgSr').textContent!==say)$('dlgSr').textContent=say;
+ const say=d.speaker+' : '+game.dialogueText();if($('dlgSr').textContent!==say)$('dlgSr').textContent=say;
  if(d.choosing){const key=d.menu.options.map(o=>(o.mark||'')+o.label).join('|');if(key!==choiceKey){choiceKey=key;choiceSel=0;$('dlgList').scrollTop=0;$('dlgList').replaceChildren(...d.menu.options.map((o,i)=>{const b=document.createElement('button');b.className='dlg-choice'+(o.mark?' mk-'+o.mark:'');b.dataset.choiceIndex=i;b.innerHTML=(QUEST_CHOICE_ICONS[o.mark]?'<i class="mk" aria-hidden="true"><img alt="" src="'+QUEST_CHOICE_ICONS[o.mark]+'"></i>':'')+'<span class="choice-copy">'+esc(o.label)+'</span>';if(o.mark)b.setAttribute('aria-label',{offer:'Nouvelle quête',turnin:'Quête à rendre',active:'Quête en cours'}[o.mark]+' : '+o.label);b.addEventListener('click',()=>game.choose(i));return b;}).filter((b,i)=>!d.menu.options[i].end));const bi=d.menu.options.findIndex(o=>o.end),bye=$('dlgBye');if(bi>=0){bye.dataset.choiceIndex=bi;bye.onclick=()=>game.choose(bi);bye.lastChild.textContent=d.menu.options[bi].label;}requestAnimationFrame(syncChoiceScroll);}band.querySelectorAll('.dlg-choice').forEach((b,i)=>b.classList.toggle('sel',i===choiceSel));}else choiceKey='';
  resetTouch();keys.clear();}
 function syncChoiceScroll(){const L=$('dlgList'),tr=$('dlgTrack'),th=tr.firstElementChild,over=L.scrollHeight>L.clientHeight+2;tr.style.visibility=over?'visible':'hidden';if(!over)return;const H=tr.clientHeight-4,hh=Math.max(22,Math.round(H*L.clientHeight/L.scrollHeight)),top=Math.round((H-hh)*L.scrollTop/Math.max(1,L.scrollHeight-L.clientHeight));th.style.height=hh+'px';th.style.transform='translateY('+top+'px)';}
@@ -12937,7 +13018,7 @@ function dragChoiceScroll(y){const L=$('dlgList'),tr=$('dlgTrack'),r=tr.getBound
 $('dlgList').addEventListener('scroll',syncChoiceScroll,{passive:true});addEventListener('resize',()=>setTimeout(syncChoiceScroll,80));
 $('dlgTrack').addEventListener('touchstart',e=>{e.preventDefault();e.stopPropagation();dragChoiceScroll(e.touches[0].clientY);},{passive:false});$('dlgTrack').addEventListener('touchmove',e=>{e.preventDefault();dragChoiceScroll(e.touches[0].clientY);},{passive:false});
 $('dlgTrack').addEventListener('pointerdown',e=>{if(e.pointerType==='touch')return;dragChoiceScroll(e.clientY);const mv=ev=>dragChoiceScroll(ev.clientY),up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);};addEventListener('pointermove',mv);addEventListener('pointerup',up);});
-function dialogueKey(e){const d=game.dialogue;if(['KeyE','Enter','Space','Numpad0','ArrowDown','ArrowRight','ArrowUp','ArrowLeft','KeyS','KeyD','KeyZ','KeyW','KeyQ','KeyA'].includes(e.code)||/^Digit[1-9]$/.test(e.code))e.preventDefault();if(d.waitPanel){if(['KeyE','Enter','Space','Numpad0'].includes(e.code))closeQuestPanel(true);else if(e.code==='Escape'&&$('qpNo'))closeQuestPanel(false);return;}const ok=['KeyE','Enter','Space','Numpad0'];if(d.choosing){const n=d.menu.options.length;if(['ArrowDown','ArrowRight','KeyS','KeyD'].includes(e.code)){choiceSel=(choiceSel+1)%n;focusDialogueChoice(choiceSel);}else if(['ArrowUp','ArrowLeft','KeyZ','KeyW','KeyQ','KeyA'].includes(e.code)){choiceSel=(choiceSel+n-1)%n;focusDialogueChoice(choiceSel);}else if(/^Digit[1-9]$/.test(e.code))game.choose(+e.code.slice(5)-1);else if(ok.includes(e.code))game.choose(choiceSel);return;}if(ok.includes(e.code))game.advanceDialogue();}
+function dialogueKey(e){const d=game.dialogue;if(['KeyE','Enter','Space','Numpad0','ArrowDown','ArrowRight','ArrowUp','ArrowLeft','KeyS','KeyD','KeyZ','KeyW','KeyQ','KeyA'].includes(e.code)||/^Digit[1-9]$/.test(e.code))e.preventDefault();if(d.waitPanel){if(['KeyE','Enter','Space','Numpad0'].includes(e.code))closeQuestPanel(true);else if(e.code==='Escape'&&$('qpNo'))closeQuestPanel(false);return;}const ok=['KeyE','Enter','Space','Numpad0'];if(d.choosing&&!game.dialogueHasMore()){const n=d.menu.options.length;if(['ArrowDown','ArrowRight','KeyS','KeyD'].includes(e.code)){choiceSel=(choiceSel+1)%n;focusDialogueChoice(choiceSel);}else if(['ArrowUp','ArrowLeft','KeyZ','KeyW','KeyQ','KeyA'].includes(e.code)){choiceSel=(choiceSel+n-1)%n;focusDialogueChoice(choiceSel);}else if(/^Digit[1-9]$/.test(e.code))game.choose(+e.code.slice(5)-1);else if(ok.includes(e.code))game.choose(choiceSel);return;}if(ok.includes(e.code))game.advanceDialogue();}
 const noticeQueue=[];let noticeTimer=0;
 function queueNotice(title,detail){const previous=noticeQueue[noticeQueue.length-1];if(previous&&previous.title===title&&previous.detail===detail){previous.count++;return;}noticeQueue.push({title,detail,count:1});if(noticeQueue.length>20)noticeQueue.shift();showNotice();}
 function showNotice(){if(noticeTimer||!noticeQueue.length)return;const item=noticeQueue.shift(),card=document.createElement('div'),title=document.createElement('strong'),detail=document.createElement('span');card.className='notice-card';title.textContent=item.title;detail.textContent=item.detail+(item.count>1?' ×'+item.count:'');card.append(title,detail);$('notices').replaceChildren(card);noticeTimer=setTimeout(()=>{$('notices').replaceChildren();noticeTimer=0;showNotice();},2800);}

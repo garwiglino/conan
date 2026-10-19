@@ -10,7 +10,7 @@ Renderer.prototype.bubble=function(){
  const d=this.g.dialogue,el=document.getElementById('dialogue'),controls=document.getElementById('dialogueControls');
  if(!el?.style)return;
  if(!d||d.waitPanel){el.hidden=true;if(controls)controls.hidden=true;return;}
- const value=(d.choosing?d.menu.prompt:d.lines[d.index])||'',screen=document.getElementById('screen'),cv=document.getElementById('game'),r=cv.getBoundingClientRect(),sr=screen.getBoundingClientRect();
+ let value=this.g.dialogueText(),screen=document.getElementById('screen'),cv=document.getElementById('game'),r=cv.getBoundingClientRect(),sr=screen.getBoundingClientRect();
  if(!value||!r.width){el.hidden=true;return;}
  const probe=document.getElementById('safeProbe'),style=probe?getComputedStyle(probe):null,safe={l:parseFloat(style?.paddingLeft)||0,r:parseFloat(style?.paddingRight)||0,t:parseFloat(style?.paddingTop)||0,b:parseFloat(style?.paddingBottom)||0};
  const layout=dialoguePanelGeometry({width:sr.width,height:sr.height,safe,hudBottom:r.top-sr.top+this.top*r.width/this.W});
@@ -39,6 +39,13 @@ Renderer.prototype.bubble=function(){
  const top=clamp(feet-(d.head||w?.head||32)*scale-height-12,layout.top,Math.max(layout.top,sr.height-layout.footerHeight-38-height));
  Object.assign(el.style,{left:Math.round(left)+'px',top:Math.round(top)+'px',width:width+'px',height:height+'px'});
  el.style.setProperty('--bubble-width',width+'px');el.style.setProperty('--bubble-body-height',(height-24)+'px');el.style.setProperty('--tail',clamp(ax-left,16,width-16)+'px');
+ // Measure against the actual DOM font and fixed body, including the name.
+ // The key prevents layout probes during ordinary typewriter frames.
+ const pageKey=[width,height,textSettings.scale,d.speaker,document.fonts?.status].join('|');
+ this.g.prepareDialoguePage(pageKey,copy=>{a.textContent=copy;b.textContent='';return body.scrollHeight<=body.clientHeight+1;});
+ value=this.g.dialogueText();const count=Math.floor(Math.min(d.shown??1e9,value.length));
+ if(a.textContent!==value.slice(0,count))a.textContent=value.slice(0,count);if(b.textContent!==value.slice(count))b.textContent=value.slice(count);
+ el.classList.remove('scrollable');
  this.bubbleBounds={left,top,width,height};
 };
 function npcNameplateMetrics(ctx,label,cssScale=2,textScale=1){
@@ -72,6 +79,7 @@ function installInteractionUI(){
  const label=document.createElement('span');label.className='dialogue-next-label';next.append(label);
  const sync=syncDialogue;syncDialogue=function(){
   sync();const d=state==='playing'?game.dialogue:null;controls.hidden=!d||!!d.waitPanel;
+  const more=!!d&&game.dialogueHasMore();if(more){next.hidden=false;next.classList.remove('end');next.setAttribute('aria-label','Suivant');band.hidden=true;bye.hidden=true;}
   label.textContent=next.classList.contains('end')?'Terminer':'Suite';
   for(const button of controls.querySelectorAll('[data-choice-index]')){const selected=Number(button.dataset.choiceIndex)===choiceSel;button.classList.toggle('sel',selected);button.setAttribute('tabindex',selected?'0':'-1');}
  };

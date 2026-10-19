@@ -16,7 +16,11 @@ const root=path.resolve(__dirname,'..');
   await page.click('#dlgNext');await page.waitForTimeout(100);const long=await page.locator('#dialogue').boundingBox();assert.deepEqual(long,first,'the long line must not move or resize the panel');
   assert.equal(await page.locator('#dialogue').evaluate(n=>n.classList.contains('docked')),false);
   assert.equal(await page.locator('#dialogue .tail').isVisible(),true);
-  await page.click('#dlgNext');await page.click('#dlgNext');await page.waitForTimeout(100);
+  // Every continuation must fit the fixed bubble and preserve the reply.
+  const fullReply=await page.evaluate(()=>ui.game.dialogue.lines[ui.game.dialogue.index]);let joined='',pages=0;while(!await page.evaluate(()=>ui.game.dialogue?.choosing)){
+   joined+=await page.evaluate(()=>ui.game.dialogueText());const fit=await page.locator('#dialogue .dlg-body').evaluate(n=>({scroll:n.scrollHeight,height:n.clientHeight}));assert.ok(fit.scroll<=fit.height+1,'page fits the bubble');
+   await page.evaluate(()=>{ui.game.dialogue.shown=1e9;});await page.click('#dlgNext');await page.waitForTimeout(25);assert.ok(++pages<100,'pagination terminates');
+  }assert.ok(pages>2,'long reply is paginated');assert.equal(joined,fullReply,'pagination preserves every word in order');await page.waitForTimeout(100);
   await page.waitForFunction(()=>ui.game.dialogue?.choosing);
   assert.deepEqual(await page.locator('#dialogue').boundingBox(),first,'choices must not move or resize the panel');
   assert.equal(await page.locator('#dialogueControls > #dlgBye').count(),1);

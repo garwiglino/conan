@@ -68,7 +68,38 @@ Game.prototype.atlasNews=function(n){const fresh=this.worldStore.readFor(this.wo
 Game.prototype.npcMenu=function(n){const menu=atlasNpcMenu.call(this,n);menu.splice(Math.max(0,menu.length-1),0,{label:'Nouvelles du monde et des routes',lines:this.atlasNews(n),act:()=>{this.worldState.recordNews(n.id,this.clock);this.emit('save');}});if(n.site||n.id==='veilleur'||n.id==='zahra')menu.splice(menu.length-1,0,{label:'Routes et destinations connues',lines:this.npcDirections(n)},{label:'Où trouver un transport ?',lines:['Parle au palefrenier ou au charretier du relais. Pour embarquer, rejoins le batelier sur le quai.']});return menu;};
 Game.prototype.npcDirections=function(n){const w=Atlas.toWorld(n.x,n.y),site=Atlas.byId[n.site]||Atlas.nearestSite(w.x,w.y),known=Atlas.roads.filter(r=>Atlas.roadCells(r).some(c=>c.region===site.region));return known.slice(0,4).map(r=>r.name+' : danger '+clamp(r.danger+this.worldState.news(n.id,this.clock).filter(e=>e.target===r.id&&!e.resolved).reduce((sum,e)=>sum+(Atlas.EVENT_TYPES[e.type].risk||0),0),0,5).toFixed(1).replace('.',',')+'/5'+(this.worldState.news(n.id,this.clock).some(e=>e.target===r.id&&!e.resolved&&Atlas.EVENT_TYPES[e.type].closed)?' ; une fermeture m’a été signalée.':'.'));};
 const atlasWalkNpc=Game.prototype.walkNpc;
-Game.prototype.walkNpc=function(n,to,dt){if(!(dt>0))return Math.hypot(n.x-to.x,n.y-to.y)<2;const key=Math.floor(to.x/16)+','+Math.floor(to.y/16);if(n.pathKey!==key||!n.path?.length){n.pathKey=key;n.path=Atlas.localPath(n,to,(x,y)=>!this.solid(x,y,4,0)&&(!n.dangerState||this.civilianStepSafe(n,x,y)));}const q=n.path?.[0];if(!q)return Math.hypot(n.x-to.x,n.y-to.y)<2;const dx=q.x-n.x,dy=q.y-n.y,d=Math.hypot(dx,dy),step=Math.min(d,(this.party?.some(c=>c.id===n.id)?80:32)*dt);if(!this.solid(n.x+(d?dx/d*step:0),n.y+(d?dy/d*step:0),4,0)&&(!n.dangerState||this.civilianStepSafe(n,n.x+(d?dx/d*step:0),n.y+(d?dy/d*step:0)))){n.x+=d?dx/d*step:0;n.y+=d?dy/d*step:0;n.dir=this.direction(dx,dy);n.anim=(n.anim||0)+step/5.5;}else n.path=[];if(d<=step+.01)n.path.shift();return Math.hypot(n.x-to.x,n.y-to.y)<2;};
+// Sweep the whole segment, including the actor radius: diagonal steering must
+// never skip a narrow wall or cut through the inside of a corner.
+Game.prototype.npcSegmentFree=function(n,from,to){
+ const length=Math.hypot(to.x-from.x,to.y-from.y),steps=Math.max(1,Math.ceil(length/4));
+ for(let i=1;i<=steps;i++){const t=i/steps,x=from.x+(to.x-from.x)*t,y=from.y+(to.y-from.y)*t;
+  if(this.solid(x,y,4,n.level||0)||(n.dangerState&&!this.civilianStepSafe(n,x,y)))return false;
+ }return true;
+};
+Game.prototype.walkNpc=function(n,to,dt){
+ if(!(dt>0))return Math.hypot(n.x-to.x,n.y-to.y)<2;
+ const key=Math.floor(to.x/16)+','+Math.floor(to.y/16);
+ if(n.pathKey!==key||!n.path?.length){
+  n.pathKey=key;const path=Atlas.localPath(n,to,(x,y)=>!this.solid(x,y,4,n.level||0)&&(!n.dangerState||this.civilianStepSafe(n,x,y)));
+  // String-pull only when planning, not for every NPC on every frame.
+  n.path=[];let anchor=n;
+  if(path.length>1&&this.npcSegmentFree(n,n,path[path.length-1]))n.path=[path[path.length-1]];
+  else for(let i=0;i<path.length;){let end=i;while(end+1<path.length&&this.npcSegmentFree(n,anchor,path[end+1]))end++;
+   n.path.push(path[end]);anchor=path[end];i=end+1;
+  }
+ }
+ // A moving target can change its position without leaving its current tile.
+ if(n.path?.length)n.path[n.path.length-1]={x:to.x,y:to.y};
+ let budget=(this.party?.some(c=>c.id===n.id)?80:32)*dt;
+ while(budget>0&&n.path?.length){
+  const q=n.path[0],dx=q.x-n.x,dy=q.y-n.y,d=Math.hypot(dx,dy),step=Math.min(d,budget);
+  const next={x:n.x+(d?dx/d*step:0),y:n.y+(d?dy/d*step:0)};
+  if(!this.npcSegmentFree(n,n,next)){n.path=[];break;}
+  n.x=next.x;n.y=next.y;if(d){n.dir=this.direction(dx,dy);n.anim=(n.anim||0)+step/5.5;}
+  budget-=step;if(d<=step+.01)n.path.shift();else break;
+ }
+ return Math.hypot(n.x-to.x,n.y-to.y)<2;
+};
 Game.prototype.stepParty=function(dt,minutes){const p=this.player,c=this.companion,active=this.story.recruited&&!this.story.delivered;if(this.story.fairy){this.fairyActor.x=p.x-28+Math.sin(this.time*2)*4;this.fairyActor.y=p.y-22;this.fairyActor.level=p.level||0;}
  if(!active)return;if(dist(this.escortActor,p)>1600&&!this.journey&&this.time>(this.partyWaitAt||0)){this.partyWaitAt=this.time+30;this.emit('notice',{title:'Elyne attend',text:'Retourne auprès d’elle avant de poursuivre.'});}
 

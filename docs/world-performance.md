@@ -18,6 +18,16 @@ Les contrôles des obstacles ne recopient plus la liste des accessoires et ne re
 
 La recherche de chemin local vérifie chaque case au plus une fois par recherche. Ses routes et leur ordre de départage sont conservés. Une destination au-delà de la limite préexistante de 36 cases est refusée immédiatement, au lieu d’explorer inutilement jusqu’à 2 200 nœuds. Les contrôles sont renouvelés à la recherche suivante ; une fermeture nouvelle reste prise en compte.
 
+Les PNJ lissent les chemins calculés pour avancer selon des angles libres, avec
+une vitesse vectorielle constante (32 pixels/s, 80 pour les compagnons suivant
+le joueur). Le lissage se fait lors de la planification ; chaque déplacement
+vérifie à nouveau tout le segment par pas d’au plus quatre pixels, avec le rayon
+du personnage et les restrictions de danger. Un obstacle refermé interrompt le
+trajet et force une nouvelle recherche. La cible reste actualisée même dans une
+même case ; le budget de déplacement restant sert à franchir un point de passage
+sans pause artificielle. Les trajets lointains et leurs horloges restent gérés par
+la simulation du monde.
+
 Le journal du monde réutilise la copie déjà construite pour la sauvegarde du jeu. Un état inchangé n’est plus sérialisé à nouveau pour vérifier qu’il est inchangé. L’écriture locale, l’ordre des écritures de fichier et les protections entre campagnes sont conservés.
 
 ## Recette reproductible

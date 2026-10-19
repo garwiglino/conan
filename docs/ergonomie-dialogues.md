@@ -76,3 +76,12 @@ Vérification de cette révision : trois conversations réelles (568×320 à 125
 ### Ancrages définitifs des choix (correction utilisateur)
 
 L’encart des choix est centré horizontalement dans le rectangle réel du canvas et collé à son bord inférieur, sans marge basse. Les actions Au revoir et Suite sont des éléments frères de cet encart, positionnés dans la colonne de droite, et ne dépendent plus de sa position. La géométrie se recalcule avec celle du canvas après un changement de taille. Les trois conversations réelles vérifient explicitement le centrage, le contact avec le bas du canvas et la présence du bouton dans la colonne de droite.
+
+Les répliques dépassant la bulle fixe sont désormais paginées à la limite des
+mots, d’après la place mesurée avec la police, la taille de texte et le format
+actuels. Une pression termine d’abord l’apparition de la page ; la pression
+suivante affiche la suite de la même réplique. Le moteur ne passe ensuite qu’à
+la réplique suivante, au choix, au panneau de quête ou à la fin de conversation.
+Les longs préambules des menus suivent la même règle. Un changement de format
+conserve la position dans la réplique. Seul un mot isolé trop long pour une page
+entière peut être partagé, sans couper une paire Unicode.
