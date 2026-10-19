@@ -147,7 +147,7 @@ const BatracienSociety = (() => {
  };
  const localThreat=Game.prototype.localThreatAt;
  Game.prototype.localThreatAt=function(x,y,level=0,radius=CIVILIAN_THREAT_RADIUS){
-  return localThreat.call(this,x,y,level,radius)||this.npcs.find(n=>this.isHostileBatracien(n)&&(n.level||0)===level&&Math.hypot(n.x-x,n.y-y)<radius&&(radius<=48||this.lineClear({x,y,level},n)))||null;
+  return localThreat.call(this,x,y,level,radius)||this.npcs.find(n=>(n.level||0)===level&&Math.hypot(n.x-x,n.y-y)<radius&&this.isHostileBatracien(n)&&(radius<=48||this.lineClear({x,y,level},n)))||null;
  };
  const damageCivilian=Game.prototype.damageCivilian;
  Game.prototype.damageCivilian=function(n,amount,source){

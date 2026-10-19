@@ -44,7 +44,7 @@ Mesure Chromium du 18 octobre 2026, même parcours de 72 images avec changements
 
 La baisse du temps cumulé du rendu du sol sur le fil principal est d’environ 93 % avec le worker. Le mode fractionné répartit le reste du calcul entre les images ; son chiffre ne mesure donc pas le délai total nécessaire pour finir une illustration. Les deux modes ont effectivement terminé les illustrations visibles et passé les contrôles de mémoire, de repos et de restauration. Des pointes plus courtes restent mesurables : ces résultats ne signifient pas qu’aucune image ne pourra dépasser 16,7 ms.
 
-Validation de cette version : **431 tests JavaScript réussis**, **24 tests de bible réussis**, compilation de la bible sans avertissement, **120 contrôles d’interface paysage réussis**, recettes Chromium des habitants et convois sans erreur JavaScript. Les recettes de performance avec worker et avec worker désactivé ont toutes deux terminé le décor visible, conservé les bornes de cache et restauré l’heure et les pièces. L’intégration HTML est idempotente ; les contenus de jeu web/iOS correspondent et l’archive native contient le HTML actuel.
+Validation de l’optimisation du 18 octobre : **431 tests JavaScript réussis**, **24 tests de bible réussis**, compilation de la bible sans avertissement, **120 contrôles d’interface paysage réussis**, recettes Chromium des habitants et convois sans erreur JavaScript. Les recettes de performance avec worker et avec worker désactivé ont toutes deux terminé le décor visible, conservé les bornes de cache et restauré l’heure et les pièces. L’intégration HTML est idempotente ; les contenus de jeu web/iOS correspondent et l’archive native contient le HTML actuel.
 
 Vérification après les corrections des personnes du 19 octobre 2026 : les deux recettes de chargement passent encore, avec zéro rendu complet du terrain sur le fil principal pendant les images contrôlées, caches bornés, décor visible terminé et restauration conforme. Les équipes en mission ne sont plus bloquées par la boucle de repos assis ou les conversations ambiantes.
 
@@ -55,3 +55,37 @@ L’audit transversal a identifié un autre coût : la suspension d’un long vo
 `UI_BROWSER_PATH=/usr/bin/chromium node scripts/check-journey-forecast.cjs` vérifie le coût immédiat, la progression d’une tâche témoin pendant le calcul, l’isolation de la vraie campagne et la concordance entre l’arrêt annoncé et la reprise réelle. Le lieu et la notification sont enregistrés lorsque la prévision est prête ; une sauvegarde encore en attente de cette prévision reste reprenable selon le temps écoulé.
 
 Mesure après l’ensemble des 19 correctifs : trajet terrestre vers `town-11` de 4 777,66 minutes, appel de suspension **13,5 ms**, appel de reprise **0,2 ms**. Le rattrapage complet prend environ 1,91 s de temps réel dans cette recette et laisse passer 63 exécutions de la tâche témoin. La campagne réelle reste inchangée pendant la prévision ; la reprise termine au lieu annoncé. Les coûts immédiats ne représentent pas le temps total du calcul.
+
+## Fluidité après voyage et dialogue
+
+Le profilage du 19 octobre 2026 reproduit deux voyages réels, vers la Citadelle-de-Sarak puis Haut-Givre, avec plusieurs secondes de jeu à chaque arrivée, une conversation avec la fée et la reprise après « Au revoir ». L'ancienne recette de 24 images par lieu ne suffisait pas à mesurer ce coût persistant.
+
+Les recherches locales filtrent maintenant la distance et l'étage avant de calculer les politiques d'hostilité, de présence ou de justice. Cela conserve l'ordre de sélection des personnes éligibles ; un personnage qui entre dans le rayon est pris en compte dès la requête suivante, sans cache de position. Le rendu exclut les personnages entièrement hors écran avant la construction de sa liste de dessin. Leur déplacement, santé, métier, connaissance et rôle dans la simulation ne sont pas suspendus par la caméra.
+
+Les couches de décor qui doivent toujours être dessinées portent désormais un indicateur explicite. Une coordonnée négative du monde ne vaut plus instruction de dessin systématique : les ennemis, restes et objets lointains des régions au nord sont filtrés normalement, sans être retirés du monde. Les couches du pont et des escaliers conservent leur ordre et leur dessin.
+
+La synchronisation des groupes ne remplace plus les tableaux de personnages lorsqu'aucun membre ne change. Le registre des travailleurs reste ainsi réutilisable ; les métiers et les états de santé continuent d'être synchronisés, et les représentations obsolètes ou éloignées restent déchargées. Aucun effectif, stock ou contrat n'est supprimé pour réduire le travail.
+
+Une demande de marche de durée nulle ne lance plus une recherche de chemin. Une destination dont la case est bloquée est refusée immédiatement, au lieu d'explorer jusqu'à 2 200 nœuds. La recherche suivante vérifie de nouveau l'obstacle : ouvrir un passage reste immédiatement pris en compte. Les chemins de référence accessibles gardent exactement leurs points et leur ordre.
+
+Recette soutenue, avec traitement normal des événements et sauvegardes par l'application :
+
+```sh
+UI_BROWSER_PATH=/usr/bin/chromium node scripts/check-world-framerate.cjs
+PERF_NO_WORKER=1 UI_BROWSER_PATH=/usr/bin/chromium node scripts/check-world-framerate.cjs
+```
+
+Pour comparer un ancien HTML autonome, `FPS_HTML=/chemin/ancien-index.html` utilise ce HTML avec le même protocole. La recette relève séparément la simulation, le rendu, les intervalles réels entre callbacks d'affichage et les appels aux politiques coûteuses. Elle contrôle deux voyages terminés, le gel de l'horloge pendant le dialogue, sa reprise après fermeture, l'unicité des personnes, les caches bornés et la restauration de l'heure et de la bourse. Les durées de travail ne sont pas une mesure directe du FPS d'un iPhone.
+
+Mesure comparative locale, même navigateur et même protocole, référence `324ebcd` (180 images après chaque fermeture) :
+
+| Séquence | Médiane avant | Médiane après | 95e centile avant | 95e centile après |
+| --- | ---: | ---: | ---: | ---: |
+| Reprise après dialogue à Sarak | 14,5 ms | 6,3 ms | 20,7 ms | 11,2 ms |
+| Reprise après dialogue à Haut-Givre | 15,4 ms | 6,6 ms | 29,1 ms | 19,0 ms |
+
+Le travail médian d'une image baisse d'environ 56 % dans ces deux séquences. À Haut-Givre, les appels à la qualification d'hostilité batracienne passent de 15 144 623 à 94 799 sur la séquence, soit une baisse de plus de 99 %. Ce sont des coûts et compteurs de cette recette instrumentée, pas une promesse de fréquence d'affichage sur tout appareil. Des pointes de chargement et de sauvegarde restent possibles.
+
+Les intervalles entre callbacks d'affichage donnent aussi environ **39 → 58 images/s** après le dialogue à Sarak et **33 → 52 images/s** à Haut-Givre dans cette recette Chromium. Ils incluent le traitement d'interface et des sauvegardes de la page de test ; ils ne préjugent pas du débit d'un téléphone particulier.
+
+Validation finale : **519 tests JavaScript et 24 tests de bible réussis**, compilation de la bible sans avertissement, recettes soutenues et chargement avec et sans worker, reconstruction HTML idempotente, scripts web/iOS identiques et archive native vérifiée. Les tests spécifiques couvrent les buts de navigation bloqués puis rouverts, les pas de durée nulle, les acteurs qui entrent dans le rayon de menace, les métiers après réutilisation du registre, les représentations de mission mortes, les propriétaires de projectile absents et les coordonnées négatives du monde.

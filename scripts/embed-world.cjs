@@ -1,6 +1,19 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=path.join(__dirname,'..'),read=n=>fs.readFileSync(path.join(root,n),'utf8');
 let html=read('index.html');
+// Cull only visual work and restrict local queries before expensive policies.
+// No actor or simulation record is removed by the camera's visibility bounds.
+// Negative world coordinates are ordinary positions, never layer sentinels.
+for(const [from,to]of [
+ ['{level:.5,y:-1e9,fn:()=>this.levelShade()}', '{always:true,level:.5,y:-1e9,fn:()=>this.levelShade()}'],
+ ['{level:1,y:-10000,fn:()=>this.drawDeck()}', '{always:true,level:1,y:-10000,fn:()=>this.drawDeck()}'],
+ ["{level:1,y:-9999,fn:()=>this.drawStairs('top')}", "{always:true,level:1,y:-9999,fn:()=>this.drawStairs('top')}"],
+ ['if(o.y<=-9999||(o.y>this.cam.y-15', 'if(o.always||(o.y>this.cam.y-15'],
+ ['if(o.level&&o.y>-9999)c.translate', 'if(o.level&&!o.always)c.translate']
+])html=html.replace(from,to);
+html=html.replace('n=>this.npcPresent(n)&&dist(p,n)<24','n=>dist(p,n)<24&&this.npcPresent(n)');
+html=html.replace('...g.npcs.map(n=>({y:n.y,fn:()=>this.npcDraw(n)}))', '...g.npcs.filter(n=>n.x>this.cam.x-96&&n.x<this.cam.x+W+96&&n.y>this.cam.y-96&&n.y<this.cam.y+VH+96).map(n=>({y:n.y,fn:()=>this.npcDraw(n)}))');
+
 const code='// BEGIN WORLD ATLAS\nconst WORLD_DATA='+read('data/world/atlas.json').trim()+';\n'+['world-model.js','world-store.js','world-runtime.js','travel-party.js','travel-background.js','world-exploration.js','world-terrain-art.js','world-props-art.js','world-art-stream.js','world-render.js','transport-art.js','travel-hud.js','travel-select.js','world-ui.js','biome-climate.js','cold-effects.js','biome-audio.js','audio-mix.js','ground-tracks.js','world-danger.js'].map(n=>read('scripts/'+n)).join('\n')+'\nconst CIVILIAN_ART='+read('data/civilians/atlas.json').trim()+';\n'+['civilian-art.js','civilian-runtime.js'].map(n=>read('scripts/'+n)).join('\n')+'\n'+read('sprites/batraciens/batraciens-complet.js')+'\n'+read('sprites/batraciens/batraciens-combattants.js')+'\nconst BATRACIEN_CONFIG='+read('data/batraciens/communities.json').trim()+';\n'+read('scripts/batraciens-runtime.js')+'\n'+read('scripts/batraciens-society.js')+'\n'+read('scripts/npc-combat.js')+'\n'+read('scripts/world-society.js')+'\n'+read('scripts/world-dialogue.js')+'\n// END WORLD ATLAS';
 const pacing=require('./world-pacing.js'),loadBible=n=>JSON.parse(read('data/world/bible/generated/'+n+'.json'));
 const bible={resources:loadBible('resources'),settlements:loadBible('settlements').map(({atlasId,authority,patrolAuthority,jurisdiction,designPopulation,speciesCounts,productionIntent,hinterlandSpecialties,criminalNetworks,supplierOptions,regionId,disputes})=>({atlasId,authority,patrolAuthority,jurisdiction,designPopulation,speciesCounts,productionIntent,hinterlandSpecialties,criminalNetworks,supplierOptions,regionId,disputes})),regions:loadBible('regions').map(({id,authority,resourceLevels})=>({id,authority,resourceLevels})),relations:loadBible('relations'),routes:loadBible('routes'),networks:loadBible('networks')};

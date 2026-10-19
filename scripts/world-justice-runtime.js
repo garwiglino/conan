@@ -76,7 +76,7 @@
  const npcs=Game.prototype.stepNpcs;
  Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filter(n=>!n.justiceReport);npcs.call(this,dt);}finally{this.npcs=all;}this.stepJusticeWitnesses(dt);};
  const guards=Game.prototype.stepHumanGuards;
- Game.prototype.stepHumanGuards=function(dt){guards.call(this,dt);const j=law(this);if(!j||this._justiceCustody)return;for(const n of this.npcs)if(this.isJusticeGuard(n)&&this.sameLevel(n,this.player)&&dist(n,this.player)<220&&this.lineClear(n,this.player))j.sighting(this.justiceSite(n),Atlas.toWorld(this.player.x,this.player.y),n.id,this.clock);};
+ Game.prototype.stepHumanGuards=function(dt){guards.call(this,dt);const j=law(this);if(!j||this._justiceCustody)return;for(const n of this.npcs)if(dist(n,this.player)<220&&this.sameLevel(n,this.player)&&this.isJusticeGuard(n)&&this.lineClear(n,this.player))j.sighting(this.justiceSite(n),Atlas.toWorld(this.player.x,this.player.y),n.id,this.clock);};
  const advance=Game.prototype.advanceAtlas;
  Game.prototype.advanceAtlas=function(dt=0){const before=this.atlasLastClock??this.clock,minutes=this.clock-before,j=law(this);if(this._justiceCustody||minutes<2||!j?.state.cases.length)return advance.call(this,dt);
   // Sleep/transport time does not freeze an already observed witness. Use a
@@ -102,9 +102,9 @@
  Game.prototype.supplyQuote=function(...args){const q=quote.apply(this,args);if(q){const e=this.justiceEffect();return {...q,cost:Math.ceil(q.cost*e.price),justiceMarkup:e.price};}return q;};
  const plan=Game.prototype.planJourney;
  Game.prototype.planJourney=function(...args){const p=plan.apply(this,args);if(p){const e=this.justiceEffect();p.cost=Math.ceil(p.cost*e.price);p.justiceMarkup=e.price;}return p;};
- Game.prototype.canJusticeArrest=function(n){return !this._justiceCustody&&!this.dead&&!this.dying&&this.isJusticeGuard(n)&&this.sameLevel(n,this.player)&&dist(n,this.player)<64&&this.lineClear(n,this.player)&&!!law(this)?.effect(this.justiceSite(n),null,this.clock).wanted;};
+ Game.prototype.canJusticeArrest=function(n){return !!n&&!this._justiceCustody&&!this.dead&&!this.dying&&dist(n,this.player)<64&&this.sameLevel(n,this.player)&&this.isJusticeGuard(n)&&this.lineClear(n,this.player)&&!!law(this)?.effect(this.justiceSite(n),null,this.clock).wanted;};
  const mechanism=Game.prototype.mechanismContext;
- Game.prototype.mechanismContext=function(){if(!this.player.attack&&!this.player.dash){const guard=this.npcs.filter(n=>this.canJusticeArrest(n)&&dist(n,this.player)<48).sort((a,b)=>dist(a,this.player)-dist(b,this.player))[0];if(guard)return {kind:'talk',npc:guard,text:'E  SE RENDRE À LA GARDE'};}return mechanism.call(this);};
+ Game.prototype.mechanismContext=function(){if(!this.player.attack&&!this.player.dash){const guard=this.npcs.filter(n=>dist(n,this.player)<48&&this.canJusticeArrest(n)).sort((a,b)=>dist(a,this.player)-dist(b,this.player))[0];if(guard)return {kind:'talk',npc:guard,text:'E  SE RENDRE À LA GARDE'};}return mechanism.call(this);};
  const talk=Game.prototype.talkTo;
  Game.prototype.talkTo=function(n){if(!this.canJusticeArrest(n))return talk.call(this,n);
   this.cancelWorldConversation(n);this.talk(n.name||'LA GARDE',['Tu es recherché ici. Pose ton arme. Le poste tranchera ton affaire.'],n,n.head||40,null,{prompt:'Que fais-tu ?',options:[{label:'Se rendre',act:()=>this.arrestByJustice(n),end:true},{label:'Refuser et partir',lines:['Alors garde tes distances. Nous ne laisserons pas passer ça.'],end:true}]});return true;

@@ -318,6 +318,9 @@ const createWorldAtlas = (raw) => {
  }
  function localPath(start,end,free,max=2200){const sx=Math.floor(start.x/16),sy=Math.floor(start.y/16),tx=Math.floor(end.x/16),ty=Math.floor(end.y/16),key=(x,y)=>x+','+y,q=new Heap(),best=new Map([[key(sx,sy),0]]),prev=new Map();q.push({x:sx,y:sy,g:0,cost:0});let count=0;
   if(Math.abs(tx-sx)>36||Math.abs(ty-sy)>36)return [];const walkable=new Map();
+  // A blocked goal cannot be reached. Do not expand an entire empty region
+  // on every retry; a fresh query rechecks it when the obstacle changes.
+  if(sx!==tx||sy!==ty){const k=key(tx,ty),open=!!free(tx*16+8,ty*16+8);if(!open)return [];walkable.set(k,true);}
   while(q.size&&count++<max){const n=q.pop(),k=key(n.x,n.y);if(n.g!==best.get(k))continue;if(n.x===tx&&n.y===ty){const path=[{x:end.x,y:end.y}];let p=k;while(prev.has(p)){const u=prev.get(p);if(u.x!==sx||u.y!==sy)path.unshift({x:u.x*16+8,y:u.y*16+8});p=key(u.x,u.y);}return path;}
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36)continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;if(!walkable.has(k2))walkable.set(k2,!!free(x*16+8,y*16+8));if(!walkable.get(k2))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];

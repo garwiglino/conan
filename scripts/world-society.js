@@ -135,7 +135,7 @@ const WorldSociety=(()=>{
   }
   const state=this.ensureWorldSociety();if(this.time<state.nextChat||this.dialogue)return;state.nextChat=this.time+2;
   const active=this.npcs.filter(n=>n.worldChat&&n.worldChat.turn===0).length;if(active>=C.chatLimit)return;
-  const people=this.npcs.filter(n=>calm(this,n)&&n.id!=='fairy'&&!n.worldChat&&this.time>=(n.chatAfter||0)&&dist(n,this.player)<380).sort((a,b)=>civilianHash(a.id+Math.floor(this.clock/30))-civilianHash(b.id+Math.floor(this.clock/30)));
+  const people=this.npcs.filter(n=>dist(n,this.player)<380&&n.id!=='fairy'&&!n.worldChat&&this.time>=(n.chatAfter||0)&&calm(this,n)).sort((a,b)=>civilianHash(a.id+Math.floor(this.clock/30))-civilianHash(b.id+Math.floor(this.clock/30)));
   for(const n of people){const other=people.find(a=>a!==n&&dist(n,a)<=C.chatRange&&dist(n,a)>=18);if(other&&this.startWorldConversation(n,other))break;}
  };
  Game.prototype.worldBanditVictims=function(e){
@@ -146,12 +146,12 @@ const WorldSociety=(()=>{
  };
  Game.prototype.stepWorldPerception=function(){
   const state=this.ensureWorldSociety();if(this.time<state.nextPerception)return;state.nextPerception=this.time+.35;
-  for(const n of this.npcs){if(!n.civilian||!alive(n)||this.civilianProtected(n)||dist(n,this.player)>700)continue;
+  for(const n of this.npcs){if(!n.civilian||dist(n,this.player)>700||!alive(n)||this.civilianProtected(n))continue;
    const e=this.localThreatAt(n.x,n.y,n.level||0,C.perception);if(e){this.cancelWorldConversation(n);if(n.dangerState?.mode!=='fleeing')this.startCivilianFlight(n,e);}
   }
  };
  Game.prototype.stepWorldLocal=function(n,dt){
-  if(!n.resident||n.batracien||n.roadTraffic||n.reliefPost||!calm(this,n)||n.worldChat||this.dialogue?.who===n||dist(n,this.player)>650)return;
+  if(!n.resident||n.batracien||n.roadTraffic||n.reliefPost||dist(n,this.player)>650||n.worldChat||this.dialogue?.who===n||!calm(this,n))return;
   const h=((this.clock/60)%24+24)%24;if(h<6||h>=22)return;
   const s=n.localLife||(n.localLife={after:this.time+10+civilianHash(n.id)%20,cycle:0,goal:null});
   if(!s.goal){if(this.time<s.after)return;s.cycle++;
