@@ -53,3 +53,5 @@
 #pursuitButton{position:absolute;z-index:8;background:transparent;border:0;border-radius:0;padding:0;box-shadow:none;cursor:pointer;touch-action:manipulation}#pursuitButton[hidden]{display:none!important}#pursuitButton:focus-visible{outline:2px solid #e5bd79;outline-offset:2px}#pursuitRegions article{padding:9px 7px;border-bottom:1px solid #574733}#pursuitRegions p{margin:5px 0;font-size:.85em;line-height:1.45}#pursuitRegions .pursuit-current{border-left:3px solid #e5a071;background:#30251e}
 
 #worldPursuit,#pursuitRegions{min-width:0;overflow-wrap:anywhere}#pursuitRegions article{min-width:0}
+
+#worldCanvas{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}#worldCanvas.dragging{cursor:grabbing}

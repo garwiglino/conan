@@ -82,3 +82,26 @@ nouvelle partie réelle. Les captures montrent ces données de vérification.
 Résultat : **138 contrôles d'affichage réussis sur les six configurations,
 aucune erreur JavaScript**. Une passe supplémentaire de 23 contrôles à
 844 × 390 valide les derniers ajustements de lisibilité et régénère les captures.
+
+
+## Carte tactile
+
+La carte se déplace à un doigt ou à deux doigts. Le pincement et l’écartement
+conservent le point du monde sous le milieu des doigts, y compris si ce milieu
+se déplace. Lever un doigt permet de poursuivre directement le déplacement avec
+l’autre. Les gestes à plusieurs doigts et les glissements ne sélectionnent pas
+accidentellement une localité.
+
+Les boutons +/− conservent le centre actuellement affiché ; la molette conserve
+le point sous le curseur. « Kaldor » recentre sur le joueur et « Vue générale »
+retrouve la vue d’ensemble. Le zoom est borné et les limites de déplacement
+conservent une portion de la carte visible. Une annulation, une perte de capture
+ou la fermeture de la carte ne laisse pas de doigt actif. Le redimensionnement
+conserve le centre du monde affiché. Le dessin est regroupé à une demande par
+image, même si les deux doigts produisent plusieurs événements.
+
+Sources : `scripts/world-map-gestures.js` et `scripts/world-ui.js`. Validation :
+`tests/world-map-gestures.test.cjs` (ancres, transitions, annulation, limites,
+redimensionnement et regroupement du dessin), puis
+`scripts/check-world-map-gestures.cjs` avec les événements multitactiles natifs
+Chromium, sur 568 × 320, 844 × 390 et 932 × 430 à une densité de pixels de 2.
