@@ -2,6 +2,8 @@
 
 Cette page décrit les fonctionnalités présentes dans les sources et les HTML web/iOS du dépôt. Elle ne garantit pas leur publication sur le site ni leur installation sur un iPhone. La bible décrit le cadre de conception ; une entrée de catalogue ou une animation disponible ne signifie pas que son comportement est activé dans le monde.
 
+Les [19 corrections de l’audit transversal](corrections-audit-monde.md) détaillent les règles de mort et sauvegarde, les raccords entre acteurs et campagne, les déplacements, les ressources d’expédition et le calcul fractionné des voyages en arrière-plan, avec leurs cas de régression.
+
 ## Aventure et exploration jouables
 
 - Kaldor commence au Campement des Exilés avec la fée. Elyne, à proximité, rejoint le groupe au premier dialogue. La prison de test a été retirée ; l'escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés.

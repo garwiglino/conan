@@ -50,6 +50,7 @@ function createWorldLabourSystems(A,W,state,H,S){
  function outsideCount(site){
   let count=Object.values(site.workerRecords).filter(p=>!p.dead&&(p.reasons.party||p.reasons.returning||p.reasons.travelling||p.assignment)).length;
   count+=site.guards.filter(p=>!p.dead&&p.assignment&&!p.post).length;
+  count+=Object.values(state.bands).filter(b=>b.home===site.id&&b.peopleReserved&&b.phase&&b.phase!=='home').reduce((n,b)=>n+b.members.filter(p=>!p.dead&&p.hp>0).length,0);
   return Math.min(site.population,count);
  }
  function localNeeds(site){const fraction=site.population?Math.max(0,site.population-outsideCount(site))/site.population:0;return Object.fromEntries(Object.entries(site.needs).map(([id,n])=>[id,n*(['provisions','water'].includes(id)?fraction:1)]));}
@@ -134,7 +135,7 @@ function createWorldLabourSystems(A,W,state,H,S){
    m.status='active';work.materialsOnSite=true;m.materials={};if(!remaining)return;
   }
  }
- Object.assign(H,{restoreWorkers,restoreCrew,crewHealth,reserveCrew,workerDeath,repairApproach,stepRepairMission,tickLabour});
+ Object.assign(H,{restoreWorkers,restoreCrew,crewHealth,reserveCrew,workerDeath,repairApproach,stepRepairMission,tickLabour,localNeeds});
  return {restoreWorkers,restoreCrew,crewHealth,reserveCrew,setWorkerReason,prepareRepair,stepRepairMission,repairApproach,tickLabour,outsideCount,localNeeds,productionStaff,jobCanProduce};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldLabourSystems;

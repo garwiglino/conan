@@ -6,11 +6,11 @@ const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
 
-async function loadGame(Image = canvas.Image) {
+async function loadGame(Image = canvas.Image, {timers = false} = {}) {
   new vm.Script(script); // Check the whole shipped script, including UI boot code.
   const context = vm.createContext({
     console, Image, Uint8ClampedArray, Path2D: canvas.Path2D,
-    setTimeout: () => 0,
+    setTimeout: timers ? setTimeout : () => 0, performance,
     document: {
       createElement(tag) {if (tag !== 'canvas') throw new Error(tag); return canvas.createCanvas(1, 1);},
       getElementById() {return {hidden: true, clientHeight: 224};}

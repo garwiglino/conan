@@ -8,25 +8,62 @@ Game.prototype.journeyScreenLeft=function(until=null){const j=this.journey;if(!j
   if(s.label!==label){if(label!==null)left+=Math.max(minutes/rate,JOURNEY_READ-read);label=s.label;minutes=0;read=i===j.index&&j.readLabel===label?j.readTime||0:0;}
   if(i===stop)return left+(minutes+Math.max(0,until.progress-from))/rate;minutes+=s.minutes-from;}
  return label===null?left:left+Math.max(minutes/rate,JOURNEY_READ-read);};
-// Forecast with the same journey state machine as actual replay. A separate
-// Game owns every mutable record: advice, weather, discoveries, care orders and
-// phase boundaries must not diverge between prediction and arrival.
-Game.prototype.forecastJourney=function(){
- const journey=this.journey;if(!journey)return null;
- const copy=new Game(JSON.parse(JSON.stringify(this.serialize())));
- copy.worldStore={readFor:()=>null,write:()=>{}};copy.clock=this.clock;copy.time=this.time;copy.elapsed=this.elapsed;copy.atlasLastClock=this.atlasLastClock;
- copy.journey=JSON.parse(JSON.stringify(journey));delete copy.journey.away;delete copy.journey.arrival;delete copy.journey.outcome;copy.journeyReplay=true;copy.events=[];
- let seconds=0;for(let i=0;copy.journey&&i<200000;i++){copy.stepJourney(JOURNEY_FRAME);seconds+=JOURNEY_FRAME;}
- const result=copy.events.filter(e=>e.type==='notice').at(-1),reason=result?.title||'Voyage interrompu';
- return {seconds,arrived:!copy.journey&&reason==='Arrivée à destination',reason,place:result?.text||''};
+// Clone runtime records without reconstructing the map, art or all the NPCs.
+// Preserve aliases (party/actors/stations) but give the forecast its own campaign,
+// caches and mutable collections. UI callbacks are never invoked by the replay.
+Game.prototype.createJourneyForecast=function(){
+ const copy=Object.create(Game.prototype),memo=new Map([[this,copy]]);
+ const world=new Atlas.WorldState(JSON.parse(JSON.stringify(this.worldState.serialize())));world.weatherAt=worldClimateAt;
+ memo.set(this.worldState,world);memo.set(this.worldState.simulation.state,world.simulation.state);
+ const clone=value=>{if(!value||typeof value!=='object')return value;if(memo.has(value))return memo.get(value);let out;
+  if(value instanceof Map){out=new Map();memo.set(value,out);for(const [k,v]of value)out.set(clone(k),clone(v));}
+  else if(value instanceof Set){out=new Set();memo.set(value,out);for(const v of value)out.add(clone(v));}
+  else if(ArrayBuffer.isView(value)){out=value.slice();memo.set(value,out);}
+  else{out=Array.isArray(value)?[]:Object.create(Object.getPrototypeOf(value));memo.set(value,out);for(const k of Object.keys(value))out[k]=clone(value[k]);}return out;};
+ // Map tiles are immutable during a journey. Mutable props still get independent records.
+ memo.set(this.world.tiles,this.world.tiles);
+ for(const k of Object.keys(this))if(!['worldStore','danger','atlas','journeyForecast'].includes(k))copy[k]=clone(this[k]);
+ copy.atlas=new Atlas.ChunkStore();copy.worldState=world;copy.worldStore={readFor:()=>null,write:()=>{}};copy.danger=new WorldDanger(copy);copy.events=[];copy.journeyReplay=true;
+ delete copy.journey.away;delete copy.journey.arrival;delete copy.journey.outcome;
+ return {copy,seconds:0,steps:0};
 };
-// Marks the first departure from the screen and returns what will happen, with its time (ms since epoch).
-Game.prototype.leaveJourney=function(now=Date.now()){const j=this.journey;if(!j)return null;if(!Number.isFinite(j.away)||!Number.isFinite(j.arrival)||!j.outcome){const f=this.forecastJourney();j.away=now;j.arrival=now+Math.ceil(f.seconds*1000);j.outcome={arrived:f.arrived,reason:f.reason,place:f.place};}
- return {at:j.arrival,...j.outcome};};
+Game.prototype.journeyForecastResult=function(job){const event=job.copy.events.filter(e=>e.type==='notice').at(-1),reason=event?.title||'Voyage interrompu';return {seconds:job.seconds,arrived:!job.copy.journey&&reason==='Arrivée à destination',reason,place:event?.text||''};};
+// Synchronous diagnostic API; suspend uses the cooperative version below.
+Game.prototype.forecastJourney=function(){if(!this.journey)return null;const job=this.createJourneyForecast();while(job.copy.journey&&job.steps++<200000){job.copy.stepJourney(JOURNEY_FRAME);job.seconds+=JOURNEY_FRAME;}return this.journeyForecastResult(job);};
+Game.prototype.leaveJourney=function(now=Date.now()){
+ const j=this.journey;if(!j)return null;
+ if(this.journeyResuming){const replay=this.journeyResuming;replay.interrupted=true;return {pending:true,ready:replay.ready.then(()=>{const out=this.leaveJourney(now);return out?.ready||out;})};}
+ if(Number.isFinite(j.away)){if(j.outcome)return {at:j.arrival,...j.outcome};if(this.journeyForecast?.journey===j&&!this.journeyForecast.cancelled)return {pending:true,ready:this.journeyForecast.ready};const departed=j.away;delete j.away;return this.leaveJourney(departed);}
+ j.away=now;
+ const job=this.createJourneyForecast();job.journey=j;
+ Object.defineProperty(this,'journeyForecast',{value:job,writable:true,configurable:true});
+ job.ready=new Promise(resolve=>{const run=()=>{try{
+  if(job.cancelled||this.journey!==j||!Number.isFinite(j.away)){delete job.copy;resolve(null);return;}
+  const start=performance.now();do{job.copy.stepJourney(JOURNEY_FRAME);job.seconds+=JOURNEY_FRAME;job.steps++;}while(job.copy.journey&&job.steps<200000&&performance.now()-start<6);
+  if(job.copy.journey&&job.steps<200000){setTimeout(run,0);return;}
+  const f=this.journeyForecastResult(job);j.arrival=now+Math.ceil(f.seconds*1000);j.outcome={arrived:f.arrived,reason:f.reason,place:f.place};delete job.copy;resolve({at:j.arrival,...j.outcome});
+ }catch{delete job.copy;resolve(null);}};setTimeout(run,0);});
+ return {pending:true,ready:job.ready};
+};
 // Replays the absence in quarter-second steps, with one save at the end. Past the announced time, the trip always ends.
-Game.prototype.resumeJourney=function(now=Date.now()){const j=this.journey;if(!j||!Number.isFinite(j.away))return false;const finish=Number.isFinite(j.arrival)&&now>=j.arrival,queued=this.events.length;let left=Math.max(0,(now-j.away)/1000);delete j.away;delete j.arrival;delete j.outcome;
- this.journeyReplay=true;try{for(let i=0;this.journey===j&&(finish||left>1e-9)&&i<JOURNEY_REPLAY_STEPS;i++){const dt=finish?JOURNEY_REPLAY_STEP:Math.min(JOURNEY_REPLAY_STEP,left);this.stepJourney(dt);left-=dt;}}finally{this.journeyReplay=false;}
- const replayed=this.events.splice(queued);this.events.push(...replayed.filter(e=>e.type!=='save'));this.emit('save');return true;};
+Game.prototype.resumeJourney=function(now=Date.now()){
+ const j=this.journey;if(!j||!Number.isFinite(j.away))return false;if(this.journeyResuming)return this.journeyResuming.ready;
+ if(this.journeyForecast?.journey===j)this.journeyForecast.cancelled=true;
+ const job={journey:j,finish:Number.isFinite(j.arrival)&&now>=j.arrival,left:Math.max(0,(now-j.away)/1000),away:j.away,seconds:0,steps:0,events:[]};
+ Object.defineProperty(this,'journeyResuming',{value:job,writable:true,configurable:true});this.journeyReplay=true;
+ job.ready=new Promise(resolve=>{const run=()=>{
+  const start=performance.now();
+  while(!job.interrupted&&this.journey===j&&(job.finish||job.left>1e-9)&&job.steps<JOURNEY_REPLAY_STEPS){
+   const dt=job.finish?JOURNEY_REPLAY_STEP:Math.min(JOURNEY_REPLAY_STEP,job.left),queued=this.events.length;
+   // Keep the absence marker while catching up: live input and rendering cannot advance the trip too.
+   backgroundStepJourney.call(this,dt);job.events.push(...this.events.splice(queued));job.left-=dt;job.seconds+=dt;job.steps++;
+   if(this.journey===j)j.away=Math.min(now,job.away+job.seconds*1000);
+   if(performance.now()-start>=6){setTimeout(run,0);return;}
+  }
+  this.journeyReplay=false;delete this.journeyResuming;if(!job.interrupted||this.journey!==j){delete j.away;delete j.arrival;delete j.outcome;}
+  this.events.push(...job.events.filter(e=>e.type!=='save'));this.emit('save');resolve(true);
+ };setTimeout(run,0);});return job.ready;
+};
 // While away, frames that still run must not advance the trip a second time.
 const backgroundStepJourney=Game.prototype.stepJourney;
 Game.prototype.stepJourney=function(dt){if(Number.isFinite(this.journey?.away))return;return backgroundStepJourney.call(this,dt);};

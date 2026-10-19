@@ -13,10 +13,10 @@
   this.player.coins-=q.cost;this.supplies.food+=q.food;this.supplies.water+=q.water;this.emit('notice',{title:'Provisions achetées',text:q.food+' rations et '+q.water.toFixed(1)+' gourdes.'});this.emit('save');return true;
  };
  const needs=Game.prototype.advanceNeeds;
- Game.prototype.advanceNeeds=function(minutes){if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;const waterBefore=this.supplies.water,people=1+this.party.filter(c=>!c.spirit).length,wet=Math.min(minutes,waterBefore*480/people),dry=minutes-wet,afterDrink=Math.max(0,(this.needs.dehydrated||0)-wet*2);
+ Game.prototype.advanceNeeds=function(minutes){if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;const waterBefore=this.supplies.water,people=1+this.waterConsumers().length,wet=Math.min(minutes,waterBefore*480/people),dry=minutes-wet,afterDrink=Math.max(0,(this.needs.dehydrated||0)-wet*2);
   needs.call(this,minutes);this.needs.dehydrated=afterDrink+dry;
   const harmful=Math.max(0,this.needs.dehydrated-180)-Math.max(0,afterDrink-180);
-  if(harmful>0){const hurt=harmful/240;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hurt));for(const c of this.party)if(!c.spirit){c.hp=Math.max(0,c.hp-hurt);c.down=c.hp===0;}}
+  if(harmful>0){const hurt=harmful/240;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hurt));for(const c of this.waterConsumers()){c.hp=Math.max(0,c.hp-hurt);c.down=c.hp===0;}}
  };
  const walk=Game.prototype.movePlayer;
  Game.prototype.movePlayer=function(p,dx,dy){const fatigue=this.supplies?.fatigue||0,thirst=this.needs?.dehydrated||0,factor=1-Math.min(.2,Math.max(0,fatigue-60)/200)-Math.min(.15,thirst/2400);return walk.call(this,p,dx*factor,dy*factor);};
@@ -41,7 +41,7 @@
   if(!this.canRelieve(station,n,restoring))return false;this.registerLabourActors();const s=sim(this),p=s.state.sites[n.labourSite].workerRecords[n.id];
   if(station.originalActor)this.releaseWorldRelief(station);
   station.originalActor=station.actor;station.actor=n;n.reliefTitle=n.title;n.reliefPost={x:station.originalActor.x+22,y:station.originalActor.y};n.title='Relève de '+Atlas.byId[station.site].name;
-  p.service=station.id;s.systems.setWorkerReason(n.labourSite,n.id,'service',true);this.cancelWorldConversation(n);if(!restoring)s.history('service_relief',{site:station.site,person:n.id});return true;
+  p.service=station.id;s.systems.setWorkerReason(n.labourSite,n.id,'service',true);this.cancelWorldConversation(n);this.cancelBatracienConversation?.(n);if(!restoring)s.history('service_relief',{site:station.site,person:n.id});return true;
  };
  const step=Game.prototype.stepNpcs;
  Game.prototype.stepNpcs=function(dt){step.call(this,dt);for(const n of this.npcs)if(n.reliefPost&&!n.dangerState&&!n.civilian?.critical&&!n.civilian?.dead&&this.dialogue?.who!==n&&dist(n,n.reliefPost)>4)this.walkNpc(n,n.reliefPost,dt);};

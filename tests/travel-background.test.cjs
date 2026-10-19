@@ -4,18 +4,18 @@ const leaveCamp=(Game,to)=>{const g=new Game(),station=g.stations.find(s=>s.site
 const lastNotice=g=>g.events.filter(e=>e.type==='notice').at(-1);
 
 test('a hidden journey is announced, frozen, replayed for the time away and ends at its announced time',async()=>{
- const {Game,Atlas}=await harness.loadGame(),g=leaveCamp(Game,Atlas.home.id);
+ const {Game,Atlas}=await harness.loadGame(undefined,{timers:true}),g=leaveCamp(Game,Atlas.home.id);
  assert.ok(g);assert.ok(g.events.some(e=>e.type==='journeystart'));for(let i=0;i<10;i++)g.stepJourney(.04);
- const now=1e12,out=g.leaveJourney(now);assert.ok(out.at>now+1000);assert.equal(typeof out.place,'string');assert.ok(out.place);assert.equal(out.arrived,out.reason==='Arrivée à destination');
+ const now=1e12,out=await g.leaveJourney(now).ready;assert.ok(out.at>now+1000);assert.equal(typeof out.place,'string');assert.ok(out.place);assert.equal(out.arrived,out.reason==='Arrivée à destination');
  assert.deepEqual(g.leaveJourney(now+4000),out,'repeated suspend events keep the first announcement');
  const clock=g.clock,elapsed=g.journey.elapsed;for(let i=0;i<50;i++)g.stepJourney(.04);assert.equal(g.clock,clock);assert.equal(g.journey.elapsed,elapsed);
  const saved=JSON.parse(JSON.stringify(g.serialize()));assert.equal(saved.atlas.journey.arrival,out.at);assert.equal(saved.atlas.journey.away,now);
- g.events.length=0;assert.equal(g.resumeJourney(now+1000),true);assert.ok(g.journey);assert.equal(g.journey.away,undefined);assert.equal(g.journey.outcome,undefined);
+ g.events.length=0;assert.equal(await g.resumeJourney(now+1000),true);assert.ok(g.journey);assert.equal(g.journey.away,undefined);assert.equal(g.journey.outcome,undefined);
  assert.ok(Math.abs(g.journey.elapsed-elapsed-1)<1e-6);assert.ok(g.clock>clock);assert.equal(g.events.map(e=>e.type).join(),'save');assert.equal(g.journeyReplay,false);
- assert.equal(g.resumeJourney(now+2000),false,'nothing to replay once back');
- g.events.length=0;const again=g.leaveJourney(now+2000);assert.equal(g.resumeJourney(again.at),true);assert.equal(g.journey,null);
+ assert.equal(await g.resumeJourney(now+2000),false,'nothing to replay once back');
+ g.events.length=0;const again=await g.leaveJourney(now+2000).ready;assert.equal(await g.resumeJourney(again.at),true);assert.equal(g.journey,null);
  const end=lastNotice(g);assert.equal(end.title,out.reason);assert.equal(end.text,out.place);assert.equal(g.events.filter(e=>e.type==='save').length,1);
- const restored=new Game(saved);assert.ok(restored.journey);assert.equal(restored.journey.arrival,out.at);restored.resumeJourney(out.at);assert.equal(restored.journey,null);assert.equal(lastNotice(restored).text,out.place);
+ const restored=new Game(saved);assert.ok(restored.journey);assert.equal(restored.journey.arrival,out.at);await restored.resumeJourney(out.at);assert.equal(restored.journey,null);assert.equal(lastNotice(restored).text,out.place);
 });
 
 test('the forecast names the stop and never announces it later than the screen would reach it',async()=>{
@@ -47,4 +47,17 @@ test('arrival alerts use the iOS bridge, or web notifications only when the play
  Note.permission='default';web.prepare();assert.equal(asked,1);assert.equal(web.schedule(arrived),false);
  Note.permission='denied';assert.equal(web.schedule(arrived),false);assert.equal(timers.length,2);
  Note.permission='granted';assert.equal(new TravelAlerts({...env,navigator:{standalone:true}}).schedule(arrived),false,'iOS home-screen web apps keep the in-game arrival only');
+});
+
+test('audit 9: forecasting yields to other tasks and cannot change the live campaign or survive an early resume',async()=>{
+ const {Game,Atlas}=await harness.loadGame(undefined,{timers:true}),g=leaveCamp(Game,Atlas.home.id);assert.ok(g);
+ const snapshot=()=>JSON.stringify({clock:g.clock,player:g.player,supplies:g.supplies,world:g.worldState.serialize(),people:g.npcs.map(n=>[n.id,n.x,n.y,n.civilian?.hp]),party:g.party});const before=snapshot();
+ const pending=g.leaveJourney(1e12);assert.equal(pending.pending,true);assert.equal(typeof pending.ready.then,'function');let ticks=0;const timer=setInterval(()=>ticks++,1);let result;try{result=await pending.ready;}finally{clearInterval(timer);}assert.ok(ticks>1);assert.ok(result.at>1e12);assert.equal(snapshot(),before);assert.equal(g.journey.outcome.reason,result.reason);
+ await g.resumeJourney(1e12+100);const early=g.leaveJourney(1e12+200);const saved=JSON.parse(JSON.stringify(g.serialize()));assert.ok(!saved.atlas.journey.arrival);const restored=new Game(saved);assert.ok(await restored.resumeJourney(1e12+1200));assert.ok(restored.clock>g.clock);await g.resumeJourney(1e12+200);assert.equal(await early.ready,null);
+});
+
+test('a second suspension checkpoints an unfinished cooperative replay instead of losing absence time',async()=>{
+ const {Game,Atlas}=await harness.loadGame(undefined,{timers:true}),g=leaveCamp(Game,'town-11');const away=1e12,announced=await g.leaveJourney(away).ready,clock=g.clock;
+ const replay=g.resumeJourney(away+10000);await new Promise(r=>setTimeout(r,1));const suspended=g.leaveJourney(away+11000);await replay;assert.ok(Number.isFinite(g.journey.away));assert.ok(g.clock>clock);assert.ok(g.journey.away<=away+10000);const saved=JSON.parse(JSON.stringify(g.serialize()));assert.equal(saved.atlas.journey.away,g.journey.away);assert.ok(await suspended.ready);
+ await g.resumeJourney(announced.at);assert.equal(g.journey,null);assert.equal(lastNotice(g).title,announced.reason);
 });

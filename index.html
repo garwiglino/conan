@@ -1395,11 +1395,11 @@ class Game{
  useMechanism(c){
   if(c.kind==='stairs'){if(this.player.attack>0||this.player.dash>0)return;const st=this.stairs,p=this.player;this.transit={age:0,fromX:p.x,fromY:p.y,toX:p.level?st.x:st.upperX,toY:p.level?st.y:st.upperY,fromLevel:p.level||0,toLevel:p.level?0:1};p.attack=0;p.dash=0;p.guard=false;this.targetId=null;return;}
   if(c.kind==='talk'){this.talkTo(c.npc||this.npcs[0]);return;}
-  if(c.kind==='lever'){const lever=this.levers[c.i],d=this.doors[lever.door];if(this.player.attack>0||this.player.dash>0)return;this.player.dir=this.direction(lever.x-this.player.x,lever.y-this.player.y);this.player.useTime=.4;if(d.open&&[this.player,...this.enemies.filter(e=>!e.dead)].some(o=>o.x+10>d.x&&o.x-10<d.x+d.w&&o.y+10>d.y&&o.y-10<d.y+d.h)){this.emit('message',{text:'Le passage est occupé.'});return;}d.open=!d.open;this.emit('door',{open:d.open});this.emit('save');return;}
+  if(c.kind==='lever'){const lever=this.levers[c.i],d=this.doors[lever.door];if(this.player.attack>0||this.player.dash>0)return;this.player.dir=this.direction(lever.x-this.player.x,lever.y-this.player.y);this.player.useTime=.4;if(d.open&&[this.player,...this.enemies.filter(e=>!e.dead),...this.npcs.filter(n=>n.id!=='fairy'&&(n.alpha??1)>.5&&n.phase!=='away'&&!n.dead&&!n.civilian?.dead&&!n.guardState?.dead)].some(o=>(o.level||0)===0&&o.x+10>d.x&&o.x-10<d.x+d.w&&o.y+10>d.y&&o.y-10<d.y+d.h)){this.emit('message',{text:'Le passage est occupé.'});return;}d.open=!d.open;this.emit('door',{open:d.open});this.emit('save');return;}
   const l=this.lifts[c.i];if(l.y!==c.y){l.goal=c.y;this.emit('message',{text:'L’ascenseur arrive…'});}else{l.riding=true;l.goal=l.y===l.top?l.bottom:l.top;this.player.x=l.x;this.player.y=l.y;this.player.attack=0;this.player.dash=0;this.player.guard=false;this.targetId=null;this.shots=[];this.emit('message',{text:'Ascenseur en mouvement…'});}
  }
  tickMechanisms(dt){if(this.transit){const tr=this.transit,p=this.player;tr.age=Math.min(.6,tr.age+dt);const u=tr.age/.6;p.x=tr.fromX+(tr.toX-tr.fromX)*u;p.y=tr.fromY+(tr.toY-tr.fromY)*u;p.elevation=12*(tr.fromLevel+(tr.toLevel-tr.fromLevel)*u);p.moving=true;p.anim+=dt*8;p.inv=.3;if(u>=1){p.level=tr.toLevel;delete p.elevation;this.transit=null;this.emit('save');}return true;}this.player.useTime=Math.max(0,(this.player.useTime||0)-dt);
- for(const d of this.doors){if(!d.open&&d.progress>0&&[this.player,...this.enemies.filter(e=>!e.dead)].some(o=>(o.level||0)===0&&o.x+10>d.x&&o.x-10<d.x+d.w&&o.y+10>d.y&&o.y-10<d.y+d.h))d.open=true;d.progress=clamp(d.progress+(d.open?1:-1)*dt*1.35,0,1);}
+ for(const d of this.doors){if(!d.open&&d.progress>0&&[this.player,...this.enemies.filter(e=>!e.dead),...this.npcs.filter(n=>n.id!=='fairy'&&(n.alpha??1)>.5&&n.phase!=='away'&&!n.dead&&!n.civilian?.dead&&!n.guardState?.dead)].some(o=>(o.level||0)===0&&o.x+10>d.x&&o.x-10<d.x+d.w&&o.y+10>d.y&&o.y-10<d.y+d.h))d.open=true;d.progress=clamp(d.progress+(d.open?1:-1)*dt*1.35,0,1);}
  for(const l of this.levers){const target=this.doors[l.door].open?1:0;l.progress+=Math.sign(target-l.progress)*Math.min(Math.abs(target-l.progress),dt*3.5);}
   let carried=false;for(const l of this.lifts){if(l.y===l.goal)continue;const riding=l.riding;l.y+=Math.sign(l.goal-l.y)*Math.min(Math.abs(l.goal-l.y),48*dt);if(riding){carried=true;this.player.x=l.x;this.player.y=l.y;this.player.elevation=12*(l.bottom-l.y)/(l.bottom-l.top);this.player.moving=false;this.player.inv=.4;}if(l.y===l.goal){l.riding=false;if(riding){this.player.level=l.y===l.top?1:0;delete this.player.elevation;}this.emit('save');if(riding)this.emit('message',{text:'Arrivée. Tu peux quitter la plateforme.'});}}return carried;
  }
@@ -1653,8 +1653,9 @@ class Game{
  debrisBurst(o,mat,n,a,k){const P=DEBRIS[mat];for(let i=0;i<n;i++){const g=a+(Math.random()-.5)*2.8,sp=(28+Math.random()*78)*k;
    this.debris.push({x:o.x+(Math.random()-.5)*10,y:o.y-1+(Math.random()-.5)*4,z:4+Math.random()*14,vx:Math.cos(g)*sp,vy:Math.sin(g)*sp*.6,vz:(55+Math.random()*95)*k,w:P.w[i%P.w.length],h:P.h[i%P.h.length],c:P.c[i%P.c.length],life:2.4+Math.random()*1.4,spin:i%2===0});}}
  zone(){const p=this.player;if(p.level===1)return 'PASSERELLE · ETAGE 1';return regionAt(Math.floor(p.x/16),Math.floor(p.y/16)).name;}
- serialize(){return {worldFlags:this.worldFlags,mechanisms:{doors:this.doors.map(d=>d.open),lifts:this.lifts.map(l=>l.riding?l.goal:l.y)},version:1,player:{level:this.dying?0:this.transit?.toLevel??(this.lifts.find(l=>l.riding)?(this.lifts.find(l=>l.riding).goal===this.lifts[0].top?1:0):(this.player.level||0)),x:this.dying?this.checkpoint.x:this.transit?.toX??this.player.x,y:this.dying?this.checkpoint.y:this.transit?.toY??this.lifts.find(l=>l.riding)?.goal??(this.player.onStairs?this.stairs.bottom+2:this.player.y),hp:this.dying?this.player.maxHp:this.player.hp,coins:this.player.coins,kills:this.player.kills,lives:this.player.lives,xp:this.player.xp||0,flasks:this.player.flasks||0},steles:{on:this.steles.map(s=>s.active),last:this.steleLast},quests:{known:[...this.quests.known],done:[...this.quests.done],tracked:[...this.quests.tracked],ready:[...this.quests.ready]},seals:this.seals,chests:this.chests.map(c=>c.open),enemies:this.enemies.map(e=>({id:e.id,hp:e.hp,dead:e.dead})),gate:this.gate,checkpoint:this.checkpoint,elapsed:this.elapsed,clock:this.clock,won:this.won,drops:this.drops.filter(d=>!d.taken&&!d.relic).map(d=>({level:d.level||0,x:Math.round(d.x),y:Math.round(d.y),kind:d.kind}))};}
- restore(s){if(s.version!==1)return;this.weather=new StormSystem();this._skyClock=null;this.doors.forEach((d,i)=>{d.open=!!s.mechanisms?.doors?.[i];d.progress=d.open?1:0;});this.levers.forEach(l=>l.progress=this.doors[l.door].open?1:0);this.lifts.forEach((l,i)=>{l.y=s.mechanisms?.lifts?.[i]===l.bottom?l.bottom:l.top;l.goal=l.y;});this.worldFlags=s.worldFlags||{};let p=s.player;if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y)){this.gate=!!s.gate;this.player.level=p.level===1?1:0;this.player.x=clamp(p.x,40,MW*16-40);this.player.y=clamp(p.y,40,MH*16-40);if(this.solid(this.player.x,this.player.y,5,this.player.level)){this.player.level=0;this.player.x=START.x;this.player.y=START.y;}this.player.hp=clamp(Number(p.hp)||10,1,10);this.player.coins=clamp(Number(p.coins)||0,0,9999);this.player.kills=clamp(Number(p.kills)||0,0,9999);this.player.lives=Number.isFinite(p.lives)?clamp(Math.round(p.lives),1,9):LIVES;}
+ serialize(){return {worldFlags:this.worldFlags,mechanisms:{doors:this.doors.map(d=>d.open),lifts:this.lifts.map(l=>l.riding?l.goal:l.y)},version:1,player:{level:this.dying&&!this.dying.over?0:this.transit?.toLevel??(this.lifts.find(l=>l.riding)?(this.lifts.find(l=>l.riding).goal===this.lifts[0].top?1:0):(this.player.level||0)),x:this.dying&&!this.dying.over?this.checkpoint.x:this.transit?.toX??this.player.x,y:this.dying&&!this.dying.over?this.checkpoint.y:this.transit?.toY??this.lifts.find(l=>l.riding)?.goal??(this.player.onStairs?this.stairs.bottom+2:this.player.y),hp:this.dying?(this.dying.over?0:this.player.maxHp):this.player.hp,coins:this.player.coins,kills:this.player.kills,lives:this.player.lives,xp:this.player.xp||0,flasks:this.player.flasks||0},steles:{on:this.steles.map(s=>s.active),last:this.steleLast},quests:{known:[...this.quests.known],done:[...this.quests.done],tracked:[...this.quests.tracked],ready:[...this.quests.ready]},seals:this.seals,chests:this.chests.map(c=>c.open),enemies:this.enemies.map(e=>({id:e.id,hp:e.hp,dead:e.dead})),gate:this.gate,checkpoint:this.checkpoint,elapsed:this.elapsed,clock:this.clock,won:this.won,drops:this.drops.filter(d=>!d.taken&&!d.relic).map(d=>({level:d.level||0,x:Math.round(d.x),y:Math.round(d.y),kind:d.kind}))};}
+ restore(s){if(s.version!==1)return;this.weather=new StormSystem();this._skyClock=null;this.doors.forEach((d,i)=>{d.open=!!s.mechanisms?.doors?.[i];d.progress=d.open?1:0;});this.levers.forEach(l=>l.progress=this.doors[l.door].open?1:0);this.lifts.forEach((l,i)=>{l.y=s.mechanisms?.lifts?.[i]===l.bottom?l.bottom:l.top;l.goal=l.y;});this.worldFlags=s.worldFlags||{};let p=s.player;if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y)){this.gate=!!s.gate;this.player.level=p.level===1?1:0;this.player.x=clamp(p.x,40,MW*16-40);this.player.y=clamp(p.y,40,MH*16-40);if(this.solid(this.player.x,this.player.y,5,this.player.level)){this.player.level=0;this.player.x=START.x;this.player.y=START.y;}this.player.hp=clamp(Number(p.hp)||10,1,10);this.player.coins=clamp(Number(p.coins)||0,0,9999);this.player.kills=clamp(Number(p.kills)||0,0,9999);this.player.lives=Number.isFinite(p.lives)?clamp(Math.round(p.lives),0,9):LIVES;}
+  if(this.player.lives===0){this.player.hp=0;this.dying={t:0,stage:'fall',over:true,side:1,dir:this.player.dir};}
   if(Array.isArray(s.seals))this.seals=[0,1,2].map(i=>!!s.seals[i]);this.chests.forEach((c,i)=>c.open=!!s.chests?.[i]);this.enemies.forEach(e=>{const old=s.enemies?.find(v=>v.id===e.id);if(old){e.dead=!!old.dead;e.hp=clamp(Number(old.hp)||0,0,e.maxHp);}});
   if(s.checkpoint&&Number.isFinite(s.checkpoint.x)&&Number.isFinite(s.checkpoint.y)&&!this.solid(s.checkpoint.x,s.checkpoint.y,5,s.checkpoint.level||0))this.checkpoint={...s.checkpoint};this.elapsed=Math.max(0,Number(s.elapsed)||0);this.clock=Number.isFinite(s.clock)?s.clock:CLOCK_START+this.elapsed*1440/960;this.won=!!s.won;if(Array.isArray(s.drops))this.drops=s.drops.filter(d=>d&&Number.isFinite(d.x)&&Number.isFinite(d.y)&&['coin','heart','flask'].includes(d.kind)).slice(0,60).map(d=>({level:d.level===1?1:0,x:d.x,y:d.y,kind:d.kind,z:0}));
   this.drops=this.drops.filter(d=>!d.relic);RELICS.forEach((r,i)=>{if(!this.worldFlags['r'+i])this.drops.push({level:0,x:r.x,y:r.y,kind:'flask',z:0,relic:'r'+i});});
@@ -4715,7 +4716,7 @@ const createWorldAtlas = (raw) => {
      if(e.resolved!==null&&clock>=e.resolved+lag&&book[e.id].resolved!==e.resolved){book[e.id].resolved=e.resolved;changed=true;}}
    }if(changed)this.revision++;return book;
   }
-  share(from,to,clock){const source=this.knowledge[from]||{},dest=this.knowledge[to]||(this.knowledge[to]={});let changed=false;for(const [id,k]of Object.entries(source)){const e=this.events.find(e=>e.id===id);if(!e||EVENT_TYPES[e.type].private)continue;if(!dest[id]||k.resolved!==null&&dest[id].resolved===null){dest[id]={...k,heard:clock,source:'Voyageur de relais'};changed=true;}}if(changed)this.revision++;}
+  share(from,to,clock){const source=this.knowledge[from]||{},dest=this.knowledge[to]||(this.knowledge[to]={});let changed=false;for(const [id,k]of Object.entries(source)){const e=this.events.find(e=>e.id===id);if(!e||EVENT_TYPES[e.type].private||k.heard>clock||k.confirmed>clock)continue;if(!dest[id]||k.resolved!==null&&dest[id].resolved===null||(k.confirmed??-Infinity)>(dest[id].confirmed??-Infinity)&&(dest[id].resolved===null||k.resolved!==null)){dest[id]={...k,heard:clock,source:'Voyageur de relais'};changed=true;}}if(changed)this.revision++;}
   news(id,clock=this.clock){const book=this.knowledge[id]||{},priority=e=>book[e.id].resolved===null&&(EVENT_TYPES[e.type].closed||EVENT_TYPES[e.type].group&&!EVENT_TYPES[e.type].guard)?1:0;return this.events.filter(e=>book[e.id]).sort((a,b)=>priority(b)-priority(a)||b.at-a.at).slice(0,8).map(e=>{const k=book[e.id],resolved=k.resolved!==null;return {id:e.id,type:e.type,target:e.target,x:e.x,y:e.y,edge:e.edge,radius:e.radius,title:e.title,text:(resolved?'Situation terminée : ':'')+e.title+' — '+eventTarget(e.target).name+'.'+(e.detail?' '+e.detail:''),source:k.source,at:e.at,heard:k.heard,resolved,uncertain:!resolved&&clock-(k.confirmed??k.heard)>1440};});}
   recordNews(id,clock=this.clock){for(const n of this.news(id,clock)){const key=n.id+':'+n.resolved;if(!this.journal.some(j=>j.key===key))this.journal.push({...n,key,npc:id});}this.journal=this.journal.slice(-120);this.revision++;}
   serialize(){return {schema:this.schema,campaign:this.campaign,revision:this.revision,clock:this.clock,events:this.events,knowledge:this.knowledge,journal:this.journal,lastHour:this.lastHour,nextId:this.nextId,...(this.simulation?{simulation:this.simulation.serialize()}: {}),...(this.justice?{justice:this.justice.serialize()}: {})};}
@@ -4800,7 +4801,7 @@ Game.prototype.initAtlas=function(saved){this.layoutMigrated=migrateAtlasLayout(
  this.initTravelParty(s);
  this.couriers=(Array.isArray(s.couriers)?s.couriers:[]).filter(c=>Atlas.byId[c.from]&&Atlas.byId[c.to]).slice(0,3);
  if(!this.couriers.length){const near=Atlas.nodes.filter(n=>n.rest&&n.id!=='camp').sort((a,b)=>Math.hypot(a.x-Atlas.byId.camp.x,a.y-Atlas.byId.camp.y)-Math.hypot(b.x-Atlas.byId.camp.x,b.y-Atlas.byId.camp.y));this.couriers=near.slice(0,2).map((n,i)=>({id:'courier-'+i,from:n.id,to:near[i+1].id,stage:0,progress:0,depart:this.clock+30}));}
- for(const c of this.couriers){if(c.plan?.stages?.some(s=>s.kind==='move'&&!Atlas.edgeById.has(s.edge))){c.plan=null;c.stage=0;c.progress=0;c.depart=this.clock+30;}const n=Atlas.byId[c.from],actor={id:c.id,name:'LE VOYAGEUR',label:'VOYAGEUR',title:'Un voyageur',...Atlas.toGame(n.x,n.y),dir:2,look:'nomade',head:40,world:true,greet:()=>['Je porte des nouvelles entre les relais.'],topics:()=>[],bye:()=>['Que la route te soit favorable.']};this.npcs.push(actor);this.atlasNpcs.push(actor);}
+ for(const c of this.couriers){if(c.plan?.stages?.some(s=>s.kind==='move'&&!Atlas.edgeById.has(s.edge))){c.plan=null;c.stage=0;c.progress=0;c.depart=this.clock+30;}const n=Atlas.byId[c.from],actor={id:c.id,name:'LE VOYAGEUR',label:'VOYAGEUR',title:'Un voyageur',...Atlas.toGame(n.x,n.y),dir:2,look:'nomade',head:40,world:true,greet:()=>['Je porte des nouvelles entre les relais.'],topics:()=>[],bye:()=>['Que la route te soit favorable.']};const stage=c.plan?.stages?.[c.stage],previous=c.plan?.stages?.[Math.max(0,c.stage-1)];const pos=c.position||(stage?.kind==='move'?Atlas.toGame(stage.from[0]+(stage.to[0]-stage.from[0])*(c.progress||0)/stage.minutes,stage.from[1]+(stage.to[1]-stage.from[1])*(c.progress||0)/stage.minutes):stage?Atlas.toGame(stage.x,stage.y):previous?.kind==='move'?Atlas.toGame(...previous.to):null);if(pos&&Number.isFinite(pos.x)&&Number.isFinite(pos.y))Object.assign(actor,pos);this.npcs.push(actor);this.atlasNpcs.push(actor);}
  this.pendingJourney=s.journey||null;this.atlasLastClock=this.clock;
 };
 Game.prototype.finishAtlasRestore=function(saved){if(saved?.atlas&&Number.isFinite(saved.player?.x)&&Number.isFinite(saved.player?.y)){const p=saved.player,w=Atlas.toWorld(p.x,p.y);if(w.x>=0&&w.y>=0&&w.x<Atlas.raw.width&&w.y<Atlas.raw.height){this.player.x=p.x;this.player.y=p.y;this.player.level=p.level===1?1:0;}}
@@ -4821,7 +4822,7 @@ Game.prototype.solid=function(x,y,r=5,level=0){if(this.atlas&&!level&&!atlasCore
  for(const e of this.worldState.active(this.clock)){if(!Atlas.EVENT_TYPES[e.type].closed||!Atlas.roadById[e.target]||Atlas.roadById[e.target].type==='searoutes')continue;const route=Atlas.roadById[e.target];if(Math.hypot(w.x-e.x,w.y-e.y)<route.width/2+1+r/16)return true;}}
  return atlasSolid.call(this,x,y,r,level);};
 const atlasNpcMenu=Game.prototype.npcMenu;
-Game.prototype.atlasNews=function(n){const fresh=this.worldStore.readFor(this.worldState);if(fresh){this.worldState=new Atlas.WorldState(fresh);this.worldState.weatherAt=worldClimateAt;}const w=Atlas.toWorld(n.x,n.y);this.worldState.learn(n.id,w.x,w.y,this.clock,{role:n.id.startsWith('courier')?'courier':'resident',privateAccess:n.id==='fairy'||n.id==='elyne'});const news=this.worldState.news(n.id,this.clock);return news.length?news.map(e=>e.text+(e.uncertain?' Cette nouvelle demande confirmation.':'')+' Source : '+e.source+' ; jour '+(Math.floor(e.at/1440)+1)+'.'):['Je n’ai pas de nouvelle récente confirmée.'];};
+Game.prototype.atlasNews=function(n){const fresh=this.worldStore.readFor(this.worldState);if(fresh){this.worldState=new Atlas.WorldState(fresh);this.worldState.weatherAt=worldClimateAt;this.reconcileWorldActors?.();}const w=Atlas.toWorld(n.x,n.y);this.worldState.learn(n.id,w.x,w.y,this.clock,{role:n.id.startsWith('courier')?'courier':'resident',privateAccess:n.id==='fairy'||n.id==='elyne'});const news=this.worldState.news(n.id,this.clock);return news.length?news.map(e=>e.text+(e.uncertain?' Cette nouvelle demande confirmation.':'')+' Source : '+e.source+' ; jour '+(Math.floor(e.at/1440)+1)+'.'):['Je n’ai pas de nouvelle récente confirmée.'];};
 Game.prototype.npcMenu=function(n){const menu=atlasNpcMenu.call(this,n);menu.splice(Math.max(0,menu.length-1),0,{label:'Nouvelles du monde et des routes',lines:this.atlasNews(n),act:()=>{this.worldState.recordNews(n.id,this.clock);this.emit('save');}});if(n.site||n.id==='veilleur'||n.id==='zahra')menu.splice(menu.length-1,0,{label:'Routes et destinations connues',lines:this.npcDirections(n)},{label:'Où trouver un transport ?',lines:['Parle au palefrenier ou au charretier du relais. Pour embarquer, rejoins le batelier sur le quai.']});return menu;};
 Game.prototype.npcDirections=function(n){const w=Atlas.toWorld(n.x,n.y),site=Atlas.byId[n.site]||Atlas.nearestSite(w.x,w.y),known=Atlas.roads.filter(r=>Atlas.roadCells(r).some(c=>c.region===site.region));return known.slice(0,4).map(r=>r.name+' : danger '+clamp(r.danger+this.worldState.news(n.id,this.clock).filter(e=>e.target===r.id&&!e.resolved).reduce((sum,e)=>sum+(Atlas.EVENT_TYPES[e.type].risk||0),0),0,5).toFixed(1).replace('.',',')+'/5'+(this.worldState.news(n.id,this.clock).some(e=>e.target===r.id&&!e.resolved&&Atlas.EVENT_TYPES[e.type].closed)?' ; une fermeture m’a été signalée.':'.'));};
 const atlasWalkNpc=Game.prototype.walkNpc;
@@ -4831,18 +4832,33 @@ Game.prototype.stepParty=function(dt,minutes){const p=this.player,c=this.compani
 
  if(this.journey){this.escortActor.x=p.x+16;this.escortActor.y=p.y+14;}
  else if(c.status!=='waiting'&&!c.down&&!this.dialogue&&!p.level&&!p.onStairs){const last=this.footprints.at(-1);if(!last||Math.hypot(last.x-p.x,last.y-p.y)>8)this.footprints.push({x:p.x,y:p.y});if(this.footprints.length>240)this.footprints.shift();while(this.footprints.length>2&&Math.hypot(this.escortActor.x-this.footprints[0].x,this.escortActor.y-this.footprints[0].y)<10)this.footprints.shift();if(Math.hypot(this.escortActor.x-p.x,this.escortActor.y-p.y)>24){const target=this.footprints[0]||p;this.walkNpc(this.escortActor,target,dt);}else this.escortActor.anim=0;}
- if(!this.journey&&!this.dialogue&&!c.down&&this.time>(this.partyHitAt||0)){const foe=this.enemies.find(e=>!e.dead&&e.kind!=='boss'&&(e.ai==='chase'||e.ai==='alert')&&dist(e,this.escortActor)<24&&this.lineClear(e,this.escortActor));if(foe){c.hp=Math.max(0,c.hp-1);this.partyHitAt=this.time+2.5;this.escortActor.flash=.12;if(!c.hp){c.down=true;this.worldState.add('injury','camp',this.clock,0,{position:Atlas.toWorld(this.escortActor.x,this.escortActor.y),source:'Elyne',witnesses:['elyne','fairy']});this.emit('notice',{title:'Elyne est blessée',text:'Protège-la et soigne-la avec une fiole.'});}}}
+ if(!this.journey&&!this.dialogue&&!c.down&&this.time>(this.partyHitAt||0)){const foe=this.enemies.find(e=>!e.dead&&e.kind!=='boss'&&this.sameLevel(e,this.escortActor)&&(e.ai==='chase'||e.ai==='alert')&&dist(e,this.escortActor)<24&&this.lineClear(e,this.escortActor));if(foe){c.hp=Math.max(0,c.hp-1);this.partyHitAt=this.time+2.5;this.escortActor.flash=.12;if(!c.hp){c.down=true;this.worldState.add('injury','camp',this.clock,0,{position:Atlas.toWorld(this.escortActor.x,this.escortActor.y),source:'Elyne',witnesses:['elyne','fairy']});this.emit('notice',{title:'Elyne est blessée',text:'Protège-la et soigne-la avec une fiole.'});}}}
  c.x=this.escortActor.x;c.y=this.escortActor.y;
 };
-Game.prototype.advanceAtlas=function(dt=0){const minutes=Math.max(0,this.clock-(this.atlasLastClock??this.clock));this.atlasLastClock=this.clock;this.worldState.advance(this.clock,worldClimateAt);if(minutes){const people=1+(this.party?.filter(c=>!c.spirit).length||0);this.advanceNeeds(minutes);this.supplies.water=Math.max(0,this.supplies.water-minutes*people/480);this.supplies.fatigue=clamp(this.supplies.fatigue+(this.sleeping?-minutes/12:minutes/18),0,100);}this.stepParty(dt,minutes);this.stepCouriers(minutes);
+Game.prototype.advanceAtlas=function(dt=0){const minutes=Math.max(0,this.clock-(this.atlasLastClock??this.clock));this.atlasLastClock=this.clock;this.worldState.advance(this.clock,worldClimateAt);if(minutes){const people=this.waterConsumers().length+1;this.advanceNeeds(minutes);this.supplies.water=Math.max(0,this.supplies.water-minutes*people/480);this.supplies.fatigue=clamp(this.supplies.fatigue+(this.sleeping?-minutes/12:minutes/18),0,100);}this.stepParty(dt,minutes);this.stepCouriers(minutes);
  const w=Atlas.toWorld(this.player.x,this.player.y),n=Atlas.siteAt(w.x,w.y,5);if(n){if(!this.discovered.has(n.id))this.worldState.add('discovery',n.id,this.clock,0,{source:'Kaldor',witnesses:['fairy','elyne']});this.discovered.add(n.id);if(n.rest&&!this.journey&&!this.dangerAt(this.player.x,this.player.y).unsafe){this.worldCheckpoint={level:0,...Atlas.toGame(n.x,n.y)};this.checkpoint={...this.worldCheckpoint};}}
 
  if(this.clock-(this.lastKnowledgeAt??-1000)>30){this.lastKnowledgeAt=this.clock;for(const n of this.npcs){if(dist(n,this.player)>200&&!n.id.startsWith('courier'))continue;const p=Atlas.toWorld(n.x,n.y);this.worldState.learn(n.id,p.x,p.y,this.clock,{role:n.id.startsWith('courier')?'courier':'resident',privateAccess:n.id==='elyne'||n.id==='fairy'});}this.worldState.learn('kaldor',w.x,w.y,this.clock,{privateAccess:true});}
 };
-Game.prototype.stepCouriers=function(minutes){for(const c of this.couriers){const actor=this.atlasNpcs.find(n=>n.id===c.id);if(!actor||actor.civilian?.critical||this.party?.some(n=>n.id===actor.id)||this.dialogue?.who===actor)continue;if(c.returnTo){const distance=dist(actor,c.returnTo);if(distance<3){delete c.returnTo;actor.path=[];}else{let seconds=WorldPacing.realSeconds(minutes);for(let i=0;i<100&&seconds>0&&dist(actor,c.returnTo)>=3;i++){const d=dist(actor,c.returnTo),k=Math.min(1,256/d);this.walkNpc(actor,{x:actor.x+(c.returnTo.x-actor.x)*k,y:actor.y+(c.returnTo.y-actor.y)*k},Math.min(1,seconds));seconds-=Math.min(1,seconds);}continue;}}if(this.clock<c.depart)continue;if(!c.plan)c.plan=Atlas.routePlan(c.from,c.to,{mode:'horse',clock:c.depart,state:this.worldState});if(!c.plan)continue;let remain=Math.min(minutes,7*1440);for(let k=0;k<300&&remain>0;k++){const s=c.plan.stages[c.stage];if(!s){const at=Atlas.byId[c.to],p=Atlas.toGame(at.x,at.y);actor.x=p.x;actor.y=p.y;const stationary=this.atlasNpcs.filter(n=>n.site===at.id);for(const n of stationary){this.worldState.share(c.id,n.id,this.clock);this.worldState.share(n.id,c.id,this.clock);}const t=c.from;c.from=c.to;c.to=t;c.plan=null;c.stage=0;c.progress=0;c.depart=this.clock+120;break;}if(s.kind==='move'&&this.worldState.edgeStatus(Atlas.edgeById.get(s.edge),this.clock).closed)break;const step=Math.min(remain,s.minutes-(c.progress||0));c.progress=(c.progress||0)+step;remain-=step;const u=c.progress/s.minutes,w=s.kind==='move'?{x:s.from[0]+(s.to[0]-s.from[0])*u,y:s.from[1]+(s.to[1]-s.from[1])*u}:s,p=Atlas.toGame(w.x,w.y);actor.dir=this.direction(p.x-actor.x,p.y-actor.y);actor.anim=(actor.anim||0)+Math.hypot(p.x-actor.x,p.y-actor.y)/5.5;actor.x=p.x;actor.y=p.y;if(c.progress>=s.minutes-1e-7){c.stage++;c.progress=0;}else break;}}
-};
+Game.prototype.stepCouriers=function(minutes){for(const c of this.couriers){
+ const actor=this.atlasNpcs.find(n=>n.id===c.id);if(!actor||actor.dead||actor.civilian?.dead||actor.civilian?.critical||this.party?.some(n=>n.id===actor.id)||this.dialogue?.who===actor)continue;
+ if(c.returnTo){const distance=dist(actor,c.returnTo);if(distance<3){delete c.returnTo;actor.path=[];}else{let seconds=WorldPacing.realSeconds(minutes);for(let i=0;i<100&&seconds>0&&dist(actor,c.returnTo)>=3;i++){const d=dist(actor,c.returnTo),k=Math.min(1,256/d);this.walkNpc(actor,{x:actor.x+(c.returnTo.x-actor.x)*k,y:actor.y+(c.returnTo.y-actor.y)*k},Math.min(1,seconds));seconds-=Math.min(1,seconds);}c.position={x:actor.x,y:actor.y};continue;}}
+ let at=this.clock-Math.max(0,minutes);
+ for(let k=0;k<10000;k++){
+  at=Math.max(at,c.depart);if(at>this.clock)break;
+  if(!c.plan)c.plan=Atlas.routePlan(c.from,c.to,{mode:'horse',clock:at,state:this.worldState});if(!c.plan)break;
+  const stage=c.plan.stages[c.stage];
+  if(!stage){const node=Atlas.byId[c.to];Object.assign(actor,Atlas.toGame(node.x,node.y));for(const n of this.atlasNpcs.filter(n=>n.site===node.id)){this.worldState.share(c.id,n.id,at);this.worldState.share(n.id,c.id,at);}const from=c.from;c.from=c.to;c.to=from;c.plan=null;c.stage=0;c.progress=0;c.depart=at+120;continue;}
+  if(at>=this.clock||stage.kind==='move'&&this.worldState.edgeStatus(Atlas.edgeById.get(stage.edge),at).closed)break;
+  const step=Math.min(this.clock-at,Math.max(0,stage.minutes-(c.progress||0)));c.progress=(c.progress||0)+step;at+=step;
+  const u=stage.minutes?c.progress/stage.minutes:1,w=stage.kind==='move'?{x:stage.from[0]+(stage.to[0]-stage.from[0])*u,y:stage.from[1]+(stage.to[1]-stage.from[1])*u}:stage,p=Atlas.toGame(w.x,w.y);
+  actor.dir=this.direction(p.x-actor.x,p.y-actor.y);actor.anim=(actor.anim||0)+Math.hypot(p.x-actor.x,p.y-actor.y)/5.5;Object.assign(actor,p);
+  if(c.progress>=stage.minutes-1e-7){c.stage++;c.progress=0;}else break;
+ }
+ c.position={x:actor.x,y:actor.y};
+}};
 Game.prototype.planJourney=function(to,options={}){const station=this.currentTransport();if(!station||!station.modes.includes(options.mode||'horse')||to===station.site||!this.stations.some(s=>s.site===to))return null;const plan=Atlas.routePlan(station.site,to,{...options,mode:options.mode==='boat'?'horse':options.mode,clock:this.clock,state:options.knowledgeState||this.worldState});if(plan&&options.mode==='boat'&&plan.stages.find(s=>s.kind==='move')?.mode!=='boat')return null;if(plan)plan.transportMode=options.mode||'horse';return plan;};
-Game.prototype.startJourney=function(plan){if(!plan||this.journey||this.dialogue||this.dead||this.dying)return false;const fresh=this.planJourney(plan.to,{mode:plan.transportMode||plan.mode,allowBoat:plan.allowBoat,preference:plan.preference});if(!fresh||fresh.mode==='foot'&&fresh.stages.some(s=>s.kind==='move'&&s.mode!=='boat'))return false;const fail=text=>{this.emit('notice',{title:'Départ impossible',text});return false;};if(this.story.recruited&&!this.story.delivered&&(this.companion.down||dist(this.player,this.escortActor)>100))return fail('Elyne doit être soignée et présente au départ.');if(this.enemies.some(e=>!e.dead&&dist(e,this.player)<100&&!this.safeZone(this.player)))return fail('Écarte-toi du combat avant de partir.');if(fresh.stages.some(s=>this.journeyThreat(s,true)))return fail('Un groupe hostile bloque ce trajet. Choisis un autre itinéraire ou attends une accalmie.');if(this.player.coins<fresh.cost)return fail('Il manque des pièces pour ce voyage.');this.player.coins-=fresh.cost;this.transportSession=null;this.player.attack=0;this.player.dash=0;this.player.guard=false;this.targetId=null;this.shots=[];this.weather.clear();this.journey={plan:fresh,index:0,progress:0,elapsed:0,serial:++this.journeySerial,cancel:false,lastSafe:fresh.from};this.emit('save');return true;};
+Game.prototype.startJourney=function(plan){if(!plan||this.journey||this.dialogue||this.dead||this.dying)return false;const fresh=this.planJourney(plan.to,{mode:plan.transportMode||plan.mode,allowBoat:plan.allowBoat,preference:plan.preference});if(!fresh||fresh.mode==='foot'&&fresh.stages.some(s=>s.kind==='move'&&s.mode!=='boat'))return false;const fail=text=>{this.emit('notice',{title:'Départ impossible',text});return false;};if(this.story.recruited&&!this.story.delivered&&(this.companion.down||dist(this.player,this.escortActor)>100))return fail('Elyne doit être soignée et présente au départ.');if(this.enemies.some(e=>!e.dead&&dist(e,this.player)<100&&!this.safeZone(this.player)))return fail('Écarte-toi du combat avant de partir.');if(fresh.stages.some(s=>this.journeyThreat(s,true)))return fail('Un groupe hostile bloque ce trajet. Choisis un autre itinéraire ou attends une accalmie.');if(this.player.coins<fresh.cost)return fail('Il manque des pièces pour ce voyage.');const seller=this.worldState.simulation?.state.sites[this.currentTransport()?.site||fresh.from];if(!seller)return false;this.player.coins-=fresh.cost;seller.treasury+=fresh.cost;this.worldState.simulation.history('passenger_fare',{site:seller.id,to:fresh.to,paid:fresh.cost});this.transportSession=null;this.player.attack=0;this.player.dash=0;this.player.guard=false;this.targetId=null;this.shots=[];this.weather.clear();this.journey={plan:fresh,index:0,progress:0,elapsed:0,serial:++this.journeySerial,cancel:false,lastSafe:fresh.from};this.emit('save');return true;};
 Game.prototype.restoreJourney=function(){const j=this.pendingJourney;this.pendingJourney=null;if(!j)return;const p=j.plan,valid=Atlas.byId[p?.from]&&Atlas.byId[p?.to]&&Array.isArray(p.stages)&&p.stages.length>0&&p.stages.length<3000&&Number.isFinite(p.minutes)&&p.minutes>0&&Number.isFinite(p.screenSeconds)&&p.screenSeconds>=3&&p.screenSeconds<=24&&Number.isInteger(j.index)&&j.index>=0&&j.index<p.stages.length&&Number.isFinite(j.progress)&&j.progress>=0&&j.progress<=p.stages[j.index].minutes&&p.stages.every(s=>s&&Number.isFinite(s.minutes)&&s.minutes>0&&(s.kind==='move'?Atlas.edgeById.has(s.edge)&&Atlas.roadById[s.road]&&Atlas.modes[s.mode]&&Array.isArray(s.from)&&s.from.length===2&&Array.isArray(s.to)&&s.to.length===2&&[...s.from,...s.to].every(Number.isFinite):['rest','wait'].includes(s.kind)&&Number.isFinite(s.x)&&Number.isFinite(s.y)));if(valid){this.journey=JSON.parse(JSON.stringify(j));this.journey.mealPause=0;this.journey.meal=null;this.journey.readLabel=null;this.journey.readTime=0;this.journey.elapsed=Number.isFinite(j.elapsed)&&j.elapsed>=0?j.elapsed:0;this.journeyPosition();return;}const n=this.journeySafeStation(j),safe=this.stationLanding(n.id);Object.assign(this.player,safe,{level:0});this.placeSafely(safe.x,safe.y);};
 Game.prototype.journeyPosition=function(){const j=this.journey,s=j?.plan.stages[j.index];if(!s)return;const u=clamp(j.progress/s.minutes,0,1),w=s.kind==='move'?{x:s.from[0]+(s.to[0]-s.from[0])*u,y:s.from[1]+(s.to[1]-s.from[1])*u}:s,p=Atlas.toGame(w.x,w.y);this.player.dir=this.direction(p.x-this.player.x,p.y-this.player.y);this.player.moving=s.kind==='move';this.player.x=p.x;this.player.y=p.y;this.player.level=0;};
 // Interrupted travel always returns to a staffed stop already reached.
@@ -4862,7 +4878,7 @@ Game.prototype.supplyQuote=function(days=3){
 };
 Game.prototype.journeySupplyDays=function(plan){const missing=plan?Math.max(0,this.journeyNeeds(plan).food-this.supplies.food):0;return Math.max(3,Math.ceil(missing/(2*(1+this.party.filter(c=>!c.spirit).length))));};
 Game.prototype.buySupplies=function(days=3){const quote=this.supplyQuote(days);if(!quote||!quote.food&&!quote.water)return false;const {food,water,cost}=quote;if(this.player.coins<cost){this.emit('notice',{title:'Provisions',text:'Il faut '+cost+' pièces pour '+food+' rations.'});return false;}this.player.coins-=cost;this.supplies.food+=food;this.supplies.water+=water;this.emit('notice',{title:'Provisions achetées',text:food+' rations et '+water.toFixed(1)+' gourdes.'});this.emit('save');return true;};
-Game.prototype.restAtRelay=function(){const at=this.atlasContext();if(!at?.rest||this.journey||this.dialogue||this.worldState.active().some(e=>e.target===at.id&&Atlas.EVENT_TYPES[e.type].closed))return false;this.clock+=480;this.advanceAtlas(0);this.supplies.fatigue=0;if(this.needs.satiety>0)this.player.hp=this.player.maxHp;for(const c of this.party)if(!c.spirit&&this.nearCompanion(c)&&c.hunger<100){c.hp=c.maxHp;c.down=false;}this.emit('notice',{title:'Repos à '+at.name,text:this.needs.satiety>0?'Huit heures de repos. Seuls les membres nourris récupèrent leur santé.':'Huit heures de repos, mais la faim empêche de récupérer la santé. Mange une ration.'});this.emit('save');return true;};
+Game.prototype.restAtRelay=function(){const at=this.atlasContext();if(!at?.rest||this.journey||this.dialogue||this.worldState.active().some(e=>e.target===at.id&&Atlas.EVENT_TYPES[e.type].closed))return false;this.clock+=480;this.advanceAtlas(0);if(this.dying||this.dead||this.player.hp<=0){this.emit('save');return false;}this.supplies.fatigue=0;if(this.needs.satiety>0)this.player.hp=this.player.maxHp;for(const c of this.party)if(!c.spirit&&this.nearCompanion(c)&&c.hunger<100){c.hp=c.maxHp;c.down=false;}this.emit('notice',{title:'Repos à '+at.name,text:this.needs.satiety>0?'Huit heures de repos. Seuls les membres nourris récupèrent leur santé.':'Huit heures de repos, mais la faim empêche de récupérer la santé. Mange une ration.'});this.emit('save');return true;};
 const atlasRestTent=Game.prototype.restTent;Game.prototype.restTent=function(){return atlasRestTent.call(this)||(!this.player.level?this.atlasProps.find(o=>o.rest&&Math.abs(this.player.x-o.x)<24&&this.player.y>o.y&&this.player.y-o.y<20):null)||null;};
 const atlasInSafe=Game.prototype.inSafe;Game.prototype.inSafe=function(x,y,m=0){const old=atlasInSafe.call(this,x,y,m);if(old)return old;if(!this.atlas)return null;const w=Atlas.toWorld(x,y),n=Atlas.siteAt(w.x,w.y,m/16);return n?.rest?Atlas.toGame(n.x,n.y):null;};
 const atlasBodies=Game.prototype.bodies;Game.prototype.bodies=function(o){return atlasBodies.call(this,o).filter(n=>n.id!=='fairy'&&n.id!=='elyne');};
@@ -4917,7 +4933,7 @@ Game.prototype.finishTravelRestore=function(saved){
  if(!this.story.recruited&&!saved?.atlas?.party){this.escortActor.x=START.x+36;this.escortActor.y=START.y;}
 };
 Game.prototype.recruitCompanion=function(actor,{permanent=false}={}){
- if(!actor||actor.civilian?.critical||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
+ if(!actor||actor.dead||actor.civilian?.dead||actor.civilian?.critical||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
  const prior=this.formerCompanions[actor.id],maximum=prior?.maxHp||6,health=Number.isFinite(actor.civilian?.hp)?actor.civilian.hp/6*maximum:maximum;
  const member=actor.id==='elyne'?Object.assign(this.companion,{hp:Math.min(this.companion.hp,health/maximum*10),down:health<=0}):{...prior,hp:Math.min(prior?.hp??health,health),maxHp:maximum,hunger:prior?.hunger??0,down:health<=0};
  const job=this.couriers?.find(c=>c.id===actor.id);if(job&&!job.returnTo)job.returnTo={x:actor.x,y:actor.y};actor.alpha=1;actor.phase='post';Object.assign(member,{id:actor.id,name:actor.title||actor.label,permanent,maxHp:actor.id==='elyne'?10:member.maxHp,down:member.hp<=0,status:'following'});this.party.push(member);
@@ -4926,6 +4942,7 @@ Game.prototype.recruitCompanion=function(actor,{permanent=false}={}){
 const travelTalk=Game.prototype.talkTo;
 Game.prototype.talkTo=function(n){if(n?.id==='elyne')this.recruitCompanion(n);return travelTalk.call(this,n);};
 Game.prototype.partyActor=function(id){return this.npcs.find(n=>n.id===id);};
+Game.prototype.waterConsumers=function(){return this.party.filter(c=>!c.spirit&&this.nearCompanion(c));};
 Game.prototype.nearCompanion=function(c){const actor=this.partyActor(c?.id);return !!actor&&(this.journey&&c.status==='following'||dist(actor,this.player)<100);};
 Game.prototype.eatRation=function(id='kaldor',quiet=false){
  const c=id==='kaldor'?null:this.party.find(n=>n.id===id),satiety=c?100-c.hunger:this.needs.satiety;
@@ -4942,15 +4959,17 @@ Game.prototype.advanceNeeds=function(minutes){
  if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;
  // Small deterministic slices preserve the same meal schedule through sleep/travel.
  // Body heat: an outfit too warm for the heat digs hunger, the cold bites health.
- const body=this.bodyHeat?.(),hunger=body?.hunger??1;
- for(let remaining=minutes;remaining>1e-7;){const step=Math.min(remaining,30);remaining-=step;
+ const endClock=this.clock;this.clock-=minutes;try{
+ for(let remaining=minutes;remaining>1e-7;){const step=Math.min(remaining,30);remaining-=step;const body=this.bodyHeat?.(),hunger=body?.hunger??1;
   const before=this.needs.satiety;this.needs.satiety=Math.max(0,before-step*hunger*100/FULL_MEAL_MINUTES);
   if((this.needs.autoEat||this.journey)&&this.needs.satiety<50)this.eatRation('kaldor',true);
   const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/(100*hunger));
   if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hungryMinutes/180));}else this.needs.starved=0;
   this.coldBite?.(step,body);this.burnCampfire?.(step);if(this.dying)break;
   for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger,heat=this.companionBodyHeat?.(c)?.hunger??1;c.hunger=Math.min(100,c.hunger+step*heat*100/FULL_MEAL_MINUTES);this.companionColdBite?.(c,step);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/(100*heat))/180);c.down=c.hp<=0;}}
+ this.clock+=step;
  }
+ }finally{this.clock=endClock;}
 };
 Game.prototype.journeyNeeds=function(plan){
  const group=this.party.filter(c=>!c.spirit),energy=plan.minutes*100/FULL_MEAL_MINUTES;
@@ -4962,7 +4981,7 @@ Game.prototype.currentTransport=function(){const s=this.stations.find(s=>s.id===
 const travelNpcMenu=Game.prototype.npcMenu;
 Game.prototype.npcMenu=function(n){const menu=travelNpcMenu.call(this,n),s=this.stations.find(s=>s.actor===n);if(s)menu.splice(0,0,{label:s.modes[0]==='boat'?'Embarquer / préparer un voyage':'Voyager / acheter des provisions',lines:['Préparons ton itinéraire.'],act:()=>this.prepareTransport(s.id)});return menu;};
 const travelStepParty=Game.prototype.stepParty;
-Game.prototype.stepParty=function(dt,minutes){travelStepParty.call(this,dt,minutes);for(const c of this.party){if(c.spirit||c.id==='elyne')continue;const n=this.partyActor(c.id);if(!n)continue;if(this.journey){n.x=this.player.x+18;n.y=this.player.y+18;}else if(!c.down&&c.status==='following'&&!this.dialogue&&dist(n,this.player)>32)this.walkNpc(n,this.player,dt);if(!this.journey&&!this.dialogue&&!c.down&&this.time>(c.hitAt||0)&&this.enemies.some(e=>!e.dead&&e.kind!=='boss'&&['chase','alert'].includes(e.ai)&&dist(e,n)<24&&this.lineClear(e,n))){c.hp=Math.max(0,c.hp-1);c.down=c.hp<=0;c.hitAt=this.time+2.5;n.flash=.12;}c.x=n.x;c.y=n.y;}};
+Game.prototype.stepParty=function(dt,minutes){travelStepParty.call(this,dt,minutes);for(const c of this.party){if(c.spirit||c.id==='elyne')continue;const n=this.partyActor(c.id);if(!n)continue;if(this.journey){n.x=this.player.x+18;n.y=this.player.y+18;}else if(!c.down&&c.status==='following'&&!this.dialogue&&dist(n,this.player)>32)this.walkNpc(n,this.player,dt);if(!this.journey&&!this.dialogue&&!c.down&&this.time>(c.hitAt||0)&&this.enemies.some(e=>!e.dead&&e.kind!=='boss'&&this.sameLevel(e,n)&&['chase','alert'].includes(e.ai)&&dist(e,n)<24&&this.lineClear(e,n))){c.hp=Math.max(0,c.hp-1);c.down=c.hp<=0;c.hitAt=this.time+2.5;n.flash=.12;}c.x=n.x;c.y=n.y;}};
 const travelStart=Game.prototype.startJourney;
 Game.prototype.startJourney=function(plan){if(this.party.some(c=>!c.spirit&&(c.status==='waiting'||c.down||!this.nearCompanion(c)))){this.emit('notice',{title:'Rassemble le groupe',text:'Les compagnons doivent être présents, soignés et prêts à suivre.'});return false;}return travelStart.call(this,plan);};
 const travelBodies=Game.prototype.bodies;
@@ -4988,25 +5007,62 @@ Game.prototype.journeyScreenLeft=function(until=null){const j=this.journey;if(!j
   if(s.label!==label){if(label!==null)left+=Math.max(minutes/rate,JOURNEY_READ-read);label=s.label;minutes=0;read=i===j.index&&j.readLabel===label?j.readTime||0:0;}
   if(i===stop)return left+(minutes+Math.max(0,until.progress-from))/rate;minutes+=s.minutes-from;}
  return label===null?left:left+Math.max(minutes/rate,JOURNEY_READ-read);};
-// Forecast with the same journey state machine as actual replay. A separate
-// Game owns every mutable record: advice, weather, discoveries, care orders and
-// phase boundaries must not diverge between prediction and arrival.
-Game.prototype.forecastJourney=function(){
- const journey=this.journey;if(!journey)return null;
- const copy=new Game(JSON.parse(JSON.stringify(this.serialize())));
- copy.worldStore={readFor:()=>null,write:()=>{}};copy.clock=this.clock;copy.time=this.time;copy.elapsed=this.elapsed;copy.atlasLastClock=this.atlasLastClock;
- copy.journey=JSON.parse(JSON.stringify(journey));delete copy.journey.away;delete copy.journey.arrival;delete copy.journey.outcome;copy.journeyReplay=true;copy.events=[];
- let seconds=0;for(let i=0;copy.journey&&i<200000;i++){copy.stepJourney(JOURNEY_FRAME);seconds+=JOURNEY_FRAME;}
- const result=copy.events.filter(e=>e.type==='notice').at(-1),reason=result?.title||'Voyage interrompu';
- return {seconds,arrived:!copy.journey&&reason==='Arrivée à destination',reason,place:result?.text||''};
+// Clone runtime records without reconstructing the map, art or all the NPCs.
+// Preserve aliases (party/actors/stations) but give the forecast its own campaign,
+// caches and mutable collections. UI callbacks are never invoked by the replay.
+Game.prototype.createJourneyForecast=function(){
+ const copy=Object.create(Game.prototype),memo=new Map([[this,copy]]);
+ const world=new Atlas.WorldState(JSON.parse(JSON.stringify(this.worldState.serialize())));world.weatherAt=worldClimateAt;
+ memo.set(this.worldState,world);memo.set(this.worldState.simulation.state,world.simulation.state);
+ const clone=value=>{if(!value||typeof value!=='object')return value;if(memo.has(value))return memo.get(value);let out;
+  if(value instanceof Map){out=new Map();memo.set(value,out);for(const [k,v]of value)out.set(clone(k),clone(v));}
+  else if(value instanceof Set){out=new Set();memo.set(value,out);for(const v of value)out.add(clone(v));}
+  else if(ArrayBuffer.isView(value)){out=value.slice();memo.set(value,out);}
+  else{out=Array.isArray(value)?[]:Object.create(Object.getPrototypeOf(value));memo.set(value,out);for(const k of Object.keys(value))out[k]=clone(value[k]);}return out;};
+ // Map tiles are immutable during a journey. Mutable props still get independent records.
+ memo.set(this.world.tiles,this.world.tiles);
+ for(const k of Object.keys(this))if(!['worldStore','danger','atlas','journeyForecast'].includes(k))copy[k]=clone(this[k]);
+ copy.atlas=new Atlas.ChunkStore();copy.worldState=world;copy.worldStore={readFor:()=>null,write:()=>{}};copy.danger=new WorldDanger(copy);copy.events=[];copy.journeyReplay=true;
+ delete copy.journey.away;delete copy.journey.arrival;delete copy.journey.outcome;
+ return {copy,seconds:0,steps:0};
 };
-// Marks the first departure from the screen and returns what will happen, with its time (ms since epoch).
-Game.prototype.leaveJourney=function(now=Date.now()){const j=this.journey;if(!j)return null;if(!Number.isFinite(j.away)||!Number.isFinite(j.arrival)||!j.outcome){const f=this.forecastJourney();j.away=now;j.arrival=now+Math.ceil(f.seconds*1000);j.outcome={arrived:f.arrived,reason:f.reason,place:f.place};}
- return {at:j.arrival,...j.outcome};};
+Game.prototype.journeyForecastResult=function(job){const event=job.copy.events.filter(e=>e.type==='notice').at(-1),reason=event?.title||'Voyage interrompu';return {seconds:job.seconds,arrived:!job.copy.journey&&reason==='Arrivée à destination',reason,place:event?.text||''};};
+// Synchronous diagnostic API; suspend uses the cooperative version below.
+Game.prototype.forecastJourney=function(){if(!this.journey)return null;const job=this.createJourneyForecast();while(job.copy.journey&&job.steps++<200000){job.copy.stepJourney(JOURNEY_FRAME);job.seconds+=JOURNEY_FRAME;}return this.journeyForecastResult(job);};
+Game.prototype.leaveJourney=function(now=Date.now()){
+ const j=this.journey;if(!j)return null;
+ if(this.journeyResuming){const replay=this.journeyResuming;replay.interrupted=true;return {pending:true,ready:replay.ready.then(()=>{const out=this.leaveJourney(now);return out?.ready||out;})};}
+ if(Number.isFinite(j.away)){if(j.outcome)return {at:j.arrival,...j.outcome};if(this.journeyForecast?.journey===j&&!this.journeyForecast.cancelled)return {pending:true,ready:this.journeyForecast.ready};const departed=j.away;delete j.away;return this.leaveJourney(departed);}
+ j.away=now;
+ const job=this.createJourneyForecast();job.journey=j;
+ Object.defineProperty(this,'journeyForecast',{value:job,writable:true,configurable:true});
+ job.ready=new Promise(resolve=>{const run=()=>{try{
+  if(job.cancelled||this.journey!==j||!Number.isFinite(j.away)){delete job.copy;resolve(null);return;}
+  const start=performance.now();do{job.copy.stepJourney(JOURNEY_FRAME);job.seconds+=JOURNEY_FRAME;job.steps++;}while(job.copy.journey&&job.steps<200000&&performance.now()-start<6);
+  if(job.copy.journey&&job.steps<200000){setTimeout(run,0);return;}
+  const f=this.journeyForecastResult(job);j.arrival=now+Math.ceil(f.seconds*1000);j.outcome={arrived:f.arrived,reason:f.reason,place:f.place};delete job.copy;resolve({at:j.arrival,...j.outcome});
+ }catch{delete job.copy;resolve(null);}};setTimeout(run,0);});
+ return {pending:true,ready:job.ready};
+};
 // Replays the absence in quarter-second steps, with one save at the end. Past the announced time, the trip always ends.
-Game.prototype.resumeJourney=function(now=Date.now()){const j=this.journey;if(!j||!Number.isFinite(j.away))return false;const finish=Number.isFinite(j.arrival)&&now>=j.arrival,queued=this.events.length;let left=Math.max(0,(now-j.away)/1000);delete j.away;delete j.arrival;delete j.outcome;
- this.journeyReplay=true;try{for(let i=0;this.journey===j&&(finish||left>1e-9)&&i<JOURNEY_REPLAY_STEPS;i++){const dt=finish?JOURNEY_REPLAY_STEP:Math.min(JOURNEY_REPLAY_STEP,left);this.stepJourney(dt);left-=dt;}}finally{this.journeyReplay=false;}
- const replayed=this.events.splice(queued);this.events.push(...replayed.filter(e=>e.type!=='save'));this.emit('save');return true;};
+Game.prototype.resumeJourney=function(now=Date.now()){
+ const j=this.journey;if(!j||!Number.isFinite(j.away))return false;if(this.journeyResuming)return this.journeyResuming.ready;
+ if(this.journeyForecast?.journey===j)this.journeyForecast.cancelled=true;
+ const job={journey:j,finish:Number.isFinite(j.arrival)&&now>=j.arrival,left:Math.max(0,(now-j.away)/1000),away:j.away,seconds:0,steps:0,events:[]};
+ Object.defineProperty(this,'journeyResuming',{value:job,writable:true,configurable:true});this.journeyReplay=true;
+ job.ready=new Promise(resolve=>{const run=()=>{
+  const start=performance.now();
+  while(!job.interrupted&&this.journey===j&&(job.finish||job.left>1e-9)&&job.steps<JOURNEY_REPLAY_STEPS){
+   const dt=job.finish?JOURNEY_REPLAY_STEP:Math.min(JOURNEY_REPLAY_STEP,job.left),queued=this.events.length;
+   // Keep the absence marker while catching up: live input and rendering cannot advance the trip too.
+   backgroundStepJourney.call(this,dt);job.events.push(...this.events.splice(queued));job.left-=dt;job.seconds+=dt;job.steps++;
+   if(this.journey===j)j.away=Math.min(now,job.away+job.seconds*1000);
+   if(performance.now()-start>=6){setTimeout(run,0);return;}
+  }
+  this.journeyReplay=false;delete this.journeyResuming;if(!job.interrupted||this.journey!==j){delete j.away;delete j.arrival;delete j.outcome;}
+  this.events.push(...job.events.filter(e=>e.type!=='save'));this.emit('save');resolve(true);
+ };setTimeout(run,0);});return job.ready;
+};
 // While away, frames that still run must not advance the trip a second time.
 const backgroundStepJourney=Game.prototype.stepJourney;
 Game.prototype.stepJourney=function(dt){if(Number.isFinite(this.journey?.away))return;return backgroundStepJourney.call(this,dt);};
@@ -10032,6 +10088,7 @@ const Batraciens = (() => {
    syncCivil(n);return;
   }
   if(m){visual(n,'idle');syncCivil(n);return;}
+  if(n.reliefPost||n.labourReturning||n.convoyId||n.campaignGroup){this.cancelBatracienConversation?.(n);visual(n,moved>.001?'walk':'idle');syncCivil(n);return;}
   if(this.stepBatracienRoutine?.(n,delta)){syncCivil(n);return;}
   if(b.action==='sit_down'){visual(n,'seated');syncCivil(n);return;}
   if(b.action==='stand_up'||b.action==='cower_exit'){visual(n,'idle');syncCivil(n);return;}
@@ -10329,7 +10386,7 @@ const BatracienSociety = (() => {
    if(a.batracien.action==='talk')this.civilianAction(a,'idle');}
  };
  Game.prototype.startBatracienConversation=function(a,b){
-  if(a===b||![a,b].every(n=>B.isCivil(n)&&alive(n)&&!member(this,n)&&!n.dangerState&&!locked(n)&&n.batracien.routine&&!n.batracien.routine.partner&&this.time>=n.batracien.routine.chatAfter)||this.dialogue||!this.sameLevel(a,b)||dist(a,b)>C.talkRadius||!this.lineClear(a,b))return false;
+  if(a===b||![a,b].every(n=>!n.reliefPost&&!n.labourReturning&&B.isCivil(n)&&alive(n)&&!member(this,n)&&!n.dangerState&&!locked(n)&&n.batracien.routine&&!n.batracien.routine.partner&&this.time>=n.batracien.routine.chatAfter)||this.dialogue||!this.sameLevel(a,b)||dist(a,b)>C.talkRadius||!this.lineClear(a,b))return false;
   if(this.localThreatAt(a.x,a.y,a.level||0)||this.localThreatAt(b.x,b.y,b.level||0))return false;
   const end=this.time+3+(civilianHash(a.id+b.id)%4);
   for(const [n,other]of [[a,b],[b,a]]){const r=n.batracien.routine;r.partner=other.id;r.chatUntil=end;r.chatStarted=this.time;n.path=[];n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk',true);}
@@ -10363,7 +10420,7 @@ const BatracienSociety = (() => {
   return true;
  }
  Game.prototype.stepBatracienRoutine=function(n,dt){
-  const b=n.batracien,r=b.routine;if(!r)return false;
+  const b=n.batracien,r=b.routine;if(!r)return false;if(n.reliefPost||n.labourReturning){this.cancelBatracienConversation(n);r.goal=null;return false;}
   if(r.partner){const other=this.npcs.find(a=>a.id===r.partner);
    if(!alive(other)||other.dangerState||member(this,other)||locked(other)||this.time>=r.chatUntil||other.batracien?.routine?.partner!==n.id||dist(n,other)>C.talkRadius||!this.lineClear(n,other)){this.cancelBatracienConversation(n);}
    else{n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk');return true;}}
@@ -10980,27 +11037,52 @@ function createCampaignSystems(A,B,W,state,H){
  function release(s,units){for(const u of units.filter(u=>u.role==='guard')){guardHealth(s,u);const p=s.guards.find(p=>p.id===(u.personId||u.id));if(p)p.assignment=null;}s.guardAvailable=Math.min(s.guardPool,people(s).filter(p=>!p.dead&&!p.assignment&&p.hp>=2).length);}
  function care(s,at){for(const p of s.guards){if(p.dead||p.assignment&&!p.post||p.hp>=8)continue;(state.care[s.id]||={})[p.id]=true;if(at<(p.nextCare||0)||stock(s,'medicinal')<1||stock(s,'provisions')<1)continue;take(s,'medicinal',1);take(s,'provisions',1);p.hp=Math.min(8,p.hp+2);p.nextCare=at+360;if(p.hp===8)delete state.care[s.id][p.id];history('guard_treated',{site:s.id,person:p.id,hp:p.hp},at);}s.guardAvailable=Math.min(s.guardPool,people(s).filter(p=>!p.dead&&!p.assignment&&p.hp>=2).length);}
  function hearth(id,at=W.clock){const s=state.sites[id];if(!s)return false;if(s.fireUntil>at)return true;const fuel=Math.max(.01,(s.needs.firewood||.24)/24);if(stock(s,'firewood')+1e-9<fuel)return false;take(s,'firewood',fuel);s.fireUntil=at+60;return true;}
- function graphPath(site,point,{routeState=W}={}){const edge=point.edge&&A.edgeById.get(point.edge);let candidates=[];
+ function graphPath(site,point,{routeState=W,allowBoat=false}={}){const edge=point.edge&&A.edgeById.get(point.edge);let candidates=[];
   const near=A.closestRoad(point.x,point.y),segment=near?.road?.segments.reduce((best,s)=>{const p=A.project(point.x,point.y,s.a,s.b);return !best||p.d<best.p.d?{s,p}:best;},null);
-  const target=edge||segment&&A.edgeById.get([segment.s.a[2],segment.s.b[2]].sort().join('|'));if(!target)return null;
-  for(const v of [target.a,target.b]){const id=A.nodes.find(n=>n.vertex===v)?.id||v,path=A.findPath(site,id,{mode:'foot',allowBoat:false,clock:W.clock,state:routeState});if(!path&&A.byId[site]?.vertex!==v)continue;
-   const legs=(path||[]).map(l=>({edge:l.edge,from:A.vertices.get(l.from).slice(0,2),to:A.vertices.get(l.to).slice(0,2),length:l.length})),a=A.vertices.get(v),projection=A.project(point.x,point.y,A.vertices.get(target.a),A.vertices.get(target.b)),b=[A.vertices.get(target.a)[0]+(A.vertices.get(target.b)[0]-A.vertices.get(target.a)[0])*projection.t,A.vertices.get(target.a)[1]+(A.vertices.get(target.b)[1]-A.vertices.get(target.a)[1])*projection.t];
+  const target=edge||segment&&A.edgeById.get([segment.s.a[2],segment.s.b[2]].sort().join('|'));if(!target||!target.modes.includes('foot')&&!(allowBoat&&target.modes.includes('boat')))return null;
+  for(const v of [target.a,target.b]){const id=A.nodes.find(n=>n.vertex===v)?.id||v,path=A.findPath(site,id,{mode:'foot',allowBoat,clock:W.clock,state:routeState});if(!path&&A.byId[site]?.vertex!==v)continue;
+   const legs=(path||[]).map(l=>({edge:l.edge,mode:l.mode,from:A.vertices.get(l.from).slice(0,2),to:A.vertices.get(l.to).slice(0,2),length:l.length})),a=A.vertices.get(v),projection=A.project(point.x,point.y,A.vertices.get(target.a),A.vertices.get(target.b)),b=[A.vertices.get(target.a)[0]+(A.vertices.get(target.b)[0]-A.vertices.get(target.a)[0])*projection.t,A.vertices.get(target.a)[1]+(A.vertices.get(target.b)[1]-A.vertices.get(target.a)[1])*projection.t];
    if(Math.hypot(a[0]-b[0],a[1]-b[1])>.001)legs.push({edge:target.id,from:a.slice(0,2),to:b,length:Math.hypot(a[0]-b[0],a[1]-b[1])});candidates.push(legs);
   }return candidates.sort((a,b)=>a.reduce((n,l)=>n+l.length,0)-b.reduce((n,l)=>n+l.length,0))[0]||null;
  }
  function position(m){if(!m.path&&m.anchor)return {...m.anchor};const l=m.path?.[m.leg||0];if(!l){const p=m.path?.at(-1)?.to||[A.byId[m.site||m.home].x,A.byId[m.site||m.home].y];return {x:p[0],y:p[1]};}const t=Math.min(1,(m.progress||0)/Math.max(.001,l.length));return {x:l.from[0]+(l.to[0]-l.from[0])*t,y:l.from[1]+(l.to[1]-l.from[1])*t};}
  function reverse(m){const l=m.path?.[m.leg||0],progress=l?l.length-(m.progress||0):0;m.path=(m.path||[]).slice(0,(m.leg||0)+1).reverse().map(l=>({...l,from:l.to,to:l.from}));m.leg=0;m.progress=progress;}
- function move(m,minutes,at=W.clock){let remaining=Math.max(0,minutes),rate=pace.metresPerMinute(pace.civilianWalk);for(let i=0;i<10000;i++){const l=m.path?.[m.leg||0];if(!l)return {arrived:true,remaining};if(W.edgeStatus(A.edgeById.get(l.edge),at).closed&&!H.repairApproach?.(m,l,at)){m.waiting=l.edge;return {arrived:false,remaining:0};}m.waiting=null;const distance=Math.min(Math.max(0,l.length-(m.progress||0)),remaining*rate);m.progress=(m.progress||0)+distance;remaining-=distance/rate;if(m.progress>=l.length-1e-7){m.leg=(m.leg||0)+1;m.progress=0;}else return {arrived:false,remaining:0};}return {arrived:false,remaining:0};}
+ function move(m,minutes,at=W.clock){let remaining=Math.max(0,minutes);for(let i=0;i<10000;i++){const l=m.path?.[m.leg||0];if(!l)return {arrived:true,remaining};if(W.edgeStatus(A.edgeById.get(l.edge),at).closed&&!H.repairApproach?.(m,l,at)){m.waiting=l.edge;return {arrived:false,remaining:0};}m.waiting=null;const rate=l.mode==='boat'?A.modes.boat.metresPerMinute:pace.metresPerMinute(pace.civilianWalk),distance=Math.min(Math.max(0,l.length-(m.progress||0)),remaining*rate);m.progress=(m.progress||0)+distance;remaining-=distance/rate;if(m.progress>=l.length-1e-7){m.leg=(m.leg||0)+1;m.progress=0;}else return {arrived:false,remaining:0};}return {arrived:false,remaining:0};}
  function settle(c,reason='loss',at=W.clock){if(c.settlement)return c.settlement;const refund=c.delivered?0:Math.max(0,c.paid||0);if(refund)state.sites[c.to].treasury+=refund;c.escrow=0;c.settlement={reason,at:Math.round(at*1e8)/1e8,refund,paidToSeller:c.delivered?(c.paid||0)*c.deliveredAmount/(c.originalAmount||1):0};history('contract_settled',{id:c.id,...c.settlement});return c.settlement;}
  function reportLoss(c,source,at=W.clock){if(!c?.abandoned||c.lossReport)return false;c.lossReport={at:Math.round(at*1e8)/1e8,source};settle(c,'loss',at);const notice=H.event('cargo_loss',c.from,{source,cargoId:c.id,detail:'Le chargement '+c.id+' a été abandonné.'},0,at);c.lossNotice=notice?.id;history('cargo_loss_report',{id:c.id,source},at);return true;}
- function recover(c){if(!c?.abandoned||!c.lossReport||c.amount<=0||c.recoveryMission)return null;const s=state.sites[c.from],path=graphPath(s.id,c.abandonedPosition);if(!path||s.workers<2||s.guardAvailable<2||s.treasury<4||stock(s,'provisions')<4||stock(s,'tools')<1)return null;const id='recovery-'+state.serial++,units=reserve(s,2,id);if(!units)return null;const crew=H.reserveCrew(s,2,id);if(!crew){release(s,units);return null;}settle(c);s.guardAvailable-=2;s.treasury-=4;s.householdFunds+=4;take(s,'provisions',4);take(s,'tools',1);units.unshift(...crew);const m={id,kind:'recovery',site:s.id,cargo:c.id,path,leg:0,progress:0,units,crew:2,status:'outbound',clock:W.clock,staffReserved:true};c.recoveryMission=id;state.missions.push(m);history('recovery_departure',{id,cargo:c.id,site:s.id});return m;}
+ function recover(c){if(!c?.abandoned||!c.lossReport||c.amount<=0||c.recoveryMission)return null;const s=state.sites[c.from],path=A.cellAt(c.abandonedPosition.x,c.abandonedPosition.y)?.land&&graphPath(s.id,c.abandonedPosition);if(!path||Math.hypot((path.at(-1)?.to||[A.byId[s.id].x,A.byId[s.id].y])[0]-c.abandonedPosition.x,(path.at(-1)?.to||[A.byId[s.id].x,A.byId[s.id].y])[1]-c.abandonedPosition.y)>8||s.workers<2||s.guardAvailable<2||s.treasury<4||stock(s,'provisions')<4||stock(s,'tools')<1)return null;const id='recovery-'+state.serial++,units=reserve(s,2,id);if(!units)return null;const crew=H.reserveCrew(s,2,id);if(!crew){release(s,units);return null;}settle(c);s.guardAvailable-=2;s.treasury-=4;s.householdFunds+=4;take(s,'provisions',4);take(s,'tools',1);units.unshift(...crew);const m={id,kind:'recovery',site:s.id,cargo:c.id,path,leg:0,progress:0,units,crew:2,status:'outbound',clock:W.clock,staffReserved:true};supplyExpedition(m,s,units,path.reduce((n,l)=>n+l.length,0)/pace.metresPerMinute(pace.civilianWalk)*2+1440,4);c.recoveryMission=id;state.missions.push(m);history('recovery_departure',{id,cargo:c.id,site:s.id});return m;}
+ const edible=['grain','legumes','rice','tubers','dates','fish','meat','provisions'];
+ function carriedFood(m){
+  const declared=Math.max(0,m.rations||0);m.foodStores||={provisions:declared};let total=Object.values(m.foodStores).reduce((n,v)=>n+Math.max(0,v||0),0);
+  if(total<declared)m.foodStores.provisions=(m.foodStores.provisions||0)+declared-total;
+  else if(total>declared)for(const id of Object.keys(m.foodStores)){const n=Math.min(m.foodStores[id],total-declared);m.foodStores[id]-=n;total-=n;if(total<=declared+1e-9)break;}
+  return m.foodStores;
+ }
+ function supplyExpedition(m,site,units,minutes=1440,prepaidFood=0){
+  const living=units.filter(u=>u.hp>0).length,needs=H.localNeeds?.(site)||site.needs,reserve=site.reserveDays||3;
+  const available=edible.reduce((n,id)=>n+stock(site,id),0),wanted=Math.max(0,Math.ceil(minutes*living/720+living*2)-prepaidFood),budget=Math.min(wanted,Math.max(Math.max(0,4-prepaidFood),available-(needs.provisions||0)*reserve));
+  m.rations=prepaidFood;m.foodStores={provisions:prepaidFood};let left=budget;for(const id of edible){const n=take(site,id,left);m.foodStores[id]=(m.foodStores[id]||0)+n;m.rations+=n;left-=n;if(left<=1e-9)break;}
+  const water=Math.ceil(minutes*living/480+living*3);m.water=take(site,'water',Math.min(water,Math.max(4,stock(site,'water')-(needs.water||0)*reserve)));m.suppliedAt=m.clock??state.clock;
+ }
+ function consumeExpedition(m,at,units,damage){
+  const elapsed=Math.max(0,at-(m.suppliedAt??m.clock??at));m.suppliedAt=Math.max(m.suppliedAt??m.clock??at,at);const living=units.filter(u=>!u.dead&&u.hp>0);if(!living.length||!elapsed)return;
+  const n=living.length,stores=carriedFood(m),food=Math.max(0,m.rations||0),water=Math.max(0,m.water||0),hungry=Math.max(0,elapsed-food*720/n),dry=Math.max(0,elapsed-water*480/n);
+  let eaten=Math.min(food,elapsed*n/720);for(const id of Object.keys(stores)){const used=Math.min(stores[id],eaten);stores[id]-=used;eaten-=used;if(eaten<=1e-9)break;}
+  m.rations=Math.max(0,food-elapsed*n/720);m.water=Math.max(0,water-elapsed*n/480);const hurt=hungry/180+dry/240;
+  if(hurt>0)for(const u of living)damage(u,Math.max(0,u.hp-hurt));
+ }
+ function refundExpedition(m,site){for(const [id,n]of Object.entries(carriedFood(m)))site.stock[id]=stock(site,id)+Math.max(0,n);site.stock.water=stock(site,'water')+Math.max(0,m.water||0);m.foodStores={};m.rations=m.water=0;}
  function missionDamage(m,id,hp){if(m?.status==='returned')return false;const u=m?.units?.find(u=>u.id===id);if(!u||!Number.isFinite(hp)||hp<0)return false;const was=u.hp>0;u.hp=Math.max(0,Math.min(u.hp,u.role==='guard'?8:6,hp));if(u.role==='crew')H.crewHealth?.(state.sites[m.site],u,m.id);if(u.role==='guard')guardHealth(state.sites[m.site],u);else if(was&&u.hp===0)death(m.site,u.id,{reserved:true});return true;}
- function finishMission(m,at){const s=state.sites[m.site];release(s,m.units||[]);if(m.staffReserved){const count=(m.units||[]).filter(u=>u.role==='crew'&&u.hp>0).length;if(H.restoreCrew)H.restoreCrew(s,m.units||[],at);else s.workers+=count;m.staffReserved=false;}if(m.load){s.stock[m.load.resource]=stock(s,m.load.resource)+m.load.amount;const c=state.shipments.find(c=>c.id===m.cargo);if(c){c.recoveredAmount=(c.recoveredAmount||0)+m.load.amount;c.recovered=true;c.recoveryMission=null;if(c.recoveredAmount>=c.originalAmount&&c.lossNotice)W.resolve(c.lossNotice,at);H.event('caravan',m.site,{source:'Équipe de récupération',cargoId:c.id+'-'+m.id,detail:m.load.amount+' lots récupérés et rapportés au poste.'},720,at);}m.load=null;}if(m.cash){s.treasury+=m.cash;m.cash=0;}if(m.cargo){const c=state.shipments.find(c=>c.id===m.cargo);if(c?.recoveryMission===m.id)c.recoveryMission=null;}m.status='returned';m.clock=at;if(m.event)W.resolve(m.event,at);history('patrol_return',{id:m.id,site:m.site,casualties:(m.units||[]).filter(u=>u.hp<=0).length},at);}
+ function finishMission(m,at){const s=state.sites[m.site];refundExpedition(m,s);release(s,m.units||[]);if(m.staffReserved){const count=(m.units||[]).filter(u=>u.role==='crew'&&u.hp>0).length;if(H.restoreCrew)H.restoreCrew(s,m.units||[],at);else s.workers+=count;m.staffReserved=false;}if(m.load){s.stock[m.load.resource]=stock(s,m.load.resource)+m.load.amount;const c=state.shipments.find(c=>c.id===m.cargo);if(c){c.recoveredAmount=(c.recoveredAmount||0)+m.load.amount;c.recovered=true;c.recoveryMission=null;if(c.recoveredAmount>=c.originalAmount&&c.lossNotice)W.resolve(c.lossNotice,at);H.event('caravan',m.site,{source:'Équipe de récupération',cargoId:c.id+'-'+m.id,detail:m.load.amount+' lots récupérés et rapportés au poste.'},720,at);}m.load=null;}if(m.cash){s.treasury+=m.cash;m.cash=0;}if(m.cargo){const c=state.shipments.find(c=>c.id===m.cargo);if(c?.recoveryMission===m.id)c.recoveryMission=null;}m.status='returned';m.clock=at;if(m.event)W.resolve(m.event,at);history('patrol_return',{id:m.id,site:m.site,casualties:(m.units||[]).filter(u=>u.hp<=0).length},at);}
  function prepareMission(m){if(m.path)return true;const e=W.events.find(e=>e.id===m.event);if(!e)return false;const path=graphPath(m.site,e,{routeState:null});if(!path)return false;m.path=path;m.leg=path.length;m.progress=0;
   if(!m.units){const site=state.sites[m.site];m.units=reserve(site,Math.max(0,(m.crew||2)-(m.casualties||0)),m.id)||[];const oldIds=Array.from({length:m.crew||2},(_,i)=>'incident-'+m.event+'-'+i).filter(id=>!(m.deadSlots||[]).includes(id));for(const [i,u]of m.units.entries()){const p=site.guards.find(p=>p.id===u.personId),id=oldIds[i];if(!id)continue;if(p){(site.personAliases||={})[p.id]=id;p.id=id;}u.id=u.personId=id;u.legacyPending=true;}}
   m.clock??=state.clock;if(m.status==='returning')reverse(m);else m.status='active';e.managedMovement=true;e.end=null;e.memberIds=m.units.map(u=>u.id);return true;
  }
- function stepMission(m,minutes,at=W.clock,local=false){if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.status==='returned'||!prepareMission(m))return;if(m.status==='active'&&at>=(m.until||Infinity)&&m.engaged){reverse(m);m.status='returning';}if(m.engaged||!local&&m.physical)return;
+ function stepMission(m,minutes,at=W.clock,local=false){
+  if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.status==='returned'||!prepareMission(m))return;if(m.rations===undefined){supplyExpedition(m,state.sites[m.site],m.units||[],1440);m.suppliedAt=at;}
+  let cursor=at-Math.max(0,minutes);do{const end=Math.min(at,cursor+60);consumeExpedition(m,end,m.units||[],(u,hp)=>missionDamage(m,u.id,hp));stepMissionSlice(m,end-cursor,end,local);cursor=end;}while(cursor<at-1e-7&&m.status!=='returned');
+ }
+ function stepMissionSlice(m,minutes,at=W.clock,local=false){if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.status==='returned'||!prepareMission(m))return;if(m.status==='active'&&at>=(m.until||Infinity)&&m.engaged){reverse(m);m.status='returning';}if(m.engaged||!local&&m.physical)return;
   const living=m.units.filter(u=>u.hp>0),c=m.cargo&&state.shipments.find(c=>c.id===m.cargo);
   if(!living.length){if(m.cash&&c){c.travelFunds=(c.travelFunds||0)+m.cash;m.cash=0;}if(m.load&&c){c.amount+=m.load.amount;c.abandonedPosition=position(m);c.recovered=false;m.load=null;}if(c)c.recoveryMission=null;finishMission(m,at);return;}
   if(m.kind==='recovery'&&!living.some(u=>u.role==='crew'&&u.hp>1)&&m.status!=='returning'){if(m.load&&c){c.amount+=m.load.amount;c.abandonedPosition=position(m);m.load=null;c.recovered=false;}if(c)c.recoveryMission=null;reverse(m);m.status='returning';}
@@ -11012,14 +11094,19 @@ function createCampaignSystems(A,B,W,state,H){
    if(m.status==='returning'){finishMission(m,at-remaining);return;}
    if(m.kind==='recovery'){
     if(c&&W.active(at).some(e=>A.EVENT_TYPES[e.type].civilianPrey&&Math.hypot(e.x-p.x,e.y-p.y)<80)){m.waiting='hostiles';return;}
+    if(c&&Math.hypot(c.abandonedPosition.x-p.x,c.abandonedPosition.y-p.y)>8){m.waiting='cargo_out_of_reach';reverse(m);m.status='returning';continue;}
     if(c&&(c.travelFunds||0)>0){m.cash=c.travelFunds;c.travelFunds=0;}if(c&&c.amount>0){m.load={resource:c.resource,amount:c.amount};c.amount=0;c.recovered=true;history('cargo_recovered',{id:c.id,mission:m.id,amount:m.load.amount});}reverse(m);m.status='returning';
    }else{m.status='active';m.until=at-remaining+1440;return;}
   }
  }
  function toll(c,e,payment){const band=state.bands[e?.bandKey];if((c.tollBreaches?.[e?.id]||0)>W.clock||!band||band.phase!=='active'||!band.members.some(m=>!m.dead)||c.passages?.[e.id])return 0;const price=Math.max(1,e.toll||Math.ceil(c.amount*.15));if(payment===undefined){if((c.travelFunds||0)<price)return 0;c.travelFunds-=price;}else if(!Number.isFinite(payment)||payment<price)return 0;band.purse=(band.purse||0)+price;(c.passages||={})[e.id]=true;history('band_toll',{band:e.bandKey,cargo:c.id,amount:price});return price;}
  function bandEvent(band){return W.events.find(e=>e.id===band.event);}
- function prepareBand(band,e){if(band.phase)return;band.home||=e.home||A.nearestSite(e.x,e.y).id;band.inventory||={};band.purse||=0;band.anchor={x:e.x,y:e.y};band.path=graphPath(band.home,e,{routeState:null});band.leg=band.path?.length||0;band.progress=0;band.phase='active';band.event=e.id;band.withdrawAt=e.end||state.clock+1440;band.clock=state.clock;e.end=null;e.managedMovement=true;e.bandKey||=Object.keys(state.bands).find(k=>state.bands[k]===band);e.memberIds||=band.members.filter(m=>!m.dead).map(m=>m.id);}
- function stepBand(band,minutes,at,local=false){const e=bandEvent(band);if(!e||band.phase==='home'||band.engaged||!local&&band.physical)return;const alive=band.members.filter(p=>!p.dead&&p.hp>0);if(!alive.length){band.phase='home';W.resolve(e.id,at);return;}
+ function prepareBand(band,e){if(band.phase)return;band.home||=e.home||A.nearestSite(e.x,e.y).id;band.inventory||={};band.purse||=0;band.anchor={x:e.x,y:e.y};band.path=graphPath(band.home,e,{routeState:null});band.leg=band.path?.length||0;band.progress=0;band.phase='active';band.event=e.id;band.withdrawAt=e.end||state.clock+1440;band.clock=state.clock;e.end=null;e.managedMovement=true;e.bandKey||=Object.keys(state.bands).find(k=>state.bands[k]===band);e.memberIds||=band.members.filter(m=>!m.dead).map(m=>m.id);if(band.rations===undefined)supplyExpedition(band,state.sites[band.home],band.members,1440);}
+ function stepBand(band,minutes,at,local=false){
+  if(band.phase==='home')return;if(band.rations===undefined){supplyExpedition(band,state.sites[band.home],band.members,1440);band.suppliedAt=at;}
+  let cursor=at-Math.max(0,minutes);do{const end=Math.min(at,cursor+60);consumeExpedition(band,end,band.members,(u,hp)=>{const alive=u.hp>0;u.hp=hp;u.dead=hp<=0;if(alive&&u.dead&&band.peopleReserved)death(band.home,u.id,{reserved:true});});if(band.members.every(u=>u.dead||u.hp<=0))band.engaged=false;stepBandSlice(band,end-cursor,end,local);cursor=end;}while(cursor<at-1e-7&&band.phase!=='home');
+ }
+ function stepBandSlice(band,minutes,at,local=false){const e=bandEvent(band);if(!e||band.phase==='home')return;const alive=band.members.filter(p=>!p.dead&&p.hp>0);if(alive.length&&alive.every(p=>p.hp<=1)&&band.phase!=='returning'){reverse(band);band.phase='returning';W.resolve(e.id,at);}if(!alive.length){band.phase='home';W.resolve(e.id,at);return;}if(band.engaged||!local&&band.physical)return;
   if(band.phase==='outbound'&&e.resolved!==null){reverse(band);band.phase='returning';W.resolve(e.id,at);minutes=Math.min(minutes,Math.max(0,at-e.resolved));}
   if(band.phase==='active'){
    const p=position(band),c=state.shipments.find(c=>c.id===e.victimCargo);
@@ -11028,14 +11115,14 @@ function createCampaignSystems(A,B,W,state,H){
    if(at<band.withdrawAt&&e.resolved===null)return;if(!band.path){band.waiting='no_land_route';return;}reverse(band);band.phase='returning';W.resolve(e.id,at);minutes=Math.min(minutes,Math.max(0,at-band.withdrawAt));
   }
   const result=move(band,minutes,at);band.clock=at;const p=position(band);if(Math.hypot(e.x-p.x,e.y-p.y)>1)W.revision++;e.x=p.x;e.y=p.y;
-  if(result.arrived){if(band.phase==='outbound'){band.phase='active';band.withdrawAt=at-result.remaining+1440;if(e.type==='band_movement'){e.type='bandits';e.title=A.EVENT_TYPES.bandits.name;e.at=at-result.remaining;H.publish(e);W.revision++;}}else{band.phase='home';band.stash||={};for(const [id,n]of Object.entries(band.inventory)){band.stash[id]=(band.stash[id]||0)+n;}band.inventory={};band.treasury=(band.treasury||0)+(band.purse||0);band.purse=0;W.resolve(e.id,at-result.remaining);history('band_home',{band:e.bandKey});}}
+  if(result.arrived){if(band.phase==='outbound'){band.phase='active';band.withdrawAt=at-result.remaining+1440;if(e.type==='band_movement'){e.type='bandits';e.title=A.EVENT_TYPES.bandits.name;e.at=at-result.remaining;H.publish(e);W.revision++;}}else{refundExpedition(band,state.sites[band.home]);band.phase='home';band.stash||={};for(const [id,n]of Object.entries(band.inventory)){band.stash[id]=(band.stash[id]||0)+n;}band.inventory={};band.treasury=(band.treasury||0)+(band.purse||0);band.purse=0;W.resolve(e.id,at-result.remaining);history('band_home',{band:e.bandKey});}}
  }
  function adoptEvents(){for(const e of W.events){if(e.resolved!==null||!A.EVENT_TYPES[e.type].group||A.EVENT_TYPES[e.type].guard||e.managedMovement)continue;if(e.type!=='bandits'){e.end=null;continue;}const key=e.bandKey||'legacy-'+e.id,band=state.bands[key]||(state.bands[key]={home:e.home||A.nearestSite(e.x,e.y).id,members:Array.from({length:e.memberIds?.length||A.EVENT_TYPES[e.type].group},(_,i)=>({id:e.memberIds?.[i]||key+'-'+i,hp:4,dead:false}))});e.bandKey=key;prepareBand(band,e);}}
  function tick(at){H.tickLabour?.(at);adoptEvents();for(const b of Object.values(state.bands))if(b.phase==='home'&&at>=(b.nextSupply||0)){const site=state.sites[b.home];b.nextSupply=at+1440;if(B.settlements.some(p=>'town-'+p.atlasId===b.home&&p.criminalNetworks?.length)){for(const [id,n]of Object.entries(b.stash||{})){if(id==='provisions')continue;const price=.5,amount=Math.min(n,Math.max(0,(site.needs[id]||0)*3-stock(site,id)),site.householdFunds/price);if(amount<=0)continue;b.stash[id]-=amount;site.stock[id]=stock(site,id)+amount;site.householdFunds-=amount*price;b.treasury=(b.treasury||0)+amount*price;history('band_fence_sale',{home:b.home,resource:id,amount,paid:amount*price});}}const living=b.members.filter(p=>!p.dead);const food=Math.min(living.length,Math.floor(stock(site,'provisions')),Math.floor(b.treasury));if(food){take(site,'provisions',food);site.treasury+=food;b.treasury-=food;b.stash||={};b.stash.provisions=(b.stash.provisions||0)+food;}for(const p of living){if((b.stash?.provisions||0)>0){b.stash.provisions--;if(p.hp<4&&b.treasury>=1&&stock(site,'medicinal')>=1){take(site,'medicinal',1);site.treasury++;b.treasury--;p.hp=Math.min(4,p.hp+1);}}}}for(const m of state.missions)stepMission(m,Math.max(0,at-(m.clock??at-60)),at);for(const b of Object.values(state.bands))if(b.phase)stepBand(b,Math.max(0,at-(b.clock??at-60)),at);for(const s of sites())care(s,at);}
  for(const c of state.shipments)c.escrow??=c.settlement||c.delivered?0:c.paid||0;
  for(const m of state.missions)if(!m.populationLossesRecorded){for(const id of m.deadSlots||[])death(m.site,id,{role:'guard',reserved:true,accountedGuard:m.status==='returned'});m.populationLossesRecorded=true;}
  for(const s of sites()){people(s);if(!s.peopleLossRevision){for(const c of state.shipments.filter(c=>c.from===s.id))for(const u of c.units||[])if(u.hp<=0)death(s.id,u.personId||u.id,{role:u.role==='guard'?'guard':'worker',reserved:true,accountedGuard:u.role==='guard'});s.peopleLossRevision=1;}}
- return {people,bindGuard,reserve,guardHealth,release,death,care,hearth,graphPath,position,reverse,move,settle,recover,missionDamage,stepMission,finishMission,prepareBand,stepBand,adoptEvents,toll,tick,reportLoss};
+ return {supplyExpedition,consumeExpedition,refundExpedition,people,bindGuard,reserve,guardHealth,release,death,care,hearth,graphPath,position,reverse,move,settle,recover,missionDamage,stepMission,finishMission,prepareBand,stepBand,adoptEvents,toll,tick,reportLoss};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createCampaignSystems;
 
@@ -11091,6 +11178,7 @@ function createWorldLabourSystems(A,W,state,H,S){
  function outsideCount(site){
   let count=Object.values(site.workerRecords).filter(p=>!p.dead&&(p.reasons.party||p.reasons.returning||p.reasons.travelling||p.assignment)).length;
   count+=site.guards.filter(p=>!p.dead&&p.assignment&&!p.post).length;
+  count+=Object.values(state.bands).filter(b=>b.home===site.id&&b.peopleReserved&&b.phase&&b.phase!=='home').reduce((n,b)=>n+b.members.filter(p=>!p.dead&&p.hp>0).length,0);
   return Math.min(site.population,count);
  }
  function localNeeds(site){const fraction=site.population?Math.max(0,site.population-outsideCount(site))/site.population:0;return Object.fromEntries(Object.entries(site.needs).map(([id,n])=>[id,n*(['provisions','water'].includes(id)?fraction:1)]));}
@@ -11175,7 +11263,7 @@ function createWorldLabourSystems(A,W,state,H,S){
    m.status='active';work.materialsOnSite=true;m.materials={};if(!remaining)return;
   }
  }
- Object.assign(H,{restoreWorkers,restoreCrew,crewHealth,reserveCrew,workerDeath,repairApproach,stepRepairMission,tickLabour});
+ Object.assign(H,{restoreWorkers,restoreCrew,crewHealth,reserveCrew,workerDeath,repairApproach,stepRepairMission,tickLabour,localNeeds});
  return {restoreWorkers,restoreCrew,crewHealth,reserveCrew,setWorkerReason,prepareRepair,stepRepairMission,repairApproach,tickLabour,outsideCount,localNeeds,productionStaff,jobCanProduce};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldLabourSystems;
@@ -11237,9 +11325,10 @@ function createWorldSimulation(A,B,W,saved){
   // rather than ceasing input orders while less than one usable lot remains.
   for(const id of ['tools','cloth'])need[id]=Math.max(1,need[id]||0);
   if(site.population<=0)return {};
+  // Workshop inputs cover continuing tool/clothing maintenance as well as rebuilding the reserve.
   const addInputs=(id,rate,seen=new Set())=>{if(seen.has(id))return;const recipes=resources.get(id)?.inputAlternatives;if(!recipes?.length)return;seen=new Set([...seen,id]);
    const recipe=[...recipes].sort((a,b)=>b.reduce((n,k)=>n+Math.min(1,stock(site,k))+(region?.resourceLevels?.[k]||0),0)-a.reduce((n,k)=>n+Math.min(1,stock(site,k))+(region?.resourceLevels?.[k]||0),0))[0];
-   const output=Math.max(0,rate*4-stock(site,id))/4;for(const input of recipe){need[input]=(need[input]||0)+output;addInputs(input,output,seen);}
+   const output=(['tools','cloth'].includes(id)?rate:0)+Math.max(0,rate*4-stock(site,id))/4;for(const input of recipe){need[input]=(need[input]||0)+output;addInputs(input,output,seen);}
   };
   for(const [id,rate]of Object.entries(need))addInputs(id,rate);
   need.medicinal=Math.max(need.medicinal||0,Object.keys(state.care[site.id]||{}).length/4,.25);
@@ -11270,10 +11359,10 @@ function createWorldSimulation(A,B,W,saved){
  function addShipment(from,to,id,amount){
   const a=state.sites[from],b=state.sites[to];if(!a||!b||from===to||amount<=0||state.shipments.filter(s=>['travel','returning'].includes(s.status)).length>=64)return null;
   if(!resources.has(id)||!finite(amount)||a.workers<2||a.guardAvailable<2||a.treasury<6||stock(a,'provisions')<4)return null;
-  const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-(a.needs[id]||1)*a.reserveDays-(id==='provisions'?4:0)));if(qty<=0)return null;
+  const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-Math.max(1,requirements(a)[id]||0)*a.reserveDays-(id==='provisions'?4:0)));if(qty<=0)return null;
   const price=Math.max(1,Math.ceil(qty*.5));if(b.treasury<price)return null;const identity='cargo-'+state.serial,guards=systems.reserve(a,2,identity);if(!guards)return null;const crew=systems.reserveCrew(a,2,identity);if(!crew){systems.release(a,guards);return null;}
   take(a,id,qty);take(a,'provisions',4);b.treasury-=price;a.guardAvailable-=2;a.treasury-=6;const cargo={id:'cargo-'+state.serial++,from,to,resource:id,amount:qty,originalAmount:qty,lost:0,paid:price,path:path.map(p=>({...p})),leg:0,progress:0,status:'travel',depart:state.clock,clock:state.clock,crew:2,guards:2,staffReserved:true,guardReserved:true,landRate:pacing.metresPerMinute(pacing.civilianWalk),delivered:false,news:JSON.parse(JSON.stringify(state.channels[from]||{}))};
-  cargo.escrow=price;cargo.travelFunds=6;cargo.units=[...crew,...guards];
+  cargo.escrow=price;cargo.travelFunds=6;cargo.units=[...crew,...guards];systems.supplyExpedition(cargo,a,cargo.units,path.reduce((n,l)=>n+l.length/cargoRate(cargo,l),0)*2+1440,4);
   state.shipments.push(cargo);history('cargo_departure',{id:cargo.id,from,to,resource:id,amount:qty});return cargo;
  }
  function produce(site,day,sky){
@@ -11328,6 +11417,20 @@ function createWorldSimulation(A,B,W,saved){
   c.escortOnly=true;c.status='returning';
  }
  function progressCargo(c,dt,local=false,at=state.clock){
+  if(!['travel','returning','abandoned'].includes(c.status)||c.escortReturned)return;if(c.rations===undefined){systems.supplyExpedition(c,state.sites[c.from],cargoUnits(c));c.suppliedAt=at;}if(!local&&controlledCargo.has(c.id)){systems.consumeExpedition(c,at,cargoUnits(c),(u,hp)=>damageCargoUnit(c,u.id,hp));return;}
+  let cursor=at-Math.max(0,dt);
+  do{
+   if(!c.encounter)returnEscort(c);if(c.escortReturned)break;
+   while(c.path[c.leg]&&c.path[c.leg].length/cargoRate(c,c.path[c.leg])-(c.progress||0)<=1e-7){c.leg++;c.progress=0;}
+   let end=Math.min(at,cursor+60),left=c.path.slice(c.leg).reduce((n,l)=>n+l.length/cargoRate(c,l),0)-(c.progress||0);
+   if(c.status==='travel')left+=c.path.reduce((n,l)=>n+l.length/cargoRate(c,l),0);
+   // Only inspect the whole remaining path when arrival can occur in this slice.
+   // Other slices share the current-hour edge cache with all the other convoys.
+   if(left<end-cursor&&c.path.slice(c.leg).every(l=>{const status=W.edgeStatus(A.edgeById.get(l.edge),end);return !status.closed&&!status.events.some(e=>A.EVENT_TYPES[e.type].civilianPrey&&!c.passages?.[e.id]);}))end=Math.min(end,cursor+Math.max(0,left));
+   systems.consumeExpedition(c,end,cargoUnits(c),(u,hp)=>damageCargoUnit(c,u.id,hp));progressCargoSlice(c,end-cursor,local,end);cursor=end;
+  }while(cursor<at-1e-7&&!c.escortReturned&&['travel','returning','abandoned'].includes(c.status));
+ }
+ function progressCargoSlice(c,dt,local=false,at=state.clock){
   if(!['travel','returning','abandoned'].includes(c.status)||c.escortReturned||!local&&controlledCargo.has(c.id))return;
   // Resolve recorded opponents before spending the remaining travel time. Legacy
   // encounters with no participants require observation rather than invented losses.
@@ -11336,7 +11439,7 @@ function createWorldSimulation(A,B,W,saved){
   let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
   for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<20000;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){const ledger=state.channels[c.from]||={};for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:at-remaining,source:'Caravaniers de retour'};if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
+    if(c.status==='returning'){systems.refundExpedition(c,state.sites[c.from]);const ledger=state.channels[c.from]||={};for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:at-remaining,source:'Caravaniers de retour'};if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
     const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at-remaining;c.escrow=0;c.settlement={reason:'delivery',at:c.arrived,refund:c.paid-paid,paidToSeller:paid};
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to},at-remaining);event('caravan',c.to,{cargoId:c.id,detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720,at-remaining);
@@ -11386,7 +11489,7 @@ function createWorldSimulation(A,B,W,saved){
    const path=systems.graphPath(site.id,incident);if(!path)continue;const id='mandate-'+state.serial++,units=systems.reserve(site,2,id);if(!units)continue;
    site.guardAvailable-=2;site.treasury-=12;site.householdFunds+=12;take(site,'provisions',4);const road=A.closestRoad(incident.x,incident.y)?.road;if(!road)continue;
    const e=event('patrol',road.id,{source:site.authority,position:node},0);if(!e){systems.release(site,units);continue;}e.authority=site.authority;e.mandateSite=site.id;e.managedMovement=true;e.memberIds=units.map(u=>u.id);e.mandate=incident.warrant?'search_last_seen':'protect_travellers';
-   state.missions.push({id,event:e.id,incident:incident.id,site:site.id,road:road.id,crew:2,units,path,leg:0,progress:0,clock:state.clock,status:'outbound'});
+   const mission={id,event:e.id,incident:incident.id,site:site.id,road:road.id,crew:2,units,path,leg:0,progress:0,clock:state.clock,status:'outbound'};systems.supplyExpedition(mission,site,units,path.reduce((n,l)=>n+l.length,0)/pacing.metresPerMinute(pacing.civilianWalk)*2+1440,4);state.missions.push(mission);
   }
  }
  function institutions(){
@@ -11397,8 +11500,8 @@ function createWorldSimulation(A,B,W,saved){
    const position=cargoPosition(cargo),base=sites().filter(s=>profiles.get(s.id)?.criminalNetworks.includes(candidate.id)&&s.distress>=1.5&&Math.hypot(A.byId[s.id].x-position.x,A.byId[s.id].y-position.y)<1500).sort((a,b)=>Math.hypot(A.byId[a.id].x-position.x,A.byId[a.id].y-position.y)-Math.hypot(A.byId[b.id].x-position.x,A.byId[b.id].y-position.y))[0];if(!base)continue;
    const key='band-'+candidate.id+'-'+base.id,previous=state.cooldowns[key]??-Infinity;if(state.clock-previous<4320||W.active(state.clock).some(e=>e.target===road.id&&['patrol','bandits'].includes(e.type)))continue;
    const band=state.bands[key]||(state.bands[key]={home:base.id,members:Array.from({length:3},(_,i)=>({id:key+'-'+i,hp:4,dead:false}))}),members=band.members.filter(m=>!m.dead&&m.hp>0);if(!members.length)continue;
-   if(band.phase&&band.phase!=='home')continue;const path=systems.graphPath(base.id,cargoPosition(cargo));if(!path)continue;
-   const e=event('band_movement',road.id,{source:'Voyageurs',position:cargoPosition(cargo)},0);if(e){e.groupId=candidate.id;e.memberIds=members.map(m=>m.id);e.bandKey=key;e.objective='cargo_or_toll';e.victimCargo=cargo.id;e.home=base.id;band.inventory||={};band.purse||=0;band.event=e.id;band.path=path;band.leg=0;band.progress=0;band.phase='outbound';band.clock=state.clock;band.withdrawAt=state.clock+1440;e.end=null;e.managedMovement=true;e.toll=Math.max(1,Math.ceil(cargo.amount*.15));e.x=A.byId[base.id].x;e.y=A.byId[base.id].y;if(!band.peopleReserved){const n=Math.min(base.workers,members.length);if(n<members.length){W.resolve(e.id,state.clock);continue;}base.workers-=n;band.peopleReserved=true;}state.cooldowns[key]=state.clock;history('band_ambush',{event:e.id,group:candidate.id,cargo:cargo.id});}
+   if(band.phase&&band.phase!=='home')continue;if(!band.peopleReserved&&base.workers-Object.values(base.workerRecords||{}).filter(p=>!p.anonymous&&!p.dead&&!Object.values(p.reasons||{}).some(Boolean)).length<members.length)continue;const path=systems.graphPath(base.id,cargoPosition(cargo));if(!path)continue;
+   const e=event('band_movement',road.id,{source:'Voyageurs',position:cargoPosition(cargo)},0);if(e){e.groupId=candidate.id;e.memberIds=members.map(m=>m.id);e.bandKey=key;e.objective='cargo_or_toll';e.victimCargo=cargo.id;e.home=base.id;band.inventory||={};band.purse||=0;band.event=e.id;band.path=path;band.leg=0;band.progress=0;band.phase='outbound';band.clock=state.clock;band.withdrawAt=state.clock+1440;e.end=null;e.managedMovement=true;e.toll=Math.max(1,Math.ceil(cargo.amount*.15));e.x=A.byId[base.id].x;e.y=A.byId[base.id].y;systems.supplyExpedition(band,base,members,path.reduce((n,l)=>n+l.length,0)/pacing.metresPerMinute(pacing.civilianWalk)*2+1440);if(!band.peopleReserved){const n=Math.min(base.workers,members.length);if(n<members.length){W.resolve(e.id,state.clock);continue;}base.workers-=n;band.peopleReserved=true;}state.cooldowns[key]=state.clock;history('band_ambush',{event:e.id,group:candidate.id,cargo:cargo.id});}
   }
  }
  function advance(clock,weather=()=>({})){systems.adoptEvents();if(!finite(clock)||clock<state.clock)return;const begin=Math.floor(state.clock/60),end=Math.floor(clock/60);
@@ -11448,10 +11551,10 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldSimulat
   this.player.coins-=q.cost;this.supplies.food+=q.food;this.supplies.water+=q.water;this.emit('notice',{title:'Provisions achetées',text:q.food+' rations et '+q.water.toFixed(1)+' gourdes.'});this.emit('save');return true;
  };
  const needs=Game.prototype.advanceNeeds;
- Game.prototype.advanceNeeds=function(minutes){if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;const waterBefore=this.supplies.water,people=1+this.party.filter(c=>!c.spirit).length,wet=Math.min(minutes,waterBefore*480/people),dry=minutes-wet,afterDrink=Math.max(0,(this.needs.dehydrated||0)-wet*2);
+ Game.prototype.advanceNeeds=function(minutes){if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;const waterBefore=this.supplies.water,people=1+this.waterConsumers().length,wet=Math.min(minutes,waterBefore*480/people),dry=minutes-wet,afterDrink=Math.max(0,(this.needs.dehydrated||0)-wet*2);
   needs.call(this,minutes);this.needs.dehydrated=afterDrink+dry;
   const harmful=Math.max(0,this.needs.dehydrated-180)-Math.max(0,afterDrink-180);
-  if(harmful>0){const hurt=harmful/240;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hurt));for(const c of this.party)if(!c.spirit){c.hp=Math.max(0,c.hp-hurt);c.down=c.hp===0;}}
+  if(harmful>0){const hurt=harmful/240;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hurt));for(const c of this.waterConsumers()){c.hp=Math.max(0,c.hp-hurt);c.down=c.hp===0;}}
  };
  const walk=Game.prototype.movePlayer;
  Game.prototype.movePlayer=function(p,dx,dy){const fatigue=this.supplies?.fatigue||0,thirst=this.needs?.dehydrated||0,factor=1-Math.min(.2,Math.max(0,fatigue-60)/200)-Math.min(.15,thirst/2400);return walk.call(this,p,dx*factor,dy*factor);};
@@ -11476,7 +11579,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldSimulat
   if(!this.canRelieve(station,n,restoring))return false;this.registerLabourActors();const s=sim(this),p=s.state.sites[n.labourSite].workerRecords[n.id];
   if(station.originalActor)this.releaseWorldRelief(station);
   station.originalActor=station.actor;station.actor=n;n.reliefTitle=n.title;n.reliefPost={x:station.originalActor.x+22,y:station.originalActor.y};n.title='Relève de '+Atlas.byId[station.site].name;
-  p.service=station.id;s.systems.setWorkerReason(n.labourSite,n.id,'service',true);this.cancelWorldConversation(n);if(!restoring)s.history('service_relief',{site:station.site,person:n.id});return true;
+  p.service=station.id;s.systems.setWorkerReason(n.labourSite,n.id,'service',true);this.cancelWorldConversation(n);this.cancelBatracienConversation?.(n);if(!restoring)s.history('service_relief',{site:station.site,person:n.id});return true;
  };
  const step=Game.prototype.stepNpcs;
  Game.prototype.stepNpcs=function(dt){step.call(this,dt);for(const n of this.npcs)if(n.reliefPost&&!n.dangerState&&!n.civilian?.critical&&!n.civilian?.dead&&this.dialogue?.who!==n&&dist(n,n.reliefPost)>4)this.walkNpc(n,n.reliefPost,dt);};
@@ -11729,7 +11832,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
  const simulation=g=>g.worldState.simulation;
  Game.prototype.convoyActors=function(c){return this.npcs.filter(n=>n.convoyId===c.id);};
  Game.prototype.convoyPosition=function(c){const s=simulation(this),p=s.cargoPosition(c);return c.localPosition&&Number.isFinite(c.localPosition.x)&&Number.isFinite(c.localPosition.y)?{...c.localPosition}:Atlas.toGame(p.x,p.y);};
- Game.prototype.saveConvoyActors=function(c){const s=simulation(this);for(const n of this.convoyActors(c)){const u=s.cargoUnits(c).find(u=>u.id===n.id);if(!u)continue;s.damageCargoUnit(c,n.id,n.convoyGuard?n.guardState?.hp??u.hp:n.civilian?.hp??u.hp,n.guardState?.hostileUntil||0);Object.assign(u,{x:n.x,y:n.y,dir:n.dir});if(n.civilian){u.appearance={...n.civilian.appearance};if(c.staffReserved)s.systems.crewHealth(s.state.sites[c.from],u,c.id);}}};
+ Game.prototype.saveConvoyActors=function(c){const s=simulation(this);for(const n of this.convoyActors(c)){const u=s.cargoUnits(c).find(u=>u.id===n.id);if(!u)continue;const health=n.convoyGuard?n.guardState:n.civilian;if(health&&u.hp<health.hp){health.hp=u.hp;health.dead=u.hp<=0;if(health.dead&&!n.convoyGuard)this.civilianAction(n,'death',true);}s.damageCargoUnit(c,n.id,n.convoyGuard?n.guardState?.hp??u.hp:n.civilian?.hp??u.hp,n.guardState?.hostileUntil||0);Object.assign(u,{x:n.x,y:n.y,dir:n.dir});if(n.civilian){u.appearance={...n.civilian.appearance};if(c.staffReserved)s.systems.crewHealth(s.state.sites[c.from],u,c.id);}}};
  Game.prototype.convoyInDanger=function(c){const actors=this.convoyActors(c),position=this.convoyPosition(c);return actors.some(n=>living(n)&&(n.wind||n.attack||n.hurt||n.dangerState||n.convoyGuard&&(this.isHostileHumanGuard(n)||this.humanGuardTarget(n,this.ensureHumanGuard(n)))))||this.enemies.some(e=>!e.dead&&e.world&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position));};
  Game.prototype.unloadConvoy=function(c){if(this.convoyInDanger(c)){c.encounter=true;const position=this.convoyPosition(c);simulation(this).beginCargoEncounter(c,this.enemies.filter(e=>e.world&&!e.dead&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position)));}this.saveConvoyActors(c);this.npcs=this.npcs.filter(n=>n.convoyId!==c.id);this.atlasNpcs=this.atlasNpcs.filter(n=>n.convoyId!==c.id);simulation(this).controlCargo(c.id,false);};
  Game.prototype.syncWorldConvoys=function(){
@@ -11766,7 +11869,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
    const position=this.convoyPosition(c),crew=actors.filter(n=>!n.convoyGuard&&living(n)),driver=(c.escortOnly?actors.filter(n=>living(n)):crew.filter(n=>n.civilian.hp>1)).find(n=>!n.dangerState),leg=c.path[c.leg];
    if(danger||!driver||c.status==='abandoned'||crew.some(n=>this.dialogue?.who===n)){s.stepCargo(c,0,this.clock);continue;}
    if(!leg){s.stepCargo(c,0,this.clock);continue;}
-   const edge=this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock);if(edge.closed||edge.events.some(e=>Atlas.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;s.stepCargo(c,0,this.clock);continue;}c.waiting=null;
+   const edge=this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock);if(edge.closed||edge.events.some(e=>Atlas.EVENT_TYPES[e.type].civilianPrey&&!c.passages?.[e.id]&&!s.systems.toll(c,e))){c.waiting=leg.edge;s.stepCargo(c,0,this.clock);continue;}c.waiting=null;
    // A driver who fled must physically return to the wagon before it can move.
    if(dist(driver,position)>12){this.walkNpc(driver,position,dt);s.stepCargo(c,0,this.clock);continue;}
    const a=Atlas.toGame(...Atlas.vertices.get(leg.from)),b=Atlas.toGame(...Atlas.vertices.get(leg.to)),dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy),metres=c.progress*s.cargoRate(c,leg),look=Math.min(leg.length,metres+2),goal={x:a.x+dx*look/leg.length,y:a.y+dy*look/leg.length},old={x:driver.x,y:driver.y};
@@ -11820,8 +11923,8 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
  const sim=g=>g.worldState.simulation,groups=g=>[...(sim(g)?.state.missions||[]).filter(m=>m.status!=='returned').map(m=>({key:m.id,m,band:false})),...Object.entries(sim(g)?.state.bands||{}).filter(([,b])=>b.phase&&b.phase!=='home').map(([key,m])=>({key,m,band:true}))];
  const actors=(g,key)=>[...g.npcs,...g.enemies].filter(n=>n.campaignGroup===key&&!n.dead&&!n.guardState?.dead&&!n.civilian?.dead);
  Game.prototype.bindPostedGuards=function(restore=false){const s=sim(this);if(!s)return;for(const n of this.npcs){if(!n.batracien?.role||n.eventId||n.convoyId||n.campaignGroup)continue;const site=s.state.sites[n.site||n.batracien.site];if(!site)continue;const max=BATRACIEN_CONFIG.combat[n.batracien.role]?.hp||8,p=s.systems.bindGuard(site,n.id,n.batracien.hp/max*8);if(!p)continue;if(restore){n.batracien.hp=p.hp/8*max;n.batracien.dead=p.dead;}else s.systems.guardHealth(site,{id:p.id,hp:n.batracien.hp/max*8});}};
- Game.prototype.saveCampaignActors=function(){const s=sim(this);if(!s)return;for(const {key,m,band}of groups(this)){const a=actors(this,key);for(const n of a){let hp=band?n.hp:n.batracien?.role?n.batracien.hp:n.guardState?.hp??n.civilian?.hp;if(!band){const unit=m.units?.find(u=>u.id===(n.personId||n.id));if(unit&&unit.hp<hp){hp=unit.hp;if(n.guardState)n.guardState.hp=hp;else if(n.civilian){n.civilian.hp=hp;if(hp<=0){n.civilian.dead=true;this.civilianAction(n,'death',true);}}}}
-    if(band){const e=this.worldState.events.find(e=>e.id===m.event),slot=e?.memberIds?.indexOf(n.personId);if(slot>=0)s.recordBandHealth(e,slot,hp);}else{const u=m.units?.find(u=>u.id===(n.personId||n.id));if(u&&n.civilian)u.appearance={...n.civilian.appearance};s.systems.missionDamage(m,n.personId||n.id,hp);}
+ Game.prototype.saveCampaignActors=function(){const s=sim(this);if(!s)return;for(const {key,m,band}of groups(this)){const a=actors(this,key);for(const n of a){let hp=band?n.hp:n.batracien?.role?n.batracien.hp:n.guardState?.hp??n.civilian?.hp;if(!band){const unit=m.units?.find(u=>u.id===(n.personId||n.id));if(unit&&unit.hp<hp){hp=unit.hp;if(n.guardState){n.guardState.hp=hp;n.guardState.dead=hp<=0;}else if(n.civilian){n.civilian.hp=hp;if(hp<=0){n.civilian.dead=true;this.civilianAction(n,'death',true);}}}}
+    if(band){const member=m.members.find(u=>u.id===n.personId);if(member&&member.hp<hp){hp=member.hp;n.hp=hp;n.dead=hp<=0;}const e=this.worldState.events.find(e=>e.id===m.event),slot=e?.memberIds?.indexOf(n.personId);if(slot>=0)s.recordBandHealth(e,slot,hp);}else{const u=m.units?.find(u=>u.id===(n.personId||n.id));if(u&&n.civilian)u.appearance={...n.civilian.appearance};s.systems.missionDamage(m,n.personId||n.id,hp);}
    }m.engaged=a.some(n=>n.wind>0||n.attack>0||n.hurt>0||!band&&(n.eventGuard&&!n.batracien&&this.humanGuardTarget(n,this.ensureHumanGuard(n))||n.dangerState)||band&&(n.ai==='chase'||n.foeId));m.physical=a.length>0&&a.some(n=>dist(n,this.player)<1500)&&!this.journey&&!this.sleeping;
   }};
  Game.prototype.clearPaidStrikes=function(c,eventId){const ids=new Set(this.convoyActors(c).map(n=>n.id));for(const n of this.convoyActors(c))if(n.convoyGuard){const foe=this.enemies.find(e=>e.id===n.guardState?.strikeId||e.id===n.guardState?.targetId);if(foe?.eventId===eventId){n.wind=n.attack=0;n.guardState.strikeId=n.guardState.targetId=null;}}for(const e of this.enemies)if(e.eventId===eventId&&ids.has(e.foeId)){e.wind=e.attack=0;delete e.foeId;}};
@@ -11891,9 +11994,22 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
    const record=site.workerRecords[n.id]||={id:n.id,reasons:{},debited:false,dead:!!site.losses[n.id]};record.home||={...(n.post||{x:n.x,y:n.y})};record.job=n.civilian?.job||'idle';const service=this.stations.find(st=>st.actor===n||st.originalActor===n);if(service)record.service=service.id;n.labourSite=site.id;this.labourSiteByPerson.set(n.id,site.id);this.labourActors.set(n.id,n);
   }
  };
+ Game.prototype.applyWorkerDeath=function(n){
+  n.dead=true;if(n.civilian){n.civilian.hp=0;n.civilian.dead=true;this.civilianAction(n,'death',true);}if(n.batracien){n.batracien.hp=0;n.batracien.dead=true;}
+  this.atlasDeaths[n.id]=true;this.party=this.party.filter(c=>c.id!==n.id);if(n.id==='elyne'){this.story.recruited=false;this.companion.hp=0;this.companion.down=true;}
+ };
+ Game.prototype.reconcileWorldActors=function(){
+  // Discard representations from the replaced campaign without writing their old health back.
+  this.npcs=this.npcs.filter(n=>!n.convoyId&&!n.campaignGroup);this.atlasNpcs=this.atlasNpcs.filter(n=>!n.convoyId&&!n.campaignGroup);this.enemies=this.enemies.filter(n=>!n.campaignGroup);
+  this.registerLabourActors();const s=sim(this);
+  for(const [id,n]of this.labourActors){const p=s.state.sites[n.labourSite]?.workerRecords[id];if(p?.dead){this.applyWorkerDeath(n);continue;}if(Number.isFinite(p?.hp)&&n.civilian){n.civilian.hp=p.hp;const member=this.party.find(c=>c.id===id);if(member){member.hp=p.hp/6*member.maxHp;member.down=member.hp<=0;}}}
+  for(const n of this.npcs){const p=s.state.sites[n.site||n.batracien?.site]?.guards.find(p=>p.id===n.id);if(!p)continue;if(n.batracien?.role){n.batracien.hp=p.hp/8*BATRACIEN_CONFIG.combat[n.batracien.role].hp;n.batracien.dead=p.dead;}if(n.guardState){n.guardState.hp=p.hp;n.guardState.dead=p.dead;}if(p.dead){n.dead=true;this.atlasDeaths[n.id]=true;}}
+  for(const n of this.enemies){const p=s.state.hostiles?.[n.id];if(p){n.hp=p.hp;n.dead=p.hp<=0;}}
+  this.syncLabourActors();
+ };
  Game.prototype.syncLabourActors=function(){
   const s=sim(this);if(!s)return;this.registerLabourActors();const members=new Map(this.party.map(c=>[c.id,c]));
-  for(const [id,n]of this.labourActors){const record=s.state.sites[n.labourSite]?.workerRecords[id];if(!record)continue;const member=members.get(id);if(n.civilian?.dead&&!member&&!record.dead)s.systems.death(n.labourSite,id);if(record.dead)continue;if(record.recoveryPending&&n.civilian){n.civilian.hp=record.hp;delete record.recoveryPending;}if(member&&n.civilian)n.civilian.hp=member.hp/Math.max(1,member.maxHp||6)*6;record.hp=n.civilian?.hp??record.hp??6;record.onDuty=!n.dangerState&&!n.worldChat&&!n.justiceReport&&this.dialogue?.who!==n&&dist(n,record.home)<48;const incapacitated=!!(n.civilian?.critical||member?.down||!member&&n.civilian?.hp<=1);
+  for(const [id,n]of this.labourActors){const record=s.state.sites[n.labourSite]?.workerRecords[id];if(!record)continue;const member=members.get(id);if(n.civilian?.dead&&!member&&!record.dead)s.systems.death(n.labourSite,id);if(record.dead){this.applyWorkerDeath(n);continue;}if(record.recoveryPending&&n.civilian){n.civilian.hp=record.hp;delete record.recoveryPending;}if(member&&n.civilian)n.civilian.hp=member.hp/Math.max(1,member.maxHp||6)*6;record.hp=n.civilian?.hp??record.hp??6;record.onDuty=!n.dangerState&&!n.worldChat&&!n.justiceReport&&this.dialogue?.who!==n&&dist(n,record.home)<48;const incapacitated=!!(n.civilian?.critical||member?.down||!member&&n.civilian?.hp<=1);
    // A legacy save may have an absent person without an availability record.
    if(member)s.systems.setWorkerReason(n.labourSite,id,'party',true);else if(record.reasons.party){if(dist(n,record.home)>12){s.systems.setWorkerReason(n.labourSite,id,'returning',true);record.returnClock=this.clock;n.labourReturning=true;}s.systems.setWorkerReason(n.labourSite,id,'party',false);}
    s.systems.setWorkerReason(n.labourSite,id,'incapacity',incapacitated);
@@ -11921,7 +12037,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
  };
  const recruit=Game.prototype.recruitCompanion;
  Game.prototype.recruitCompanion=function(n,...args){
-  if(enlisted(n)||this.stations.some(st=>st.originalActor===n)||n?.reliefPost)return false;this.registerLabourActors();const result=recruit.call(this,n,...args);
+  if(n?.dead||n?.civilian?.dead||sim(this)?.state.sites[n?.labourSite||n?.site]?.workerRecords[n?.id]?.dead||enlisted(n)||this.stations.some(st=>st.originalActor===n)||n?.reliefPost)return false;this.registerLabourActors();const result=recruit.call(this,n,...args);
   if(result&&n.labourSite){const s=sim(this),record=s.state.sites[n.labourSite].workerRecords[n.id];const job=this.couriers?.find(c=>c.id===n.id);if(job?.returnTo)record.home={...job.returnTo};s.systems.setWorkerReason(n.labourSite,n.id,'party',true);s.systems.setWorkerReason(n.labourSite,n.id,'returning',false);delete record.returnRoute;delete n.labourReturning;if(record.reasons.travelling)s.systems.setWorkerReason(n.labourSite,n.id,'travelling',false);}
   return result;
  };
@@ -11937,15 +12053,15 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
    const home=record.home,world=Atlas.toWorld(n.x,n.y);let route=record.returnRoute;
    const near=dist(n,this.player)<1500&&!this.journey&&!this.sleeping;
    this.labourWalking=true;try{
-    if(!route&&dist(n,home)>48){const path=s.systems.graphPath(site.id,world),node=Atlas.toGame(Atlas.byId[site.id].x,Atlas.byId[site.id].y),homePath=dist(home,node)>48?s.systems.graphPath(site.id,Atlas.toWorld(home.x,home.y)):[];if(!path||!homePath)continue;route=record.returnRoute={site:site.id,path,leg:path.length,progress:0,clock:this.clock};s.systems.reverse(route);route.path.push(...homePath);}
-    let homeSeconds=near?dt:WorldPacing.realSeconds(elapsed);
-    if(route&&route.path[route.leg]){const goal=Atlas.toGame(...Object.values(s.systems.position(route)));route.clock=this.clock;let travelMinutes=elapsed;
-     if(dist(n,goal)>12){const seconds=near?dt:Math.min(16,WorldPacing.realSeconds(elapsed));let used=0;while(used<seconds-1e-7&&dist(n,goal)>2){const step=Math.min(.25,seconds-used);walk.call(this,n,goal,step);used+=step;}travelMinutes=Math.max(0,elapsed-used*1440/WorldPacing.dayRealSeconds);homeSeconds=Math.max(0,homeSeconds-used);}
+    if(!route&&dist(n,home)>48){const path=s.systems.graphPath(site.id,world,{allowBoat:true}),node=Atlas.toGame(Atlas.byId[site.id].x,Atlas.byId[site.id].y),homePath=dist(home,node)>48?s.systems.graphPath(site.id,Atlas.toWorld(home.x,home.y)):[];if(!path||!homePath)continue;route=record.returnRoute={site:site.id,path,leg:path.length,progress:0,clock:this.clock};s.systems.reverse(route);route.path.push(...homePath);}
+    let availableMinutes=elapsed,homeSeconds=near?dt:WorldPacing.realSeconds(elapsed);if(route?.path[route.leg]?.mode==='boat'){const result=s.systems.move(route,elapsed,this.clock);Object.assign(n,Atlas.toGame(...Object.values(s.systems.position(route))));availableMinutes=result.remaining;homeSeconds=WorldPacing.realSeconds(result.remaining);n.alpha=route.path[route.leg]?.mode==='boat'?0:1;}else n.alpha=1;
+    if(route&&route.path[route.leg]&&route.path[route.leg].mode!=='boat'){const goal=Atlas.toGame(...Object.values(s.systems.position(route)));route.clock=this.clock;let travelMinutes=availableMinutes;
+     if(dist(n,goal)>12){const seconds=near?Math.min(dt,WorldPacing.realSeconds(availableMinutes)):Math.min(16,WorldPacing.realSeconds(availableMinutes));let used=0;while(used<seconds-1e-7&&dist(n,goal)>2){const step=Math.min(.25,seconds-used);walk.call(this,n,goal,step);used+=step;}travelMinutes=Math.max(0,availableMinutes-used*1440/WorldPacing.dayRealSeconds);homeSeconds=Math.max(0,homeSeconds-used);}
      if(!near&&dist(n,goal)<=12){const result=s.systems.move(route,travelMinutes,this.clock);Object.assign(n,Atlas.toGame(...Object.values(s.systems.position(route))));homeSeconds=WorldPacing.realSeconds(result.remaining);}
-     else if(near&&dist(n,goal)<=12){const leg=route.path[route.leg];if(leg&&!this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock).closed){const t=Math.min(1,((route.progress||0)+2)/Math.max(.001,leg.length)),target=Atlas.toGame(leg.from[0]+(leg.to[0]-leg.from[0])*t,leg.from[1]+(leg.to[1]-leg.from[1])*t);walk.call(this,n,target,dt);const w=Atlas.toWorld(n.x,n.y),distance=Atlas.project(w.x,w.y,leg.from,leg.to).t*leg.length;s.systems.move(route,Math.max(0,distance-route.progress)/WorldPacing.metresPerMinute(WorldPacing.civilianWalk),this.clock);}}
+     else if(near&&dist(n,goal)<=12){const leg=route.path[route.leg];if(leg&&!this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock).closed){const t=Math.min(1,((route.progress||0)+2)/Math.max(.001,leg.length)),target=Atlas.toGame(leg.from[0]+(leg.to[0]-leg.from[0])*t,leg.from[1]+(leg.to[1]-leg.from[1])*t);walk.call(this,n,target,Math.min(dt,WorldPacing.realSeconds(availableMinutes)));const w=Atlas.toWorld(n.x,n.y),distance=Atlas.project(w.x,w.y,leg.from,leg.to).t*leg.length;s.systems.move(route,Math.max(0,distance-route.progress)/WorldPacing.metresPerMinute(WorldPacing.civilianWalk),this.clock);}}
     }
     if(!route||!route.path[route.leg]){for(let left=Math.min(16,homeSeconds);left>1e-7&&dist(n,home)>12;left-=.25)walk.call(this,n,home,Math.min(.25,left));if(dist(n,home)<=12){s.systems.setWorkerReason(site.id,id,'returning',false);delete record.returnRoute;delete n.labourReturning;n.post={...home};}}
-   }finally{this.labourWalking=false;record.position={x:n.x,y:n.y};}
+   }finally{n.alpha=record.returnRoute?.path[record.returnRoute.leg]?.mode==='boat'?0:1;this.labourWalking=false;record.position={x:n.x,y:n.y};}
   }
  };
  const damage=Game.prototype.damageCivilian;Game.prototype.damageCivilian=function(...args){const result=damage.apply(this,args);if(result)this.syncLabourActors();return result;};
@@ -11957,6 +12073,9 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
   for(const [id,n]of this.labourActors){const p=sim(this).state.sites[n.labourSite].workerRecords[id];if(p.reasons.service&&!this.stations.some(st=>st.actor===n)){delete p.service;sim(this).systems.setWorkerReason(n.labourSite,id,'service',false);}}
   this.syncLabourActors();
  };
+ const update=Game.prototype.update;Game.prototype.update=function(...args){if(this.journeyResuming)return;return update.apply(this,args);};
+ const props=Renderer.prototype.visibleAtlasProps;
+ Renderer.prototype.visibleAtlasProps=function(){const result=props.call(this);for(const n of this.g.npcs){const record=sim(this.g)?.state.sites[n.labourSite]?.workerRecords[n.id],r=record?.returnRoute;if(r?.path[r.leg]?.mode==='boat'&&!record.dead&&dist(n,this.g.player)<1200)result.push({x:n.x,y:n.y,kind:'transport_boat_front',world:true,returningPerson:n.id});}return result;};
  const serialize=Game.prototype.serialize;Game.prototype.serialize=function(){this.syncLabourActors();return serialize.call(this);};
 })();
 
@@ -12605,7 +12724,7 @@ function syncLandscape(){
  if(blocked){
   landscapeFocus=document.activeElement;keys.clear();resetTouch();
   // Keep paid journeys running through orientation changes, as in background.
-  if(state==='playing'&&game.journey){travelAlerts.schedule(game.leaveJourney());save();}else if(state==='playing')pause();
+  if(state==='playing'&&game.journey){scheduleHiddenJourney();}else if(state==='playing')pause();
   sound.tick(false,null);sound.rain(0);sound.ambience({active:false});
   gate.focus({preventScroll:true});
  }else{
@@ -12700,7 +12819,7 @@ function musicMode(){const now=performance.now(),dt=Math.min(.1,(now-lastMusicT)
 function save(){if(game.dead||game.won||['title','options','quit'].includes(state))return;try{localStorage.setItem(KEY,JSON.stringify(game.serialize()));$('saveStatus').textContent='PROGRESSION SAUVEGARDÉE DANS CE NAVIGATEUR';}catch{storageWorks=false;$('saveStatus').textContent='SAUVEGARDE INDISPONIBLE DANS CE NAVIGATEUR';}}
 function toast(msg,force=false){if(!force)return;$('toast').textContent=msg;$('toast').classList.add('visible');toastUntil=performance.now()+4800;}
 function overlay(label,title,desc,button,hint='',secondary=false,opt={}){$("overlay").inert=false;$('overlayLabel').textContent=label;$('overlayTitle').innerHTML=title;$('overlayText')[opt.html?'innerHTML':'textContent']=desc;$('start').innerHTML=button+' <span>↵</span>';$('overlayHint').textContent=hint;$('newGame').hidden=!secondary;$('newGame').textContent=opt.second||'Nouvelle partie';$('newGame').classList.toggle('as-button',!!opt.second);$('overlay').className='screen-overlay'+(opt.mode?' '+opt.mode:'');const act=$('overlay').querySelector('.overlay-actions');if(opt.second&&!act){const w=document.createElement('div');w.className='overlay-actions';$('start').before(w);w.append($('start'),$('newGame'));}else if(!opt.second&&act){act.before($('start'));$('start').after($('newGame'));act.remove();}$('toast').classList.remove('visible');keys.clear();pending={dodge:false,interact:false,attack:false};}
-function run(){if(landscapeBlocked)return;if(Number.isFinite(game.journey?.away)){travelAlerts.cancel();game.resumeJourney();}if(mobileMode)enterFull(true);titleFocus(false);$("overlay").inert=true;if(state==='title'||state==='confirm')titleDeparture=true;state='playing';updateWorldUI();newConfirm=false;$('overlay').classList.add('hidden');$('game').focus({preventScroll:true});$('pause').textContent='Ⅱ';last=performance.now();}
+async function run(){if(landscapeBlocked)return;if(Number.isFinite(game.journey?.away)){const owner=game;travelAlerts.cancel();await owner.resumeJourney();if(game!==owner||landscapeBlocked||document.hidden)return;}if(mobileMode)enterFull(true);titleFocus(false);$("overlay").inert=true;if(state==='title'||state==='confirm')titleDeparture=true;state='playing';updateWorldUI();newConfirm=false;$('overlay').classList.add('hidden');$('game').focus({preventScroll:true});$('pause').textContent='Ⅱ';last=performance.now();}
 function begin(){if(!BITMAPS.ready){toast(BITMAPS.errors.length?'Un atlas n’a pas pu être chargé. Recharge ce fichier.':'Chargement des sprites…',true);return;}if(state==='confirm'){game=new Game();renderer.setGame(game);save();run();toast('Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');return;}if(state==='dead'){game=new Game();renderer.setGame(game);save();run();return;}if(state==='deathscreen'){run();game.revive();return;}if(state==='win'||game.won){game=new Game();renderer.setGame(game);save();run();return;}if(state==='title'){run();toast(saved?'L’aventure reprend. Avar veille sur ton acier.':'Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.');return;}if(state==='paused')run();}
 function showTitle(){state='title';updateWorldUI();$('titleOptions').hidden=true;$('titleExit').hidden=true;overlay('','HearthreaveR','','COMMENCER','',false,{mode:'title'});refreshTitleMenu();}
 function cancelNewGame(){newConfirm=false;if(confirmReturn==='title')showTitle();else{state='playing';pause();}}
@@ -12767,10 +12886,11 @@ window.addEventListener('keydown',e=>{if(landscapeBlocked){e.preventDefault();re
 window.addEventListener('keyup',e=>keys.delete(e.code==='Numpad0'?'attack':e.code==='NumpadDecimal'?'guard':e.key.toLowerCase()));
 window.addEventListener('blur',suspendSession);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)suspendSession();});
-function suspendSession(){keys.clear();resetTouch();pending={dodge:false,interact:false,attack:false};if(state==='playing'&&game.journey){travelAlerts.schedule(game.leaveJourney());save();}else if(state==='playing')pause();else save();updateWorldUI();sound.tick(false,null);sound.rain(0);sound.ambience({active:false});sound.silent?.pause();}
+function scheduleHiddenJourney(){const owner=game,out=owner.leaveJourney();travelAlerts.schedule(out);save();if(out?.ready)out.ready.then(result=>{if(result&&game===owner&&Number.isFinite(owner.journey?.away)){travelAlerts.schedule(result);save();}});}
+function suspendSession(){keys.clear();resetTouch();pending={dodge:false,interact:false,attack:false};if(state==='playing'&&game.journey){scheduleHiddenJourney();}else if(state==='playing')pause();else save();updateWorldUI();sound.tick(false,null);sound.rain(0);sound.ambience({active:false});sound.silent?.pause();}
 window.addEventListener('pagehide',suspendSession);
 // A journey left running while hidden is replayed on return; arriving meanwhile leaves the game paused.
-function returnToJourney(){if(!Number.isFinite(game.journey?.away))return;travelAlerts.cancel();game.resumeJourney();if(game.journey||state!=='playing')return;const end=game.events.filter(e=>e.type==='notice').at(-1);handleEvents();if(state!=='playing')return;pause();const arrived=!end||end.title==='Arrivée à destination';$('overlayLabel').textContent=arrived?'ARRIVÉ À DESTINATION':'VOYAGE INTERROMPU';$('overlayText').textContent=(end?arrived?'Kaldor est arrivé à '+end.text+'. ':end.title+'. Kaldor attend à '+end.text+'. ':'')+'Le voyage s’est poursuivi pendant ton absence. Reprends quand tu le souhaites.';}
+async function returnToJourney(){if(!Number.isFinite(game.journey?.away)||game.journeyResuming)return;const owner=game;travelAlerts.cancel();await owner.resumeJourney();if(game!==owner||game.journey||state!=='playing')return;const end=game.events.filter(e=>e.type==='notice').at(-1);handleEvents();if(state!=='playing')return;pause();const arrived=!end||end.title==='Arrivée à destination';$('overlayLabel').textContent=arrived?'ARRIVÉ À DESTINATION':'VOYAGE INTERROMPU';$('overlayText').textContent=(end?arrived?'Kaldor est arrivé à '+end.text+'. ':end.title+'. Kaldor attend à '+end.text+'. ':'')+'Le voyage s’est poursuivi pendant ton absence. Reprends quand tu le souhaites.';}
 window.addEventListener('hearthreaver-suspend',suspendSession);
 for(const name of ['gesturestart','gesturechange'])document.addEventListener(name,e=>e.preventDefault(),{passive:false});
 document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault();},{passive:false});

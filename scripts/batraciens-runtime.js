@@ -152,6 +152,7 @@ const Batraciens = (() => {
    syncCivil(n);return;
   }
   if(m){visual(n,'idle');syncCivil(n);return;}
+  if(n.reliefPost||n.labourReturning||n.convoyId||n.campaignGroup){this.cancelBatracienConversation?.(n);visual(n,moved>.001?'walk':'idle');syncCivil(n);return;}
   if(this.stepBatracienRoutine?.(n,delta)){syncCivil(n);return;}
   if(b.action==='sit_down'){visual(n,'seated');syncCivil(n);return;}
   if(b.action==='stand_up'||b.action==='cower_exit'){visual(n,'idle');syncCivil(n);return;}

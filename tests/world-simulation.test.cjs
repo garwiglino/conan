@@ -16,7 +16,7 @@ test('active incidents and the 181st resident memory survive arbitrary history g
 test('purchases and dispatch reserve finite stock, money and workers atomically',()=>{
  const w=world(),s=w.simulation,[a,b]=pair(w);a.stock.provisions=a.needs.provisions*a.reserveDays+100;b.treasury=1000;const workers=a.workers,coins=b.treasury,initial=a.stock.provisions;
  assert.equal(s.purchase(a.id,initial+1,0),false);assert.equal(a.stock.provisions,initial);assert.equal(s.purchase(a.id,2,1),true);
- const guards=a.guardAvailable,treasury=a.treasury,c=s.addShipment(a.id,b.id,'provisions',20);assert.ok(c);assert.equal(a.stock.provisions,initial-26);assert.equal(a.workers,workers-2);assert.equal(a.guardAvailable,guards-2);assert.equal(a.treasury,treasury-6);assert.equal(b.treasury,coins-c.paid);assert.equal(c.amount,20);assert.equal(s.cargoUnits(c).length,4);
+ const guards=a.guardAvailable,treasury=a.treasury,c=s.addShipment(a.id,b.id,'provisions',20);assert.ok(c);assert.equal(a.stock.provisions+(c.foodStores.provisions||0)+c.amount,initial-2);assert.equal(c.rations,Object.values(c.foodStores).reduce((n,v)=>n+v,0));assert.equal(a.workers,workers-2);assert.equal(a.guardAvailable,guards-2);assert.equal(a.treasury,treasury-6);assert.equal(b.treasury,coins-c.paid);assert.equal(c.amount,20);assert.equal(s.cargoUnits(c).length,4);
  assert.equal(s.addShipment(a.id,b.id,'provisions',NaN),null);assert.equal(s.addShipment(a.id,b.id,'not-a-resource',20),null);
 });
 test('damage cannot expire into a magically repaired bridge without materials',()=>{
@@ -49,8 +49,9 @@ test('floodwater stays high in sustained rain and recedes only in dry conditions
  w.advance(w.clock+900,()=>({rain:0}));assert.ok(e.resolved);assert.ok(!w.events.some(x=>x.type==='repair'&&x.target===road.id),'subsiding water does not repair structural damage');
 });
 test('delivery occurs exactly once; a closed return road keeps workers away rather than teleporting them home',()=>{
- const w=world(),s=w.simulation,[a,b]=pair(w);for(const site of Object.values(s.state.sites)){site.capacity={};site.needs={};site.treasury=0;for(const id of Object.keys(site.stock))site.stock[id]=0;}a.stock.cloth=100;a.stock.provisions=4;a.treasury=6;b.treasury=100;const workers=a.workers,c=s.addShipment(a.id,b.id,'cloth',10),initial=b.stock.cloth;
- assert.ok(c);while(!c.delivered&&w.clock<1080)w.advance(w.clock+60);assert.ok(c.delivered);assert.equal(c.status,'returning');const leg=c.path[0],from=A.vertices.get(leg.from),to=A.vertices.get(leg.to),e=w.add('bridge',leg.road,w.clock,0,{position:{x:(from[0]+to[0])/2,y:(from[1]+to[1])/2}});e.edge=leg.edge;
+ const w=world(),s=w.simulation,[a,b]=pair(w);for(const site of Object.values(s.state.sites)){site.capacity={};site.needs={};site.treasury=0;for(const id of Object.keys(site.stock))site.stock[id]=0;}a.stock.cloth=100;a.stock.provisions=20;a.stock.water=30;a.treasury=6;b.treasury=100;const workers=a.workers,c=s.addShipment(a.id,b.id,'cloth',10),initial=b.stock.cloth;
+ assert.ok(c);a.stock.cloth=0; // Isolate this contract: refunded supplies must not finance another shipment.
+ while(!c.delivered&&w.clock<1080)w.advance(w.clock+60);assert.ok(c.delivered);assert.equal(c.status,'returning');const leg=c.path[0],from=A.vertices.get(leg.from),to=A.vertices.get(leg.to),e=w.add('bridge',leg.road,w.clock,0,{position:{x:(from[0]+to[0])/2,y:(from[1]+to[1])/2}});e.edge=leg.edge;
  w.advance(w.clock+600);assert.equal(a.workers,workers-2);assert.equal(c.status,'returning');
  const copy=world(w.serialize());copy.resolve(e.id,copy.clock);copy.advance(copy.clock+600);assert.equal(copy.simulation.state.history.filter(h=>h.type==='cargo_delivered'&&h.id===c.id).length,1);assert.ok(b.stock.cloth>initial);
  assert.equal(copy.simulation.state.sites[a.id].workers,workers,'the physically completed return releases the crew');

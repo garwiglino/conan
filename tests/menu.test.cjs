@@ -129,23 +129,23 @@ test('cold restart preserves a paid journey, which keeps going while the app is 
   click('menuLoad');raf(130);assert.equal(a.state,'playing');assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
   const elapsed=a.game.journey.elapsed,hidden=value=>Object.defineProperty(w.document,'hidden',{value,configurable:true}),last=()=>posts.at(-1);
   // Leaving the app no longer pauses a journey: its arrival is announced and the trip waits for the real time spent away.
-  hidden(true);for(let i=0;i<3;i++)w.dispatchEvent(new w.Event('hearthreaver-suspend'));
+  hidden(true);for(let i=0;i<3;i++)w.dispatchEvent(new w.Event('hearthreaver-suspend'));await a.game.journeyForecast.ready;
   assert.equal(a.state,'playing');const {away,arrival,outcome}=a.game.journey;assert.ok(arrival>away);assert.equal(last().action,'schedule');assert.equal(last().title,outcome.arrived?'Arrivé à destination':'Voyage interrompu');assert.ok(last().body.includes(outcome.place));assert.match(last().body,/Le jeu est en pause/);assert.ok(Math.abs(last().delay-(arrival-Date.now())/1000)<2);
   raf(5000);assert.equal(a.game.journey.elapsed,elapsed);assert.equal(a.game.journey.arrival,arrival);
   const saved=JSON.parse(w.localStorage.getItem('conan-serpent-v1'));assert.equal(saved.atlas.journey.arrival,arrival);assert.equal(saved.player.coins,coins);
   // Back before the arrival: the time away is replayed, the alert is withdrawn and the trip goes on.
-  a.game.journey.away-=1500;a.game.journey.arrival-=1500;hidden(false);raf(5040);
+  a.game.journey.away-=1500;a.game.journey.arrival-=1500;hidden(false);raf(5040);await a.game.journeyResuming?.ready;await Promise.resolve();
   assert.equal(a.state,'playing');assert.equal(a.game.journey.away,undefined);assert.ok(a.game.journey.elapsed>=elapsed+1.5);assert.equal(last().action,'cancel');assert.equal($('worldJourney').hidden,false);
   // Turning the device to portrait does not pause a journey either; it is replayed back in landscape.
   const rotate=(width,height)=>{w.innerWidth=width;w.innerHeight=height;w.dispatchEvent(new w.Event('resize'));};
-  rotate(390,844);assert.equal($('landscapeGate').hidden,false);assert.equal(a.state,'playing');assert.ok(Number.isFinite(a.game.journey.away));assert.equal(last().action,'schedule');
+  rotate(390,844);assert.equal($('landscapeGate').hidden,false);assert.equal(a.state,'playing');assert.ok(Number.isFinite(a.game.journey.away));await a.game.journeyForecast.ready;assert.equal(last().action,'schedule');
   a.game.journey.away-=500;a.game.journey.arrival-=500;const turned=a.game.journey.elapsed;raf(5050);assert.equal(a.game.journey.elapsed,turned);
-  rotate(844,390);raf(5060);assert.equal(a.state,'playing');assert.equal(a.game.journey.away,undefined);assert.ok(a.game.journey.elapsed>=turned+.5);assert.equal(last().action,'cancel');
+  rotate(844,390);raf(5060);await a.game.journeyResuming?.ready;await Promise.resolve();assert.equal(a.state,'playing');assert.equal(a.game.journey.away,undefined);assert.ok(a.game.journey.elapsed>=turned+.5);assert.equal(last().action,'cancel');
   // A journey saved while hidden resumes from a cold restart.
   w.dispatchEvent(new w.Event('pagehide'));assert.equal(a.state,'playing');assert.ok(Number.isFinite(a.game.journey.away));
-  a.showTitle();raf(5100);assert.equal($('worldJourney').hidden,true);click('menuLoad');assert.equal(a.game.journey.away,undefined);raf(5130);assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
+  a.showTitle();raf(5100);assert.equal($('worldJourney').hidden,true);click('menuLoad');await a.game.journeyResuming?.ready;await Promise.resolve();assert.equal(a.game.journey.away,undefined);raf(5130);assert.equal($('worldJourney').hidden,false);assert.equal(a.game.player.coins,coins);
   // Away past the announced arrival: the trip ends and the game waits paused.
-  hidden(true);w.document.dispatchEvent(new w.Event('visibilitychange'));assert.equal(last().action,'schedule');const trip=a.game.journey,final={...trip.outcome};trip.away-=3600000;trip.arrival-=3600000;hidden(false);raf(5170);
+  hidden(true);w.document.dispatchEvent(new w.Event('visibilitychange'));await a.game.journeyForecast.ready;assert.equal(last().action,'schedule');const trip=a.game.journey,final={...trip.outcome};trip.away-=3600000;trip.arrival-=3600000;hidden(false);raf(5170);await a.game.journeyResuming?.ready;await Promise.resolve();
   assert.equal(a.game.journey,null);assert.equal(a.state,'paused');assert.equal($('worldJourney').hidden,true);assert.match($('overlayText').textContent,/pendant ton absence/);assert.ok($('overlayText').textContent.includes(final.place));assert.equal($('overlayLabel').textContent,final.arrived?'ARRIVÉ À DESTINATION':'VOYAGE INTERROMPU');assert.equal(last().action,'cancel');
   assert.equal(JSON.parse(w.localStorage.getItem('conan-serpent-v1')).atlas.journey,null);click('start');raf(5210);assert.equal(a.state,'playing');
   const pinch=new w.Event('gesturestart',{cancelable:true});w.document.dispatchEvent(pinch);assert.equal(pinch.defaultPrevented,true);

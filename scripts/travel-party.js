@@ -39,7 +39,7 @@ Game.prototype.finishTravelRestore=function(saved){
  if(!this.story.recruited&&!saved?.atlas?.party){this.escortActor.x=START.x+36;this.escortActor.y=START.y;}
 };
 Game.prototype.recruitCompanion=function(actor,{permanent=false}={}){
- if(!actor||actor.civilian?.critical||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
+ if(!actor||actor.dead||actor.civilian?.dead||actor.civilian?.critical||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
  const prior=this.formerCompanions[actor.id],maximum=prior?.maxHp||6,health=Number.isFinite(actor.civilian?.hp)?actor.civilian.hp/6*maximum:maximum;
  const member=actor.id==='elyne'?Object.assign(this.companion,{hp:Math.min(this.companion.hp,health/maximum*10),down:health<=0}):{...prior,hp:Math.min(prior?.hp??health,health),maxHp:maximum,hunger:prior?.hunger??0,down:health<=0};
  const job=this.couriers?.find(c=>c.id===actor.id);if(job&&!job.returnTo)job.returnTo={x:actor.x,y:actor.y};actor.alpha=1;actor.phase='post';Object.assign(member,{id:actor.id,name:actor.title||actor.label,permanent,maxHp:actor.id==='elyne'?10:member.maxHp,down:member.hp<=0,status:'following'});this.party.push(member);
@@ -48,6 +48,7 @@ Game.prototype.recruitCompanion=function(actor,{permanent=false}={}){
 const travelTalk=Game.prototype.talkTo;
 Game.prototype.talkTo=function(n){if(n?.id==='elyne')this.recruitCompanion(n);return travelTalk.call(this,n);};
 Game.prototype.partyActor=function(id){return this.npcs.find(n=>n.id===id);};
+Game.prototype.waterConsumers=function(){return this.party.filter(c=>!c.spirit&&this.nearCompanion(c));};
 Game.prototype.nearCompanion=function(c){const actor=this.partyActor(c?.id);return !!actor&&(this.journey&&c.status==='following'||dist(actor,this.player)<100);};
 Game.prototype.eatRation=function(id='kaldor',quiet=false){
  const c=id==='kaldor'?null:this.party.find(n=>n.id===id),satiety=c?100-c.hunger:this.needs.satiety;
@@ -64,15 +65,17 @@ Game.prototype.advanceNeeds=function(minutes){
  if(!Number.isFinite(minutes)||minutes<=0||this.dead||this.dying||this.player.hp<=0)return;
  // Small deterministic slices preserve the same meal schedule through sleep/travel.
  // Body heat: an outfit too warm for the heat digs hunger, the cold bites health.
- const body=this.bodyHeat?.(),hunger=body?.hunger??1;
- for(let remaining=minutes;remaining>1e-7;){const step=Math.min(remaining,30);remaining-=step;
+ const endClock=this.clock;this.clock-=minutes;try{
+ for(let remaining=minutes;remaining>1e-7;){const step=Math.min(remaining,30);remaining-=step;const body=this.bodyHeat?.(),hunger=body?.hunger??1;
   const before=this.needs.satiety;this.needs.satiety=Math.max(0,before-step*hunger*100/FULL_MEAL_MINUTES);
   if((this.needs.autoEat||this.journey)&&this.needs.satiety<50)this.eatRation('kaldor',true);
   const hungryMinutes=Math.max(0,step-before*FULL_MEAL_MINUTES/(100*hunger));
   if(this.needs.satiety<=0){this.needs.starved+=hungryMinutes;this.player.hp=Math.min(this.player.hp,Math.max(1,this.player.hp-hungryMinutes/180));}else this.needs.starved=0;
   this.coldBite?.(step,body);this.burnCampfire?.(step);if(this.dying)break;
   for(const c of this.party){if(c.spirit)continue;const reserve=100-c.hunger,heat=this.companionBodyHeat?.(c)?.hunger??1;c.hunger=Math.min(100,c.hunger+step*heat*100/FULL_MEAL_MINUTES);this.companionColdBite?.(c,step);if((this.needs.autoEat||this.journey)&&c.hunger>50)this.eatRation(c.id,true);if(c.hunger>=100){c.hp=Math.max(0,c.hp-Math.max(0,step-reserve*FULL_MEAL_MINUTES/(100*heat))/180);c.down=c.hp<=0;}}
+ this.clock+=step;
  }
+ }finally{this.clock=endClock;}
 };
 Game.prototype.journeyNeeds=function(plan){
  const group=this.party.filter(c=>!c.spirit),energy=plan.minutes*100/FULL_MEAL_MINUTES;
@@ -84,7 +87,7 @@ Game.prototype.currentTransport=function(){const s=this.stations.find(s=>s.id===
 const travelNpcMenu=Game.prototype.npcMenu;
 Game.prototype.npcMenu=function(n){const menu=travelNpcMenu.call(this,n),s=this.stations.find(s=>s.actor===n);if(s)menu.splice(0,0,{label:s.modes[0]==='boat'?'Embarquer / préparer un voyage':'Voyager / acheter des provisions',lines:['Préparons ton itinéraire.'],act:()=>this.prepareTransport(s.id)});return menu;};
 const travelStepParty=Game.prototype.stepParty;
-Game.prototype.stepParty=function(dt,minutes){travelStepParty.call(this,dt,minutes);for(const c of this.party){if(c.spirit||c.id==='elyne')continue;const n=this.partyActor(c.id);if(!n)continue;if(this.journey){n.x=this.player.x+18;n.y=this.player.y+18;}else if(!c.down&&c.status==='following'&&!this.dialogue&&dist(n,this.player)>32)this.walkNpc(n,this.player,dt);if(!this.journey&&!this.dialogue&&!c.down&&this.time>(c.hitAt||0)&&this.enemies.some(e=>!e.dead&&e.kind!=='boss'&&['chase','alert'].includes(e.ai)&&dist(e,n)<24&&this.lineClear(e,n))){c.hp=Math.max(0,c.hp-1);c.down=c.hp<=0;c.hitAt=this.time+2.5;n.flash=.12;}c.x=n.x;c.y=n.y;}};
+Game.prototype.stepParty=function(dt,minutes){travelStepParty.call(this,dt,minutes);for(const c of this.party){if(c.spirit||c.id==='elyne')continue;const n=this.partyActor(c.id);if(!n)continue;if(this.journey){n.x=this.player.x+18;n.y=this.player.y+18;}else if(!c.down&&c.status==='following'&&!this.dialogue&&dist(n,this.player)>32)this.walkNpc(n,this.player,dt);if(!this.journey&&!this.dialogue&&!c.down&&this.time>(c.hitAt||0)&&this.enemies.some(e=>!e.dead&&e.kind!=='boss'&&this.sameLevel(e,n)&&['chase','alert'].includes(e.ai)&&dist(e,n)<24&&this.lineClear(e,n))){c.hp=Math.max(0,c.hp-1);c.down=c.hp<=0;c.hitAt=this.time+2.5;n.flash=.12;}c.x=n.x;c.y=n.y;}};
 const travelStart=Game.prototype.startJourney;
 Game.prototype.startJourney=function(plan){if(this.party.some(c=>!c.spirit&&(c.status==='waiting'||c.down||!this.nearCompanion(c)))){this.emit('notice',{title:'Rassemble le groupe',text:'Les compagnons doivent être présents, soignés et prêts à suivre.'});return false;}return travelStart.call(this,plan);};
 const travelBodies=Game.prototype.bodies;

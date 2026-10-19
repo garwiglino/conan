@@ -55,9 +55,10 @@ function createWorldSimulation(A,B,W,saved){
   // rather than ceasing input orders while less than one usable lot remains.
   for(const id of ['tools','cloth'])need[id]=Math.max(1,need[id]||0);
   if(site.population<=0)return {};
+  // Workshop inputs cover continuing tool/clothing maintenance as well as rebuilding the reserve.
   const addInputs=(id,rate,seen=new Set())=>{if(seen.has(id))return;const recipes=resources.get(id)?.inputAlternatives;if(!recipes?.length)return;seen=new Set([...seen,id]);
    const recipe=[...recipes].sort((a,b)=>b.reduce((n,k)=>n+Math.min(1,stock(site,k))+(region?.resourceLevels?.[k]||0),0)-a.reduce((n,k)=>n+Math.min(1,stock(site,k))+(region?.resourceLevels?.[k]||0),0))[0];
-   const output=Math.max(0,rate*4-stock(site,id))/4;for(const input of recipe){need[input]=(need[input]||0)+output;addInputs(input,output,seen);}
+   const output=(['tools','cloth'].includes(id)?rate:0)+Math.max(0,rate*4-stock(site,id))/4;for(const input of recipe){need[input]=(need[input]||0)+output;addInputs(input,output,seen);}
   };
   for(const [id,rate]of Object.entries(need))addInputs(id,rate);
   need.medicinal=Math.max(need.medicinal||0,Object.keys(state.care[site.id]||{}).length/4,.25);
@@ -88,10 +89,10 @@ function createWorldSimulation(A,B,W,saved){
  function addShipment(from,to,id,amount){
   const a=state.sites[from],b=state.sites[to];if(!a||!b||from===to||amount<=0||state.shipments.filter(s=>['travel','returning'].includes(s.status)).length>=64)return null;
   if(!resources.has(id)||!finite(amount)||a.workers<2||a.guardAvailable<2||a.treasury<6||stock(a,'provisions')<4)return null;
-  const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-(a.needs[id]||1)*a.reserveDays-(id==='provisions'?4:0)));if(qty<=0)return null;
+  const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-Math.max(1,requirements(a)[id]||0)*a.reserveDays-(id==='provisions'?4:0)));if(qty<=0)return null;
   const price=Math.max(1,Math.ceil(qty*.5));if(b.treasury<price)return null;const identity='cargo-'+state.serial,guards=systems.reserve(a,2,identity);if(!guards)return null;const crew=systems.reserveCrew(a,2,identity);if(!crew){systems.release(a,guards);return null;}
   take(a,id,qty);take(a,'provisions',4);b.treasury-=price;a.guardAvailable-=2;a.treasury-=6;const cargo={id:'cargo-'+state.serial++,from,to,resource:id,amount:qty,originalAmount:qty,lost:0,paid:price,path:path.map(p=>({...p})),leg:0,progress:0,status:'travel',depart:state.clock,clock:state.clock,crew:2,guards:2,staffReserved:true,guardReserved:true,landRate:pacing.metresPerMinute(pacing.civilianWalk),delivered:false,news:JSON.parse(JSON.stringify(state.channels[from]||{}))};
-  cargo.escrow=price;cargo.travelFunds=6;cargo.units=[...crew,...guards];
+  cargo.escrow=price;cargo.travelFunds=6;cargo.units=[...crew,...guards];systems.supplyExpedition(cargo,a,cargo.units,path.reduce((n,l)=>n+l.length/cargoRate(cargo,l),0)*2+1440,4);
   state.shipments.push(cargo);history('cargo_departure',{id:cargo.id,from,to,resource:id,amount:qty});return cargo;
  }
  function produce(site,day,sky){
@@ -146,6 +147,20 @@ function createWorldSimulation(A,B,W,saved){
   c.escortOnly=true;c.status='returning';
  }
  function progressCargo(c,dt,local=false,at=state.clock){
+  if(!['travel','returning','abandoned'].includes(c.status)||c.escortReturned)return;if(c.rations===undefined){systems.supplyExpedition(c,state.sites[c.from],cargoUnits(c));c.suppliedAt=at;}if(!local&&controlledCargo.has(c.id)){systems.consumeExpedition(c,at,cargoUnits(c),(u,hp)=>damageCargoUnit(c,u.id,hp));return;}
+  let cursor=at-Math.max(0,dt);
+  do{
+   if(!c.encounter)returnEscort(c);if(c.escortReturned)break;
+   while(c.path[c.leg]&&c.path[c.leg].length/cargoRate(c,c.path[c.leg])-(c.progress||0)<=1e-7){c.leg++;c.progress=0;}
+   let end=Math.min(at,cursor+60),left=c.path.slice(c.leg).reduce((n,l)=>n+l.length/cargoRate(c,l),0)-(c.progress||0);
+   if(c.status==='travel')left+=c.path.reduce((n,l)=>n+l.length/cargoRate(c,l),0);
+   // Only inspect the whole remaining path when arrival can occur in this slice.
+   // Other slices share the current-hour edge cache with all the other convoys.
+   if(left<end-cursor&&c.path.slice(c.leg).every(l=>{const status=W.edgeStatus(A.edgeById.get(l.edge),end);return !status.closed&&!status.events.some(e=>A.EVENT_TYPES[e.type].civilianPrey&&!c.passages?.[e.id]);}))end=Math.min(end,cursor+Math.max(0,left));
+   systems.consumeExpedition(c,end,cargoUnits(c),(u,hp)=>damageCargoUnit(c,u.id,hp));progressCargoSlice(c,end-cursor,local,end);cursor=end;
+  }while(cursor<at-1e-7&&!c.escortReturned&&['travel','returning','abandoned'].includes(c.status));
+ }
+ function progressCargoSlice(c,dt,local=false,at=state.clock){
   if(!['travel','returning','abandoned'].includes(c.status)||c.escortReturned||!local&&controlledCargo.has(c.id))return;
   // Resolve recorded opponents before spending the remaining travel time. Legacy
   // encounters with no participants require observation rather than invented losses.
@@ -154,7 +169,7 @@ function createWorldSimulation(A,B,W,saved){
   let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
   for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<20000;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){const ledger=state.channels[c.from]||={};for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:at-remaining,source:'Caravaniers de retour'};if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
+    if(c.status==='returning'){systems.refundExpedition(c,state.sites[c.from]);const ledger=state.channels[c.from]||={};for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:at-remaining,source:'Caravaniers de retour'};if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
     const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at-remaining;c.escrow=0;c.settlement={reason:'delivery',at:c.arrived,refund:c.paid-paid,paidToSeller:paid};
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to},at-remaining);event('caravan',c.to,{cargoId:c.id,detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720,at-remaining);
@@ -204,7 +219,7 @@ function createWorldSimulation(A,B,W,saved){
    const path=systems.graphPath(site.id,incident);if(!path)continue;const id='mandate-'+state.serial++,units=systems.reserve(site,2,id);if(!units)continue;
    site.guardAvailable-=2;site.treasury-=12;site.householdFunds+=12;take(site,'provisions',4);const road=A.closestRoad(incident.x,incident.y)?.road;if(!road)continue;
    const e=event('patrol',road.id,{source:site.authority,position:node},0);if(!e){systems.release(site,units);continue;}e.authority=site.authority;e.mandateSite=site.id;e.managedMovement=true;e.memberIds=units.map(u=>u.id);e.mandate=incident.warrant?'search_last_seen':'protect_travellers';
-   state.missions.push({id,event:e.id,incident:incident.id,site:site.id,road:road.id,crew:2,units,path,leg:0,progress:0,clock:state.clock,status:'outbound'});
+   const mission={id,event:e.id,incident:incident.id,site:site.id,road:road.id,crew:2,units,path,leg:0,progress:0,clock:state.clock,status:'outbound'};systems.supplyExpedition(mission,site,units,path.reduce((n,l)=>n+l.length,0)/pacing.metresPerMinute(pacing.civilianWalk)*2+1440,4);state.missions.push(mission);
   }
  }
  function institutions(){
@@ -215,8 +230,8 @@ function createWorldSimulation(A,B,W,saved){
    const position=cargoPosition(cargo),base=sites().filter(s=>profiles.get(s.id)?.criminalNetworks.includes(candidate.id)&&s.distress>=1.5&&Math.hypot(A.byId[s.id].x-position.x,A.byId[s.id].y-position.y)<1500).sort((a,b)=>Math.hypot(A.byId[a.id].x-position.x,A.byId[a.id].y-position.y)-Math.hypot(A.byId[b.id].x-position.x,A.byId[b.id].y-position.y))[0];if(!base)continue;
    const key='band-'+candidate.id+'-'+base.id,previous=state.cooldowns[key]??-Infinity;if(state.clock-previous<4320||W.active(state.clock).some(e=>e.target===road.id&&['patrol','bandits'].includes(e.type)))continue;
    const band=state.bands[key]||(state.bands[key]={home:base.id,members:Array.from({length:3},(_,i)=>({id:key+'-'+i,hp:4,dead:false}))}),members=band.members.filter(m=>!m.dead&&m.hp>0);if(!members.length)continue;
-   if(band.phase&&band.phase!=='home')continue;const path=systems.graphPath(base.id,cargoPosition(cargo));if(!path)continue;
-   const e=event('band_movement',road.id,{source:'Voyageurs',position:cargoPosition(cargo)},0);if(e){e.groupId=candidate.id;e.memberIds=members.map(m=>m.id);e.bandKey=key;e.objective='cargo_or_toll';e.victimCargo=cargo.id;e.home=base.id;band.inventory||={};band.purse||=0;band.event=e.id;band.path=path;band.leg=0;band.progress=0;band.phase='outbound';band.clock=state.clock;band.withdrawAt=state.clock+1440;e.end=null;e.managedMovement=true;e.toll=Math.max(1,Math.ceil(cargo.amount*.15));e.x=A.byId[base.id].x;e.y=A.byId[base.id].y;if(!band.peopleReserved){const n=Math.min(base.workers,members.length);if(n<members.length){W.resolve(e.id,state.clock);continue;}base.workers-=n;band.peopleReserved=true;}state.cooldowns[key]=state.clock;history('band_ambush',{event:e.id,group:candidate.id,cargo:cargo.id});}
+   if(band.phase&&band.phase!=='home')continue;if(!band.peopleReserved&&base.workers-Object.values(base.workerRecords||{}).filter(p=>!p.anonymous&&!p.dead&&!Object.values(p.reasons||{}).some(Boolean)).length<members.length)continue;const path=systems.graphPath(base.id,cargoPosition(cargo));if(!path)continue;
+   const e=event('band_movement',road.id,{source:'Voyageurs',position:cargoPosition(cargo)},0);if(e){e.groupId=candidate.id;e.memberIds=members.map(m=>m.id);e.bandKey=key;e.objective='cargo_or_toll';e.victimCargo=cargo.id;e.home=base.id;band.inventory||={};band.purse||=0;band.event=e.id;band.path=path;band.leg=0;band.progress=0;band.phase='outbound';band.clock=state.clock;band.withdrawAt=state.clock+1440;e.end=null;e.managedMovement=true;e.toll=Math.max(1,Math.ceil(cargo.amount*.15));e.x=A.byId[base.id].x;e.y=A.byId[base.id].y;systems.supplyExpedition(band,base,members,path.reduce((n,l)=>n+l.length,0)/pacing.metresPerMinute(pacing.civilianWalk)*2+1440);if(!band.peopleReserved){const n=Math.min(base.workers,members.length);if(n<members.length){W.resolve(e.id,state.clock);continue;}base.workers-=n;band.peopleReserved=true;}state.cooldowns[key]=state.clock;history('band_ambush',{event:e.id,group:candidate.id,cargo:cargo.id});}
   }
  }
  function advance(clock,weather=()=>({})){systems.adoptEvents();if(!finite(clock)||clock<state.clock)return;const begin=Math.floor(state.clock/60),end=Math.floor(clock/60);

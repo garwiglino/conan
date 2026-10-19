@@ -57,7 +57,7 @@ const BatracienSociety = (() => {
    if(a.batracien.action==='talk')this.civilianAction(a,'idle');}
  };
  Game.prototype.startBatracienConversation=function(a,b){
-  if(a===b||![a,b].every(n=>B.isCivil(n)&&alive(n)&&!member(this,n)&&!n.dangerState&&!locked(n)&&n.batracien.routine&&!n.batracien.routine.partner&&this.time>=n.batracien.routine.chatAfter)||this.dialogue||!this.sameLevel(a,b)||dist(a,b)>C.talkRadius||!this.lineClear(a,b))return false;
+  if(a===b||![a,b].every(n=>!n.reliefPost&&!n.labourReturning&&B.isCivil(n)&&alive(n)&&!member(this,n)&&!n.dangerState&&!locked(n)&&n.batracien.routine&&!n.batracien.routine.partner&&this.time>=n.batracien.routine.chatAfter)||this.dialogue||!this.sameLevel(a,b)||dist(a,b)>C.talkRadius||!this.lineClear(a,b))return false;
   if(this.localThreatAt(a.x,a.y,a.level||0)||this.localThreatAt(b.x,b.y,b.level||0))return false;
   const end=this.time+3+(civilianHash(a.id+b.id)%4);
   for(const [n,other]of [[a,b],[b,a]]){const r=n.batracien.routine;r.partner=other.id;r.chatUntil=end;r.chatStarted=this.time;n.path=[];n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk',true);}
@@ -91,7 +91,7 @@ const BatracienSociety = (() => {
   return true;
  }
  Game.prototype.stepBatracienRoutine=function(n,dt){
-  const b=n.batracien,r=b.routine;if(!r)return false;
+  const b=n.batracien,r=b.routine;if(!r)return false;if(n.reliefPost||n.labourReturning){this.cancelBatracienConversation(n);r.goal=null;return false;}
   if(r.partner){const other=this.npcs.find(a=>a.id===r.partner);
    if(!alive(other)||other.dangerState||member(this,other)||locked(other)||this.time>=r.chatUntil||other.batracien?.routine?.partner!==n.id||dist(n,other)>C.talkRadius||!this.lineClear(n,other)){this.cancelBatracienConversation(n);}
    else{n.dir=this.direction(other.x-n.x,other.y-n.y);this.civilianAction(n,'talk');return true;}}

@@ -10,6 +10,8 @@ Le recrutement retire le personnage du travail local pendant le voyage et l’at
 
 Les gardes, escortes et membres des missions institutionnelles ne peuvent pas devenir compagnons. Le titulaire d’un service conserve cette protection lorsqu’il est remplacé. Les anciennes sauvegardes sont réconciliées pour éviter une deuxième affectation ou une absence devenue orpheline.
 
+Un retour depuis une île peut emprunter une traversée existante. Le personnage est alors représenté par une embarcation et ne marche pas sur l’eau ; les fermetures suspendent la traversée. Sa disponibilité reste retenue jusqu’à son arrivée au poste. Les coursiers conservent leur position au rechargement et utilisent le temps restant après une arrivée pour leur attente puis leur trajet suivant.
+
 ## Relèves et services
 
 La relève est assurée par une personne existante de la même communauté, disponible, hors de danger et ayant plus d’un PV. Un personnage en retour, en mission, dans le groupe ou déjà affecté à un autre service n’est pas admissible. Les quais et leur ville partagent la même communauté économique ; la restauration d’une relève compare cette communauté plutôt que leurs identifiants d’atlas distincts.
@@ -18,15 +20,21 @@ Les compétences sont vérifiées à partir du métier : palefrenier, manutentio
 
 La relève cesse de contribuer à son métier habituel. Si elle devient incapable, une autre relève admissible peut prendre sa place en conservant l’identité du titulaire initial. À la reprise du titulaire, la relève récupère son titre et rentre physiquement à son poste avant de retrouver sa disponibilité. Les achats et démarches au poste utilisent la même vérification que le transport : ils ne contournent ni l’incapacité ni les fermetures locales.
 
+Les routines spécifiques des Batraciens respectent également ces affectations : elles ne lancent ni conversation ni promenade pendant le service ou le retour.
+
 ## Identités, blessures et soins
 
 Les ouvriers des convois, des réparations et des récupérations utilisent un registre commun. Les personnes libres sont réaffectées avec leur identité, leur apparence et leurs PV actuels. Les habitants visibles ne sont pas transformés silencieusement en ouvriers anonymes ailleurs. Une réservation doit disposer d’assez de personnes réellement libres avant tout paiement.
 
 Les blessures de tous les survivants sont conservées, y compris entre deux missions. Les morts ne réapparaissent pas. Un ancien effectif déjà rentré ne peut pas modifier les PV d’une personne repartie avec une nouvelle équipe.
 
+L’adoption d’un journal du monde plus récent applique ses décès et ses PV aux acteurs déjà chargés. Une représentation provenant de l’ancienne campagne ne peut pas réécrire ses anciens PV dans le nouveau registre.
+
 Un ouvrier à un PV ne travaille plus. À domicile, hors de danger, un traitement après six heures consomme un médicament et une provision et restaure deux PV. Les soins continuent jusqu’à guérison, selon le temps de campagne et les stocks disponibles. Une personne en mission n’est pas soignée à distance. Un convoi sans porteur capable laisse sa cargaison et ramène les survivants ; une récupération incapable rentre sans charger les biens et ne verrouille pas une future tentative. Les services essentiels conservent leur incapacité critique et leur premier traitement après vingt-quatre heures ; les gardes conservent leur propre calendrier de soins. Les compagnons restent soumis aux provisions et soins du groupe. Les changements entre PV de compagnon et PV de civil conservent la même proportion de santé, y compris pour Elyne.
 
 ## Métiers et ressources
+
+Les expéditions non réparatrices portent désormais des réserves finies de nourriture et d’eau, prélevées au départ et sauvegardées. Une attente ou un combat observé ne suspend pas leur consommation. La pénurie atteint les personnes réelles ; les anciens PV d’un acteur visible ne peuvent pas annuler ces dégâts. Les réserves inutilisées reviennent avec l’équipe. Les bandes réservées effectivement absentes sont retirées des besoins locaux de leur base.
 
 La production utilise les métiers et les affectations effectives. Agriculture, pêche, élevage, collecte, métallurgie, fours, textile, cuisine et construction navale disposent de capacités distinctes. Un cultivateur absent ne remplace pas automatiquement un artisan ; un employé de transport ne produit pas simultanément aux champs. Les personnes en fuite, en conversation ou occupées à signaler un incident ne contribuent pas à leur travail local pendant cette occupation.
 
