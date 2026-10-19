@@ -12,7 +12,7 @@ Renderer.prototype.drawAtlasGround=function(){const g=this.g;if(!g.atlas)return;
    // The collision tiles are authoritative immediately. Art refines in the worker
    // (or bounded cooperative slices) without holding up input or simulation.
    cv=document.createElement('canvas');cv.width=cv.height=512;cv.preview=true;const c=cv.getContext('2d');
-   for(let y=0;y<32;y++)for(let x=0;x<32;x++){const t=chunk.tiles[y*32+x],wx=cx*32+x,wy=cy*32+y,cell=Atlas.cellAt(wx+.5,wy+.5),family=WorldTerrainArt.family({biome:cell?.biome,cursed:Atlas.curseCells.has(cell?.id)}),profile=WorldTerrainArt.profiles[family],snow=Atlas.visualSnowCover(cell?.biome,cell?.height,groundClock)>.5,palette=t===3?WorldTerrainArt.colors.water:t===5?WorldTerrainArt.colors.wood:t===8?WorldTerrainArt.colors[profile.rock]:WorldTerrainArt.colors[snow?'snow':t===1?'road':t===2?'pave':profile.ground];c.fillStyle=palette[4];c.fillRect(x*16,y*16,16,16);}
+   for(let y=0;y<32;y++)for(let x=0;x<32;x++){const t=chunk.tiles[y*32+x],wx=cx*32+x,wy=cy*32+y,cell=Atlas.cellAt(wx+.5,wy+.5),family=WorldTerrainArt.family({biome:cell?.biome,cursed:Atlas.curseCells.has(cell?.id)}),profile=WorldTerrainArt.profiles[family],snow=Atlas.visualSnowCover(cell?.biome,cell?.height,groundClock,cell?.region)>.5,palette=t===3?WorldTerrainArt.colors.water:t===5?WorldTerrainArt.colors.wood:t===8?WorldTerrainArt.colors[profile.rock]:WorldTerrainArt.colors[snow?'snow':t===1?'road':t===2?'pave':profile.ground];c.fillStyle=palette[4];c.fillRect(x*16,y*16,16,16);}
   }
   this.atlasGround.delete(chunk.key);this.atlasGround.set(chunk.key,cv);this.atlasArtStream.request(cx,cy);
   this.c.drawImage(cv,Math.round(p.x),Math.round(p.y));

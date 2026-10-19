@@ -19,17 +19,24 @@ const createWorldAtlas = (raw) => {
  {temp:-22,range:7,wet:.16,fog:.07,family:'polar'},
  {temp:18,range:7,wet:.48,fog:.55,family:'wetland'}
 ];
- function climateTemperature(clock,biome=6,height=20){const p=climateProfiles[biome]||climateProfiles[6];return p.temp+p.range*Math.sin(clock/1440/96*Math.PI*2)-Math.max(0,height-65)*.18;}
- function airTemperature(clock,biome=6,height=20){return climateTemperature(clock,biome,height)+2*Math.sin((clock/60-8)/24*Math.PI*2);}
+ // Vegetation describes the ground, not the latitude: the same forest or
+ // grassland has an oceanic/tropical regime on the southern islands.
+ const islandClimates={
+  Varan:{8:{...climateProfiles[8],temp:18,range:5},12:{...climateProfiles[12],range:5}},
+  Tagon:{4:{...climateProfiles[4],temp:23,range:4,monsoon:.35},6:{...climateProfiles[6],temp:23,range:4,monsoon:.25},8:{...climateProfiles[8],temp:24,range:3}}
+ };
+ function climateProfile(biome=6,region=0){return islandClimates[regions.get(region)?.territory]?.[biome]||climateProfiles[biome]||climateProfiles[6];}
+ function climateTemperature(clock,biome=6,height=20,region=0){const p=climateProfile(biome,region);return p.temp+p.range*Math.sin(clock/1440/96*Math.PI*2)-Math.max(0,height-65)*.18;}
+ function airTemperature(clock,biome=6,height=20,region=0){return climateTemperature(clock,biome,height,region)+2*Math.sin((clock/60-8)/24*Math.PI*2);}
  // Continuous thermal cover, independent from a passing precipitation front.
- function snowCover(biome,height=20,clock=480){if(biome===11)return 1;if([0,1,3,5,7,12].includes(biome))return 0;const t=airTemperature(clock,biome,height),v=clamp((6-t)/10,0,1),wet=climateProfiles[biome]?.wet||0;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
+ function snowCover(biome,height=20,clock=480,region=0){if(biome===11)return 1;const t=airTemperature(clock,biome,height,region),v=clamp((6-t)/10,0,1),wet=climateProfile(biome,region).wet;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
  // 32 native-pixel coverage levels; cache descriptors only for nearby chunks.
- const visualSnowCover=(b,h,t)=>Math.round(snowCover(b,h,t)*32)/32;
+ const visualSnowCover=(b,h,t,r)=>Math.round(snowCover(b,h,t,r)*32)/32;
  const snowRegions=new Map();
  function chunkSnowKey(cx,cy,clock,propsOnly=false){
   const key=cx+','+cy;let entry=snowRegions.get(key);
-  if(!entry){const pairs=new Map();for(let y=-3;y<35;y++)for(let x=-3;x<35;x++){const wx=cx*32+x+.5,wy=cy*32+y+.5,h=cellAt(wx,wy)?.height||20;for(const p of environment(wx,wy).mix)pairs.set(p.biome+':'+h,[p.biome,h]);}entry={pairs:[...pairs.values()]};snowRegions.set(key,entry);while(snowRegions.size>64)snowRegions.delete(snowRegions.keys().next().value);}
-  if(entry.clock!==clock){entry.clock=clock;const values=entry.pairs.map(([b,h])=>snowCover(b,h,clock));entry.value=values.map(v=>Math.round(v*32)).join(',');entry.props=values.map(v=>v>.3?1:0).join(',');}return propsOnly?entry.props:entry.value;
+  if(!entry){const pairs=new Map();for(let y=-3;y<35;y++)for(let x=-3;x<35;x++){const wx=cx*32+x+.5,wy=cy*32+y+.5,h=cellAt(wx,wy)?.height||20;for(const p of environment(wx,wy).mix)pairs.set([p.biome,p.height??h,p.region].join(':'),[p.biome,p.height??h,p.region]);}entry={pairs:[...pairs.values()]};snowRegions.set(key,entry);while(snowRegions.size>64)snowRegions.delete(snowRegions.keys().next().value);}
+  if(entry.clock!==clock){entry.clock=clock;const values=entry.pairs.map(([b,h,r])=>snowCover(b,h,clock,r));entry.value=values.map(v=>Math.round(v*32)).join(',');entry.props=values.map(v=>v>.3?1:0).join(',');}return propsOnly?entry.props:entry.value;
  }
  const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
  const random=(x,y,s=1)=>{let n=Math.imul(x|0,374761393)^Math.imul(y|0,668265263)^Math.imul(s,1442695041);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967296;};
@@ -129,9 +136,9 @@ const createWorldAtlas = (raw) => {
   return 0;
  }
  const BLEND=layout?.blend||800;
- function environment(x,y){const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}const own={biome:c.biome,cursed:curseCells.has(c.id),weight:1};if(nearest&&nearest.d<BLEND){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);if(other){const weight=.5*(1-nearest.d/BLEND);own.weight=1-weight;return {biome:c.biome,mix:[own,{biome:other.biome,cursed:curseCells.has(other.id),weight}]};}}return {biome:c.biome,mix:[own]};}
+ function environment(x,y){const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}const own={biome:c.biome,height:c.height,region:c.region,cursed:curseCells.has(c.id),weight:1};if(nearest&&nearest.d<BLEND){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);if(other){const weight=.5*(1-nearest.d/BLEND);own.weight=1-weight;return {biome:c.biome,mix:[own,{biome:other.biome,height:other.height,region:other.region,cursed:curseCells.has(other.id),weight}]};}}return {biome:c.biome,mix:[own]};}
  function propAt(x,y,t,clock=480){if(t!==4&&(t!==0||random(x,y,41)>=.06))return null;const c=cellAt(x+.5,y+.5);if(!c)return null;let kind;
-  const blend=environment(x+.5,y+.5),sample=blend.mix.length>1&&random(x,y,49)<blend.mix[1].weight?blend.mix[1]:blend.mix[0],biome=sample?.biome??c.biome,snow=snowCover(biome,c.height,clock)>.3;
+  const blend=environment(x+.5,y+.5),sample=blend.mix.length>1&&random(x,y,49)<blend.mix[1].weight?blend.mix[1]:blend.mix[0],biome=sample?.biome??c.biome,snow=snowCover(biome,sample?.height??c.height,clock,sample?.region??c.region)>.3;
   const r=random(x,y,40),v=Math.floor(random(x,y,44)*3);
   if(t===4)kind=sample?.cursed?(r<.65?'world_cursed':'world_dead_cursed'):biome===11?'world_boulder_1':biome===10?(snow?'world_boulder_1':'world_boulder_0'):biome===9?(r<.8?(snow?'world_pine_1':'world_pine_0'):(snow?'world_boulder_1':'world_boulder_2')):[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(r*5)]:biome===8?(snow?'world_oak_winter':r<.55?'world_cypress':'world_oak_'+v):[5,7].includes(biome)?(r<.3?'palm':r<.85?'world_jungle':'world_boulder_2'):biome===12?(r<.7?'world_cypress':'world_boulder_2'):[3,4].includes(biome)?(r<.4?'shrub':'world_boulder_0'):(r<.86?(snow?'world_oak_winter':'world_oak_'+v):(snow?'world_boulder_1':'world_boulder_2'));
   else if(t===0&&random(x,y,41)<.06){const plants=sample?.cursed?['bones','world_gravel']:biome===11?['world_gravel']:biome===10?(snow?['world_frostgrass','world_gravel']:['world_gravel','scrub']):biome===9?(snow?['world_frostgrass','world_gravel']:['world_mushrooms','world_fern']):snow?['world_frostgrass','world_gravel']:[1,2,3,4].includes(biome)?['scrub','pebbles']:[5,7].includes(biome)?['world_fern','world_fern','world_flowers']:[8,12].includes(biome)?['world_reeds','world_fern','world_mushrooms']:['world_flowers','world_mushrooms','world_fern'];kind=plants[Math.floor(random(x,y,42)*plants.length)];}
@@ -274,6 +281,6 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36)continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;if(!walkable.has(k2))walkable.set(k2,!!free(x*16+8,y*16+8));if(!walkable.get(k2))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {layout,scale,passable,roadCells,vertexOf,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {layout,scale,passable,roadCells,vertexOf,climateProfile,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;

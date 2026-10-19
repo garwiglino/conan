@@ -63,7 +63,7 @@ function createWorldTerrainArt(atlas, ramps) {
   const tx0=Math.floor(ox/16)-1,ty0=Math.floor(oy/16)-1,tw=Math.ceil(w/16)+3,th=Math.ceil(h/16)+3,meta=[];
   for(let y=0;y<th;y++){for(let x=0;x<tw;x++)meta.push(tileInfo(tx0+x,ty0+y));if(y%4===3)yield;}
   // Sample thermal cover once per tile/biome, never once per pixel.
-  for(const tile of meta)for(const p of tile.parts)p.cover=atlas.visualSnowCover(p.biome,tile.cell?.height||20,clock);
+  for(const tile of meta)for(const p of tile.parts)p.cover=atlas.visualSnowCover(p.biome,p.height??tile.cell?.height??20,clock,p.region??tile.cell?.region);
   const info=(x,y)=>meta[(Math.floor(y/16)-ty0)*tw+Math.floor(x/16)-tx0];
   const category=t=>t===4?0:t===5?3:t;
   const edge=field(ox,oy,w,h,9,31),edge2=field(ox,oy,w,h,4,32),broad=field(ox,oy,w,h,40,41),grain=field(ox,oy,w,h,24,45),dunes=field(ox,oy,w,h,56,42),ripple=field(ox,oy,w,h,11,43),patch=field(ox,oy,w,h,86,450),fine=field(ox,oy,w,h,7,451);

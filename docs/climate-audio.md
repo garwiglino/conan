@@ -23,6 +23,24 @@ La neige et la pluie se partagent les précipitations selon une transition therm
 
 Les paramètres de probabilité sont des réglages de jeu, pas des statistiques terrestres. `audio/biome-audio-analysis.json` mesure leur fréquence effective sur un cycle complet (pas de 15 minutes), incluant les transitions entre fronts. La météo se mélange aussi aux frontières des biomes. Les orages restent des cellules brèves ; une pluie forte n'implique pas forcément du tonnerre.
 
+## Géographie climatique
+
+Le biome décrit la végétation ; il ne suffit pas à définir la température d'un territoire. Les profils locaux tiennent désormais compte de la région, du biome, de l'altitude et de l'horloge sauvegardée. Les paramètres de relief de la carte sont des indices de hauteur de 20 à 100, pas des altitudes en mètres. Le refroidissement au-dessus de l'indice 65 reste actif, y compris sur les îles.
+
+| Territoire | Règles appliquées |
+|---|---|
+| Igea | Taïga et toundra saisonnières, glaciers permanents ; hiver neigeux préservé. |
+| Teremor | Forêts et prairies tempérées avec hiver froid ; relief boréal et glaciers conservés. |
+| Sarak | Désert chaud sec ; neige rare possible dans le désert frais et les hauts reliefs froids existants. |
+| Varan | Forêt humide et marais océaniques doux : moyenne annuelle de 18 °C, amplitude saisonnière de 5 °C, variation diurne de ±2 °C. Les 185 cellules terrestres actuelles restent sans neige toute l'année. |
+| Tagon | Forêts tropicales et mousson ; prairies et forêts des collines suivent aussi un régime tropical, avec une moyenne de 23–24 °C et une amplitude de 3–4 °C. Les 301 cellules terrestres actuelles restent sans neige toute l'année. |
+
+La correction de Varan et Tagon ne masque pas artificiellement les flocons : elle corrige la température qui provoquait aussi du givre au sol et sur les décors. La même source géographique alimente les précipitations, le froid subi, le couvert, les accessoires des relais, les pas, les traces, les événements météo locaux et le worker de terrain. Les sols et collisions ne changent pas avec la saison. Les sauvegardes existantes utilisent automatiquement les règles corrigées.
+
+Chaque échantillon de transition conserve sa propre région et hauteur. La phase pluie/neige est ensuite calculée à partir de la température de l'air mélangé : un biome voisin froid ne peut plus faire tomber des flocons dans un air local à plus de 2 °C. Les libellés météo sont recalculés après le mélange. Les fronts gardent leur état saisonnier pendant leur passage, sans apparition brutale de pluie au franchissement d'un seuil de mousson.
+
+Les tests de géographie parcourent les 486 cellules terrestres des deux îles sur les 96 jours de l'année, à quatre heures de la journée, puis vérifient les frontières, côtes, pixels du terrain, accessoires, pas, sauvegardes et caches. Les autres tests contrôlent le maintien de l'hiver continental, des glaciers, de la mousson, du refroidissement d'altitude et de la parité worker/fallback. `node scripts/check-world-climate.cjs` vérifie aussi les sept types de terrain insulaires et les 21 localités dans Chromium ; `PERF_NO_WORKER=1` répète le contrôle avec le chargement coopératif de secours.
+
 ## Audio
 
 10 compositions originales de 32 mesures : 9 familles de biomes et une musique de voyage. Six pistes musicales plus conducteur MIDI, panoramiques, phrases aérées, basses centrées, instruments doux et fondus entre morceaux. 18 partitions de faune jour/nuit : quatre pistes disponibles plus conducteur ; les pistes non pertinentes sont volontairement silencieuses (notamment pas d'insectes dans les glaces).
