@@ -339,7 +339,7 @@ const Batraciens = (() => {
  };
  const oldCivilCombat=Game.prototype.civilianCombat;
  Game.prototype.civilianCombat=function(dt,before){oldCivilCombat.call(this,dt,before);const p=this.player,guards=this.npcs.filter(n=>isArmed(n)&&alive(n)&&dist(n,p)<C.activeRadius);
-  if(p.attack>0){const f=attackFrame(p.attack,p.combo);if(f===2||f===3)for(const n of guards){if(this.hits.has(n.id)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageBatracienGuard(n,p.combo===3?2:1,p);}}
+  if(p.attack>0){const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const n of guards){if(this.hits.has(n.id)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageBatracienGuard(n,this.weaponDamage(p.combo===3?2:1),p);}}
   for(const e of this.enemies){const prev=before.get(e);if(!prev||e.dead||e.friendly||e.batracien)continue;const fired=prev.melee>0&&!prev.meleeHit&&e.meleeHit||prev.wind>0&&e.wind<=0&&e.kind!=='cultist'||e.kind==='guardian'&&e.move&&!prev.hitDone&&e.hitDone;
    if(fired)for(const n of guards)if(this.sameLevel(e,n)&&dist(e,n)<(e.kind==='guardian'?44:(e.reach||20)+8)&&front(this,e,n)&&this.lineClear(e,n))this.damageBatracienGuard(n,e.damage||1,e);
   }
@@ -371,14 +371,14 @@ const Batraciens = (() => {
    if(!b.role&&b.work&&!member(this.g,n)){const activeWork=b.action===b.job||b.job==='fish_cast'&&b.action.startsWith('fish_'),f=activeWork?frame:0,action=activeWork?b.action:b.job;
     for(const layer of ['scene_back']){const im=atlas.get(action,b.workDir,f,{layer,catch:false});c.drawImage(im,Math.round(b.work.x)-40,Math.round(b.work.y)-52);}
    }
-   this.shadow(n.x,n.y,dead?12:10);const im=atlas.get(b.action,n.dir??2,frame,{catch:false});c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
+   this.shadow(n.x,n.y,dead?12:10);const im=atlas.get(b.action,n.dir??2,frame,{catch:false,...(globalThis.KaldorArmaments?.batracienOptions(n)||{})});c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
    if(!dead){this.npcNameplate(n);const m=this.g.npcPresent(n)&&this.g.npcMark(n);if(m)this.questMark(n.x,n.y-35,m);}
   }finally{c.restore();}
   this.coldBreath?.(n);
  };
  const oldEnemyBody=Renderer.prototype.enemyBody;
  Renderer.prototype.enemyBody=function(e){if(!e.batracien)return oldEnemyBody.call(this,e);const b=e.batracien,c=this.c;if(this.cam&&(e.x<this.cam.x-96||e.x>this.cam.x+this.W+96||e.y<this.cam.y-96||e.y>this.cam.y+this.H+96))return;this.shadow(e.x,e.y,11);if(this.g.targetId===e.id)this.targetRing(e.x,e.y,12);
-  c.save();try{c.imageSmoothingEnabled=false;const atlas=atlasFor(this,e),frame=Armed.frameAt(b.action,b.elapsed,b.distance);const im=atlas.get(b.action,e.dir,frame);c.drawImage(im,Math.round(e.x)-40,Math.round(e.y)-52);e._img=im;
+  c.save();try{c.imageSmoothingEnabled=false;const atlas=atlasFor(this,e),frame=Armed.frameAt(b.action,b.elapsed,b.distance);const im=atlas.get(b.action,e.dir,frame,globalThis.KaldorArmaments?.batracienOptions(e)||{});c.drawImage(im,Math.round(e.x)-40,Math.round(e.y)-52);e._img=im;
    if(e.flash>0){c.globalAlpha=.35;c.globalCompositeOperation='lighter';c.drawImage(im,Math.round(e.x)-40,Math.round(e.y)-52);}
   }finally{c.restore();}
   if(e.hp<e.maxHp){box(c,e.x-9,e.y-28,18,3,PAL.ink);box(c,e.x-8,e.y-27,Math.ceil(16*e.hp/e.maxHp),1,'#cda46d');}

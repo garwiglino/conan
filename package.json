@@ -28,7 +28,12 @@
     "test:human-headgear": "node --test tests/human-headgear.test.cjs",
     "test:human-modularity": "node --test tests/human-modularity.test.cjs",
     "preview:igea": "node scripts/render-igea-winter.cjs",
-    "build:human-stations": "node scripts/build-human-stations.cjs"
+    "build:human-stations": "node scripts/build-human-stations.cjs",
+    "build:kaldor-weapons": "node scripts/build-kaldor-weapon-layers.cjs && node scripts/embed-kaldor.cjs",
+    "preview:weapons": "node scripts/preview-kaldor-weapons.cjs",
+    "preview:weapon-layers": "node scripts/preview-kaldor-native-arms.cjs",
+    "preview:armory": "node scripts/preview-kaldor-armory.cjs",
+    "preview:armaments": "node scripts/preview-kaldor-armaments.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

@@ -32,7 +32,7 @@ const NpcCombat=(()=>{
  Game.prototype.damageHumanGuard=function(n,amount,source){
   const s=this.ensureHumanGuard(n);if(!s||s.dead||(n.alpha??1)<.5||!Number.isFinite(amount)||amount<=0||source&&!this.sameLevel(n,source))return false;
   const p=this.player,playerHit=source===p;if(!playerHit&&s.inv>0)return false;
-  if(playerHit){this.reportBatracienAssault(n,p);amount*=this.power();if(p.riposte>0){amount+=1;p.riposte=0;}p.hitPause=p.combo===3?.075:.04;if(!this.target())this.targetId=n.id;}
+  if(playerHit){this.reportBatracienAssault(n,p);amount*=this.power();if(p.riposte>0){amount+=1;p.riposte=0;}p.hitPause=HearthreaverWeapons.hitPause(p.weapon,p.combo);if(!this.target())this.targetId=n.id;}
   s.hp=Math.max(0,Math.round((s.hp-amount)*100)/100);if(s.hp<.05)s.hp=0;s.inv=playerHit?0:.5;
   n.flash=.075;n.hurt=n.hurtDuration=.24;n.stun=Math.max(n.stun||0,.24);n.wind=n.attack=0;
   const from=Number.isFinite(source?.x)?source:n,d=Math.max(1,dist(n,from));if(from!==n)this.move(n,(n.x-from.x)/d*6,(n.y-from.y)/d*6);
@@ -144,7 +144,7 @@ const NpcCombat=(()=>{
  const combat=Game.prototype.civilianCombat;
  Game.prototype.civilianCombat=function(dt,before){
   combat.call(this,dt,before);const p=this.player,guards=this.npcs.filter(n=>this.humanGuardAlive(n)&&dist(n,p)<C.guard.active);if(!guards.length)return;
-  if(p.attack>0){const f=attackFrame(p.attack,p.combo);if(f===2||f===3)for(const n of guards){if(this.hits.has(n.id)||!this.sameLevel(p,n)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageHumanGuard(n,p.combo===3?2:1,p);}}
+  if(p.attack>0){const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const n of guards){if(this.hits.has(n.id)||!this.sameLevel(p,n)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageHumanGuard(n,this.weaponDamage(p.combo===3?2:1),p);}}
   for(const e of this.enemies){const prev=before.get(e);if(!prev||e.dead||e.friendly||e.batracien)continue;
    const melee=prev.melee>0&&!prev.meleeHit&&e.meleeHit,blow=prev.wind>0&&e.wind<=0&&e.kind!=='cultist',heavy=e.kind==='guardian'&&e.move&&!prev.hitDone&&e.hitDone;
    if(!melee&&!blow&&!heavy)continue;const [fx,fy]=this.facing(e.dir);

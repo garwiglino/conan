@@ -1,0 +1,146 @@
+# Arsenal de Kaldor
+
+48 armes de mêlée : l’épée de départ, 39 armes sur des râteliers et huit armes portées à récupérer sur des combattants ou le Prêtre du Serpent. Huit familles et cinq territoires. Les six peuples existants ont des armes courantes et des pièces de maîtrise ; deux armes préparent les futurs centaures. Les appartenances raciales ne créent aucune hostilité ni population supplémentaire.
+
+## Animations et calques conservés
+
+Les nouvelles animations déplacent les **calques originaux des bras, manches, gants et mains** de chaque tenue. Les pixels, couleurs, proportions et contours restent identiques. Aucune nouvelle forme de bras ou de poing, aucun découpage au coude, aucun étirement ni rotation des membres. Les deux silhouettes déjà disjointes des vues face/dos peuvent se déplacer séparément ; un profil conserve son unique silhouette visible, l’autre prise étant occultée. Le corps sans bras vient du calque natif déjà disponible, sans effacement de morceaux du torse.
+
+La donnée `hands` choisit une ou deux mains. Avec une main, l’autre bras garde sa position native ; avec deux, les deux prises suivent le manche, écartées davantage sur une lance, une vouge ou un bâton. Les translations restent en pixels entiers, communes aux manches et aux mains. Les cheveux, casques et corps conservent leur assemblage modulaire.
+
+Les trajectoires des nouvelles armes sont partagées par le rendu et le balayage physique : point de prise, direction et allonge. Les estocs des lances et dagues diffèrent des tailles des sabres et épées, des balayages du bâton et des frappes pesantes des haches et masses. La lance enchaîne un estoc vif, un revers de hampe, une taille montante et une fente longue : préparations distinctes, transfert du corps et appuis natifs, accélération sur la frappe puis reprise plus lourde. Elle possède huit sous-poses par intervalle et des durées propres à chaque coup. Les attaques possèdent des poses intermédiaires, des smears au passage actif et un retour en garde. Le rendu conserve le cadre 80 × 80, ancré aux pieds (40,52).
+
+Après 3,7 secondes sans attaquer ni parer, l’arme se range au milieu du dos, aussi en marchant, avec une durée adaptée à son poids. Les lances/bâtons/haches/masses sont attachés au dos ; les lames rejoignent un fourreau. L’attaque interrompt immédiatement le rangement ; la parade dégaine visuellement selon le poids, sans retarder la défense. Le rig des tenues et les casques restent réutilisés.
+
+## Jeu et sauvegarde
+
+Approcher un râtelier à moins de 18 pixels, puis interagir pour prendre l’arme. Elle rejoint **Inventaire → Armes**, où figurent les pièces possédées, les caractéristiques, les lieux des armes restantes et un aperçu animé tournant de Kaldor. Équiper une arme nécessite de terminer le geste de combat ou le voyage en cours ; cela ne permet pas d’annuler le délai de récupération d’un coup. L’arme trouvée n’est pas équipée automatiquement.
+
+La sauvegarde ajoute `arsenal: {owned, equipped}`. Une ancienne sauvegarde conserve l’épée de départ ; les identifiants inconnus sont ignorés. Un râtelier pris reste vide au rechargement. Les emplacements sont fixes, vérifiés sur le terrain réel, à l’écart des tenues, PNJ et transports. Les dégâts passent par les canaux existants pour ennemis, civils et gardes, avec leurs protections, étages et règles de justice.
+
+Les coefficients ci-dessous sont relatifs à l’épée de départ. Le quatrième coup double les dégâts de base ; le niveau et les défenses de la cible s’appliquent ensuite. La cadence affichée provient des durées réelles des quatre coups : les armes lourdes ont une préparation et une reprise plus longues. Les noms, le jade et les filets de cuivre restent des éléments de facture, sans effet élémentaire implicite.
+
+## Combos et poids
+
+Toutes les armes, y compris l’épée de départ, utilisent désormais les calques natifs et le même calcul de trajectoire pour le rendu et les collisions. Chaque famille possède quatre gestes ; la longueur, la variante, la prise et le poids adaptent chaque arme. Le combo de Lance de Boisclair validé est conservé.
+
+- **Épées** : Taille oblique, Revers croisé, Coupe montante, Abattée.
+- **Sabres** : Taille filante, Revers enroulé, Coupe remontante, Taille passante.
+- **Dagues** : Entaille vive, Revers court, Estoc oblique, Pointe engagée.
+- **Haches** : Taille mordante, Revers de barbe, Crochet oblique, Abattée ample.
+- **Masses et marteaux** : Coup croisé, Revers lourd, Levée latérale, Abattée martelée.
+- **Bâtons** : Balayage de hampe, Revers circulaire, Levée du bâton, Poussée à deux mains.
+- **Vouges** : Grande taille, Revers du fer, Crochet montant, Fente à la lame.
+- **Lances et harpons** : estoc vif, revers de hampe, taille montante, fente longue.
+
+Chaque coup commence par sa garde, charge son élan, accélère sur la frappe, dépasse légèrement le contact puis retrouve sa garde avec une reprise pondérée. Les huit sous-poses par intervalle conservent les accélérations. Les appuis sont des poses de marche natives et les translations du corps entraînent la tête et les cheveux. La main libre suit le corps sur les armes à une main.
+
+Les dagues ont une courte traînée ; les sabres une trace courbe ; les haches, masses et vouges gardent jusqu’à deux silhouettes de retard de l’arme, en tramage opaque. Aucun smear n’apparaît pendant la préparation ou une reprise inactive. La pause d’impact et le pas d’attaque varient aussi selon l’arme. Les dégâts des armes lourdes compensent leur moindre cadence ; les dagues restent faibles par frappe et de courte portée.
+
+Le rangement place le **milieu de la silhouette complète sur la colonne du dos**, en oblique comme l’épée de départ, et conserve ce point pendant le mouvement de la tenue. De profil, l’attache est derrière le torse. La même destination sert au rangement et au dégainage. Les durées dépendent du poids ; celles de la lance validée restent 0,33 s et 0,21 s. Le délai automatique reste 3,7 s et une attaque interrompt toujours le rangement immédiatement.
+
+## Porteurs, butin et encart
+
+`catalogue.json.loadouts` distingue métier de combat, peuple et rang. Un habitant sans rôle armé reste civil ; un animal ou un gardien de pierre sans arme n’en lâche aucune. Les profils sont déterministes, indépendants de la couleur du personnage. `armament` désigne l’objet porté ; le joueur conserve son propre champ `weapon`.
+
+| Porteur | Arme courante | Arme de maîtrise |
+|---|---|---|
+| Humains | Lame de la milice ; Sabre des pistes pour les pillards | Épée des Chartes |
+| Gobelins | Coutelas de Boisclair ; Dague de Kesh pour les éclaireurs | Marteau de Griseborne ; Crochet du maître de Kesh |
+| Orques | Hache de Darg | Brise-Givre |
+| Hommes-serpents | Lame d’enclave | Lame de Rosebrume |
+| Batraciens | Lance de chenal, Lame de batelier, Javelot des Joncs ou Massue de chenal, selon le rôle | Lance du chef des chenaux |
+| Hommes-singes | Bâton des sentiers | Garde des Palmes |
+| Centaures, intégration future | Lance des grands chemins | Sarisse de l’Horizon |
+
+Les deux armes centaures sont disponibles sur des râteliers de Sarak, aux contacts des routes et des oasis. Leur attribution future ne crée pas de centaures dans le monde ni de septième catégorie dans le recensement existant. Les gobelins, orques et hommes-serpents reçoivent aussi des profils prêts pour leurs futurs rigs ; seuls les combattants déjà intégrés sont dessinés aujourd’hui.
+
+Les humains armés utilisent les tenues et les calques de mains natifs, avec des têtes distinctes de celle du héros. Leur préparation et leur contact restent synchronisés sur les temps de l’IA existante. Les batraciens conservent leurs clips, corps, mains, boucliers et rythmes ; un peintre optionnel remplace uniquement l’arme dans le calque d’équipement, à leur point de prise actuel. Les squelettes, cultistes et le Prêtre gardent leur animation et leur arme natives, désormais reliées à un objet du catalogue. La crosse ne donne pas les sortilèges du boss au joueur.
+
+À la mort d’un ennemi armé, `dropCarriedWeapon` dépose son arme exacte au sol si elle manque à la collection. La mort par un garde emprunte la même logique sans donner de points d’expérience ni de victoire au joueur. Un cadavre et une arme déjà en attente ne créent pas de doublon. Les habitants non combattants n’ont aucun butin d’arme ajouté.
+
+Le joueur ramasse le butin en passant à moins de 14 pixels, sur le même étage et avec un passage libre. L’objet rejoint l’inventaire sans changer l’arme équipée. Un petit encart non modal sur deux lignes affiche uniquement l’icône et le nom, puis la prise et les dégâts. Il apparaît au-dessus de la position de l’arme et suit les déplacements de la caméra. Les caractéristiques complètes restent dans l’inventaire. Elle se ferme après 3,2 secondes ou avec ×. Une arme déjà possédée ne génère ni butin supplémentaire ni encart. Les râteliers correspondants deviennent vides après acquisition, quelle que soit la source.
+
+La sauvegarde ajoute `arsenal.drops` aux champs `owned` et `equipped`. Les armes au sol restent récupérables après rechargement ; identifiants inconnus, doublons, armes possédées et coordonnées invalides sont ignorés. Les anciennes sauvegardes restent valides. La crosse du Prêtre est ajoutée avant la sauvegarde de victoire, car celle-ci arrête la simulation et empêcherait un ramassage dans l’arène.
+
+[Combattants et leurs armes animés](../art/armed-npcs.gif) · [Encart de découverte en jeu](../art/weapon-discovery.png).
+
+## Catalogue
+
+La cadence de l’inventaire est calculée sur les durées des quatre attaques, relativement à l’épée de départ. Les données de masse et d’équilibre servent à l’animation, sans ajouter un système d’encombrement.
+
+| Arme | Mains | Masse | Force par frappe | Origine | Lieu ou porteur |
+|---|---:|---:|---:|---|---|
+| Épée de l’exilé | 2 | 1.85 kg | ×1 | Humains · Sarak | Portée au départ |
+| Couteau du roulier | 1 | 0.57 kg | ×0.37 | Humains · Teremor | Campement des Exilés |
+| Bâton d’aulne | 2 | 1.69 kg | ×0.72 | Humains · Teremor | Source-Claire |
+| Lame de la milice | 1 | 1.56 kg | ×1.12 | Humains · Teremor | Clairval |
+| Hache des Ronces | 1 | 1.55 kg | ×1.89 | Humains · Teremor | Fort-des-Ronces |
+| Lance de Boisclair | 2 | 2.02 kg | ×1.12 | Gobelins · Teremor | Val-des-Mousses |
+| Épée des Chartes | 1 | 1.44 kg | ×1.45 | Humains · Teremor | Aulneport |
+| Marteau de Griseborne | 1 | 2.06 kg | ×2.69 | Gobelins · Sarak | Griseborne |
+| Sabre des pistes | 1 | 1.05 kg | ×0.99 | Humains · Sarak | Relais-des-Dunes |
+| Dague de Kesh | 1 | 0.57 kg | ×0.51 | Gobelins de Kesh · Sarak | Puits-Rouge |
+| Croissant du Safran | 1 | 1.29 kg | ×1.26 | Humains · Sarak | Oasis-du-Safran |
+| Vouge des Acacias | 2 | 2.86 kg | ×1.65 | Orques · Sarak | Bourg-des-Acacias |
+| Lame de l’Arène | 2 | 1.85 kg | ×1.75 | Humains · Sarak | Citadelle-de-Sarak |
+| Hache des cols de Darg | 2 | 2.32 kg | ×2.73 | Orques de Darg · Igea | Val-des-Neiges |
+| Pic de Fort-Écho | 1 | 1.94 kg | ×2.72 | Humains · Igea | Fort-Écho |
+| Lance de Pâleval | 2 | 2.26 kg | ×1.38 | Humains · Igea | Pâleval |
+| Brise-Givre | 2 | 3.4 kg | ×3.91 | Orques · Igea | Veille-Boréale |
+| Serment boréal | 2 | 1.97 kg | ×1.9 | Humains · Igea | Roche-Blanche |
+| Coutelas des Veilleurs | 1 | 1.29 kg | ×1.17 | Humains · Varan | Port-des-Veilleurs |
+| Harpon des Joncs | 2 | 2.26 kg | ×1.36 | Batraciens · Varan | Pont-des-Joncs |
+| Battoir de Tourbeclaire | 1 | 1.7 kg | ×2.89 | Batraciens · Varan | Tourbeclaire |
+| Lame de Rosebrume | 1 | 1.17 kg | ×1.51 | Hommes-serpents · Varan | Brume-aux-Saules |
+| Vouge des Roseaux | 2 | 2.74 kg | ×1.6 | Batraciens · Varan | Bac-des-Roseaux |
+| Croc d’enclave | 1 | 0.81 kg | ×0.68 | Hommes-serpents · Sarak | Roche-du-Serpent |
+| Bâton des Lianes | 2 | 1.45 kg | ×1.15 | Hommes-singes · Tagon | Relais-des-Lianes |
+| Lame de Santalune | 1 | 1.17 kg | ×1.38 | Hommes-singes · Tagon | Santalune |
+| Lance de Palmehaute | 2 | 2.14 kg | ×1.63 | Hommes-singes · Tagon | Palmehaute |
+| Hache des Coquilles | 1 | 1.91 kg | ×2.41 | Humains et hommes-singes · Tagon | Bourg-des-Coquilles |
+| Aiguille de Corail | 1 | 0.45 kg | ×0.78 | Batraciens · Tagon | Rive-de-Corail |
+| Garde des Palmes | 2 | 2.62 kg | ×2.05 | Hommes-singes · Tagon | Anse-des-Palmes |
+| Masse du Havre | 1 | 1.94 kg | ×2.41 | Gobelins · Sarak | Havre-du-Cuivre |
+| Veille des Aulnes | 2 | 1.81 kg | ×1.45 | Hommes-singes et batraciens · Varan | Refuge-des-Aulnes |
+| Flamme de Clairfoyer | 2 | 1.85 kg | ×2.05 | Humains · Teremor | Clairfoyer |
+| Coutelas de Boisclair | 1 | 0.76 kg | ×0.72 | Gobelins · Teremor | Val-des-Mousses |
+| Crochet du maître de Kesh | 1 | 0.84 kg | ×1.05 | Gobelins de Kesh · Sarak | Puits-Rouge |
+| Hache de Darg | 2 | 2.05 kg | ×1.35 | Orques · Igea | Val-des-Neiges |
+| Lame d’enclave | 1 | 1.02 kg | ×0.82 | Hommes-serpents · Varan | Brume-aux-Saules |
+| Bâton des sentiers | 2 | 1.32 kg | ×0.65 | Hommes-singes · Tagon | Relais-des-Lianes |
+| Lance de chenal | 1 | 1.55 kg | ×0.78 | Batraciens · Varan | Butin des gardes et sentinelles batraciens |
+| Lame de batelier | 1 | 1.12 kg | ×0.86 | Batraciens · Varan | Butin des escortes batraciennes |
+| Javelot des Joncs | 1 | 1.05 kg | ×0.64 | Batraciens · Varan | Butin des éclaireurs batraciens |
+| Massue de chenal | 1 | 1.58 kg | ×1.12 | Batraciens · Varan | Butin des pilleurs de chenal |
+| Lance du chef des chenaux | 1 | 1.88 kg | ×1.82 | Batraciens · Varan | Butin des chefs batraciens |
+| Lance des grands chemins | 2 | 2.16 kg | ×1.12 | Centaures · Sarak | Relais-des-Dunes |
+| Sarisse de l’Horizon | 2 | 2.98 kg | ×2.15 | Centaures · Sarak | Oasis-du-Safran |
+| Lame de l’ossuaire | 1 | 1.48 kg | ×0.74 | Armes anciennes · Teremor | Butin des squelettes animés |
+| Bâton du culte | 2 | 1.64 kg | ×0.82 | Culte du Serpent · Varan | Butin des cultistes |
+| Crosse du Prêtre du Serpent | 2 | 2.24 kg | ×2.3 | Culte du Serpent · Varan | Butin des Prêtre du Serpent |
+
+## Sources et reconstruction
+
+- `data/weapons/catalogue.json` : armes, prise, puissance, tempo, matière, provenance et emplacements.
+- `scripts/kaldor-weapons.js` : formes des armes, trajectoires, smears et balayage physique commun.
+- `scripts/build-kaldor-weapon-layers.cjs` : export sans déformation des calques de membres déjà présents dans `art/kaldor-tenues/`.
+- `data/weapons/native-arms.json` : images originales de ces calques et leurs points de prise, pour chaque tenue et vue.
+- `scripts/kaldor-civilian-bridge.js` : translations des calques natifs, tenue, casque, occultation et rangement.
+- `scripts/kaldor-weapons-runtime.js` : râteliers, collection, équipement, sauvegarde et inventaire.
+- `scripts/kaldor-armaments.js` : armes portées, morts, butin persistant et encart de découverte.
+
+```sh
+npm run build:kaldor-weapons
+node --test --test-concurrency=2 tests/kaldor-weapons.test.cjs tests/kaldor-art.test.cjs tests/kaldor-outfits.test.cjs
+npm run preview:weapon-layers
+npm run preview:weapons
+npm run preview:armory
+npm run preview:armaments
+```
+
+L’export natif ne modifie pas les sources des tenues. `build:kaldor` embarque le catalogue, les calques et les deux modules dans les HTML web et iOS. Après un changement de source de tenue, reconstruire également `build:kaldor-weapons` pour actualiser ses bras natifs.
+
+[Aperçu demandé : Lance de Boisclair, trois tenues et quatre vues](../art/boisclair-combo-v2.gif). L’aperçu est ralenti pour lire les déplacements ; il montre les quatre attaques, la marche, le rangement et la reprise. [Atelier complet](../art/weapons-preview.html).
+
+[Aperçu des huit familles à vitesse réelle](../art/armory-combos.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).

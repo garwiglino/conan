@@ -220,6 +220,6 @@ Game.prototype.finishAtlasRestore=function(saved){dangerRestore.call(this,saved)
 const mundaneEnemyBody=Renderer.prototype.enemyBody;
 Renderer.prototype.enemyBody=function(e){if(e.kind!=='bandit')return mundaneEnemyBody.call(this,e);
  const c=this.c;c.save();this.shadow(e.x,e.y,12);if(this.g.targetId===e.id)this.targetRing(e.x,e.y,13);
- this.characters.draw(c,'nomade',e,this.g.time);c.save();c.translate(Math.round(e.x),Math.round(e.y));greatsword(c,swordPose(e.dir,e.attack>0?attackFrame(e.attack):0,0));c.restore();
+ this.characters.draw(c,'nomade',e,this.g.time); // The armament adapter owns the weapon, attached to the native hand.
  if(e.wind>0)text(c,'!',e.x-2,e.y-38,'#edb279');if(e.hp<e.maxHp){box(c,e.x-9,e.y-34,18,3,PAL.ink);box(c,e.x-8,e.y-33,Math.ceil(16*e.hp/e.maxHp),1,'#cda46d');}c.restore();
 };

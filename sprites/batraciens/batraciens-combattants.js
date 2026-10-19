@@ -134,7 +134,7 @@
   }
  }
 
- function combatRaster(role,action,view,frame,palette,smears=true,outfit=true,equipment=true){
+ function combatRaster(role,action,view,frame,palette,smears=true,outfit=true,equipment=true,weaponPainter=null){
   const image=empty(),back=empty(),body=empty(),arms=empty(),gear=empty(),fx=empty(),p=combatPose(role,action,view,frame),pal=API.paletteFor('male',palette),rows=MALE.SOURCE_VIEWS[view],side=view==='droite'||view==='gauche',x0=40-Math.floor(rows[0].length/2),y0=52-rows.length+1;
   const resting=['idle','walk','patrol','flee','guard_walk'].includes(action),walking=resting&&action!=='idle';
   const reference=resting?API.renderLayers({sex:'male',action:walking?'walk':'idle',dir:view,frame,palette}).layers.body:null;
@@ -174,7 +174,8 @@
   }
   const behind=view==='dos'||(resting&&view==='gauche')||(isAttack(action)&&p.tip[1]<32&&frame<5),wl=behind?back:gear;
   if(equipment&&!(action==='throw_javelin'&&frame>=5)){
-   if(weapon==='spear'){
+   if(weaponPainter)weaponPainter(wl,p);
+   else if(weapon==='spear'){
     const vx=p.tip[0]-p.hand[0],vy=p.tip[1]-p.hand[1],len=Math.max(1,Math.hypot(vx,vy));const butt=[Math.round(p.hand[0]-vx/len*7),Math.round(p.hand[1]-vy/len*7)];line(wl,...butt,...p.tip,'wood0');spear(wl,p.hand,p.tip,spec.accent,spec.banner);
    }else if(weapon==='sword')sword(wl,p.hand,p.tip);else if(weapon==='club')club(wl,p.hand,p.tip);else javelin(wl,p.hand,p.tip);
   }
@@ -272,7 +273,7 @@
  }
  function raster(options={}){const role=roleName(options.role||'village_guard'), action=clipName(options.action||'idle'), view=directionName(options.dir===undefined?DIR.SOUTH:options.dir), frame=integer(options.frame===undefined?0:options.frame,'frame'), palette=paletteName(options.palette||'original'), format=options.format||'engine';
   if(frame<0||frame>=CLIPS[action].frames) throw new RangeError('frame hors limite');
-  if(isAttack(action)||['idle','walk','patrol','flee','guard','guard_walk','block'].includes(action)){const im=combatRaster(role,action,view,frame,palette,options.smear!==false,options.outfit!==false,options.equipment!==false);headgear(im,role,view,action,frame,palette,options.headgear!==false);im.metadata.headgear=options.headgear===false?null:HEADGEAR[role];return {...formatImage(im,format),metadata:im.metadata};}
+  if(isAttack(action)||['idle','walk','patrol','flee','guard','guard_walk','block'].includes(action)){const im=combatRaster(role,action,view,frame,palette,options.smear!==false,options.outfit!==false,options.equipment!==false,options.weaponPainter||null);headgear(im,role,view,action,frame,palette,options.headgear!==false);im.metadata.headgear=options.headgear===false?null:HEADGEAR[role];return {...formatImage(im,format),metadata:im.metadata};}
   const base=baseFrameData(action,view,frame,palette); const image=clone(base.body);
   // hide stars for hit? body+hands already no tools only.
   const side=view==='droite'||view==='gauche',rows=MALE.SOURCE_VIEWS[view],x0=40-Math.floor(rows[0].length/2),y0=52-rows.length+1,joint=base.meta.joints?.[side?base.meta.joints.length-1:0];
@@ -283,7 +284,7 @@
   return {...formatImage(image,format), metadata:{role,action,direction:view,engineDirection:DIRECTIONS.indexOf(view),frame,palette,outfit:options.outfit===false?null:OUTFITS[role].label,anchor:format==='native'?NATIVE_ANCHOR:ANCHOR}};
  }
  class Atlas{ constructor(options={}){this.role=roleName(options.role||'village_guard'); this.palette=paletteName(options.palette||'original'); this.canvasFactory=options.canvasFactory||defaultCanvasFactory; this.maxFrames=options.maxFrames===undefined?128:integer(options.maxFrames,'maxFrames'); if(this.maxFrames<1||this.maxFrames>256)throw new RangeError('maxFrames : 1..256'); this.cache=new Map();}
-   get(action='idle',dir=DIR.SOUTH,frame=0){const key=[this.role,this.palette,action,dir,frame].join(':'); if(this.cache.has(key)){const v=this.cache.get(key); this.cache.delete(key); this.cache.set(key,v); return v;} const im=raster({role:this.role,palette:this.palette,action,dir,frame,format:'engine'}); const cv=this.canvasFactory(80,80), c=cv.getContext('2d'); const id=c.createImageData(80,80); id.data.set(im.data); c.putImageData(id,0,0); this.cache.set(key,cv); while(this.cache.size>this.maxFrames) this.cache.delete(this.cache.keys().next().value); return cv;}
+   get(action='idle',dir=DIR.SOUTH,frame=0,options={}){const key=[this.role,this.palette,action,dir,frame,options.weaponId||'',options.equipment!==false].join(':'); if(this.cache.has(key)){const v=this.cache.get(key); this.cache.delete(key); this.cache.set(key,v); return v;} const im=raster({...options,role:this.role,palette:this.palette,action,dir,frame,format:'engine'}); const cv=this.canvasFactory(80,80), c=cv.getContext('2d'); const id=c.createImageData(80,80); id.data.set(im.data); c.putImageData(id,0,0); this.cache.set(key,cv); while(this.cache.size>this.maxFrames) this.cache.delete(this.cache.keys().next().value); return cv;}
    draw(ctx,actor,time=0,state={}){const action=clipName(state.action||'idle'); const frame=state.frame===undefined?frameAt(action,state.elapsed===undefined?time:state.elapsed,state.distance):state.frame; const im=this.get(action,actor.dir===undefined?DIR.SOUTH:actor.dir,frame); const z=actor.z||0, alpha=actor.alpha===undefined?1:actor.alpha; ctx.save(); try{ctx.imageSmoothingEnabled=false; ctx.globalAlpha*=alpha; ctx.drawImage(im,Math.round(actor.x)-ANCHOR.x,Math.round(actor.y-z)-ANCHOR.y);} finally{ctx.restore();} actor._img=im; return im;}
    clear(){this.cache.clear();}
  }

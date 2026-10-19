@@ -1,0 +1,2997 @@
+{
+  "version": 3,
+  "start": "exile",
+  "weapons": [
+    {
+      "id": "exile",
+      "label": "Épée de l’exilé",
+      "family": "sword",
+      "culture": "Humains",
+      "territory": "Sarak",
+      "site": null,
+      "damage": 1,
+      "tempo": 1,
+      "length": 11,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 0,
+      "description": "La grande lame de départ de Kaldor, forgée à Sarak. Une garde franche et un équilibre familier.",
+      "hands": 2,
+      "weightKg": 1.85,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "couteau-roulier",
+      "label": "Couteau du roulier",
+      "family": "dagger",
+      "culture": "Humains",
+      "territory": "Teremor",
+      "site": "camp",
+      "damage": 0.37,
+      "tempo": 0.7,
+      "length": 7,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 1,
+      "description": "Dos épais, pointe courte et poignée de cuir : une lame de route, vive mais de faible allonge.",
+      "place": {
+        "dx": 30,
+        "dy": -52
+      },
+      "hands": 1,
+      "weightKg": 0.57,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "baton-aulne",
+      "label": "Bâton d’aulne",
+      "family": "staff",
+      "culture": "Humains",
+      "territory": "Teremor",
+      "site": "town-30",
+      "damage": 0.72,
+      "tempo": 1.02,
+      "length": 17,
+      "material": "wood",
+      "rarity": "Commune",
+      "variant": 2,
+      "description": "Aulne séché, extrémités ferrées. Deux mains écartées conduisent ses balayages et son estoc final.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 2,
+      "weightKg": 1.69,
+      "balance": "centré"
+    },
+    {
+      "id": "lame-milice",
+      "label": "Lame de la milice",
+      "family": "sword",
+      "culture": "Humains",
+      "territory": "Teremor",
+      "site": "town-8",
+      "damage": 1.12,
+      "tempo": 0.96,
+      "length": 12,
+      "material": "steel",
+      "rarity": "Commune",
+      "variant": 3,
+      "description": "Épée droite de fer aciéré, garde sobre et fusée de laine rouge des bourgs de Valdorne.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 1.56,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "hache-rondes",
+      "label": "Hache des Ronces",
+      "family": "axe",
+      "culture": "Humains",
+      "territory": "Teremor",
+      "site": "town-19",
+      "damage": 1.89,
+      "tempo": 1.13,
+      "length": 13,
+      "material": "steel",
+      "rarity": "Soignée",
+      "variant": 0,
+      "description": "Hache à douille de la lisière, manche de frêne et barbe courte. La masse du fer entraîne la reprise.",
+      "place": {
+        "dx": -12,
+        "dy": 46
+      },
+      "hands": 1,
+      "weightKg": 1.55,
+      "balance": "en tête"
+    },
+    {
+      "id": "lance-boisclair",
+      "label": "Lance de Boisclair",
+      "family": "spear",
+      "culture": "Gobelins",
+      "territory": "Teremor",
+      "site": "town-25",
+      "damage": 1.12,
+      "tempo": 1.08,
+      "length": 20,
+      "material": "steel",
+      "rarity": "Soignée",
+      "variant": 1,
+      "description": "Pointe foliacée et ligature de lin vert d’un atelier gobelin forestier. Hampe adaptée aux mains de Kaldor.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 2,
+      "weightKg": 2.02,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "garde-charte",
+      "label": "Épée des Chartes",
+      "family": "sword",
+      "culture": "Humains",
+      "territory": "Teremor",
+      "site": "town-2",
+      "damage": 1.45,
+      "tempo": 0.98,
+      "length": 13,
+      "material": "steel",
+      "rarity": "Remarquable",
+      "variant": 2,
+      "description": "Garde à quillons de laiton et sceau gravé de cité : une épée d’escorte des ateliers de Sylverive.",
+      "place": {
+        "dx": 42,
+        "dy": 24
+      },
+      "hands": 1,
+      "weightKg": 1.44,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "marteau-borne",
+      "label": "Marteau de Griseborne",
+      "family": "mace",
+      "culture": "Gobelins",
+      "territory": "Sarak",
+      "site": "town-81",
+      "damage": 2.69,
+      "tempo": 1.24,
+      "length": 12,
+      "material": "iron",
+      "rarity": "Soignée",
+      "variant": 3,
+      "description": "Tête carrée de fer, panne étroite et manche gainé. Les carriers gobelins l’ont équilibré pour le combat.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 2.06,
+      "balance": "en tête"
+    },
+    {
+      "id": "sabre-piste",
+      "label": "Sabre des pistes",
+      "family": "sabre",
+      "culture": "Humains",
+      "territory": "Sarak",
+      "site": "town-20",
+      "damage": 0.99,
+      "tempo": 0.86,
+      "length": 12,
+      "material": "steel",
+      "rarity": "Commune",
+      "variant": 0,
+      "description": "Lame courbe, garde de laiton et poignée en cuir sable des escortes de caravane.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 1.05,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "dague-kesh",
+      "label": "Dague de Kesh",
+      "family": "dagger",
+      "culture": "Gobelins de Kesh",
+      "territory": "Sarak",
+      "site": "town-23",
+      "damage": 0.51,
+      "tempo": 0.68,
+      "length": 8,
+      "material": "bronze",
+      "rarity": "Soignée",
+      "variant": 1,
+      "description": "Lame recourbée à dos de bronze et pointe aciérée, poignée en corne. Ouvrage marchand, sans allégeance imposée.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 0.57,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "croissant-safran",
+      "label": "Croissant du Safran",
+      "family": "sabre",
+      "culture": "Humains",
+      "territory": "Sarak",
+      "site": "town-7",
+      "damage": 1.26,
+      "tempo": 0.88,
+      "length": 13,
+      "material": "bronze",
+      "rarity": "Soignée",
+      "variant": 2,
+      "description": "Large croissant d’acier poli, dos cuivré et ligature safran. Les tailles se poursuivent sans cassure.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 1.29,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "vouge-acacias",
+      "label": "Vouge des Acacias",
+      "family": "glaive",
+      "culture": "Orques",
+      "territory": "Sarak",
+      "site": "town-66",
+      "damage": 1.65,
+      "tempo": 1.24,
+      "length": 21,
+      "material": "steel",
+      "rarity": "Remarquable",
+      "variant": 3,
+      "description": "Long fer asymétrique rivé sur bois d’acacia, laiton et cuir rouge. Arme d’escorte des passages pastoraux.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 2,
+      "weightKg": 2.86,
+      "balance": "en tête"
+    },
+    {
+      "id": "lame-arene",
+      "label": "Lame de l’Arène",
+      "family": "sword",
+      "culture": "Humains",
+      "territory": "Sarak",
+      "site": "town-6",
+      "damage": 1.75,
+      "tempo": 1.14,
+      "length": 14,
+      "material": "bronze",
+      "rarity": "Remarquable",
+      "variant": 0,
+      "description": "Large lame à nervure et garde solaire. Ses quatre coupes demandent un retour maîtrisé.",
+      "place": {
+        "dx": -12,
+        "dy": -46
+      },
+      "hands": 2,
+      "weightKg": 1.85,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "hache-darg",
+      "label": "Hache des cols de Darg",
+      "family": "axe",
+      "culture": "Orques de Darg",
+      "territory": "Igea",
+      "site": "town-69",
+      "damage": 2.73,
+      "tempo": 1.32,
+      "length": 15,
+      "material": "iron",
+      "rarity": "Remarquable",
+      "variant": 1,
+      "description": "Fer barbu et talon contrebalancé, laine sombre autour du manche. Ouvrage des communautés de Givreval.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 2,
+      "weightKg": 2.32,
+      "balance": "en tête"
+    },
+    {
+      "id": "pic-echo",
+      "label": "Pic de Fort-Écho",
+      "family": "mace",
+      "culture": "Humains",
+      "territory": "Igea",
+      "site": "town-68",
+      "damage": 2.72,
+      "tempo": 1.18,
+      "length": 13,
+      "material": "steel",
+      "rarity": "Soignée",
+      "variant": 2,
+      "description": "Bec d’acier opposé à une petite table de marteau ; cuir huilé contre l’humidité des cols.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 1.94,
+      "balance": "en tête"
+    },
+    {
+      "id": "lance-paleval",
+      "label": "Lance de Pâleval",
+      "family": "spear",
+      "culture": "Humains",
+      "territory": "Igea",
+      "site": "town-67",
+      "damage": 1.38,
+      "tempo": 1.1,
+      "length": 22,
+      "material": "steel",
+      "rarity": "Soignée",
+      "variant": 3,
+      "description": "Long fer à douille, frêne clair et anneaux de fer. L’estoc garde sa ligne au-delà du premier rang.",
+      "place": {
+        "dx": -12,
+        "dy": 46
+      },
+      "hands": 2,
+      "weightKg": 2.26,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "brise-givre",
+      "label": "Brise-Givre",
+      "family": "mace",
+      "culture": "Orques",
+      "territory": "Igea",
+      "site": "town-71",
+      "damage": 3.91,
+      "tempo": 1.48,
+      "length": 14,
+      "material": "steel",
+      "rarity": "Maîtresse",
+      "variant": 0,
+      "description": "Masse à ailettes forgées et poignée de laine bleue. Une pièce de maître au choc lourd et à la reprise lente.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 2,
+      "weightKg": 3.4,
+      "balance": "en tête"
+    },
+    {
+      "id": "serment-boreal",
+      "label": "Serment boréal",
+      "family": "sword",
+      "culture": "Humains",
+      "territory": "Igea",
+      "site": "town-70",
+      "damage": 1.9,
+      "tempo": 1.16,
+      "length": 15,
+      "material": "steel",
+      "rarity": "Maîtresse",
+      "variant": 1,
+      "description": "Acier bleui, rainure claire et pommeau d’os gravé. Son nom commémore un serment ; il ne gèle pas ses victimes.",
+      "place": {
+        "dx": -24,
+        "dy": 42
+      },
+      "hands": 2,
+      "weightKg": 1.97,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "coutelas-veilleur",
+      "label": "Coutelas des Veilleurs",
+      "family": "sabre",
+      "culture": "Humains",
+      "territory": "Varan",
+      "site": "town-10",
+      "damage": 1.17,
+      "tempo": 0.9,
+      "length": 11,
+      "material": "steel",
+      "rarity": "Soignée",
+      "variant": 2,
+      "description": "Lame large, garde enveloppante et cuir poissé : outil d’équipage devenu arme des quais.",
+      "place": {
+        "dx": 19,
+        "dy": -70
+      },
+      "hands": 1,
+      "weightKg": 1.29,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "harpon-joncs",
+      "label": "Harpon des Joncs",
+      "family": "spear",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": "town-76",
+      "damage": 1.36,
+      "tempo": 1.04,
+      "length": 20,
+      "material": "bronze",
+      "rarity": "Soignée",
+      "variant": 3,
+      "description": "Fer à deux ergots, hampe laquée et ligature de fibres. Il reste tenu à deux mains, sans lancer.",
+      "place": {
+        "dx": 42,
+        "dy": 24
+      },
+      "hands": 2,
+      "weightKg": 2.26,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "battoir-tourbe",
+      "label": "Battoir de Tourbeclaire",
+      "family": "mace",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": "town-74",
+      "damage": 2.89,
+      "tempo": 1.27,
+      "length": 13,
+      "material": "wood",
+      "rarity": "Remarquable",
+      "variant": 0,
+      "description": "Bois dense cerclé de bronze et tête aplatie des ateliers de marais. Frappe courte, lourde et lisible.",
+      "place": {
+        "dx": 42,
+        "dy": 24
+      },
+      "hands": 1,
+      "weightKg": 1.7,
+      "balance": "en tête"
+    },
+    {
+      "id": "lame-rosebrume",
+      "label": "Lame de Rosebrume",
+      "family": "sabre",
+      "culture": "Hommes-serpents",
+      "territory": "Varan",
+      "site": "town-75",
+      "damage": 1.51,
+      "tempo": 0.94,
+      "length": 14,
+      "material": "jade",
+      "rarity": "Remarquable",
+      "variant": 1,
+      "description": "Acier sombre à incrustations de pierre verte, courbe en feuille. Le jade est ornemental, sans venin automatique.",
+      "place": {
+        "dx": -58,
+        "dy": 16
+      },
+      "hands": 1,
+      "weightKg": 1.17,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "vouge-roseaux",
+      "label": "Vouge des Roseaux",
+      "family": "glaive",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": "town-73",
+      "damage": 1.6,
+      "tempo": 1.2,
+      "length": 21,
+      "material": "bronze",
+      "rarity": "Remarquable",
+      "variant": 2,
+      "description": "Fer en feuille à dos épais, douille de bronze et hampe de bois verni. Grandes tailles au-dessus des berges.",
+      "place": {
+        "dx": -62,
+        "dy": 36
+      },
+      "hands": 2,
+      "weightKg": 2.74,
+      "balance": "en tête"
+    },
+    {
+      "id": "croc-enclave",
+      "label": "Croc d’enclave",
+      "family": "dagger",
+      "culture": "Hommes-serpents",
+      "territory": "Sarak",
+      "site": "town-34",
+      "damage": 0.68,
+      "tempo": 0.73,
+      "length": 9,
+      "material": "jade",
+      "rarity": "Remarquable",
+      "variant": 3,
+      "description": "Lame ondulée, garde ouverte et mosaïque verte. Une facture d’enclave locale, sans emblème d’empire commun.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 0.81,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "baton-lianes",
+      "label": "Bâton des Lianes",
+      "family": "staff",
+      "culture": "Hommes-singes",
+      "territory": "Tagon",
+      "site": "town-55",
+      "damage": 1.15,
+      "tempo": 0.92,
+      "length": 19,
+      "material": "wood",
+      "rarity": "Soignée",
+      "variant": 0,
+      "description": "Bois dur poli, bagues de fibres et deux talons de bronze. Fait par un atelier des communautés de Palmeraie.",
+      "place": {
+        "dx": -19,
+        "dy": 70
+      },
+      "hands": 2,
+      "weightKg": 1.45,
+      "balance": "centré"
+    },
+    {
+      "id": "lame-santal",
+      "label": "Lame de Santalune",
+      "family": "sabre",
+      "culture": "Hommes-singes",
+      "territory": "Tagon",
+      "site": "town-40",
+      "damage": 1.38,
+      "tempo": 0.88,
+      "length": 13,
+      "material": "bronze",
+      "rarity": "Remarquable",
+      "variant": 1,
+      "description": "Lame ventrue, poignée de bois rouge et garde ajourée. Adaptée à la prise humaine sans perdre son dessin.",
+      "place": {
+        "dx": -72,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 1.17,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "lance-palmehaute",
+      "label": "Lance de Palmehaute",
+      "family": "spear",
+      "culture": "Hommes-singes",
+      "territory": "Tagon",
+      "site": "town-62",
+      "damage": 1.63,
+      "tempo": 1.12,
+      "length": 23,
+      "material": "steel",
+      "rarity": "Remarquable",
+      "variant": 2,
+      "description": "Hampe sombre, pointe losangée et liens de fibres rouges ; une lance de veille communautaire.",
+      "place": {
+        "dx": 24,
+        "dy": 42
+      },
+      "hands": 2,
+      "weightKg": 2.14,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "hache-coquilles",
+      "label": "Hache des Coquilles",
+      "family": "axe",
+      "culture": "Humains et hommes-singes",
+      "territory": "Tagon",
+      "site": "town-50",
+      "damage": 2.41,
+      "tempo": 1.21,
+      "length": 14,
+      "material": "bronze",
+      "rarity": "Remarquable",
+      "variant": 3,
+      "description": "Fer de charpente navale repris pour la mêlée, talon de laiton et ligature de corde goudronnée.",
+      "place": {
+        "dx": 42,
+        "dy": 24
+      },
+      "hands": 1,
+      "weightKg": 1.91,
+      "balance": "en tête"
+    },
+    {
+      "id": "aiguille-corail",
+      "label": "Aiguille de Corail",
+      "family": "dagger",
+      "culture": "Batraciens",
+      "territory": "Tagon",
+      "site": "town-61",
+      "damage": 0.78,
+      "tempo": 0.72,
+      "length": 10,
+      "material": "steel",
+      "rarity": "Maîtresse",
+      "variant": 0,
+      "description": "Acier effilé à rainure cuivrée et pommeau de coquille. Une pointe vive dont la courte portée impose l’approche.",
+      "place": {
+        "dx": 42,
+        "dy": 24
+      },
+      "hands": 1,
+      "weightKg": 0.45,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "garde-palmes",
+      "label": "Garde des Palmes",
+      "family": "glaive",
+      "culture": "Hommes-singes",
+      "territory": "Tagon",
+      "site": "town-27",
+      "damage": 2.05,
+      "tempo": 1.32,
+      "length": 23,
+      "material": "bronze",
+      "rarity": "Maîtresse",
+      "variant": 1,
+      "description": "Fer de vouge à croc de dos, anneaux de bronze et long manche de bois naval. Une ample taille, puis un estoc.",
+      "place": {
+        "dx": -24,
+        "dy": 42
+      },
+      "hands": 2,
+      "weightKg": 2.62,
+      "balance": "en tête"
+    },
+    {
+      "id": "masse-cuivre",
+      "label": "Masse du Havre",
+      "family": "mace",
+      "culture": "Gobelins",
+      "territory": "Sarak",
+      "site": "town-58",
+      "damage": 2.41,
+      "tempo": 1.15,
+      "length": 12,
+      "material": "bronze",
+      "rarity": "Soignée",
+      "variant": 2,
+      "description": "Noyau de fer, bossages de bronze et manche court. Le cuivre vient du marché du Havre, pas d’un métal magique.",
+      "place": {
+        "dx": 48,
+        "dy": 0
+      },
+      "hands": 1,
+      "weightKg": 1.94,
+      "balance": "en tête"
+    },
+    {
+      "id": "veille-aulnes",
+      "label": "Veille des Aulnes",
+      "family": "staff",
+      "culture": "Hommes-singes et batraciens",
+      "territory": "Varan",
+      "site": "town-77",
+      "damage": 1.45,
+      "tempo": 1,
+      "length": 20,
+      "material": "jade",
+      "rarity": "Remarquable",
+      "variant": 3,
+      "description": "Bâton ferré à ligatures vertes, produit d’un atelier de voisinage sur terrain drainé.",
+      "place": {
+        "dx": 24,
+        "dy": 42
+      },
+      "hands": 2,
+      "weightKg": 1.81,
+      "balance": "centré"
+    },
+    {
+      "id": "flamme-clairfoyer",
+      "label": "Flamme de Clairfoyer",
+      "family": "sword",
+      "culture": "Humains",
+      "territory": "Teremor",
+      "site": "town-1",
+      "damage": 2.05,
+      "tempo": 1.1,
+      "length": 15,
+      "material": "ember",
+      "rarity": "Maîtresse",
+      "variant": 0,
+      "description": "Acier à filet de cuivre rouge et garde en flamme forgée. Le nom évoque le foyer : ses dégâts restent physiques.",
+      "place": {
+        "dx": 12,
+        "dy": 46
+      },
+      "hands": 2,
+      "weightKg": 1.85,
+      "balance": "vers la garde"
+    },
+    {
+      "id": "coutelas-gobelin",
+      "label": "Coutelas de Boisclair",
+      "family": "sabre",
+      "culture": "Gobelins",
+      "territory": "Teremor",
+      "site": "town-25",
+      "damage": 0.72,
+      "tempo": 0.78,
+      "length": 9,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 1,
+      "description": "Un coutelas court forgé pour les mains gobelines : dos solide, garde serrée et poignée de noisetier.",
+      "hands": 1,
+      "weightKg": 0.76,
+      "balance": "vers la garde",
+      "discovery": "Sur un râtelier près des routes de Teremor",
+      "place": {
+        "dx": 34,
+        "dy": 34
+      }
+    },
+    {
+      "id": "crochet-kesh",
+      "label": "Crochet du maître de Kesh",
+      "family": "dagger",
+      "culture": "Gobelins de Kesh",
+      "territory": "Sarak",
+      "site": "town-23",
+      "damage": 1.05,
+      "tempo": 0.69,
+      "length": 10,
+      "material": "steel",
+      "rarity": "Maîtrise",
+      "variant": 2,
+      "description": "Une pointe recourbée et un anneau de cuivre travaillé, réservés aux maîtres d’armes des oasis de Kesh.",
+      "hands": 1,
+      "weightKg": 0.84,
+      "balance": "vers la garde",
+      "discovery": "Sur un râtelier près des routes de Sarak",
+      "place": {
+        "dx": 34,
+        "dy": 34
+      }
+    },
+    {
+      "id": "hache-pastorale",
+      "label": "Hache de Darg",
+      "family": "axe",
+      "culture": "Orques",
+      "territory": "Igea",
+      "site": "town-69",
+      "damage": 1.35,
+      "tempo": 1.16,
+      "length": 14,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 3,
+      "description": "Hache de marche des communautés pastorales de Darg : fer sobre et manche de frêne tenu à deux mains.",
+      "hands": 2,
+      "weightKg": 2.05,
+      "balance": "vers le fer",
+      "discovery": "Sur un râtelier près des routes de Igea",
+      "place": {
+        "dx": 12,
+        "dy": -46
+      }
+    },
+    {
+      "id": "lame-enclave",
+      "label": "Lame d’enclave",
+      "family": "sabre",
+      "culture": "Hommes-serpents",
+      "territory": "Varan",
+      "site": "town-75",
+      "damage": 0.82,
+      "tempo": 0.84,
+      "length": 11,
+      "material": "bronze",
+      "rarity": "Commune",
+      "variant": 0,
+      "description": "Une lame courte de bronze, résistante à l’humidité, avec une fusée annelée adaptée aux prises serpentines.",
+      "hands": 1,
+      "weightKg": 1.02,
+      "balance": "vers la garde",
+      "discovery": "Sur un râtelier près des routes de Varan",
+      "place": {
+        "dx": 0,
+        "dy": -48
+      }
+    },
+    {
+      "id": "baton-forestier",
+      "label": "Bâton des sentiers",
+      "family": "staff",
+      "culture": "Hommes-singes",
+      "territory": "Tagon",
+      "site": "town-55",
+      "damage": 0.65,
+      "tempo": 0.91,
+      "length": 18,
+      "material": "wood",
+      "rarity": "Commune",
+      "variant": 1,
+      "description": "Bois souple séché au-dessus du sol et liens de rotin : un bâton courant des passages forestiers de Palmeraie.",
+      "hands": 2,
+      "weightKg": 1.32,
+      "balance": "centré",
+      "discovery": "Sur un râtelier près des routes de Tagon",
+      "place": {
+        "dx": -62,
+        "dy": 17
+      }
+    },
+    {
+      "id": "lance-chenal",
+      "label": "Lance de chenal",
+      "family": "spear",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": null,
+      "damage": 0.78,
+      "tempo": 1.02,
+      "length": 19,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 2,
+      "description": "Une lance légère de garde, tenue d’une main avec un bouclier dans l’autre. Hampe huilée et fer étroit.",
+      "hands": 1,
+      "weightKg": 1.55,
+      "balance": "centré",
+      "discovery": "Butin des gardes et sentinelles batraciens"
+    },
+    {
+      "id": "lame-batelier",
+      "label": "Lame de batelier",
+      "family": "sword",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": null,
+      "damage": 0.86,
+      "tempo": 0.93,
+      "length": 11,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 3,
+      "description": "Lame droite courte des escortes de barges, poignée cordée et garde discrète pour travailler près des cordages.",
+      "hands": 1,
+      "weightKg": 1.12,
+      "balance": "vers la garde",
+      "discovery": "Butin des escortes batraciennes"
+    },
+    {
+      "id": "javelot-joncs",
+      "label": "Javelot des Joncs",
+      "family": "spear",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": null,
+      "damage": 0.64,
+      "tempo": 0.83,
+      "length": 18,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 0,
+      "description": "Une hampe mince, une pointe ligaturée et un talon ferré. Employé au lancer et en estoc par les éclaireurs.",
+      "hands": 1,
+      "weightKg": 1.05,
+      "balance": "centré",
+      "discovery": "Butin des éclaireurs batraciens"
+    },
+    {
+      "id": "massue-chenal",
+      "label": "Massue de chenal",
+      "family": "mace",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": null,
+      "damage": 1.12,
+      "tempo": 1.1,
+      "length": 11,
+      "material": "wood",
+      "rarity": "Commune",
+      "variant": 1,
+      "description": "Une tête de bois dense cerclée de cuivre ; l’arme robuste des bandes de chenal, sans ornement superflu.",
+      "hands": 1,
+      "weightKg": 1.58,
+      "balance": "vers le fer",
+      "discovery": "Butin des pilleurs de chenal"
+    },
+    {
+      "id": "lance-capitaine",
+      "label": "Lance du chef des chenaux",
+      "family": "spear",
+      "culture": "Batraciens",
+      "territory": "Varan",
+      "site": null,
+      "damage": 1.82,
+      "tempo": 1.12,
+      "length": 21,
+      "material": "steel",
+      "rarity": "Maîtrise",
+      "variant": 2,
+      "description": "Fer d’acier à douille renforcée et bagues de cuivre. Une lance de commandement compatible avec le bouclier des chefs.",
+      "hands": 1,
+      "weightKg": 1.88,
+      "balance": "centré",
+      "discovery": "Butin des chefs batraciens"
+    },
+    {
+      "id": "lance-centaure",
+      "label": "Lance des grands chemins",
+      "family": "spear",
+      "culture": "Centaures",
+      "territory": "Sarak",
+      "site": "town-20",
+      "damage": 1.12,
+      "tempo": 1.06,
+      "length": 23,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 3,
+      "description": "Frêne long, douille sans crochet et prise espacée : une lance prévue pour les futurs voyageurs centaures, maniable aussi à pied.",
+      "hands": 2,
+      "weightKg": 2.16,
+      "balance": "centré",
+      "discovery": "Sur un râtelier près des routes de Sarak",
+      "place": {
+        "dx": 34,
+        "dy": 34
+      }
+    },
+    {
+      "id": "sarisse-horizon",
+      "label": "Sarisse de l’Horizon",
+      "family": "glaive",
+      "culture": "Centaures",
+      "territory": "Sarak",
+      "site": "town-7",
+      "damage": 2.15,
+      "tempo": 1.35,
+      "length": 26,
+      "material": "steel",
+      "rarity": "Maîtrise",
+      "variant": 0,
+      "description": "Une longue lame effilée sur hampe équilibrée. Pièce de prestige des futurs chefs centaures, issue des échanges avec les forges de Sarak.",
+      "hands": 2,
+      "weightKg": 2.98,
+      "balance": "vers le fer",
+      "discovery": "Sur un râtelier près des routes de Sarak",
+      "place": {
+        "dx": 12,
+        "dy": 46
+      }
+    },
+    {
+      "id": "lame-ossuaire",
+      "label": "Lame de l’ossuaire",
+      "family": "sword",
+      "culture": "Armes anciennes",
+      "territory": "Teremor",
+      "site": null,
+      "damage": 0.74,
+      "tempo": 1.04,
+      "length": 12,
+      "material": "iron",
+      "rarity": "Commune",
+      "variant": 1,
+      "description": "Une ancienne lame de garnison piquée de rouille, encore portée par les squelettes animés du temple.",
+      "hands": 1,
+      "weightKg": 1.48,
+      "balance": "vers la garde",
+      "discovery": "Butin des squelettes animés"
+    },
+    {
+      "id": "baton-cultiste",
+      "label": "Bâton du culte",
+      "family": "staff",
+      "culture": "Culte du Serpent",
+      "territory": "Varan",
+      "site": null,
+      "damage": 0.82,
+      "tempo": 1.08,
+      "length": 19,
+      "material": "jade",
+      "rarity": "Commune",
+      "variant": 2,
+      "description": "Une hampe sombre et une tête de pierre verte, semblables aux bâtons des officiants. Kaldor l’emploie comme arme physique.",
+      "hands": 2,
+      "weightKg": 1.64,
+      "balance": "centré",
+      "head": "orb",
+      "discovery": "Butin des cultistes"
+    },
+    {
+      "id": "crosse-pretre",
+      "label": "Crosse du Prêtre du Serpent",
+      "family": "staff",
+      "culture": "Culte du Serpent",
+      "territory": "Varan",
+      "site": null,
+      "damage": 2.3,
+      "tempo": 1.22,
+      "length": 23,
+      "material": "jade",
+      "rarity": "Maîtrise",
+      "variant": 3,
+      "description": "La crosse à pommeau vert portée par le Prêtre du Serpent. Son poids et ses bagues de bronze donnent de puissants balayages ; elle ne confère pas ses sortilèges.",
+      "hands": 2,
+      "weightKg": 2.24,
+      "balance": "centré",
+      "head": "orb",
+      "discovery": "Butin des Prêtre du Serpent"
+    }
+  ],
+  "motions": {
+    "sword": {
+      "names": [
+        "Taille oblique",
+        "Revers croisé",
+        "Coupe montante",
+        "Abattée"
+      ],
+      "times": [
+        [
+          0,
+          0.13,
+          0.045,
+          0.055,
+          0.09,
+          0.12
+        ],
+        [
+          0,
+          0.145,
+          0.045,
+          0.06,
+          0.1,
+          0.125
+        ],
+        [
+          0,
+          0.15,
+          0.045,
+          0.065,
+          0.11,
+          0.13
+        ],
+        [
+          0,
+          0.2,
+          0.05,
+          0.075,
+          0.14,
+          0.17
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            -3,
+            -1.5,
+            -1,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -1,
+            -0.45,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            -1,
+            0,
+            0.65,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            -1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -2,
+            1,
+            1.3,
+            -1,
+            1,
+            3
+          ],
+          [
+            2,
+            -1,
+            0,
+            0.35,
+            1,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            -2,
+            -0.85,
+            2,
+            0,
+            4
+          ],
+          [
+            1,
+            2,
+            -3,
+            -1.15,
+            1,
+            -1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            2,
+            0.85,
+            -1,
+            1,
+            6
+          ],
+          [
+            1,
+            0,
+            0,
+            0.15,
+            1,
+            0,
+            6
+          ],
+          [
+            3,
+            -1,
+            -3,
+            -1,
+            2,
+            -1,
+            7
+          ],
+          [
+            1,
+            -1,
+            -4,
+            -1.2,
+            1,
+            -1,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            0,
+            -10,
+            -1.8,
+            -2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -4,
+            -0.75,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            0,
+            2,
+            0.5,
+            3,
+            2,
+            0
+          ],
+          [
+            2,
+            0,
+            3,
+            0.9,
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 2.8,
+      "ghosts": 1
+    },
+    "sabre": {
+      "names": [
+        "Taille filante",
+        "Revers enroulé",
+        "Coupe remontante",
+        "Taille passante"
+      ],
+      "times": [
+        [
+          0,
+          0.105,
+          0.04,
+          0.045,
+          0.07,
+          0.09
+        ],
+        [
+          0,
+          0.115,
+          0.04,
+          0.05,
+          0.075,
+          0.095
+        ],
+        [
+          0,
+          0.13,
+          0.04,
+          0.055,
+          0.085,
+          0.11
+        ],
+        [
+          0,
+          0.16,
+          0.045,
+          0.065,
+          0.1,
+          0.13
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            2,
+            -1,
+            -1.1,
+            -1,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            -0.3,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            -2,
+            1,
+            0.75,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            -3,
+            0,
+            1.2,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            -2,
+            1,
+            1.15,
+            -1,
+            0,
+            3
+          ],
+          [
+            2,
+            -1,
+            0,
+            0.4,
+            1,
+            0,
+            3
+          ],
+          [
+            4,
+            2,
+            -1,
+            -0.7,
+            2,
+            0,
+            4
+          ],
+          [
+            1,
+            3,
+            -2,
+            -1.2,
+            1,
+            -1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            1,
+            2,
+            0.9,
+            -1,
+            1,
+            6
+          ],
+          [
+            2,
+            0,
+            0,
+            0.1,
+            1,
+            0,
+            6
+          ],
+          [
+            3,
+            -2,
+            -3,
+            -0.95,
+            2,
+            -1,
+            7
+          ],
+          [
+            1,
+            -2,
+            -3,
+            -1.2,
+            1,
+            -1,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            2,
+            -2,
+            -1.45,
+            -2,
+            0,
+            3
+          ],
+          [
+            3,
+            0,
+            -1,
+            -0.35,
+            1,
+            0,
+            3
+          ],
+          [
+            5,
+            -2,
+            1,
+            0.8,
+            3,
+            1,
+            4
+          ],
+          [
+            3,
+            -3,
+            1,
+            1.25,
+            2,
+            1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 3.5,
+      "ghosts": 1
+    },
+    "dagger": {
+      "names": [
+        "Entaille vive",
+        "Revers court",
+        "Estoc oblique",
+        "Pointe engagée"
+      ],
+      "times": [
+        [
+          0,
+          0.08,
+          0.035,
+          0.04,
+          0.05,
+          0.07
+        ],
+        [
+          0,
+          0.085,
+          0.035,
+          0.045,
+          0.055,
+          0.075
+        ],
+        [
+          0,
+          0.1,
+          0.035,
+          0.045,
+          0.06,
+          0.08
+        ],
+        [
+          0,
+          0.13,
+          0.04,
+          0.06,
+          0.08,
+          0.105
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            1,
+            0,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            -0.3,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            -1,
+            0,
+            0.6,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            -1,
+            1,
+            0.8,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            -1,
+            1,
+            0.9,
+            -1,
+            0,
+            3
+          ],
+          [
+            1,
+            0,
+            0,
+            0.25,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            -1,
+            -0.7,
+            1,
+            0,
+            4
+          ],
+          [
+            1,
+            1,
+            -2,
+            -0.8,
+            0,
+            0,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            1,
+            0.35,
+            -1,
+            1,
+            6
+          ],
+          [
+            2,
+            0,
+            0,
+            0.12,
+            1,
+            0,
+            6
+          ],
+          [
+            5,
+            -1,
+            -1,
+            -0.18,
+            2,
+            0,
+            7
+          ],
+          [
+            2,
+            0,
+            0,
+            -0.3,
+            1,
+            0,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -3,
+            0,
+            1,
+            -0.15,
+            -1,
+            1,
+            0
+          ],
+          [
+            3,
+            0,
+            0,
+            -0.05,
+            1,
+            0,
+            0
+          ],
+          [
+            6,
+            0,
+            0,
+            0.02,
+            3,
+            1,
+            0
+          ],
+          [
+            3,
+            0,
+            1,
+            0.12,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 1.5,
+      "ghosts": 0
+    },
+    "axe": {
+      "names": [
+        "Taille mordante",
+        "Revers de barbe",
+        "Crochet oblique",
+        "Abattée ample"
+      ],
+      "times": [
+        [
+          0,
+          0.17,
+          0.05,
+          0.065,
+          0.12,
+          0.15
+        ],
+        [
+          0,
+          0.185,
+          0.05,
+          0.07,
+          0.13,
+          0.16
+        ],
+        [
+          0,
+          0.19,
+          0.05,
+          0.075,
+          0.14,
+          0.17
+        ],
+        [
+          0,
+          0.25,
+          0.055,
+          0.085,
+          0.18,
+          0.22
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            -4,
+            -1.6,
+            -2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -1,
+            -0.55,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            -1,
+            2,
+            0.7,
+            2,
+            2,
+            0
+          ],
+          [
+            2,
+            -1,
+            3,
+            1.15,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -2,
+            1,
+            1.35,
+            -1,
+            1,
+            3
+          ],
+          [
+            2,
+            -1,
+            0,
+            0.45,
+            1,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            -2,
+            -0.9,
+            2,
+            0,
+            4
+          ],
+          [
+            1,
+            2,
+            -3,
+            -1.25,
+            1,
+            -1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            2,
+            1,
+            0.9,
+            -1,
+            1,
+            6
+          ],
+          [
+            2,
+            0,
+            0,
+            0.2,
+            1,
+            0,
+            6
+          ],
+          [
+            4,
+            -2,
+            -2,
+            -0.8,
+            2,
+            -1,
+            7
+          ],
+          [
+            2,
+            -2,
+            -3,
+            -1,
+            1,
+            -1,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -3,
+            0,
+            -11,
+            -1.95,
+            -2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -4,
+            -0.9,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            0,
+            3,
+            0.65,
+            3,
+            2,
+            0
+          ],
+          [
+            3,
+            0,
+            4,
+            0.95,
+            2,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 4.3,
+      "ghosts": 2
+    },
+    "mace": {
+      "names": [
+        "Coup croisé",
+        "Revers lourd",
+        "Levée latérale",
+        "Abattée martelée"
+      ],
+      "times": [
+        [
+          0,
+          0.18,
+          0.05,
+          0.07,
+          0.13,
+          0.16
+        ],
+        [
+          0,
+          0.19,
+          0.055,
+          0.075,
+          0.14,
+          0.17
+        ],
+        [
+          0,
+          0.205,
+          0.055,
+          0.08,
+          0.15,
+          0.18
+        ],
+        [
+          0,
+          0.275,
+          0.06,
+          0.09,
+          0.19,
+          0.235
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            -3,
+            -1.35,
+            -2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -1,
+            -0.4,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            -1,
+            1,
+            0.7,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            -1,
+            2,
+            1.15,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -2,
+            1,
+            1.15,
+            -1,
+            1,
+            3
+          ],
+          [
+            2,
+            -1,
+            0,
+            0.35,
+            1,
+            0,
+            3
+          ],
+          [
+            4,
+            2,
+            -2,
+            -0.85,
+            2,
+            0,
+            4
+          ],
+          [
+            1,
+            2,
+            -3,
+            -1.1,
+            1,
+            -1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            2,
+            0.9,
+            -1,
+            1,
+            6
+          ],
+          [
+            2,
+            0,
+            0,
+            0.15,
+            1,
+            0,
+            6
+          ],
+          [
+            3,
+            -1,
+            -3,
+            -0.95,
+            2,
+            -1,
+            7
+          ],
+          [
+            1,
+            -1,
+            -4,
+            -1.2,
+            1,
+            -1,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -3,
+            0,
+            -10,
+            -1.85,
+            -2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -3,
+            -0.75,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            0,
+            3,
+            0.65,
+            3,
+            2,
+            0
+          ],
+          [
+            3,
+            0,
+            4,
+            0.95,
+            2,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 4.6,
+      "ghosts": 2
+    },
+    "staff": {
+      "names": [
+        "Balayage de hampe",
+        "Revers circulaire",
+        "Levée du bâton",
+        "Poussée à deux mains"
+      ],
+      "times": [
+        [
+          0,
+          0.13,
+          0.045,
+          0.06,
+          0.09,
+          0.12
+        ],
+        [
+          0,
+          0.14,
+          0.045,
+          0.065,
+          0.1,
+          0.13
+        ],
+        [
+          0,
+          0.15,
+          0.045,
+          0.065,
+          0.105,
+          0.135
+        ],
+        [
+          0,
+          0.175,
+          0.05,
+          0.075,
+          0.12,
+          0.15
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            2,
+            0,
+            -1.15,
+            -1,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            -0.3,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            -2,
+            0,
+            0.85,
+            2,
+            0,
+            0
+          ],
+          [
+            1,
+            -3,
+            1,
+            1.2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -2,
+            0,
+            1.15,
+            -1,
+            0,
+            3
+          ],
+          [
+            2,
+            -1,
+            0,
+            0.3,
+            1,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            -1,
+            -0.85,
+            2,
+            0,
+            4
+          ],
+          [
+            1,
+            3,
+            -2,
+            -1.2,
+            1,
+            -1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            2,
+            0.85,
+            -1,
+            1,
+            6
+          ],
+          [
+            2,
+            0,
+            0,
+            0.1,
+            1,
+            0,
+            6
+          ],
+          [
+            3,
+            -1,
+            -3,
+            -0.95,
+            2,
+            -1,
+            7
+          ],
+          [
+            1,
+            -1,
+            -3,
+            -1.15,
+            1,
+            -1,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -3,
+            0,
+            1,
+            -0.2,
+            -2,
+            1,
+            0
+          ],
+          [
+            4,
+            0,
+            0,
+            -0.06,
+            1,
+            0,
+            0
+          ],
+          [
+            7,
+            0,
+            0,
+            0,
+            3,
+            1,
+            0
+          ],
+          [
+            4,
+            0,
+            1,
+            0.1,
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 3,
+      "ghosts": 1
+    },
+    "glaive": {
+      "names": [
+        "Grande taille",
+        "Revers du fer",
+        "Crochet montant",
+        "Fente à la lame"
+      ],
+      "times": [
+        [
+          0,
+          0.18,
+          0.05,
+          0.075,
+          0.12,
+          0.16
+        ],
+        [
+          0,
+          0.19,
+          0.05,
+          0.08,
+          0.13,
+          0.17
+        ],
+        [
+          0,
+          0.205,
+          0.055,
+          0.08,
+          0.14,
+          0.18
+        ],
+        [
+          0,
+          0.23,
+          0.055,
+          0.085,
+          0.16,
+          0.205
+        ]
+      ],
+      "keys": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            2,
+            -2,
+            -1.3,
+            -2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            -1,
+            -0.35,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            -2,
+            1,
+            0.8,
+            2,
+            1,
+            0
+          ],
+          [
+            1,
+            -3,
+            2,
+            1.1,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -2,
+            1,
+            1.2,
+            -1,
+            1,
+            3
+          ],
+          [
+            2,
+            -1,
+            0,
+            0.35,
+            1,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            -2,
+            -0.85,
+            2,
+            0,
+            4
+          ],
+          [
+            1,
+            3,
+            -3,
+            -1.15,
+            1,
+            -1,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -2,
+            1,
+            2,
+            0.9,
+            -1,
+            1,
+            6
+          ],
+          [
+            2,
+            0,
+            0,
+            0.12,
+            1,
+            0,
+            6
+          ],
+          [
+            3,
+            -2,
+            -3,
+            -0.9,
+            2,
+            -1,
+            7
+          ],
+          [
+            1,
+            -2,
+            -4,
+            -1.1,
+            1,
+            -1,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -3,
+            0,
+            1,
+            -0.2,
+            -2,
+            1,
+            0
+          ],
+          [
+            4,
+            0,
+            0,
+            -0.06,
+            1,
+            0,
+            0
+          ],
+          [
+            7,
+            0,
+            0,
+            0,
+            3,
+            1,
+            0
+          ],
+          [
+            4,
+            0,
+            1,
+            0.1,
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "trailWidth": 4,
+      "ghosts": 2
+    }
+  },
+  "loadouts": {
+    "human": {
+      "label": "Humains",
+      "basic": "lame-milice",
+      "elite": "garde-charte",
+      "raider": "sabre-piste"
+    },
+    "goblin": {
+      "label": "Gobelins",
+      "basic": "coutelas-gobelin",
+      "elite": "marteau-borne",
+      "roles": {
+        "scout": "dague-kesh",
+        "captain": "crochet-kesh",
+        "village_guard": "lance-boisclair"
+      }
+    },
+    "orc": {
+      "label": "Orques",
+      "basic": "hache-pastorale",
+      "elite": "brise-givre"
+    },
+    "serpentfolk": {
+      "label": "Hommes-serpents",
+      "basic": "lame-enclave",
+      "elite": "lame-rosebrume"
+    },
+    "batracien": {
+      "label": "Batraciens",
+      "basic": "lance-chenal",
+      "elite": "lance-capitaine",
+      "roles": {
+        "village_guard": "lance-chenal",
+        "channel_sentinel": "lance-chenal",
+        "boat_escort": "lame-batelier",
+        "scout": "javelot-joncs",
+        "raider": "massue-chenal",
+        "captain": "lance-capitaine"
+      }
+    },
+    "ape_folk": {
+      "label": "Hommes-singes",
+      "basic": "baton-forestier",
+      "elite": "garde-palmes"
+    },
+    "centaur": {
+      "label": "Centaures",
+      "basic": "lance-centaure",
+      "elite": "sarisse-horizon",
+      "future": true
+    },
+    "skeleton": {
+      "label": "Squelettes animés",
+      "basic": "lame-ossuaire",
+      "elite": "lame-ossuaire"
+    },
+    "cultist": {
+      "label": "Culte du Serpent",
+      "basic": "baton-cultiste",
+      "elite": "crosse-pretre"
+    }
+  }
+}

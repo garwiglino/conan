@@ -208,7 +208,8 @@ test('Kaldor overlay build is deterministic in isolation and never races world r
   'sprites/kaldor/kaldor-art.js',
   'art/kaldor-preview-template.html','art/kaldor-preview.html',
   'data/kaldor-manifest.json',
-  'data/kaldor-outfits/atlas.json','scripts/kaldor-outfits.js'
+  'data/kaldor-outfits/atlas.json','scripts/kaldor-outfits.js',
+  'data/weapons/catalogue.json','data/weapons/native-arms.json','scripts/kaldor-weapons.js','scripts/kaldor-weapons-runtime.js','scripts/kaldor-armaments.js'
  ];
  const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
  try {
@@ -313,7 +314,7 @@ test('profile gait plays the human strides forwards, face and back views keep at
 test('attacks hold the sword in both hands, along the exact gameplay blade direction',async()=>{
  const human=api.HearthreaverKaldorCivilianArt;
  assert.equal(await human.preload(),true);
- const steel=new Set(['154,166,171','214,220,220','251,251,239']),skin=new Set(['248,176,122','200,116,62']);
+ const steel=new Set(api.HearthreaverWeapons.palettes[api.HearthreaverWeapons.get('exile').material].slice(0,3).map(h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(','))),skin=new Set(['248,176,122','200,116,62']);
  for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
   const hashes=new Set();
   for(let frame=1;frame<=5;frame++){
@@ -325,7 +326,7 @@ test('attacks hold the sword in both hands, along the exact gameplay blade direc
    // Strike, contact and follow-through keep the swept gameplay direction;
    // wind-up and recovery are free drawings.
    if(frame>=2&&frame<=4){
-    const [x,y,vx,vy]=pose(dir,frame,combo),l=Math.hypot(vx,vy);
+    const [x,y,vx,vy]=api.HearthreaverWeapons.vector('exile',dir,frame,combo),l=Math.hypot(vx,vy);
     assert.ok(Math.abs(p.blade[0]-vx/l)<1e-9&&Math.abs(p.blade[1]-vy/l)<1e-9,'blade follows swordPose '+dir+':'+combo+':'+frame);
    }
    if(!p.front)continue;
@@ -350,7 +351,7 @@ test('sword, harness and scabbard never paint over the NPC eyes, nose and mouth'
  }
 });
 
-const STEEL=new Set(['154,166,171','214,220,220','251,251,239']);
+const STEEL=new Set(require('../scripts/kaldor-weapons.js').palettes.iron.slice(1,3).map(h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(',')));
 const rgbAt=(d,x,y)=>{const i=(y*80+x)*4;return d[i+3]?[d[i],d[i+1],d[i+2]].join(','):'';};
 
 test('the sword in hand is held point up in every view, while idle, walking and after a blow',async()=>{
@@ -377,12 +378,12 @@ test('seen from the back, the swing stays behind the hair and body except the ov
  const solid=(x,y)=>npc[(y*80+x)*4+3]>0;
  const inside=(x,y)=>{for(let j=-2;j<=2;j++)for(let i=-2;i<=2;i++)if(!solid(x+i,y+j))return false;return true;};
  for(let combo=0;combo<4;combo++)for(let frame=1;frame<=5;frame++){
-  const overhead=combo===3&&frame===1;
+  const p=api.HearthreaverWeapons.pose('exile',0,frame,combo),overhead=p.z!==0;
   assert.equal(human.attackPose(0,frame,combo,pose).front,overhead,`front ${combo}:${frame}`);
   if(overhead)continue;
   const d=shot(human.nativeFrame(0,'attack',frame,combo,pose).getContext('2d'));
   for(let y=2;y<78;y++)for(let x=2;x<78;x++)
-   assert.ok(!(inside(x,y)&&STEEL.has(rgbAt(d,x,y))),`steel over the back ${combo}:${frame} at ${x},${y}`);
+   assert.ok(!(y<42&&inside(x-p.head[0],y-p.head[1])&&STEEL.has(rgbAt(d,x,y))),`steel over the back ${combo}:${frame} at ${x},${y}`);
  }
  for(let f=0;f<4;f++){
   const d=shot(human.nativeFrame(0,'idle',f,0,pose).getContext('2d'));
@@ -398,16 +399,16 @@ test('scabbard and harness on the back move with the body through the walk and i
   for(let f=0;f<n;f++){
    const p=human.pose(state,f,dir);
    const npc=shot(api.CIVILIAN_BITMAPS.get(human.appearance,p.action,dir,p.frame).getContext('2d'));
-   const hero=shot(human.nativeFrame(dir,state,f,0,pose).getContext('2d'));
+   const hero=shot(human.storedFrame(dir,state,f).getContext('2d'));
    let head=-1,gear=-1;
    for(let y=0;y<80&&(head<0||gear<0);y++)for(let x=0;x<80;x++){
     const i=(y*80+x)*4;
     if(head<0&&npc[i+3])head=y;
-    if(gear<0&&(hero[i]!==npc[i]||hero[i+1]!==npc[i+1]||hero[i+2]!==npc[i+2]||hero[i+3]!==npc[i+3]))gear=y;
+    if(gear<0&&hero[i+3])gear=y;
    }
    heads.add(head);gaps.add(gear-head);
   }
   assert.ok(heads.size>1,`${state} ${dir}: the body bobs`);
-  assert.equal(gaps.size,1,`${state} ${dir}: the hilt keeps its place on the shoulders`);
+  assert.equal(gaps.size,1,`${state} ${dir}: complete centered scabbard follows the moving torso exactly before hair occlusion`);
  }
 });

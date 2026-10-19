@@ -18,7 +18,7 @@ function composeMenuSections(body,page){
  if(page==='bag'){
   body.classList.add('player-overview');
   for(const section of body.querySelectorAll(':scope > .ui-section')){
-   section.dataset.kind=({Personnage:'character',Tenue:'outfit',Objets:'items',Climat:'climate'})[section.dataset.section]||'other';
+   section.dataset.kind=({Personnage:'character',Tenue:'outfit',Armes:'weapons',Objets:'items',Climat:'climate'})[section.dataset.section]||'other';
   }
   const character=body.querySelector('[data-kind="character"]'),coins=[...body.querySelectorAll('[data-kind="items"] .inv-row')].find(n=>n.textContent.includes('Pièces d’or'));
   if(character){

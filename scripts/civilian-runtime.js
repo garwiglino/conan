@@ -90,7 +90,7 @@ Game.prototype.damageCivilian=function(n,amount,source){
 };
 Game.prototype.civilianCombat=function(dt,before){
  const p=this.player,near=this.npcs.filter(n=>n.civilian&&!n.civilian.dead&&(n.alpha??1)>.5&&dist(n,p)<650);
- if(p.attack>0){const f=attackFrame(p.attack,p.combo);if(f===2||f===3)for(const n of near){if(this.hits.has(n.id)||!this.sameLevel(p,n)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageCivilian(n,p.combo===3?2:1,p);}}
+ if(p.attack>0){const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const n of near){if(this.hits.has(n.id)||!this.sameLevel(p,n)||!bladeHits(p,n,f)||!this.lineClear(p,n))continue;this.hits.add(n.id);this.damageCivilian(n,this.weaponDamage(p.combo===3?2:1),p);}}
  for(const e of this.enemies){const old=before.get(e);if(!old||e.dead||e.friendly)continue;
   const melee=old.melee>0&&!old.meleeHit&&e.meleeHit,strike=old.wind>0&&e.wind<=0&&e.kind!=='cultist',heavy=e.kind==='guardian'&&e.move&&!old.hitDone&&e.hitDone;
   if(!melee&&!strike&&!heavy)continue;

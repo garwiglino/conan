@@ -449,6 +449,7 @@
   // A strictly visual state machine. No swing duration, stamina, hitbox or
   // movement delay is introduced. Clock is game-time, never wall-clock.
   const t=Number.isFinite(time)?time:0;
+  const timing=actor.weapon&&typeof HearthreaverWeapons!=='undefined'?HearthreaverWeapons.holster(actor.weapon):HOLSTER;
   let b=actor.kaldorWeapon;
   if(!b||!Number.isFinite(b.lastTime)||t<b.lastTime-0.001){
    b={mode:'drawn',lastAttack:t,lastTime:t,phaseAt:t,wasAttacking:false};actor.kaldorWeapon=b;
@@ -466,9 +467,9 @@
    }
    b.lastAttack=t;
   }
-  if(b.mode==='drawing'&&t-b.phaseAt>=HOLSTER.draw)b.mode='drawn';
-  if(b.mode==='stowing'&&t-b.phaseAt>=HOLSTER.stow)b.mode='sheathed';
-  if(!attacking&&!guarding&&!forced&&b.mode==='drawn'&&t-b.lastAttack>=HOLSTER.delay){
+  if(b.mode==='drawing'&&t-b.phaseAt>=timing.draw)b.mode='drawn';
+  if(b.mode==='stowing'&&t-b.phaseAt>=timing.stow)b.mode='sheathed';
+  if(!attacking&&!guarding&&!forced&&b.mode==='drawn'&&t-b.lastAttack>=timing.delay){
    b.mode='stowing';b.phaseAt=t;
   }
   if(attacking)return {state,frame,mode:'drawn'};
@@ -480,12 +481,12 @@
   }
   const walking=state==='walk'&&!!actor.moving;
   if(b.mode==='stowing'){
-   const phase=Math.min(5,Math.floor((t-b.phaseAt)/HOLSTER.stow*6));
+   const phase=Math.min(5,Math.floor((t-b.phaseAt)/timing.stow*6));
    return walking?{state:'sheathe_walk',frame:phase*6+(frame%6),mode:b.mode}:
       {state:'sheathe',frame:phase,mode:b.mode};
   }
   if(b.mode==='drawing'){
-   const phase=Math.min(4,Math.floor((t-b.phaseAt)/HOLSTER.draw*5));
+   const phase=Math.min(4,Math.floor((t-b.phaseAt)/timing.draw*5));
    return walking?{state:'draw_walk',frame:phase*6+(frame%6),mode:b.mode}:
       {state:'draw',frame:phase,mode:b.mode};
   }

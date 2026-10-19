@@ -41,6 +41,10 @@ combos et de leurs smears. Les quatre directions et le rendu en JavaScript
 préservent les mêmes dimensions que les batraciens. Voir [la réalisation et
 ses tests](docs/kaldor-art.md) et [l'atelier interactif](art/kaldor-preview.html).
 
+## Armes à trouver
+
+Kaldor dispose de 48 armes : épées, sabres, dagues, haches, masses, lances, bâtons et vouges. 39 armes attendent sur des râteliers dans les cinq territoires ; les combattants et le Prêtre portent aussi leurs propres armes. Un ennemi armé vaincu lâche son arme si elle manque à la collection. Le ramassage affiche ses caractéristiques, sans équiper l’arme ni afficher de doublon. Prise à une ou deux mains, puissance, cadence et allonge diffèrent ; les animations déplacent les calques originaux des bras et des mains de la tenue. Équipement et aperçu dans **Inventaire → Armes**. [Catalogue et fonctionnement](docs/kaldor-weapons.md) · [Atelier des 48 armes](art/weapons-preview.html) · [Combos et rangement des huit familles](art/armory-combos.gif) · [Armes des combattants](art/armed-npcs.gif).
+
 ## Froid, chaleur et tenues
 
 La chaleur de la tenue et du casque de Kaldor est comparée à la température ressentie du lieu, selon la saison, l'heure, le vent, la pluie, la neige et l'abri. Sans tenue assez chaude, il grelotte puis **perd vite de la santé** et peut mourir de froid ; un voyage organisé le laisse au pire à 1 PV. Une tenue trop chaude dans la chaleur ne coûte jamais de santé mais **creuse la faim plus vite**. Le HUD, le givre au bord de l'écran, l'inventaire et le panneau du palefrenier l'indiquent. Voir [les règles et les exemples](docs/body-heat.md).

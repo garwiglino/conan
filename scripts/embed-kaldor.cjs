@@ -23,7 +23,7 @@ replaceOnce("get(kind,dir,state,frame,flash=false,combo=0){const image=BITMAPS.g
 replaceOnce("if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;}",
  "if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;if(HearthreaverKaldorCivilianArt.ready()){const npcWalk=HearthreaverKaldorCivilianArt.gaitFrame(actor);frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}");
 // Putting an outfit on: the dressing pose replaces the hero's idle while it plays.
-replaceOnce("frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}const im=this.get(",
+if(!html.includes("const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time)"))replaceOnce("frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}const im=this.get(",
  "frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}if(kind==='hero'){const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time);if(dressed){state=dressed.state;frame=dressed.frame;}}const im=this.get(");
 // Wardrobe: the Tenue row right under the character, its screen bound after the drink button.
 html=html.replace("Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>'+KaldorWardrobe.inventoryHTML(g);","Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>';"); // first wardrobe build
@@ -31,14 +31,19 @@ replaceOnce("Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+'<div class=\"m-
 replaceOnce("$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});","$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});KaldorWardrobe.bindInventory(body,g,()=>{handleEvents();renderMenu();});");
 // Take action on a mannequin or helmet post.
 html=html.replace("sleep:['moon','DORMIR'],outfit:['hand','PRENDRE']}","sleep:['moon','DORMIR']}"); // first wardrobe build
-replaceOnce("sleep:['moon','DORMIR']}","sleep:['moon','DORMIR'],outfit:['hand','PRENDRE'],helmet:['hand','PRENDRE']}");
+if(!html.includes("helmet:['hand','PRENDRE']"))replaceOnce("sleep:['moon','DORMIR']}","sleep:['moon','DORMIR'],outfit:['hand','PRENDRE'],helmet:['hand','PRENDRE']}");
 // The Tenue screen closes with another tab or a reopened menu; Escape goes back to the inventory.
 replaceOnce("menuTab=tab;if(tab==='quests')game.quests.fresh=false;","KaldorWardrobe.leave();menuTab=tab;if(tab==='quests')game.quests.fresh=false;");
 replaceOnce("if(menuTab==='options'&&e.code==='Escape')selectMenuTab(menuPrevious,true);else closeMenu();","if(menuTab==='options'&&e.code==='Escape')selectMenuTab(menuPrevious,true);else if(menuTab==='bag'&&e.code==='Escape'&&KaldorWardrobe.leave())renderMenu();else closeMenu();");
 // Slightly shorter sword from the ONE authoritative pose used by both hit sweep
 // and v3 art. The authored four combo trajectories remain entirely unchanged.
 replaceOnce('return [p[0],p[1],p[2]*1.1,p[3]*1.1];','return [p[0],p[1],p[2]*1.02,p[3]*1.02];');
-const block=begin+'\n'+source+'\n'+humanBridge+'\n'+end;
+const weaponData=fs.readFileSync(path.join(root,'data/weapons/catalogue.json'),'utf8').trim();
+const nativeArms=fs.readFileSync(path.join(root,'data/weapons/native-arms.json'),'utf8').trim();
+const weaponArt=fs.readFileSync(path.join(root,'scripts/kaldor-weapons.js'),'utf8');
+const weaponRuntime=fs.readFileSync(path.join(root,'scripts/kaldor-weapons-runtime.js'),'utf8');
+const armaments=fs.readFileSync(path.join(root,'scripts/kaldor-armaments.js'),'utf8');
+const block=begin+'\nglobalThis.KALDOR_WEAPONS_DATA='+weaponData+';\nglobalThis.KALDOR_WEAPON_LIMBS='+nativeArms+';\n'+weaponArt+'\n'+source+'\n'+humanBridge+'\n'+end;
 if(html.includes(begin)){
  const i=html.indexOf(begin),j=html.indexOf(end,i);
  if(j<0||html.indexOf(begin,i+begin.length)>=0)throw Error('Kaldor: corrupted or duplicated art section');
@@ -51,7 +56,7 @@ if(html.includes(begin)){
 const outfitData=fs.readFileSync(path.join(root,'data/kaldor-outfits/atlas.json'),'utf8').trim();
 const wardrobe=fs.readFileSync(path.join(root,'scripts/kaldor-outfits.js'),'utf8');
 const wBegin='// BEGIN KALDOR WARDROBE',wEnd='// END KALDOR WARDROBE';
-const wBlock=wBegin+'\nvar KALDOR_OUTFITS='+outfitData+';\n'+wardrobe+'\n'+wEnd;
+const wBlock=wBegin+'\nvar KALDOR_OUTFITS='+outfitData+';\n'+wardrobe+'\n'+weaponRuntime+'\n'+armaments+'\n'+wEnd;
 if(html.includes(wBegin)){
  const i=html.indexOf(wBegin),j=html.indexOf(wEnd,i);
  if(j<0||html.indexOf(wBegin,i+wBegin.length)>=0)throw Error('Kaldor: corrupted or duplicated wardrobe section');
@@ -60,6 +65,27 @@ if(html.includes(wBegin)){
  if(html.split('// app.js').length!==2)throw Error('Kaldor: app insertion marker missing');
  html=html.replace('// app.js',()=>wBlock+'\n// app.js');
 }
+// Explicit weapon ids keep independently loaded games and NPC attack timings isolated.
+html=html.replaceAll('attackLength(p.combo)','attackLength(p.combo,p.weapon)')
+ .replaceAll('attackFrame(p.attack,p.combo)','attackFrame(p.attack,p.combo,p.weapon)')
+ .replaceAll("kind==='hero'?actor.combo:-1)","kind==='hero'?actor.combo:-1,kind==='hero'?actor.weapon:undefined)")
+ .replaceAll("this.emit('sword',{combo:p.combo});","this.emit('sword',{combo:p.combo,weapon:p.weapon});");
+for(const target of ['damageEnemy(e,','damageCivilian(n,','damageHumanGuard(n,','damageBatracienGuard(n,'])
+ html=html.replaceAll('this.'+target+'p.combo===3?2:1','this.'+target+'this.weaponDamage(p.combo===3?2:1)');
+replaceOnce("let state='idle',frame=0;if(kind==='guardian'", "if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');let state='idle',frame=0;if(kind==='guardian'");
+html=html.replace("&&actor.weapon!=='exile'",'');
+replaceOnce("const im=this.get(kind,actor.dir,state,frame,actor.flash>0,", "if(kind==='hero'&&state==='attack'&&actor.weapon)frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);const im=this.get(kind,actor.dir,state,frame,actor.flash>0,");
+replaceOnce("helmet:['hand','PRENDRE']}","helmet:['hand','PRENDRE'],weapon:['hand','PRENDRE']}");
+replaceOnce("t=COMBO_TIMES[c]||ATTACK_TIMES;this.play(","t=HearthreaverWeapons.times(ev.weapon,c,COMBO_TIMES);this.play(");
+// Replace the obsolete fixed-sword label; the arsenal above is authoritative.
+const oldSwordRow=`+'<div class="inv-row"><img alt="" src="'+ICONS.sword+'"><div class="grow">Épée à deux mains<small>Lourde lame de Sahrak. Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>'`;
+html=html.replace(oldSwordRow,'');
+html=html.replaceAll('this.player.hitPause=this.player.combo===3?.075:.04','this.player.hitPause=HearthreaverWeapons.hitPause(this.player.weapon,this.player.combo)')
+ .replaceAll('p.hitPause=p.combo===3?.075:.04','p.hitPause=HearthreaverWeapons.hitPause(p.weapon,p.combo)');
+html=html.replaceAll('(p.combo===3?9:4)','HearthreaverWeapons.attackStep(p.weapon,p.combo)');
+// A weapon discovery is an informative, non-modal card; its payload is plain text.
+replaceOnce("if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}", "if(ev.type==='weaponfound'){KaldorArmaments.showDiscovery(ev);continue;}if(ev.type==='notice'){queueNotice(ev.title,ev.text);continue;}");
+replaceOnce("resetTouch();noticeQueue.length=0;", "resetTouch();KaldorArmaments.clearDiscovery();noticeQueue.length=0;");
 const write=(rel,bytes)=>fs.writeFileSync(path.join(root,rel),bytes,'utf8');
 write('index.html',html);
 const ios=html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,'');
@@ -69,5 +95,5 @@ if(poseStart<0||poseEnd<0)throw Error('Kaldor: authored sword pose source missin
 const marker='/*__KALDOR_POSE_CODE__*/',template=fs.readFileSync(path.join(root,'art/kaldor-preview-template.html'),'utf8');
 if(template.split(marker).length!==2)throw Error('Kaldor: preview marker not unique');
 write('art/kaldor-preview.html',template.replace(marker,html.slice(poseStart,poseEnd)));
-write('data/kaldor-manifest.json',JSON.stringify({version:5,authored:'Aseprite human NPC modules + JavaScript sword',npcCell:[48,48],cell:[80,80],anchor:[40,52],outfit:'pagne-noue',outfits:Object.keys(JSON.parse(outfitData).outfits),helmets:Object.keys(JSON.parse(outfitData).helmets||{}),head:'masculin-adulte',hair:'masculin-hair-14',walkFrames:8,bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{legacyArt:crypto.createHash('sha256').update(source).digest('hex'),humanBridge:crypto.createHash('sha256').update(humanBridge).digest('hex'),outfits:crypto.createHash('sha256').update(outfitData).digest('hex'),wardrobe:crypto.createHash('sha256').update(wardrobe).digest('hex')}},null,2)+'\n');
+write('data/kaldor-manifest.json',JSON.stringify({version:5,authored:'Aseprite human NPC modules + JavaScript sword',npcCell:[48,48],cell:[80,80],anchor:[40,52],outfit:'pagne-noue',outfits:Object.keys(JSON.parse(outfitData).outfits),helmets:Object.keys(JSON.parse(outfitData).helmets||{}),head:'masculin-adulte',hair:'masculin-hair-14',walkFrames:8,bladeScale:1.02,holsterDelaySeconds:3.7,holsterDurationSeconds:.33,states:Object.keys(require('../sprites/kaldor/kaldor-art.js').states),fingerprints:{legacyArt:crypto.createHash('sha256').update(source).digest('hex'),humanBridge:crypto.createHash('sha256').update(humanBridge).digest('hex'),outfits:crypto.createHash('sha256').update(outfitData).digest('hex'),wardrobe:crypto.createHash('sha256').update(wardrobe).digest('hex'),weapons:crypto.createHash('sha256').update(weaponData+nativeArms+weaponArt+weaponRuntime+armaments).digest('hex')}},null,2)+'\n');
 console.log('Kaldor v5 rebuilt, wardrobe of '+Object.keys(JSON.parse(outfitData).outfits).length+' outfits and '+Object.keys(JSON.parse(outfitData).helmets||{}).length+' helmets — actual modular NPC human head/hair/body/8-step gait + authoritative sword.');

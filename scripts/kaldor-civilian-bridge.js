@@ -30,6 +30,10 @@
   hair:'14',color:'brun',hat:null,beard:null,moustache:null
  });
  const START_OUTFIT='pagne-noue';
+ const weapons=()=>typeof HearthreaverWeapons!=='undefined'?HearthreaverWeapons:null;
+ let wielded='exile';
+ const customWeapon=()=>weapons()&&weapons().has(wielded);
+ function wield(id){if(!weapons()?.has(id))return false;wielded=id;return true;}
  // previous: what he wore before the last change ({outfit, helmet}), shown
  // until the swap frame of the dress or helm clip.
  const worn={outfit:START_OUTFIT,helmet:null,previous:null};
@@ -39,7 +43,7 @@
  const OUTFITS=()=>typeof KALDOR_OUTFITS!=='undefined'?KALDOR_OUTFITS:null;
  const outfitData=id=>OUTFITS()?.outfits?.[id]||null;
  const helmetData=id=>id&&OUTFITS()?.helmets?.[id]||null;
- const headId=appearance.sex+'-'+appearance.age,hairId=appearance.sex+'-hair-'+appearance.hair;
+ let headId=appearance.sex+'-'+appearance.age,hairId=appearance.sex+'-hair-'+appearance.hair;
  const valid=()=>typeof CIVILIAN_ART!=='undefined'&&typeof CIVILIAN_BITMAPS!=='undefined'&&
   !!outfitData(worn.outfit)&&!!CIVILIAN_ART.modules?.[headId]&&!!CIVILIAN_ART.modules?.[hairId];
  // Outfit sheets are decoded once and kept: switching never waits on a decode.
@@ -54,10 +58,11 @@
  function preload(){
   if(!valid())return Promise.resolve(false);
   if(loading)return loading;
-  const modules=[headId,hairId].map(id=>sheet(id,CIVILIAN_ART.modules[id].asset).promise);
+  const nativeArms=typeof KALDOR_WEAPON_LIMBS!=='undefined'?Object.entries(KALDOR_WEAPON_LIMBS.outfits).flatMap(([id,views])=>views.flatMap((parts,d)=>parts.map((p,i)=>sheet('native-arm:'+id+':'+d+':'+i,p).promise))):[];
+  const modules=[headId,hairId,'masculin-mur','masculin-age',...['01','02','05','09'].map(n=>'masculin-hair-'+n)].map(id=>sheet(id,CIVILIAN_ART.modules[id].asset).promise);
   const outfits=Object.values(OUTFITS().outfits).flatMap(o=>Object.values(sheetsOf(o)).map(e=>e.promise));
   const helmets=Object.values(OUTFITS().helmets||{}).map(h=>helmetSheet(h).promise);
-  loading=Promise.all([...modules,...outfits,...helmets])
+  loading=Promise.all([...modules,...outfits,...helmets,...nativeArms])
    .then(values=>{loaded=values.every(Boolean);failed=!loaded;return loaded;})
    .catch(()=>{loaded=false;failed=true;return false;});
   return loading;
@@ -155,6 +160,7 @@
  // 3px wrapped grip and pommel (16px from pommel to tip, as tall as his body).
  const BLADE=11;
  function paintSword(b,hx,hy,ux,uy,{hands=2,blade=BLADE}={}){
+  if(customWeapon()){weapons().paint(b,wielded,hx,hy,ux,uy,blade/BLADE);return;}
   blade=Math.max(2,Math.round(blade));
   const nx=-uy,ny=ux,at=d=>[hx+ux*d,hy+uy*d];
   // Second blade row on the axis that keeps a 2px edge at every angle.
@@ -184,7 +190,7 @@
 
  // ---- Separate NPC layers, so the head, hair and torso can move apart. ----
  function layers(action,dir,frame,outfit=worn.outfit,helmet=worn.helmet){
-  const key=[outfit,helmet,action,dir,frame].join(':');
+  const key=[headId,hairId,outfit,helmet,action,dir,frame].join(':');
   if(layerCache.has(key))return layerCache.get(key);
   const A=CIVILIAN_ART,o=outfitData(outfit),d=[2,1,0,3][dir];
   if(!o||!o.frames[action])return null;
@@ -238,7 +244,7 @@
  }
  // Fold the two baked NPC hands into the torso: Kaldor's hands are on the grip.
  // Clothed outfits ship a bare torso sheet instead (arms layers removed).
- function torso(L,dir,dx=0){return L.fold?torsoOnly(L.body,dir,dx):L.bare;}
+ function torso(L,dir,dx=0){if(customWeapon())return L.bare;return L.fold?torsoOnly(L.body,dir,dx):L.bare;}
  function torsoOnly(body,dir,dx=0){
   const cv=document.createElement('canvas');cv.width=cv.height=80;
   const c=cv.getContext('2d');c.drawImage(body,0,0);
@@ -267,7 +273,7 @@
   return top<0?null:[left,top];
  }
  function bodyShift(action,dir,frame){
-  const key=[action,dir,frame].join(':');
+  const key=[headId,hairId,worn.outfit,action,dir,frame].join(':');
   if(shiftCache.has(key))return shiftCache.get(key);
   const a=headBox(action,dir,frame),r=headBox('idle',dir,0);
   const out=a&&r?[a[0]-r[0],a[1]-r[1]]:[0,0];
@@ -317,6 +323,7 @@
  const GUARD={2:{h:[-6,-6],u:[-.5,-.87]},1:{h:[3,-6],u:[.71,-.71]},0:{h:[6,-6],u:[.6,-.8]},3:{h:[-4,-6],u:[-.71,-.71]}};
  const SHOULDERS={2:[[-4,-8],[3,-8]],0:[[-4,-8],[3,-8]],1:[[0,-8]],3:[[-1,-8]]};
  function attackSpec(dir,frame,combo){
+  if(customWeapon())return weapons().pose(wielded,dir,frame,combo);
   const view=dir===3?1:dir,row=ATTACK[view][Math.max(0,Math.min(3,combo))];
   let s=row[Math.max(1,Math.min(5,frame))];
   if(!s){const g=GUARD[dir];return {h:g.h,z:dir===0?0:1,head:[0,0],hair:[0,0],lunge:false,u:g.u,rest:true};}
@@ -325,6 +332,7 @@
   return s;
  }
  function bladeDir(dir,frame,combo,swordPose){
+  if(customWeapon())return weapons().pose(wielded,dir,frame,combo).u;
   const s=attackSpec(dir,frame,combo);if(s.u)return unit(s.u[0],s.u[1]);
   const f=Math.max(1,Math.min(4,frame));
   const p=typeof swordPose==='function'?swordPose(dir,f,combo):[0,0,GUARD[dir].u[0],GUARD[dir].u[1]];
@@ -378,7 +386,13 @@
  };
  // part: 'sheath' (leather body, under the hair) or 'hilt' (guard, grip
  // and pommel standing out of the hair above the shoulder); default both.
+ function storagePose(dir){return weapons().storage(wielded,dir);}
+
  function scabbard(c,dir,part){
+  if(customWeapon()){
+   const b=buffer();weapons().paintStored(b,wielded,dir);
+   b.outline();b.paint(c);return;
+  }
   const {w,v}=sheath[dir],[ux,uy]=unit(v[0],v[1]),b=buffer();
   if(part!=='hilt'){
    b.line(w[0],w[1],w[0]+v[0],w[1]+v[1],GRIP[0],1);
@@ -391,6 +405,12 @@
    b.set(w[0]-ux*4,w[1]-uy*4,GOLD[1],4);
   }
   b.outline();b.paint(c);
+ }
+ // Reused by the compositor: draw the complete stored arm at the moving
+ // torso anchor before the body/head decide which pixels occlude it.
+ function storedFrame(dir,state='sheathed_idle',frame=0){
+  const p=pose(state,frame,dir),shift=bodyShift(p.action,dir,p.frame),[cv,c]=canvas80();
+  c.translate(40+shift[0],52+shift[1]);scabbard(c,dir);return cv;
  }
  function gear(c,dir){
   // One leather baldric across the real 4px torso, never across the face.
@@ -418,12 +438,13 @@
  // mouth while the blade turns over the shoulder in depth, so its drawn length
  // shrinks while it points at the camera, then grows into the scabbard.
  function weaponBlend(dir,state,frame,hand,shift=[0,0]){
-  const g=GUARD[dir],end=sheath[dir],[ex,ey]=unit(end.v[0],end.v[1]);
+  const custom=customWeapon(),store=custom?storagePose(dir):null;
+  const g=custom?weapons().guard(wielded,dir):GUARD[dir],end=custom?{w:store.h,v:store.u}:sheath[dir],[ex,ey]=unit(end.v[0],end.v[1]);
   const total=state==='draw'||state==='draw_walk'?5:6;
   const phase=state.endsWith('_walk')?Math.floor(frame/8):frame;
   const f=Math.max(0,Math.min(1,(phase+1)/total));
   const t=state.startsWith('draw')?1-f:f;
-  const mx=end.w[0]-ex+shift[0],my=end.w[1]-ey+shift[1];
+  const mx=end.w[0]-(custom?0:ex)+shift[0],my=end.w[1]-(custom?0:ey)+shift[1];
   const m=Math.min(1,t/.6),r=Math.max(0,Math.min(1,(t-.3)/.7));
   const vx=g.u[0]+(ex-g.u[0])*r,vy=g.u[1]+(ey-g.u[1])*r;
   return {h:[hand[0]+(mx-hand[0])*m,hand[1]+(my-hand[1])*m],u:unit(vx,vy),
@@ -459,39 +480,64 @@
  function canvas80(){const out=document.createElement('canvas');out.width=80;out.height=80;const c=out.getContext('2d');c.imageSmoothingEnabled=false;return [out,c];}
  // Stack the NPC layers like the composer does, with the baked hands folded
  // into the torso, the head and hair offset, and the harness on the chest.
- function stack(c,L,legs,dir,head=[0,0],hair=[0,0],shift=[0,0]){
+ function stack(c,L,legs,dir,head=[0,0],hair=[0,0],shift=[0,0],bodyOffset=[0,0]){
   const at=(img,dx,dy)=>c.drawImage(img,dx,dy);
   const [hx,hy]=head,[tx,ty]=[hx+hair[0],hy+hair[1]];
   hairOn(c,L,0,tx,ty,hx,hy);
   if(L.headFirst)at(L.head,hx,hy);
-  at(torso(legs,dir,shift[0]),0,0);
+  at(torso(legs,dir,shift[0]),bodyOffset[0],bodyOffset[1]);
   hairOn(c,L,1,tx,ty,hx,hy);
   if(L.hat)at(L.hat[0],hx,hy);
   if(!L.headFirst)at(L.head,hx,hy);
-  at(legs.fore,0,0);
+  if(!customWeapon())at(legs.fore,0,0);
   c.save();c.translate(40+shift[0],52+shift[1]);gear(c,dir);c.restore();
   hairOn(c,L,2,tx,ty,hx,hy);
   if(L.hat)at(L.hat[1],hx,hy);
  }
  const paintAt=(c,g)=>{c.save();c.translate(40,52);g.paint(c);c.restore();};
+ // Reuse each existing sleeve/hand silhouette as a rigid image. Face/back
+ // have two already disconnected arms, profiles have one visible silhouette.
+ // No procedural limb, new fist, elbow cut, stretch, rotation or added contour.
+ function nativeArmLayers(dir,h,u,shift=[0,0],freeOffset=[0,0]){
+  const [front,fc]=canvas80(),[back,bc]=canvas80(),w=weapons().get(wielded);
+  const view=[2,1,0,3][dir],parts=KALDOR_WEAPON_LIMBS.outfits[worn.outfit][view];
+  const mainSide=dir===0?'right':'left',span=weapons().handSpan(wielded);
+  parts.forEach((part,i)=>{
+   const main=part.side===null||part.side===mainSide;
+   const target=main?h:w.hands===2?[h[0]-u[0]*span,h[1]-u[1]*span]:[part.palm[0]+freeOffset[0],part.palm[1]+freeOffset[1]];
+   const dx=Math.round(target[0]-part.palm[0]+shift[0]),dy=Math.round(target[1]-part.palm[1]+shift[1]);
+   const c=main?fc:bc,e=sheet('native-arm:'+worn.outfit+':'+view+':'+i,part);
+   if(e.ready)c.drawImage(e.image,dx,dy);
+  });
+  return {front,back};
+ }
  function attackFrame(dir,frame,combo,swordPose){
   const s=attackSpec(dir,frame,combo);
-  const L=layers('idle',dir,0),legs=s.lunge?layers('walk',dir,0):L;
+  const L=layers('idle',dir,0),legs=s.lunge?layers('walk',dir,s.leg||0):L;
   if(!L||!legs)return null;
   const [out,c]=canvas80();
   const u=bladeDir(dir,frame,combo,swordPose);
   const sword=buffer(),hands=buffer(),trail=buffer(),behind=buffer();
-  if(dir===1||dir===3)for(const [sx,sy] of SHOULDERS[dir])arm(s.z?hands:sword,sx,sy,s.h[0],s.h[1]);
-  paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0});
-  fist(s.z===0?sword:hands,s.h[0],s.h[1]);fist(s.z===0?sword:hands,s.h[0]-u[0]*2,s.h[1]-u[1]*2);
-  sword.outline();hands.outline();
-  if(frame===2||frame===3)smear(trail,dir,frame,combo,swordPose,frame===2?4.5:3,behind);
+  let arms=null;
+  if(customWeapon()){
+   arms=nativeArmLayers(dir,s.h,u,[0,0],s.body||[0,0]);
+   paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0});sword.outline();
+  }else{
+   if(dir===1||dir===3)for(const [sx,sy] of SHOULDERS[dir])arm(s.z?hands:sword,sx,sy,s.h[0],s.h[1]);
+   paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0});
+   fist(s.z===0?sword:hands,s.h[0],s.h[1]);fist(s.z===0?sword:hands,s.h[0]-u[0]*2,s.h[1]-u[1]*2);
+   sword.outline();hands.outline();
+  }
+  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,dir,frame,combo);}
+  else if(frame===2||frame===3)smear(trail,dir,frame,combo,swordPose,frame===2?4.5:3,behind);
   else if(frame===4)smear(trail,dir,frame,combo,swordPose,1.5,behind);
-  if(combo===3&&frame===3)impact(trail,s.h[0]+u[0]*(3+BLADE),s.h[1]+u[1]*(3+BLADE));
+  if(combo===3&&frame===3){const w=customWeapon()?weapons().get(wielded):null,reach=w?w.length+2:3+BLADE,x=s.h[0]+u[0]*reach,y=s.h[1]+u[1]*reach;if(w?.family==='spear'){for(const [dx,dy]of [[0,0],[1,0],[-1,0],[0,1],[0,-1]])trail.set(x+dx,y+dy,SMEAR[0],3);}else impact(trail,x,y);}
   paintAt(c,behind);
   if(s.z!==1){paintAt(c,trail);paintAt(c,sword);}
-  stack(c,L,legs,dir,s.head,s.hair);
+  if(arms){c.drawImage(arms.back,0,0);if(s.z===0)c.drawImage(arms.front,0,0);}
+  stack(c,L,legs,dir,s.head,s.hair,s.body||[0,0],s.body||[0,0]);
   if(s.z===1){paintAt(c,trail);paintAt(c,sword);}
+  if(arms&&s.z!==0)c.drawImage(arms.front,0,0);
   paintAt(c,hands);
   return out;
  }
@@ -501,29 +547,37 @@
  // the body when it is in front of the hero seen from the back, or on its way
  // over the shoulder into the scabbard in the other views.
  function heldSword(dir,state,frame,p,npcPixels,shift){
-  const profile=dir===1||dir===3,g=GUARD[dir];
+  const profile=dir===1||dir===3,g=customWeapon()?weapons().guard(wielded,dir):GUARD[dir];
   // The back view hides the NPC hands under the hair: use the guard grip.
-  const hand=(dir===2&&handPoint(npcPixels,outfitData(worn.outfit)))||[g.h[0]+shift[0],g.h[1]+shift[1]];
+  const hand=(!customWeapon()&&dir===2&&handPoint(npcPixels,outfitData(worn.outfit)))||[g.h[0]+shift[0],g.h[1]+shift[1]];
   const held=BLEND_STATES.has(state)?weaponBlend(dir,state,frame,hand,shift):{h:hand,u:g.u,length:1,t:0};
   held.behind=dir===0?held.t<.5:held.t>=(profile?.3:.5);
   const sword=buffer(),hands=buffer(),grip=held.behind&&dir!==2?sword:hands;
+  let arms=null;
+  if(customWeapon()){
+   const h=weapons().fitGrip(wielded,dir,[held.h[0]-shift[0],held.h[1]-shift[1]],held.u).h;
+   held.h=[h[0]+shift[0],h[1]+shift[1]];arms=nativeArmLayers(dir,h,held.u,shift);
+  }
   const [hx,hy]=held.h,[ux,uy]=held.u;
   paintSword(sword,hx,hy,ux,uy,{hands:0,blade:BLADE*held.length});
-  if(profile){
-   for(const [sx,sy] of SHOULDERS[dir])arm(grip,sx+shift[0],sy+shift[1],hx,hy);
-   fist(grip,hx,hy);fist(grip,hx-ux*2,hy-uy*2);
-  }else fist(grip,hx,hy);
+  if(!customWeapon()){
+   if(profile){
+    for(const [sx,sy] of SHOULDERS[dir])arm(grip,sx+shift[0],sy+shift[1],hx,hy);
+    fist(grip,hx,hy);fist(grip,hx-ux*2,hy-uy*2);
+   }else fist(grip,hx,hy);
+  }
   sword.outline();hands.outline();
-  // Profile: carry is a walk with the arms out; take the walk with arms down.
   let L=null;
-  if(profile)L=p.action==='carry'?layers('walk',dir,(8-p.frame)%8):layers(p.action,dir,p.frame);
-  return {sword,hands,behind:held.behind,L};
+  if(customWeapon())L=layers(p.action,dir,p.frame);
+  else if(profile)L=p.action==='carry'?layers('walk',dir,(8-p.frame)%8):layers(p.action,dir,p.frame);
+
+  return {sword,hands,behind:held.behind,L,arms};
  }
 
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
-  const key=[worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
+  const key=[headId,hairId,wielded,worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
   if(cache.has(key)){
    const value=cache.get(key);cache.delete(key);cache.set(key,value);return value;
   }
@@ -541,18 +595,20 @@
    let c;[out,c]=canvas80();
    const shift=bodyShift(p.action,dir,p.frame);
    const onBody=paint=>{c.save();c.translate(40+shift[0],52+shift[1]);paint();c.restore();};
-   const sheathed=state.startsWith('sheathed_');
+   const sheathed=state.startsWith('sheathed_'),stored=sheathed?storedFrame(dir,state,frame):null;
    const npcPixels=pixels(npc);
    const held=sheathed?null:heldSword(dir,state,frame,p,npcPixels,shift);
-   if(sheathed&&dir!==0)onBody(()=>scabbard(c,dir));
+   if(stored&&dir!==0)c.drawImage(stored,0,0);
    if(held&&held.behind)paintAt(c,held.sword);
+   if(held?.arms){c.drawImage(held.arms.back,0,0);if(dir===0)c.drawImage(held.arms.front,0,0);}
    hairTips(c,npcPixels,dir,state,frame,true);
    if(held&&held.L)stack(c,held.L,held.L,dir,[0,0],[0,0],shift);
    else{c.drawImage(npc,0,0);onBody(()=>gear(c,dir));}
    hairTips(c,npcPixels,dir,state,frame,false);
-   if(sheathed&&dir===0)onBody(()=>scabbard(c,dir));
+   if(stored&&dir===0)c.drawImage(stored,0,0);
    if(held&&!held.behind)paintAt(c,held.sword);
    if(held)paintAt(c,held.hands);
+   if(held?.arms&&dir!==0)c.drawImage(held.arms.front,0,0);
   }
   if(flash){
    const c=out.getContext('2d');
@@ -634,6 +690,18 @@
   else for(const p of [0,1])put(h.asset,p*h.count+h.frames.idle[0]);
   layerCache.set(key,cv);return cv;
  }
+ // Human fighters reuse intact garment/hand layers, with their own existing
+ // modular head and hair. Scoped selection never changes Kaldor's equipment.
+ function npcFrame(actor,state,frame,weapon,swordPose){
+  if(!weapons()?.has(weapon)||!ready())return null;
+  const saved={...worn},oldWeapon=wielded,oldHead=headId,oldHair=hairId;
+  let seed=0;for(const c of String(actor.id||''))seed=(Math.imul(seed,31)+c.charCodeAt(0))>>>0;
+  try{
+   headId='masculin-'+['adulte','mur','age'][seed%3];hairId='masculin-hair-'+['01','02','05','09'][(seed>>>3)%4];
+   worn.outfit=actor.kind==='bandit'?'cuir-traqueur':actor.convoyGuard?'brigandine-mercenaire':'cotte-mailles';worn.helmet=null;worn.previous=null;wielded=weapon;
+   return nativeFrame(actor.dir??2,state,frame,actor.combo||0,swordPose);
+  }finally{Object.assign(worn,saved);wielded=oldWeapon;headId=oldHead;hairId=oldHair;}
+ }
  function clear(){cache.clear();layerCache.clear();shiftCache.clear();}
  // Grip and blade direction actually drawn, exposed for regression tests.
  function attackPose(dir,frame,combo,swordPose){
@@ -641,7 +709,7 @@
   return {hand:[...s.h],blade:bladeDir(dir,frame,combo,swordPose),front:s.z!==0};
  }
  return Object.freeze({version:5,appearance,anchor:foot,
-  preload,ready,frameAt,gaitFrame,remap,pose,nativeFrame,attackPose,clear,
+  preload,ready,frameAt,gaitFrame,remap,pose,nativeFrame,npcFrame,attackPose,nativeArmLayers,storagePose,storedFrame,clear,wield,weapon:()=>wielded,
   wear,wearHelmet,dressLook,portrait,garment,bareHead,figure,dressDuration:(id='dress')=>clipMs(id)/1000,
   outfit:()=>worn.outfit,helmet:()=>worn.helmet,
   outfits:()=>Object.values(OUTFITS()?.outfits||{}).map(({id,label,warmth,description,place,cloth})=>({id,label,warmth,description,place,cloth})),

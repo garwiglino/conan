@@ -15,9 +15,9 @@
     "sprites/batraciens/sources/activities.cjs": "b6b4a871fc3cd796667d879ab6573a5749e7890b509c1ae88e3e3125fa0db12f",
     "sprites/batraciens/sources/palettes.json": "7cc6c0fcf9cb5caa4f225d47ae3cc128be97b525aa69eb964f5d5c5ee8b80ee9",
     "sprites/batraciens/batraciens-complet.js": "714abf7cc1ab3066e5529adae385a0cd25906fc01abfc8a4cd2959c941ce2b49",
-    "sprites/batraciens/batraciens-combattants.js": "1b5ff1562fc6aa5fcb5e5633387fe7a49ccd8826c245355e199cef6594b40b60",
-    "scripts/batraciens-runtime.js": "8d8507802eb126bc6c3c9730e7b415b04c9d76746e7bb224bc9bed7ae160c7e2",
-    "scripts/batraciens-society.js": "4330d4fdaa5e96854f47bd4ae485ab97f82032b3121a1fa58f70553bcd5559a4",
+    "sprites/batraciens/batraciens-combattants.js": "2e76b7bdb2027e87a9f014a2e0c615dc20e6d3bc659034a3a221fb526ef43fe8",
+    "scripts/batraciens-runtime.js": "2f7e8745243acf884635edb4499fd7762e3ac0bb444ef23169bbda31d48f6898",
+    "scripts/batraciens-society.js": "50a187477933460aa647a6d2fee16fd44ab9d4a7c4856a6b9a0fe1d8edafac95",
     "data/batraciens/communities.json": "5d07714c0a948814acda3371dca394acaf963c2d88f187f2eb613d958532f34b"
   }
 }
