@@ -210,3 +210,30 @@ des primes.
 
 Validation ajoutée : `tests/world-pursuit.test.cjs`,
 `tests/world-pursuit-runtime.test.cjs` et `scripts/check-world-pursuit.cjs`.
+
+
+## Vérification du compteur R0 après l’arsenal
+
+`R0` signifie qu’aucun mandat actif n’est connu dans la région. Un meurtre
+sans témoin survivant capable de déposer conserve ce niveau ; la découverte
+ultérieure du corps ne révèle pas l’identité de son auteur.
+
+Un relais déjà habilité à recevoir des dépositions enregistre aussi ce qu’il a
+lui-même vu, au titre de son poste : il n’attend plus un second employé. Les
+anciens témoignages sauvegardés reprennent ce même chemin. Un témoin ordinaire
+qui a échappé au danger donne priorité à son signalement avant de rentrer chez
+lui. Sa fuite reste prioritaire s’il est encore menacé ; un ancien objectif de
+déposition ne le retire plus du contrôleur de fuite.
+
+Les approches des relais réemploient `stationLanding`, avec les collisions et la
+visibilité réelles : la cible n’est plus systématiquement dix-huit pixels au sud
+du contact, point parfois situé dans un mur. Les gardes utilisent les mêmes
+candidats d’approche. Ce choix vaut aussi pour le rattrapage hors écran.
+
+Régression reproduite sur `bf61312` avec une attaque de l’arme équipée contre un
+résident du camp, sous les yeux du palefrenier : la déposition restait vide et le
+compteur à zéro. `tests/world-crime-reporting.test.cjs` couvre ce parcours réel,
+les anciennes sauvegardes, la fuite, le retour et les corps sans identification.
+`scripts/check-world-crime-reporting.cjs` attaque par la touche de combat réelle
+et vérifie `R0 → R3`, le HUD et la carte sur trois formats, sans garde inventé,
+signalement forcé ou remplacement des règles de visibilité.

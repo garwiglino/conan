@@ -12,6 +12,13 @@
   const w=Atlas.toWorld(n.x,n.y),sites=Atlas.nodes.filter(s=>s.rest);return sites.reduce((a,b)=>!a||Math.hypot(b.x-w.x,b.y-w.y)<Math.hypot(a.x-w.x,a.y-w.y)?b:a,null)?.id;
  };
  Game.prototype.isJusticeGuard=function(n){return alive(n)&&(!!n.eventGuard||n.convoyGuard&&this.worldState.simulation?.state.sites[n.site]?.authority===this.worldState.simulation?.state.sites[this.justiceSite(n)]?.authority||!!n.batracien?.role&&!n.eventId&&['village_guard','channel_sentinel','boat_escort','scout','captain'].includes(n.batracien.role));};
+ // A staffed relay already accepts other people's statements. Its own living
+ // eyewitness can use the same office; it does not need a second clerk nearby.
+ Game.prototype.justiceReportingSite=function(n){return this.stations.find(s=>s.actor===n)?.site||(this.isJusticeGuard(n)?this.justiceSite(n):null);};
+ Game.prototype.justiceContactApproach=function(n){
+  const station=this.stations.find(s=>s.actor===n);if(station)return this.stationLanding(station.site);
+  for(const [dx,dy]of [[0,18],[18,0],[-18,0],[0,-18],[24,24],[-24,24],[24,-24],[-24,-24]]){const p={x:n.x+dx,y:n.y+dy,level:n.level||0};if(!this.solid(p.x,p.y,5,p.level)&&this.lineClear(p,n))return p;}return null;
+ };
  Game.prototype.justiceEffect=function(n=null){return law(this)?.effect(this.justiceSite(n||this.player),n?.id,this.clock)||{wanted:false,refuse:false,price:1,score:0};};
  Game.prototype.justiceWitnesses=function(victim){
   return this.npcs.filter(n=>alive(n)&&n.id!=='fairy'&&!this.party.some(c=>c.id===n.id)&&this.sameLevel(n,victim)&&dist(n,victim)<=180&&(n===victim||this.lineClear(n,victim)&&this.lineClear(n,this.player))).map(n=>({id:n.id,guard:this.isJusticeGuard(n),site:this.justiceSite(n)}));
@@ -21,7 +28,7 @@
   const site=this.justiceTerritorialSite?.(n)||this.justiceSite(n),victimInfo=this.justiceIdentity?.(n)||{};if(witnesses.some(w=>w.id===n.id&&w.guard))victimInfo.role='guard';const c=j.record({victim:n.id,site,kind,victimInfo,witnesses:witnesses.map(w=>w.id),position:Atlas.toWorld(this.player.x,this.player.y),at:this.clock});if(!c)return;
   for(const w of witnesses)if(c.witnesses[w.id]&&w.identity)c.witnesses[w.id].identity=w.identity;
   if(dead(n))j.witnessDied(n.id);
-  for(const w of witnesses){const actor=this.npcs.find(a=>a.id===w.id);if(w.guard&&alive(actor)&&j.zone(w.site)?.id===j.zone(c.site)?.id)this.fileJusticeStatement(c.id,w.id,this.clock,w.site);}
+  for(const w of witnesses){const actor=this.npcs.find(a=>a.id===w.id),contact=actor&&this.justiceReportingSite(actor);if(contact&&alive(actor)&&!actor.civilian?.critical&&j.zone(contact)?.id===j.zone(c.site)?.id)this.fileJusticeStatement(c.id,w.id,this.clock,contact);}
   this.worldState.simulation?.history('violence_recorded',{case:c.id,kind,site,witnesses:witnesses.map(w=>w.id)});this.emit('save');
  };
  Game.prototype.recordJusticeDeath=function(n){
@@ -79,18 +86,21 @@
  };
  Game.prototype.stepJusticeWitnesses=function(dt,at=this.clock){
   const j=law(this);if(!j||this._justiceCustody||!j.state.cases.length&&!j.state.scenes.length)return;this.discoverJusticeScenes();
-  const contacts=this.npcs.filter(n=>alive(n)&&!n.civilian?.critical&&(this.isJusticeGuard(n)||this.stations.some(s=>s.actor===n)));
+  const contacts=this.npcs.filter(n=>alive(n)&&!n.civilian?.critical&&this.justiceReportingSite(n));
   for(const n of this.npcs){if(dead(n)){j.witnessDied(n.id);delete n.justiceReport;continue;}if(!alive(n)||n.civilian?.critical||this.party.some(c=>c.id===n.id))continue;
    const cases=j.pending(n.id,at),scenes=j.discoveries(n.id);if(!cases.length&&!scenes.length){delete n.justiceReport;continue;}
-   const contact=contacts.filter(a=>a!==n&&this.sameLevel(a,n)&&(scenes.length||cases.some(c=>j.zone(this.justiceSite(a))?.id===j.zone(c.site)?.id&&j.canReport(c,this.justiceIdentity(n),this.justiceSite(a)).allowed))&&dist(n,a)<540).sort((a,b)=>dist(n,a)-dist(n,b)).find(a=>dist(n,a)<44?this.lineClear(n,a):!this.solid(a.x,a.y+18,5,0));
+   const contact=contacts.filter(a=>this.sameLevel(a,n)&&(scenes.length||cases.some(c=>j.zone(this.justiceReportingSite(a))?.id===j.zone(c.site)?.id&&j.canReport(c,this.justiceIdentity(n),this.justiceReportingSite(a)).allowed))&&dist(n,a)<540).sort((a,b)=>dist(n,a)-dist(n,b)).find(a=>dist(n,a)<44?this.lineClear(n,a):this.justiceContactApproach(a));
    if(!contact){delete n.justiceReport;continue;}
-   if(dist(n,contact)<44&&this.lineClear(n,contact)){for(const c of cases)if(j.zone(c.site)?.id===j.zone(this.justiceSite(contact))?.id&&j.canReport(c,this.justiceIdentity(n),this.justiceSite(contact)).allowed)this.fileJusticeStatement(c.id,n.id,at,this.justiceSite(contact));for(const s of scenes)this.fileJusticeDiscovery(s.id,n.id);delete n.justiceReport;continue;}
-   if(n.dangerState||n.hurt||n.stun||this.dialogue?.who===n)continue;
-   this.cancelWorldConversation?.(n);n.justiceReport={contact:contact.id};this.walkNpc(n,{x:contact.x,y:contact.y+18},dt);
+   if(dist(n,contact)<44&&this.lineClear(n,contact)){for(const c of cases)if(j.zone(c.site)?.id===j.zone(this.justiceReportingSite(contact))?.id&&j.canReport(c,this.justiceIdentity(n),this.justiceReportingSite(contact)).allowed)this.fileJusticeStatement(c.id,n.id,at,this.justiceReportingSite(contact));for(const s of scenes)this.fileJusticeDiscovery(s.id,n.id);delete n.justiceReport;continue;}
+   // Once safe enough to return, finish the testimony before the ordinary
+   // trip home. Fleeing and sheltering still take precedence over reporting.
+   if(n.dangerState?.mode==='returning'&&!this.localThreatAt(n.x,n.y,n.level||0,120)){delete n.dangerState;n.alpha=1;n.path=[];}
+   if(n.dangerState||n.hurt||n.stun||this.dialogue?.who===n){delete n.justiceReport;continue;}
+   const goal=this.justiceContactApproach(contact);if(!goal){delete n.justiceReport;continue;}this.cancelWorldConversation?.(n);n.justiceReport={contact:contact.id};this.walkNpc(n,goal,dt);
   }
  };
  const npcs=Game.prototype.stepNpcs;
- Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filter(n=>!n.justiceReport);npcs.call(this,dt);}finally{this.npcs=all;}this.stepJusticeWitnesses(dt);};
+ Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filter(n=>!n.justiceReport||n.dangerState);npcs.call(this,dt);}finally{this.npcs=all;}this.stepJusticeWitnesses(dt);};
  const guards=Game.prototype.stepHumanGuards;
  Game.prototype.stepHumanGuards=function(dt){guards.call(this,dt);const j=law(this);if(!j||this._justiceCustody)return;for(const n of this.npcs)if(dist(n,this.player)<220&&this.sameLevel(n,this.player)&&this.isJusticeGuard(n)&&this.lineClear(n,this.player))j.sighting(this.justiceSite(n),Atlas.toWorld(this.player.x,this.player.y),n.id,this.clock);};
  const advance=Game.prototype.advanceAtlas;
@@ -101,9 +111,9 @@
   const eligible=this.npcs.filter(n=>alive(n)&&!n.civilian?.critical&&j.pending(n.id,before).length&&(this.journey||this.sleeping||minutes>10||dist(n,this.player)>900));
   for(const n of eligible){if(n.dangerState&&dist(n,this.player)>300&&!this.localThreatAt(n.x,n.y,n.level||0,120))delete n.dangerState;if(n.civilian){n.civilian.elapsed+=WorldPacing.realSeconds(minutes);if(n.civilian.action==='seated')this.civilianAction(n,'idle');}}
   this.stepJusticeWitnesses(0,before);
-  for(const n of eligible){const contact=this.npcs.find(a=>a.id===n.justiceReport?.contact);if(!contact||n.dangerState)continue;let remaining=WorldPacing.realSeconds(minutes),moved=0;
-   for(let i=0;i<100&&remaining>0&&dist(n,contact)>=44;i++){const old={x:n.x,y:n.y};this.walkNpc(n,{x:contact.x,y:contact.y+18},Math.min(remaining,1));const distance=dist(old,n);if(distance<.001)break;moved+=distance;remaining-=distance/WorldPacing.civilianWalk;}
-   if(dist(n,contact)<44&&this.lineClear(n,contact)){const at=before+Math.min(minutes,moved/(WorldPacing.civilianWalk*WorldPacing.dayRealSeconds/1440));for(const c of j.pending(n.id,at))if(j.zone(c.site)?.id===j.zone(this.justiceSite(contact))?.id&&j.canReport(c,this.justiceIdentity(n),this.justiceSite(contact)).allowed)this.fileJusticeStatement(c.id,n.id,at,this.justiceSite(contact));delete n.justiceReport;}
+  for(const n of eligible){const contact=this.npcs.find(a=>a.id===n.justiceReport?.contact);if(!contact||n.dangerState)continue;const goal=this.justiceContactApproach(contact);if(!goal)continue;let remaining=WorldPacing.realSeconds(minutes),moved=0;
+   for(let i=0;i<100&&remaining>0&&(dist(n,contact)>=44||!this.lineClear(n,contact));i++){const old={x:n.x,y:n.y};this.walkNpc(n,goal,Math.min(remaining,1));const distance=dist(old,n);if(distance<.001)break;moved+=distance;remaining-=distance/WorldPacing.civilianWalk;}
+   if(dist(n,contact)<44&&this.lineClear(n,contact)){const at=before+Math.min(minutes,moved/(WorldPacing.civilianWalk*WorldPacing.dayRealSeconds/1440));for(const c of j.pending(n.id,at))if(j.zone(c.site)?.id===j.zone(this.justiceReportingSite(contact))?.id&&j.canReport(c,this.justiceIdentity(n),this.justiceReportingSite(contact)).allowed)this.fileJusticeStatement(c.id,n.id,at,this.justiceReportingSite(contact));delete n.justiceReport;}
   }advance.call(this,dt);
  };
  // Keep a witness's reporting goal from fighting ordinary stroll/road/courier AI.
