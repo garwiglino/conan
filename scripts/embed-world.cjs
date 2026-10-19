@@ -66,3 +66,8 @@ html=html.replace(/(?:installWorldUI\(\);|installLandscapeUI\(\);)+(?=refreshTit
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
 console.log('Embedded world atlas, simulation, streaming terrain, map and travel UI.');
+
+// Rebuild relative district plans against the current geography before embedding.
+const districtPlans=JSON.stringify(require('./build-settlements.cjs').build())+'\n';
+if(read('data/architecture/settlements.json')!==districtPlans)fs.writeFileSync(path.join(root,'data/architecture/settlements.json'),districtPlans);
+require('./embed-architecture.cjs');

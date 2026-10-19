@@ -4,9 +4,12 @@ from zipfile import ZipFile, ZIP_DEFLATED
 import plistlib
 import re
 import struct
+import subprocess
 import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[1]
+# Always package the current editable world and native architecture sources.
+subprocess.run(['node', str(root / 'scripts/embed-world.cjs')], cwd=root, check=True)
 project = root / 'ios/Hearthreaver.xcodeproj'
 pbx = (project / 'project.pbxproj').read_text(encoding='utf-8')
 info = plistlib.loads((root / 'ios/Hearthreaver/Info.plist').read_bytes())

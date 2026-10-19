@@ -3,17 +3,17 @@
 [Atelier des humains : tenues, métiers, armées et animations](art/humains/activites/atelier.html)
 · [Sources et utilisation de la bibliothèque JavaScript](docs/humains-activites.md).
 Ce catalogue visuel est consultable séparément du jeu.
-[Consultation et préparation de l’intégration ultérieure](docs/humains-integration-differee.md).
+[Bibliothèque humaine et périmètre intégré](docs/humains-integration-differee.md).
 
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
 
-**Architecture humaine en JavaScript — ressources prêtes, non intégrées au jeu :** [atelier natif et assemblages](art/architecture/atelier.html), [catalogue complet et API](docs/architecture-javascript.md), [pack des sources, sprites et calques](art/architecture/architecture-complete.zip). 106 bâtiments, 8 variantes d’hiver et 120 modules, à l’échelle de l’humain de 19 px.
+**Architecture humaine en JavaScript — intégrée aux localités :** [atelier natif et assemblages](art/architecture/atelier.html), [catalogue complet et API](docs/architecture-javascript.md), [pack des sources, sprites et calques](art/architecture/architecture-complete.zip). 106 bâtiments, 8 variantes d’hiver et 120 modules, à l’échelle de l’humain de 19 px.
 
 Le héros est **Kaldor « the Flamebearer »**. Dans la version jouable actuelle, il commence au Campement des Exilés avec la fée ; Elyne, à proximité, rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. La prison de test a été retirée.
 
 [État réel du jeu : fonctionnalités intégrées, ressources disponibles et limites](docs/etat-du-jeu.md). [Registre des corrections de cohérence et vérifications](docs/corrections-coherence.md). [Personnes, patrouilles, combustible et échanges causaux](docs/campagne-causale.md). [Chargement et performances du monde](docs/world-performance.md). [Affectations et réparateurs](docs/personnes-affectations.md).
 
-Le bouton **Monde** ou la touche **G** ouvre la carte : Igea, Teremor et Sarak constituent un seul continent, Varan et Tagon deux îles plus petites. La carte Azgaar est resserrée au vingtième (72 × 48 km) : chaque région forme un pays habité, relié à ses voisins par une route d’environ 15 à 30 minutes de marche, et des frontières naturelles ferment le reste. Le terrain à une tuile par mètre est chargé autour du joueur ; les 83 localités sont pour cette première passe des relais de test. Itinéraires, voyages par cheval/charrette/bateau, provisions, lieux stables et chronique des nouvelles connues par chaque PNJ sont intégrés. [Fonctionnement, événements et limites de cette première passe](docs/world.md).
+Le bouton **Monde** ou la touche **G** ouvre la carte : Igea, Teremor et Sarak constituent un seul continent, Varan et Tagon deux îles plus petites. La carte Azgaar est resserrée au vingtième (72 × 48 km) : chaque région forme un pays habité, relié à ses voisins par une route d’environ 15 à 30 minutes de marche, et des frontières naturelles ferment le reste. Le terrain à une tuile par mètre est chargé autour du joueur ; les 83 localités disposent d’un premier quartier bâti régional, avec rues, habitations et services. Itinéraires, voyages par cheval/charrette/bateau, provisions, lieux stables et chronique des nouvelles connues par chaque PNJ sont intégrés. [Fonctionnement, événements et limites de cette première passe](docs/world.md).
 
 Le menu utilise un logo rouge métallique bordé d'or, dessiné dans Aseprite, avec douze images de reflets de flammes. Six plans de ciel, reliefs et poussière composent un panorama qui défile lentement. L'option système de réduction des animations immobilise le décor et les reflets. Les quatre commandes sont **Nouvelle partie**, **Charger**, **Options** et **Quitter**. Charger est grisé sans sauvegarde valide. Les options mémorisent séparément l'activation et le volume de la musique et des bruitages. Quitter coupe la session et tente de fermer la fenêtre lorsque le navigateur l'autorise ; sinon un écran de fin permet de revenir au menu. Sur iOS, la fermeture de l'app reste un geste système.
 
@@ -117,3 +117,5 @@ Postes humains indépendants : [guide JavaScript](docs/humains-postes-javascript
 - [Sprites humains d’Igea en saison enneigée](docs/humains-igea-hiver.md) : réutilisation des postes, neige sélective et gestes hivernaux.
 
 - [Vêtements et animations modulaires des humains](docs/humains-modularite.md) : pièces natives articulées, combinaisons de vêtements et vérifications.
+
+Les [implantations des 83 localités](docs/implantation-localites.md) intègrent les bâtiments natifs et les postes des habitants dans les versions web et iOS.

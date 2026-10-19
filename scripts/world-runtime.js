@@ -80,7 +80,7 @@ Game.prototype.walkNpc=function(n,to,dt){
  if(!(dt>0))return Math.hypot(n.x-to.x,n.y-to.y)<2;
  const key=Math.floor(to.x/16)+','+Math.floor(to.y/16);
  if(n.pathKey!==key||!n.path?.length){
-  n.pathKey=key;const path=Atlas.localPath(n,to,(x,y)=>!this.solid(x,y,4,n.level||0)&&(!n.dangerState||this.civilianStepSafe(n,x,y)));
+  n.pathKey=key;const path=Atlas.localPath(n,to,(x,y)=>!this.solid(x,y,4,n.level||0)&&(!n.dangerState||this.civilianStepSafe(n,x,y)),2200,this.settlementPathEdges?.(n,to));
   // String-pull only when planning, not for every NPC on every frame.
   n.path=[];let anchor=n;
   if(path.length>1&&this.npcSegmentFree(n,n,path[path.length-1]))n.path=[path[path.length-1]];

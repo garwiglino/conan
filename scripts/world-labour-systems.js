@@ -55,14 +55,10 @@ function createWorldLabourSystems(A,W,state,H,S){
  }
  function localNeeds(site){const fraction=site.population?Math.max(0,site.population-outsideCount(site))/site.population:0;return Object.fromEntries(Object.entries(site.needs).map(([id,n])=>[id,n*(['provisions','water'].includes(id)?fraction:1)]));}
  const jobs={hoe:'farm',sow:'farm',craft:'smith',pottery:'kiln',weave:'textile',stir:'kitchen',net:'fish',groom:'herd',load:'service',rope:'boat',ledger:'service',carry:'gather'};
- function resourceJob(id){
-  if(['grain','legumes','rice','tubers','dates','fruit','vegetables','oil','flax','cotton','fiber','dyes','aromatics'].includes(id))return 'farm';
-  if(id==='fish')return 'fish';if(['meat','milk','wool','hides','pack_animals'].includes(id))return 'herd';
-  if(['cloth','leather'].includes(id))return 'textile';if(['boats','rope'].includes(id))return 'boat';
-  if(['pottery','glass'].includes(id))return 'kiln';if(['provisions','flour'].includes(id))return 'kitchen';
-  if(['tools','arms','iron','copper','tin','bronze','steel','charcoal'].includes(id))return 'smith';return 'gather';
- }
- const jobCanProduce=(site,job)=>Object.keys(site.capacity).some(id=>resourceJob(id)===jobs[job]);
+ // Shared classification: frame-time job checks must not allocate resource arrays.
+ const resourceGroups=new Map([['fish','fish'],...['grain','legumes','rice','tubers','dates','fruit','vegetables','oil','flax','cotton','fiber','dyes','aromatics'].map(id=>[id,'farm']),...['meat','milk','wool','hides','pack_animals'].map(id=>[id,'herd']),...['cloth','leather'].map(id=>[id,'textile']),...['boats','rope'].map(id=>[id,'boat']),...['pottery','glass'].map(id=>[id,'kiln']),...['provisions','flour'].map(id=>[id,'kitchen']),...['tools','arms','iron','copper','tin','bronze','steel','charcoal'].map(id=>[id,'smith'])]),resourceJob=id=>resourceGroups.get(id)||'gather',ownCapacity=Object.prototype.hasOwnProperty;
+ const jobCanProduce=(site,job)=>{for(const id in site.capacity)if(ownCapacity.call(site.capacity,id)&&resourceJob(id)===jobs[job])return true;return false;};
+ const jobCanWork=(site,job)=>{for(const id in site.capacity){if(!ownCapacity.call(site.capacity,id)||!(site.capacity[id]>0)||resourceJob(id)!==jobs[job])continue;const r=H.resource?.(id);if(!r)continue;if(r.inputAlternatives?.length){if(r.inputAlternatives.some(recipe=>recipe.every(input=>H.stock(site,input)>0)))return true;}else if(id==='water'||site.deposits[id]>0)return true;}return false;};
  function productionStaff(site){
   const groups=[...new Set(Object.keys(site.capacity).map(resourceJob))],base=Math.max(1,site.labourBase||site.population),records=Object.values(site.workerRecords),named=records.filter(p=>!p.anonymous&&!p.dead),available=named.filter(p=>!blocked(p)&&p.onDuty!==false&&!p.service),anonymous=Math.max(0,site.workers-named.filter(p=>!blocked(p)).length),share=Math.max(0,(base-named.length)/Math.max(1,groups.length));
   const result={};for(const group of groups){const normal=share+named.filter(p=>jobs[p.job]===group&&!p.service).length,active=anonymous/Math.max(1,groups.length)+available.filter(p=>jobs[p.job]===group).length;result[group]=normal?Math.min(1,active/normal):0;}
@@ -136,6 +132,6 @@ function createWorldLabourSystems(A,W,state,H,S){
   }
  }
  Object.assign(H,{restoreWorkers,restoreCrew,crewHealth,reserveCrew,workerDeath,repairApproach,stepRepairMission,tickLabour,localNeeds});
- return {restoreWorkers,restoreCrew,crewHealth,reserveCrew,setWorkerReason,prepareRepair,stepRepairMission,repairApproach,tickLabour,outsideCount,localNeeds,productionStaff,jobCanProduce};
+ return {restoreWorkers,restoreCrew,crewHealth,reserveCrew,setWorkerReason,prepareRepair,stepRepairMission,repairApproach,tickLabour,outsideCount,localNeeds,productionStaff,jobCanProduce,jobCanWork};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldLabourSystems;

@@ -1,11 +1,11 @@
 'use strict';
 // Offline, reproducible integration. The full native JS pack stays available
-// without image requests. No architecture is placed by this build operation.
+// without image requests. Native districts and human activity resources are installed offline.
 const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const begin='// BEGIN NATIVE JAVASCRIPT ARCHITECTURE',end='// END NATIVE JAVASCRIPT ARCHITECTURE';
-const parts=['sprites/architecture/architecture-data.js','sprites/architecture/architecture.js','sprites/architecture/localities.js','scripts/architecture-world.js'];
-const block=begin+'\n'+parts.map(read).join('\n')+'\nHearthreaverArchitectureWorld.install(Game,Renderer);\n'+end;
+const parts=['sprites/architecture/architecture-data.js','sprites/architecture/architecture.js','sprites/architecture/localities.js','scripts/architecture-world.js','sprites/humains/sources-natives.js','sprites/humains/catalogue.js','sprites/humains/rig.js','sprites/humains/modularite.js','sprites/humains/cheval.js','sprites/humains/accessoires.js','sprites/humains/activites.js','sprites/decors/humains-grilles.js','sprites/decors/atlas-nature.js','sprites/decors/igea-hiver.js','sprites/decors/postes-humains.js'];
+const block=begin+'\n'+parts.map(read).join('\n')+'\nHearthreaverArchitectureWorld.install(Game,Renderer);\nconst SETTLEMENT_DATA='+read('data/architecture/settlements.json').trim()+';\n'+read('scripts/settlement-runtime.js')+'\n'+end;
 let html=read('index.html');
 if(html.includes(begin)){
  const a=html.indexOf(begin),b=html.indexOf(end,a);if(b<0||html.indexOf(begin,a+begin.length)>=0)throw Error('Architecture block is corrupted');html=html.slice(0,a)+block+html.slice(b+end.length);

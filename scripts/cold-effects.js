@@ -37,5 +37,5 @@ Renderer.prototype.refreshColdSiteProps=function(clock){
  if(this.coldSiteGame===g&&this.coldSiteClock===cellKey&&this.coldSitePosition===position)return;
  if(this.coldSiteGame!==g){this.coldSites=new Map();this.coldSiteGame=g;}this.coldSiteClock=cellKey;this.coldSitePosition=position;
  const sites=new Set();for(const o of g.atlasProps){if(o.id&&o.site&&Math.abs(o.x-this.cam.x-this.W/2)<this.W/2+96&&Math.abs(o.y-this.cam.y-this.H/2)<this.H/2+96)sites.add(o.site);}
- for(const id of sites){const n=Atlas.byId[id],cell=Atlas.cellAt(n.x,n.y),key=Atlas.snowCover(cell?.biome,cell?.height,clock,cell?.region)>.3;if(this.coldSites.get(id)===key)continue;this.coldSites.set(id,key);const kinds=new Map(atlasSiteProps(n,clock).map(o=>[o.id,o.kind]));for(const o of g.atlasProps)if(o.site===id&&kinds.has(o.id)&&!o.kind.startsWith('transport_'))o.kind=kinds.get(o.id);}
+ for(const id of sites){const n=Atlas.byId[id],cell=Atlas.cellAt(n.x,n.y),key=Atlas.snowCover(cell?.biome,cell?.height,clock,cell?.region)>.3;if(this.coldSites.get(id)===key)continue;this.coldSites.set(id,key);const kinds=new Map(atlasSiteProps(n,clock).map(o=>[o.id,o.kind]));for(const o of g.atlasProps)if(o.site===id&&kinds.has(o.id)&&!o.kind.startsWith('transport_')&&o.kind!=='settlement_refuge')o.kind=kinds.get(o.id);}
 };

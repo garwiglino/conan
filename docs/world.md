@@ -146,3 +146,13 @@ Le ravitaillement propose au moins trois jours, ou davantage pour couvrir les ra
 La liste commerciale contient 85 destinations habitées (83 localités, le camp et le refuge), au lieu de 121 points incluant les quais techniques. Les 8 quais restent à leur côte réelle pour les bateaux, les correspondances et les anciennes sauvegardes, mais ne doublonnent plus les localités dans la liste. Les villages isolés restent desservis : retirer leur relais imposerait plusieurs kilomètres à pied dans cette géographie. Aucun relais n’est ajouté aux ruines ou aux tronçons sauvages. Les transporteurs terrestres sont placés sur une voie d’accès, à environ cinq mètres du centre local. Une arrivée normale dépose le groupe à un emplacement libre et visible, à moins de trois mètres du transporteur ; les interruptions et haltes maritimes conservent leur comportement.
 
 Le panneau du palefrenier utilise des textes plus petits et une aide séparée « Comment voyager », fermable avec Retour ou Échap. Le départ avec réserves insuffisantes s’intitule « Partir avec ressources actuelles ». L’écran en route présente une ligne par membre avec nom, faim et vie ; les repas sont résumés par membre (« −1 ration · +50 % »). La progression représente le temps du trajet, attentes et repos inclus, et reste immobile pendant les pauses de présentation.
+
+## Implantation des localités
+
+Les anciens relais de test des 83 localités ont désormais un premier quartier bâti
+avec les sprites natifs du catalogue architectural. Les rues, les emprises, les
+entrées des auberges et les postes de travail des habitants utilisent les
+collisions réelles du moteur. Les groupes et populations ne sont pas multipliés
+pour habiller ces quartiers. Le camp scénarisé et les quais gardent leur plan
+propre. Voir [Implantation des localités](implantation-localites.md) pour les
+1 691 bâtiments, les familles régionales et le périmètre effectivement raccordé.

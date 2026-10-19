@@ -45,6 +45,16 @@ La justice distingue acte, témoin, déposition et dernier signalement. Un témo
 
 Sources : `scripts/world-society.js`, `scripts/world-dialogue.js`, `scripts/world-justice.js`, `scripts/world-justice-runtime.js`, `scripts/world-life-runtime.js`.
 
+## Localités aménagées
+
+Les 83 localités disposent d’un premier quartier extérieur : 1 691 bâtiments natifs,
+rues accessibles, habitations régionales, auberges, halles, réserves et ateliers
+adaptés à leur rôle. Les positions des centres et les transports restent ceux de
+l’atlas. Les activités raccordées des habitants utilisent des postes indépendants,
+avec arrivée à pied, contrôle des matières disponibles et interruptions cohérentes.
+Les quartiers et animations n’ajoutent ni population ni stocks. Voir
+[l’implantation des localités](implantation-localites.md) pour le détail et les vérifications.
+
 ## Ressources artistiques disponibles
 
 Les humains et les batraciens ont leurs ressources et leur intégration en jeu. Les batraciens ajoutent 62 civils et 11 gardes dans 14 localités, avec rôles armés pour certains groupes existants.
@@ -54,7 +64,7 @@ Les hommes-singes disposent des deux silhouettes, cinq pelages, quatre vues et d
 ## Limites encore présentes
 
 - Pas de diplomatie opérationnelle complète, de guerre ou d'alliance militaire décidée par les acteurs politiques.
-- Pas de peuplement physique complet des six espèces, de villes entièrement bâties ou d'ateliers dont chaque geste produit un bien réel.
+- Pas de peuplement physique complet des six espèces, de représentation de tous les foyers et intérieurs des villes, ou d'ateliers dont chaque geste produit un bien réel.
 - Pas de bataille navale ni de pillage général libre de tous les objets. Les bandes peuvent prélever des cargaisons abandonnées et financer leurs dépenses ; les équipes de récupération rapportent les biens encore disponibles. Les combats de convois dont les participants ont été observés continuent hors écran avec pertes persistantes ; un ancien combat sauvegardé sans participants attend encore une observation.
 - Les patrouilles parcourent désormais les routes pour rejoindre leur mission et rentrer au poste. Les grandes tournées entre plusieurs relais, les rançons, la contrebande et l’ensemble des procédures de la bible restent à développer.
 - Les conseils et refus au départ dépendent des nouvelles reçues par le transporteur ; l’interception en route utilise la réalité du passage effectivement abordé. Les tempêtes maritimes suspendent les traversées.

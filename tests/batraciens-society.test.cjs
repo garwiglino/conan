@@ -55,7 +55,8 @@ test('nearby civilian injury or a fatal first hit triggers witnesses, including 
  const g=game(),{guard}=arena(g),human=g.npcs.find(n=>n.civilian&&!n.batracien&&n.id!=='elyne');Object.assign(human,{x:guard.x+24,y:guard.y,level:0});g.damageCivilian(human,1,g.player);human.civilian.inv=0;g.damageCivilian(human,1,g.player);assert.ok(g.isHostileBatracien(guard));
 });
 test('monster damage, unseen assaults and other floors never accuse the player',()=>{
- const g=game(),{guard,civil}=arena(g);Object.assign(civil,{x:guard.x+28,y:guard.y});g.damageCivilian(civil,1,{x:civil.x+10,y:civil.y,level:0,kind:'snake'});assert.equal(g.isHostileBatracien(guard),false);
+ // Perception is tested without another staffed contact filing its own testimony.
+ const g=game(),{guard,civil}=arena(g);g.npcs=[guard,civil];Object.assign(civil,{x:guard.x+28,y:guard.y});g.damageCivilian(civil,1,{x:civil.x+10,y:civil.y,level:0,kind:'snake'});assert.equal(g.isHostileBatracien(guard),false);
  civil.civilian.inv=0;g.lineClear=()=>false;g.damageCivilian(civil,1,g.player);assert.equal(g.isHostileBatracien(guard),false);
  g.lineClear=()=>true;guard.level=1;civil.civilian.inv=0;g.damageCivilian(civil,1,g.player);assert.equal(g.isHostileBatracien(guard),false);
 });

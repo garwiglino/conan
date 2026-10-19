@@ -89,26 +89,19 @@ En Node, `require('./sprites/architecture/architecture.js')` donne la même API,
 avec `raster` utilisable sans navigateur ni bibliothèque d’images. Le rendu
 Canvas peut utiliser `setCanvasFactory(createCanvas)` si un cache est souhaité.
 
-## Intégration future au jeu
+## Intégration au jeu
 
-La bibliothèque est livrée comme ressource autonome, sans chargement dans le jeu.
-Les fichiers `index.html`, le HTML iOS et le paquet iOS restent inchangés.
-La commande `build:architecture` produit uniquement les ressources et l’atelier.
-Le script `scripts/embed-architecture.cjs` reste un outil facultatif pour une
-intégration ultérieure, à lancer explicitement lorsque celle-ci sera souhaitée.
-Après cette intégration seulement, les objets explicitement créés avec
-`game.placeArchitecture(id, {x, y, dir, site})` rejoignent le tri de profondeur
-du moteur, ses collisions et sa sauvegarde. `site`, facultatif, désigne une
-localité par son nom et vérifie la famille architecturale ; les fonctions et
-modules communs restent réutilisables.
+Le catalogue est maintenant chargé dans les éditions web et iOS. Le premier
+aménagement des 83 localités est décrit dans [Implantation des localités](implantation-localites.md).
+`embed-world.cjs` appelle automatiquement `embed-architecture.cjs` ; le paquet
+standalone et l’atelier restent disponibles pour le travail d’auteur.
 
-Les plans de quartiers, la décision de fortifier une localité et les intérieurs
-ne sont pas générés par cette bibliothèque de sprites. Aucune population, route,
-ressource ou localité n’est déplacée. Le contrôleur peut interroger
-`game.architectureHeight(x, y)` pour les surfaces hautes et
-`game.architectureSolid(x, y, rayon, altitude, hauteurDuCorps)` pour le volume.
-La marche automatique sur les nouveaux escaliers doit utiliser ces données,
-distinctes de l’ancien étage unique de 12 px du campement.
+Les constructions explicitement créées avec
+`game.placeArchitecture(id, {x, y, dir, site})` gardent leur sauvegarde propre.
+Les quartiers déterministes utilisent une géométrie partagée et un index spatial,
+sans les recopier dans chaque sauvegarde. Le contrôleur conserve les surfaces
+hautes de la bibliothèque ; ce premier aménagement utilise les bâtiments au sol
+et n’installe pas de nouveaux remparts ou escaliers à parcourir.
 
 ## Reconstruire et vérifier
 

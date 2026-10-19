@@ -1,6 +1,9 @@
 const {test}=require('node:test'),fs=require('node:fs'),assert=require('node:assert/strict');
 const {JSDOM}=require('jsdom'),canvas=require('@napi-rs/canvas'),{RenderingAudioContext}=require('web-audio-engine');
 const {html}=require('./game-harness.cjs');
+// A frame drains the callbacks already queued, like a browser; map redraws and
+// the game loop must coexist without replacing each other's callback.
+function animationFrames(w){const queue=new Map();let serial=0;w.requestAnimationFrame=cb=>{queue.set(++serial,cb);return serial;};w.cancelAnimationFrame=id=>queue.delete(id);return at=>{const callbacks=[...queue.values()];queue.clear();for(const cb of callbacks)cb(at);};}
 test('main menu loads real saves, cancels overwrite, persists audio levels, and ends/resumes its session',async()=>{
  const script=html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/,'globalThis.testAPI={get state(){return state;},get game(){return game;},sound,studioIntro,titleScene,musicMode,begin,showTitle,pause,save,Sound,returnFromQuit,BITMAPS,lockLandscape,renderTracker,openMenu,closeMenu,openSleepPanel,haptics,Haptics,textSettings,setTextSize};})();');
  const dom=new JSDOM(html.replace(/<script>[\s\S]*?<\/script>/,''),{url:'https://hearthreaver.test/',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,map=new WeakMap();let raf,closes=0;
@@ -10,7 +13,7 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
  for(const key of ['width','height']){const d=Object.getOwnPropertyDescriptor(proto,key);Object.defineProperty(proto,key,{get:d.get,set(v){d.set.call(this,v);if(map.has(this))map.get(this).native[key]=v;},configurable:true});}
  proto.getContext=function(){if(!map.has(this)){const native=canvas.createCanvas(this.width||1,this.height||1),ctx=native.getContext('2d');const proxy=new Proxy(ctx,{get(target,k){if(k==='drawImage'||k==='createPattern'){const method=target[k].bind(target);return (im,...args)=>method(map.get(im)?.native||im,...args);}const v=target[k];return typeof v==='function'?v.bind(target):v;},set(t,k,v){t[k]=v;return true;}});map.set(this,{native,proxy});}return map.get(this).proxy;};
  proto.toDataURL=function(){this.getContext('2d');return map.get(this).native.toDataURL();};
- w.Image=canvas.Image;w.Path2D=canvas.Path2D;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});w.requestAnimationFrame=cb=>{raf=cb;return 1;};
+ w.Image=canvas.Image;w.Path2D=canvas.Path2D;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});raf=animationFrames(w);
  w.AudioContext=class extends RenderingAudioContext{constructor(){super({sampleRate:8000});Object.defineProperty(this,'state',{value:'running'});}resume(){return Promise.resolve();}suspend(){return Promise.resolve();}decodeAudioData(b,ok){ok(this.createBuffer(1,1,8000));}};
  w.HTMLMediaElement.prototype.play=()=>Promise.resolve();w.HTMLMediaElement.prototype.pause=()=>{};
  const errors=[];w.addEventListener('error',e=>{errors.push(e.error?.stack||e.message);e.preventDefault();});
@@ -50,7 +53,7 @@ test('main menu loads real saves, cancels overwrite, persists audio levels, and 
   a.game.talkTo(a.game.escortActor);a.game.dialogue=null;click('btnParty');assert.equal($('partyList').children.length,3);$('partyList').querySelector('[data-member="elyne"]').click();assert.match($('partyDetail').textContent,/Réserve de nourriture/);click('partyClose');
   a.openMenu('quests');click('menuMap');assert.equal(a.state,'world');click('worldClose');assert.equal(a.state,'menu');a.closeMenu();
   assert.equal(a.game.startJourney({to:'town-1',mode:'horse'}),false);
-  const station=a.game.stations.find(s=>s.site==='camp');Object.assign(a.game.player,{x:station.actor.x,y:station.actor.y+16});Object.assign(a.game.escortActor,{x:station.actor.x+16,y:station.actor.y+16});
+  const station=a.game.stations.find(s=>s.site==='camp'),landing=a.game.stationLanding(station.site);assert.ok(landing);Object.assign(a.game.player,landing);const escort=[[16,0],[-16,0],[0,16],[0,-16]].map(([dx,dy])=>({x:landing.x+dx,y:landing.y+dy})).find(p=>!a.game.solid(p.x,p.y,4,0)&&a.game.lineClear(p,a.game.player));assert.ok(escort);Object.assign(a.game.escortActor,escort);
   a.game.talkTo(station.actor);const option=a.game.npcMenu(station.actor).find(o=>o.label.includes('acheter'));option.act();raf(500);assert.equal(a.state,'transport');assert.ok($('transportDestination').options.length>80);
   click('transportHelpOpen');assert.equal($('transportHelp').hidden,false);assert.equal($('transportPanel').inert,true);w.document.activeElement.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',code:'Escape',bubbles:true,cancelable:true}));assert.equal($('transportHelp').hidden,true);assert.equal(a.state,'transport');assert.equal(w.document.activeElement.id,'transportHelpOpen');assert.equal($('transportDestination').hidden,true);assert.ok($('transportDestination').querySelectorAll('optgroup').length>=4);
   click('transportDestinationTrigger');assert.equal($('transportDestinationList').hidden,false);
@@ -111,7 +114,7 @@ test('cold restart preserves a paid journey, which keeps going while the app is 
  for(const key of ['width','height']){const d=Object.getOwnPropertyDescriptor(proto,key);Object.defineProperty(proto,key,{get:d.get,set(v){d.set.call(this,v);if(map.has(this))map.get(this).native[key]=v;},configurable:true});}
  proto.getContext=function(){if(!map.has(this)){const native=canvas.createCanvas(this.width||1,this.height||1),ctx=native.getContext('2d');const proxy=new Proxy(ctx,{get(target,k){if(k==='drawImage'||k==='createPattern'){const method=target[k].bind(target);return (im,...args)=>method(map.get(im)?.native||im,...args);}const v=target[k];return typeof v==='function'?v.bind(target):v;},set(t,k,v){t[k]=v;return true;}});map.set(this,{native,proxy});}return map.get(this).proxy;};
  proto.toDataURL=function(){this.getContext('2d');return map.get(this).native.toDataURL();};
- w.Image=canvas.Image;w.Path2D=canvas.Path2D;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});w.requestAnimationFrame=cb=>{raf=cb;return 1;};
+ w.Image=canvas.Image;w.Path2D=canvas.Path2D;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});raf=animationFrames(w);
  w.AudioContext=class extends RenderingAudioContext{constructor(){super({sampleRate:8000});Object.defineProperty(this,'state',{value:'running'});}resume(){return Promise.resolve();}suspend(){return Promise.resolve();}decodeAudioData(b,ok){ok(this.createBuffer(1,1,8000));}};
  w.HTMLMediaElement.prototype.play=()=>Promise.resolve();w.HTMLMediaElement.prototype.pause=()=>{};
  const errors=[];w.addEventListener('error',e=>{errors.push(e.error?.stack||e.message);e.preventDefault();});

@@ -47,7 +47,7 @@ function createWorldSimulation(A,B,W,saved){
   };
   if(!site.supplyRevision){for(const id of Object.keys(site.capacity))ensure(id);ensure('medicinal');ensure('tools');ensure('cloth');site.supplyRevision=1;}
  }
- const campaignHooks={stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish};
+ const campaignHooks={resource:id=>resources.get(id),stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish};
  const systems=(typeof createCampaignSystems==='function'?createCampaignSystems:require('./world-campaign-systems.js'))(A,B,W,state,campaignHooks);
  Object.assign(systems,(typeof createWorldLabourSystems==='function'?createWorldLabourSystems:require('./world-labour-systems.js'))(A,W,state,campaignHooks,systems));
  function requirements(site){const need=systems.localNeeds(site),region=regions.get(A.byId[site.id].region);

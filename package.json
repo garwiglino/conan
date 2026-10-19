@@ -36,7 +36,10 @@
     "preview:armaments": "node scripts/preview-kaldor-armaments.cjs",
     "build:architecture": "python3 scripts/build-architecture.py && node scripts/build-architecture-human.cjs && node scripts/export-architecture.cjs",
     "test:architecture": "node --test tests/architecture.test.cjs",
-    "package:architecture": "python3 scripts/package-architecture.py"
+    "package:architecture": "python3 scripts/package-architecture.py",
+    "build:settlements": "node scripts/build-settlements.cjs && node scripts/embed-world.cjs",
+    "test:settlements": "node --test tests/settlements.test.cjs tests/architecture.test.cjs",
+    "check:settlements": "node scripts/check-settlements.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

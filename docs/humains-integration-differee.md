@@ -1,6 +1,6 @@
-# Ressources humaines prêtes pour une intégration ultérieure
+# Ressources humaines — bibliothèque et intégration
 
-Ce lot est livré dans le dépôt comme bibliothèque de sprites et atelier autonome. Son ajout ne branche pas les activités sur les PNJ du jeu principal. L’intégration à la simulation pourra être décidée séparément.
+La bibliothèque et l’atelier autonome restent disponibles. Une première intégration au jeu principal raccorde désormais les habitants et leurs postes aux localités : voir [Implantation des localités](implantation-localites.md) pour le périmètre effectivement activé. Les autres clips restent des ressources, sans créer leurs entités ou leur production.
 
 Les ressources comprennent les 59 tenues natives, les 55 coiffes et casques, les 152 clips, les pièces de vêtements combinables, les postes indépendants, les concepts retenus et l’adaptation hivernale d’Igea. Les grilles JavaScript sont directement utilisables ; il n’est pas nécessaire de reconstruire les dessins sources pour consulter ou utiliser la bibliothèque.
 
