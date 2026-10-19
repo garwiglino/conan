@@ -129,3 +129,15 @@ test('all existing arm, hand and sleeve silhouettes keep their exact pixels afte
  }
  A.wear('pagne-noue');A.wield(W.START);
 });
+
+test('the legendary Clairfoyer sword is reachable beside the actual spawn and stays acquired after reload',()=>{
+ const {Game}=api,g=new Game(),w=W.get('flamme-clairfoyer'),rack=g.atlasProps.find(o=>o.kind==='kaldor_weapon'&&o.weapon===w.id);
+ assert.equal(w.rarity,'Légendaire');assert.equal(w.site,'camp');assert.equal(w.hands,2);assert.equal(W.finisher(w.id).effect,'ember');
+ assert.ok(Math.hypot(rack.x-g.player.x,rack.y-g.player.y)<40,'near actual player spawn, not only the distant camp marker');
+ assert.ok(g.lineClear(g.player,rack));assert.ok(!g.solid(rack.x,rack.y,10,0));assert.ok(!g.solid(rack.x,rack.y-18,8,0));
+ assert.equal(g.takeWeapon(w.id),false,'still a local pickup');
+ Object.assign(g.player,{x:rack.x,y:rack.y+8,level:0,spawnFX:0});assert.equal(g.context()?.kind,'weapon');
+ g.interact();assert.ok(g.arsenal.owned.includes(w.id));assert.equal(rack.taken,true);assert.equal(g.player.weapon,W.START,'no automatic equip');assert.equal(g.takeWeapon(w.id),false);
+ assert.equal(g.equipWeapon(w.id),true);
+ const restored=new Game(plain(g.serialize()));assert.ok(restored.arsenal.owned.includes(w.id));assert.equal(restored.player.weapon,w.id);assert.ok(restored.atlasProps.find(o=>o.weapon===w.id).taken);
+});

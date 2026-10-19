@@ -17,59 +17,51 @@
   jade:['#324c48','#71947c','#c7d7ad','#dbad60'],ember:['#633c39','#a8664d','#edb77f','#f2d383']
  });
  const MOTIONS=freeze(data.motions);
+ // Cut dead time, especially the floating follow-through and return. Tempo and
+ // inertia remain relative to each individual weapon.
+ const BEAT=freeze([1,.83,.72,.78,.65,.70]);
  function times(id,combo=0){
-  const w=get(id);if(w.family==='spear')return SPEAR_TIMES[combo].map(t=>t*w.tempo);
+  const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
+  if(w.family==='spear')return SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1));
   const row=MOTIONS[w.family].times[combo],reference={sword:1.8,sabre:1.25,dagger:.6,axe:1.9,mace:2.1,staff:1.6,glaive:2.7}[w.family];
   const inertia=Math.max(.84,Math.min(1.22,1+(w.weightKg/reference-1)*.16));
-  return row.map((t,i)=>t*w.tempo*(i===1||i===4||i===5?inertia:1));
+  return row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1));
  }
  const duration=(id,combo=0)=>times(id,combo).reduce((a,b)=>a+b,0);
  function frame(remaining,id,combo=0){
   const row=times(id,combo);let t=duration(id,combo)-Math.max(0,remaining);
   for(let i=0;i<6;i++){if(t<row[i]-1e-7)return i;t-=row[i];}return 5;
  }
- // Quarter-frame samples interpolate from the previous key drawing into the
- // current one. Active-frame collision sweeps cover exactly that same motion.
+ // Few deliberate drawings: held anticipation, a fast crossing and a readable
+ // contact. Collision still sweeps the complete path between those drawings.
  function sample(remaining,id,combo=0){
-  const row=times(id,combo),steps=8;let t=duration(id,combo)-Math.max(0,remaining);
+  const row=times(id,combo),steps=4;let t=duration(id,combo)-Math.max(0,remaining);
   for(let i=0;i<6;i++){if(t<row[i]-1e-7)return Math.max(0,i-1+Math.floor(t/row[i]*steps)/steps);t-=row[i];}return 5;
  }
  // The arms and hands are existing sprite layers. Choreography translates
  // those intact images to the grip; it never generates an arm or changes its shape.
- const handSpan=id=>['staff','spear','glaive'].includes(get(id).family)?3.5:2;
- const fitGrip=(id,dir,h,u)=>({h:[...h],u,span:handSpan(id)});
+ const isPole=id=>['staff','spear','glaive'].includes(get(id).family);
+ const handSpan=(id,dir)=>isPole(id)?dir===2?6:3.5:2;
+ const fitGrip=(id,dir,h,u)=>{const span=handSpan(id,dir);return {h:[...h],u,span,
+  support:get(id).hands===2?[h[0]-u[0]*span,h[1]-u[1]*span]:null};};
  const forward=dir=>[[0,-1],[1,0],[0,1],[-1,0]][dir];
  const smooth=t=>t*t*(3-2*t);
- // Each spear blow has a different transfer of weight. Columns are:
- // grip forward, lateral, height, blade angle, body forward, body height, gait.
- // These are translations of original character layers, never new limb shapes.
- const SPEAR_NAMES=freeze(['Estoc vif','Revers de hampe','Taille montante','Fente longue']);
+ // Spear blows keep their separate load and recovery budgets.
+ const SPEAR_NAMES=freeze(['Estoc vif','Revers de hampe','Taille croisée','Fente longue']);
  const SPEAR_TIMES=freeze([
   [0,.12,.045,.055,.085,.115],
   [0,.16,.05,.065,.105,.135],
   [0,.14,.045,.065,.10,.14],
   [0,.21,.05,.085,.15,.19]
  ]);
- const SPEAR_KEYS=freeze([
-  [[0,0,0,-.15,0,0,0],[-3,0,1,-.20,-1,0,0],[4,0,0,-.08,1,0,0],[7,0,0,.02,2,0,0],[4,0,1,.08,1,0,1],[0,0,0,-.15,0,0,0]],
-  [[0,0,0,-.15,0,0,0],[-1,1,0,1.10,-1,0,3],[2,0,0,.25,1,0,3],[3,-1,-1,-.85,2,0,4],[1,-1,-1,-1.10,1,0,5],[0,0,0,-.15,0,0,0]],
-  [[0,0,0,-.15,0,0,0],[-2,1,2,.80,-1,1,6],[3,0,0,.12,1,0,6],[4,-1,-2,-.85,2,-1,7],[2,-1,-2,-1.02,1,-1,7],[0,0,0,-.15,0,0,0]],
-  [[0,0,0,-.15,0,0,0],[-4,0,1,-.23,-2,1,0],[5,0,0,-.08,1,0,0],[8,0,0,0,3,1,0],[6,0,1,.07,2,1,1],[0,0,0,-.15,0,0,0]]
- ]);
- function spearKey(id,dir,f,combo){
-  const w=get(id),v=SPEAR_KEYS[combo][f],[fx,fy]=forward(dir),side=[-fy,fx],mirror=dir===3?-1:1;
-  const home=dir===0?[4,-8]:dir===2?[-4,-7]:dir===1?[1,-6]:[-2,-6];
-  const a=v[3]*mirror,ca=Math.cos(a),sa=Math.sin(a),u=[fx*ca+side[0]*sa,fy*ca+side[1]*sa];
-  const body=[Math.round(fx*v[4]),Math.round(fy*v[4]*.4+v[5])];
-  const h=[home[0]+fx*v[0]+side[0]*v[1]+body[0],home[1]+fy*v[0]*.45+side[1]*v[1]+v[2]+body[1]];
-  if(dir===2)h[1]=Math.min(-4,h[1]);
-  const lean=f===1?-1:f===2||f===3?1:0;
-  return {h,u,reach:w.length+2,body,leg:v[6],head:[body[0]+fx*lean,body[1]+(f===3?1:0)],
-   hair:[-fx*(f===2||f===3?2:lean),f===1?1:0],lunge:f>=2&&f<=4,z:dir===0?0:1};
- }
  function guard(id,dir){
   const w=get(id),profile=dir===1||dir===3;
-  if(w.family==='spear'){const p=spearKey(id,dir,0,0);return {h:p.h,u:p.u,reach:p.reach,profile};}
+  if(dir===2&&isPole(id))return {h:[-3,-7],u:[-.65,Math.sqrt(1-.65*.65)],reach:w.length+2,profile};
+  if(w.family==='spear'){
+   const [fx,fy]=forward(dir),side=[-fy,fx],a=-.15*(dir===3?-1:1);
+   return {h:dir===0?[4,-8]:dir===2?[-4,-7]:dir===1?[1,-6]:[-2,-6],
+    u:[fx*Math.cos(a)+side[0]*Math.sin(a),fy*Math.cos(a)+side[1]*Math.sin(a)],reach:w.length+2,profile};
+  }
   const pole=w.family==='staff'||w.family==='glaive';
   const h=dir===0?[4,-8]:dir===2?[-7,-6]:dir===1?[1,-6]:[-2,-6];
   const u=pole?(dir===0?[.12,-.993]:dir===2?[-.12,.993]:dir===1?[.985,-.173]:[-.985,-.173]):dir===0?[.6,-.8]:dir===2?[-.65,-.76]:dir===1?[.58,-.815]:[-.58,-.815];
@@ -81,31 +73,150 @@
   const tip=[h[0]+u[0]*(w.length+2),h[1]+u[1]*(w.length+2)];
   return [h[0]+(tip[0]<-33?-33-tip[0]:tip[0]>33?33-tip[0]:0),h[1]+(tip[1]<-44?-44-tip[1]:tip[1]>22?22-tip[1]:0)];
  }
+ // Screen-space stroke drawings, authored separately for face and profile.
+ // [hand x, hand height, blade x, blade y]. The hand crosses the torso;
+ // the edge travels with it instead of orbiting a fixed wrist. Back view
+ // projects the contact away from the camera, while keeping the raised load.
+ const STROKES=freeze({
+  cut:{face:[[7,-14,.55,-.84],[2,-9,.8,.6],[-5,-3,-.35,.94],[-7,-2,-.65,.76]],
+       side:[[-4,-17,-.65,-.76],[5,-12,.9,-.44],[9,-4,.92,.39],[7,-2,.65,.76]]},
+  reverse:{face:[[-8,-10,-.8,-.6],[-1,-7,-.5,.87],[7,-4,.7,.71],[8,-5,.88,.48]],
+           side:[[0,-3,.4,.92],[6,-7,.98,.18],[8,-14,.75,-.66],[5,-17,.35,-.94]]},
+  rise:{face:[[7,-2,.9,.44],[2,-5,.8,-.6],[-5,-12,-.65,-.76],[-7,-14,-.8,-.6]],
+        side:[[-3,-2,.55,.83],[6,-6,.99,.12],[9,-13,.85,-.53],[6,-16,.55,-.84]]},
+  overhead:{face:[[-1,-19,-.14,-.99],[0,-10,.9,.44],[1,-2,.08,1],[2,0,.16,.99]],
+            side:[[-5,-19,-.55,-.84],[5,-12,.94,-.34],[10,-3,.88,.48],[8,0,.55,.84]]},
+  thrust:{face:[[-6,-9,-.18,.98],[-3,-5,-.12,.99],[0,0,-.06,1],[-1,-1,-.1,.99]],
+          side:[[-4,-7,.99,-.14],[5,-7,1,-.05],[12,-6,1,0],[9,-6,1,.04]]},
+  cross:{face:[[6,-3,.75,.66],[1,-5,-.6,.8],[-5,-5,-.75,.66],[-6,-5,-.8,.6]],
+         side:[[-4,-5,.8,.6],[4,-7,.99,.1],[9,-5,.99,.1],[7,-5,.98,.2]]},
+  butt:{face:[[7,-8,.9,-.44],[1,-6,.94,.34],[-7,-4,.8,.6],[-8,-3,.65,.76]],
+        side:[[-5,-5,-.94,-.34],[4,-6,-1,0],[10,-6,-.99,.14],[8,-5,-.94,.34]]}
+ });
+ // Face-on strokes alternate delivery sides. Both hands stay on the shaft;
+ // their screen order is allowed to change as a real cut crosses the body.
+ const POLE_FACE=freeze({
+  thrust:[[0,-11,-.65,.76],[-4,-7,-.65,.76],[-7,-3,-.65,.76],[-6,-4,-.65,.76]],
+  cut:[[7,-12,.7,-.7],[0,-7,.6,.8],[-7,-3,-.65,.76],[-8,-2,-.7,.71]],
+  reverse:[[-7,-12,-.7,-.7],[0,-7,-.6,.8],[7,-3,.65,.76],[8,-2,.7,.71]],
+  cross:[[6,-3,.75,.66],[1,-5,-.6,.8],[-5,-5,-.75,.66],[-6,-5,-.8,.6]],
+  butt:[[-7,-10,-.8,-.6],[-1,-6,-.6,.8],[7,-3,.8,.6],[8,-3,.85,.53]]
+ });
+ const STYLES=freeze({
+  sword:{strokes:['cut','reverse','rise','overhead'],span:1,drive:1},
+  sabre:{strokes:['cut','reverse','rise','cut'],span:1.12,drive:1.1},
+  dagger:{strokes:['cut','reverse','thrust','thrust'],span:.73,drive:.9},
+  axe:{strokes:['cut','reverse','rise','overhead'],span:1.03,drive:1.12},
+  mace:{strokes:['cut','reverse','rise','overhead'],span:.92,drive:1.2},
+  spear:{strokes:['thrust','butt','cross','thrust'],span:1,drive:1.15},
+  staff:{strokes:['cut','reverse','cross','thrust'],span:1.08,drive:1},
+  glaive:{strokes:['cut','reverse','cross','thrust'],span:1.1,drive:1.12}
+ });
  function keyPose(id,dir,f,combo){
-  const w=get(id);if(w.family==='spear')return spearKey(id,dir,f,combo);
-  const ready=guard(id,dir);
+  const w=get(id),ready=guard(id,dir);
   if(f===0||f===5)return {...ready,body:[0,0],leg:0,head:[0,0],hair:[0,0],lunge:false,z:dir===0?0:1};
-  const v=MOTIONS[w.family].keys[combo][f],[fx,fy]=forward(dir),side=[-fy,fx],mirror=dir===3?-1:1;
-  const two=w.hands===2,load=two?1.12:1,variation=(w.variant-1.5)*.035;
-  const a=(v[3]+variation)*mirror,ca=Math.cos(a),sa=Math.sin(a),u=[fx*ca+side[0]*sa,fy*ca+side[1]*sa];
-  const body=[Math.round(fx*v[4]*(two?1:.8)),Math.round(fy*v[4]*.35+v[5])];
-  let h=[ready.h[0]+fx*v[0]*load+side[0]*v[1]+body[0],ready.h[1]+fy*v[0]*.4+side[1]*v[1]+v[2]+body[1]];
-  if(dir===2&&f!==1)h[1]=Math.min(-3,h[1]);h=confineGrip(w,h,u);
-  const lean=f===1?-1:f===2||f===3?1:0;
-  return {h,u,reach:w.length+2,body,leg:v[6],head:[body[0]+fx*lean,body[1]+(f===3?1:0)],
-   hair:[-fx*(f===2||f===3?2:lean),f===1?1:0],lunge:f>=2&&f<=4,z:dir===0||f===1&&v[2]<-5?0:1};
+  const style=STYLES[w.family],stroke=style.strokes[combo],profile=dir===1||dir===3;
+  const poleFace=dir===2&&isPole(id);
+  const row=(poleFace?POLE_FACE[stroke]:STROKES[stroke][profile?'side':'face'])[f-1];
+  const [fx,fy]=forward(dir),mirror=dir===3||dir===0?-1:1;
+  const finish=combo===3?1.12:1,two=w.hands===2,span=style.span*(two?.92:1);
+  const advance=[-1,1,2,1][f-1]*style.drive*finish;
+  const body=[Math.round(fx*advance),Math.round(fy*advance*.45+(f===3&&stroke==='overhead'?1:0))];
+  let x=row[0]*span,y=row[1],ux=row[2],uy=row[3];
+  // The finishing estoc uses the opposite shoulder, rather than repeating
+  // the first thrust's left diagonal. Keep its extension on that same axis.
+  const oppositeThrust=poleFace&&stroke==='thrust'&&combo===3;
+  if(oppositeThrust){x=-x;ux=-ux;}
+  if(combo===3&&stroke==='cut'){x*=1.16;y+=f===1?-2:2;}
+  // A long finishing thrust moves the grip, not the arm's pixels or length.
+  if(stroke==='thrust'&&combo===3){
+   const extra=[-1,1,2,1][f-1];
+   if(poleFace){x+=ux*extra;y+=uy*extra;}
+   else{x+=profile?extra:[0,1,1,0][f-1];y+=profile?0:[0,1,2,1][f-1];}
+  }
+  if(dir===0){x=-x;y=f===1?y:-12-(y+7)*.45;ux=-ux;if(f>1||stroke==='thrust')uy=-Math.abs(uy);}
+  if(dir===3){x=-x;ux=-ux;}
+  // Side grips are carried forward by the weight transfer. Face grips traverse
+  // shoulder -> centre -> opposite hip. Small family offsets retain identity.
+  if(profile)x+=fx*(two?1:0);else x+=(w.variant-1.5)*.25*mirror;
+  const len=Math.hypot(ux,uy),u=[ux/len,uy/len];
+  const h=confineGrip(w,[x+body[0],y+body[1]],u);
+  return {h,u,reach:w.length+2,body,leg:f===1?combo===1?3:0:f===2||f===3?combo===2?7:4:5,
+   head:[body[0]+(profile?fx*(f===1?-1:1):Math.round(x*.12)),body[1]+(f===3?1:0)],
+   hair:[-fx*(f===2||f===3?2:-1),f===1?1:0],lunge:f>=2&&f<=4,z:dir===0?0:1};
  }
+ // The finisher has ONE delivery: frame 1 -> 2. Frames 2 -> 3 hold
+ // that same contact, then 3 -> 5 only withdraw. No second thrust on settling.
+ function finisherPose(id,dir,f){
+  const w=get(id),v=w.finisher,g=guard(id,dir),[fx,fy]=forward(dir),profile=dir===1||dir===3;
+  if(f===0||f===5)return {...g,body:[0,0],head:[0,0],hair:[0,0],leg:0,lunge:false,z:dir===0?0:1,view:dir};
+  const kind=v.kind,whirl=kind==='whirl',thrust=kind==='lunge',smash=kind==='smash'||kind==='cleave';
+  const mirror=dir===3?-1:1;
+  let contact=profile?[Math.min(10,31-(w.length+2)*.98),-5]:dir===0?[-3,-14]:[5,-3];
+  let edge=profile?[mirror*.98,.2]:dir===0?[-.65,-.76]:[.65,.76];
+  if(profile)contact[0]*=mirror;
+  if(kind==='sweep'||kind==='slash'||kind==='hook')edge=profile?[mirror*.97,.24]:dir===0?[-.8,-.6]:[.8,.6];
+  const tilt=v.tilt*.25*(dir===3?-1:1),a=Math.atan2(edge[1],edge[0])+tilt;
+  edge=[Math.cos(a),Math.sin(a)];
+  let load=contact.map((x,k)=>x-edge[k]*v.drive),loadAngle=a;
+  if(!thrust){
+   load=profile?[-5*mirror,smash?-18:-9]:dir===0?[6,smash?-18:-8]:[-6,smash?-18:-8];
+   loadAngle=profile?(dir===3?Math.PI:0)+(smash?-2.0:-1.25)*mirror:dir===0?(smash?-.5:1.0):(smash?-1.7:2.5);
+  }
+  const landed=[Math.round(fx*(2+v.drive*.08)),Math.round(fy*.7+(smash?1:0))];
+  // A body turn sweeps a horizontal waist-height ellipse in perspective,
+  // never a vertical wheel pasted over the face. Only weapon projection changes.
+  const orbit=Math.max(4,Math.min(8,31-w.length-2));
+  if(whirl){loadAngle=a;load=[Math.cos(a)*orbit+Math.round(fx*1.5),-5+Math.sin(a)*2+Math.round(fy*.5)];}
+  const homeAngle=Math.atan2(g.u[1],g.u[0]);
+  const short=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  let h,angle,view=dir,body,leg=0,depth=1;
+  if(f<1){
+   const t=smooth(f);h=g.h.map((x,k)=>lerp(x,load[k],t));angle=homeAngle+short(homeAngle,loadAngle)*t;
+   if(whirl)depth=lerp(1,.35,t);
+   body=whirl?[Math.round(fx*1.5*t),Math.round(fy*.5*t)]:[Math.round(-fx*t),Math.round((smash?1:0)*t)];
+  }else if(f<2){
+   const t=Math.pow(f-1,whirl?1:2.15);leg=t<.5?0:4;
+   if(whirl){
+    angle=a-Math.PI*2+Math.PI*2*t;view=(dir+Math.floor(t*4+.0001))%4;
+    const turn=forward(view);body=[Math.round(turn[0]*1.5*(1-t)+landed[0]*t),Math.round(turn[1]*.5*(1-t)+landed[1]*t)];
+    depth=.35;h=[Math.cos(angle)*orbit+body[0],-5+Math.sin(angle)*2+body[1]];
+   }else{
+    angle=loadAngle+short(loadAngle,a)*t;h=load.map((x,k)=>lerp(x,contact[k],t));
+    body=[Math.round(lerp(-fx,landed[0],t)),Math.round(lerp(smash?1:0,landed[1],t))];
+   }
+  }else{
+   const retreat=f<=3?0:f<4?.35*smooth(f-3):.35+.65*smooth(f-4);
+   const end=whirl?[Math.cos(a)*orbit+landed[0],-5+Math.sin(a)*2+landed[1]]:contact;
+   const handRetreat=dir===2&&g.u[1]<0?Math.min(1,retreat*1.3):retreat;
+   h=end.map((x,k)=>lerp(x,g.h[k],handRetreat));
+   // Front recovery drops out to the hip before raising the edge outside the
+   // shoulder. The shortest angle used to flick slash blades through the face.
+   let recovery=short(a,homeAngle);
+   if(dir===2&&g.u[1]<0&&recovery<0)recovery+=Math.PI*2;
+   angle=a+recovery*retreat;if(whirl)depth=lerp(.35,1,retreat);
+   body=landed.map(x=>Math.round(x*(1-retreat)));leg=retreat<.5?4:5;
+  }
+  const u=[Math.cos(angle),Math.sin(angle)*depth];h=confineGrip(w,h,u);
+  return {h,u,reach:w.length+2,body,view,leg,head:[body[0],body[1]+(f>=2&&f<=3?1:0)],
+   hair:[f>=1&&f<2?-fx*2:0,smash&&f<2?1:0],lunge:f>=1&&f<4.5,z:whirl&&f>=1&&f<=3?(u[1]<0?0:1):view===0?0:1};
+ }
+
  function pose(id,dir,f,combo=0){
+  if(combo===3)return finisherPose(id,dir,Math.max(0,Math.min(5,f)));
   f=Math.max(0,Math.min(5,f));const i=Math.floor(f),fraction=f-i,w=get(id),spear=w.family==='spear';
   // Slow load, fast delivery, then an overshoot and a weighted recovery.
-  const weight=Math.max(1.5,Math.min(2.8,1.6+w.weightKg*.3));
-  const t=i===1?Math.pow(fraction,spear?2:weight):i===2?1-Math.pow(1-fraction,spear?3:weight+1):i===3?1-Math.pow(1-fraction,2):i===4?smooth(Math.max(0,(fraction-.2)/.8)):smooth(fraction);
+  const weight=Math.max(2,Math.min(3.2,2+w.weightKg*.25));
+  const t=i===1?Math.pow(fraction,spear?2:weight):i===2?1-Math.pow(1-fraction,spear?3:weight+1):i===3?Math.min(1,fraction*2):i===4?smooth(fraction):smooth(fraction);
   const a=keyPose(id,dir,i,combo),b=keyPose(id,dir,Math.min(5,i+1),combo);
   let angle=Math.atan2(a.u[1],a.u[0]),delta=Math.atan2(b.u[1],b.u[0])-angle;
   while(delta>Math.PI)delta-=Math.PI*2;while(delta<-Math.PI)delta+=Math.PI*2;
+  const outerRecovery=dir===2&&i===4&&b.u[1]<0&&delta<0;
+  if(outerRecovery)delta+=Math.PI*2;
   angle+=delta*t;
-  const lerp=(x,y)=>x+(y-x)*t;
-  const u=[Math.cos(angle),Math.sin(angle)],raw=a.h.map((v,k)=>lerp(v,b.h[k])),h=spear?raw:confineGrip(w,raw,u);
+  const lerp=(x,y)=>x+(y-x)*t,handTime=outerRecovery?Math.min(1,t*1.3):t;
+  const u=[Math.cos(angle),Math.sin(angle)],raw=a.h.map((v,k)=>v+(b.h[k]-v)*handTime),h=confineGrip(w,raw,u);
   return {h,u,reach:a.reach,body:a.body?a.body.map((v,k)=>Math.round(lerp(v,b.body[k]))):[0,0],leg:fraction<.5?a.leg:b.leg,
    head:a.head.map((v,k)=>Math.round(lerp(v,b.head[k]))),hair:a.hair.map((v,k)=>Math.round(lerp(v,b.hair[k]))),lunge:a.lunge||b.lunge,z:a.z};
  }
@@ -113,9 +224,19 @@
  function segmentDistance(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/l)):0;return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
  function hits(actor,target,f){
   if((f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
-  for(let i=0;i<=20;i++){
-   const p=pose(actor.weapon,actor.dir,f-1+i/20,actor.combo||0),[x,y]=p.h;
-   if(segmentDistance(target.x-actor.x,target.y-actor.y-9,x-(get(actor.weapon).family==='staff'?p.u[0]*7:0),y-(get(actor.weapon).family==='staff'?p.u[1]*7:0),x+p.u[0]*p.reach,y+p.u[1]*p.reach)<(target.r||6)+(['axe','mace','sabre'].includes(get(actor.weapon).family)?3:1.5))return true;
+  let from=f-1,to=f;
+  // For a live fourth strike, sweep ONLY the drawings already reached this
+  // tick. Casting the whole future delivery triggered hit-pause in the load.
+  const finisher=(actor.combo||0)===3;
+  if(finisher&&Number.isFinite(actor.attack)&&actor.attack>0){
+   to=Math.min(2,sample(actor.attack,actor.weapon,3));if(to<=1)return false;
+   from=Math.max(1,Math.min(to,sample(actor.attack+.04,actor.weapon,3)));
+  }
+  const density=finisher?(from>=2?1:get(actor.weapon).finisher.kind==='whirl'?128:40):20;
+  const steps=Math.max(1,Math.ceil(density*(to-from)));
+  for(let i=0;i<=steps;i++){
+   const p=pose(actor.weapon,actor.dir,from+(to-from)*i/steps,actor.combo||0),[x,y]=p.h;
+   if(segmentDistance(target.x-actor.x,target.y-actor.y-9,x-(['staff','spear','glaive'].includes(get(actor.weapon).family)?p.u[0]*7:0),y-(['staff','spear','glaive'].includes(get(actor.weapon).family)?p.u[1]*7:0),x+p.u[0]*p.reach,y+p.u[1]*p.reach)<(target.r||6)+(['axe','mace','sabre'].includes(get(actor.weapon).family)?3:1.5))return true;
   }return false;
  }
  // Palette-authored silhouettes in weapon-local coordinates. Every point is
@@ -156,16 +277,17 @@
    for(const r of [3,7,L-4])line(r,-1,r,0,p[3],4);
   }
  }
- function trail(b,id,dir,f,combo){
+ function trail(b,id,dir,f,combo,rear=b){
   const w=get(id),profile=w.family==='spear'?{trailWidth:3,ghosts:0}:MOTIONS[w.family];
-  if(f<1.125||f>3.5)return;
+  if(f<1.125||f>(combo===3?2.7:3.5))return;
   const p=PALETTES[w.material],previous=Math.max(1,f-(w.family==='dagger'?.5:.85));
+  const sink=q=>combo===3&&w.finisher.kind==='whirl'&&q.z===0?rear:b;
   const width=profile.trailWidth*(.85+Math.min(.35,w.weightKg*.1));
   // Dithered silhouettes record earlier WEAPON positions, without touching
  // or regenerating any character layer. Heavy heads carry a longer shadow.
   for(let n=profile.ghosts;n>0;n--){
    const q=pose(id,dir,Math.max(1,f-n*.24),combo);
-   const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)b.set(x,y,p[0],-5+n);},
+   const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)sink(q).set(x,y,p[0],-5+n);},
     line(x,y,X,Y,color,z){const count=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=count;i++)this.set(x+(X-x)*i/count,y+(Y-y)*i/count,color,z);}};
    paint(ghost,id,...q.h,...q.u);
   }
@@ -174,11 +296,62 @@
    for(let k=0;k<width;k+=.65){
     const x=q.h[0]+q.u[0]*(r-k),y=q.h[1]+q.u[1]*(r-k);
     if(t<.4&&((Math.round(x)+Math.round(y))&1))continue;
-    b.set(x,y,k<.8?p[2]:t>.5?p[3]:p[1],1);
+    sink(q).set(x,y,k<.8?p[2]:t>.5?p[3]:p[1],1);
    }
-   if(w.family==='staff')b.set(q.h[0]-q.u[0]*7,q.h[1]-q.u[1]*7,p[3],0);
+   if(w.family==='staff'||w.family==='spear'&&combo===1)sink(q).set(q.h[0]-q.u[0]*7,q.h[1]-q.u[1]*7,p[3],0);
   }
  }
+ // Pixel effects are bounded to the same native cell and the one delivery.
+ // Magic is authored per weapon; ordinary steel gets short impact sparks.
+ const FINISH_COLORS=freeze({steel:['#768b91','#cbd4ca','#fff5d9'],gold:['#a16b3e','#e5b955','#fff1ac'],
+  dust:['#685340','#ab875c','#d6ba8b'],wind:['#639786','#b7d1b2','#f2f1cb'],
+  frost:['#537a9a','#8dccdd','#e3fbf4'],ember:['#a34432','#ee8d43','#fff0a0'],
+  tide:['#467e91','#74bfc4','#d4f3e3'],jade:['#3d765b','#8fc87c','#e3edac'],
+  sand:['#886044','#d4a766','#f8db9e'],star:['#71709b','#b4b0df','#f5edce']});
+ function finisherEffects(buffer,id,dir,f,rear=buffer){
+  if(f<1.1||f>4.25)return;
+  const w=get(id),v=w.finisher,p=pose(id,dir,f,3),colors=FINISH_COLORS[v.effect],magic=v.magic;
+  const set=(x,y,c,z=2,target=buffer)=>{if(x>=-34&&x<=34&&y>=-44&&y<=23)target.set(x,y,c,z);};
+  const line=(x,y,X,Y,c,z=2)=>{const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)set(x+(X-x)*i/n,y+(Y-y)*i/n,c,z);};
+  const tip=[p.h[0]+p.u[0]*p.reach,p.h[1]+p.u[1]*p.reach];
+  if(f<2){
+   // A short charge on exceptional heads, never a detached projectile.
+   if(magic)for(let k=0;k<3;k++){const d=2+(f-1)*3+k;set(tip[0]+Math.cos(k*2.1+f)*d,tip[1]+Math.sin(k*2.1+f)*d,colors[k]);}
+   return;
+  }
+  const age=f-2,fade=Math.max(0,1-age/2.25),radius=2+age*4;
+  if(age<.8)for(let k=0;k<4;k++){
+   const a=k*Math.PI/2+v.tilt,dx=Math.cos(a),dy=Math.sin(a),r=(magic?radius+2:radius)*fade;
+   line(tip[0]+dx,tip[1]+dy,tip[0]+dx*r,tip[1]+dy*r,colors[age<.3?2:1],3);
+  }
+  if(!magic&&['steel','gold'].includes(v.effect))return;
+  if(v.kind==='smash'||v.effect==='dust'){
+   for(let k=0;k<9;k++){const a=k/8*Math.PI,r=(3+age*7)*(k%2?.8:1);
+    set(tip[0]+Math.cos(a)*r,tip[1]+Math.sin(a)*r*.35-age*2,colors[k%3],1);}
+  }
+  if(magic){
+   const n=v.effect==='jade'?4:6;
+   for(let k=0;k<n;k++){
+    const a=k*Math.PI*2/n+v.tilt,r=3+age*4,x=tip[0]+Math.cos(a)*r,y=tip[1]+Math.sin(a)*r*.65-age*.5;
+    if(v.effect==='frost'||v.effect==='jade'||v.effect==='star'){
+     line(x,y-1.5,x+1,y,colors[2]);line(x+1,y,x,y+1.5,colors[1]);line(x,y+1.5,x-1,y,colors[0]);
+    }else if(v.effect==='ember'){
+     line(x,y,x+Math.cos(a)*2,y-2-age,colors[k%2+1]);set(x,y-1,colors[2],3);
+    }else if(v.effect==='tide'){
+     line(x-1,y,x,y-1,colors[1]);line(x,y-1,x+2,y,colors[2]);
+    }else set(x,y,colors[k%3],2);
+   }
+  }
+  if(v.kind==='whirl'||v.kind==='sweep'||v.kind==='seal'){
+   // Residue follows the same weapon sweep that can actually connect.
+   for(let i=0;i<=28;i++){
+    const q=pose(id,dir,1+i/28,3),r=q.reach*(magic?.85:.95);
+    if(age>.7&&i%3)continue;
+    set(q.h[0]+q.u[0]*r,q.h[1]+q.u[1]*r,colors[age<.7?1:0],0,v.kind==='whirl'&&q.z===0?rear:buffer);
+   }
+  }
+ }
+
  const loadouts=freeze(data.loadouts||{});
  function speciesOf(actor){
   if(actor?.batracien)return 'batracien';
@@ -201,13 +374,18 @@
   return profile.roles?.[role]||(role==='captain'?profile.elite:null)||(actor.kind==='bandit'||role==='raider'?profile.raider:null)||profile.basic;
  }
  const hasArmament=id=>typeof id==='string'&&Object.hasOwn(byId,id);
- function comboNames(id){const w=get(id);return w.family==='spear'?SPEAR_NAMES:MOTIONS[w.family].names;}
+ function comboNames(id){const w=get(id),names=[...(w.family==='spear'?SPEAR_NAMES:MOTIONS[w.family].names)];names[3]=w.finisher.name;return names;}
  const cadence=id=>[0,1,2,3].reduce((n,c)=>n+duration(START,c),0)/[0,1,2,3].reduce((n,c)=>n+duration(id,c),0);
  const attackStep=(id,combo=0)=>{const f=get(id).family,pairs={dagger:[2,4],sword:[3,6],sabre:[4,7],axe:[3,6],mace:[2,4],staff:[4,7],spear:[4,9],glaive:[4,8]};return pairs[f][combo===3?1:0];};
  const hitPause=(id,combo=0)=>Math.min(.105,.022+get(id).weightKg*.012+(combo===3?.018:0));
  const holster=id=>get(id).family==='spear'?{delay:3.7,stow:.33,draw:.21}:{delay:3.7,stow:Math.min(.46,Math.max(.22,.21+get(id).weightKg*.06)),draw:Math.min(.31,Math.max(.16,.15+get(id).weightKg*.045))};
  function preview(id,seconds,mode='attack'){
   const t=Math.max(0,seconds),gait=Math.floor(t*10)%8;
+  if(mode==='finisher'){
+   const len=duration(id,3),at=t%(len+1),strike=at-.2;
+   if(strike<0||strike>=len)return {state:'attack',frame:5,combo:3,label:comboNames(id)[3]+' · Garde'};
+   const phase=frame(len-strike,id,3);return {state:'attack',frame:sample(len-strike,id,3),combo:3,label:comboNames(id)[3]+' · '+['Garde','Charge','Frappe unique','Impact','Retrait','Reprise'][phase]};
+  }
   if(mode==='walk')return {state:'walk',frame:gait,combo:0,label:'Marche armée'};
   if(mode==='holster'){
    const h=holster(id),total=.7+h.stow+1+h.draw+.5;let at=t%total;
@@ -217,7 +395,7 @@
    if(at<h.draw)return {state:'draw_walk',frame:Math.min(4,Math.floor(at/h.draw*5))*8+gait,combo:0,label:'Dégainage'};
    return {state:'walk',frame:gait,combo:0,label:'Garde retrouvée'};
   }
-  const lengths=[0,1,2,3].map(c=>duration(id,c)+.12);let at=t%lengths.reduce((a,b)=>a+b,0);
+  const lengths=[0,1,2,3].map(c=>duration(id,c)+.075);let at=t%lengths.reduce((a,b)=>a+b,0);
   for(let combo=0;combo<4;combo++){
    if(at<lengths[combo]){const len=duration(id,combo),remaining=len-at,phase=frame(remaining,id,combo);
     return {state:'attack',frame:at<len?sample(remaining,id,combo):5,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Garde','Préparation','Accélération','Impact','Suite du geste','Reprise'][phase]:'Garde')};
@@ -250,5 +428,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,pose,vector,guard,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,pose,vector,guard,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });

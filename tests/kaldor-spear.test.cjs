@@ -2,7 +2,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),W=require('../scripts/kaldor-weapons.js');
 const id='lance-boisclair';
 test('spear has four distinct blows and weighted anticipation/strike/recovery timings',()=>{
- assert.deepEqual(W.spearNames,['Estoc vif','Revers de hampe','Taille montante','Fente longue']);
+ assert.deepEqual(W.spearNames,['Estoc vif','Revers de hampe','Taille croisée','Fente longue']);
  for(let dir=0;dir<4;dir++){
   const paths=[0,1,2,3].map(c=>JSON.stringify([1,2,3,4].map(f=>W.pose(id,dir,f,c))));assert.equal(new Set(paths).size,4);
  }

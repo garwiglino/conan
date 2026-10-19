@@ -8,7 +8,7 @@ Les nouvelles animations déplacent les **calques originaux des bras, manches, g
 
 La donnée `hands` choisit une ou deux mains. Avec une main, l’autre bras garde sa position native ; avec deux, les deux prises suivent le manche, écartées davantage sur une lance, une vouge ou un bâton. Les translations restent en pixels entiers, communes aux manches et aux mains. Les cheveux, casques et corps conservent leur assemblage modulaire.
 
-Les trajectoires des nouvelles armes sont partagées par le rendu et le balayage physique : point de prise, direction et allonge. Les estocs des lances et dagues diffèrent des tailles des sabres et épées, des balayages du bâton et des frappes pesantes des haches et masses. La lance enchaîne un estoc vif, un revers de hampe, une taille montante et une fente longue : préparations distinctes, transfert du corps et appuis natifs, accélération sur la frappe puis reprise plus lourde. Elle possède huit sous-poses par intervalle et des durées propres à chaque coup. Les attaques possèdent des poses intermédiaires, des smears au passage actif et un retour en garde. Le rendu conserve le cadre 80 × 80, ancré aux pieds (40,52).
+Les trajectoires des nouvelles armes sont partagées par le rendu et le balayage physique : point de prise, direction et allonge. Les estocs des lances et dagues diffèrent des tailles des sabres et épées, des balayages du bâton et des frappes pesantes des haches et masses. La lance enchaîne un estoc vif, un revers de hampe, une taille croisée et une fente longue : préparations distinctes, transfert du corps et appuis natifs, accélération sur la frappe puis reprise plus lourde. Elle conserve des durées propres à chaque coup. Les attaques possèdent des poses intermédiaires, des smears au passage actif et un retour en garde. Le rendu conserve le cadre 80 × 80, ancré aux pieds (40,52).
 
 Après 3,7 secondes sans attaquer ni parer, l’arme se range au milieu du dos, aussi en marchant, avec une durée adaptée à son poids. Les lances/bâtons/haches/masses sont attachés au dos ; les lames rejoignent un fourreau. L’attaque interrompt immédiatement le rangement ; la parade dégaine visuellement selon le poids, sans retarder la défense. Le rig des tenues et les casques restent réutilisés.
 
@@ -18,22 +18,22 @@ Approcher un râtelier à moins de 18 pixels, puis interagir pour prendre l’ar
 
 La sauvegarde ajoute `arsenal: {owned, equipped}`. Une ancienne sauvegarde conserve l’épée de départ ; les identifiants inconnus sont ignorés. Un râtelier pris reste vide au rechargement. Les emplacements sont fixes, vérifiés sur le terrain réel, à l’écart des tenues, PNJ et transports. Les dégâts passent par les canaux existants pour ennemis, civils et gardes, avec leurs protections, étages et règles de justice.
 
-Les coefficients ci-dessous sont relatifs à l’épée de départ. Le quatrième coup double les dégâts de base ; le niveau et les défenses de la cible s’appliquent ensuite. La cadence affichée provient des durées réelles des quatre coups : les armes lourdes ont une préparation et une reprise plus longues. Les noms, le jade et les filets de cuivre restent des éléments de facture, sans effet élémentaire implicite.
+Les coefficients ci-dessous sont relatifs à l’épée de départ. Le quatrième coup double les dégâts de base ; le niveau et les défenses de la cible s’appliquent ensuite. La cadence affichée provient des durées réelles des quatre coups : les armes lourdes ont une préparation et une reprise plus longues. Les quatrième coups sont désormais propres à chaque arme. Certaines pièces de maîtrise manifestent une magie visuelle décrite dans leur fiche ; les dégâts suivent les règles de mêlée existantes.
 
 ## Combos et poids
 
-Toutes les armes, y compris l’épée de départ, utilisent désormais les calques natifs et le même calcul de trajectoire pour le rendu et les collisions. Chaque famille possède quatre gestes ; la longueur, la variante, la prise et le poids adaptent chaque arme. Le combo de Lance de Boisclair validé est conservé.
+Toutes les armes, y compris l’épée de départ, utilisent désormais les calques natifs et le même calcul de trajectoire pour le rendu et les collisions. Chaque famille possède quatre gestes ; la longueur, la variante, la prise et le poids adaptent chaque arme. Les quatre types de coups de la Lance de Boisclair sont conservés ; leurs trajectoires sont revues avec celles des autres armes.
 
 - **Épées** : Taille oblique, Revers croisé, Coupe montante, Abattée.
 - **Sabres** : Taille filante, Revers enroulé, Coupe remontante, Taille passante.
 - **Dagues** : Entaille vive, Revers court, Estoc oblique, Pointe engagée.
 - **Haches** : Taille mordante, Revers de barbe, Crochet oblique, Abattée ample.
 - **Masses et marteaux** : Coup croisé, Revers lourd, Levée latérale, Abattée martelée.
-- **Bâtons** : Balayage de hampe, Revers circulaire, Levée du bâton, Poussée à deux mains.
-- **Vouges** : Grande taille, Revers du fer, Crochet montant, Fente à la lame.
-- **Lances et harpons** : estoc vif, revers de hampe, taille montante, fente longue.
+- **Bâtons** : Balayage de hampe, Revers circulaire, Taille de relance, Poussée à deux mains.
+- **Vouges** : Grande taille, Revers du fer, Crochet bas, Fente à la lame.
+- **Lances et harpons** : estoc vif, revers de hampe, taille croisée, fente longue.
 
-Chaque coup commence par sa garde, charge son élan, accélère sur la frappe, dépasse légèrement le contact puis retrouve sa garde avec une reprise pondérée. Les huit sous-poses par intervalle conservent les accélérations. Les appuis sont des poses de marche natives et les translations du corps entraînent la tête et les cheveux. La main libre suit le corps sur les armes à une main.
+Les trois premiers coups chargent leur élan puis suivent leur trajectoire. Le quatrième utilise une frappe unique, un contact tenu et un retrait distinct, sans nouvelle avancée pendant la reprise. Les quatre sous-poses par intervalle privilégient des dessins francs. Les poignées traversent le corps avec le coup ; face, dos et profils ont des projections adaptées, avec une lame stable sur les estocs. Les durées sont réduites d’environ 25 %, surtout sur les transitions et la reprise, en conservant les tempos et le poids de chaque arme. Les appuis sont des poses de marche natives et les translations du corps entraînent la tête et les cheveux. La main libre suit le corps sur les armes à une main.
 
 Les dagues ont une courte traînée ; les sabres une trace courbe ; les haches, masses et vouges gardent jusqu’à deux silhouettes de retard de l’arme, en tramage opaque. Aucun smear n’apparaît pendant la préparation ou une reprise inactive. La pause d’impact et le pas d’attaque varient aussi selon l’arme. Les dégâts des armes lourdes compensent leur moindre cadence ; les dagues restent faibles par frappe et de courte portée.
 
@@ -103,7 +103,7 @@ La cadence de l’inventaire est calculée sur les durées des quatre attaques, 
 | Garde des Palmes | 2 | 2.62 kg | ×2.05 | Hommes-singes · Tagon | Anse-des-Palmes |
 | Masse du Havre | 1 | 1.94 kg | ×2.41 | Gobelins · Sarak | Havre-du-Cuivre |
 | Veille des Aulnes | 2 | 1.81 kg | ×1.45 | Hommes-singes et batraciens · Varan | Refuge-des-Aulnes |
-| Flamme de Clairfoyer | 2 | 1.85 kg | ×2.05 | Humains · Teremor | Clairfoyer |
+| Flamme de Clairfoyer | 2 | 1.85 kg | ×2.05 | Humains · Teremor | Campement de départ, près du spawn |
 | Coutelas de Boisclair | 1 | 0.76 kg | ×0.72 | Gobelins · Teremor | Val-des-Mousses |
 | Crochet du maître de Kesh | 1 | 0.84 kg | ×1.05 | Gobelins de Kesh · Sarak | Puits-Rouge |
 | Hache de Darg | 2 | 2.05 kg | ×1.35 | Orques · Igea | Val-des-Neiges |
@@ -143,4 +143,81 @@ L’export natif ne modifie pas les sources des tenues. `build:kaldor` embarque 
 
 [Aperçu demandé : Lance de Boisclair, trois tenues et quatre vues](../art/boisclair-combo-v2.gif). L’aperçu est ralenti pour lire les déplacements ; il montre les quatre attaques, la marche, le rangement et la reprise. [Atelier complet](../art/weapons-preview.html).
 
-[Aperçu des huit familles à vitesse réelle](../art/armory-combos.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).
+[Étude précédente, face et profil à vitesse réelle](../art/armory-strikes.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).
+
+## Révision des frappes
+
+`node scripts/preview-kaldor-strikes.cjs` produit `art/armory-strikes.gif` : huit familles, face et profil simultanés, quatre coups à leur cadence réelle. `art/armory-strikes.png` décompose le premier coup de face. L’atelier `art/weapons-preview.html` permet de revoir les 48 armes, les quatre orientations, le ralenti et le rangement.
+
+### Prise des armes d’hast de face
+
+Lances, harpons, vouges et bâtons partagent une garde diagonale. À deux mains, l’écartement de base des prises est de six pixels le long de la hampe, projetés en profondeur pendant une rotation : les mains suivent le manche et changent naturellement de côté lorsque le geste traverse le corps. Les trois premières frappes alternent gauche, droite, gauche ; les tailles et revers croisent en sens opposés. Le quatrième suit sa chorégraphie propre : percée, arrachement, fauchée ou tourbillon selon l’arme. Les estocs déplacent les prises dans l’axe de la pointe, avec une diagonale opposée sur la fente finale. Les armes à une main gardent leur bras libre. Seules des translations entières des calques existants sont utilisées. Les profils, le dos et les cadences restent ceux de la révision précédente.
+
+[Aperçu des prises de face](../art/pole-grips.gif) · `node scripts/preview-kaldor-strikes.cjs --pole-grips`.
+
+La taille croisée basse est conservée en troisième position. La fin de combo devient la frappe propre à l’arme, avec une prise à une ou deux mains respectée.
+
+## Quatrième coup propre à chaque arme
+
+Chaque entrée de `catalogue.json` possède `finisher` : nom, geste, poussée, inclinaison, palette et manifestation magique éventuelle. Le mouvement se compose d’une charge (0–1), d’une seule délivrance (1–2), d’un contact tenu (2–3) puis d’un retrait (3–5). La position de la main et la direction de la lame restent identiques pendant le contact : il n’y a pas de deuxième coup caché dans la pose d’impact. Les durées conservent le tempo et le poids de l’arme.
+
+Les tourbillons utilisent successivement les quatre vues natives du joueur, sans rotation ni étirement de ses pixels. La hampe balaie une ellipse horizontale à hauteur de taille : le raccourcissement en profondeur concerne uniquement l’arme, et la moitié arrière du geste passe derrière le corps. La reprise de face ramène d’abord les mains à l’extérieur de la hanche, puis relève la lame hors du visage. Corps, cheveux, tête, casque et prises suivent ce changement de vue. La même trajectoire complète pilote le rendu, les traînées et le balayage de collision ; le tour circulaire utilise un échantillonnage plus dense pour ne pas laisser de trous. Sur une attaque en cours, la collision ne balaie que les poses déjà atteintes pendant le pas de simulation : les dégâts et la pause d’impact ne peuvent plus précéder visuellement l’arrivée de la lame. Le joueur ne touche une même cible qu’une fois par attaque, grâce au registre de coups existant. Les étages et la ligne de vue restent vérifiés.
+
+Les onze pièces indiquées comme magiques projettent des éclats de givre, braises, signes de jade, embruns, grains de sable, lumière d’étoile ou sillages de vent. Ces effets restent attachés au geste et s’effacent avant l’attaque suivante. Ils ne créent ni projectile autonome ni nouvelle altération d’état : les dégâts du quatrième coup restent ceux de la mêlée, doublés comme auparavant. Les armes courantes conservent des frappes physiques et des traces de mouvement ou d’impact.
+
+L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/preview-kaldor-finishers.cjs` produit [l’aperçu animé](../art/weapon-finishers.gif) et [la planche des 48 armes](../art/weapon-finishers.png). Les études précédentes restent des étapes de conception ; cet aperçu et l’atelier reflètent les finishers actuels.
+
+| Arme | Quatrième coup | Mouvement | Manifestation magique |
+|---|---|---|---|
+| Épée de l’exilé | Brise-garde de l’exilé | Abattée | — |
+| Couteau du roulier | Pointe du roulier | Percée | — |
+| Bâton d’aulne | Grand revers d’aulne | Fauchée | — |
+| Lame de la milice | Sentence de la milice | Abattée | — |
+| Hache des Ronces | Morsure des Ronces | Crochet / arrachement | — |
+| Lance de Boisclair | Percée de Boisclair | Percée | — |
+| Épée des Chartes | Sceau des Chartes | Taille passante | — |
+| Marteau de Griseborne | Frappe de borne | Choc lourd | — |
+| Sabre des pistes | Taille de caravane | Taille passante | — |
+| Dague de Kesh | Crochet des dunes | Crochet / arrachement | — |
+| Croissant du Safran | Cercle du Safran | Rotation complète | — |
+| Vouge des Acacias | Fauchée des Acacias | Fauchée | — |
+| Lame de l’Arène | Coup du champion | Abattée | — |
+| Hache des cols de Darg | Abattée des cols | Abattée | — |
+| Pic de Fort-Écho | Poinçon de Fort-Écho | Choc lourd | — |
+| Lance de Pâleval | Brèche de Pâleval | Percée | — |
+| Brise-Givre | Fracture de givre | Choc lourd | Givre |
+| Serment boréal | Serment de l’aurore | Abattée | Givre |
+| Coutelas des Veilleurs | Revers des quais | Taille passante | — |
+| Harpon des Joncs | Arrachement des Joncs | Crochet / arrachement | — |
+| Battoir de Tourbeclaire | Choc de Tourbeclaire | Choc lourd | — |
+| Lame de Rosebrume | Croissant de Rosebrume | Taille passante | Jade |
+| Vouge des Roseaux | Fauchée des berges | Fauchée | — |
+| Croc d’enclave | Morsure de l’enclave | Percée | Jade |
+| Bâton des Lianes | Ronde des Lianes | Rotation complète | — |
+| Lame de Santalune | Spirale de Santal | Rotation complète | — |
+| Lance de Palmehaute | Percée de Palmehaute | Percée | — |
+| Hache des Coquilles | Coupe de la Coquille | Crochet / arrachement | — |
+| Aiguille de Corail | Éclat de Corail | Percée | Embruns |
+| Garde des Palmes | Tourbillon des Palmes | Rotation complète | Vent |
+| Masse du Havre | Choc de cuivre | Choc lourd | — |
+| Veille des Aulnes | Ronde des Aulnes | Fauchée | — |
+| Flamme de Clairfoyer | Brasier de Clairfoyer | Taille passante | Braises |
+| Coutelas de Boisclair | Taille de noisetier | Taille passante | — |
+| Crochet du maître de Kesh | Sillage du maître de Kesh | Crochet / arrachement | Sable |
+| Hache de Darg | Abattée pastorale | Abattée | — |
+| Lame d’enclave | Revers de bronze | Taille passante | — |
+| Bâton des sentiers | Ronde forestière | Fauchée | — |
+| Lance de chenal | Percée du chenal | Percée | — |
+| Lame de batelier | Brise-cordage | Abattée | — |
+| Javelot des Joncs | Pointe de l’éclaireur | Percée | — |
+| Massue de chenal | Poids du chenal | Choc lourd | — |
+| Lance du chef des chenaux | Fer du capitaine | Percée | Embruns |
+| Lance des grands chemins | Charge à pied | Percée | — |
+| Sarisse de l’Horizon | Cercle de l’Horizon | Rotation complète | Étoiles |
+| Lame de l’ossuaire | Taille de l’ossuaire | Abattée | — |
+| Bâton du culte | Revers de l’officiant | Fauchée | — |
+| Crosse du Prêtre du Serpent | Sceau du Serpent | Frappe au sceau | Jade |
+
+## Arme légendaire au départ
+
+**Flamme de Clairfoyer** est une pièce légendaire à deux mains, disponible sur un râtelier à droite du point d’apparition réel du joueur au campement des dunes (environ 29 pixels). Son origine reste Clairfoyer, en Teremor ; elle a été confiée aux voyageurs du camp. Elle conserve sa force ×2,05 et son finisher **Brasier de Clairfoyer**. Le joueur la ramasse normalement et choisit de l’équiper ; le râtelier reste vide après l’acquisition, y compris sur une sauvegarde qui la possédait déjà à son ancien emplacement.

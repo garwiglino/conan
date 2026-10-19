@@ -501,10 +501,10 @@
  function nativeArmLayers(dir,h,u,shift=[0,0],freeOffset=[0,0]){
   const [front,fc]=canvas80(),[back,bc]=canvas80(),w=weapons().get(wielded);
   const view=[2,1,0,3][dir],parts=KALDOR_WEAPON_LIMBS.outfits[worn.outfit][view];
-  const mainSide=dir===0?'right':'left',span=weapons().handSpan(wielded);
+  const mainSide=dir===0?'right':'left',grip=weapons().fitGrip(wielded,dir,h,u);
   parts.forEach((part,i)=>{
    const main=part.side===null||part.side===mainSide;
-   const target=main?h:w.hands===2?[h[0]-u[0]*span,h[1]-u[1]*span]:[part.palm[0]+freeOffset[0],part.palm[1]+freeOffset[1]];
+   const target=main?grip.h:w.hands===2?grip.support:[part.palm[0]+freeOffset[0],part.palm[1]+freeOffset[1]];
    const dx=Math.round(target[0]-part.palm[0]+shift[0]),dy=Math.round(target[1]-part.palm[1]+shift[1]);
    const c=main?fc:bc,e=sheet('native-arm:'+worn.outfit+':'+view+':'+i,part);
    if(e.ready)c.drawImage(e.image,dx,dy);
@@ -512,11 +512,12 @@
   return {front,back};
  }
  function attackFrame(dir,frame,combo,swordPose){
-  const s=attackSpec(dir,frame,combo);
+  const facing=dir,s=attackSpec(dir,frame,combo);
+  dir=s.view??dir;
   const L=layers('idle',dir,0),legs=s.lunge?layers('walk',dir,s.leg||0):L;
   if(!L||!legs)return null;
   const [out,c]=canvas80();
-  const u=bladeDir(dir,frame,combo,swordPose);
+  const u=customWeapon()?s.u:bladeDir(dir,frame,combo,swordPose);
   const sword=buffer(),hands=buffer(),trail=buffer(),behind=buffer();
   let arms=null;
   if(customWeapon()){
@@ -528,10 +529,11 @@
    fist(s.z===0?sword:hands,s.h[0],s.h[1]);fist(s.z===0?sword:hands,s.h[0]-u[0]*2,s.h[1]-u[1]*2);
    sword.outline();hands.outline();
   }
-  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,dir,frame,combo);}
+  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,facing,frame,combo,behind);}
   else if(frame===2||frame===3)smear(trail,dir,frame,combo,swordPose,frame===2?4.5:3,behind);
   else if(frame===4)smear(trail,dir,frame,combo,swordPose,1.5,behind);
-  if(combo===3&&frame===3){const w=customWeapon()?weapons().get(wielded):null,reach=w?w.length+2:3+BLADE,x=s.h[0]+u[0]*reach,y=s.h[1]+u[1]*reach;if(w?.family==='spear'){for(const [dx,dy]of [[0,0],[1,0],[-1,0],[0,1],[0,-1]])trail.set(x+dx,y+dy,SMEAR[0],3);}else impact(trail,x,y);}
+  if(customWeapon()&&combo===3)weapons().finisherEffects(trail,wielded,facing,frame,behind);
+  else if(combo===3&&frame===3){const reach=3+BLADE;impact(trail,s.h[0]+u[0]*reach,s.h[1]+u[1]*reach);}
   paintAt(c,behind);
   if(s.z!==1){paintAt(c,trail);paintAt(c,sword);}
   if(arms){c.drawImage(arms.back,0,0);if(s.z===0)c.drawImage(arms.front,0,0);}

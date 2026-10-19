@@ -50,3 +50,28 @@ test('mass-based stowing keeps attacks responsive and every preview frame valid'
  }
  assert.ok(W.holster('brise-givre').stow>W.holster('aiguille-corail').stow);
 });
+
+test('strikes carry the grip across the body and thrusts drive a stable point forward',()=>{
+ for(const w of W.all){
+  for(const dir of [1,2,3]){
+   const a=W.pose(w.id,dir,1,0),b=W.pose(w.id,dir,3,0);
+   assert.ok(Math.hypot(b.h[0]-a.h[0],b.h[1]-a.h[1])>8,w.id+' is a moving strike, not a wrist spin');
+  }
+  if(W.finisher(w.id).kind==='lunge'){
+   for(const dir of [1,2,3]){
+    const a=W.pose(w.id,dir,1,3),b=W.pose(w.id,dir,3,3);
+    assert.ok(a.u[0]*b.u[0]+a.u[1]*b.u[1]>.96,w.id+' keeps its thrust point aligned');
+   }
+  }
+  if(['cleave','smash'].includes(W.finisher(w.id).kind)){
+   const a=W.pose(w.id,2,1,3),b=W.pose(w.id,2,3,3);
+   assert.ok(b.h[1]-a.h[1]>12,w.id+' overhead falls from a raised grip');
+  }
+ }
+});
+
+test('a spear reverse can contact with the visible butt instead of a phantom forward blade',()=>{
+ const id='lance-boisclair',p=W.pose(id,1,3,1),actor={x:0,y:0,dir:1,combo:1,weapon:id};
+ const target={x:p.h[0]-p.u[0]*6,y:p.h[1]-p.u[1]*6+9,r:.1};
+ assert.ok(target.x>p.h[0]);assert.ok(W.hits(actor,target,3));
+});

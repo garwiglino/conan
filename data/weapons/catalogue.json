@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "start": "exile",
   "weapons": [
     {
@@ -18,7 +18,15 @@
       "description": "La grande lame de départ de Kaldor, forgée à Sarak. Une garde franche et un équilibre familier.",
       "hands": 2,
       "weightKg": 1.85,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Brise-garde de l’exilé",
+        "kind": "cleave",
+        "effect": "steel",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.12
+      }
     },
     {
       "id": "couteau-roulier",
@@ -40,7 +48,15 @@
       },
       "hands": 1,
       "weightKg": 0.57,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Pointe du roulier",
+        "kind": "lunge",
+        "effect": "steel",
+        "magic": false,
+        "drive": 8.0,
+        "tilt": 0.04
+      }
     },
     {
       "id": "baton-aulne",
@@ -62,7 +78,15 @@
       },
       "hands": 2,
       "weightKg": 1.69,
-      "balance": "centré"
+      "balance": "centré",
+      "finisher": {
+        "name": "Grand revers d’aulne",
+        "kind": "sweep",
+        "effect": "wind",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.1
+      }
     },
     {
       "id": "lame-milice",
@@ -84,7 +108,15 @@
       },
       "hands": 1,
       "weightKg": 1.56,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Sentence de la milice",
+        "kind": "cleave",
+        "effect": "steel",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.18
+      }
     },
     {
       "id": "hache-rondes",
@@ -106,7 +138,15 @@
       },
       "hands": 1,
       "weightKg": 1.55,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Morsure des Ronces",
+        "kind": "hook",
+        "effect": "dust",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.2
+      }
     },
     {
       "id": "lance-boisclair",
@@ -128,7 +168,15 @@
       },
       "hands": 2,
       "weightKg": 2.02,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Percée de Boisclair",
+        "kind": "lunge",
+        "effect": "wind",
+        "magic": false,
+        "drive": 12.0,
+        "tilt": 0.03
+      }
     },
     {
       "id": "garde-charte",
@@ -150,7 +198,15 @@
       },
       "hands": 1,
       "weightKg": 1.44,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Sceau des Chartes",
+        "kind": "slash",
+        "effect": "gold",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.22
+      }
     },
     {
       "id": "marteau-borne",
@@ -172,7 +228,15 @@
       },
       "hands": 1,
       "weightKg": 2.06,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Frappe de borne",
+        "kind": "smash",
+        "effect": "dust",
+        "magic": false,
+        "drive": 8.0,
+        "tilt": 0.08
+      }
     },
     {
       "id": "sabre-piste",
@@ -194,7 +258,15 @@
       },
       "hands": 1,
       "weightKg": 1.05,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Taille de caravane",
+        "kind": "slash",
+        "effect": "sand",
+        "magic": false,
+        "drive": 11.0,
+        "tilt": 0.15
+      }
     },
     {
       "id": "dague-kesh",
@@ -216,7 +288,15 @@
       },
       "hands": 1,
       "weightKg": 0.57,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Crochet des dunes",
+        "kind": "hook",
+        "effect": "sand",
+        "magic": false,
+        "drive": 8.0,
+        "tilt": 0.12
+      }
     },
     {
       "id": "croissant-safran",
@@ -238,7 +318,15 @@
       },
       "hands": 1,
       "weightKg": 1.29,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Cercle du Safran",
+        "kind": "whirl",
+        "effect": "gold",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.18
+      }
     },
     {
       "id": "vouge-acacias",
@@ -260,7 +348,15 @@
       },
       "hands": 2,
       "weightKg": 2.86,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Fauchée des Acacias",
+        "kind": "sweep",
+        "effect": "wind",
+        "magic": false,
+        "drive": 12.0,
+        "tilt": 0.08
+      }
     },
     {
       "id": "lame-arene",
@@ -282,7 +378,15 @@
       },
       "hands": 2,
       "weightKg": 1.85,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Coup du champion",
+        "kind": "cleave",
+        "effect": "gold",
+        "magic": false,
+        "drive": 12.0,
+        "tilt": 0.24
+      }
     },
     {
       "id": "hache-darg",
@@ -304,7 +408,15 @@
       },
       "hands": 2,
       "weightKg": 2.32,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Abattée des cols",
+        "kind": "cleave",
+        "effect": "dust",
+        "magic": false,
+        "drive": 11.0,
+        "tilt": 0.06
+      }
     },
     {
       "id": "pic-echo",
@@ -326,7 +438,15 @@
       },
       "hands": 1,
       "weightKg": 1.94,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Poinçon de Fort-Écho",
+        "kind": "smash",
+        "effect": "steel",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.03
+      }
     },
     {
       "id": "lance-paleval",
@@ -348,7 +468,15 @@
       },
       "hands": 2,
       "weightKg": 2.26,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Brèche de Pâleval",
+        "kind": "lunge",
+        "effect": "steel",
+        "magic": false,
+        "drive": 13.0,
+        "tilt": 0.04
+      }
     },
     {
       "id": "brise-givre",
@@ -363,14 +491,22 @@
       "material": "steel",
       "rarity": "Maîtresse",
       "variant": 0,
-      "description": "Masse à ailettes forgées et poignée de laine bleue. Une pièce de maître au choc lourd et à la reprise lente.",
+      "description": "Masse à ailettes forgées et poignée de laine bleue. Une pièce de maître au choc lourd et à la reprise lente. Sa frappe finale libère des éclats de givre.",
       "place": {
         "dx": 48,
         "dy": 0
       },
       "hands": 2,
       "weightKg": 3.4,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Fracture de givre",
+        "kind": "smash",
+        "effect": "frost",
+        "magic": true,
+        "drive": 12.0,
+        "tilt": 0.15
+      }
     },
     {
       "id": "serment-boreal",
@@ -385,14 +521,22 @@
       "material": "steel",
       "rarity": "Maîtresse",
       "variant": 1,
-      "description": "Acier bleui, rainure claire et pommeau d’os gravé. Son nom commémore un serment ; il ne gèle pas ses victimes.",
+      "description": "Acier bleui, rainure claire et pommeau d’os gravé. Son coup de serment fait rayonner une aurore glacée le long du fer.",
       "place": {
         "dx": -24,
         "dy": 42
       },
       "hands": 2,
       "weightKg": 1.97,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Serment de l’aurore",
+        "kind": "cleave",
+        "effect": "frost",
+        "magic": true,
+        "drive": 13.0,
+        "tilt": 0.16
+      }
     },
     {
       "id": "coutelas-veilleur",
@@ -414,7 +558,15 @@
       },
       "hands": 1,
       "weightKg": 1.29,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Revers des quais",
+        "kind": "slash",
+        "effect": "tide",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.11
+      }
     },
     {
       "id": "harpon-joncs",
@@ -436,7 +588,15 @@
       },
       "hands": 2,
       "weightKg": 2.26,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Arrachement des Joncs",
+        "kind": "hook",
+        "effect": "tide",
+        "magic": false,
+        "drive": 12.0,
+        "tilt": 0.03
+      }
     },
     {
       "id": "battoir-tourbe",
@@ -458,7 +618,15 @@
       },
       "hands": 1,
       "weightKg": 1.7,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Choc de Tourbeclaire",
+        "kind": "smash",
+        "effect": "dust",
+        "magic": false,
+        "drive": 11.0,
+        "tilt": 0.21
+      }
     },
     {
       "id": "lame-rosebrume",
@@ -480,7 +648,15 @@
       },
       "hands": 1,
       "weightKg": 1.17,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Croissant de Rosebrume",
+        "kind": "slash",
+        "effect": "jade",
+        "magic": true,
+        "drive": 12.0,
+        "tilt": 0.2
+      }
     },
     {
       "id": "vouge-roseaux",
@@ -502,7 +678,15 @@
       },
       "hands": 2,
       "weightKg": 2.74,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Fauchée des berges",
+        "kind": "sweep",
+        "effect": "tide",
+        "magic": false,
+        "drive": 13.0,
+        "tilt": 0.07
+      }
     },
     {
       "id": "croc-enclave",
@@ -524,7 +708,15 @@
       },
       "hands": 1,
       "weightKg": 0.81,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Morsure de l’enclave",
+        "kind": "lunge",
+        "effect": "jade",
+        "magic": true,
+        "drive": 9.0,
+        "tilt": 0.13
+      }
     },
     {
       "id": "baton-lianes",
@@ -546,7 +738,15 @@
       },
       "hands": 2,
       "weightKg": 1.45,
-      "balance": "centré"
+      "balance": "centré",
+      "finisher": {
+        "name": "Ronde des Lianes",
+        "kind": "whirl",
+        "effect": "wind",
+        "magic": false,
+        "drive": 11.0,
+        "tilt": 0.05
+      }
     },
     {
       "id": "lame-santal",
@@ -568,7 +768,15 @@
       },
       "hands": 1,
       "weightKg": 1.17,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Spirale de Santal",
+        "kind": "whirl",
+        "effect": "gold",
+        "magic": false,
+        "drive": 12.0,
+        "tilt": 0.14
+      }
     },
     {
       "id": "lance-palmehaute",
@@ -590,7 +798,15 @@
       },
       "hands": 2,
       "weightKg": 2.14,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Percée de Palmehaute",
+        "kind": "lunge",
+        "effect": "wind",
+        "magic": false,
+        "drive": 14.0,
+        "tilt": 0.02
+      }
     },
     {
       "id": "hache-coquilles",
@@ -612,7 +828,15 @@
       },
       "hands": 1,
       "weightKg": 1.91,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Coupe de la Coquille",
+        "kind": "hook",
+        "effect": "tide",
+        "magic": false,
+        "drive": 11.0,
+        "tilt": 0.17
+      }
     },
     {
       "id": "aiguille-corail",
@@ -634,7 +858,15 @@
       },
       "hands": 1,
       "weightKg": 0.45,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Éclat de Corail",
+        "kind": "lunge",
+        "effect": "tide",
+        "magic": true,
+        "drive": 11.0,
+        "tilt": 0.09
+      }
     },
     {
       "id": "garde-palmes",
@@ -656,7 +888,15 @@
       },
       "hands": 2,
       "weightKg": 2.62,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Tourbillon des Palmes",
+        "kind": "whirl",
+        "effect": "wind",
+        "magic": true,
+        "drive": 14.0,
+        "tilt": 0.1
+      }
     },
     {
       "id": "masse-cuivre",
@@ -678,7 +918,15 @@
       },
       "hands": 1,
       "weightKg": 1.94,
-      "balance": "en tête"
+      "balance": "en tête",
+      "finisher": {
+        "name": "Choc de cuivre",
+        "kind": "smash",
+        "effect": "steel",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.19
+      }
     },
     {
       "id": "veille-aulnes",
@@ -700,7 +948,15 @@
       },
       "hands": 2,
       "weightKg": 1.81,
-      "balance": "centré"
+      "balance": "centré",
+      "finisher": {
+        "name": "Ronde des Aulnes",
+        "kind": "sweep",
+        "effect": "jade",
+        "magic": false,
+        "drive": 12.0,
+        "tilt": 0.11
+      }
     },
     {
       "id": "flamme-clairfoyer",
@@ -708,21 +964,29 @@
       "family": "sword",
       "culture": "Humains",
       "territory": "Teremor",
-      "site": "town-1",
+      "site": "camp",
       "damage": 2.05,
       "tempo": 1.1,
       "length": 15,
       "material": "ember",
-      "rarity": "Maîtresse",
+      "rarity": "Légendaire",
       "variant": 0,
-      "description": "Acier à filet de cuivre rouge et garde en flamme forgée. Le nom évoque le foyer : ses dégâts restent physiques.",
+      "description": "Pièce légendaire de Clairfoyer confiée aux voyageurs du campement des dunes. Acier à filet de cuivre rouge et garde en flamme forgée ; son dernier coup s’embrase dans une gerbe de braises.",
       "place": {
-        "dx": 12,
-        "dy": 46
+        "dx": 24,
+        "dy": 80
       },
       "hands": 2,
       "weightKg": 1.85,
-      "balance": "vers la garde"
+      "balance": "vers la garde",
+      "finisher": {
+        "name": "Brasier de Clairfoyer",
+        "kind": "slash",
+        "effect": "ember",
+        "magic": true,
+        "drive": 14.0,
+        "tilt": 0.23
+      }
     },
     {
       "id": "coutelas-gobelin",
@@ -745,6 +1009,14 @@
       "place": {
         "dx": 34,
         "dy": 34
+      },
+      "finisher": {
+        "name": "Taille de noisetier",
+        "kind": "slash",
+        "effect": "steel",
+        "magic": false,
+        "drive": 8.0,
+        "tilt": 0.06
       }
     },
     {
@@ -768,6 +1040,14 @@
       "place": {
         "dx": 34,
         "dy": 34
+      },
+      "finisher": {
+        "name": "Sillage du maître de Kesh",
+        "kind": "hook",
+        "effect": "sand",
+        "magic": true,
+        "drive": 11.0,
+        "tilt": 0.24
       }
     },
     {
@@ -791,6 +1071,14 @@
       "place": {
         "dx": 12,
         "dy": -46
+      },
+      "finisher": {
+        "name": "Abattée pastorale",
+        "kind": "cleave",
+        "effect": "dust",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.09
       }
     },
     {
@@ -814,6 +1102,14 @@
       "place": {
         "dx": 0,
         "dy": -48
+      },
+      "finisher": {
+        "name": "Revers de bronze",
+        "kind": "slash",
+        "effect": "steel",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.08
       }
     },
     {
@@ -837,6 +1133,14 @@
       "place": {
         "dx": -62,
         "dy": 17
+      },
+      "finisher": {
+        "name": "Ronde forestière",
+        "kind": "sweep",
+        "effect": "wind",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.16
       }
     },
     {
@@ -856,7 +1160,15 @@
       "hands": 1,
       "weightKg": 1.55,
       "balance": "centré",
-      "discovery": "Butin des gardes et sentinelles batraciens"
+      "discovery": "Butin des gardes et sentinelles batraciens",
+      "finisher": {
+        "name": "Percée du chenal",
+        "kind": "lunge",
+        "effect": "steel",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.07
+      }
     },
     {
       "id": "lame-batelier",
@@ -875,7 +1187,15 @@
       "hands": 1,
       "weightKg": 1.12,
       "balance": "vers la garde",
-      "discovery": "Butin des escortes batraciennes"
+      "discovery": "Butin des escortes batraciennes",
+      "finisher": {
+        "name": "Brise-cordage",
+        "kind": "cleave",
+        "effect": "tide",
+        "magic": false,
+        "drive": 9.0,
+        "tilt": 0.13
+      }
     },
     {
       "id": "javelot-joncs",
@@ -894,7 +1214,15 @@
       "hands": 1,
       "weightKg": 1.05,
       "balance": "centré",
-      "discovery": "Butin des éclaireurs batraciens"
+      "discovery": "Butin des éclaireurs batraciens",
+      "finisher": {
+        "name": "Pointe de l’éclaireur",
+        "kind": "lunge",
+        "effect": "wind",
+        "magic": false,
+        "drive": 11.0,
+        "tilt": 0.05
+      }
     },
     {
       "id": "massue-chenal",
@@ -913,7 +1241,15 @@
       "hands": 1,
       "weightKg": 1.58,
       "balance": "vers le fer",
-      "discovery": "Butin des pilleurs de chenal"
+      "discovery": "Butin des pilleurs de chenal",
+      "finisher": {
+        "name": "Poids du chenal",
+        "kind": "smash",
+        "effect": "dust",
+        "magic": false,
+        "drive": 8.0,
+        "tilt": 0.14
+      }
     },
     {
       "id": "lance-capitaine",
@@ -932,7 +1268,15 @@
       "hands": 1,
       "weightKg": 1.88,
       "balance": "centré",
-      "discovery": "Butin des chefs batraciens"
+      "discovery": "Butin des chefs batraciens",
+      "finisher": {
+        "name": "Fer du capitaine",
+        "kind": "lunge",
+        "effect": "tide",
+        "magic": true,
+        "drive": 13.0,
+        "tilt": 0.12
+      }
     },
     {
       "id": "lance-centaure",
@@ -955,6 +1299,14 @@
       "place": {
         "dx": 34,
         "dy": 34
+      },
+      "finisher": {
+        "name": "Charge à pied",
+        "kind": "lunge",
+        "effect": "wind",
+        "magic": false,
+        "drive": 14.0,
+        "tilt": 0.06
       }
     },
     {
@@ -978,6 +1330,14 @@
       "place": {
         "dx": 12,
         "dy": 46
+      },
+      "finisher": {
+        "name": "Cercle de l’Horizon",
+        "kind": "whirl",
+        "effect": "star",
+        "magic": true,
+        "drive": 15.0,
+        "tilt": 0.2
       }
     },
     {
@@ -997,7 +1357,15 @@
       "hands": 1,
       "weightKg": 1.48,
       "balance": "vers la garde",
-      "discovery": "Butin des squelettes animés"
+      "discovery": "Butin des squelettes animés",
+      "finisher": {
+        "name": "Taille de l’ossuaire",
+        "kind": "cleave",
+        "effect": "dust",
+        "magic": false,
+        "drive": 8.0,
+        "tilt": 0.02
+      }
     },
     {
       "id": "baton-cultiste",
@@ -1017,7 +1385,15 @@
       "weightKg": 1.64,
       "balance": "centré",
       "head": "orb",
-      "discovery": "Butin des cultistes"
+      "discovery": "Butin des cultistes",
+      "finisher": {
+        "name": "Revers de l’officiant",
+        "kind": "sweep",
+        "effect": "jade",
+        "magic": false,
+        "drive": 10.0,
+        "tilt": 0.04
+      }
     },
     {
       "id": "crosse-pretre",
@@ -1032,12 +1408,20 @@
       "material": "jade",
       "rarity": "Maîtrise",
       "variant": 3,
-      "description": "La crosse à pommeau vert portée par le Prêtre du Serpent. Son poids et ses bagues de bronze donnent de puissants balayages ; elle ne confère pas ses sortilèges.",
+      "description": "La crosse à pommeau vert portée par le Prêtre du Serpent. Son poids et ses bagues de bronze donnent de puissants balayages ; son coup final trace un sceau vert, distinct des sortilèges de son ancien porteur.",
       "hands": 2,
       "weightKg": 2.24,
       "balance": "centré",
       "head": "orb",
-      "discovery": "Butin des Prêtre du Serpent"
+      "discovery": "Butin des Prêtre du Serpent",
+      "finisher": {
+        "name": "Sceau du Serpent",
+        "kind": "seal",
+        "effect": "jade",
+        "magic": true,
+        "drive": 13.0,
+        "tilt": 0.19
+      }
     }
   ],
   "motions": {
@@ -2395,7 +2779,7 @@
       "names": [
         "Balayage de hampe",
         "Revers circulaire",
-        "Levée du bâton",
+        "Taille de relance",
         "Poussée à deux mains"
       ],
       "times": [
@@ -2665,7 +3049,7 @@
       "names": [
         "Grande taille",
         "Revers du fer",
-        "Crochet montant",
+        "Crochet bas",
         "Fente à la lame"
       ],
       "times": [
