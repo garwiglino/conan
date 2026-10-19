@@ -1,0 +1,213 @@
+{
+  "frames": {
+    "M14/ew": {
+      "frame": {
+        "x": 2,
+        "y": 38,
+        "w": 48,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 12
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        12
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 12
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M14",
+        "dir": "ew"
+      }
+    },
+    "M14/ns": {
+      "frame": {
+        "x": 72,
+        "y": 2,
+        "w": 12,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 12
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M14",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M14.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M14",
+    "label": "Parapet bas",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/17-enceintes.png",
+    "sheet": "Murs et chemins de ronde",
+    "season": "base",
+    "shape": "parapet",
+    "width": 48,
+    "depth": 8,
+    "totalHeight": 12,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 12,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          12
+        ],
+        "crop": [
+          863,
+          535,
+          314,
+          76
+        ],
+        "anchor": [
+          24,
+          12
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          48
+        ],
+        "crop": [
+          1321,
+          493,
+          58,
+          132
+        ],
+        "anchor": [
+          6,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

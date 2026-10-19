@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "TAG-C02/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 88,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        44,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -44,
+          "y": -64,
+          "w": 88,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -44,
+            "y": -64,
+            "w": 37,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 37,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "TAG-C02",
+        "dir": "face"
+      }
+    },
+    "TAG-C02/droite": {
+      "frame": {
+        "x": 106,
+        "y": 2,
+        "w": 64,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -88,
+          "w": 64,
+          "h": 88
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 32,
+            "y": -44,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -88,
+            "w": 64,
+            "h": 37,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -32,
+            "y": -37,
+            "w": 64,
+            "h": 37,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -32,
+            "y": -51,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "TAG-C02",
+        "dir": "droite"
+      }
+    },
+    "TAG-C02/dos": {
+      "frame": {
+        "x": 186,
+        "y": 2,
+        "w": 88,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        44,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -44,
+          "y": -64,
+          "w": 88,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -44,
+            "y": -64,
+            "w": 37,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 37,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "TAG-C02",
+        "dir": "dos"
+      }
+    },
+    "TAG-C02/gauche": {
+      "frame": {
+        "x": 290,
+        "y": 2,
+        "w": 64,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -88,
+          "w": 64,
+          "h": 88
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -32,
+            "y": -44,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -88,
+            "w": 64,
+            "h": 37,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -32,
+            "y": -37,
+            "w": 64,
+            "h": 37,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -24,
+            "y": -51,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "TAG-C02",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "TAG-C02.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 368,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "TAG-C02",
+    "label": "Maison familiale",
+    "family": "tagon",
+    "kind": "building",
+    "source": "expansion/tagon-houses.png",
+    "sheet": "Tagon — maisons civiles",
+    "season": "base",
+    "width": 88,
+    "depth": 64,
+    "height": 64,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          88,
+          64
+        ],
+        "crop": [
+          217,
+          361,
+          300,
+          250
+        ],
+        "anchor": [
+          44,
+          64
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          64,
+          64
+        ],
+        "crop": [
+          568,
+          367,
+          272,
+          243
+        ],
+        "anchor": [
+          32,
+          64
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          88,
+          64
+        ],
+        "crop": [
+          869,
+          360,
+          322,
+          250
+        ],
+        "anchor": [
+          44,
+          64
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          64,
+          64
+        ],
+        "crop": [
+          1235,
+          367,
+          267,
+          243
+        ],
+        "anchor": [
+          32,
+          64
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

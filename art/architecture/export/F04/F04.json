@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "F04/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 96,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -80,
+          "w": 96,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -7,
+            "y": -80,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F04",
+        "dir": "face"
+      }
+    },
+    "F04/droite": {
+      "frame": {
+        "x": 110,
+        "y": 2,
+        "w": 80,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -96,
+          "w": 80,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 40,
+            "y": -48,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -96,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -40,
+            "y": -41,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -40,
+            "y": -55,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F04",
+        "dir": "droite"
+      }
+    },
+    "F04/dos": {
+      "frame": {
+        "x": 202,
+        "y": 2,
+        "w": 96,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -80,
+          "w": 96,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -80,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F04",
+        "dir": "dos"
+      }
+    },
+    "F04/gauche": {
+      "frame": {
+        "x": 310,
+        "y": 2,
+        "w": 80,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -96,
+          "w": 80,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -40,
+            "y": -48,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -96,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -40,
+            "y": -41,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -32,
+            "y": -55,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F04",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "F04.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 400,
+      "h": 132
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "F04",
+    "label": "Donjon résidentiel",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/13-garde.png",
+    "sheet": "Garde et défense habitée",
+    "season": "base",
+    "width": 96,
+    "depth": 80,
+    "height": 128,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          96,
+          128
+        ],
+        "crop": [
+          249,
+          694,
+          239,
+          289
+        ],
+        "anchor": [
+          48,
+          128
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          80,
+          128
+        ],
+        "crop": [
+          599,
+          698,
+          222,
+          277
+        ],
+        "anchor": [
+          40,
+          128
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          96,
+          128
+        ],
+        "crop": [
+          922,
+          695,
+          224,
+          280
+        ],
+        "anchor": [
+          48,
+          128
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          80,
+          128
+        ],
+        "crop": [
+          1242,
+          698,
+          227,
+          277
+        ],
+        "anchor": [
+          40,
+          128
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

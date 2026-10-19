@@ -1,0 +1,214 @@
+{
+  "frames": {
+    "M56/ew": {
+      "frame": {
+        "x": 2,
+        "y": 40,
+        "w": 48,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 10
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        10
+      ],
+      "renderLift": 30,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 30,
+            "zMax": 40
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "M56",
+        "dir": "ew"
+      }
+    },
+    "M56/ns": {
+      "frame": {
+        "x": 72,
+        "y": 2,
+        "w": 12,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        48
+      ],
+      "renderLift": 30,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 30,
+            "zMax": 40
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "M56",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M56.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M56",
+    "label": "Parapet haut raccordable",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/29-enceinte-haute-bois.png",
+    "sheet": "Enceinte haute de village — bois",
+    "season": "base",
+    "shape": "parapet",
+    "width": 48,
+    "depth": 12,
+    "totalHeight": 40,
+    "walkHeight": 30,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "wood",
+    "height": 40,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          10
+        ],
+        "crop": [
+          557,
+          1013,
+          219,
+          72
+        ],
+        "anchor": [
+          24,
+          10
+        ],
+        "lift": 30
+      },
+      "ns": {
+        "size": [
+          12,
+          48
+        ],
+        "crop": [
+          878,
+          935,
+          54,
+          166
+        ],
+        "anchor": [
+          6,
+          48
+        ],
+        "lift": 30
+      }
+    }
+  }
+}

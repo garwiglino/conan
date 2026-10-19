@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "B02/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -72,
+          "w": 112,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B02",
+        "dir": "face"
+      }
+    },
+    "B02/droite": {
+      "frame": {
+        "x": 138,
+        "y": 2,
+        "w": 72,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -112,
+          "w": 72,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -112,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -36,
+            "y": -49,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -36,
+            "y": -63,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B02",
+        "dir": "droite"
+      }
+    },
+    "B02/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -72,
+          "w": 112,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B02",
+        "dir": "dos"
+      }
+    },
+    "B02/gauche": {
+      "frame": {
+        "x": 370,
+        "y": 2,
+        "w": 72,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -112,
+          "w": 72,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -112,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -36,
+            "y": -49,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -28,
+            "y": -63,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B02",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "B02.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 76
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "B02",
+    "label": "Étable fermée",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/07-fermes.png",
+    "sheet": "Dépendances rurales",
+    "season": "base",
+    "width": 112,
+    "depth": 72,
+    "height": 72,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          72
+        ],
+        "crop": [
+          223,
+          349,
+          336,
+          185
+        ],
+        "anchor": [
+          56,
+          72
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          72
+        ],
+        "crop": [
+          611,
+          352,
+          214,
+          181
+        ],
+        "anchor": [
+          36,
+          72
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          72
+        ],
+        "crop": [
+          879,
+          350,
+          346,
+          183
+        ],
+        "anchor": [
+          56,
+          72
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          72
+        ],
+        "crop": [
+          1287,
+          352,
+          205,
+          181
+        ],
+        "anchor": [
+          36,
+          72
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

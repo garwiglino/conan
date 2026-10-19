@@ -1,0 +1,313 @@
+{
+  "frames": {
+    "VAR-H05/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 48,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "z": 52
+          },
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -8,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -8,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "VAR-H05",
+        "dir": "ew"
+      }
+    },
+    "VAR-H05/ns": {
+      "frame": {
+        "x": 54,
+        "y": 18,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "z": 52
+          },
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -8,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -8,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "VAR-H05",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "VAR-H05.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "VAR-H05",
+    "label": "Jonction en T",
+    "family": "varan",
+    "kind": "module",
+    "source": "expansion/varan-walls.png",
+    "sheet": "Varan — hauts remparts",
+    "season": "base",
+    "shape": "junction-t",
+    "width": 48,
+    "depth": 48,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 16,
+    "material": "wood",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          64
+        ],
+        "crop": [
+          47,
+          647,
+          225,
+          197
+        ],
+        "anchor": [
+          24,
+          64
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          323,
+          659,
+          181,
+          177
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "composedFrom": "VAR-H01/ns",
+        "lift": 52
+      }
+    }
+  }
+}

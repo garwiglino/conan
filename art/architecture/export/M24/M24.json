@@ -1,0 +1,195 @@
+{
+  "frames": {
+    "M24/ew": {
+      "frame": {
+        "x": 2,
+        "y": 26,
+        "w": 48,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -12,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -12,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M24",
+        "dir": "ew"
+      }
+    },
+    "M24/ns": {
+      "frame": {
+        "x": 66,
+        "y": 2,
+        "w": 24,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M24",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M24.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M24",
+    "label": "Auvent",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/18-ouvertures.png",
+    "sheet": "Portes, fenêtres et protection",
+    "season": "base",
+    "shape": "awning",
+    "width": 48,
+    "depth": 24,
+    "totalHeight": 20,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 20,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          24
+        ],
+        "crop": [
+          836,
+          680,
+          312,
+          123
+        ],
+        "anchor": [
+          24,
+          24
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          24,
+          48
+        ],
+        "crop": [
+          1308,
+          671,
+          90,
+          124
+        ],
+        "anchor": [
+          12,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

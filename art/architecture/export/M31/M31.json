@@ -1,0 +1,215 @@
+{
+  "frames": {
+    "M31/face": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 24,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 44
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        44
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -32,
+          "w": 24,
+          "h": 32
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -32,
+            "w": 24,
+            "h": 32,
+            "zFrom": 0,
+            "zTo": 12,
+            "axis": "north"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "ground",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "landing",
+            "x": 0,
+            "y": -32,
+            "nx": 0,
+            "ny": -1,
+            "z": 12,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M31",
+        "dir": "face"
+      }
+    },
+    "M31/palier": {
+      "frame": {
+        "x": 30,
+        "y": 2,
+        "w": 24,
+        "h": 60
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 60
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 60
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        60
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -32,
+          "w": 24,
+          "h": 32
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -32,
+            "w": 24,
+            "h": 32,
+            "zFrom": 0,
+            "zTo": 12,
+            "axis": "north"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "ground",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "landing",
+            "x": 0,
+            "y": -32,
+            "nx": 0,
+            "ny": -1,
+            "z": 12,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M31",
+        "dir": "palier"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M31.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 56,
+      "h": 64
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M31",
+    "label": "Escalier d’accostage",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/19-franchissements.png",
+    "sheet": "Ponts et accès portuaires",
+    "season": "base",
+    "shape": "stairs",
+    "width": 24,
+    "depth": 32,
+    "totalHeight": 12,
+    "walkHeight": 12,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 12,
+    "high": false,
+    "views": [
+      "face",
+      "palier"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          24,
+          44
+        ],
+        "crop": [
+          145,
+          680,
+          236,
+          103
+        ],
+        "anchor": [
+          12,
+          44
+        ],
+        "lift": 0
+      },
+      "palier": {
+        "size": [
+          24,
+          60
+        ],
+        "crop": [
+          554,
+          668,
+          110,
+          132
+        ],
+        "anchor": [
+          12,
+          60
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

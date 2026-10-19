@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "H14/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 80,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -72,
+          "w": 80,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H14",
+        "dir": "face"
+      }
+    },
+    "H14/droite": {
+      "frame": {
+        "x": 90,
+        "y": 2,
+        "w": 72,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -80,
+          "w": 72,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -40,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -80,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -36,
+            "y": -33,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -36,
+            "y": -47,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H14",
+        "dir": "droite"
+      }
+    },
+    "H14/dos": {
+      "frame": {
+        "x": 170,
+        "y": 2,
+        "w": 80,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -72,
+          "w": 80,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H14",
+        "dir": "dos"
+      }
+    },
+    "H14/gauche": {
+      "frame": {
+        "x": 258,
+        "y": 2,
+        "w": 72,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -80,
+          "w": 72,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -40,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -80,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -36,
+            "y": -33,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -47,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H14",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "H14.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 336,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "H14",
+    "label": "Maison à patio",
+    "family": "sarak",
+    "kind": "building",
+    "source": "concepts/26-habitat-sarak.png",
+    "sheet": "Sarak — variantes de maisons",
+    "season": "base",
+    "width": 80,
+    "depth": 72,
+    "height": 64,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          80,
+          64
+        ],
+        "crop": [
+          205,
+          337,
+          292,
+          160
+        ],
+        "anchor": [
+          40,
+          64
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          64
+        ],
+        "crop": [
+          560,
+          338,
+          279,
+          159
+        ],
+        "anchor": [
+          36,
+          64
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          80,
+          64
+        ],
+        "crop": [
+          878,
+          338,
+          298,
+          159
+        ],
+        "anchor": [
+          40,
+          64
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          64
+        ],
+        "crop": [
+          1220,
+          338,
+          272,
+          159
+        ],
+        "anchor": [
+          36,
+          64
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -33,7 +33,10 @@
     "preview:weapons": "node scripts/preview-kaldor-weapons.cjs",
     "preview:weapon-layers": "node scripts/preview-kaldor-native-arms.cjs",
     "preview:armory": "node scripts/preview-kaldor-armory.cjs",
-    "preview:armaments": "node scripts/preview-kaldor-armaments.cjs"
+    "preview:armaments": "node scripts/preview-kaldor-armaments.cjs",
+    "build:architecture": "python3 scripts/build-architecture.py && node scripts/build-architecture-human.cjs && node scripts/export-architecture.cjs",
+    "test:architecture": "node --test tests/architecture.test.cjs",
+    "package:architecture": "python3 scripts/package-architecture.py"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

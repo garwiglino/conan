@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "B19/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 128,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        64,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -64,
+          "y": -64,
+          "w": 128,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -64,
+            "y": -64,
+            "w": 57,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 57,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B19",
+        "dir": "face"
+      }
+    },
+    "B19/droite": {
+      "frame": {
+        "x": 166,
+        "y": 2,
+        "w": 64,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -128,
+          "w": 64,
+          "h": 128
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 32,
+            "y": -64,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -128,
+            "w": 64,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -32,
+            "y": -57,
+            "w": 64,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -32,
+            "y": -71,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B19",
+        "dir": "droite"
+      }
+    },
+    "B19/dos": {
+      "frame": {
+        "x": 266,
+        "y": 2,
+        "w": 128,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        64,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -64,
+          "y": -64,
+          "w": 128,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -64,
+            "y": -64,
+            "w": 57,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 57,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B19",
+        "dir": "dos"
+      }
+    },
+    "B19/gauche": {
+      "frame": {
+        "x": 430,
+        "y": 2,
+        "w": 64,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -128,
+          "w": 64,
+          "h": 128
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -32,
+            "y": -64,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -128,
+            "w": 64,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -32,
+            "y": -57,
+            "w": 64,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -24,
+            "y": -71,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B19",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "B19.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 528,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "B19",
+    "label": "Corderie",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/11-fibres.png",
+    "sheet": "Textile et transformations",
+    "season": "base",
+    "width": 128,
+    "depth": 64,
+    "height": 64,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          128,
+          64
+        ],
+        "crop": [
+          189,
+          579,
+          447,
+          129
+        ],
+        "anchor": [
+          64,
+          64
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          64,
+          64
+        ],
+        "crop": [
+          677,
+          566,
+          144,
+          142
+        ],
+        "anchor": [
+          32,
+          64
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          128,
+          64
+        ],
+        "crop": [
+          860,
+          579,
+          451,
+          129
+        ],
+        "anchor": [
+          64,
+          64
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          64,
+          64
+        ],
+        "crop": [
+          1345,
+          566,
+          145,
+          142
+        ],
+        "anchor": [
+          32,
+          64
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "frames": {
+    "M60/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 38,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 38
+          },
+          {
+            "x": -24,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 38
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 38,
+            "zMax": 48
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 38,
+            "zMax": 48
+          },
+          {
+            "x": -24,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 38,
+            "zMax": 48
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 38
+          },
+          {
+            "x": -24,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 38
+          }
+        ],
+        "sockets": [
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "north",
+            "x": -18,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M60",
+        "dir": "ew"
+      }
+    },
+    "M60/ns": {
+      "frame": {
+        "x": 54,
+        "y": 2,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 38,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 38
+          },
+          {
+            "x": 12,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 38
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 38,
+            "zMax": 48
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 38,
+            "zMax": 48
+          },
+          {
+            "x": 20,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 38,
+            "zMax": 48
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 38
+          },
+          {
+            "x": 12,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 38
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "north",
+            "x": 18,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M60",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M60.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M60",
+    "label": "Angle intérieur haut",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/30-enceinte-haute-pierre.png",
+    "sheet": "Enceinte haute de bourg — pierre",
+    "season": "base",
+    "shape": "corner-inner",
+    "width": 48,
+    "depth": 48,
+    "totalHeight": 48,
+    "walkHeight": 38,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 48,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          560,
+          427,
+          179,
+          173
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "composedFrom": "M57/ns",
+        "lift": 38
+      },
+      "ns": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          830,
+          423,
+          152,
+          156
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "composedFrom": "M57/ns",
+        "lift": 38
+      }
+    }
+  }
+}

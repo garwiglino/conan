@@ -1,0 +1,472 @@
+{
+  "frames": {
+    "X04/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 144,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 144,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 144,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        72,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -72,
+          "y": -96,
+          "w": 144,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -72,
+            "y": -96,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 66,
+            "y": -96,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -72,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 66,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -72,
+            "y": -96,
+            "w": 144,
+            "h": 96,
+            "zMin": 57,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "X04",
+        "dir": "face"
+      }
+    },
+    "X04/droite": {
+      "frame": {
+        "x": 174,
+        "y": 2,
+        "w": 96,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -144,
+          "w": 96,
+          "h": 144
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 48,
+            "y": -72,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -144,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 42,
+            "y": -144,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -48,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 42,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -48,
+            "y": -144,
+            "w": 96,
+            "h": 144,
+            "zMin": 57,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "X04",
+        "dir": "droite"
+      }
+    },
+    "X04/dos": {
+      "frame": {
+        "x": 298,
+        "y": 2,
+        "w": 144,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 144,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 144,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        72,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -72,
+          "y": -96,
+          "w": 144,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -96,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -72,
+            "y": -96,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 66,
+            "y": -96,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -72,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 66,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -72,
+            "y": -96,
+            "w": 144,
+            "h": 96,
+            "zMin": 57,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "X04",
+        "dir": "dos"
+      }
+    },
+    "X04/gauche": {
+      "frame": {
+        "x": 470,
+        "y": 2,
+        "w": 96,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -144,
+          "w": 96,
+          "h": 144
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -48,
+            "y": -72,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -144,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 42,
+            "y": -144,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -48,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 42,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -48,
+            "y": -144,
+            "w": 96,
+            "h": 144,
+            "zMin": 57,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "X04",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "X04.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 592,
+      "h": 92
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "X04",
+    "label": "Chantier naval couvert",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/15-sites.png",
+    "sheet": "Dépendances des districts",
+    "season": "base",
+    "width": 144,
+    "depth": 96,
+    "height": 88,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": true,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          144,
+          88
+        ],
+        "crop": [
+          183,
+          717,
+          325,
+          233
+        ],
+        "anchor": [
+          72,
+          88
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          96,
+          88
+        ],
+        "crop": [
+          519,
+          731,
+          316,
+          219
+        ],
+        "anchor": [
+          48,
+          88
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          144,
+          88
+        ],
+        "crop": [
+          868,
+          736,
+          329,
+          214
+        ],
+        "anchor": [
+          72,
+          88
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          96,
+          88
+        ],
+        "crop": [
+          1222,
+          731,
+          304,
+          219
+        ],
+        "anchor": [
+          48,
+          88
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

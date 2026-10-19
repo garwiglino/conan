@@ -1,0 +1,216 @@
+{
+  "frames": {
+    "M63/face": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 24,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 102
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        102
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -64,
+          "w": 24,
+          "h": 64
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -64,
+            "w": 24,
+            "h": 64,
+            "zFrom": 0,
+            "zTo": 38,
+            "axis": "north"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "ground",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "landing",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M63",
+        "dir": "face"
+      }
+    },
+    "M63/palier": {
+      "frame": {
+        "x": 30,
+        "y": 2,
+        "w": 24,
+        "h": 118
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 118
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 118
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        118
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -64,
+          "w": 24,
+          "h": 64
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -64,
+            "w": 24,
+            "h": 64,
+            "zFrom": 0,
+            "zTo": 38,
+            "axis": "north"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "ground",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "landing",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M63",
+        "dir": "palier"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M63.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 56,
+      "h": 122
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M63",
+    "label": "Escalier frontal de ronde",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/30-enceinte-haute-pierre.png",
+    "sheet": "Enceinte haute de bourg — pierre",
+    "season": "base",
+    "shape": "stairs",
+    "width": 24,
+    "depth": 64,
+    "totalHeight": 48,
+    "walkHeight": 38,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 48,
+    "high": true,
+    "views": [
+      "face",
+      "palier"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          24,
+          102
+        ],
+        "crop": [
+          104,
+          962,
+          114,
+          181
+        ],
+        "anchor": [
+          12,
+          102
+        ],
+        "lift": 0
+      },
+      "palier": {
+        "size": [
+          24,
+          118
+        ],
+        "crop": [
+          360,
+          954,
+          92,
+          196
+        ],
+        "anchor": [
+          12,
+          118
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "frames": {
+    "M27/ew": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 32,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -16,
+          "y": -12,
+          "w": 32,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -16,
+            "y": -12,
+            "w": 32,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 24
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -16,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 16,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M27",
+        "dir": "ew"
+      }
+    },
+    "M27/ns": {
+      "frame": {
+        "x": 48,
+        "y": 2,
+        "w": 12,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -32,
+          "w": 12,
+          "h": 32
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -32,
+            "w": 12,
+            "h": 32,
+            "zMin": 0,
+            "zMax": 24
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -32,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M27",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M27.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 72,
+      "h": 36
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M27",
+    "label": "Culée de pont",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/19-franchissements.png",
+    "sheet": "Ponts et accès portuaires",
+    "season": "base",
+    "shape": "abutment",
+    "width": 32,
+    "depth": 24,
+    "totalHeight": 24,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 24,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          32,
+          24
+        ],
+        "crop": [
+          128,
+          318,
+          268,
+          140
+        ],
+        "anchor": [
+          16,
+          24
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          32
+        ],
+        "crop": [
+          553,
+          318,
+          115,
+          142
+        ],
+        "anchor": [
+          6,
+          32
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

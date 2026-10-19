@@ -1,0 +1,419 @@
+{
+  "frames": {
+    "B14/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 96,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -80,
+          "w": 96,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -80,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B14",
+        "dir": "face"
+      }
+    },
+    "B14/droite": {
+      "frame": {
+        "x": 110,
+        "y": 2,
+        "w": 80,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -96,
+          "w": 80,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 40,
+            "y": -48,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -96,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -41,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -55,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B14",
+        "dir": "droite"
+      }
+    },
+    "B14/dos": {
+      "frame": {
+        "x": 202,
+        "y": 2,
+        "w": 96,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -80,
+          "w": 96,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -80,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 41,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B14",
+        "dir": "dos"
+      }
+    },
+    "B14/gauche": {
+      "frame": {
+        "x": 310,
+        "y": 2,
+        "w": 80,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -96,
+          "w": 80,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -40,
+            "y": -48,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -96,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -41,
+            "w": 80,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -32,
+            "y": -55,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B14",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "B14.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 400,
+      "h": 92
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "B14",
+    "label": "Moulin à eau",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/10-alimentation.png",
+    "sheet": "Transformation alimentaire",
+    "season": "base",
+    "width": 96,
+    "depth": 80,
+    "height": 88,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "mechanism": {
+      "type": "waterwheel",
+      "views": [
+        "droite"
+      ],
+      "center": [
+        40,
+        62
+      ],
+      "radius": 23
+    },
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          96,
+          88
+        ],
+        "crop": [
+          242,
+          361,
+          273,
+          205
+        ],
+        "anchor": [
+          48,
+          88
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          80,
+          88
+        ],
+        "crop": [
+          592,
+          358,
+          218,
+          190
+        ],
+        "anchor": [
+          40,
+          88
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          96,
+          88
+        ],
+        "crop": [
+          904,
+          358,
+          244,
+          188
+        ],
+        "anchor": [
+          48,
+          88
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          80,
+          88
+        ],
+        "crop": [
+          1245,
+          358,
+          239,
+          190
+        ],
+        "anchor": [
+          40,
+          88
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

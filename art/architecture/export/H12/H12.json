@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "H12/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -72,
+          "w": 112,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H12",
+        "dir": "face"
+      }
+    },
+    "H12/droite": {
+      "frame": {
+        "x": 138,
+        "y": 2,
+        "w": 72,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -112,
+          "w": 72,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -112,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -36,
+            "y": -49,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -36,
+            "y": -63,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H12",
+        "dir": "droite"
+      }
+    },
+    "H12/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -72,
+          "w": 112,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H12",
+        "dir": "dos"
+      }
+    },
+    "H12/gauche": {
+      "frame": {
+        "x": 370,
+        "y": 2,
+        "w": 72,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -112,
+          "w": 72,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -112,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -36,
+            "y": -49,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -28,
+            "y": -63,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H12",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "H12.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 84
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "H12",
+    "label": "Grande maison de maisonnée",
+    "family": "igea",
+    "kind": "building",
+    "source": "concepts/25-habitat-igea.png",
+    "sheet": "Igea — maisons de vallée",
+    "season": "base",
+    "width": 112,
+    "depth": 72,
+    "height": 80,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          80
+        ],
+        "crop": [
+          168,
+          796,
+          403,
+          164
+        ],
+        "anchor": [
+          56,
+          80
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          80
+        ],
+        "crop": [
+          591,
+          795,
+          225,
+          165
+        ],
+        "anchor": [
+          36,
+          80
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          80
+        ],
+        "crop": [
+          851,
+          796,
+          372,
+          164
+        ],
+        "anchor": [
+          56,
+          80
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          80
+        ],
+        "crop": [
+          1267,
+          796,
+          224,
+          163
+        ],
+        "anchor": [
+          36,
+          80
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

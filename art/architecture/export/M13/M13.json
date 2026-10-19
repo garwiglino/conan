@@ -1,0 +1,249 @@
+{
+  "frames": {
+    "M13/ew": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 48,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 32
+          },
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 32
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M13",
+        "dir": "ew"
+      }
+    },
+    "M13/ns": {
+      "frame": {
+        "x": 54,
+        "y": 2,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 32
+          },
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 32
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M13",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M13.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M13",
+    "label": "Jonction en T",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/17-enceintes.png",
+    "sheet": "Murs et chemins de ronde",
+    "season": "base",
+    "shape": "junction-t",
+    "width": 48,
+    "depth": 48,
+    "totalHeight": 32,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 32,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          32
+        ],
+        "crop": [
+          161,
+          476,
+          316,
+          138
+        ],
+        "anchor": [
+          24,
+          32
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          552,
+          479,
+          132,
+          145
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

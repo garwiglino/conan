@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "F05/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 64,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -64,
+          "w": 64,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -64,
+            "w": 25,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 25,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F05",
+        "dir": "face"
+      }
+    },
+    "F05/droite": {
+      "frame": {
+        "x": 70,
+        "y": 2,
+        "w": 64,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -64,
+          "w": 64,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 32,
+            "y": -32,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -64,
+            "w": 64,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -32,
+            "y": -25,
+            "w": 64,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -32,
+            "y": -39,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F05",
+        "dir": "droite"
+      }
+    },
+    "F05/dos": {
+      "frame": {
+        "x": 138,
+        "y": 2,
+        "w": 64,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -64,
+          "w": 64,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -64,
+            "w": 25,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 25,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F05",
+        "dir": "dos"
+      }
+    },
+    "F05/gauche": {
+      "frame": {
+        "x": 206,
+        "y": 2,
+        "w": 64,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 128
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        128
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -64,
+          "w": 64,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -32,
+            "y": -32,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -64,
+            "w": 64,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -32,
+            "y": -25,
+            "w": 64,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 128
+          },
+          {
+            "x": -24,
+            "y": -39,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 128
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F05",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "F05.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 272,
+      "h": 132
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "F05",
+    "label": "Tour de guet bois",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/14-fortifications.png",
+    "sheet": "Tours et portes d’enceinte",
+    "season": "base",
+    "width": 64,
+    "depth": 64,
+    "height": 128,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          64,
+          128
+        ],
+        "crop": [
+          328,
+          109,
+          134,
+          204
+        ],
+        "anchor": [
+          32,
+          128
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          64,
+          128
+        ],
+        "crop": [
+          655,
+          108,
+          153,
+          202
+        ],
+        "anchor": [
+          32,
+          128
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          64,
+          128
+        ],
+        "crop": [
+          958,
+          109,
+          134,
+          202
+        ],
+        "anchor": [
+          32,
+          128
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          64,
+          128
+        ],
+        "crop": [
+          1267,
+          108,
+          155,
+          202
+        ],
+        "anchor": [
+          32,
+          128
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

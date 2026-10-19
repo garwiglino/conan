@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "T18/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 80,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -64,
+          "w": 80,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -64,
+            "w": 33,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 33,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T18",
+        "dir": "face"
+      }
+    },
+    "T18/droite": {
+      "frame": {
+        "x": 94,
+        "y": 2,
+        "w": 64,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -80,
+          "w": 64,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 32,
+            "y": -40,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -80,
+            "w": 64,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -32,
+            "y": -33,
+            "w": 64,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -32,
+            "y": -47,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T18",
+        "dir": "droite"
+      }
+    },
+    "T18/dos": {
+      "frame": {
+        "x": 170,
+        "y": 2,
+        "w": 80,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -64,
+          "w": 80,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -64,
+            "w": 33,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 33,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T18",
+        "dir": "dos"
+      }
+    },
+    "T18/gauche": {
+      "frame": {
+        "x": 262,
+        "y": 2,
+        "w": 64,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -80,
+          "w": 64,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -32,
+            "y": -40,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -80,
+            "w": 64,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -32,
+            "y": -33,
+            "w": 64,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -24,
+            "y": -47,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T18",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "T18.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 336,
+      "h": 76
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "T18",
+    "label": "Maison de bourg drainé",
+    "family": "varan",
+    "kind": "building",
+    "source": "concepts/05-varan.png",
+    "sheet": "Varan — habitats humides",
+    "season": "base",
+    "width": 80,
+    "depth": 64,
+    "height": 72,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          80,
+          72
+        ],
+        "crop": [
+          213,
+          341,
+          298,
+          160
+        ],
+        "anchor": [
+          40,
+          72
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          64,
+          72
+        ],
+        "crop": [
+          564,
+          331,
+          229,
+          171
+        ],
+        "anchor": [
+          32,
+          72
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          80,
+          72
+        ],
+        "crop": [
+          860,
+          327,
+          315,
+          175
+        ],
+        "anchor": [
+          40,
+          72
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          64,
+          72
+        ],
+        "crop": [
+          1250,
+          331,
+          218,
+          171
+        ],
+        "anchor": [
+          32,
+          72
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

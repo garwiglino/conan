@@ -1,0 +1,214 @@
+{
+  "frames": {
+    "M72/ew": {
+      "frame": {
+        "x": 2,
+        "y": 38,
+        "w": 48,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 12
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        12
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M72",
+        "dir": "ew"
+      }
+    },
+    "M72/ns": {
+      "frame": {
+        "x": 72,
+        "y": 2,
+        "w": 12,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M72",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M72.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M72",
+    "label": "Parapet haut raccordable",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/31-courtine-haute-chateau.png",
+    "sheet": "Courtine haute de château",
+    "season": "base",
+    "shape": "parapet",
+    "width": 48,
+    "depth": 12,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          12
+        ],
+        "crop": [
+          679,
+          1046,
+          167,
+          57
+        ],
+        "anchor": [
+          24,
+          12
+        ],
+        "lift": 52
+      },
+      "ns": {
+        "size": [
+          12,
+          48
+        ],
+        "crop": [
+          901,
+          991,
+          54,
+          161
+        ],
+        "anchor": [
+          6,
+          48
+        ],
+        "lift": 52
+      }
+    }
+  }
+}

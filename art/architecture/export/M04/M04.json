@@ -1,0 +1,211 @@
+{
+  "frames": {
+    "M04/ew": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 48,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -32,
+          "w": 48,
+          "h": 32
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -32,
+            "w": 48,
+            "h": 32,
+            "z": 16
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -16,
+            "nx": -1,
+            "ny": 0,
+            "z": 16,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -16,
+            "nx": 1,
+            "ny": 0,
+            "z": 16,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M04",
+        "dir": "ew"
+      }
+    },
+    "M04/ns": {
+      "frame": {
+        "x": 62,
+        "y": 2,
+        "w": 32,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -16,
+          "y": -48,
+          "w": 32,
+          "h": 48
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -16,
+            "y": -48,
+            "w": 32,
+            "h": 48,
+            "z": 16
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 16,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 16,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M04",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M04.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M04",
+    "label": "Fondation sur poteaux",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/16-structures.png",
+    "sheet": "Structure et enveloppes",
+    "season": "base",
+    "shape": "platform-raised",
+    "width": 48,
+    "depth": 32,
+    "totalHeight": 16,
+    "walkHeight": 16,
+    "parapetHeight": 12,
+    "wallThickness": 8,
+    "height": 16,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          32
+        ],
+        "crop": [
+          861,
+          310,
+          251,
+          113
+        ],
+        "anchor": [
+          24,
+          32
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          32,
+          48
+        ],
+        "crop": [
+          1301,
+          287,
+          70,
+          155
+        ],
+        "anchor": [
+          16,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "T13/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 80,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -72,
+          "w": 80,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T13",
+        "dir": "face"
+      }
+    },
+    "T13/droite": {
+      "frame": {
+        "x": 90,
+        "y": 2,
+        "w": 72,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -80,
+          "w": 72,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -40,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -80,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -36,
+            "y": -33,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -36,
+            "y": -47,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T13",
+        "dir": "droite"
+      }
+    },
+    "T13/dos": {
+      "frame": {
+        "x": 170,
+        "y": 2,
+        "w": 80,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -72,
+          "w": 80,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 33,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T13",
+        "dir": "dos"
+      }
+    },
+    "T13/gauche": {
+      "frame": {
+        "x": 258,
+        "y": 2,
+        "w": 72,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -80,
+          "w": 72,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -40,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -80,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -36,
+            "y": -33,
+            "w": 72,
+            "h": 33,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -28,
+            "y": -47,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T13",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "T13.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 336,
+      "h": 60
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "T13",
+    "label": "Maison à cour",
+    "family": "sarak",
+    "kind": "building",
+    "source": "concepts/04-sarak.png",
+    "sheet": "Sarak — bassins et étapes",
+    "season": "base",
+    "width": 80,
+    "depth": 72,
+    "height": 56,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          80,
+          56
+        ],
+        "crop": [
+          219,
+          143,
+          249,
+          142
+        ],
+        "anchor": [
+          40,
+          56
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          56
+        ],
+        "crop": [
+          546,
+          141,
+          270,
+          141
+        ],
+        "anchor": [
+          36,
+          56
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          80,
+          56
+        ],
+        "crop": [
+          895,
+          149,
+          238,
+          133
+        ],
+        "anchor": [
+          40,
+          56
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          56
+        ],
+        "crop": [
+          1227,
+          140,
+          267,
+          142
+        ],
+        "anchor": [
+          36,
+          56
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "frames": {
+    "M46/ew": {
+      "frame": {
+        "x": 2,
+        "y": 26,
+        "w": 48,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        24
+      ],
+      "renderLift": 20,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -24,
+          "w": 48,
+          "h": 24
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -24,
+            "w": 48,
+            "h": 24,
+            "z": 20
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -12,
+            "nx": -1,
+            "ny": 0,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -12,
+            "nx": 1,
+            "ny": 0,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -24,
+            "nx": 0,
+            "ny": -1,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M46",
+        "dir": "ew"
+      }
+    },
+    "M46/ns": {
+      "frame": {
+        "x": 66,
+        "y": 2,
+        "w": 24,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        48
+      ],
+      "renderLift": 20,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -48,
+          "w": 24,
+          "h": 48
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -48,
+            "w": 24,
+            "h": 48,
+            "z": 20
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "west",
+            "x": -12,
+            "y": -24,
+            "nx": -1,
+            "ny": 0,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 12,
+            "y": -24,
+            "nx": 1,
+            "ny": 0,
+            "z": 20,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M46",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M46.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M46",
+    "label": "Palier extérieur",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/21-toitures-chantier.png",
+    "sheet": "Couvertures et assemblages",
+    "season": "base",
+    "shape": "landing",
+    "width": 48,
+    "depth": 24,
+    "totalHeight": 20,
+    "walkHeight": 20,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 20,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          24
+        ],
+        "crop": [
+          851,
+          489,
+          305,
+          120
+        ],
+        "anchor": [
+          24,
+          24
+        ],
+        "lift": 20
+      },
+      "ns": {
+        "size": [
+          24,
+          48
+        ],
+        "crop": [
+          1306,
+          475,
+          107,
+          146
+        ],
+        "anchor": [
+          12,
+          48
+        ],
+        "lift": 20
+      }
+    }
+  }
+}

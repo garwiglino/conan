@@ -1,0 +1,213 @@
+{
+  "frames": {
+    "M05/ew": {
+      "frame": {
+        "x": 2,
+        "y": 42,
+        "w": 48,
+        "h": 8
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 8
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 8
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        8
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -8,
+          "w": 48,
+          "h": 8
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -8,
+            "w": 48,
+            "h": 8,
+            "zMin": 0,
+            "zMax": 8
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -4,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -4,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M05",
+        "dir": "ew"
+      }
+    },
+    "M05/ns": {
+      "frame": {
+        "x": 74,
+        "y": 2,
+        "w": 8,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 8,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        4,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -4,
+          "y": -48,
+          "w": 8,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -4,
+            "y": -48,
+            "w": 8,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 8
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M05",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M05.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M05",
+    "label": "Poutre de liaison",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/16-structures.png",
+    "sheet": "Structure et enveloppes",
+    "season": "base",
+    "shape": "beam",
+    "width": 48,
+    "depth": 8,
+    "totalHeight": 8,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 8,
+    "height": 8,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          8
+        ],
+        "crop": [
+          144,
+          505,
+          256,
+          52
+        ],
+        "anchor": [
+          24,
+          8
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          8,
+          48
+        ],
+        "crop": [
+          579,
+          472,
+          38,
+          119
+        ],
+        "anchor": [
+          4,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

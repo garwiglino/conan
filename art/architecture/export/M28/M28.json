@@ -1,0 +1,211 @@
+{
+  "frames": {
+    "M28/ew": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 48,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -32,
+          "w": 48,
+          "h": 32
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -32,
+            "w": 48,
+            "h": 32,
+            "z": 12
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -16,
+            "nx": -1,
+            "ny": 0,
+            "z": 12,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -16,
+            "nx": 1,
+            "ny": 0,
+            "z": 12,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M28",
+        "dir": "ew"
+      }
+    },
+    "M28/ns": {
+      "frame": {
+        "x": 62,
+        "y": 2,
+        "w": 32,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -16,
+          "y": -48,
+          "w": 32,
+          "h": 48
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -16,
+            "y": -48,
+            "w": 32,
+            "h": 48,
+            "z": 12
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 12,
+            "width": 16,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 12,
+            "width": 16,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M28",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M28.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M28",
+    "label": "Quai bois",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/19-franchissements.png",
+    "sheet": "Ponts et accès portuaires",
+    "season": "base",
+    "shape": "quay-wood",
+    "width": 48,
+    "depth": 32,
+    "totalHeight": 12,
+    "walkHeight": 12,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 12,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          32
+        ],
+        "crop": [
+          853,
+          343,
+          311,
+          107
+        ],
+        "anchor": [
+          24,
+          32
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          32,
+          48
+        ],
+        "crop": [
+          1316,
+          320,
+          105,
+          152
+        ],
+        "anchor": [
+          16,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

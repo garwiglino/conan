@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "B22/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 96,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -72,
+          "w": 96,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B22",
+        "dir": "face"
+      }
+    },
+    "B22/droite": {
+      "frame": {
+        "x": 114,
+        "y": 2,
+        "w": 72,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -96,
+          "w": 72,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -48,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -96,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -36,
+            "y": -41,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -36,
+            "y": -55,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B22",
+        "dir": "droite"
+      }
+    },
+    "B22/dos": {
+      "frame": {
+        "x": 202,
+        "y": 2,
+        "w": 96,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -72,
+          "w": 96,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B22",
+        "dir": "dos"
+      }
+    },
+    "B22/gauche": {
+      "frame": {
+        "x": 314,
+        "y": 2,
+        "w": 72,
+        "h": 80
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 80
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        80
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -96,
+          "w": 72,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -48,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -96,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -36,
+            "y": -41,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 80
+          },
+          {
+            "x": -28,
+            "y": -55,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 80
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B22",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "B22.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 400,
+      "h": 84
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "B22",
+    "label": "Maison de soins",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/12-public.png",
+    "sheet": "Vie publique et mémoire",
+    "season": "base",
+    "width": 96,
+    "depth": 72,
+    "height": 80,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          96,
+          80
+        ],
+        "crop": [
+          220,
+          365,
+          326,
+          167
+        ],
+        "anchor": [
+          48,
+          80
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          80
+        ],
+        "crop": [
+          589,
+          365,
+          238,
+          167
+        ],
+        "anchor": [
+          36,
+          80
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          96,
+          80
+        ],
+        "crop": [
+          873,
+          365,
+          316,
+          167
+        ],
+        "anchor": [
+          48,
+          80
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          80
+        ],
+        "crop": [
+          1242,
+          365,
+          252,
+          167
+        ],
+        "anchor": [
+          36,
+          80
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

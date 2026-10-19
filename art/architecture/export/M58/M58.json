@@ -1,0 +1,234 @@
+{
+  "frames": {
+    "M58/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 32,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 38
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 38,
+            "zMax": 48
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 38,
+            "zMax": 48
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 38
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M58",
+        "dir": "ew"
+      }
+    },
+    "M58/ns": {
+      "frame": {
+        "x": 48,
+        "y": 18,
+        "w": 12,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        32
+      ],
+      "renderLift": 38,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 38
+          },
+          {
+            "x": 2,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 38,
+            "zMax": 48
+          }
+        ],
+        "walkables": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 38
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M58",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M58.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 72,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M58",
+    "label": "Terminaison haute",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/30-enceinte-haute-pierre.png",
+    "sheet": "Enceinte haute de bourg — pierre",
+    "season": "base",
+    "shape": "end",
+    "width": 48,
+    "depth": 12,
+    "totalHeight": 48,
+    "walkHeight": 38,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 48,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          32,
+          48
+        ],
+        "crop": [
+          591,
+          163,
+          122,
+          180
+        ],
+        "anchor": [
+          16,
+          48
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          32
+        ],
+        "crop": [
+          867,
+          158,
+          61,
+          191
+        ],
+        "anchor": [
+          6,
+          32
+        ],
+        "lift": 38
+      }
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "frames": {
+    "TAG-H02/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 32,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -16,
+          "w": 48,
+          "h": 16
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -8,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "TAG-H02",
+        "dir": "ew"
+      }
+    },
+    "TAG-H02/ns": {
+      "frame": {
+        "x": 46,
+        "y": 34,
+        "w": 16,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        8,
+        32
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -8,
+          "y": -48,
+          "w": 16,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": 4,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "TAG-H02",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "TAG-H02.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 72,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "TAG-H02",
+    "label": "Terminaison",
+    "family": "tagon",
+    "kind": "module",
+    "source": "expansion/tagon-walls.png",
+    "sheet": "Tagon — hauts remparts",
+    "season": "base",
+    "shape": "end",
+    "width": 48,
+    "depth": 16,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 16,
+    "material": "stone",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          32,
+          64
+        ],
+        "crop": [
+          672,
+          160,
+          150,
+          199
+        ],
+        "anchor": [
+          16,
+          64
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          16,
+          32
+        ],
+        "crop": [
+          891,
+          169,
+          66,
+          184
+        ],
+        "anchor": [
+          8,
+          32
+        ],
+        "lift": 52
+      }
+    }
+  }
+}

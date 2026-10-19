@@ -1,0 +1,213 @@
+{
+  "frames": {
+    "M18/ew": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 40,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        20,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -20,
+          "y": -12,
+          "w": 40,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -20,
+            "y": -12,
+            "w": 40,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 32
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -20,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 20,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M18",
+        "dir": "ew"
+      }
+    },
+    "M18/ns": {
+      "frame": {
+        "x": 60,
+        "y": 2,
+        "w": 12,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 40
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        40
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -40,
+          "w": 12,
+          "h": 40
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -40,
+            "w": 12,
+            "h": 40,
+            "zMin": 0,
+            "zMax": 32
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -40,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M18",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M18.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 88,
+      "h": 44
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M18",
+    "label": "Vantaux de grand portail",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/18-ouvertures.png",
+    "sheet": "Portes, fenêtres et protection",
+    "season": "base",
+    "shape": "gate-leaves",
+    "width": 40,
+    "depth": 8,
+    "totalHeight": 32,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 32,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          40,
+          32
+        ],
+        "crop": [
+          785,
+          123,
+          434,
+          132
+        ],
+        "anchor": [
+          20,
+          32
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          40
+        ],
+        "crop": [
+          1311,
+          119,
+          85,
+          141
+        ],
+        "anchor": [
+          6,
+          40
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

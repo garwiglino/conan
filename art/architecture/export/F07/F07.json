@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "F07/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -48,
+          "w": 112,
+          "h": 48
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 28,
+            "clearance": 32
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -48,
+            "w": 42,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": 14,
+            "y": -48,
+            "w": 42,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -56,
+            "y": -48,
+            "w": 112,
+            "h": 48,
+            "zMin": 32,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F07",
+        "dir": "face"
+      }
+    },
+    "F07/droite": {
+      "frame": {
+        "x": 150,
+        "y": 2,
+        "w": 48,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -112,
+          "w": 48,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 24,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 28,
+            "clearance": 32
+          }
+        ],
+        "solids": [
+          {
+            "x": -24,
+            "y": -112,
+            "w": 48,
+            "h": 42,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -24,
+            "y": -42,
+            "w": 48,
+            "h": 42,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -24,
+            "y": -112,
+            "w": 48,
+            "h": 112,
+            "zMin": 32,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F07",
+        "dir": "droite"
+      }
+    },
+    "F07/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -48,
+          "w": 112,
+          "h": 48
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "width": 28,
+            "clearance": 32
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -48,
+            "w": 42,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": 14,
+            "y": -48,
+            "w": 42,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -56,
+            "y": -48,
+            "w": 112,
+            "h": 48,
+            "zMin": 32,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F07",
+        "dir": "dos"
+      }
+    },
+    "F07/gauche": {
+      "frame": {
+        "x": 382,
+        "y": 2,
+        "w": 48,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -112,
+          "w": 48,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -24,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 28,
+            "clearance": 32
+          }
+        ],
+        "solids": [
+          {
+            "x": -24,
+            "y": -112,
+            "w": 48,
+            "h": 42,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -24,
+            "y": -42,
+            "w": 48,
+            "h": 42,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -24,
+            "y": -112,
+            "w": 48,
+            "h": 112,
+            "zMin": 32,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F07",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "F07.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 100
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "F07",
+    "label": "Porte de palissade",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/14-fortifications.png",
+    "sheet": "Tours et portes d’enceinte",
+    "season": "base",
+    "width": 112,
+    "depth": 48,
+    "height": 96,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 32,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          96
+        ],
+        "crop": [
+          241,
+          555,
+          316,
+          160
+        ],
+        "anchor": [
+          56,
+          96
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          48,
+          96
+        ],
+        "crop": [
+          631,
+          555,
+          174,
+          161
+        ],
+        "anchor": [
+          24,
+          96
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          96
+        ],
+        "crop": [
+          880,
+          555,
+          324,
+          160
+        ],
+        "anchor": [
+          56,
+          96
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          48,
+          96
+        ],
+        "crop": [
+          1275,
+          556,
+          172,
+          159
+        ],
+        "anchor": [
+          24,
+          96
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

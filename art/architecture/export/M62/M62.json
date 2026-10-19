@@ -1,0 +1,252 @@
+{
+  "frames": {
+    "M62/ew": {
+      "frame": {
+        "x": 2,
+        "y": 26,
+        "w": 48,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        24
+      ],
+      "renderLift": 38,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -24,
+          "w": 48,
+          "h": 24
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -24,
+            "w": 48,
+            "h": 24,
+            "z": 38
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -12,
+            "nx": -1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -12,
+            "nx": 1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -24,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M62",
+        "dir": "ew"
+      }
+    },
+    "M62/ns": {
+      "frame": {
+        "x": 66,
+        "y": 2,
+        "w": 24,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        48
+      ],
+      "renderLift": 38,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -48,
+          "w": 24,
+          "h": 48
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -48,
+            "w": 24,
+            "h": 48,
+            "z": 38
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "west",
+            "x": -12,
+            "y": -24,
+            "nx": -1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "east",
+            "x": 12,
+            "y": -24,
+            "nx": 1,
+            "ny": 0,
+            "z": 38,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M62",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M62.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M62",
+    "label": "Platelage de ronde haut",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/30-enceinte-haute-pierre.png",
+    "sheet": "Enceinte haute de bourg — pierre",
+    "season": "base",
+    "shape": "deck",
+    "width": 48,
+    "depth": 24,
+    "totalHeight": 48,
+    "walkHeight": 38,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 48,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          24
+        ],
+        "crop": [
+          567,
+          736,
+          189,
+          125
+        ],
+        "anchor": [
+          24,
+          24
+        ],
+        "lift": 38
+      },
+      "ns": {
+        "size": [
+          24,
+          48
+        ],
+        "crop": [
+          858,
+          698,
+          84,
+          177
+        ],
+        "anchor": [
+          12,
+          48
+        ],
+        "lift": 38
+      }
+    }
+  }
+}

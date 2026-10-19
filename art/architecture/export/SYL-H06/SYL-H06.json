@@ -1,0 +1,252 @@
+{
+  "frames": {
+    "SYL-H06/ew": {
+      "frame": {
+        "x": 2,
+        "y": 26,
+        "w": 48,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        24
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -24,
+          "w": 48,
+          "h": 24
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -24,
+            "w": 48,
+            "h": 24,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -12,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -12,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -24,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "SYL-H06",
+        "dir": "ew"
+      }
+    },
+    "SYL-H06/ns": {
+      "frame": {
+        "x": 66,
+        "y": 2,
+        "w": 24,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        12,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -12,
+          "y": -48,
+          "w": 24,
+          "h": 48
+        },
+        "solids": [],
+        "walkables": [
+          {
+            "x": -12,
+            "y": -48,
+            "w": 24,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "west",
+            "x": -12,
+            "y": -24,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "east",
+            "x": 12,
+            "y": -24,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "SYL-H06",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "SYL-H06.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "SYL-H06",
+    "label": "Platelage de ronde",
+    "family": "sylverive",
+    "kind": "module",
+    "source": "expansion/sylverive-walls.png",
+    "sheet": "Sylverive — hauts remparts",
+    "season": "base",
+    "shape": "deck",
+    "width": 48,
+    "depth": 24,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 16,
+    "material": "stone",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          24
+        ],
+        "crop": [
+          659,
+          790,
+          182,
+          102
+        ],
+        "anchor": [
+          24,
+          24
+        ],
+        "lift": 52
+      },
+      "ns": {
+        "size": [
+          24,
+          48
+        ],
+        "crop": [
+          886,
+          735,
+          83,
+          174
+        ],
+        "anchor": [
+          12,
+          48
+        ],
+        "lift": 52
+      }
+    }
+  }
+}

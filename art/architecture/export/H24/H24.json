@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "H24/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 96,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -72,
+          "w": 96,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H24",
+        "dir": "face"
+      }
+    },
+    "H24/droite": {
+      "frame": {
+        "x": 114,
+        "y": 2,
+        "w": 72,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -96,
+          "w": 72,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -48,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -96,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -36,
+            "y": -41,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -36,
+            "y": -55,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H24",
+        "dir": "droite"
+      }
+    },
+    "H24/dos": {
+      "frame": {
+        "x": 202,
+        "y": 2,
+        "w": 96,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -72,
+          "w": 96,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 41,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H24",
+        "dir": "dos"
+      }
+    },
+    "H24/gauche": {
+      "frame": {
+        "x": 314,
+        "y": 2,
+        "w": 72,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -96,
+          "w": 72,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -48,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -96,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -36,
+            "y": -41,
+            "w": 72,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -28,
+            "y": -55,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H24",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "H24.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 400,
+      "h": 92
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "H24",
+    "label": "Maison familiale à galerie",
+    "family": "tagon",
+    "kind": "building",
+    "source": "concepts/28-habitat-tagon.png",
+    "sheet": "Tagon — maisons côtières et forestières",
+    "season": "base",
+    "width": 96,
+    "depth": 72,
+    "height": 88,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          96,
+          88
+        ],
+        "crop": [
+          208,
+          761,
+          334,
+          232
+        ],
+        "anchor": [
+          48,
+          88
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          88
+        ],
+        "crop": [
+          571,
+          761,
+          250,
+          232
+        ],
+        "anchor": [
+          36,
+          88
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          96,
+          88
+        ],
+        "crop": [
+          862,
+          761,
+          338,
+          232
+        ],
+        "anchor": [
+          48,
+          88
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          88
+        ],
+        "crop": [
+          1240,
+          761,
+          253,
+          232
+        ],
+        "anchor": [
+          36,
+          88
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "frames": {
+    "M66/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 32,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M66",
+        "dir": "ew"
+      }
+    },
+    "M66/ns": {
+      "frame": {
+        "x": 48,
+        "y": 34,
+        "w": 12,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        32
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": 2,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M66",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M66.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 72,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M66",
+    "label": "Terminaison haute",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/31-courtine-haute-chateau.png",
+    "sheet": "Courtine haute de château",
+    "season": "base",
+    "shape": "end",
+    "width": 48,
+    "depth": 12,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          32,
+          64
+        ],
+        "crop": [
+          672,
+          169,
+          154,
+          205
+        ],
+        "anchor": [
+          16,
+          64
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          32
+        ],
+        "crop": [
+          883,
+          180,
+          69,
+          192
+        ],
+        "anchor": [
+          6,
+          32
+        ],
+        "lift": 52
+      }
+    }
+  }
+}

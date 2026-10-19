@@ -1,0 +1,195 @@
+{
+  "frames": {
+    "M20/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 20,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 20,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 20,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        10,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -10,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 10,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M20",
+        "dir": "ew"
+      }
+    },
+    "M20/ns": {
+      "frame": {
+        "x": 30,
+        "y": 6,
+        "w": 12,
+        "h": 20
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 20
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 20
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        20
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -20,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M20",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M20.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 48,
+      "h": 28
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M20",
+    "label": "Fenêtre à volets",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/18-ouvertures.png",
+    "sheet": "Portes, fenêtres et protection",
+    "season": "base",
+    "shape": "window-shutters",
+    "width": 20,
+    "depth": 8,
+    "totalHeight": 24,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 24,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          20,
+          24
+        ],
+        "crop": [
+          777,
+          330,
+          198,
+          114
+        ],
+        "anchor": [
+          10,
+          24
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          20
+        ],
+        "crop": [
+          1177,
+          330,
+          175,
+          114
+        ],
+        "anchor": [
+          6,
+          20
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

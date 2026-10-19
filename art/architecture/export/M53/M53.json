@@ -1,0 +1,313 @@
+{
+  "frames": {
+    "M53/ew": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 48,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 40
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        40
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 30
+          },
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 30
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 30,
+            "zMax": 40
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 30,
+            "zMax": 40
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 30
+          },
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 30
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "M53",
+        "dir": "ew"
+      }
+    },
+    "M53/ns": {
+      "frame": {
+        "x": 54,
+        "y": 2,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 30,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 30
+          },
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 30
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 30,
+            "zMax": 40
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 30,
+            "zMax": 40
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 30
+          },
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 30
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          },
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "M53",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M53.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M53",
+    "label": "Jonction haute en T",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/29-enceinte-haute-bois.png",
+    "sheet": "Enceinte haute de village — bois",
+    "season": "base",
+    "shape": "junction-t",
+    "width": 48,
+    "depth": 48,
+    "totalHeight": 40,
+    "walkHeight": 30,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "wood",
+    "height": 40,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          40
+        ],
+        "crop": [
+          48,
+          664,
+          228,
+          203
+        ],
+        "anchor": [
+          24,
+          40
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          323,
+          658,
+          178,
+          203
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "composedFrom": "M49/ns",
+        "lift": 30
+      }
+    }
+  }
+}

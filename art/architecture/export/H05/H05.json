@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "H05/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 56,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -48,
+          "w": 56,
+          "h": 48
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -48,
+            "w": 21,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -48,
+            "w": 21,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -48,
+            "w": 14,
+            "h": 40,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H05",
+        "dir": "face"
+      }
+    },
+    "H05/droite": {
+      "frame": {
+        "x": 66,
+        "y": 2,
+        "w": 48,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -56,
+          "w": 48,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 24,
+            "y": -28,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -24,
+            "y": -56,
+            "w": 48,
+            "h": 21,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -24,
+            "y": -21,
+            "w": 48,
+            "h": 21,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -24,
+            "y": -35,
+            "w": 40,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H05",
+        "dir": "droite"
+      }
+    },
+    "H05/dos": {
+      "frame": {
+        "x": 122,
+        "y": 2,
+        "w": 56,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -48,
+          "w": 56,
+          "h": 48
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -48,
+            "w": 21,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -48,
+            "w": 21,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -40,
+            "w": 14,
+            "h": 40,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H05",
+        "dir": "dos"
+      }
+    },
+    "H05/gauche": {
+      "frame": {
+        "x": 186,
+        "y": 2,
+        "w": 48,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -56,
+          "w": 48,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -24,
+            "y": -28,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -24,
+            "y": -56,
+            "w": 48,
+            "h": 21,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -24,
+            "y": -21,
+            "w": 48,
+            "h": 21,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -16,
+            "y": -35,
+            "w": 40,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "H05",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "H05.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 240,
+      "h": 92
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "H05",
+    "label": "Logis de ruelle",
+    "family": "sylverive",
+    "kind": "building",
+    "source": "concepts/24-habitat-sylverive.png",
+    "sheet": "Sylverive — logements de cité",
+    "season": "base",
+    "width": 56,
+    "depth": 48,
+    "height": 88,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          56,
+          88
+        ],
+        "crop": [
+          299,
+          118,
+          132,
+          201
+        ],
+        "anchor": [
+          28,
+          88
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          48,
+          88
+        ],
+        "crop": [
+          639,
+          120,
+          140,
+          201
+        ],
+        "anchor": [
+          24,
+          88
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          56,
+          88
+        ],
+        "crop": [
+          973,
+          118,
+          155,
+          203
+        ],
+        "anchor": [
+          28,
+          88
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          48,
+          88
+        ],
+        "crop": [
+          1332,
+          120,
+          140,
+          201
+        ],
+        "anchor": [
+          24,
+          88
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

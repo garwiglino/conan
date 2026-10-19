@@ -1,0 +1,274 @@
+{
+  "frames": {
+    "M65/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 48,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "inner",
+            "x": 0,
+            "y": -12,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M65",
+        "dir": "ew"
+      }
+    },
+    "M65/ns": {
+      "frame": {
+        "x": 72,
+        "y": 18,
+        "w": 12,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": 2,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          },
+          {
+            "id": "inner",
+            "x": -6,
+            "y": -24,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 12,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "M65",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M65.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M65",
+    "label": "Mur haut droit",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/31-courtine-haute-chateau.png",
+    "sheet": "Courtine haute de château",
+    "season": "base",
+    "shape": "curtain",
+    "width": 48,
+    "depth": 12,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "material": "stone",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          64
+        ],
+        "crop": [
+          169,
+          169,
+          146,
+          205
+        ],
+        "anchor": [
+          24,
+          64
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          48
+        ],
+        "crop": [
+          415,
+          169,
+          71,
+          203
+        ],
+        "anchor": [
+          6,
+          48
+        ],
+        "lift": 52
+      }
+    }
+  }
+}

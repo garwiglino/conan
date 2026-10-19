@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "T09-hiver/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -64,
+          "w": 112,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -64,
+            "w": 49,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 49,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T09-hiver",
+        "dir": "face"
+      }
+    },
+    "T09-hiver/droite": {
+      "frame": {
+        "x": 142,
+        "y": 2,
+        "w": 64,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -112,
+          "w": 64,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 32,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -112,
+            "w": 64,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -32,
+            "y": -49,
+            "w": 64,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -32,
+            "y": -63,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T09-hiver",
+        "dir": "droite"
+      }
+    },
+    "T09-hiver/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -64,
+          "w": 112,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -64,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -64,
+            "w": 49,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": 7,
+            "y": -64,
+            "w": 49,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T09-hiver",
+        "dir": "dos"
+      }
+    },
+    "T09-hiver/gauche": {
+      "frame": {
+        "x": 374,
+        "y": 2,
+        "w": 64,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 72
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        72
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -112,
+          "w": 64,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -32,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -112,
+            "w": 64,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -32,
+            "y": -49,
+            "w": 64,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 72
+          },
+          {
+            "x": -24,
+            "y": -63,
+            "w": 56,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 72
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T09-hiver",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "T09-hiver.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 76
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "T09-hiver",
+    "label": "Maison longue — hiver",
+    "family": "igea",
+    "kind": "building",
+    "source": "concepts/22-igea-hiver.png",
+    "sheet": "Igea — neige saisonnière",
+    "season": "winter",
+    "width": 112,
+    "depth": 64,
+    "height": 72,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          72
+        ],
+        "crop": [
+          200,
+          90,
+          353,
+          181
+        ],
+        "anchor": [
+          56,
+          72
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          64,
+          72
+        ],
+        "crop": [
+          597,
+          97,
+          204,
+          174
+        ],
+        "anchor": [
+          32,
+          72
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          72
+        ],
+        "crop": [
+          872,
+          90,
+          331,
+          181
+        ],
+        "anchor": [
+          56,
+          72
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          64,
+          72
+        ],
+        "crop": [
+          1278,
+          99,
+          212,
+          172
+        ],
+        "anchor": [
+          32,
+          72
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "frames": {
+    "M07/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 48,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -4,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -4,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M07",
+        "dir": "ew"
+      }
+    },
+    "M07/ns": {
+      "frame": {
+        "x": 70,
+        "y": 2,
+        "w": 16,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        8,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M07",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M07.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 28
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M07",
+    "label": "Pignon de toiture",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/16-structures.png",
+    "sheet": "Structure et enveloppes",
+    "season": "base",
+    "shape": "gable",
+    "width": 48,
+    "depth": 16,
+    "totalHeight": 24,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 8,
+    "height": 24,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          24
+        ],
+        "crop": [
+          131,
+          618,
+          281,
+          126
+        ],
+        "anchor": [
+          24,
+          24
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          16,
+          24
+        ],
+        "crop": [
+          563,
+          617,
+          71,
+          146
+        ],
+        "anchor": [
+          8,
+          24
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

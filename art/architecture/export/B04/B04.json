@@ -1,0 +1,472 @@
+{
+  "frames": {
+    "B04/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 80,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -56,
+          "w": 80,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -56,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 34,
+            "y": -56,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -40,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 34,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -40,
+            "y": -56,
+            "w": 80,
+            "h": 56,
+            "zMin": 36,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B04",
+        "dir": "face"
+      }
+    },
+    "B04/droite": {
+      "frame": {
+        "x": 98,
+        "y": 2,
+        "w": 56,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -80,
+          "w": 56,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 28,
+            "y": -40,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -80,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 22,
+            "y": -80,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -28,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 22,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -28,
+            "y": -80,
+            "w": 56,
+            "h": 80,
+            "zMin": 36,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B04",
+        "dir": "droite"
+      }
+    },
+    "B04/dos": {
+      "frame": {
+        "x": 170,
+        "y": 2,
+        "w": 80,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -56,
+          "w": 80,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -56,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -56,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 34,
+            "y": -56,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -40,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 34,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -40,
+            "y": -56,
+            "w": 80,
+            "h": 56,
+            "zMin": 36,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B04",
+        "dir": "dos"
+      }
+    },
+    "B04/gauche": {
+      "frame": {
+        "x": 266,
+        "y": 2,
+        "w": 56,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 56
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        56
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -80,
+          "w": 56,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -28,
+            "y": -40,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -80,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 22,
+            "y": -80,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -28,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": 22,
+            "y": -6,
+            "w": 6,
+            "h": 6,
+            "zMin": 0,
+            "zMax": 56
+          },
+          {
+            "x": -28,
+            "y": -80,
+            "w": 56,
+            "h": 80,
+            "zMin": 36,
+            "zMax": 56
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B04",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "B04.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 336,
+      "h": 60
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "B04",
+    "label": "Abri pastoral démontable",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/07-fermes.png",
+    "sheet": "Dépendances rurales",
+    "season": "base",
+    "width": 80,
+    "depth": 56,
+    "height": 56,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": true,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          80,
+          56
+        ],
+        "crop": [
+          255,
+          779,
+          267,
+          164
+        ],
+        "anchor": [
+          40,
+          56
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          56,
+          56
+        ],
+        "crop": [
+          606,
+          797,
+          219,
+          146
+        ],
+        "anchor": [
+          28,
+          56
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          80,
+          56
+        ],
+        "crop": [
+          903,
+          793,
+          288,
+          151
+        ],
+        "anchor": [
+          40,
+          56
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          56,
+          56
+        ],
+        "crop": [
+          1268,
+          784,
+          226,
+          160
+        ],
+        "anchor": [
+          28,
+          56
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

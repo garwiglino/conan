@@ -1,0 +1,234 @@
+{
+  "frames": {
+    "M50/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 32,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 40
+      },
+      "duration": 100,
+      "anchor": [
+        16,
+        40
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -12,
+          "w": 48,
+          "h": 12
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "zMin": 0,
+            "zMax": 30
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 30,
+            "zMax": 40
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 30,
+            "zMax": 40
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -12,
+            "w": 48,
+            "h": 12,
+            "z": 30
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "M50",
+        "dir": "ew"
+      }
+    },
+    "M50/ns": {
+      "frame": {
+        "x": 48,
+        "y": 10,
+        "w": 12,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        6,
+        32
+      ],
+      "renderLift": 30,
+      "geometry": {
+        "foot": {
+          "x": -6,
+          "y": -48,
+          "w": 12,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 30
+          },
+          {
+            "x": 2,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 30,
+            "zMax": 40
+          }
+        ],
+        "walkables": [
+          {
+            "x": -6,
+            "y": -48,
+            "w": 12,
+            "h": 48,
+            "z": 30
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 30,
+            "width": 12,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "M50",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M50.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 72,
+      "h": 44
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M50",
+    "label": "Terminaison haute",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/29-enceinte-haute-bois.png",
+    "sheet": "Enceinte haute de village — bois",
+    "season": "base",
+    "shape": "end",
+    "width": 48,
+    "depth": 12,
+    "totalHeight": 40,
+    "walkHeight": 30,
+    "parapetHeight": 10,
+    "wallThickness": 12,
+    "material": "wood",
+    "height": 40,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          32,
+          40
+        ],
+        "crop": [
+          605,
+          164,
+          105,
+          178
+        ],
+        "anchor": [
+          16,
+          40
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          12,
+          32
+        ],
+        "crop": [
+          871,
+          143,
+          54,
+          202
+        ],
+        "anchor": [
+          6,
+          32
+        ],
+        "lift": 30
+      }
+    }
+  }
+}

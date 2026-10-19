@@ -1,0 +1,409 @@
+{
+  "frames": {
+    "VAR-C03/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -80,
+          "w": 112,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -80,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "VAR-C03",
+        "dir": "face"
+      }
+    },
+    "VAR-C03/droite": {
+      "frame": {
+        "x": 134,
+        "y": 2,
+        "w": 80,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -112,
+          "w": 80,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 40,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -112,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -49,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -63,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "VAR-C03",
+        "dir": "droite"
+      }
+    },
+    "VAR-C03/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -80,
+          "w": 112,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -80,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "VAR-C03",
+        "dir": "dos"
+      }
+    },
+    "VAR-C03/gauche": {
+      "frame": {
+        "x": 366,
+        "y": 2,
+        "w": 80,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -112,
+          "w": 80,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -40,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -112,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -49,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -32,
+            "y": -63,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "VAR-C03",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "VAR-C03.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 92
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "VAR-C03",
+    "label": "Demeure aisée",
+    "family": "varan",
+    "kind": "building",
+    "source": "expansion/varan-houses.png",
+    "sheet": "Varan — maisons civiles",
+    "season": "base",
+    "width": 112,
+    "depth": 80,
+    "height": 88,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          88
+        ],
+        "crop": [
+          163,
+          613,
+          369,
+          315
+        ],
+        "anchor": [
+          56,
+          88
+        ],
+        "nativeCleanup": "Connected caption fragment removed at left eave: x0..11, y30..32",
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          80,
+          88
+        ],
+        "crop": [
+          529,
+          613,
+          285,
+          315
+        ],
+        "anchor": [
+          40,
+          88
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          88
+        ],
+        "crop": [
+          847,
+          628,
+          403,
+          300
+        ],
+        "anchor": [
+          56,
+          88
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          80,
+          88
+        ],
+        "crop": [
+          1254,
+          613,
+          267,
+          315
+        ],
+        "anchor": [
+          40,
+          88
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

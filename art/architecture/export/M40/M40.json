@@ -1,0 +1,195 @@
+{
+  "frames": {
+    "M40/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 16,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        8,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -8,
+            "y": -6,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 8,
+            "y": -6,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M40",
+        "dir": "ew"
+      }
+    },
+    "M40/ns": {
+      "frame": {
+        "x": 22,
+        "y": 2,
+        "w": 16,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        8,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "solids": [],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -16,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 12,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M40",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M40.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 40,
+      "h": 28
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M40",
+    "label": "Évent de toiture",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/20-eau-salubrite.png",
+    "sheet": "Eau et salubrité — structures seules",
+    "season": "base",
+    "shape": "vent",
+    "width": 16,
+    "depth": 16,
+    "totalHeight": 24,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 12,
+    "height": 24,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          16,
+          24
+        ],
+        "crop": [
+          944,
+          666,
+          113,
+          130
+        ],
+        "anchor": [
+          8,
+          24
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          16,
+          24
+        ],
+        "crop": [
+          1332,
+          665,
+          68,
+          144
+        ],
+        "anchor": [
+          8,
+          24
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

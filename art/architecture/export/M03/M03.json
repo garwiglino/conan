@@ -1,0 +1,213 @@
+{
+  "frames": {
+    "M03/ew": {
+      "frame": {
+        "x": 2,
+        "y": 26,
+        "w": 48,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 24
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        24
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -8,
+          "w": 48,
+          "h": 8
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -8,
+            "w": 48,
+            "h": 8,
+            "zMin": 0,
+            "zMax": 24
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -4,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -4,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M03",
+        "dir": "ew"
+      }
+    },
+    "M03/ns": {
+      "frame": {
+        "x": 74,
+        "y": 2,
+        "w": 8,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 8,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        4,
+        48
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -4,
+          "y": -48,
+          "w": 8,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -4,
+            "y": -48,
+            "w": 8,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 24
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M03",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M03.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M03",
+    "label": "Panneau adobe",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/16-structures.png",
+    "sheet": "Structure et enveloppes",
+    "season": "base",
+    "shape": "wall-adobe",
+    "width": 48,
+    "depth": 8,
+    "totalHeight": 24,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 8,
+    "height": 24,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          24
+        ],
+        "crop": [
+          140,
+          318,
+          268,
+          102
+        ],
+        "anchor": [
+          24,
+          24
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          8,
+          48
+        ],
+        "crop": [
+          579,
+          291,
+          38,
+          147
+        ],
+        "anchor": [
+          4,
+          48
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

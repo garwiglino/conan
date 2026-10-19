@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "T10/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 64,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -56,
+          "w": 64,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -56,
+            "w": 25,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -56,
+            "w": 25,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T10",
+        "dir": "face"
+      }
+    },
+    "T10/droite": {
+      "frame": {
+        "x": 74,
+        "y": 2,
+        "w": 56,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -64,
+          "w": 56,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 28,
+            "y": -32,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -64,
+            "w": 56,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -25,
+            "w": 56,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -39,
+            "w": 48,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T10",
+        "dir": "droite"
+      }
+    },
+    "T10/dos": {
+      "frame": {
+        "x": 138,
+        "y": 2,
+        "w": 64,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        32,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -32,
+          "y": -56,
+          "w": 64,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -56,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -32,
+            "y": -56,
+            "w": 25,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -56,
+            "w": 25,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -48,
+            "w": 14,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T10",
+        "dir": "dos"
+      }
+    },
+    "T10/gauche": {
+      "frame": {
+        "x": 210,
+        "y": 2,
+        "w": 56,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -64,
+          "w": 56,
+          "h": 64
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -28,
+            "y": -32,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -64,
+            "w": 56,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -25,
+            "w": 56,
+            "h": 25,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -20,
+            "y": -39,
+            "w": 48,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T10",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "T10.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 272,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "T10",
+    "label": "Refuge de passage",
+    "family": "igea",
+    "kind": "building",
+    "source": "concepts/03-igea.png",
+    "sheet": "Igea — habitat et réserves",
+    "season": "base",
+    "width": 64,
+    "depth": 56,
+    "height": 64,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          64,
+          64
+        ],
+        "crop": [
+          291,
+          332,
+          183,
+          154
+        ],
+        "anchor": [
+          32,
+          64
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          56,
+          64
+        ],
+        "crop": [
+          596,
+          333,
+          211,
+          153
+        ],
+        "anchor": [
+          28,
+          64
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          64,
+          64
+        ],
+        "crop": [
+          930,
+          333,
+          200,
+          153
+        ],
+        "anchor": [
+          32,
+          64
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          56,
+          64
+        ],
+        "crop": [
+          1243,
+          333,
+          217,
+          153
+        ],
+        "anchor": [
+          28,
+          64
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

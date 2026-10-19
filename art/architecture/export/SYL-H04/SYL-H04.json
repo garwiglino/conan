@@ -1,0 +1,310 @@
+{
+  "frames": {
+    "SYL-H04/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": -24,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "z": 52
+          },
+          {
+            "x": -24,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "east",
+            "x": 24,
+            "y": -8,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "north",
+            "x": -16,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "SYL-H04",
+        "dir": "ew"
+      }
+    },
+    "SYL-H04/ns": {
+      "frame": {
+        "x": 54,
+        "y": 2,
+        "w": 48,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -48,
+          "w": 48,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": 8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 20,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "z": 52
+          },
+          {
+            "x": 8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -8,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          },
+          {
+            "id": "north",
+            "x": 16,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "stone"
+          }
+        ],
+        "portals": [],
+        "id": "SYL-H04",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "SYL-H04.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 52
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "SYL-H04",
+    "label": "Angle intérieur",
+    "family": "sylverive",
+    "kind": "module",
+    "source": "expansion/sylverive-walls.png",
+    "sheet": "Sylverive — hauts remparts",
+    "season": "base",
+    "shape": "corner-inner",
+    "width": 48,
+    "depth": 48,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 16,
+    "material": "stone",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          653,
+          466,
+          158,
+          171
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "composedFrom": "SYL-H01/ns",
+        "lift": 52
+      },
+      "ns": {
+        "size": [
+          48,
+          48
+        ],
+        "crop": [
+          877,
+          445,
+          117,
+          202
+        ],
+        "anchor": [
+          24,
+          48
+        ],
+        "composedFrom": "SYL-H01/ns",
+        "lift": 52
+      }
+    }
+  }
+}

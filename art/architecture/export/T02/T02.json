@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "T02/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -56,
+          "w": 96,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -56,
+            "w": 41,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -56,
+            "w": 41,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -56,
+            "w": 14,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T02",
+        "dir": "face"
+      }
+    },
+    "T02/droite": {
+      "frame": {
+        "x": 122,
+        "y": 2,
+        "w": 56,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -96,
+          "w": 56,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 28,
+            "y": -48,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -96,
+            "w": 56,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -41,
+            "w": 56,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -55,
+            "w": 48,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T02",
+        "dir": "droite"
+      }
+    },
+    "T02/dos": {
+      "frame": {
+        "x": 202,
+        "y": 2,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        48,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -48,
+          "y": -56,
+          "w": 96,
+          "h": 56
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -56,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -48,
+            "y": -56,
+            "w": 41,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -56,
+            "w": 41,
+            "h": 56,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -48,
+            "w": 14,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T02",
+        "dir": "dos"
+      }
+    },
+    "T02/gauche": {
+      "frame": {
+        "x": 322,
+        "y": 2,
+        "w": 56,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        28,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -28,
+          "y": -96,
+          "w": 56,
+          "h": 96
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -28,
+            "y": -48,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -28,
+            "y": -96,
+            "w": 56,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -41,
+            "w": 56,
+            "h": 41,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -20,
+            "y": -55,
+            "w": 48,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T02",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "T02.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 400,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "T02",
+    "label": "Longère de ferme",
+    "family": "teremor",
+    "kind": "building",
+    "source": "concepts/01-teremor.png",
+    "sheet": "Teremor — habitat tempéré",
+    "season": "base",
+    "width": 96,
+    "depth": 56,
+    "height": 64,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          96,
+          64
+        ],
+        "crop": [
+          218,
+          310,
+          339,
+          156
+        ],
+        "anchor": [
+          48,
+          64
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          56,
+          64
+        ],
+        "crop": [
+          611,
+          316,
+          203,
+          149
+        ],
+        "anchor": [
+          28,
+          64
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          96,
+          64
+        ],
+        "crop": [
+          874,
+          310,
+          338,
+          155
+        ],
+        "anchor": [
+          48,
+          64
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          56,
+          64
+        ],
+        "crop": [
+          1275,
+          312,
+          203,
+          154
+        ],
+        "anchor": [
+          28,
+          64
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

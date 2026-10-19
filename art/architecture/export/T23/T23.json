@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "T23/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -80,
+          "w": 112,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -80,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T23",
+        "dir": "face"
+      }
+    },
+    "T23/droite": {
+      "frame": {
+        "x": 134,
+        "y": 2,
+        "w": 80,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -112,
+          "w": 80,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 40,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -112,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -49,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -63,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T23",
+        "dir": "droite"
+      }
+    },
+    "T23/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -80,
+          "w": 112,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -80,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 49,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T23",
+        "dir": "dos"
+      }
+    },
+    "T23/gauche": {
+      "frame": {
+        "x": 366,
+        "y": 2,
+        "w": 80,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 88
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        88
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -112,
+          "w": 80,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -40,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -112,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -40,
+            "y": -49,
+            "w": 80,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 88
+          },
+          {
+            "x": -32,
+            "y": -63,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 88
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "T23",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "T23.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 92
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "T23",
+    "label": "Maison des marins",
+    "family": "tagon",
+    "kind": "building",
+    "source": "concepts/06-tagon.png",
+    "sheet": "Tagon — côtes et arrière-pays",
+    "season": "base",
+    "width": 112,
+    "depth": 80,
+    "height": 88,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          88
+        ],
+        "crop": [
+          209,
+          522,
+          334,
+          238
+        ],
+        "anchor": [
+          56,
+          88
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          80,
+          88
+        ],
+        "crop": [
+          593,
+          522,
+          210,
+          237
+        ],
+        "anchor": [
+          40,
+          88
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          88
+        ],
+        "crop": [
+          860,
+          522,
+          339,
+          236
+        ],
+        "anchor": [
+          56,
+          88
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          80,
+          88
+        ],
+        "crop": [
+          1257,
+          523,
+          205,
+          235
+        ],
+        "anchor": [
+          40,
+          88
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

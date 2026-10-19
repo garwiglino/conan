@@ -7,6 +7,8 @@ Ce catalogue visuel est consultable séparément du jeu.
 
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
 
+**Architecture humaine en JavaScript — ressources prêtes, non intégrées au jeu :** [atelier natif et assemblages](art/architecture/atelier.html), [catalogue complet et API](docs/architecture-javascript.md), [pack des sources, sprites et calques](art/architecture/architecture-complete.zip). 106 bâtiments, 8 variantes d’hiver et 120 modules, à l’échelle de l’humain de 19 px.
+
 Le héros est **Kaldor « the Flamebearer »**. Dans la version jouable actuelle, il commence au Campement des Exilés avec la fée ; Elyne, à proximité, rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. La prison de test a été retirée.
 
 [État réel du jeu : fonctionnalités intégrées, ressources disponibles et limites](docs/etat-du-jeu.md). [Registre des corrections de cohérence et vérifications](docs/corrections-coherence.md). [Personnes, patrouilles, combustible et échanges causaux](docs/campagne-causale.md). [Chargement et performances du monde](docs/world-performance.md). [Affectations et réparateurs](docs/personnes-affectations.md).

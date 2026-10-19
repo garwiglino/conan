@@ -1,0 +1,274 @@
+{
+  "frames": {
+    "VAR-H01/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 48,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        24,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -24,
+          "y": -16,
+          "w": 48,
+          "h": 16
+        },
+        "solids": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": -24,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          },
+          {
+            "x": 0,
+            "y": -4,
+            "w": 24,
+            "h": 4,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -24,
+            "y": -16,
+            "w": 48,
+            "h": 16,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -24,
+            "y": -8,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "east",
+            "x": 24,
+            "y": -8,
+            "nx": 1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "inner",
+            "x": 0,
+            "y": -16,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "VAR-H01",
+        "dir": "ew"
+      }
+    },
+    "VAR-H01/ns": {
+      "frame": {
+        "x": 70,
+        "y": 18,
+        "w": 16,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 48
+      },
+      "duration": 100,
+      "anchor": [
+        8,
+        48
+      ],
+      "renderLift": 52,
+      "geometry": {
+        "foot": {
+          "x": -8,
+          "y": -48,
+          "w": 16,
+          "h": 48
+        },
+        "solids": [
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "zMin": 0,
+            "zMax": 52
+          },
+          {
+            "x": 4,
+            "y": -48,
+            "w": 4,
+            "h": 48,
+            "zMin": 52,
+            "zMax": 64
+          }
+        ],
+        "walkables": [
+          {
+            "x": -8,
+            "y": -48,
+            "w": 16,
+            "h": 48,
+            "z": 52
+          }
+        ],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -48,
+            "nx": 0,
+            "ny": -1,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          },
+          {
+            "id": "inner",
+            "x": -8,
+            "y": -24,
+            "nx": -1,
+            "ny": 0,
+            "z": 52,
+            "width": 16,
+            "material": "wood"
+          }
+        ],
+        "portals": [],
+        "id": "VAR-H01",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "VAR-H01.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 104,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "VAR-H01",
+    "label": "Mur droit",
+    "family": "varan",
+    "kind": "module",
+    "source": "expansion/varan-walls.png",
+    "sheet": "Varan — hauts remparts",
+    "season": "base",
+    "shape": "curtain",
+    "width": 48,
+    "depth": 16,
+    "totalHeight": 64,
+    "walkHeight": 52,
+    "parapetHeight": 12,
+    "wallThickness": 16,
+    "material": "wood",
+    "height": 64,
+    "high": true,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          48,
+          64
+        ],
+        "crop": [
+          89,
+          159,
+          182,
+          190
+        ],
+        "anchor": [
+          24,
+          64
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          16,
+          48
+        ],
+        "crop": [
+          385,
+          155,
+          57,
+          188
+        ],
+        "anchor": [
+          8,
+          48
+        ],
+        "lift": 52
+      }
+    }
+  }
+}

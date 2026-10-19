@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "F02/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 128,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        64,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -64,
+          "y": -80,
+          "w": 128,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -64,
+            "y": -80,
+            "w": 57,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 57,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -7,
+            "y": -80,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F02",
+        "dir": "face"
+      }
+    },
+    "F02/droite": {
+      "frame": {
+        "x": 158,
+        "y": 2,
+        "w": 80,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -128,
+          "w": 80,
+          "h": 128
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 40,
+            "y": -64,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -128,
+            "w": 80,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -40,
+            "y": -57,
+            "w": 80,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -40,
+            "y": -71,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F02",
+        "dir": "droite"
+      }
+    },
+    "F02/dos": {
+      "frame": {
+        "x": 266,
+        "y": 2,
+        "w": 128,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        64,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -64,
+          "y": -80,
+          "w": 128,
+          "h": 80
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -80,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -64,
+            "y": -80,
+            "w": 57,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": 7,
+            "y": -80,
+            "w": 57,
+            "h": 80,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F02",
+        "dir": "dos"
+      }
+    },
+    "F02/gauche": {
+      "frame": {
+        "x": 422,
+        "y": 2,
+        "w": 80,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 80,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 80,
+        "h": 96
+      },
+      "duration": 100,
+      "anchor": [
+        40,
+        96
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -40,
+          "y": -128,
+          "w": 80,
+          "h": 128
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -40,
+            "y": -64,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -40,
+            "y": -128,
+            "w": 80,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -40,
+            "y": -57,
+            "w": 80,
+            "h": 57,
+            "zMin": 0,
+            "zMax": 96
+          },
+          {
+            "x": -32,
+            "y": -71,
+            "w": 72,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 96
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "F02",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "F02.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 528,
+      "h": 100
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "F02",
+    "label": "Caserne",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/13-garde.png",
+    "sheet": "Garde et défense habitée",
+    "season": "base",
+    "width": 128,
+    "depth": 80,
+    "height": 96,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          128,
+          96
+        ],
+        "crop": [
+          217,
+          307,
+          348,
+          180
+        ],
+        "anchor": [
+          64,
+          96
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          80,
+          96
+        ],
+        "crop": [
+          605,
+          305,
+          226,
+          182
+        ],
+        "anchor": [
+          40,
+          96
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          128,
+          96
+        ],
+        "crop": [
+          873,
+          307,
+          329,
+          180
+        ],
+        "anchor": [
+          64,
+          96
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          80,
+          96
+        ],
+        "crop": [
+          1252,
+          305,
+          235,
+          182
+        ],
+        "anchor": [
+          40,
+          96
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

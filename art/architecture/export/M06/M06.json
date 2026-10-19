@@ -1,0 +1,213 @@
+{
+  "frames": {
+    "M06/ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 8,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 8,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        4,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -4,
+          "y": -8,
+          "w": 8,
+          "h": 8
+        },
+        "solids": [
+          {
+            "x": -4,
+            "y": -8,
+            "w": 8,
+            "h": 8,
+            "zMin": 0,
+            "zMax": 32
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "west",
+            "x": -4,
+            "y": -4,
+            "nx": -1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "east",
+            "x": 4,
+            "y": -4,
+            "nx": 1,
+            "ny": 0,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M06",
+        "dir": "ew"
+      }
+    },
+    "M06/ns": {
+      "frame": {
+        "x": 14,
+        "y": 2,
+        "w": 8,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 8,
+        "h": 32
+      },
+      "duration": 100,
+      "anchor": [
+        4,
+        32
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -4,
+          "y": -8,
+          "w": 8,
+          "h": 8
+        },
+        "solids": [
+          {
+            "x": -4,
+            "y": -8,
+            "w": 8,
+            "h": 8,
+            "zMin": 0,
+            "zMax": 32
+          }
+        ],
+        "walkables": [],
+        "sockets": [
+          {
+            "id": "north",
+            "x": 0,
+            "y": -8,
+            "nx": 0,
+            "ny": -1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          },
+          {
+            "id": "south",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "z": 0,
+            "width": 8,
+            "material": "mixed"
+          }
+        ],
+        "portals": [],
+        "id": "M06",
+        "dir": "ns"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "M06.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 24,
+      "h": 36
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "M06",
+    "label": "Poteau de charpente",
+    "family": "shared",
+    "kind": "module",
+    "source": "concepts/16-structures.png",
+    "sheet": "Structure et enveloppes",
+    "season": "base",
+    "shape": "post",
+    "width": 8,
+    "depth": 8,
+    "totalHeight": 32,
+    "walkHeight": 0,
+    "parapetHeight": 12,
+    "wallThickness": 8,
+    "height": 32,
+    "high": false,
+    "views": [
+      "ew",
+      "ns"
+    ],
+    "frames": {
+      "ew": {
+        "size": [
+          8,
+          32
+        ],
+        "crop": [
+          959,
+          476,
+          49,
+          117
+        ],
+        "anchor": [
+          4,
+          32
+        ],
+        "lift": 0
+      },
+      "ns": {
+        "size": [
+          8,
+          32
+        ],
+        "crop": [
+          1312,
+          473,
+          48,
+          120
+        ],
+        "anchor": [
+          4,
+          32
+        ],
+        "lift": 0
+      }
+    }
+  }
+}

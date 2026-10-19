@@ -1,0 +1,408 @@
+{
+  "frames": {
+    "B11/face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 112,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -72,
+          "w": 112,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": 0,
+            "nx": 0,
+            "ny": 1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -72,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B11",
+        "dir": "face"
+      }
+    },
+    "B11/droite": {
+      "frame": {
+        "x": 138,
+        "y": 2,
+        "w": 72,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -112,
+          "w": 72,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 36,
+            "y": -56,
+            "nx": 1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -112,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -36,
+            "y": -49,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -36,
+            "y": -63,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B11",
+        "dir": "droite"
+      }
+    },
+    "B11/dos": {
+      "frame": {
+        "x": 234,
+        "y": 2,
+        "w": 112,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        56,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -56,
+          "y": -72,
+          "w": 112,
+          "h": 72
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": 0,
+            "y": -72,
+            "nx": 0,
+            "ny": -1,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -56,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": 7,
+            "y": -72,
+            "w": 49,
+            "h": 72,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -7,
+            "y": -64,
+            "w": 14,
+            "h": 64,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B11",
+        "dir": "dos"
+      }
+    },
+    "B11/gauche": {
+      "frame": {
+        "x": 370,
+        "y": 2,
+        "w": 72,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 72,
+        "h": 64
+      },
+      "duration": 100,
+      "anchor": [
+        36,
+        64
+      ],
+      "renderLift": 0,
+      "geometry": {
+        "foot": {
+          "x": -36,
+          "y": -112,
+          "w": 72,
+          "h": 112
+        },
+        "portals": [
+          {
+            "id": "door-0",
+            "x": -36,
+            "y": -56,
+            "nx": -1,
+            "ny": 0,
+            "width": 12,
+            "clearance": 22
+          }
+        ],
+        "solids": [
+          {
+            "x": -36,
+            "y": -112,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -36,
+            "y": -49,
+            "w": 72,
+            "h": 49,
+            "zMin": 0,
+            "zMax": 64
+          },
+          {
+            "x": -28,
+            "y": -63,
+            "w": 64,
+            "h": 14,
+            "zMin": 0,
+            "zMax": 64
+          }
+        ],
+        "walkables": [],
+        "sockets": [],
+        "id": "B11",
+        "dir": "gauche"
+      }
+    }
+  },
+  "meta": {
+    "app": "Hearthreaver native JavaScript architecture",
+    "version": 1,
+    "image": "B11.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 464,
+      "h": 68
+    },
+    "scale": "1"
+  },
+  "definition": {
+    "id": "B11",
+    "label": "Tannerie",
+    "family": "shared",
+    "kind": "building",
+    "source": "concepts/09-ateliers.png",
+    "sheet": "Ateliers à nuisances",
+    "season": "base",
+    "width": 112,
+    "depth": 72,
+    "height": 64,
+    "entrances": [
+      0.5
+    ],
+    "doorClearance": 22,
+    "openHall": false,
+    "views": [
+      "face",
+      "droite",
+      "dos",
+      "gauche"
+    ],
+    "frames": {
+      "face": {
+        "size": [
+          112,
+          64
+        ],
+        "crop": [
+          204,
+          561,
+          361,
+          155
+        ],
+        "anchor": [
+          56,
+          64
+        ],
+        "lift": 0
+      },
+      "droite": {
+        "size": [
+          72,
+          64
+        ],
+        "crop": [
+          620,
+          562,
+          228,
+          154
+        ],
+        "anchor": [
+          36,
+          64
+        ],
+        "lift": 0
+      },
+      "dos": {
+        "size": [
+          112,
+          64
+        ],
+        "crop": [
+          900,
+          569,
+          306,
+          147
+        ],
+        "anchor": [
+          56,
+          64
+        ],
+        "lift": 0
+      },
+      "gauche": {
+        "size": [
+          72,
+          64
+        ],
+        "crop": [
+          1258,
+          561,
+          227,
+          155
+        ],
+        "anchor": [
+          36,
+          64
+        ],
+        "lift": 0
+      }
+    }
+  }
+}
