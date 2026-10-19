@@ -75,7 +75,7 @@ Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filte
 Game.prototype.damageCivilian=function(n,amount,source){
  const c=this.ensureCivilian(n);if(!c||c.dead||c.inv>0||!Number.isFinite(amount)||amount<=0||(n.alpha??1)<.5||source&&!this.sameLevel(n,source))return false;
  const member=this.party?.find(v=>v.id===n.id);if(member?.down)return false;c.inv=.9;
- if(member){member.hp=Math.max(0,member.hp-amount);member.down=member.hp===0;member.hitAt=this.time+2.5;c.hp=member.hp;}
+ if(member){member.hp=Math.max(0,member.hp-amount);member.down=member.hp===0;member.hitAt=this.time+2.5;c.hp=member.hp/Math.max(1,member.maxHp||6)*6;}
  else{
   // Main quest givers and staffed routes remain recoverable; ordinary residents
   // have persistent deaths. This avoids destroying the only quest/travel service.
@@ -117,14 +117,17 @@ Game.prototype.stepCivilianAnimations=function(dt){
   if(c.moveTime===this.time){this.civilianAction(n,['leaving','fleeing'].includes(n.dangerState?.mode)?'flee':'walk');n.anim=c.distance/(c.action==='flee'?16/3:4);continue;}
   if(n.dangerState){this.civilianAction(n,n.dangerState.mode==='returning'?'idle':'cower');continue;}
   if(member){this.civilianAction(n,'idle');continue;}
+  if(n.labourReturning||c.hp<=1){this.civilianAction(n,'idle');continue;}
+  if(n.convoyId||n.campaignGroup||n.reliefPost)c.restClock=0;
   c.restClock=(c.restClock+delta)%52;
   if(c.action==='sit_down'){this.civilianAction(n,'seated');continue;}
   if(c.action==='stand_up'){this.civilianAction(n,'idle');continue;}
   if(c.restClock>=38&&c.restClock<45){if(c.action!=='seated')this.civilianAction(n,'sit_down');continue;}
   if(c.action==='seated'){this.civilianAction(n,'stand_up');continue;}
-  let job=c.job;
+  let job=c.job;if(n.campaignGroup){const m=this.worldState.simulation?.state.missions.find(m=>m.id===n.campaignGroup);job=m?.kind==='repair'&&m.status==='active'&&!m.engaged&&!m.waiting?'craft':'idle';}
   const station=this.stations?.find(s=>s.actor===n);
-  if(station)job=CIVILIAN_ART.outfits[c.appearance.outfit].cut.startsWith('TR')?c.job:'idle';
+  if(station)job=station.modes.includes('boat')?'rope':'groom';
+  else if(n.labourSite&&!n.campaignGroup){const s=this.worldState.simulation,site=s?.state.sites[n.labourSite];if(site&&!s.systems.jobCanProduce(site,job))job='idle';}
   if(job==='groom'&&!this.atlasProps.some(o=>o.kind==='transport_horse'&&dist(o,n)<26))job='ledger';
   if(c.restClock<26&&CIVILIAN_ART.outfits[c.appearance.outfit].frames[job])this.civilianAction(n,job);else this.civilianAction(n,'idle');
  }

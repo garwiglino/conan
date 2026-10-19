@@ -41,8 +41,8 @@ Game.prototype.finishTravelRestore=function(saved){
 Game.prototype.recruitCompanion=function(actor,{permanent=false}={}){
  if(!actor||actor.civilian?.critical||!this.npcs.includes(actor)||this.stations.some(s=>s.actor===actor)||this.party.some(c=>c.id===actor.id)||this.party.length>=12)return false;
  const prior=this.formerCompanions[actor.id],maximum=prior?.maxHp||6,health=Number.isFinite(actor.civilian?.hp)?actor.civilian.hp/6*maximum:maximum;
- const member=actor.id==='elyne'?this.companion:{...prior,hp:Math.min(prior?.hp??health,health),maxHp:maximum,hunger:prior?.hunger??0,down:health<=0};
- const job=this.couriers?.find(c=>c.id===actor.id);if(job&&!job.returnTo)job.returnTo={x:actor.x,y:actor.y};actor.alpha=1;actor.phase='post';Object.assign(member,{id:actor.id,name:actor.title||actor.label,permanent,maxHp:actor.id==='elyne'?10:member.maxHp,status:'following'});this.party.push(member);
+ const member=actor.id==='elyne'?Object.assign(this.companion,{hp:Math.min(this.companion.hp,health/maximum*10),down:health<=0}):{...prior,hp:Math.min(prior?.hp??health,health),maxHp:maximum,hunger:prior?.hunger??0,down:health<=0};
+ const job=this.couriers?.find(c=>c.id===actor.id);if(job&&!job.returnTo)job.returnTo={x:actor.x,y:actor.y};actor.alpha=1;actor.phase='post';Object.assign(member,{id:actor.id,name:actor.title||actor.label,permanent,maxHp:actor.id==='elyne'?10:member.maxHp,down:member.hp<=0,status:'following'});this.party.push(member);
  if(actor.id==='elyne')this.story.recruited=true;this.emit('notice',{title:'Compagnon de voyage',text:member.name+' rejoint le groupe.'});this.emit('save');return true;
 };
 const travelTalk=Game.prototype.talkTo;

@@ -7,7 +7,7 @@ const WorldSociety=(()=>{
  const C=Object.freeze({trafficLimit:8,window:2048,load:1050,unload:1500,spawn:360,chatRange:62,chatCooldown:32,chatLimit:2,perception:140});
  const alive=n=>n&&!n.dead&&!n.civilian?.dead&&!n.batracien?.dead&&!n.guardState?.dead&&(n.alpha??1)>.8&&n.phase!=='away';
  const member=(g,n)=>g.party?.some(c=>c.id===n.id);
- const calm=(g,n)=>alive(n)&&!member(g,n)&&!n.dangerState&&!n.wind&&!n.attack&&!n.hurt&&!n.stun&&!g.npcMoveLocked?.(n)&&!g.isHostileHumanGuard?.(n)&&!g.isHostileBatracien?.(n);
+ const calm=(g,n)=>alive(n)&&!n.convoyId&&!n.campaignGroup&&!n.labourReturning&&!n.reliefPost&&!member(g,n)&&!n.dangerState&&!n.wind&&!n.attack&&!n.hurt&&!n.stun&&!g.npcMoveLocked?.(n)&&!g.isHostileHumanGuard?.(n)&&!g.isHostileBatracien?.(n);
  const land=road=>road&&road.type!=='searoutes';
  const finite=Number.isFinite;
  function routePoint(s,p){const t=clamp(p/Math.max(1,s.length),0,1);return {x:s.a.x+(s.b.x-s.a.x)*t,y:s.a.y+(s.b.y-s.a.y)*t};}

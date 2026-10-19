@@ -49,7 +49,7 @@ function createWorldSimulation(A,B,W,saved){
  const campaignHooks={stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish};
  const systems=(typeof createCampaignSystems==='function'?createCampaignSystems:require('./world-campaign-systems.js'))(A,B,W,state,campaignHooks);
  Object.assign(systems,(typeof createWorldLabourSystems==='function'?createWorldLabourSystems:require('./world-labour-systems.js'))(A,W,state,campaignHooks,systems));
- function requirements(site){const need={...site.needs},region=regions.get(A.byId[site.id].region);
+ function requirements(site){const need=systems.localNeeds(site),region=regions.get(A.byId[site.id].region);
   // Tools, coats and treatments are indivisible at the service counter. Small
   // communities need the same four-lot replenishment target as their workshop,
   // rather than ceasing input orders while less than one usable lot remains.
@@ -65,7 +65,7 @@ function createWorldSimulation(A,B,W,saved){
   return need;
  }
  function history(type,detail,at=state.clock){state.history.push({type,at,...detail});if(state.history.length>1000)state.history.shift();}
- function publish(e,site){if(!e)return;
+ function publish(e,site){if(!e||e.reportPending&&!site)return;
   if(e.resolved===null&&e.type==='flood'){e.end=null;e.waterLevel=finite(e.waterLevel)?e.waterLevel:1;}
   if(e.resolved===null&&['bridge','landslide','avalanche','fire'].includes(e.type)&&!state.works.some(w=>w.event===e.id)){
    e.end=null;const nearest=A.nodes.filter(n=>state.sites[n.id]).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0];
@@ -89,16 +89,16 @@ function createWorldSimulation(A,B,W,saved){
   const a=state.sites[from],b=state.sites[to];if(!a||!b||from===to||amount<=0||state.shipments.filter(s=>['travel','returning'].includes(s.status)).length>=64)return null;
   if(!resources.has(id)||!finite(amount)||a.workers<2||a.guardAvailable<2||a.treasury<6||stock(a,'provisions')<4)return null;
   const path=route(from,to);if(!path?.length)return null;const qty=Math.min(amount,80,Math.max(0,stock(a,id)-(a.needs[id]||1)*a.reserveDays-(id==='provisions'?4:0)));if(qty<=0)return null;
-  const price=Math.max(1,Math.ceil(qty*.5));if(b.treasury<price)return null;const identity='cargo-'+state.serial,guards=systems.reserve(a,2,identity);if(!guards)return null;
-  take(a,id,qty);take(a,'provisions',4);b.treasury-=price;a.workers-=2;a.guardAvailable-=2;a.treasury-=6;const cargo={id:'cargo-'+state.serial++,from,to,resource:id,amount:qty,originalAmount:qty,lost:0,paid:price,path:path.map(p=>({...p})),leg:0,progress:0,status:'travel',depart:state.clock,clock:state.clock,crew:2,guards:2,staffReserved:true,guardReserved:true,landRate:pacing.metresPerMinute(pacing.civilianWalk),delivered:false,news:JSON.parse(JSON.stringify(state.channels[from]||{}))};
-  cargo.escrow=price;cargo.travelFunds=6;cargoUnits(cargo);cargo.units.push(...guards);
+  const price=Math.max(1,Math.ceil(qty*.5));if(b.treasury<price)return null;const identity='cargo-'+state.serial,guards=systems.reserve(a,2,identity);if(!guards)return null;const crew=systems.reserveCrew(a,2,identity);if(!crew){systems.release(a,guards);return null;}
+  take(a,id,qty);take(a,'provisions',4);b.treasury-=price;a.guardAvailable-=2;a.treasury-=6;const cargo={id:'cargo-'+state.serial++,from,to,resource:id,amount:qty,originalAmount:qty,lost:0,paid:price,path:path.map(p=>({...p})),leg:0,progress:0,status:'travel',depart:state.clock,clock:state.clock,crew:2,guards:2,staffReserved:true,guardReserved:true,landRate:pacing.metresPerMinute(pacing.civilianWalk),delivered:false,news:JSON.parse(JSON.stringify(state.channels[from]||{}))};
+  cargo.escrow=price;cargo.travelFunds=6;cargo.units=[...crew,...guards];
   state.shipments.push(cargo);history('cargo_departure',{id:cargo.id,from,to,resource:id,amount:qty});return cargo;
  }
  function produce(site,day,sky){
   const demand=requirements(site);
-  const work=clamp(1-site.distress*.06,.2,1)*clamp(site.workers/Math.max(1,site.labourBase||site.population),0,1),season=(state.clock/1440)%96/96,cold=(sky.temperature??15)<-5;
+  const staff=systems.productionStaff(site),work=clamp(1-site.distress*.06,.2,1),season=(state.clock/1440)%96/96,cold=(sky.temperature??15)<-5;
   for(const [id,rate]of Object.entries(site.capacity).sort((a,b)=>depth(a[0])-depth(b[0])||Number(b[0]==='tools')-Number(a[0]==='tools')||a[0].localeCompare(b[0]))){
-   const r=resources.get(id);if(!r)continue;let amount=rate*day*work;
+   const r=resources.get(id);if(!r)continue;let amount=rate*day*work*(staff[id]||0);
    if(['agriculture','natural','animal','mineral'].includes(r.kind)&&id!=='water')amount*=clamp(stock(site,'tools')/Math.max(1,site.needs.tools||0),r.kind==='mineral'?.05:.35,1);
    if(r.kind==='agriculture')amount*=cold?.05:season>.25&&season<.8?1.3:.65;
    if(id==='water')amount*=clamp(1-(sky.storm||0)*.1-(sky.temperature>30?.25:0),.4,1.2);
@@ -111,7 +111,7 @@ function createWorldSimulation(A,B,W,saved){
    }
    site.stock[id]=stock(site,id)+amount;site.production+=amount;
   }
-  let deficiency=0;for(const [id,need]of Object.entries(site.needs)){const requested=need*day;let n=0;if(id==='firewood'&&site.fireUntil>state.clock)n=requested;if(id==='provisions')for(const food of foods){n+=take(site,food,requested-n);if(n>=requested)break;}n+=take(site,id,requested-n);if(id==='firewood'&&requested>0&&n>=requested-1e-9)site.fireUntil=state.clock+60;site.consumption+=n;if(['water','provisions'].includes(id)&&n<requested-.00001)deficiency+=(requested-n)/Math.max(1,requested);}
+  let deficiency=0;for(const [id,need]of Object.entries(systems.localNeeds(site))){const requested=need*day;let n=0;if(id==='firewood'&&site.fireUntil>state.clock)n=requested;if(id==='provisions')for(const food of foods){n+=take(site,food,requested-n);if(n>=requested)break;}n+=take(site,id,requested-n);if(id==='firewood'&&requested>0&&n>=requested-1e-9)site.fireUntil=state.clock+60;site.consumption+=n;if(['water','provisions'].includes(id)&&n<requested-.00001)deficiency+=(requested-n)/Math.max(1,requested);}
   for(const [id,r]of resources)if(r.storageDays>0&&r.storageDays<999)take(site,id,stock(site,id)*day/Math.max(1,r.storageDays)*.1);
   site.distress=clamp(site.distress+(deficiency?deficiency*day*3:-day*.4),0,10);const wages=Math.min(site.treasury,site.workers*day*.15);site.treasury-=wages;site.householdFunds+=wages;const tax=Math.min(site.householdFunds,site.population*day*.3);site.householdFunds-=tax;site.treasury+=tax;
  }
@@ -136,7 +136,7 @@ function createWorldSimulation(A,B,W,saved){
  function recordBandHealth(event,slot,hp){const band=state.bands[event?.bandKey],id=event?.memberIds?.[slot],member=band?.members.find(m=>m.id===id);if(member){member.hp=Math.max(0,hp);member.dead=member.hp<=0;if(member.dead&&band.peopleReserved)systems.death(band.home,member.id,{reserved:true});}}
  function abandonCargo(c){if(c.abandoned)return;c.abandoned=true;c.abandonedAt??=W.clock;c.abandonedPosition=c.localPosition?A.toWorld(c.localPosition.x,c.localPosition.y):cargoPosition(c);c.status='abandoned';history('cargo_abandoned',{id:c.id},c.abandonedAt);}
  function returnEscort(c){
-  const units=cargoUnits(c);if(units.some(u=>u.role==='crew'&&u.hp>0))return;
+  const units=cargoUnits(c);if(units.some(u=>u.role==='crew'&&u.hp>1))return;
   if(!c.delivered)abandonCargo(c);
   if(!units.some(u=>u.hp>0)){c.staffReserved=c.guardReserved=false;c.escortReturned=true;c.status=c.abandoned?'abandoned':'delivered';return;}
   if(c.escortOnly)return;
@@ -154,17 +154,17 @@ function createWorldSimulation(A,B,W,saved){
   let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
   for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<20000;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
+    if(c.status==='returning'){const ledger=state.channels[c.from]||={};for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:at-remaining,source:'Caravaniers de retour'};if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
     const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at-remaining;c.escrow=0;c.settlement={reason:'delivery',at:c.arrived,refund:c.paid-paid,paidToSeller:paid};
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to},at-remaining);event('caravan',c.to,{cargoId:c.id,detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720,at-remaining);
-    c.status='returning';c.path=c.path.slice().reverse().map(p=>({...p,from:p.to,to:p.from}));c.leg=0;c.progress=0;continue;
+    c.news=JSON.parse(JSON.stringify(state.channels[c.to]||{}));c.status='returning';c.path=c.path.slice().reverse().map(p=>({...p,from:p.to,to:p.from}));c.leg=0;c.progress=0;continue;
    }
    const edge=A.edgeById.get(leg.edge);if(!edge){c.waiting='route_migration';break;}const status=W.edgeStatus(edge,at);if(status.closed||status.events.some(e=>A.EVENT_TYPES[e.type].civilianPrey&&!c.passages?.[e.id]&&!systems.toll(c,e))){c.waiting=leg.edge;break;}c.waiting=null;
    const length=leg.length/cargoRate(c,leg),step=Math.min(remaining,length-c.progress);c.progress+=step;remaining-=step;if(c.progress>=length-1e-7){c.leg++;c.progress=0;}
   }c.clock=Math.max(c.clock||0,at);
  }
- function damageCargoUnit(c,id,hp,hostileUntil=0){const u=cargoUnits(c).find(u=>u.id===id);if(!u||!finite(hp)||hp<0)return false;const alive=u.hp>0;u.hp=clamp(hp,0,u.role==='guard'?8:6);u.hostileUntil=hostileUntil;if(u.role==='guard'&&u.hp>0)systems.guardHealth(state.sites[c.from],u);
+ function damageCargoUnit(c,id,hp,hostileUntil=0){if(!c.staffReserved&&!c.guardReserved)return false;const u=cargoUnits(c).find(u=>u.id===id);if(!u||!finite(hp)||hp<0)return false;const alive=u.hp>0;u.hp=clamp(hp,0,Math.min(u.hp,u.role==='guard'?8:6));u.hostileUntil=hostileUntil;if(u.role==='crew')systems.crewHealth(state.sites[c.from],u,c.id);if(u.role==='guard'&&u.hp>0)systems.guardHealth(state.sites[c.from],u);
   if(alive&&u.hp===0){if(u.role==='guard')systems.guardHealth(state.sites[c.from],u);else systems.death(c.from,u.id,{reserved:true});history('cargo_casualty',{id:c.id,person:id,role:u.role});}
   if(!c.delivered&&!cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0))abandonCargo(c);return true;
  }
@@ -172,10 +172,10 @@ function createWorldSimulation(A,B,W,saved){
  function resolveWork(work,dt){systems.prepareRepair(work);}
  function causalEvents(){
   for(const site of sites()){
-   const food=stock(site,'provisions')+foods.reduce((n,id)=>n+stock(site,id),0),shortage=food<site.needs.provisions||stock(site,'water')<site.needs.water;
+   const needs=systems.localNeeds(site),food=stock(site,'provisions')+foods.reduce((n,id)=>n+stock(site,id),0),shortage=food<needs.provisions||stock(site,'water')<needs.water;
    const old=W.active(state.clock).find(e=>e.type==='shortage'&&e.target===site.id);
    if(shortage&&!old)event('shortage',site.id,{source:'Intendant de '+A.byId[site.id].name});
-   if(!shortage&&old&&food>=site.needs.provisions*2&&stock(site,'water')>=site.needs.water*2)W.resolve(old.id,state.clock);
+   if(!shortage&&old&&food>=needs.provisions*2&&stock(site,'water')>=needs.water*2)W.resolve(old.id,state.clock);
   }
   // Physical damage remains until an actual, paid work order completes.
   for(const e of W.active(state.clock))if(['bridge','landslide','avalanche','fire'].includes(e.type)&&!state.works.some(w=>w.event===e.id)){publish(e);W.revision++;}

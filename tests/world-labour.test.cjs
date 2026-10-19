@@ -37,3 +37,56 @@ test('incapacitated returning crew need actual medicine and food before rejoinin
 test('repair expeditions preserve the same campaign through split advances and a mid-mission save',()=>{
  const initial=fixture().w.serialize(),one=world(initial),split=world(initial);one.advance(1800,()=>({rain:0,temperature:15}));split.advance(720,()=>({rain:0,temperature:15}));const restored=world(split.serialize());restored.advance(1800,()=>({rain:0,temperature:15}));assert.deepEqual(one.simulation.state,restored.simulation.state);
 });
+
+test('worker identities and every surviving wound persist across repair, reassignment and reload',()=>{
+ const {w,s,site,work}=fixture();s.systems.prepareRepair(work);const m=s.state.missions.find(m=>m.id===work.mission),ids=m.units.map(u=>u.id);for(const u of m.units)s.systems.missionDamage(m,u.id,3);
+ m.status='returning';m.path=[];s.systems.stepMission(m,0,480);assert.equal(m.status,'returned');assert.deepEqual(ids.map(id=>site.workerRecords[id].hp),[3,3]);
+ const copy=world(w.serialize()),other=copy.simulation,post=other.state.sites[site.id],next=other.systems.reserveCrew(post,2,'next-mission');assert.deepEqual(next.map(u=>[u.id,u.hp]),ids.map(id=>[id,3]));const medicine=post.stock.medicinal=1;other.systems.tickLabour(2000);assert.equal(post.stock.medicinal,medicine,'assigned workers cannot receive treatment remotely');
+});
+test('local meals and water count each absent living person once, but incapacity alone does not remove a local mouth',()=>{
+ const {s,site}=fixture(),food=site.needs.provisions,water=site.needs.water,pop=site.population;s.systems.setWorkerReason(site.id,'absent','party',true);s.systems.setWorkerReason(site.id,'absent','returning',true);s.systems.setWorkerReason(site.id,'absent','incapacity',true);s.systems.setWorkerReason(site.id,'local-patient','incapacity',true);
+ assert.ok(Math.abs(s.systems.localNeeds(site).provisions-food*(pop-1)/pop)<1e-8);assert.ok(Math.abs(s.systems.localNeeds(site).water-water*(pop-1)/pop)<1e-8);s.systems.setWorkerReason(site.id,'absent','party',false);s.systems.setWorkerReason(site.id,'absent','returning',false);assert.equal(s.systems.localNeeds(site).provisions,food);
+});
+test('a finite anonymous expedition cannot reserve a named local person who is still working visibly at home',()=>{
+ const {s,site}=fixture();site.workers=2;site.workerRecords.local={id:'local',hp:6,job:'hoe',reasons:{},debited:false};const before=JSON.stringify(site);assert.equal(s.systems.reserveCrew(site,2,'no-hidden-clone'),null);assert.equal(JSON.stringify(site),before);
+});
+test('a dead worker is never recreated by reassignment and all treatment requests are removed',()=>{
+ const {s,site}=fixture(),units=s.systems.reserveCrew(site,2,'first');s.state.care[site.id]={[units[0].id]:true};s.systems.death(site.id,units[0].id,{reserved:true});units[0].hp=0;s.systems.restoreCrew(site,units,480);assert.equal(s.state.care[site.id][units[0].id],undefined);const next=s.systems.reserveCrew(site,2,'second');assert.ok(next.every(u=>u.id!==units[0].id));
+});
+test('production follows the available profession and does not assign a transport relief to farming or crafting',()=>{
+ const {s,site}=fixture();site.capacity={grain:100,tools:100};site.labourBase=site.workers=2;site.workerRecords={farmer:{id:'farmer',job:'hoe',hp:6,reasons:{},onDuty:true},smith:{id:'smith',job:'craft',hp:6,reasons:{},onDuty:true}};
+ assert.deepEqual(s.systems.productionStaff(site),{grain:1,tools:1});s.systems.setWorkerReason(site.id,'farmer','party',true);assert.deepEqual(s.systems.productionStaff(site),{grain:0,tools:1});s.systems.setWorkerReason(site.id,'farmer','party',false);site.workerRecords.farmer.service='relay';assert.equal(s.systems.productionStaff(site).grain,0);site.workerRecords.smith.onDuty=false;assert.equal(s.systems.productionStaff(site).tools,0);
+});
+test('a remote repair reopens the passage before the crew returns but its report reaches the home ledger only with the survivors',()=>{
+ const {w,s,site,e,work}=fixture();s.systems.prepareRepair(work);const m=s.state.missions.find(m=>m.id===work.mission);s.systems.stepMission(m,100,580);assert.equal(m.status,'active');work.remaining=1;s.systems.stepMission(m,1,581);assert.equal(e.resolved,581);assert.equal(m.status,'returning');assert.equal(s.state.channels[site.id]?.[e.id]?.resolved??null,null);const report=w.events.find(e=>e.type==='repair');assert.ok(report.reportPending);assert.equal(Object.values(s.state.channels).some(book=>book[report.id]),false);
+ const copy=world(w.serialize()),other=copy.simulation,saved=other.state.missions.find(v=>v.id===m.id);assert.equal(other.state.channels[site.id]?.[e.id]?.resolved??null,null);other.systems.stepMission(saved,100,681);assert.equal(saved.status,'returned');assert.equal(other.state.channels[site.id][e.id].resolved,581);assert.ok(other.state.channels[site.id][report.id]);
+});
+test('named workers heal by campaign hours and finite medicine with identical results across split advances',()=>{
+ const {w,s,site}=fixture();site.workerRecords.patient={id:'patient',job:'hoe',hp:2,reasons:{},careEligible:true,nextCare:840};site.stock.medicinal=20;const saved=w.serialize(),one=world(saved),split=world(saved);one.advance(1260,()=>({temperature:15}));split.advance(900,()=>({temperature:15}));const restored=world(split.serialize());restored.advance(1260,()=>({temperature:15}));assert.deepEqual(one.simulation.state,restored.simulation.state);assert.equal(one.simulation.state.sites[site.id].workerRecords.patient.hp,6);
+});
+
+test('repairing one event does not drain a separate flood at the same crossing',()=>{
+ const {w,s,e,work}=fixture();s.systems.prepareRepair(work);const m=s.state.missions.find(m=>m.id===work.mission);s.systems.stepMission(m,100,580);assert.equal(m.status,'active');const flood=w.add('flood',e.target,580,0,{position:e});work.remaining=1;s.systems.stepMission(m,1,581);assert.notEqual(e.resolved,null);assert.equal(flood.resolved,null);
+});
+test('a returned roster cannot damage or resurrect a worker assigned to the next expedition',()=>{
+ const {s,site}=fixture(),units=s.systems.reserveCrew(site,2,'first'),m={id:'first',site:site.id,units,status:'returned'};s.systems.restoreCrew(site,units,480);const next=s.systems.reserveCrew(site,2,'next'),population=site.population;assert.equal(next[0].id,units[0].id);assert.equal(s.systems.missionDamage(m,units[0].id,0),false);assert.equal(site.population,population);assert.equal(site.workerRecords[next[0].id].assignment,'next');
+});
+test('the same worker keeps their appearance as well as their wounds when changing jobs',()=>{
+ const {s,site}=fixture(),units=s.systems.reserveCrew(site,2,'first');units[0].appearance={sex:'feminin',outfit:'saved-outfit'};units[0].hp=3;s.systems.crewHealth(site,units[0],'first');s.systems.restoreCrew(site,units,480);const next=s.systems.reserveCrew(site,2,'next');assert.deepEqual(next[0].appearance,units[0].appearance);assert.equal(next[0].hp,3);
+});
+function cargoFixture(){const w=world(),s=w.simulation,posts=[...new Set(Object.values(s.state.sites))];for(const from of posts)for(const to of posts){if(from===to)continue;const path=A.findPath(from.id,to.id,{mode:'cart',allowBoat:false,state:w});if(!path?.length||path.reduce((n,l)=>n+l.length,0)>1500)continue;Object.assign(from.stock,{cloth:200,provisions:200,tools:20});from.treasury=to.treasury=1000;const c=s.addShipment(from.id,to.id,'cloth',10);if(!c)continue;c.progress=c.path[0].length/s.cargoRate(c,c.path[0])/2;return {w,s,site:from,c};}throw Error('No cargo fixture');}
+test('an entirely incapacitated convoy leaves its goods and returns its living personnel without inventing deaths',()=>{
+ const {s,site,c}=cargoFixture(),population=site.population,workers=site.workers;for(const u of c.units.filter(u=>u.role==='crew'))s.damageCargoUnit(c,u.id,1);s.stepCargo(c,0,480);assert.equal(c.abandoned,true);assert.equal(c.status,'returning');assert.equal(site.population,population);assert.equal(site.workers,workers);assert.equal(c.amount,10);
+});
+test('a recovery with incapacitated porters returns without loading goods and permits a subsequent recovery',()=>{
+ const {w,s,site,c}=cargoFixture();for(const u of c.units)s.damageCargoUnit(c,u.id,0);s.systems.reportLoss(c,'Témoin');const m=s.systems.recover(c);assert.ok(m);for(const u of m.units.filter(u=>u.role==='crew'))s.systems.missionDamage(m,u.id,1);s.systems.stepMission(m,1000,1480);assert.equal(m.status,'returned');assert.equal(c.amount,10);assert.equal(c.recoveryMission,null);assert.ok(s.systems.recover(c));
+});
+test('the death of all returning repairers does not deliver their pending report remotely',()=>{
+ const {w,s,site,e,work}=fixture();s.systems.prepareRepair(work);const m=s.state.missions.find(m=>m.id===work.mission);s.systems.stepMission(m,100,580);work.remaining=1;s.systems.stepMission(m,1,581);assert.equal(m.status,'returning');for(const u of m.units)s.systems.missionDamage(m,u.id,0);s.systems.stepMission(m,0,581);assert.equal(m.status,'returned');assert.equal(s.state.channels[site.id]?.[e.id]?.resolved??null,null);assert.equal(Object.values(s.state.channels).some(book=>Object.keys(book).some(id=>w.events.find(e=>e.id===id)?.type==='repair')),false);
+});
+test('a convoy brings back a dated snapshot of news acquired at its destination',()=>{
+ const {w,s,site,c}=cargoFixture(),e=w.add('shortage',c.to,480,0);assert.equal(s.state.channels[site.id]?.[e.id],undefined);w.clock=3000;s.catchUpCargo(c,3000);assert.equal(c.status,'delivered');assert.ok(s.state.channels[site.id][e.id]);assert.equal(s.state.channels[site.id][e.id].source,'Caravaniers de retour');
+});
+test('legacy convoys without units retain their reserved guards and bind crew without charging workers again',()=>{
+ const {w,s,site,c}=cargoFixture(),saved=w.serialize(),data=saved.simulation.shipments.find(v=>v.id===c.id),workers=site.workers,guards=c.units.filter(u=>u.role==='guard').map(u=>[u.id,u.hp]);for(const u of c.units.filter(u=>u.role==='crew'))delete saved.simulation.sites[site.id].workerRecords[u.id];delete data.units;const restored=world(saved),other=restored.simulation,copy=other.state.shipments.find(v=>v.id===c.id);assert.equal(other.state.sites[site.id].workers,workers);assert.deepEqual(copy.units.filter(u=>u.role==='guard').map(u=>[u.id,u.hp]),guards);assert.equal(copy.units.filter(u=>u.role==='crew').length,2);assert.equal(other.systems.outsideCount(other.state.sites[site.id]),4);
+});

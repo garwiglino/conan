@@ -31,23 +31,29 @@
  Game.prototype.serialize=function(){const d=save.call(this);if(d.atlas){d.atlas.deaths={...this.atlasDeaths};d.atlas.relief=this.stations.filter(s=>s.originalActor).map(s=>({site:s.site,original:s.originalActor.id,replacement:s.actor.id}));if(d.atlas.civilians)for(const r of d.atlas.civilians.people){const c=this.npcs.find(n=>n.id===r.id)?.civilian;if(c?.critical)Object.assign(r,{critical:true,criticalUntil:c.criticalUntil,injuredAt:c.injuredAt});}}return d;};
  const restore=Game.prototype.finishAtlasRestore;
  Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);for(const r of saved?.atlas?.civilians?.people||[]){const n=this.npcs.find(n=>n.id===r.id);if(n?.civilian&&r.critical&&Number.isFinite(r.criticalUntil)){Object.assign(n.civilian,{critical:true,criticalUntil:r.criticalUntil,injuredAt:Number.isFinite(r.injuredAt)?r.injuredAt:r.criticalUntil-1440});delete n.dangerState;}}
-  for(const r of saved?.atlas?.relief||[]){const station=this.stations.find(s=>s.site===r.site&&s.actor.id===r.original),replacement=this.npcs.find(n=>n.id===r.replacement&&n.site===r.site&&!n.civilian?.dead);if(station&&replacement)this.assignWorldRelief(station,replacement,true);}
+  for(const r of saved?.atlas?.relief||[]){const station=this.stations.find(s=>s.site===r.site&&s.actor.id===r.original),replacement=this.npcs.find(n=>n.id===r.replacement&&sim(this)?.state.sites[n.site]===sim(this)?.state.sites[r.site]&&!n.civilian?.dead);if(station&&replacement)this.assignWorldRelief(station,replacement,true);}
   // Couriers are constructed after initTravelParty: restore their membership here.
   for(const entry of saved?.atlas?.party||[])if(!this.party.some(c=>c.id===entry.id)){
    const n=this.npcs.find(n=>n.id===entry.id);if(n&&this.recruitCompanion(n,{permanent:!!entry.permanent})){const c=this.party.find(c=>c.id===entry.id);Object.assign(c,{maxHp:travelNumber(entry.maxHp,c.maxHp,10)||c.maxHp,hp:travelNumber(entry.hp,c.hp,entry.maxHp||c.maxHp),hunger:travelNumber(entry.hunger,0),down:!!entry.down,coatOwned:!!entry.coatOwned,coatWorn:!!entry.coatWorn,coldDose:travelNumber(entry.coldDose,0,1000),status:entry.status==='waiting'?'waiting':'following'});if(Number.isFinite(entry.x)&&Number.isFinite(entry.y)){n.x=entry.x;n.y=entry.y;}}
   }
  };
- Game.prototype.assignWorldRelief=function(station,n,restoring=false){if(!station.originalActor)station.originalActor=station.actor;station.actor=n;n.reliefPost={x:station.originalActor.x+22,y:station.originalActor.y};n.title='Relève de '+Atlas.byId[station.site].name;this.cancelWorldConversation(n);if(!restoring)sim(this)?.history('service_relief',{site:station.site,person:n.id});};
+ Game.prototype.assignWorldRelief=function(station,n,restoring=false){
+  if(!this.canRelieve(station,n,restoring))return false;this.registerLabourActors();const s=sim(this),p=s.state.sites[n.labourSite].workerRecords[n.id];
+  if(station.originalActor)this.releaseWorldRelief(station);
+  station.originalActor=station.actor;station.actor=n;n.reliefTitle=n.title;n.reliefPost={x:station.originalActor.x+22,y:station.originalActor.y};n.title='Relève de '+Atlas.byId[station.site].name;
+  p.service=station.id;s.systems.setWorkerReason(n.labourSite,n.id,'service',true);this.cancelWorldConversation(n);if(!restoring)s.history('service_relief',{site:station.site,person:n.id});return true;
+ };
  const step=Game.prototype.stepNpcs;
  Game.prototype.stepNpcs=function(dt){step.call(this,dt);for(const n of this.npcs)if(n.reliefPost&&!n.dangerState&&!n.civilian?.critical&&!n.civilian?.dead&&this.dialogue?.who!==n&&dist(n,n.reliefPost)>4)this.walkNpc(n,n.reliefPost,dt);};
  const ready=Game.prototype.currentTransport;
- Game.prototype.currentTransport=function(){const s=ready.call(this);return s&&!s.actor.civilian?.critical&&!s.actor.civilian?.dead&&(!s.actor.reliefPost||dist(s.actor,s.actor.reliefPost)<8)?s:null;};
+ Game.prototype.currentTransport=function(){const s=ready.call(this);return this.staffReady(s)?s:null;};
  const advance=Game.prototype.advanceAtlas;
  Game.prototype.advanceAtlas=function(dt=0){for(const m of sim(this)?.state.missions||[]){if(m.path)continue;const guards=this.npcs.filter(n=>n.eventId===m.event&&!n.guardState?.dead);m.physical=guards.some(n=>dist(n,this.player)<1500);m.engaged=guards.some(n=>n.wind>0||n.attack>0||this.humanGuardTarget(n,this.ensureHumanGuard(n)));}advance.call(this,dt);const s=sim(this);if(!s)return;
+  for(const st of this.stations)if(st.originalActor&&!this.labourAvailable(st.actor,st)){const replacement=this.npcs.find(n=>this.canRelieve(st,n));if(replacement)this.assignWorldRelief(st,replacement);}
   for(const n of this.npcs){const c=n.civilian;if(!c?.critical)continue;
-   const station=this.stations.find(st=>st.actor===n&&!st.originalActor);const careSite=n.site||Atlas.nearestSite(...Object.values(Atlas.toWorld(n.x,n.y))).id;s.requestCare(careSite,n.id);
-   if(station&&this.clock>=(c.injuredAt??this.clock)+360){const replacement=this.npcs.find(a=>a!==n&&a.site===station.site&&a.resident&&!a.reliefPost&&!a.batracien?.role&&!a.civilian?.dead&&!a.civilian?.critical&&!a.dangerState&&!this.party.some(p=>p.id===a.id));if(replacement)this.assignWorldRelief(station,replacement);}
-   if(this.clock>=c.criticalUntil){const w=Atlas.toWorld(n.x,n.y),site=s.state.sites[n.site]||s.state.sites[Atlas.nearestSite(w.x,w.y).id];if(site&&s.stock(site,'medicinal')>=1&&s.stock(site,'provisions')>=1){site.stock.medicinal--;site.stock.provisions--;c.critical=false;c.hp=3;delete n.dangerState;this.civilianAction(n,'idle');s.finishCare(careSite,n.id);s.history('person_recovered',{person:n.id});for(const st of this.stations)if(st.originalActor===n){delete st.actor.reliefPost;st.actor=n;delete st.originalActor;}}else c.criticalUntil=this.clock+360;}
+   const station=this.stations.find(st=>st.actor===n);const careSite=n.site||Atlas.nearestSite(...Object.values(Atlas.toWorld(n.x,n.y))).id;s.requestCare(careSite,n.id);
+   if(station&&this.clock>=(c.injuredAt??this.clock)+360){const replacement=this.npcs.find(a=>a!==n&&this.canRelieve(station,a));if(replacement)this.assignWorldRelief(station,replacement);}
+   if(this.clock>=c.criticalUntil){const w=Atlas.toWorld(n.x,n.y),site=s.state.sites[n.site]||s.state.sites[Atlas.nearestSite(w.x,w.y).id];if(site&&s.stock(site,'medicinal')>=1&&s.stock(site,'provisions')>=1){site.stock.medicinal--;site.stock.provisions--;c.critical=false;c.hp=3;delete n.dangerState;this.civilianAction(n,'idle');s.finishCare(careSite,n.id);s.history('person_recovered',{person:n.id});for(const st of this.stations)if(st.originalActor===n)this.releaseWorldRelief(st);}else c.criticalUntil=this.clock+360;}
   }
  };
 })();

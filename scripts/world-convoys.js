@@ -8,7 +8,7 @@
  const simulation=g=>g.worldState.simulation;
  Game.prototype.convoyActors=function(c){return this.npcs.filter(n=>n.convoyId===c.id);};
  Game.prototype.convoyPosition=function(c){const s=simulation(this),p=s.cargoPosition(c);return c.localPosition&&Number.isFinite(c.localPosition.x)&&Number.isFinite(c.localPosition.y)?{...c.localPosition}:Atlas.toGame(p.x,p.y);};
- Game.prototype.saveConvoyActors=function(c){const s=simulation(this);for(const n of this.convoyActors(c)){const u=s.cargoUnits(c).find(u=>u.id===n.id);if(!u)continue;s.damageCargoUnit(c,n.id,n.convoyGuard?n.guardState?.hp??u.hp:n.civilian?.hp??u.hp,n.guardState?.hostileUntil||0);Object.assign(u,{x:n.x,y:n.y,dir:n.dir});if(n.civilian)u.appearance={...n.civilian.appearance};}};
+ Game.prototype.saveConvoyActors=function(c){const s=simulation(this);for(const n of this.convoyActors(c)){const u=s.cargoUnits(c).find(u=>u.id===n.id);if(!u)continue;s.damageCargoUnit(c,n.id,n.convoyGuard?n.guardState?.hp??u.hp:n.civilian?.hp??u.hp,n.guardState?.hostileUntil||0);Object.assign(u,{x:n.x,y:n.y,dir:n.dir});if(n.civilian){u.appearance={...n.civilian.appearance};if(c.staffReserved)s.systems.crewHealth(s.state.sites[c.from],u,c.id);}}};
  Game.prototype.convoyInDanger=function(c){const actors=this.convoyActors(c),position=this.convoyPosition(c);return actors.some(n=>living(n)&&(n.wind||n.attack||n.hurt||n.dangerState||n.convoyGuard&&(this.isHostileHumanGuard(n)||this.humanGuardTarget(n,this.ensureHumanGuard(n)))))||this.enemies.some(e=>!e.dead&&e.world&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position));};
  Game.prototype.unloadConvoy=function(c){if(this.convoyInDanger(c)){c.encounter=true;const position=this.convoyPosition(c);simulation(this).beginCargoEncounter(c,this.enemies.filter(e=>e.world&&!e.dead&&!e.friendly&&this.sameLevel(e,{level:0})&&dist(e,position)<260&&this.lineClear(e,position)));}this.saveConvoyActors(c);this.npcs=this.npcs.filter(n=>n.convoyId!==c.id);this.atlasNpcs=this.atlasNpcs.filter(n=>n.convoyId!==c.id);simulation(this).controlCargo(c.id,false);};
  Game.prototype.syncWorldConvoys=function(){
@@ -42,7 +42,7 @@
    const actors=this.convoyActors(c);if(!actors.length)continue;this.saveConvoyActors(c);
    const danger=this.convoyInDanger(c);if(danger)c.encounter=true;else delete c.encounter;
    if(!actors.some(n=>!n.convoyGuard&&living(n)))s.stepCargo(c,0,this.clock);
-   const position=this.convoyPosition(c),crew=actors.filter(n=>!n.convoyGuard&&living(n)),driver=(c.escortOnly?actors.filter(n=>n.convoyGuard&&living(n)):crew).find(n=>!n.dangerState),leg=c.path[c.leg];
+   const position=this.convoyPosition(c),crew=actors.filter(n=>!n.convoyGuard&&living(n)),driver=(c.escortOnly?actors.filter(n=>living(n)):crew.filter(n=>n.civilian.hp>1)).find(n=>!n.dangerState),leg=c.path[c.leg];
    if(danger||!driver||c.status==='abandoned'||crew.some(n=>this.dialogue?.who===n)){s.stepCargo(c,0,this.clock);continue;}
    if(!leg){s.stepCargo(c,0,this.clock);continue;}
    const edge=this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock);if(edge.closed||edge.events.some(e=>Atlas.EVENT_TYPES[e.type].civilianPrey)){c.waiting=leg.edge;s.stepCargo(c,0,this.clock);continue;}c.waiting=null;

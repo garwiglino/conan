@@ -1,47 +1,61 @@
-# Affectations, incapacité et équipes de réparation
+# Personnes, métiers et affectations
 
-Cette passe corrige les cinq défauts de l’audit du 19 octobre 2026. Sources : `world-labour-systems.js`, `world-labour-runtime.js`, `world-campaign-systems.js`, `world-campaign-runtime.js` et `world-simulation.js`. Les règles sont embarquées dans les versions web et iOS.
+Les règles ci-dessous décrivent le fonctionnement livré. Elles relient les personnages visibles à la simulation des communautés, aux déplacements, aux soins et aux sauvegardes. Sources principales : `world-labour-systems.js`, `world-labour-runtime.js`, `world-life-runtime.js`, `world-campaign-systems.js`, `world-campaign-runtime.js` et `world-simulation.js`.
 
-## Disponibilité d’une personne
+## Une personne, une affectation
 
-Les habitants, courriers, personnels des relais et personnages locaux concernés ont un dossier de disponibilité rattaché à leur communauté d’origine. Le recrutement retire une personne de la main-d’œuvre disponible. L’affectation reste enregistrée pendant le voyage, l’attente et la sauvegarde.
+Chaque habitant, courrier et personnel local concerné a un dossier rattaché à sa communauté d’origine. Le recrutement, l’incapacité, une relève et le retour physique peuvent retenir cette personne, sans retirer plusieurs travailleurs pour les mêmes absences cumulées. Un décès est compté une seule fois et supprime la demande de soins correspondante.
 
-Les raisons d’absence se cumulent sans retirer plusieurs personnes : appartenance au groupe, incapacité et trajet de retour. Une personne grièvement blessée et recrutée occupe un seul effectif indisponible. Un décès déjà compté ne retire pas un deuxième travailleur. Si aucun effectif n’était disponible, une incapacité retient le prochain effectif libéré au lieu de créer une disponibilité négative ou gratuite.
+Le recrutement retire le personnage du travail local pendant le voyage et l’attente. Son renvoi ne libère pas un travailleur à distance : il doit rentrer par le graphe des routes puis atteindre réellement son poste. Les fermetures suspendent son retour. Les autres routines de promenade et de courrier ne peuvent pas avancer simultanément son itinéraire. Le trajet, la position et les raisons d’absence persistent dans les sauvegardes. Pendant une expédition, les conversations ambiantes et le repos assis automatique ne peuvent pas prendre la priorité sur le déplacement de l’équipe.
 
-Le renvoi d’un compagnon ne le remet pas immédiatement au travail à distance. Il rejoint son poste par les routes et une approche locale respectant les collisions. Les routes fermées suspendent le retour. Le courrier reprend son point de travail interrompu ; son dossier reste attaché à la même communauté après rechargement. Les positions et itinéraires de retour sont conservés, y compris lorsque le personnage est loin de son lieu d’origine. Le temps restant après un déplacement hors écran sert aussi à finir l’approche du poste.
+Les gardes, escortes et membres des missions institutionnelles ne peuvent pas devenir compagnons. Le titulaire d’un service conserve cette protection lorsqu’il est remplacé. Les anciennes sauvegardes sont réconciliées pour éviter une deuxième affectation ou une absence devenue orpheline.
 
-## Gardes et personnels en mission
+## Relèves et services
 
-Un garde humain ou batracien, une escorte et un membre d’une mission ne peuvent pas être recrutés comme compagnons. Le refus intervient avant toute création de fiche ou modification de santé. Cette règle s’applique également à la restauration des anciens groupes : un rôle institutionnel ne devient pas une seconde affectation de voyage. Les gardes conservent leur dossier et leurs blessures dans les systèmes d’escorte, de patrouille et de poste.
+La relève est assurée par une personne existante de la même communauté, disponible, hors de danger et ayant plus d’un PV. Un personnage en retour, en mission, dans le groupe ou déjà affecté à un autre service n’est pas admissible. Les quais et leur ville partagent la même communauté économique ; la restauration d’une relève compare cette communauté plutôt que leurs identifiants d’atlas distincts.
 
-## Incapacité et soins
+Les compétences sont vérifiées à partir du métier : palefrenier, manutentionnaire, porteur ou gestionnaire pour les transports terrestres ; batelier, filetier ou gestionnaire pour une traversée. L’absence de remplaçant compétent laisse le service fermé ; elle ne crée pas de personnel. Le personnage rejoint physiquement son poste avant de proposer le service.
 
-Un service essentiel gravement blessé reste indisponible et retire un travailleur disponible pendant ses soins. Sa relève continue d’utiliser les règles de remplacement existantes. La guérison ne recrée pas une personne : elle lève seulement la cause d’incapacité, si aucune autre absence ne subsiste.
+La relève cesse de contribuer à son métier habituel. Si elle devient incapable, une autre relève admissible peut prendre sa place en conservant l’identité du titulaire initial. À la reprise du titulaire, la relève récupère son titre et rentre physiquement à son poste avant de retrouver sa disponibilité. Les achats et démarches au poste utilisent la même vérification que le transport : ils ne contournent ni l’incapacité ni les fermetures locales.
 
-Un habitant ordinaire à un PV ne travaille plus. Revenu à proximité de son poste et hors de danger, il peut recevoir après six heures un traitement consommant un lot de médicaments et une provision, pour deux PV. Un compagnon à terre reste soumis aux soins du groupe. Les services essentiels gardent leur calendrier de soins existant. Les convoyeurs et ouvriers de mission qui rentrent incapables sont retenus dans les comptes jusqu’à un traitement réellement approvisionné ; leur santé et leur besoin de soins sont sauvegardés.
+## Identités, blessures et soins
 
-## Réparation physique
+Les ouvriers des convois, des réparations et des récupérations utilisent un registre commun. Les personnes libres sont réaffectées avec leur identité, leur apparence et leurs PV actuels. Les habitants visibles ne sont pas transformés silencieusement en ouvriers anonymes ailleurs. Une réservation doit disposer d’assez de personnes réellement libres avant tout paiement.
 
-Un poste ne peut plus réparer un passage éloigné par un simple compteur lancé depuis le village. Il prépare une expédition de deux ouvriers, avec les outils, le bois requis, les salaires et les provisions du déplacement, du chantier et du retour. L’itinéraire doit être accessible. L’équipe approche un pont ou passage endommagé depuis le côté accessible, en restant avant l’obstacle ; ce droit d’approche ne lui permet pas de traverser une autre fermeture.
+Les blessures de tous les survivants sont conservées, y compris entre deux missions. Les morts ne réapparaissent pas. Un ancien effectif déjà rentré ne peut pas modifier les PV d’une personne repartie avec une nouvelle équipe.
 
-Les mêmes ouvriers avancent sur le graphe hors écran et marchent avec les collisions du jeu lorsqu’ils sont observés. Le travail commence seulement au chantier. Une menace locale ou un combat le suspend. Le rythme dépend du nombre d’ouvriers encore capables ; les morts diminuent la population une seule fois. Les provisions sont portées et consommées selon le temps écoulé. Une équipe trop blessée ou manquant de provisions entreprend son retour ; une fermeture peut la bloquer, et la famine prolongée peut tuer ses membres.
+Un ouvrier à un PV ne travaille plus. À domicile, hors de danger, un traitement après six heures consomme un médicament et une provision et restaure deux PV. Les soins continuent jusqu’à guérison, selon le temps de campagne et les stocks disponibles. Une personne en mission n’est pas soignée à distance. Un convoi sans porteur capable laisse sa cargaison et ramène les survivants ; une récupération incapable rentre sans charger les biens et ne verrouille pas une future tentative. Les services essentiels conservent leur incapacité critique et leur premier traitement après vingt-quatre heures ; les gardes conservent leur propre calendrier de soins. Les compagnons restent soumis aux provisions et soins du groupe. Les changements entre PV de compagnon et PV de civil conservent la même proportion de santé, y compris pour Elyne.
 
-La fin du chantier rouvre réellement le passage, mais les survivants ne redeviennent disponibles qu’après leur retour au poste. Les biens inutilisés et provisions restantes reviennent avec eux. Les matériaux déposés au chantier restent affectés à l’ouvrage. Si tous les porteurs meurent en chemin, les matériaux portés sont enregistrés comme perdus à leur position, sans remboursement ni duplication. Cette passe n’ajoute pas de procédure générale de récupération de tous les outils abandonnés.
+## Métiers et ressources
 
-Les anciens chantiers déjà financés conservent leurs intrants et leurs effectifs réservés ; leur durée restante est reprise par une vraie mission. Un rechargement ne relance pas un deuxième financement et ne libère pas leurs ouvriers à distance.
+La production utilise les métiers et les affectations effectives. Agriculture, pêche, élevage, collecte, métallurgie, fours, textile, cuisine et construction navale disposent de capacités distinctes. Un cultivateur absent ne remplace pas automatiquement un artisan ; un employé de transport ne produit pas simultanément aux champs. Les personnes en fuite, en conversation ou occupées à signaler un incident ne contribuent pas à leur travail local pendant cette occupation.
 
-## Paiement
+La population non matérialisée reste représentée par des effectifs économiques, sans créer des milliers de personnages. Les capacités nominales représentent leur travail réparti entre les filières. Les ressources sont produites par l’horloge de campagne avec leurs intrants et gisements ; les animations illustrent l’activité, sans créer des biens par image affichée. L’émission des ressources ne dépend donc pas du nombre d’images d’animation affichées. Une animation de métier sans filière locale correspondante reste au repos.
 
-Chaque départ transfère deux pièces par ouvrier depuis la trésorerie vers le fonds privé des ménages du poste. La transaction est enregistrée une seule fois avec la mission. Une nouvelle équipe remplaçant des morts doit être financée à nouveau ; une sauvegarde ou un simple nouvel appel ne repaie pas l’équipe existante.
+`site.needs` conserve les besoins nominaux de la population vivante. Les besoins alimentaires et hydriques effectivement consommés et commandés sont calculés avec les personnes présentes : un compagnon ou un équipier en expédition n’est pas également nourri dans son village. Les causes d’absence cumulées ne retirent qu’une bouche. Une personne incapable mais restée sur place continue de consommer. Les effectifs réellement disponibles et les soins supplémentaires restent comptés séparément.
 
-Pour un ancien chantier marqué payé, la migration crédite une seule fois le salaire historiquement débité mais absent du fonds privé. Il s’agit d’une réconciliation des dépenses enregistrées, pas d’une subvention périodique.
+## Chantiers et nouvelles
 
-## Vérifications
+Une réparation mobilise une équipe réelle, des outils, du bois, des provisions et des salaires. Les mêmes personnes se déplacent hors écran sur le graphe et sur le terrain avec les collisions lorsqu’elles sont observées. Le chantier commence à l’arrivée ; le danger interrompt le travail et son rythme dépend des ouvriers capables. Les matériaux déposés restent affectés à l’ouvrage. Une équipe trop blessée ou manquant de provisions entreprend son retour. Une fermeture peut le bloquer ; une famine prolongée peut tuer.
 
-`world-labour.test.cjs` couvre les réservations, salaires, matériaux, approches et fermetures, pertes humaines, soins au retour et avances fractionnées avec sauvegarde. `world-labour-runtime.test.cjs` couvre le vrai `Game`, dont recrutement, incapacité, renvoi et retour physique, repos long, sauvegardes et refus des gardes.
+La fin du travail rouvre le passage concerné. Elle ne résout pas un autre incident voisin, notamment une crue. Les ouvriers restent absents jusqu’au retour. Les biens inutilisés reviennent avec les survivants ; des matériaux perdus sont enregistrés à leur position, sans remboursement ni duplication.
 
-`UI_BROWSER_PATH=/usr/bin/chromium node scripts/check-world-labour.cjs` vérifie les deux ouvriers sur le terrain réel, l’approche d’un pont endommagé, l’arrêt face au danger, le chantier et le retour effectif. Les recettes de performance avec et sans worker continuent de vérifier les bornes de cache et le chargement asynchrone.
+L’état réel du passage et la connaissance de cet état sont distincts. Un témoin sur place peut constater la réparation. Le poste reçoit le rapport quand les survivants reviennent ; une sauvegarde ne transmet pas ce rapport à leur place. Si tous les porteurs du rapport meurent avant le retour, le poste n’est pas informé automatiquement. Les convois transportent aussi les nouvelles connues à leur départ et celles acquises à destination lors de leur retour.
 
-Les relèves sans compétence professionnelle vérifiée et la production individuelle liée à chaque animation de métier restent des limites distinctes de ces cinq corrections.
+Chaque départ rémunéré transfère les salaires de la trésorerie vers les fonds privés une seule fois. Les anciens chantiers déjà payés conservent leur financement et leurs réservations ; leur migration ne crée ni nouvel ouvrier ni second salaire.
 
-Validation du 19 octobre 2026 : **446 tests JavaScript réussis**, dont quinze nouveaux cas sur ces raccordements, **24 tests de bible réussis**, compilation de la bible sans avertissement et **120 contrôles d’interface paysage réussis**. Les recettes Chromium des habitants, convois et réparateurs passent sans erreur JavaScript. Les recettes de performance avec et sans worker passent avec caches bornés et décor visible terminé. L’intégration HTML est idempotente, les contenus de jeu web/iOS correspondent et l’archive native contient le HTML vérifié. La recette sur appareil iOS reste distincte de ces vérifications.
+## Validation
+
+Les suites `world-labour.test.cjs` et `world-labour-runtime.test.cjs` couvrent les interactions ci-dessus, avec les suites de campagne, de population, de convois, de justice et de voyage. Les recettes Chromium vérifient les personnages et les équipes sur le terrain livré. Les tests de performance contrôlent les limites de caches et le chargement avec et sans worker.
+
+Ce document décrit les garanties vérifiées sur ces systèmes. Il ne constitue pas une preuve d’absence de tout défaut dans l’ensemble du jeu ni une recette sur appareil iOS.
+
+Validation du 19 octobre 2026 : suite complète de **468 tests JavaScript réussis**, puis **69 contrôles ciblés réussis** après la correction des quais, incluant un nouveau cas — soit **469 cas JavaScript distincts validés**. **24 tests de bible** et sa compilation déterministe sans avertissement, **120 contrôles d’interface**, recettes Chromium des habitants, convois et réparateurs réussis. Les chargements avec et sans worker terminent le décor visible, respectent les limites de cache et restaurent l’état après repos et sauvegarde, sans rendu complet du terrain pendant une image de jeu. Intégration HTML idempotente, parité web/iOS et contenu de l’archive native vérifiés.
+
+## Contrat pour les prochaines fonctionnalités
+
+Une nouvelle mission doit réserver ses personnes avec `reserveCrew` et les gardes avec `reserve`, puis utiliser leur dossier existant pour les PV et l’apparence. Un refus de réservation doit précéder les dépenses. Les retours libèrent les personnes seulement au poste ; les morts passent par `death` et ne sont jamais remplacés par une nouvelle identité gratuite.
+
+Un nouveau service doit utiliser les mêmes critères de disponibilité que `staffReady`, vérifier la compétence requise et protéger son titulaire pendant une relève. Une activité productive doit contribuer à sa filière et consommer les intrants du stock commun. Les animations ne créditent pas de ressources.
+
+Un événement résolu loin d’un poste doit distinguer la modification physique du monde et son signalement. Les tests de la fonctionnalité doivent couvrir un personnage blessé, une fermeture de route, une interruption de mission, un retour, une sauvegarde en cours et des avances de temps fractionnées.

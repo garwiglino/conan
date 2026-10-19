@@ -4,31 +4,50 @@
  const enlisted=n=>!!(n?.eventGuard||n?.convoyGuard||n?.convoyId||n?.campaignGroup||n?.guardState||n?.batracien?.role);
  Game.prototype.registerLabourActors=function(){
   const campaign=sim(this)?.state;if(!campaign)return;if(this.labourState!==campaign){this.labourState=campaign;this.labourNpcCount=-1;this.labourActors=new Map();this.labourSiteByPerson=new Map([...new Set(Object.values(campaign.sites))].flatMap(site=>Object.keys(site.workerRecords).map(id=>[id,site.id])));}
-  this.labourActors||=new Map();if(this.labourNpcCount===this.npcs.length)return;this.labourNpcCount=this.npcs.length;
+  this.labourActors||=new Map();if(this.labourNpcCount===this.npcs.length&&this.labourNpcList===this.npcs)return;this.labourNpcList=this.npcs;this.labourNpcCount=this.npcs.length;
   for(const n of this.npcs){if(enlisted(n)||!(n.resident||/^(relay-|courier-)/.test(n.id)||['elyne','veilleur','zahra'].includes(n.id)))continue;
    const s=sim(this),id=this.labourSiteByPerson.get(n.id)||n.site||this.couriers?.find(c=>c.id===n.id)?.from||Atlas.nearestSite(...Object.values(Atlas.toWorld(n.x,n.y))).id,site=s?.state.sites[id];if(!site)continue;
-   const record=site.workerRecords[n.id]||={id:n.id,reasons:{},debited:false,dead:!!site.losses[n.id]};record.home||={...(n.post||{x:n.x,y:n.y})};n.labourSite=site.id;this.labourSiteByPerson.set(n.id,site.id);this.labourActors.set(n.id,n);
+   const record=site.workerRecords[n.id]||={id:n.id,reasons:{},debited:false,dead:!!site.losses[n.id]};record.home||={...(n.post||{x:n.x,y:n.y})};record.job=n.civilian?.job||'idle';const service=this.stations.find(st=>st.actor===n||st.originalActor===n);if(service)record.service=service.id;n.labourSite=site.id;this.labourSiteByPerson.set(n.id,site.id);this.labourActors.set(n.id,n);
   }
  };
  Game.prototype.syncLabourActors=function(){
   const s=sim(this);if(!s)return;this.registerLabourActors();const members=new Map(this.party.map(c=>[c.id,c]));
-  for(const [id,n]of this.labourActors){const record=s.state.sites[n.labourSite]?.workerRecords[id];if(!record)continue;const member=members.get(id);if(n.civilian?.dead&&!member&&!record.dead)s.systems.death(n.labourSite,id);if(record.dead)continue;const incapacitated=!!(n.civilian?.critical||member?.down||!member&&n.civilian?.hp<=1);
+  for(const [id,n]of this.labourActors){const record=s.state.sites[n.labourSite]?.workerRecords[id];if(!record)continue;const member=members.get(id);if(n.civilian?.dead&&!member&&!record.dead)s.systems.death(n.labourSite,id);if(record.dead)continue;if(record.recoveryPending&&n.civilian){n.civilian.hp=record.hp;delete record.recoveryPending;}if(member&&n.civilian)n.civilian.hp=member.hp/Math.max(1,member.maxHp||6)*6;record.hp=n.civilian?.hp??record.hp??6;record.onDuty=!n.dangerState&&!n.worldChat&&!n.justiceReport&&this.dialogue?.who!==n&&dist(n,record.home)<48;const incapacitated=!!(n.civilian?.critical||member?.down||!member&&n.civilian?.hp<=1);
    // A legacy save may have an absent person without an availability record.
-   if(member)s.systems.setWorkerReason(n.labourSite,id,'party',true);
+   if(member)s.systems.setWorkerReason(n.labourSite,id,'party',true);else if(record.reasons.party){if(dist(n,record.home)>12){s.systems.setWorkerReason(n.labourSite,id,'returning',true);record.returnClock=this.clock;n.labourReturning=true;}s.systems.setWorkerReason(n.labourSite,id,'party',false);}
    s.systems.setWorkerReason(n.labourSite,id,'incapacity',incapacitated);
-   if(!member&&n.civilian?.hp<=1&&!n.civilian.dead&&!n.civilian.critical){record.nextCare??=this.clock+360;s.requestCare(n.labourSite,id);
-    if(this.clock>=record.nextCare&&!n.dangerState&&dist(n,record.home)<48){const site=s.state.sites[n.labourSite];if(s.stock(site,'medicinal')>=1&&s.stock(site,'provisions')>=1){site.stock.medicinal--;site.stock.provisions--;n.civilian.hp=Math.min(6,n.civilian.hp+2);record.nextCare=this.clock+360;s.finishCare(n.labourSite,id);s.systems.setWorkerReason(n.labourSite,id,'incapacity',false);s.history('worker_treated',{site:site.id,person:id,hp:n.civilian.hp});}}
-   }
+   record.careEligible=!member&&!n.labourReturning&&!n.dangerState&&!n.civilian?.critical&&dist(n,record.home)<48;
+   if(!member&&n.civilian?.hp<6&&!n.civilian.dead&&!n.civilian.critical){record.nextCare??=this.clock+360;s.requestCare(n.labourSite,id);}
+   else if(!n.civilian?.critical)s.finishCare(n.labourSite,id);
+   const courier=this.couriers?.find(c=>c.id===id);if(courier)s.systems.setWorkerReason(n.labourSite,id,'travelling',!member&&!record.reasons.returning&&dist(n,record.home)>48);
   }
+ };
+ Game.prototype.labourAvailable=function(n,station=null){
+  if(!n||enlisted(n)||(n.alpha??1)<.5||n.phase==='away'||n.hurt>0||n.stun>0||n.civilian?.dead||n.civilian?.critical||(n.civilian?.hp??6)<=1||n.dangerState||n.labourReturning||this.party.some(c=>c.id===n.id))return false;
+  const p=sim(this)?.state.sites[n.labourSite||n.site]?.workerRecords[n.id];
+  return !p?.dead&&!p?.assignment&&!p?.reasons.returning&&!p?.reasons.incapacity&&(!p?.service||p.service===station?.id);
+ };
+ Game.prototype.canRelieve=function(st,n,restoring=false){
+  this.registerLabourActors();const s=sim(this),site=s?.state.sites[n.labourSite||n.site],target=s?.state.sites[st.site];
+  const skills=st.modes.includes('boat')?['rope','net','ledger']:['groom','load','carry','ledger'];
+  return !!(n.resident&&site===target&&!n.reliefPost&&this.labourAvailable(n,restoring?st:null)&&!n.worldChat&&!n.justiceReport&&this.dialogue?.who!==n&&skills.includes(n.civilian?.job));
+ };
+ Game.prototype.staffReady=function(st){return !!st&&this.labourAvailable(st.actor,st)&&(!st.actor.reliefPost||dist(st.actor,st.actor.reliefPost)<8);};
+ Game.prototype.releaseWorldRelief=function(st){
+  const n=st.actor;if(!st.originalActor)return;this.registerLabourActors();const s=sim(this),p=s.state.sites[n.labourSite]?.workerRecords[n.id];
+  if(p&&!p.dead){s.systems.setWorkerReason(n.labourSite,n.id,'returning',true);s.systems.setWorkerReason(n.labourSite,n.id,'service',false);delete p.service;p.returnClock=this.clock;n.labourReturning=true;}
+  n.title=n.reliefTitle||n.title;delete n.reliefTitle;delete n.reliefPost;st.actor=st.originalActor;delete st.originalActor;
  };
  const recruit=Game.prototype.recruitCompanion;
  Game.prototype.recruitCompanion=function(n,...args){
-  if(enlisted(n))return false;this.registerLabourActors();const result=recruit.call(this,n,...args);
-  if(result&&n.labourSite){const s=sim(this),record=s.state.sites[n.labourSite].workerRecords[n.id];const job=this.couriers?.find(c=>c.id===n.id);if(job?.returnTo)record.home={...job.returnTo};s.systems.setWorkerReason(n.labourSite,n.id,'party',true);s.systems.setWorkerReason(n.labourSite,n.id,'returning',false);delete record.returnRoute;delete n.labourReturning;}
+  if(enlisted(n)||this.stations.some(st=>st.originalActor===n)||n?.reliefPost)return false;this.registerLabourActors();const result=recruit.call(this,n,...args);
+  if(result&&n.labourSite){const s=sim(this),record=s.state.sites[n.labourSite].workerRecords[n.id];const job=this.couriers?.find(c=>c.id===n.id);if(job?.returnTo)record.home={...job.returnTo};s.systems.setWorkerReason(n.labourSite,n.id,'party',true);s.systems.setWorkerReason(n.labourSite,n.id,'returning',false);delete record.returnRoute;delete n.labourReturning;if(record.reasons.travelling)s.systems.setWorkerReason(n.labourSite,n.id,'travelling',false);}
   return result;
  };
  const dismiss=Game.prototype.dismissCompanion;
  Game.prototype.dismissCompanion=function(id){const n=this.partyActor(id),result=dismiss.call(this,id);if(result&&n?.labourSite){const s=sim(this);s.systems.setWorkerReason(n.labourSite,id,'returning',true);s.systems.setWorkerReason(n.labourSite,id,'party',false);n.labourReturning=true;s.state.sites[n.labourSite].workerRecords[id].returnClock=this.clock;this.stepLabourReturns(0);}return result;};
+ const couriers=Game.prototype.stepCouriers;Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>{const n=this.npcs.find(n=>n.id===c.id);return !n?.labourReturning&&(n?.civilian?.hp??6)>1;});return couriers.call(this,minutes);}finally{this.couriers=all;}};
+ const local=Game.prototype.stepWorldLocal;Game.prototype.stepWorldLocal=function(n,...args){if(n.labourReturning||(n.civilian?.hp??6)<=1)return;return local.call(this,n,...args);};
  const walk=Game.prototype.walkNpc;Game.prototype.walkNpc=function(n,to,dt){if(n.labourReturning&&!this.labourWalking)return false;return walk.call(this,n,to,dt);};
  Game.prototype.stepLabourReturns=function(dt=0){
   const s=sim(this);if(!s||!this.labourActors)return;
@@ -52,8 +71,9 @@
  const advance=Game.prototype.advanceAtlas;Game.prototype.advanceAtlas=function(dt=0){this.syncLabourActors();const result=advance.call(this,dt);this.syncLabourActors();this.stepLabourReturns(dt);return result;};
  const restore=Game.prototype.finishAtlasRestore;Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);this.registerLabourActors();
   // Old party arrays were restored directly: reject institutional actors there too.
-  this.party=this.party.filter(c=>!enlisted(this.partyActor(c.id)));
+  this.party=this.party.filter(c=>!enlisted(this.partyActor(c.id))&&!this.stations.some(st=>st.actor.id===c.id||st.originalActor?.id===c.id));
   for(const [id,n]of this.labourActors){const record=sim(this).state.sites[n.labourSite].workerRecords[id];if(record.reasons.returning&&record.position&&!this.party.some(c=>c.id===id))Object.assign(n,record.position);}
+  for(const [id,n]of this.labourActors){const p=sim(this).state.sites[n.labourSite].workerRecords[id];if(p.reasons.service&&!this.stations.some(st=>st.actor===n)){delete p.service;sim(this).systems.setWorkerReason(n.labourSite,id,'service',false);}}
   this.syncLabourActors();
  };
  const serialize=Game.prototype.serialize;Game.prototype.serialize=function(){this.syncLabourActors();return serialize.call(this);};
