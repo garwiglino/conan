@@ -1,7 +1,8 @@
 // Fictional 96-day year: local climate, reproducible fronts, smooth biome boundaries.
 const BIOME_CLIMATE=Atlas.climateProfiles;
 function climateAt(clock,biome=6,height=20,region=0){
- const p=Atlas.climateProfile(biome,region),day=clock/1440,season=(day%96+96)%96/96;
+ biome=Atlas.climateBiome(biome,region,height);
+ const p=Atlas.climateProfile(biome,region,height),day=clock/1440,season=(day%96+96)%96/96;
  const summer=Math.sin(season*Math.PI*2),wetSeason=skySmooth(.0,.65,summer),cycle=dayCycle(clock);
  const temperature=Atlas.airTemperature(clock,biome,height,region);
  const k=Math.floor((clock-CLOCK_START)/WEATHER_WIN),u=(clock-CLOCK_START)/WEATHER_WIN-k;
@@ -18,7 +19,7 @@ function climateAt(clock,biome=6,height=20,region=0){
  return {...cycle,temperature,season,monsoon:wetSeason*(p.monsoon||0),rain,snow,blizzard,fog,wind,cloud:clamp(.12+precipitation*.8+fog*.25,0,1),storm,front:k,biome,family:p.family,level:snow>.02?'snow':rain<.04?'dry':rain<.35?'light':rain<.7?'steady':'downpour',kind:snow>.02?'snow':rain>.7?'shower':rain>.03?'steady':'clear'};
 }
 function worldClimateAt(clock,x,y){
- const env=Atlas.environment(x,y),cell=Atlas.cellAt(x,y),parts=env.mix.length?env.mix:[{biome:env.biome,weight:1}],out=climateAt(clock,env.biome,cell?.height??20,cell?.region);
+ const env=Atlas.environment(x,y),cell=Atlas.cellAt(x,y),parts=env.mix.length?env.mix:[{biome:env.biome,weight:1}],out=climateAt(clock,env.biome,cell?.height??20,parts[0].region??cell?.region);
  const samples=parts.map(p=>({...climateAt(clock,p.biome,p.height??cell?.height??20,p.region??cell?.region),weight:p.weight}));
  for(const key of ['rain','snow','blizzard','fog','wind','cloud','storm','temperature'])out[key]=samples.reduce((sum,p)=>sum+p[key]*p.weight,0);
  // Mix thermal air masses first, then choose the precipitation phase. A

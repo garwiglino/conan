@@ -4,6 +4,7 @@ const createWorldAtlas = (raw) => {
  'use strict';
  const pacing=typeof WorldPacing!=='undefined'?WorldPacing:require('./world-pacing.js');
  const VERSION=1,CHUNK=32,PIXELS=16,clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+ const regions=new Map(raw.regions.map(r=>[r.id,r]));
  const climateProfiles=[
  {temp:15,range:5,wet:.34,fog:.18,family:'coast'},
  {temp:29,range:8,wet:.035,fog:.01,family:'desert'},
@@ -19,18 +20,39 @@ const createWorldAtlas = (raw) => {
  {temp:-22,range:7,wet:.16,fog:.07,family:'polar'},
  {temp:18,range:7,wet:.48,fog:.55,family:'wetland'}
 ];
- // Vegetation describes the ground, not the latitude: the same forest or
- // grassland has an oceanic/tropical regime on the southern islands.
- const islandClimates={
-  Varan:{8:{...climateProfiles[8],temp:18,range:5},12:{...climateProfiles[12],range:5}},
-  Tagon:{4:{...climateProfiles[4],temp:23,range:4,monsoon:.35},6:{...climateProfiles[6],temp:23,range:4,monsoon:.25},8:{...climateProfiles[8],temp:24,range:3}}
+ // Territory sets the climatic regime; vegetation and relief refine it.
+ // Polar symbols imported by Azgaar are not glaciers in the arid Sarak.
+ function climateBiome(biome,region=0,height=20){
+  const territory=regions.get(region)?.territory;
+  if(territory==='Sarak'&&[9,10,11].includes(biome))return 2;
+  if(['Varan','Tagon'].includes(territory)&&[9,10,11].includes(biome))return 8;
+  if(territory==='Igea'&&[1,2,3,4,5,6,7,8].includes(biome))return [1,2,3,4].includes(biome)?10:9;
+  if(territory==='Teremor'&&biome===11&&height<73)return 9;
+  return biome;
+ }
+ const territoryClimates={
+  Igea:{0:{...climateProfiles[0],temp:3,range:6,diurnal:1},12:{...climateProfiles[12],temp:0,range:12}},
+  Teremor:{0:{...climateProfiles[0],temp:12,range:8,diurnal:1},12:{...climateProfiles[12],temp:12,range:11}},
+  Sarak:{
+   0:{...climateProfiles[0],temp:24,range:6,wet:.12,fog:.08},
+   1:{...climateProfiles[1],diurnal:5},
+   2:{...climateProfiles[2],temp:24,range:6,diurnal:4},
+   4:{...climateProfiles[4],temp:26,range:7,wet:.12,diurnal:4},
+   6:{...climateProfiles[6],temp:24,range:6,wet:.18,diurnal:3},
+   8:{...climateProfiles[8],temp:24,range:6,wet:.22},
+   12:{...climateProfiles[12],temp:25,range:6,wet:.22,fog:.25}
+  },
+  Varan:{0:{...climateProfiles[0],temp:19,range:4,wet:.4,fog:.25,diurnal:1},8:{...climateProfiles[8],temp:18,range:5},12:{...climateProfiles[12],range:5}},
+  Tagon:{0:{...climateProfiles[0],temp:26,range:2,wet:.45,monsoon:.2,diurnal:1},4:{...climateProfiles[4],temp:23,range:4,monsoon:.35},6:{...climateProfiles[6],temp:23,range:4,monsoon:.25},8:{...climateProfiles[8],temp:24,range:3}}
  };
- function climateProfile(biome=6,region=0){return islandClimates[regions.get(region)?.territory]?.[biome]||climateProfiles[biome]||climateProfiles[6];}
- function climateTemperature(clock,biome=6,height=20,region=0){const p=climateProfile(biome,region);return p.temp+p.range*Math.sin(clock/1440/96*Math.PI*2)-Math.max(0,height-65)*.18;}
- function airTemperature(clock,biome=6,height=20,region=0){return climateTemperature(clock,biome,height,region)+2*Math.sin((clock/60-8)/24*Math.PI*2);}
- // Continuous thermal cover, independent from a passing precipitation front.
- function snowCover(biome,height=20,clock=480,region=0){if(biome===11)return 1;const t=airTemperature(clock,biome,height,region),v=clamp((6-t)/10,0,1),wet=climateProfile(biome,region).wet;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
+ function climateProfile(biome=6,region=0,height=20){biome=climateBiome(biome,region,height);return territoryClimates[regions.get(region)?.territory]?.[biome]||climateProfiles[biome]||climateProfiles[6];}
+ function climateTemperature(clock,biome=6,height=20,region=0){const p=climateProfile(biome,region,height);return p.temp+p.range*Math.sin(clock/1440/96*Math.PI*2)-Math.max(0,height-65)*.18;}
+ function airTemperature(clock,biome=6,height=20,region=0){const p=climateProfile(biome,region,height);return climateTemperature(clock,biome,height,region)+(p.diurnal??2)*Math.sin((clock/60-8)/24*Math.PI*2);}
+ // Open water receives snowfall, but never a walkable snow mantle.
+ function snowCover(biome,height=20,clock=480,region=0){biome=climateBiome(biome,region,height);if(biome===0)return 0;if(biome===11)return 1;const t=airTemperature(clock,biome,height,region),v=clamp((6-t)/10,0,1),wet=climateProfile(biome,region,height).wet;return v*v*(3-2*v)*([2,4].includes(biome)?Math.min(.45,wet*2):1);}
  // 32 native-pixel coverage levels; cache descriptors only for nearby chunks.
+ // A winter gale can make navigation dangerous without thunder.
+ const marineWeatherHazard=sky=>(sky.storm||0)>.3||(sky.wind||0)>.7||(sky.blizzard||0)>.25;
  const visualSnowCover=(b,h,t,r)=>Math.round(snowCover(b,h,t,r)*32)/32;
  const snowRegions=new Map();
  function chunkSnowKey(cx,cy,clock,propsOnly=false){
@@ -47,7 +69,7 @@ const createWorldAtlas = (raw) => {
   put(item,x0,y0,x1,y1){for(let y=Math.floor(y0/this.size);y<=Math.floor(y1/this.size);y++)for(let x=Math.floor(x0/this.size);x<=Math.floor(x1/this.size);x++){const k=x+','+y;if(!this.cells.has(k))this.cells.set(k,[]);this.cells.get(k).push(item);}}
   near(x,y){return this.cells.get(Math.floor(x/this.size)+','+Math.floor(y/this.size))||[];}
  }
- const cells=raw.cells.map(c=>({id:c[0],x:c[1],y:c[2],land:!!c[3],height:c[4],biome:c[5],region:c[6],feature:c[7],river:c[8],polygon:c[9]}));
+ const cells=raw.cells.map(c=>({id:c[0],x:c[1],y:c[2],land:!!c[3],height:c[4],biome:climateBiome(c[5],c[6],c[4]),terrainBiome:c[10]??c[5],region:c[6],feature:c[7],river:c[8],polygon:c[9]}));
  const layout=raw.layout||null,scale=layout?.scale||1,cellById=new Map(cells.map(c=>[c.id,c])),cellIndex=new Index(16000/scale);
  for(const c of cells){let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;for(let i=0;i<c.polygon.length;i+=2){x0=Math.min(x0,c.polygon[i]);x1=Math.max(x1,c.polygon[i]);y0=Math.min(y0,c.polygon[i+1]);y1=Math.max(y1,c.polygon[i+1]);}cellIndex.put(c,x0,y0,x1,y1);}
  function contains(poly,x,y){let inside=false;for(let i=0,j=poly.length-2;i<poly.length;j=i,i+=2){const a=poly[i],b=poly[i+1],c=poly[j],d=poly[j+1];if(((b>y)!==(d>y))&&x<(c-a)*(y-b)/(d-b)+a)inside=!inside;}return inside;}
@@ -59,7 +81,6 @@ const createWorldAtlas = (raw) => {
  const toWorld=(x,y)=>({x:x/16+origin.x,y:y/16+origin.y});
  const toGame=(x,y)=>({x:(x-origin.x)*16,y:(y-origin.y)*16});
  const core=(x,y)=>x>=origin.x&&y>=origin.y&&x<origin.x+72&&y<origin.y+64;
- const regions=new Map(raw.regions.map(r=>[r.id,r]));
  const nodes=raw.sites.map(s=>({...s,id:'town-'+s.id,vertex:vertexOf(s),radius:s.regionalCentre?65:38,kind:s.oceanPort?'port':s.regionalCentre?'town':'relay',rest:true}));
  nodes.push({id:'camp',name:'Campement des Exilés',x:anchor[0],y:anchor[1],cell:geole.cell,vertex:vertexOf(geole),radius:10,kind:'camp',region:cellById.get(geole.cell).region,rest:true});
  for(const s of raw.story)if(s!==geole&&!nodes.some(n=>n.vertex===vertexOf(s)))nodes.push({id:'story-'+s.i,name:s.name,x:s.x,y:s.y,cell:s.cell,vertex:vertexOf(s),radius:18,kind:'ruin',region:cellById.get(s.cell).region,rest:false});
@@ -128,19 +149,39 @@ const createWorldAtlas = (raw) => {
   if(on)return 1;
   const site=siteAt(x+.5,y+.5);if(site)return site.kind==='town'||site.kind==='ruin'?2:0;
   const noise=Math.sin(x/94)*Math.cos(y/113)+Math.sin((x+y)/39)*.2;
-  if((c.height>58&&noise>1.1)||([1,2].includes(c.biome)&&c.height>30&&noise>1.08))return 8;
+  if((c.height>58&&noise>1.1)||([1,2].includes(c.terrainBiome)&&c.height>30&&noise>1.08))return 8;
   // Woodland clumps with clearings. The cleared road corridor takes priority.
-  const wooded=[5,6,7,8,9,12].includes(c.biome),grove=(Math.sin(x/8)*Math.cos(y/11)+1)/2;
-  const density=wooded?.018+.055*grove*grove:c.biome===11?.012:.016;
+  const wooded=[5,6,7,8,9,12].includes(c.terrainBiome),grove=(Math.sin(x/8)*Math.cos(y/11)+1)/2;
+  const density=wooded?.018+.055*grove*grove:c.terrainBiome===11?.012:.016;
   if((!near||near.d>near.road.width/2+1)&&random(x,y,39)<density)return 4;
   return 0;
  }
  const BLEND=layout?.blend||800;
- function environment(x,y){const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}const own={biome:c.biome,height:c.height,region:c.region,cursed:curseCells.has(c.id),weight:1};if(nearest&&nearest.d<BLEND){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);if(other){const weight=.5*(1-nearest.d/BLEND);own.weight=1-weight;return {biome:c.biome,mix:[own,{biome:other.biome,height:other.height,region:other.region,cursed:curseCells.has(other.id),weight}]};}}return {biome:c.biome,mix:[own]};}
+ // Marine cells inherit their nearest landmass's maritime regime, not a
+ // universal 15-degree sea. This bounded cache is shared with the worker.
+ const marineRegions=new Map();
+ function marineRegion(c){
+  if(c.land)return c.region;if(marineRegions.has(c.id))return marineRegions.get(c.id);
+  let nearest=null,d=Infinity;for(const land of cells){if(!land.land)continue;const q=(land.x-c.x)**2+(land.y-c.y)**2;if(q<d){d=q;nearest=land;}}
+  const region=nearest?.region||0;marineRegions.set(c.id,region);while(marineRegions.size>128)marineRegions.delete(marineRegions.keys().next().value);return region;
+ }
+ function environment(x,y){
+  const c=cellAt(x,y);if(!c)return {biome:0,mix:[]};let nearest=null;
+  for(let i=0;i<c.polygon.length;i+=2){const j=(i+2)%c.polygon.length,p=project(x,y,[c.polygon[i],c.polygon[i+1]],[c.polygon[j],c.polygon[j+1]]);if(!nearest||p.d<nearest.d)nearest={...p,dx:c.polygon[j]-c.polygon[i],dy:c.polygon[j+1]-c.polygon[i+1]};}
+  const region=marineRegion(c),own={biome:c.biome,height:c.height,region,cursed:curseCells.has(c.id),weight:1};
+  if(nearest&&nearest.d<BLEND){const len=Math.hypot(nearest.dx,nearest.dy)||1,nx=-nearest.dy/len,ny=nearest.dx/len;
+   const choices=[cellAt(nearest.x+nx*2,nearest.y+ny*2),cellAt(nearest.x-nx*2,nearest.y-ny*2)],other=choices.find(n=>n&&n.id!==c.id&&n.land);
+   if(other){const weight=.5*(1-nearest.d/BLEND);own.weight=1-weight;
+    // Ecotones mix vegetation inside the receiving territory's regime. A
+    // glacier symbol beyond the frontier cannot seed permanent desert snow.
+    return {biome:c.biome,mix:[own,{biome:climateBiome(other.biome,region,other.height),height:other.height,region,sourceRegion:other.region,cursed:curseCells.has(other.id),weight}]};
+   }
+  }return {biome:c.biome,mix:[own]};
+ }
  function propAt(x,y,t,clock=480){if(t!==4&&(t!==0||random(x,y,41)>=.06))return null;const c=cellAt(x+.5,y+.5);if(!c)return null;let kind;
   const blend=environment(x+.5,y+.5),sample=blend.mix.length>1&&random(x,y,49)<blend.mix[1].weight?blend.mix[1]:blend.mix[0],biome=sample?.biome??c.biome,snow=snowCover(biome,sample?.height??c.height,clock,sample?.region??c.region)>.3;
   const r=random(x,y,40),v=Math.floor(random(x,y,44)*3);
-  if(t===4)kind=sample?.cursed?(r<.65?'world_cursed':'world_dead_cursed'):biome===11?'world_boulder_1':biome===10?(snow?'world_boulder_1':'world_boulder_0'):biome===9?(r<.8?(snow?'world_pine_1':'world_pine_0'):(snow?'world_boulder_1':'world_boulder_2')):[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(r*5)]:biome===8?(snow?'world_oak_winter':r<.55?'world_cypress':'world_oak_'+v):[5,7].includes(biome)?(r<.3?'palm':r<.85?'world_jungle':'world_boulder_2'):biome===12?(r<.7?'world_cypress':'world_boulder_2'):[3,4].includes(biome)?(r<.4?'shrub':'world_boulder_0'):(r<.86?(snow?'world_oak_winter':'world_oak_'+v):(snow?'world_boulder_1':'world_boulder_2'));
+  if(t===4)kind=sample?.cursed?(r<.65?'world_cursed':'world_dead_cursed'):biome===11?'world_boulder_1':biome===10?(snow?'world_boulder_1':'world_boulder_0'):biome===9?(r<.8?(snow?'world_pine_1':'world_pine_0'):(snow?'world_boulder_1':'world_boulder_2')):[1,2].includes(biome)?['rock_a','rock_b','rock_e','deadtree','shrub'][Math.floor(r*5)]:biome===8?(snow?'world_oak_winter':r<.55?'world_cypress':'world_oak_'+v):[5,7].includes(biome)?(r<.3?'palm':r<.85?'world_jungle':'world_boulder_2'):biome===12?(r<.7?(snow?'world_oak_winter':'world_cypress'):(snow?'world_boulder_1':'world_boulder_2')):[3,4].includes(biome)?(r<.4?'shrub':'world_boulder_0'):(r<.86?(snow?'world_oak_winter':'world_oak_'+v):(snow?'world_boulder_1':'world_boulder_2'));
   else if(t===0&&random(x,y,41)<.06){const plants=sample?.cursed?['bones','world_gravel']:biome===11?['world_gravel']:biome===10?(snow?['world_frostgrass','world_gravel']:['world_gravel','scrub']):biome===9?(snow?['world_frostgrass','world_gravel']:['world_mushrooms','world_fern']):snow?['world_frostgrass','world_gravel']:[1,2,3,4].includes(biome)?['scrub','pebbles']:[5,7].includes(biome)?['world_fern','world_fern','world_flowers']:[8,12].includes(biome)?['world_reeds','world_fern','world_mushrooms']:['world_flowers','world_mushrooms','world_fern'];kind=plants[Math.floor(random(x,y,42)*plants.length)];}
   if(!kind)return null;const q=toGame(x+.5,y+.65);return {kind,...q,world:true};
  }
@@ -222,7 +263,7 @@ const createWorldAtlas = (raw) => {
     if(phase===14&&day%2===1)this.add('bandits',route.id,at,1440,{source:'Caravaniers'});
     if(phase===7&&day%3===1)this.add('patrol',route.id,at,1440,{source:'Garde des relais'});
     if(phase===12&&crossings.length){const b=pick(crossings,5);if((weather(at,b.x,b.y)||{}).rain>.7)this.add('flood',b.road,at,720,{position:b,source:'Bateliers'});}
-    if(phase===18&&(weather(at,sea.pts[0][0],sea.pts[0][1])||{}).storm>.3)this.add('storm',sea.id,at,180,{source:'Capitainerie'});
+    if(phase===18&&marineWeatherHazard(weather(at,sea.pts[0][0],sea.pts[0][1])||{}))this.add('storm',sea.id,at,180,{source:'Capitainerie'});
     if(phase===10&&day%5===3){const mountain=roads.filter(r=>roadCells(r).some(c=>c.height>58));if(mountain.length)this.add('landslide',pick(mountain,6).id,at,1440,{source:'Éclaireurs'});}
     if(phase===15&&day%6===4)this.add('shortage',town.id,at,2880,{source:'Intendant de '+town.name});
     if(phase===16&&day%7===2)this.add('caravan',town.id,at,720,{source:'Maître du relais'});
@@ -281,6 +322,6 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36)continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;if(!walkable.has(k2))walkable.set(k2,!!free(x*16+8,y*16+8));if(!walkable.get(k2))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {layout,scale,passable,roadCells,vertexOf,climateProfile,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {layout,scale,passable,roadCells,vertexOf,marineWeatherHazard,climateBiome,climateProfile,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;

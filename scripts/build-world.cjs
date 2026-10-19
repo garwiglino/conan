@@ -15,6 +15,9 @@ const data={version:2,seed:546366735,width:compact.width,height:compact.height,t
 // can graze a bay when joined by a straight segment; the graph and drawing use
 // the same added vertices. The native source remains an editable macro map.
 const atlas=require('./world-model.js')(data);let vertex=-1;const refinements=[];
+// Persist the same canonical biomes used by weather, rendering and inhabitants.
+// Retain original terrain sampling so saves, collisions and roads do not move.
+for(const row of data.cells){const c=atlas.cellById.get(row[0]);if(row[5]!==c.biome){row[10]=row[10]??row[5];row[5]=c.biome;}}
 const clear=(a,b)=>{const len=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.ceil(len/75);for(let i=0;i<=steps;i++){const t=i/steps;if(!atlas.cellAt(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t)?.land)return false;}return true;};
 for(const r of data.routes){if(r.type==='searoutes')continue;for(let i=1;i<r.points.length;i++){const a=r.points[i-1],b=r.points[i];if(clear(a,b))continue;const len=Math.hypot(b[0]-a[0],b[1]-a[1]),nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len;let detour=null;for(let offset=250;offset<=20000&&!detour;offset+=250)for(const side of [-1,1]){const points=[.25,.5,.75].map(t=>[a[0]+(b[0]-a[0])*t+nx*offset*side,a[1]+(b[1]-a[1])*t+ny*offset*side]);const line=[a,...points,b];if(line.every((q,j)=>!j||clear(line[j-1],q))){detour=points;break;}}if(!detour)throw Error('No dry coastal refinement for route '+r.id);for(const q of detour)q.push(vertex--);r.points.splice(i,0,...detour);refinements.push({route:r.id,points:detour});i+=detour.length;}}
 data.refinements=refinements;

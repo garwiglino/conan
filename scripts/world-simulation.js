@@ -242,7 +242,7 @@ function createWorldSimulation(A,B,W,saved){
    for(const site of sites()){const node=A.byId[site.id],sky=weather(state.clock,node.x,node.y)||{};produce(site,1/24,sky);
     for(const [type,condition]of [['rain',(sky.rain||0)>.35],['snow',(sky.snow||0)>.35],['fog',(sky.fog||0)>.6]]){const old=W.active(state.clock).find(e=>e.type===type&&e.target===site.id);if(condition&&!old)event(type,site.id,{source:'Habitants de '+node.name});else if(!condition&&old)W.resolve(old.id,state.clock);}
    }
-   for(const sea of A.roads.filter(r=>r.type==='searoutes')){const rough=sea.pts.some(p=>{const sky=weather(state.clock,p[0],p[1])||{};return sky.storm>.3||sky.wind>.85;}),old=W.active(state.clock).find(e=>e.type==='storm'&&e.target===sea.id);if(rough&&!old)event('storm',sea.id,{source:'Bateliers'});else if(!rough&&old)W.resolve(old.id,state.clock);}
+   for(const sea of A.roads.filter(r=>r.type==='searoutes')){const rough=sea.pts.some(p=>{const sky=weather(state.clock,p[0],p[1])||{};return A.marineWeatherHazard(sky);}),old=W.active(state.clock).find(e=>e.type==='storm'&&e.target===sea.id);if(rough&&!old)event('storm',sea.id,{source:'Bateliers'});else if(!rough&&old)W.resolve(old.id,state.clock);}
    systems.tick(state.clock);for(const c of state.shipments)progressCargo(c,Math.max(0,state.clock-(c.clock??state.clock-60)));causalEvents();
    if(hour%6===2)dispatch();if(hour%6===0){mandate();institutions();}
    // A crossing reopens only after its water has actually subsided.
