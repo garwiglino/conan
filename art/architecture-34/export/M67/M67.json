@@ -1,0 +1,147 @@
+{
+  "id": "M67",
+  "label": "Angle extérieur haut",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/31-courtine-haute-chateau.png",
+  "sheet": "Courtine haute de château",
+  "season": "base",
+  "shape": "corner-outer",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 75,
+        "h": 91
+      },
+      "anchor": [
+        25,
+        89
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 81,
+        "y": 2,
+        "w": 75,
+        "h": 91
+      },
+      "anchor": [
+        25,
+        89
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        135,
+        459,
+        195,
+        179
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "M65/ns",
+      "lift": 52
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        380,
+        439,
+        141,
+        207
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "M65/ns",
+      "lift": 52
+    }
+  }
+}

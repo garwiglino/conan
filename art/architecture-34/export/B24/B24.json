@@ -1,0 +1,257 @@
+{
+  "id": "B24",
+  "label": "Salle commune et refuge",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/12-public.png",
+  "sheet": "Vie publique et mémoire",
+  "season": "base",
+  "width": 128,
+  "depth": 80,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 40,
+        "w": 177,
+        "h": 100
+      },
+      "anchor": [
+        68,
+        98
+      ],
+      "footprint": [
+        [
+          -64,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          104,
+          -40
+        ],
+        [
+          -24,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 80,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 183,
+        "y": 2,
+        "w": 153,
+        "h": 138
+      },
+      "anchor": [
+        44,
+        136
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          104,
+          -64
+        ],
+        [
+          24,
+          -64
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 128,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 364,
+        "y": 40,
+        "w": 177,
+        "h": 100
+      },
+      "anchor": [
+        68,
+        98
+      ],
+      "footprint": [
+        [
+          -64,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          104,
+          -40
+        ],
+        [
+          -24,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 80,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 545,
+        "y": 2,
+        "w": 153,
+        "h": 138
+      },
+      "anchor": [
+        44,
+        136
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          104,
+          -64
+        ],
+        [
+          24,
+          -64
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 128,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        128,
+        80
+      ],
+      "crop": [
+        203,
+        796,
+        378,
+        175
+      ],
+      "anchor": [
+        64,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        80
+      ],
+      "crop": [
+        597,
+        786,
+        233,
+        185
+      ],
+      "anchor": [
+        40,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        128,
+        80
+      ],
+      "crop": [
+        863,
+        796,
+        333,
+        175
+      ],
+      "anchor": [
+        64,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        80
+      ],
+      "crop": [
+        1246,
+        786,
+        241,
+        185
+      ],
+      "anchor": [
+        40,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

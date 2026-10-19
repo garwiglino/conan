@@ -1,0 +1,257 @@
+{
+  "id": "F11",
+  "label": "Châtelet de courtine haute",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/32-portes-hautes-tours.png",
+  "sheet": "Enceintes hautes — portes et tours",
+  "season": "base",
+  "width": 144,
+  "depth": 80,
+  "height": 128,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 32,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 34,
+        "w": 187,
+        "h": 169
+      },
+      "anchor": [
+        73,
+        167
+      ],
+      "footprint": [
+        [
+          -72,
+          0
+        ],
+        [
+          72,
+          0
+        ],
+        [
+          112,
+          -40
+        ],
+        [
+          -32,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 193,
+        "y": 2,
+        "w": 155,
+        "h": 201
+      },
+      "anchor": [
+        41,
+        199
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          112,
+          -72
+        ],
+        [
+          32,
+          -72
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 144,
+        "height": 128
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 384,
+        "y": 34,
+        "w": 187,
+        "h": 169
+      },
+      "anchor": [
+        73,
+        167
+      ],
+      "footprint": [
+        [
+          -72,
+          0
+        ],
+        [
+          72,
+          0
+        ],
+        [
+          112,
+          -40
+        ],
+        [
+          -32,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 575,
+        "y": 2,
+        "w": 155,
+        "h": 201
+      },
+      "anchor": [
+        41,
+        199
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          112,
+          -72
+        ],
+        [
+          32,
+          -72
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 144,
+        "height": 128
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        144,
+        128
+      ],
+      "crop": [
+        233,
+        519,
+        413,
+        209
+      ],
+      "anchor": [
+        72,
+        128
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        665,
+        519,
+        183,
+        209
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        144,
+        128
+      ],
+      "crop": [
+        873,
+        518,
+        375,
+        210
+      ],
+      "anchor": [
+        72,
+        128
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        1275,
+        519,
+        193,
+        209
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "B21",
+  "label": "Maison de conseil",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/12-public.png",
+  "sheet": "Vie publique et mémoire",
+  "season": "base",
+  "width": 112,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 38,
+        "w": 161,
+        "h": 108
+      },
+      "anchor": [
+        60,
+        106
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 167,
+        "y": 2,
+        "w": 145,
+        "h": 144
+      },
+      "anchor": [
+        44,
+        142
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 88
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 332,
+        "y": 38,
+        "w": 161,
+        "h": 108
+      },
+      "anchor": [
+        60,
+        106
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 497,
+        "y": 2,
+        "w": 145,
+        "h": 144
+      },
+      "anchor": [
+        44,
+        142
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 88
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        88
+      ],
+      "crop": [
+        236,
+        123,
+        297,
+        215
+      ],
+      "anchor": [
+        56,
+        88
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        618,
+        123,
+        213,
+        215
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        88
+      ],
+      "crop": [
+        879,
+        123,
+        296,
+        215
+      ],
+      "anchor": [
+        56,
+        88
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        1233,
+        123,
+        229,
+        215
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    }
+  }
+}

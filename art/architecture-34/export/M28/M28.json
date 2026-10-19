@@ -1,0 +1,144 @@
+{
+  "id": "M28",
+  "label": "Quai bois",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/19-franchissements.png",
+  "sheet": "Ponts et accès portuaires",
+  "season": "base",
+  "shape": "quay-wood",
+  "width": 48,
+  "depth": 32,
+  "totalHeight": 12,
+  "walkHeight": 12,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 12,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 67,
+        "h": 31
+      },
+      "anchor": [
+        25,
+        29
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          40,
+          -16
+        ],
+        [
+          -8,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 32,
+        "height": 12
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 73,
+        "y": 2,
+        "w": 59,
+        "h": 39
+      },
+      "anchor": [
+        17,
+        37
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          40,
+          -24
+        ],
+        [
+          8,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 48,
+        "height": 12
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        32
+      ],
+      "crop": [
+        853,
+        343,
+        311,
+        107
+      ],
+      "anchor": [
+        24,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        32,
+        48
+      ],
+      "crop": [
+        1316,
+        320,
+        105,
+        152
+      ],
+      "anchor": [
+        16,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

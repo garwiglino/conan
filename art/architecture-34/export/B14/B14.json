@@ -1,0 +1,268 @@
+{
+  "id": "B14",
+  "label": "Moulin à eau",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/10-alimentation.png",
+  "sheet": "Transformation alimentaire",
+  "season": "base",
+  "width": 96,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "mechanism": {
+    "type": "waterwheel",
+    "views": [
+      "droite"
+    ],
+    "center": [
+      40,
+      62
+    ],
+    "radius": 23
+  },
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 32,
+        "w": 145,
+        "h": 106
+      },
+      "anchor": [
+        52,
+        106
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          88,
+          -40
+        ],
+        [
+          -8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 151,
+        "y": 2,
+        "w": 137,
+        "h": 136
+      },
+      "anchor": [
+        44,
+        134
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          88,
+          -48
+        ],
+        [
+          8,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 96,
+        "height": 88
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 300,
+        "y": 30,
+        "w": 145,
+        "h": 108
+      },
+      "anchor": [
+        52,
+        106
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          88,
+          -40
+        ],
+        [
+          -8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 449,
+        "y": 2,
+        "w": 137,
+        "h": 136
+      },
+      "anchor": [
+        44,
+        134
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          88,
+          -48
+        ],
+        [
+          8,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 96,
+        "height": 88
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        96,
+        88
+      ],
+      "crop": [
+        242,
+        361,
+        273,
+        205
+      ],
+      "anchor": [
+        48,
+        88
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        592,
+        358,
+        218,
+        190
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        96,
+        88
+      ],
+      "crop": [
+        904,
+        358,
+        244,
+        188
+      ],
+      "anchor": [
+        48,
+        88
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        1245,
+        358,
+        239,
+        190
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    }
+  }
+}

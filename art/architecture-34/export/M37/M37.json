@@ -1,0 +1,144 @@
+{
+  "id": "M37",
+  "label": "Cloison de latrines",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/20-eau-salubrite.png",
+  "sheet": "Eau et salubrité — structures seules",
+  "season": "base",
+  "shape": "latrine",
+  "width": 32,
+  "depth": 8,
+  "totalHeight": 32,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 32,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 17,
+        "w": 36,
+        "h": 35
+      },
+      "anchor": [
+        15,
+        33
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          20,
+          -4
+        ],
+        [
+          -12,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 8,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 42,
+        "y": 2,
+        "w": 25,
+        "h": 50
+      },
+      "anchor": [
+        4,
+        48
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          20,
+          -16
+        ],
+        [
+          12,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 32,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        32,
+        32
+      ],
+      "crop": [
+        122,
+        492,
+        344,
+        126
+      ],
+      "anchor": [
+        16,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        32
+      ],
+      "crop": [
+        586,
+        483,
+        89,
+        139
+      ],
+      "anchor": [
+        6,
+        32
+      ],
+      "lift": 0
+    }
+  }
+}

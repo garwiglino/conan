@@ -1,0 +1,144 @@
+{
+  "id": "M07",
+  "label": "Pignon de toiture",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/16-structures.png",
+  "sheet": "Structure et enveloppes",
+  "season": "base",
+  "shape": "gable",
+  "width": 48,
+  "depth": 16,
+  "totalHeight": 24,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 8,
+  "height": 24,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 11,
+        "w": 59,
+        "h": 31
+      },
+      "anchor": [
+        25,
+        29
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          32,
+          -8
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 65,
+        "y": 2,
+        "w": 43,
+        "h": 40
+      },
+      "anchor": [
+        9,
+        38
+      ],
+      "footprint": [
+        [
+          -8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          32,
+          -24
+        ],
+        [
+          16,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 48,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        131,
+        618,
+        281,
+        126
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        16,
+        24
+      ],
+      "crop": [
+        563,
+        617,
+        71,
+        146
+      ],
+      "anchor": [
+        8,
+        24
+      ],
+      "lift": 0
+    }
+  }
+}

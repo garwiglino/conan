@@ -1,0 +1,146 @@
+{
+  "id": "VAR-H05",
+  "label": "Jonction en T",
+  "family": "varan",
+  "kind": "module",
+  "source": "expansion/varan-walls.png",
+  "sheet": "Varan — hauts remparts",
+  "season": "base",
+  "shape": "junction-t",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 16,
+  "material": "wood",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 59,
+        "h": 79
+      },
+      "anchor": [
+        25,
+        77
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 65,
+        "y": 2,
+        "w": 59,
+        "h": 79
+      },
+      "anchor": [
+        25,
+        77
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        64
+      ],
+      "crop": [
+        47,
+        647,
+        225,
+        197
+      ],
+      "anchor": [
+        24,
+        64
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        323,
+        659,
+        181,
+        177
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "VAR-H01/ns",
+      "lift": 52
+    }
+  }
+}

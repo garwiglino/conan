@@ -1,0 +1,258 @@
+{
+  "id": "H16",
+  "label": "Maisonnée à deux logis",
+  "family": "sarak",
+  "kind": "building",
+  "source": "concepts/26-habitat-sarak.png",
+  "sheet": "Sarak — variantes de maisons",
+  "season": "base",
+  "width": 112,
+  "depth": 72,
+  "height": 64,
+  "entrances": [
+    0.26,
+    0.74
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 22,
+        "w": 151,
+        "h": 101
+      },
+      "anchor": [
+        57,
+        99
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          92,
+          -36
+        ],
+        [
+          -20,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 72,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 157,
+        "y": 2,
+        "w": 131,
+        "h": 121
+      },
+      "anchor": [
+        37,
+        119
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          92,
+          -56
+        ],
+        [
+          20,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 112,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 312,
+        "y": 22,
+        "w": 151,
+        "h": 101
+      },
+      "anchor": [
+        57,
+        99
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          92,
+          -36
+        ],
+        [
+          -20,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 72,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 467,
+        "y": 2,
+        "w": 131,
+        "h": 121
+      },
+      "anchor": [
+        37,
+        119
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          92,
+          -56
+        ],
+        [
+          20,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 112,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        64
+      ],
+      "crop": [
+        206,
+        805,
+        340,
+        160
+      ],
+      "anchor": [
+        56,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        72,
+        64
+      ],
+      "crop": [
+        561,
+        808,
+        280,
+        155
+      ],
+      "anchor": [
+        36,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        64
+      ],
+      "crop": [
+        863,
+        808,
+        292,
+        155
+      ],
+      "anchor": [
+        56,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        72,
+        64
+      ],
+      "crop": [
+        1178,
+        809,
+        338,
+        154
+      ],
+      "anchor": [
+        36,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

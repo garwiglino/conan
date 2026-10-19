@@ -1,0 +1,257 @@
+{
+  "id": "F09",
+  "label": "Porte haute de village en bois",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/32-portes-hautes-tours.png",
+  "sheet": "Enceintes hautes — portes et tours",
+  "season": "base",
+  "width": 112,
+  "depth": 48,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 32,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 46,
+        "w": 145,
+        "h": 92
+      },
+      "anchor": [
+        60,
+        90
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          80,
+          -24
+        ],
+        [
+          -32,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 151,
+        "y": 2,
+        "w": 113,
+        "h": 136
+      },
+      "anchor": [
+        28,
+        134
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          80,
+          -56
+        ],
+        [
+          32,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 112,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 300,
+        "y": 46,
+        "w": 145,
+        "h": 92
+      },
+      "anchor": [
+        60,
+        90
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          80,
+          -24
+        ],
+        [
+          -32,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 449,
+        "y": 2,
+        "w": 113,
+        "h": 136
+      },
+      "anchor": [
+        28,
+        134
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          80,
+          -56
+        ],
+        [
+          32,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 112,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        80
+      ],
+      "crop": [
+        295,
+        115,
+        328,
+        157
+      ],
+      "anchor": [
+        56,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        48,
+        80
+      ],
+      "crop": [
+        690,
+        115,
+        126,
+        157
+      ],
+      "anchor": [
+        24,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        80
+      ],
+      "crop": [
+        889,
+        115,
+        318,
+        157
+      ],
+      "anchor": [
+        56,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        48,
+        80
+      ],
+      "crop": [
+        1300,
+        115,
+        148,
+        157
+      ],
+      "anchor": [
+        24,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

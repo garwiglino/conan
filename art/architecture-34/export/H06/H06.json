@@ -1,0 +1,257 @@
+{
+  "id": "H06",
+  "label": "Maison d’artisan habitée",
+  "family": "sylverive",
+  "kind": "building",
+  "source": "concepts/24-habitat-sylverive.png",
+  "sheet": "Sylverive — logements de cité",
+  "season": "base",
+  "width": 72,
+  "depth": 56,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 15,
+        "w": 109,
+        "h": 107
+      },
+      "anchor": [
+        40,
+        107
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          64,
+          -28
+        ],
+        [
+          -8,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 56,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 115,
+        "y": 2,
+        "w": 101,
+        "h": 120
+      },
+      "anchor": [
+        32,
+        118
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          64,
+          -36
+        ],
+        [
+          8,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 228,
+        "y": 13,
+        "w": 109,
+        "h": 109
+      },
+      "anchor": [
+        40,
+        107
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          64,
+          -28
+        ],
+        [
+          -8,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 56,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 341,
+        "y": 2,
+        "w": 101,
+        "h": 120
+      },
+      "anchor": [
+        32,
+        118
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          64,
+          -36
+        ],
+        [
+          8,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        250,
+        346,
+        226,
+        206
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        56,
+        80
+      ],
+      "crop": [
+        615,
+        352,
+        177,
+        196
+      ],
+      "anchor": [
+        28,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        941,
+        346,
+        227,
+        202
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        56,
+        80
+      ],
+      "crop": [
+        1292,
+        352,
+        177,
+        196
+      ],
+      "anchor": [
+        28,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

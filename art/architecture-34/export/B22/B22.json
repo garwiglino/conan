@@ -1,0 +1,257 @@
+{
+  "id": "B22",
+  "label": "Maison de soins",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/12-public.png",
+  "sheet": "Vie publique et mémoire",
+  "season": "base",
+  "width": 96,
+  "depth": 72,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 141,
+        "h": 113
+      },
+      "anchor": [
+        52,
+        111
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          84,
+          -36
+        ],
+        [
+          -12,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 147,
+        "y": 2,
+        "w": 129,
+        "h": 129
+      },
+      "anchor": [
+        40,
+        127
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          84,
+          -48
+        ],
+        [
+          12,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 96,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 292,
+        "y": 18,
+        "w": 141,
+        "h": 113
+      },
+      "anchor": [
+        52,
+        111
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          84,
+          -36
+        ],
+        [
+          -12,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 437,
+        "y": 2,
+        "w": 129,
+        "h": 129
+      },
+      "anchor": [
+        40,
+        127
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          84,
+          -48
+        ],
+        [
+          12,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 96,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        96,
+        80
+      ],
+      "crop": [
+        220,
+        365,
+        326,
+        167
+      ],
+      "anchor": [
+        48,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        589,
+        365,
+        238,
+        167
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        96,
+        80
+      ],
+      "crop": [
+        873,
+        365,
+        316,
+        167
+      ],
+      "anchor": [
+        48,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        1242,
+        365,
+        252,
+        167
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "id": "H04",
+  "label": "Maisons jumelées",
+  "family": "teremor",
+  "kind": "building",
+  "source": "concepts/23-habitat-teremor.png",
+  "sheet": "Teremor — variantes d’habitation",
+  "season": "base",
+  "width": 112,
+  "depth": 64,
+  "height": 72,
+  "entrances": [
+    0.26,
+    0.74
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 27,
+        "w": 153,
+        "h": 103
+      },
+      "anchor": [
+        60,
+        101
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          88,
+          -32
+        ],
+        [
+          -24,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 72
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 159,
+        "y": 2,
+        "w": 129,
+        "h": 128
+      },
+      "anchor": [
+        36,
+        126
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          88,
+          -56
+        ],
+        [
+          24,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 112,
+        "height": 72
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 316,
+        "y": 27,
+        "w": 153,
+        "h": 103
+      },
+      "anchor": [
+        60,
+        101
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          88,
+          -32
+        ],
+        [
+          -24,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 72
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 473,
+        "y": 2,
+        "w": 129,
+        "h": 128
+      },
+      "anchor": [
+        36,
+        126
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          88,
+          -56
+        ],
+        [
+          24,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 112,
+        "height": 72
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        72
+      ],
+      "crop": [
+        235,
+        787,
+        325,
+        166
+      ],
+      "anchor": [
+        56,
+        72
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        72
+      ],
+      "crop": [
+        611,
+        787,
+        188,
+        166
+      ],
+      "anchor": [
+        32,
+        72
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        72
+      ],
+      "crop": [
+        869,
+        787,
+        354,
+        166
+      ],
+      "anchor": [
+        56,
+        72
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        72
+      ],
+      "crop": [
+        1293,
+        787,
+        189,
+        166
+      ],
+      "anchor": [
+        32,
+        72
+      ],
+      "lift": 0
+    }
+  }
+}

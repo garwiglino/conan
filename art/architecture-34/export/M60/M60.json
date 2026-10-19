@@ -1,0 +1,147 @@
+{
+  "id": "M60",
+  "label": "Angle intérieur haut",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/30-enceinte-haute-pierre.png",
+  "sheet": "Enceinte haute de bourg — pierre",
+  "season": "base",
+  "shape": "corner-inner",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 48,
+  "walkHeight": 38,
+  "parapetHeight": 10,
+  "wallThickness": 12,
+  "material": "stone",
+  "height": 48,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 75,
+        "h": 75
+      },
+      "anchor": [
+        25,
+        73
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 48
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 81,
+        "y": 2,
+        "w": 75,
+        "h": 75
+      },
+      "anchor": [
+        25,
+        73
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 48
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        560,
+        427,
+        179,
+        173
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "M57/ns",
+      "lift": 38
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        830,
+        423,
+        152,
+        156
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "M57/ns",
+      "lift": 38
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "T02",
+  "label": "Longère de ferme",
+  "family": "teremor",
+  "kind": "building",
+  "source": "concepts/01-teremor.png",
+  "sheet": "Teremor — habitat tempéré",
+  "season": "base",
+  "width": 96,
+  "depth": 56,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 22,
+        "w": 133,
+        "h": 93
+      },
+      "anchor": [
+        52,
+        91
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          76,
+          -28
+        ],
+        [
+          -20,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 56,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 139,
+        "y": 2,
+        "w": 113,
+        "h": 113
+      },
+      "anchor": [
+        32,
+        111
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          76,
+          -48
+        ],
+        [
+          20,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 96,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 276,
+        "y": 22,
+        "w": 133,
+        "h": 93
+      },
+      "anchor": [
+        52,
+        91
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          76,
+          -28
+        ],
+        [
+          -20,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 56,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 413,
+        "y": 2,
+        "w": 113,
+        "h": 113
+      },
+      "anchor": [
+        32,
+        111
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          76,
+          -48
+        ],
+        [
+          20,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 96,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        96,
+        64
+      ],
+      "crop": [
+        218,
+        310,
+        339,
+        156
+      ],
+      "anchor": [
+        48,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        56,
+        64
+      ],
+      "crop": [
+        611,
+        316,
+        203,
+        149
+      ],
+      "anchor": [
+        28,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        96,
+        64
+      ],
+      "crop": [
+        874,
+        310,
+        338,
+        155
+      ],
+      "anchor": [
+        48,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        56,
+        64
+      ],
+      "crop": [
+        1275,
+        312,
+        203,
+        154
+      ],
+      "anchor": [
+        28,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

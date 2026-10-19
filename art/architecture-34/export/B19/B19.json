@@ -1,0 +1,257 @@
+{
+  "id": "B19",
+  "label": "Corderie",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/11-fibres.png",
+  "sheet": "Textile et transformations",
+  "season": "base",
+  "width": 128,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 50,
+        "w": 169,
+        "h": 80
+      },
+      "anchor": [
+        68,
+        78
+      ],
+      "footprint": [
+        [
+          -64,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          96,
+          -32
+        ],
+        [
+          -32,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 175,
+        "y": 2,
+        "w": 137,
+        "h": 128
+      },
+      "anchor": [
+        36,
+        126
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          96,
+          -64
+        ],
+        [
+          32,
+          -64
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 128,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 348,
+        "y": 50,
+        "w": 169,
+        "h": 80
+      },
+      "anchor": [
+        68,
+        78
+      ],
+      "footprint": [
+        [
+          -64,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          96,
+          -32
+        ],
+        [
+          -32,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 521,
+        "y": 2,
+        "w": 137,
+        "h": 128
+      },
+      "anchor": [
+        36,
+        126
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          96,
+          -64
+        ],
+        [
+          32,
+          -64
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 128,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        128,
+        64
+      ],
+      "crop": [
+        189,
+        579,
+        447,
+        129
+      ],
+      "anchor": [
+        64,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        677,
+        566,
+        144,
+        142
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        128,
+        64
+      ],
+      "crop": [
+        860,
+        579,
+        451,
+        129
+      ],
+      "anchor": [
+        64,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        1345,
+        566,
+        145,
+        142
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

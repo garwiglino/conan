@@ -1,0 +1,257 @@
+{
+  "id": "B02",
+  "label": "Étable fermée",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/07-fermes.png",
+  "sheet": "Dépendances rurales",
+  "season": "base",
+  "width": 112,
+  "depth": 72,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 40,
+        "w": 157,
+        "h": 90
+      },
+      "anchor": [
+        60,
+        88
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          92,
+          -36
+        ],
+        [
+          -20,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 72,
+        "height": 72
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 163,
+        "y": 2,
+        "w": 137,
+        "h": 128
+      },
+      "anchor": [
+        40,
+        126
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          92,
+          -56
+        ],
+        [
+          20,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 112,
+        "height": 72
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 324,
+        "y": 40,
+        "w": 157,
+        "h": 90
+      },
+      "anchor": [
+        60,
+        88
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          92,
+          -36
+        ],
+        [
+          -20,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 72,
+        "height": 72
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 485,
+        "y": 2,
+        "w": 137,
+        "h": 128
+      },
+      "anchor": [
+        40,
+        126
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          92,
+          -56
+        ],
+        [
+          20,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 112,
+        "height": 72
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        72
+      ],
+      "crop": [
+        223,
+        349,
+        336,
+        185
+      ],
+      "anchor": [
+        56,
+        72
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        72,
+        72
+      ],
+      "crop": [
+        611,
+        352,
+        214,
+        181
+      ],
+      "anchor": [
+        36,
+        72
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        72
+      ],
+      "crop": [
+        879,
+        350,
+        346,
+        183
+      ],
+      "anchor": [
+        56,
+        72
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        72,
+        72
+      ],
+      "crop": [
+        1287,
+        352,
+        205,
+        181
+      ],
+      "anchor": [
+        36,
+        72
+      ],
+      "lift": 0
+    }
+  }
+}

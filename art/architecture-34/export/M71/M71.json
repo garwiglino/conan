@@ -1,0 +1,145 @@
+{
+  "id": "M71",
+  "label": "Escalier frontal de ronde",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/31-courtine-haute-chateau.png",
+  "sheet": "Courtine haute de château",
+  "season": "base",
+  "shape": "stairs",
+  "width": 24,
+  "depth": 64,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 59,
+        "h": 87
+      },
+      "anchor": [
+        13,
+        85
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          44,
+          -32
+        ],
+        [
+          20,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "face"
+      ]
+    },
+    "palier": {
+      "frame": {
+        "x": 73,
+        "y": 2,
+        "w": 67,
+        "h": 95
+      },
+      "anchor": [
+        13,
+        93
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          52,
+          -40
+        ],
+        [
+          28,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "palier",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        24,
+        116
+      ],
+      "crop": [
+        158,
+        1012,
+        123,
+        144
+      ],
+      "anchor": [
+        12,
+        116
+      ],
+      "lift": 0
+    },
+    "palier": {
+      "size": [
+        24,
+        132
+      ],
+      "crop": [
+        385,
+        990,
+        105,
+        165
+      ],
+      "anchor": [
+        12,
+        132
+      ],
+      "lift": 0
+    }
+  }
+}

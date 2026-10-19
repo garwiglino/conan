@@ -1,0 +1,257 @@
+{
+  "id": "B07",
+  "label": "Auberge-relais",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/08-echanges.png",
+  "sheet": "Marchés et relais",
+  "season": "base",
+  "width": 112,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 22,
+        "w": 161,
+        "h": 124
+      },
+      "anchor": [
+        60,
+        122
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 167,
+        "y": 2,
+        "w": 145,
+        "h": 144
+      },
+      "anchor": [
+        44,
+        142
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 88
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 332,
+        "y": 22,
+        "w": 161,
+        "h": 124
+      },
+      "anchor": [
+        60,
+        122
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 497,
+        "y": 2,
+        "w": 145,
+        "h": 144
+      },
+      "anchor": [
+        44,
+        142
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 88
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        88
+      ],
+      "crop": [
+        203,
+        534,
+        326,
+        233
+      ],
+      "anchor": [
+        56,
+        88
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        598,
+        537,
+        200,
+        230
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        88
+      ],
+      "crop": [
+        878,
+        537,
+        338,
+        231
+      ],
+      "anchor": [
+        56,
+        88
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        1269,
+        539,
+        230,
+        229
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "M09",
+  "label": "Palissade droite",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/17-enceintes.png",
+  "sheet": "Murs et chemins de ronde",
+  "season": "base",
+  "shape": "stockade",
+  "width": 48,
+  "depth": 8,
+  "totalHeight": 32,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 32,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 22,
+        "w": 55,
+        "h": 39
+      },
+      "anchor": [
+        25,
+        37
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          28,
+          -4
+        ],
+        [
+          -20,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 61,
+        "y": 2,
+        "w": 35,
+        "h": 59
+      },
+      "anchor": [
+        5,
+        57
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          28,
+          -24
+        ],
+        [
+          20,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 48,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        32
+      ],
+      "crop": [
+        173,
+        140,
+        311,
+        107
+      ],
+      "anchor": [
+        24,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        48
+      ],
+      "crop": [
+        608,
+        125,
+        31,
+        144
+      ],
+      "anchor": [
+        6,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

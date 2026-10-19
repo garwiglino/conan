@@ -1,0 +1,257 @@
+{
+  "id": "X04",
+  "label": "Chantier naval couvert",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/15-sites.png",
+  "sheet": "Dépendances des districts",
+  "season": "base",
+  "width": 144,
+  "depth": 96,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": true,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 43,
+        "w": 201,
+        "h": 112
+      },
+      "anchor": [
+        76,
+        110
+      ],
+      "footprint": [
+        [
+          -72,
+          0
+        ],
+        [
+          72,
+          0
+        ],
+        [
+          120,
+          -48
+        ],
+        [
+          -24,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 96,
+        "height": 88
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 207,
+        "y": 2,
+        "w": 177,
+        "h": 153
+      },
+      "anchor": [
+        52,
+        151
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          120,
+          -72
+        ],
+        [
+          24,
+          -72
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 144,
+        "height": 88
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 412,
+        "y": 43,
+        "w": 201,
+        "h": 112
+      },
+      "anchor": [
+        76,
+        110
+      ],
+      "footprint": [
+        [
+          -72,
+          0
+        ],
+        [
+          72,
+          0
+        ],
+        [
+          120,
+          -48
+        ],
+        [
+          -24,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 96,
+        "height": 88
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 617,
+        "y": 2,
+        "w": 177,
+        "h": 153
+      },
+      "anchor": [
+        52,
+        151
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          120,
+          -72
+        ],
+        [
+          24,
+          -72
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 144,
+        "height": 88
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        144,
+        88
+      ],
+      "crop": [
+        183,
+        717,
+        325,
+        233
+      ],
+      "anchor": [
+        72,
+        88
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        96,
+        88
+      ],
+      "crop": [
+        519,
+        731,
+        316,
+        219
+      ],
+      "anchor": [
+        48,
+        88
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        144,
+        88
+      ],
+      "crop": [
+        868,
+        736,
+        329,
+        214
+      ],
+      "anchor": [
+        72,
+        88
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        96,
+        88
+      ],
+      "crop": [
+        1222,
+        731,
+        304,
+        219
+      ],
+      "anchor": [
+        48,
+        88
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "B06",
+  "label": "Grenier collectif",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/08-echanges.png",
+  "sheet": "Marchés et relais",
+  "season": "base",
+  "width": 96,
+  "depth": 64,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 35,
+        "w": 137,
+        "h": 95
+      },
+      "anchor": [
+        52,
+        94
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          80,
+          -32
+        ],
+        [
+          -16,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 143,
+        "y": 2,
+        "w": 121,
+        "h": 128
+      },
+      "anchor": [
+        36,
+        126
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          80,
+          -48
+        ],
+        [
+          16,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 96,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 284,
+        "y": 34,
+        "w": 137,
+        "h": 96
+      },
+      "anchor": [
+        52,
+        94
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          80,
+          -32
+        ],
+        [
+          -16,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 425,
+        "y": 2,
+        "w": 121,
+        "h": 128
+      },
+      "anchor": [
+        36,
+        126
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          80,
+          -48
+        ],
+        [
+          16,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 96,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        96,
+        80
+      ],
+      "crop": [
+        231,
+        321,
+        306,
+        191
+      ],
+      "anchor": [
+        48,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        595,
+        323,
+        208,
+        185
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        96,
+        80
+      ],
+      "crop": [
+        858,
+        321,
+        346,
+        187
+      ],
+      "anchor": [
+        48,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        1290,
+        323,
+        209,
+        185
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

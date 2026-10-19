@@ -1,0 +1,144 @@
+{
+  "id": "M35",
+  "label": "Encadrement de vanne",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/20-eau-salubrite.png",
+  "sheet": "Eau et salubrité — structures seules",
+  "season": "base",
+  "shape": "sluice-frame",
+  "width": 32,
+  "depth": 12,
+  "totalHeight": 32,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 32,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 13,
+        "w": 41,
+        "h": 39
+      },
+      "anchor": [
+        17,
+        37
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          22,
+          -6
+        ],
+        [
+          -10,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 12,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 47,
+        "y": 2,
+        "w": 31,
+        "h": 50
+      },
+      "anchor": [
+        7,
+        48
+      ],
+      "footprint": [
+        [
+          -6,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          22,
+          -16
+        ],
+        [
+          10,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 12,
+        "depth": 32,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        32,
+        32
+      ],
+      "crop": [
+        159,
+        301,
+        272,
+        136
+      ],
+      "anchor": [
+        16,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        32
+      ],
+      "crop": [
+        594,
+        306,
+        70,
+        140
+      ],
+      "anchor": [
+        6,
+        32
+      ],
+      "lift": 0
+    }
+  }
+}

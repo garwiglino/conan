@@ -1,0 +1,257 @@
+{
+  "id": "T16",
+  "label": "Réserve fraîche",
+  "family": "sarak",
+  "kind": "building",
+  "source": "concepts/04-sarak.png",
+  "sheet": "Sarak — bassins et étapes",
+  "season": "base",
+  "width": 80,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 115,
+        "h": 97
+      },
+      "anchor": [
+        41,
+        95
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          72,
+          -32
+        ],
+        [
+          -8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 121,
+        "y": 2,
+        "w": 107,
+        "h": 105
+      },
+      "anchor": [
+        33,
+        103
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          72,
+          -40
+        ],
+        [
+          8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 240,
+        "y": 10,
+        "w": 115,
+        "h": 97
+      },
+      "anchor": [
+        41,
+        95
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          72,
+          -32
+        ],
+        [
+          -8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 359,
+        "y": 2,
+        "w": 107,
+        "h": 105
+      },
+      "anchor": [
+        33,
+        103
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          72,
+          -40
+        ],
+        [
+          8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        64
+      ],
+      "crop": [
+        217,
+        790,
+        232,
+        163
+      ],
+      "anchor": [
+        40,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        541,
+        784,
+        262,
+        167
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        64
+      ],
+      "crop": [
+        894,
+        784,
+        244,
+        167
+      ],
+      "anchor": [
+        40,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        1238,
+        784,
+        247,
+        167
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

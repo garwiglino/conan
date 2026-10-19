@@ -1,0 +1,144 @@
+{
+  "id": "M22",
+  "label": "Claustra de ventilation",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/18-ouvertures.png",
+  "sheet": "Portes, fenêtres et protection",
+  "season": "base",
+  "shape": "screen",
+  "width": 32,
+  "depth": 8,
+  "totalHeight": 24,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 24,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 14,
+        "w": 39,
+        "h": 31
+      },
+      "anchor": [
+        17,
+        29
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          20,
+          -4
+        ],
+        [
+          -12,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 8,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 45,
+        "y": 2,
+        "w": 27,
+        "h": 43
+      },
+      "anchor": [
+        5,
+        41
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          20,
+          -16
+        ],
+        [
+          12,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 32,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        32,
+        24
+      ],
+      "crop": [
+        860,
+        515,
+        225,
+        107
+      ],
+      "anchor": [
+        16,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        32
+      ],
+      "crop": [
+        1320,
+        502,
+        69,
+        125
+      ],
+      "anchor": [
+        6,
+        32
+      ],
+      "lift": 0
+    }
+  }
+}

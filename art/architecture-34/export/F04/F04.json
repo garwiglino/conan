@@ -1,0 +1,257 @@
+{
+  "id": "F04",
+  "label": "Donjon résidentiel",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/13-garde.png",
+  "sheet": "Garde et défense habitée",
+  "season": "base",
+  "width": 96,
+  "depth": 80,
+  "height": 128,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 30,
+        "w": 145,
+        "h": 148
+      },
+      "anchor": [
+        52,
+        146
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          88,
+          -40
+        ],
+        [
+          -8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 151,
+        "y": 2,
+        "w": 137,
+        "h": 176
+      },
+      "anchor": [
+        44,
+        174
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          88,
+          -48
+        ],
+        [
+          8,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 96,
+        "height": 128
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 300,
+        "y": 30,
+        "w": 145,
+        "h": 148
+      },
+      "anchor": [
+        52,
+        146
+      ],
+      "footprint": [
+        [
+          -48,
+          0
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          88,
+          -40
+        ],
+        [
+          -8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 449,
+        "y": 2,
+        "w": 137,
+        "h": 176
+      },
+      "anchor": [
+        44,
+        174
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          88,
+          -48
+        ],
+        [
+          8,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 96,
+        "height": 128
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        96,
+        128
+      ],
+      "crop": [
+        249,
+        694,
+        239,
+        289
+      ],
+      "anchor": [
+        48,
+        128
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        599,
+        698,
+        222,
+        277
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        96,
+        128
+      ],
+      "crop": [
+        922,
+        695,
+        224,
+        280
+      ],
+      "anchor": [
+        48,
+        128
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        1242,
+        698,
+        227,
+        277
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "M46",
+  "label": "Palier extérieur",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/21-toitures-chantier.png",
+  "sheet": "Couvertures et assemblages",
+  "season": "base",
+  "shape": "landing",
+  "width": 48,
+  "depth": 24,
+  "totalHeight": 20,
+  "walkHeight": 20,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 20,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 14,
+        "w": 63,
+        "h": 35
+      },
+      "anchor": [
+        25,
+        33
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          36,
+          -12
+        ],
+        [
+          -12,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 20
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 69,
+        "y": 2,
+        "w": 51,
+        "h": 47
+      },
+      "anchor": [
+        13,
+        45
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 20
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        851,
+        489,
+        305,
+        120
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 20
+    },
+    "ns": {
+      "size": [
+        24,
+        48
+      ],
+      "crop": [
+        1306,
+        475,
+        107,
+        146
+      ],
+      "anchor": [
+        12,
+        48
+      ],
+      "lift": 20
+    }
+  }
+}

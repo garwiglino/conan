@@ -1,0 +1,144 @@
+{
+  "id": "M30",
+  "label": "Extrémité de jetée",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/19-franchissements.png",
+  "sheet": "Ponts et accès portuaires",
+  "season": "base",
+  "shape": "jetty-end",
+  "width": 48,
+  "depth": 24,
+  "totalHeight": 12,
+  "walkHeight": 12,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 12,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 14,
+        "w": 63,
+        "h": 27
+      },
+      "anchor": [
+        25,
+        25
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          36,
+          -12
+        ],
+        [
+          -12,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 12
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 69,
+        "y": 2,
+        "w": 51,
+        "h": 39
+      },
+      "anchor": [
+        13,
+        37
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 12
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        858,
+        517,
+        299,
+        116
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        24,
+        48
+      ],
+      "crop": [
+        1312,
+        506,
+        118,
+        128
+      ],
+      "anchor": [
+        12,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

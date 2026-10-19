@@ -1,0 +1,144 @@
+{
+  "id": "M06",
+  "label": "Poteau de charpente",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/16-structures.png",
+  "sheet": "Structure et enveloppes",
+  "season": "base",
+  "shape": "post",
+  "width": 8,
+  "depth": 8,
+  "totalHeight": 32,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 8,
+  "height": 32,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 15,
+        "h": 39
+      },
+      "anchor": [
+        5,
+        37
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          8,
+          -4
+        ],
+        [
+          0,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 8,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 21,
+        "y": 2,
+        "w": 15,
+        "h": 39
+      },
+      "anchor": [
+        5,
+        37
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          8,
+          -4
+        ],
+        [
+          0,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 8,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        8,
+        32
+      ],
+      "crop": [
+        959,
+        476,
+        49,
+        117
+      ],
+      "anchor": [
+        4,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        8,
+        32
+      ],
+      "crop": [
+        1312,
+        473,
+        48,
+        120
+      ],
+      "anchor": [
+        4,
+        32
+      ],
+      "lift": 0
+    }
+  }
+}

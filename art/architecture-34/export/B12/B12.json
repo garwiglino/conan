@@ -1,0 +1,257 @@
+{
+  "id": "B12",
+  "label": "Atelier de charpente",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/09-ateliers.png",
+  "sheet": "Ateliers à nuisances",
+  "season": "base",
+  "width": 112,
+  "depth": 80,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": true,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 38,
+        "w": 161,
+        "h": 92
+      },
+      "anchor": [
+        60,
+        90
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 72
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 167,
+        "y": 2,
+        "w": 145,
+        "h": 128
+      },
+      "anchor": [
+        44,
+        126
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 72
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 332,
+        "y": 38,
+        "w": 161,
+        "h": 92
+      },
+      "anchor": [
+        60,
+        90
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 72
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 497,
+        "y": 2,
+        "w": 145,
+        "h": 128
+      },
+      "anchor": [
+        44,
+        126
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 72
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        72
+      ],
+      "crop": [
+        211,
+        757,
+        366,
+        171
+      ],
+      "anchor": [
+        56,
+        72
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        72
+      ],
+      "crop": [
+        605,
+        757,
+        253,
+        171
+      ],
+      "anchor": [
+        40,
+        72
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        72
+      ],
+      "crop": [
+        900,
+        763,
+        312,
+        165
+      ],
+      "anchor": [
+        56,
+        72
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        72
+      ],
+      "crop": [
+        1258,
+        757,
+        241,
+        171
+      ],
+      "anchor": [
+        40,
+        72
+      ],
+      "lift": 0
+    }
+  }
+}

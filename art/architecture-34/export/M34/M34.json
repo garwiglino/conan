@@ -1,0 +1,144 @@
+{
+  "id": "M34",
+  "label": "Gouttière et descente",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/20-eau-salubrite.png",
+  "sheet": "Eau et salubrité — structures seules",
+  "season": "base",
+  "shape": "gutter",
+  "width": 48,
+  "depth": 16,
+  "totalHeight": 24,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 24,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 59,
+        "h": 34
+      },
+      "anchor": [
+        25,
+        32
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          32,
+          -8
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 65,
+        "y": 2,
+        "w": 43,
+        "h": 50
+      },
+      "anchor": [
+        9,
+        48
+      ],
+      "footprint": [
+        [
+          -8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          32,
+          -24
+        ],
+        [
+          16,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 48,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        862,
+        125,
+        273,
+        128
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        48
+      ],
+      "crop": [
+        1326,
+        124,
+        80,
+        145
+      ],
+      "anchor": [
+        6,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "id": "TER-H05",
+  "label": "Jonction en T",
+  "family": "teremor",
+  "kind": "module",
+  "source": "expansion/teremor-walls.png",
+  "sheet": "Teremor — hauts remparts",
+  "season": "base",
+  "shape": "junction-t",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 16,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 59,
+        "h": 79
+      },
+      "anchor": [
+        25,
+        77
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 65,
+        "y": 2,
+        "w": 59,
+        "h": 79
+      },
+      "anchor": [
+        25,
+        77
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        64
+      ],
+      "crop": [
+        112,
+        738,
+        218,
+        189
+      ],
+      "anchor": [
+        24,
+        64
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        352,
+        735,
+        168,
+        181
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "TER-H01/ns",
+      "lift": 52
+    }
+  }
+}

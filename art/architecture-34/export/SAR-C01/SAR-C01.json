@@ -1,0 +1,257 @@
+{
+  "id": "SAR-C01",
+  "label": "Logis modeste",
+  "family": "sarak",
+  "kind": "building",
+  "source": "expansion/sarak-houses.png",
+  "sheet": "Sarak — maisons civiles",
+  "season": "base",
+  "width": 64,
+  "depth": 48,
+  "height": 48,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 91,
+        "h": 73
+      },
+      "anchor": [
+        33,
+        71
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          56,
+          -24
+        ],
+        [
+          -8,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 48,
+        "height": 48
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 97,
+        "y": 2,
+        "w": 83,
+        "h": 81
+      },
+      "anchor": [
+        25,
+        79
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          56,
+          -32
+        ],
+        [
+          8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 64,
+        "height": 48
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 192,
+        "y": 10,
+        "w": 91,
+        "h": 73
+      },
+      "anchor": [
+        33,
+        71
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          56,
+          -24
+        ],
+        [
+          -8,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 48,
+        "height": 48
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 287,
+        "y": 2,
+        "w": 83,
+        "h": 81
+      },
+      "anchor": [
+        25,
+        79
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          56,
+          -32
+        ],
+        [
+          8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 64,
+        "height": 48
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        64,
+        48
+      ],
+      "crop": [
+        216,
+        161,
+        260,
+        143
+      ],
+      "anchor": [
+        32,
+        48
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        545,
+        150,
+        269,
+        154
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        64,
+        48
+      ],
+      "crop": [
+        894,
+        150,
+        241,
+        154
+      ],
+      "anchor": [
+        32,
+        48
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        1226,
+        150,
+        265,
+        154
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

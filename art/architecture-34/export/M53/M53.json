@@ -1,0 +1,146 @@
+{
+  "id": "M53",
+  "label": "Jonction haute en T",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/29-enceinte-haute-bois.png",
+  "sheet": "Enceinte haute de village — bois",
+  "season": "base",
+  "shape": "junction-t",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 40,
+  "walkHeight": 30,
+  "parapetHeight": 10,
+  "wallThickness": 12,
+  "material": "wood",
+  "height": 40,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 57,
+        "h": 57
+      },
+      "anchor": [
+        25,
+        55
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 40
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 63,
+        "y": 2,
+        "w": 57,
+        "h": 57
+      },
+      "anchor": [
+        25,
+        55
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 40
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        40
+      ],
+      "crop": [
+        48,
+        664,
+        228,
+        203
+      ],
+      "anchor": [
+        24,
+        40
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        323,
+        658,
+        178,
+        203
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "M49/ns",
+      "lift": 30
+    }
+  }
+}

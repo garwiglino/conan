@@ -1,0 +1,144 @@
+{
+  "id": "M42",
+  "label": "Travée chaume",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/21-toitures-chantier.png",
+  "sheet": "Couvertures et assemblages",
+  "season": "base",
+  "shape": "roof-thatch",
+  "width": 48,
+  "depth": 32,
+  "totalHeight": 16,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 16,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 8,
+        "w": 67,
+        "h": 27
+      },
+      "anchor": [
+        25,
+        25
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          40,
+          -16
+        ],
+        [
+          -8,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 32,
+        "height": 16
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 73,
+        "y": 2,
+        "w": 59,
+        "h": 33
+      },
+      "anchor": [
+        17,
+        31
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          40,
+          -24
+        ],
+        [
+          8,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 48,
+        "height": 16
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        32
+      ],
+      "crop": [
+        849,
+        136,
+        311,
+        126
+      ],
+      "anchor": [
+        24,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        32,
+        48
+      ],
+      "crop": [
+        1314,
+        130,
+        89,
+        144
+      ],
+      "anchor": [
+        16,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

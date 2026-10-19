@@ -1,0 +1,144 @@
+{
+  "id": "M01",
+  "label": "Panneau colombage",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/16-structures.png",
+  "sheet": "Structure et enveloppes",
+  "season": "base",
+  "shape": "wall-timber",
+  "width": 48,
+  "depth": 8,
+  "totalHeight": 24,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 8,
+  "height": 24,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 22,
+        "w": 55,
+        "h": 31
+      },
+      "anchor": [
+        25,
+        29
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          28,
+          -4
+        ],
+        [
+          -20,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 61,
+        "y": 2,
+        "w": 35,
+        "h": 51
+      },
+      "anchor": [
+        5,
+        49
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          28,
+          -24
+        ],
+        [
+          20,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 48,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        140,
+        147,
+        263,
+        89
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        8,
+        48
+      ],
+      "crop": [
+        579,
+        121,
+        39,
+        123
+      ],
+      "anchor": [
+        4,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

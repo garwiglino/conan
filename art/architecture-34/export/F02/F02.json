@@ -1,0 +1,257 @@
+{
+  "id": "F02",
+  "label": "Caserne",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/13-garde.png",
+  "sheet": "Garde et défense habitée",
+  "season": "base",
+  "width": 128,
+  "depth": 80,
+  "height": 96,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 46,
+        "w": 177,
+        "h": 116
+      },
+      "anchor": [
+        68,
+        114
+      ],
+      "footprint": [
+        [
+          -64,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          104,
+          -40
+        ],
+        [
+          -24,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 80,
+        "height": 96
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 183,
+        "y": 2,
+        "w": 153,
+        "h": 160
+      },
+      "anchor": [
+        44,
+        158
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          104,
+          -64
+        ],
+        [
+          24,
+          -64
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 128,
+        "height": 96
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 364,
+        "y": 46,
+        "w": 177,
+        "h": 116
+      },
+      "anchor": [
+        68,
+        114
+      ],
+      "footprint": [
+        [
+          -64,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          104,
+          -40
+        ],
+        [
+          -24,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 80,
+        "height": 96
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 545,
+        "y": 2,
+        "w": 153,
+        "h": 160
+      },
+      "anchor": [
+        44,
+        158
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          104,
+          -64
+        ],
+        [
+          24,
+          -64
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 128,
+        "height": 96
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        128,
+        96
+      ],
+      "crop": [
+        217,
+        307,
+        348,
+        180
+      ],
+      "anchor": [
+        64,
+        96
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        96
+      ],
+      "crop": [
+        605,
+        305,
+        226,
+        182
+      ],
+      "anchor": [
+        40,
+        96
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        128,
+        96
+      ],
+      "crop": [
+        873,
+        307,
+        329,
+        180
+      ],
+      "anchor": [
+        64,
+        96
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        96
+      ],
+      "crop": [
+        1252,
+        305,
+        235,
+        182
+      ],
+      "anchor": [
+        40,
+        96
+      ],
+      "lift": 0
+    }
+  }
+}

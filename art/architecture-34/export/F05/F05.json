@@ -1,0 +1,257 @@
+{
+  "id": "F05",
+  "label": "Tour de guet bois",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/14-fortifications.png",
+  "sheet": "Tours et portes d’enceinte",
+  "season": "base",
+  "width": 64,
+  "depth": 64,
+  "height": 128,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 19,
+        "w": 105,
+        "h": 143
+      },
+      "anchor": [
+        36,
+        142
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 111,
+        "y": 2,
+        "w": 105,
+        "h": 160
+      },
+      "anchor": [
+        36,
+        158
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 220,
+        "y": 18,
+        "w": 105,
+        "h": 144
+      },
+      "anchor": [
+        36,
+        142
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 329,
+        "y": 2,
+        "w": 105,
+        "h": 160
+      },
+      "anchor": [
+        36,
+        158
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        64,
+        128
+      ],
+      "crop": [
+        328,
+        109,
+        134,
+        204
+      ],
+      "anchor": [
+        32,
+        128
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        128
+      ],
+      "crop": [
+        655,
+        108,
+        153,
+        202
+      ],
+      "anchor": [
+        32,
+        128
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        64,
+        128
+      ],
+      "crop": [
+        958,
+        109,
+        134,
+        202
+      ],
+      "anchor": [
+        32,
+        128
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        128
+      ],
+      "crop": [
+        1267,
+        108,
+        155,
+        202
+      ],
+      "anchor": [
+        32,
+        128
+      ],
+      "lift": 0
+    }
+  }
+}

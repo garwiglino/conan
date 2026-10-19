@@ -1,0 +1,144 @@
+{
+  "id": "M47",
+  "label": "Travée échafaudage",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/21-toitures-chantier.png",
+  "sheet": "Couvertures et assemblages",
+  "season": "base",
+  "shape": "scaffold",
+  "width": 48,
+  "depth": 24,
+  "totalHeight": 32,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 32,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 14,
+        "w": 63,
+        "h": 46
+      },
+      "anchor": [
+        25,
+        44
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          36,
+          -12
+        ],
+        [
+          -12,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 69,
+        "y": 2,
+        "w": 51,
+        "h": 58
+      },
+      "anchor": [
+        13,
+        56
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        32
+      ],
+      "crop": [
+        145,
+        657,
+        289,
+        143
+      ],
+      "anchor": [
+        24,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        48
+      ],
+      "crop": [
+        568,
+        648,
+        97,
+        158
+      ],
+      "anchor": [
+        6,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

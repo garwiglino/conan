@@ -1,0 +1,257 @@
+{
+  "id": "F07",
+  "label": "Porte de palissade",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/14-fortifications.png",
+  "sheet": "Tours et portes d’enceinte",
+  "season": "base",
+  "width": 112,
+  "depth": 48,
+  "height": 96,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 32,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 46,
+        "w": 145,
+        "h": 108
+      },
+      "anchor": [
+        60,
+        106
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          80,
+          -24
+        ],
+        [
+          -32,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 96
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 151,
+        "y": 2,
+        "w": 113,
+        "h": 152
+      },
+      "anchor": [
+        28,
+        150
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          80,
+          -56
+        ],
+        [
+          32,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 112,
+        "height": 96
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 300,
+        "y": 46,
+        "w": 145,
+        "h": 108
+      },
+      "anchor": [
+        60,
+        106
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          80,
+          -24
+        ],
+        [
+          -32,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 96
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 449,
+        "y": 2,
+        "w": 113,
+        "h": 152
+      },
+      "anchor": [
+        28,
+        150
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          80,
+          -56
+        ],
+        [
+          32,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 112,
+        "height": 96
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        96
+      ],
+      "crop": [
+        241,
+        555,
+        316,
+        160
+      ],
+      "anchor": [
+        56,
+        96
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        48,
+        96
+      ],
+      "crop": [
+        631,
+        555,
+        174,
+        161
+      ],
+      "anchor": [
+        24,
+        96
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        96
+      ],
+      "crop": [
+        880,
+        555,
+        324,
+        160
+      ],
+      "anchor": [
+        56,
+        96
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        48,
+        96
+      ],
+      "crop": [
+        1275,
+        556,
+        172,
+        159
+      ],
+      "anchor": [
+        24,
+        96
+      ],
+      "lift": 0
+    }
+  }
+}

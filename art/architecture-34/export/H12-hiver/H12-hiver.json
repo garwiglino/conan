@@ -1,0 +1,257 @@
+{
+  "id": "H12-hiver",
+  "label": "Grande maison de maisonnée — hiver",
+  "family": "igea",
+  "kind": "building",
+  "source": "concepts/33-habitat-igea-hiver.png",
+  "sheet": "Igea — variantes d’habitation sous neige",
+  "season": "winter",
+  "width": 112,
+  "depth": 72,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 24,
+        "w": 157,
+        "h": 113
+      },
+      "anchor": [
+        60,
+        111
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          92,
+          -36
+        ],
+        [
+          -20,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 163,
+        "y": 2,
+        "w": 137,
+        "h": 135
+      },
+      "anchor": [
+        40,
+        133
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          92,
+          -56
+        ],
+        [
+          20,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 112,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 324,
+        "y": 24,
+        "w": 157,
+        "h": 113
+      },
+      "anchor": [
+        60,
+        111
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          92,
+          -36
+        ],
+        [
+          -20,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 485,
+        "y": 2,
+        "w": 137,
+        "h": 135
+      },
+      "anchor": [
+        40,
+        133
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          92,
+          -56
+        ],
+        [
+          20,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 112,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        80
+      ],
+      "crop": [
+        168,
+        790,
+        403,
+        170
+      ],
+      "anchor": [
+        56,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        592,
+        793,
+        225,
+        167
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        80
+      ],
+      "crop": [
+        850,
+        792,
+        373,
+        168
+      ],
+      "anchor": [
+        56,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        1267,
+        792,
+        223,
+        168
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

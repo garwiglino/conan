@@ -1,0 +1,258 @@
+{
+  "id": "H23",
+  "label": "Maisons de bourg jumelées",
+  "family": "tagon",
+  "kind": "building",
+  "source": "concepts/28-habitat-tagon.png",
+  "sheet": "Tagon — maisons côtières et forestières",
+  "season": "base",
+  "width": 112,
+  "depth": 64,
+  "height": 80,
+  "entrances": [
+    0.26,
+    0.74
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 42,
+        "w": 153,
+        "h": 96
+      },
+      "anchor": [
+        60,
+        94
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          88,
+          -32
+        ],
+        [
+          -24,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 159,
+        "y": 2,
+        "w": 129,
+        "h": 136
+      },
+      "anchor": [
+        36,
+        134
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          88,
+          -56
+        ],
+        [
+          24,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 112,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 316,
+        "y": 42,
+        "w": 153,
+        "h": 96
+      },
+      "anchor": [
+        60,
+        94
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          88,
+          -32
+        ],
+        [
+          -24,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 473,
+        "y": 2,
+        "w": 129,
+        "h": 136
+      },
+      "anchor": [
+        36,
+        134
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          88,
+          -56
+        ],
+        [
+          24,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 112,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        80
+      ],
+      "crop": [
+        208,
+        525,
+        356,
+        215
+      ],
+      "anchor": [
+        56,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        599,
+        525,
+        201,
+        213
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        80
+      ],
+      "crop": [
+        858,
+        525,
+        352,
+        213
+      ],
+      "anchor": [
+        56,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        1263,
+        525,
+        196,
+        213
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

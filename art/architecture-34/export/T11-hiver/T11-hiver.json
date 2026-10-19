@@ -1,0 +1,257 @@
+{
+  "id": "T11-hiver",
+  "label": "Grenier surélevé — hiver",
+  "family": "igea",
+  "kind": "building",
+  "source": "concepts/22-igea-hiver.png",
+  "sheet": "Igea — neige saisonnière",
+  "season": "winter",
+  "width": 64,
+  "depth": 56,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 20,
+        "w": 101,
+        "h": 86
+      },
+      "anchor": [
+        36,
+        84
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          60,
+          -28
+        ],
+        [
+          -4,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 56,
+        "height": 72
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 107,
+        "y": 2,
+        "w": 97,
+        "h": 104
+      },
+      "anchor": [
+        32,
+        102
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          60,
+          -32
+        ],
+        [
+          4,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 64,
+        "height": 72
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 212,
+        "y": 20,
+        "w": 101,
+        "h": 86
+      },
+      "anchor": [
+        36,
+        84
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          60,
+          -28
+        ],
+        [
+          -4,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 56,
+        "height": 72
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 317,
+        "y": 2,
+        "w": 97,
+        "h": 104
+      },
+      "anchor": [
+        32,
+        102
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          60,
+          -32
+        ],
+        [
+          4,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 64,
+        "height": 72
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        64,
+        72
+      ],
+      "crop": [
+        286,
+        528,
+        188,
+        184
+      ],
+      "anchor": [
+        32,
+        72
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        56,
+        72
+      ],
+      "crop": [
+        562,
+        543,
+        252,
+        170
+      ],
+      "anchor": [
+        28,
+        72
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        64,
+        72
+      ],
+      "crop": [
+        933,
+        528,
+        192,
+        184
+      ],
+      "anchor": [
+        32,
+        72
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        56,
+        72
+      ],
+      "crop": [
+        1238,
+        543,
+        251,
+        170
+      ],
+      "anchor": [
+        28,
+        72
+      ],
+      "lift": 0
+    }
+  }
+}

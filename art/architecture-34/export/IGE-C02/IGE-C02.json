@@ -1,0 +1,257 @@
+{
+  "id": "IGE-C02",
+  "label": "Maison familiale",
+  "family": "igea",
+  "kind": "building",
+  "source": "expansion/igea-houses.png",
+  "sheet": "Igea — maisons civiles",
+  "season": "base",
+  "width": 88,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 17,
+        "w": 129,
+        "h": 95
+      },
+      "anchor": [
+        48,
+        93
+      ],
+      "footprint": [
+        [
+          -44,
+          0
+        ],
+        [
+          44,
+          0
+        ],
+        [
+          76,
+          -32
+        ],
+        [
+          -12,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 88,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 135,
+        "y": 2,
+        "w": 117,
+        "h": 110
+      },
+      "anchor": [
+        36,
+        108
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          76,
+          -44
+        ],
+        [
+          12,
+          -44
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 88,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 268,
+        "y": 17,
+        "w": 129,
+        "h": 95
+      },
+      "anchor": [
+        48,
+        93
+      ],
+      "footprint": [
+        [
+          -44,
+          0
+        ],
+        [
+          44,
+          0
+        ],
+        [
+          76,
+          -32
+        ],
+        [
+          -12,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 88,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 401,
+        "y": 2,
+        "w": 117,
+        "h": 110
+      },
+      "anchor": [
+        36,
+        108
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          76,
+          -44
+        ],
+        [
+          12,
+          -44
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 88,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        88,
+        64
+      ],
+      "crop": [
+        235,
+        340,
+        313,
+        203
+      ],
+      "anchor": [
+        44,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        588,
+        343,
+        229,
+        199
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        88,
+        64
+      ],
+      "crop": [
+        897,
+        340,
+        278,
+        202
+      ],
+      "anchor": [
+        44,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        1259,
+        343,
+        228,
+        200
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

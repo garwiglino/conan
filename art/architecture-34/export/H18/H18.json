@@ -1,0 +1,257 @@
+{
+  "id": "H18",
+  "label": "Maison familiale ventilée",
+  "family": "varan",
+  "kind": "building",
+  "source": "concepts/27-habitat-varan.png",
+  "sheet": "Varan — maisons ventilées",
+  "season": "base",
+  "width": 88,
+  "depth": 64,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 30,
+        "w": 129,
+        "h": 96
+      },
+      "anchor": [
+        48,
+        94
+      ],
+      "footprint": [
+        [
+          -44,
+          0
+        ],
+        [
+          44,
+          0
+        ],
+        [
+          76,
+          -32
+        ],
+        [
+          -12,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 88,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 135,
+        "y": 2,
+        "w": 117,
+        "h": 124
+      },
+      "anchor": [
+        36,
+        122
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          76,
+          -44
+        ],
+        [
+          12,
+          -44
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 88,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 268,
+        "y": 30,
+        "w": 129,
+        "h": 96
+      },
+      "anchor": [
+        48,
+        94
+      ],
+      "footprint": [
+        [
+          -44,
+          0
+        ],
+        [
+          44,
+          0
+        ],
+        [
+          76,
+          -32
+        ],
+        [
+          -12,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 88,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 401,
+        "y": 2,
+        "w": 117,
+        "h": 124
+      },
+      "anchor": [
+        36,
+        122
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          76,
+          -44
+        ],
+        [
+          12,
+          -44
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 88,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        88,
+        80
+      ],
+      "crop": [
+        204,
+        338,
+        327,
+        172
+      ],
+      "anchor": [
+        44,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        554,
+        320,
+        253,
+        190
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        88,
+        80
+      ],
+      "crop": [
+        851,
+        322,
+        340,
+        188
+      ],
+      "anchor": [
+        44,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        1247,
+        327,
+        244,
+        183
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "H14",
+  "label": "Maison à patio",
+  "family": "sarak",
+  "kind": "building",
+  "source": "concepts/26-habitat-sarak.png",
+  "sheet": "Sarak — variantes de maisons",
+  "season": "base",
+  "width": 80,
+  "depth": 72,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 6,
+        "w": 119,
+        "h": 101
+      },
+      "anchor": [
+        41,
+        99
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          76,
+          -36
+        ],
+        [
+          -4,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 72,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 125,
+        "y": 2,
+        "w": 115,
+        "h": 105
+      },
+      "anchor": [
+        37,
+        103
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          76,
+          -40
+        ],
+        [
+          4,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 248,
+        "y": 6,
+        "w": 119,
+        "h": 101
+      },
+      "anchor": [
+        41,
+        99
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          76,
+          -36
+        ],
+        [
+          -4,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 72,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 371,
+        "y": 2,
+        "w": 115,
+        "h": 105
+      },
+      "anchor": [
+        37,
+        103
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          76,
+          -40
+        ],
+        [
+          4,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        64
+      ],
+      "crop": [
+        205,
+        337,
+        292,
+        160
+      ],
+      "anchor": [
+        40,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        72,
+        64
+      ],
+      "crop": [
+        560,
+        338,
+        279,
+        159
+      ],
+      "anchor": [
+        36,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        64
+      ],
+      "crop": [
+        878,
+        338,
+        298,
+        159
+      ],
+      "anchor": [
+        40,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        72,
+        64
+      ],
+      "crop": [
+        1220,
+        338,
+        272,
+        159
+      ],
+      "anchor": [
+        36,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

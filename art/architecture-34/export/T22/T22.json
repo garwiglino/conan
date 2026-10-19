@@ -1,0 +1,257 @@
+{
+  "id": "T22",
+  "label": "Maison forestière",
+  "family": "tagon",
+  "kind": "building",
+  "source": "concepts/06-tagon.png",
+  "sheet": "Tagon — côtes et arrière-pays",
+  "season": "base",
+  "width": 80,
+  "depth": 64,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 22,
+        "w": 121,
+        "h": 88
+      },
+      "anchor": [
+        44,
+        86
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          72,
+          -32
+        ],
+        [
+          -8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 72
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 127,
+        "y": 2,
+        "w": 113,
+        "h": 108
+      },
+      "anchor": [
+        36,
+        106
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          72,
+          -40
+        ],
+        [
+          8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 80,
+        "height": 72
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 252,
+        "y": 22,
+        "w": 121,
+        "h": 88
+      },
+      "anchor": [
+        44,
+        86
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          72,
+          -32
+        ],
+        [
+          -8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 72
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 377,
+        "y": 2,
+        "w": 113,
+        "h": 108
+      },
+      "anchor": [
+        36,
+        106
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          72,
+          -40
+        ],
+        [
+          8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 80,
+        "height": 72
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        72
+      ],
+      "crop": [
+        221,
+        340,
+        292,
+        156
+      ],
+      "anchor": [
+        40,
+        72
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        72
+      ],
+      "crop": [
+        565,
+        327,
+        271,
+        168
+      ],
+      "anchor": [
+        32,
+        72
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        72
+      ],
+      "crop": [
+        883,
+        332,
+        300,
+        164
+      ],
+      "anchor": [
+        40,
+        72
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        72
+      ],
+      "crop": [
+        1233,
+        327,
+        255,
+        168
+      ],
+      "anchor": [
+        32,
+        72
+      ],
+      "lift": 0
+    }
+  }
+}

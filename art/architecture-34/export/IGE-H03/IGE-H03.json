@@ -1,0 +1,147 @@
+{
+  "id": "IGE-H03",
+  "label": "Angle extérieur",
+  "family": "igea",
+  "kind": "module",
+  "source": "expansion/igea-walls.png",
+  "sheet": "Igea — hauts remparts",
+  "season": "base",
+  "shape": "corner-outer",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 16,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 75,
+        "h": 91
+      },
+      "anchor": [
+        25,
+        89
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 81,
+        "y": 2,
+        "w": 75,
+        "h": 91
+      },
+      "anchor": [
+        25,
+        89
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        134,
+        463,
+        200,
+        175
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "IGE-H01/ns",
+      "lift": 52
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        381,
+        443,
+        139,
+        203
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "IGE-H01/ns",
+      "lift": 52
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "B08",
+  "label": "Comptoir d’échange",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/08-echanges.png",
+  "sheet": "Marchés et relais",
+  "season": "base",
+  "width": 80,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 27,
+        "w": 121,
+        "h": 79
+      },
+      "anchor": [
+        44,
+        78
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          72,
+          -32
+        ],
+        [
+          -8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 127,
+        "y": 2,
+        "w": 113,
+        "h": 104
+      },
+      "anchor": [
+        36,
+        102
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          72,
+          -40
+        ],
+        [
+          8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 252,
+        "y": 26,
+        "w": 121,
+        "h": 80
+      },
+      "anchor": [
+        44,
+        78
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          72,
+          -32
+        ],
+        [
+          -8,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 377,
+        "y": 2,
+        "w": 113,
+        "h": 104
+      },
+      "anchor": [
+        36,
+        102
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          72,
+          -40
+        ],
+        [
+          8,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 80,
+        "height": 64
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        64
+      ],
+      "crop": [
+        254,
+        795,
+        219,
+        167
+      ],
+      "anchor": [
+        40,
+        64
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        610,
+        796,
+        167,
+        162
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        64
+      ],
+      "crop": [
+        909,
+        796,
+        202,
+        162
+      ],
+      "anchor": [
+        40,
+        64
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        64
+      ],
+      "crop": [
+        1271,
+        797,
+        176,
+        162
+      ],
+      "anchor": [
+        32,
+        64
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "M16",
+  "label": "Escalier de rempart",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/17-enceintes.png",
+  "sheet": "Murs et chemins de ronde",
+  "season": "base",
+  "shape": "stairs",
+  "width": 24,
+  "depth": 48,
+  "totalHeight": 20,
+  "walkHeight": 20,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 20,
+  "high": false,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 51,
+        "h": 47
+      },
+      "anchor": [
+        13,
+        45
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 20
+      },
+      "sourceFacades": [
+        "face",
+        "face"
+      ]
+    },
+    "palier": {
+      "frame": {
+        "x": 65,
+        "y": 2,
+        "w": 59,
+        "h": 55
+      },
+      "anchor": [
+        13,
+        53
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          44,
+          -32
+        ],
+        [
+          20,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 20
+      },
+      "sourceFacades": [
+        "palier",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        24,
+        68
+      ],
+      "crop": [
+        885,
+        658,
+        128,
+        181
+      ],
+      "anchor": [
+        12,
+        68
+      ],
+      "lift": 0
+    },
+    "palier": {
+      "size": [
+        24,
+        84
+      ],
+      "crop": [
+        1188,
+        660,
+        218,
+        182
+      ],
+      "anchor": [
+        12,
+        84
+      ],
+      "lift": 0
+    }
+  }
+}

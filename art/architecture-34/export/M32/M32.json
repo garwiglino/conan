@@ -1,0 +1,144 @@
+{
+  "id": "M32",
+  "label": "Rampe de chargement",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/19-franchissements.png",
+  "sheet": "Ponts et accès portuaires",
+  "season": "base",
+  "shape": "ramp",
+  "width": 32,
+  "depth": 32,
+  "totalHeight": 12,
+  "walkHeight": 12,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 12,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 51,
+        "h": 31
+      },
+      "anchor": [
+        17,
+        29
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          32,
+          -16
+        ],
+        [
+          0,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 32,
+        "height": 12
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 57,
+        "y": 2,
+        "w": 51,
+        "h": 31
+      },
+      "anchor": [
+        17,
+        29
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          32,
+          -16
+        ],
+        [
+          0,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 32,
+        "height": 12
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        32,
+        32
+      ],
+      "crop": [
+        882,
+        681,
+        246,
+        111
+      ],
+      "anchor": [
+        16,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        32,
+        32
+      ],
+      "crop": [
+        1312,
+        672,
+        117,
+        136
+      ],
+      "anchor": [
+        16,
+        32
+      ],
+      "lift": 0
+    }
+  }
+}

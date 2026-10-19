@@ -1,0 +1,257 @@
+{
+  "id": "F06",
+  "label": "Tour de rempart pierre",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/14-fortifications.png",
+  "sheet": "Tours et portes d’enceinte",
+  "season": "base",
+  "width": 80,
+  "depth": 80,
+  "height": 128,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 123,
+        "h": 169
+      },
+      "anchor": [
+        41,
+        167
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          0,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 129,
+        "y": 2,
+        "w": 123,
+        "h": 169
+      },
+      "anchor": [
+        41,
+        167
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          0,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 256,
+        "y": 2,
+        "w": 123,
+        "h": 169
+      },
+      "anchor": [
+        41,
+        167
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          0,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 383,
+        "y": 2,
+        "w": 123,
+        "h": 169
+      },
+      "anchor": [
+        41,
+        167
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          0,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        271,
+        336,
+        247,
+        190
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        638,
+        337,
+        186,
+        187
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        913,
+        336,
+        221,
+        188
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        128
+      ],
+      "crop": [
+        1255,
+        337,
+        185,
+        187
+      ],
+      "anchor": [
+        40,
+        128
+      ],
+      "lift": 0
+    }
+  }
+}

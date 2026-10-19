@@ -1,0 +1,257 @@
+{
+  "id": "T23",
+  "label": "Maison des marins",
+  "family": "tagon",
+  "kind": "building",
+  "source": "concepts/06-tagon.png",
+  "sheet": "Tagon — côtes et arrière-pays",
+  "season": "base",
+  "width": 112,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 38,
+        "w": 161,
+        "h": 108
+      },
+      "anchor": [
+        60,
+        106
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 167,
+        "y": 2,
+        "w": 145,
+        "h": 144
+      },
+      "anchor": [
+        44,
+        142
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 88
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 332,
+        "y": 38,
+        "w": 161,
+        "h": 108
+      },
+      "anchor": [
+        60,
+        106
+      ],
+      "footprint": [
+        [
+          -56,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          96,
+          -40
+        ],
+        [
+          -16,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 497,
+        "y": 2,
+        "w": 145,
+        "h": 144
+      },
+      "anchor": [
+        44,
+        142
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          96,
+          -56
+        ],
+        [
+          16,
+          -56
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 112,
+        "height": 88
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        112,
+        88
+      ],
+      "crop": [
+        209,
+        522,
+        334,
+        238
+      ],
+      "anchor": [
+        56,
+        88
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        593,
+        522,
+        210,
+        237
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        112,
+        88
+      ],
+      "crop": [
+        860,
+        522,
+        339,
+        236
+      ],
+      "anchor": [
+        56,
+        88
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        80,
+        88
+      ],
+      "crop": [
+        1257,
+        523,
+        205,
+        235
+      ],
+      "anchor": [
+        40,
+        88
+      ],
+      "lift": 0
+    }
+  }
+}

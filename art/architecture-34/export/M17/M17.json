@@ -1,0 +1,144 @@
+{
+  "id": "M17",
+  "label": "Porte de maison",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/18-ouvertures.png",
+  "sheet": "Portes, fenêtres et protection",
+  "season": "base",
+  "shape": "door",
+  "width": 20,
+  "depth": 8,
+  "totalHeight": 28,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 28,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 5,
+        "w": 27,
+        "h": 33
+      },
+      "anchor": [
+        11,
+        31
+      ],
+      "footprint": [
+        [
+          -10,
+          0
+        ],
+        [
+          10,
+          0
+        ],
+        [
+          14,
+          -4
+        ],
+        [
+          -6,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 20,
+        "depth": 8,
+        "height": 28
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 33,
+        "y": 2,
+        "w": 21,
+        "h": 36
+      },
+      "anchor": [
+        5,
+        34
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          14,
+          -10
+        ],
+        [
+          6,
+          -10
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 20,
+        "height": 28
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        20,
+        28
+      ],
+      "crop": [
+        118,
+        140,
+        310,
+        112
+      ],
+      "anchor": [
+        10,
+        28
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        20
+      ],
+      "crop": [
+        550,
+        118,
+        82,
+        139
+      ],
+      "anchor": [
+        6,
+        20
+      ],
+      "lift": 0
+    }
+  }
+}

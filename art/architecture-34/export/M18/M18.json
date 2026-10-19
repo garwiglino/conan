@@ -1,0 +1,144 @@
+{
+  "id": "M18",
+  "label": "Vantaux de grand portail",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/18-ouvertures.png",
+  "sheet": "Portes, fenêtres et protection",
+  "season": "base",
+  "shape": "gate-leaves",
+  "width": 40,
+  "depth": 8,
+  "totalHeight": 32,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 32,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 19,
+        "w": 47,
+        "h": 35
+      },
+      "anchor": [
+        21,
+        33
+      ],
+      "footprint": [
+        [
+          -20,
+          0
+        ],
+        [
+          20,
+          0
+        ],
+        [
+          24,
+          -4
+        ],
+        [
+          -16,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 40,
+        "depth": 8,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 53,
+        "y": 2,
+        "w": 31,
+        "h": 52
+      },
+      "anchor": [
+        5,
+        50
+      ],
+      "footprint": [
+        [
+          -4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          24,
+          -20
+        ],
+        [
+          16,
+          -20
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 40,
+        "height": 32
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        40,
+        32
+      ],
+      "crop": [
+        785,
+        123,
+        434,
+        132
+      ],
+      "anchor": [
+        20,
+        32
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        40
+      ],
+      "crop": [
+        1311,
+        119,
+        85,
+        141
+      ],
+      "anchor": [
+        6,
+        40
+      ],
+      "lift": 0
+    }
+  }
+}

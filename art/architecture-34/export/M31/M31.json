@@ -1,0 +1,144 @@
+{
+  "id": "M31",
+  "label": "Escalier d’accostage",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/19-franchissements.png",
+  "sheet": "Ponts et accès portuaires",
+  "season": "base",
+  "shape": "stairs",
+  "width": 24,
+  "depth": 32,
+  "totalHeight": 12,
+  "walkHeight": 12,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 12,
+  "high": false,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 43,
+        "h": 31
+      },
+      "anchor": [
+        13,
+        29
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          28,
+          -16
+        ],
+        [
+          4,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 32,
+        "height": 12
+      },
+      "sourceFacades": [
+        "face",
+        "face"
+      ]
+    },
+    "palier": {
+      "frame": {
+        "x": 57,
+        "y": 2,
+        "w": 51,
+        "h": 39
+      },
+      "anchor": [
+        13,
+        37
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 12
+      },
+      "sourceFacades": [
+        "palier",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        24,
+        44
+      ],
+      "crop": [
+        145,
+        680,
+        236,
+        103
+      ],
+      "anchor": [
+        12,
+        44
+      ],
+      "lift": 0
+    },
+    "palier": {
+      "size": [
+        24,
+        60
+      ],
+      "crop": [
+        554,
+        668,
+        110,
+        132
+      ],
+      "anchor": [
+        12,
+        60
+      ],
+      "lift": 0
+    }
+  }
+}

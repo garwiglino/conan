@@ -1,0 +1,147 @@
+{
+  "id": "TAG-H04",
+  "label": "Angle intérieur",
+  "family": "tagon",
+  "kind": "module",
+  "source": "expansion/tagon-walls.png",
+  "sheet": "Tagon — hauts remparts",
+  "season": "base",
+  "shape": "corner-inner",
+  "width": 48,
+  "depth": 48,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 16,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 75,
+        "h": 91
+      },
+      "anchor": [
+        25,
+        89
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 81,
+        "y": 2,
+        "w": 75,
+        "h": 91
+      },
+      "anchor": [
+        25,
+        89
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          48,
+          -24
+        ],
+        [
+          0,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        649,
+        435,
+        178,
+        179
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "TAG-H01/ns",
+      "lift": 52
+    },
+    "ns": {
+      "size": [
+        48,
+        48
+      ],
+      "crop": [
+        867,
+        431,
+        127,
+        190
+      ],
+      "anchor": [
+        24,
+        48
+      ],
+      "composedFrom": "TAG-H01/ns",
+      "lift": 52
+    }
+  }
+}

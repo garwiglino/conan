@@ -1,0 +1,257 @@
+{
+  "id": "B04",
+  "label": "Abri pastoral démontable",
+  "family": "shared",
+  "kind": "building",
+  "source": "concepts/07-fermes.png",
+  "sheet": "Dépendances rurales",
+  "season": "base",
+  "width": 80,
+  "depth": 56,
+  "height": 56,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": true,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 24,
+        "w": 117,
+        "h": 70
+      },
+      "anchor": [
+        44,
+        68
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          68,
+          -28
+        ],
+        [
+          -12,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 56,
+        "height": 56
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 123,
+        "y": 2,
+        "w": 105,
+        "h": 92
+      },
+      "anchor": [
+        32,
+        90
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          68,
+          -40
+        ],
+        [
+          12,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 80,
+        "height": 56
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 244,
+        "y": 24,
+        "w": 117,
+        "h": 70
+      },
+      "anchor": [
+        44,
+        68
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          68,
+          -28
+        ],
+        [
+          -12,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 56,
+        "height": 56
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 365,
+        "y": 2,
+        "w": 105,
+        "h": 92
+      },
+      "anchor": [
+        32,
+        90
+      ],
+      "footprint": [
+        [
+          -28,
+          0
+        ],
+        [
+          28,
+          0
+        ],
+        [
+          68,
+          -40
+        ],
+        [
+          12,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 56,
+        "depth": 80,
+        "height": 56
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        56
+      ],
+      "crop": [
+        255,
+        779,
+        267,
+        164
+      ],
+      "anchor": [
+        40,
+        56
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        56,
+        56
+      ],
+      "crop": [
+        606,
+        797,
+        219,
+        146
+      ],
+      "anchor": [
+        28,
+        56
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        56
+      ],
+      "crop": [
+        903,
+        793,
+        288,
+        151
+      ],
+      "anchor": [
+        40,
+        56
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        56,
+        56
+      ],
+      "crop": [
+        1268,
+        784,
+        226,
+        160
+      ],
+      "anchor": [
+        28,
+        56
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "M39",
+  "label": "Cheminée",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/20-eau-salubrite.png",
+  "sheet": "Eau et salubrité — structures seules",
+  "season": "base",
+  "shape": "chimney",
+  "width": 16,
+  "depth": 16,
+  "totalHeight": 24,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 24,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 27,
+        "h": 35
+      },
+      "anchor": [
+        9,
+        33
+      ],
+      "footprint": [
+        [
+          -8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          16,
+          -8
+        ],
+        [
+          0,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 16,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 33,
+        "y": 2,
+        "w": 27,
+        "h": 35
+      },
+      "anchor": [
+        9,
+        33
+      ],
+      "footprint": [
+        [
+          -8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          16,
+          -8
+        ],
+        [
+          0,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 16,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        16,
+        24
+      ],
+      "crop": [
+        243,
+        663,
+        97,
+        135
+      ],
+      "anchor": [
+        8,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        16,
+        24
+      ],
+      "crop": [
+        593,
+        661,
+        71,
+        153
+      ],
+      "anchor": [
+        8,
+        24
+      ],
+      "lift": 0
+    }
+  }
+}

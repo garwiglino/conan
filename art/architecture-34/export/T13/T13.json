@@ -1,0 +1,257 @@
+{
+  "id": "T13",
+  "label": "Maison à cour",
+  "family": "sarak",
+  "kind": "building",
+  "source": "concepts/04-sarak.png",
+  "sheet": "Sarak — bassins et étapes",
+  "season": "base",
+  "width": 80,
+  "depth": 72,
+  "height": 56,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 6,
+        "w": 119,
+        "h": 93
+      },
+      "anchor": [
+        41,
+        91
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          76,
+          -36
+        ],
+        [
+          -4,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 72,
+        "height": 56
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 125,
+        "y": 2,
+        "w": 115,
+        "h": 97
+      },
+      "anchor": [
+        37,
+        95
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          76,
+          -40
+        ],
+        [
+          4,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 80,
+        "height": 56
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 248,
+        "y": 6,
+        "w": 119,
+        "h": 93
+      },
+      "anchor": [
+        41,
+        91
+      ],
+      "footprint": [
+        [
+          -40,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          76,
+          -36
+        ],
+        [
+          -4,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 72,
+        "height": 56
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 371,
+        "y": 2,
+        "w": 115,
+        "h": 97
+      },
+      "anchor": [
+        37,
+        95
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          76,
+          -40
+        ],
+        [
+          4,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 80,
+        "height": 56
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        80,
+        56
+      ],
+      "crop": [
+        219,
+        143,
+        249,
+        142
+      ],
+      "anchor": [
+        40,
+        56
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        72,
+        56
+      ],
+      "crop": [
+        546,
+        141,
+        270,
+        141
+      ],
+      "anchor": [
+        36,
+        56
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        80,
+        56
+      ],
+      "crop": [
+        895,
+        149,
+        238,
+        133
+      ],
+      "anchor": [
+        40,
+        56
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        72,
+        56
+      ],
+      "crop": [
+        1227,
+        140,
+        267,
+        142
+      ],
+      "anchor": [
+        36,
+        56
+      ],
+      "lift": 0
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "T17",
+  "label": "Maison sur plancher haut",
+  "family": "varan",
+  "kind": "building",
+  "source": "concepts/05-varan.png",
+  "sheet": "Varan — habitats humides",
+  "season": "base",
+  "width": 72,
+  "depth": 64,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 19,
+        "w": 113,
+        "h": 96
+      },
+      "anchor": [
+        40,
+        94
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          68,
+          -32
+        ],
+        [
+          -4,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "face",
+        "droite"
+      ]
+    },
+    "droite": {
+      "frame": {
+        "x": 119,
+        "y": 2,
+        "w": 109,
+        "h": 113
+      },
+      "anchor": [
+        36,
+        111
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          68,
+          -36
+        ],
+        [
+          4,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "droite",
+        "dos"
+      ]
+    },
+    "dos": {
+      "frame": {
+        "x": 236,
+        "y": 19,
+        "w": 113,
+        "h": 96
+      },
+      "anchor": [
+        40,
+        94
+      ],
+      "footprint": [
+        [
+          -36,
+          0
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          68,
+          -32
+        ],
+        [
+          -4,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 64,
+        "height": 80
+      },
+      "sourceFacades": [
+        "dos",
+        "gauche"
+      ]
+    },
+    "gauche": {
+      "frame": {
+        "x": 353,
+        "y": 2,
+        "w": 109,
+        "h": 113
+      },
+      "anchor": [
+        36,
+        111
+      ],
+      "footprint": [
+        [
+          -32,
+          0
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          68,
+          -36
+        ],
+        [
+          4,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 72,
+        "height": 80
+      },
+      "sourceFacades": [
+        "gauche",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        241,
+        116,
+        240,
+        178
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    },
+    "droite": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        553,
+        113,
+        215,
+        181
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    },
+    "dos": {
+      "size": [
+        72,
+        80
+      ],
+      "crop": [
+        891,
+        116,
+        257,
+        178
+      ],
+      "anchor": [
+        36,
+        80
+      ],
+      "lift": 0
+    },
+    "gauche": {
+      "size": [
+        64,
+        80
+      ],
+      "crop": [
+        1239,
+        112,
+        211,
+        182
+      ],
+      "anchor": [
+        32,
+        80
+      ],
+      "lift": 0
+    }
+  }
+}

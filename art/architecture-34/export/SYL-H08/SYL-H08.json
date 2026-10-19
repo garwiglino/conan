@@ -1,0 +1,145 @@
+{
+  "id": "SYL-H08",
+  "label": "Parapet indépendant",
+  "family": "sylverive",
+  "kind": "module",
+  "source": "expansion/sylverive-walls.png",
+  "sheet": "Sylverive — hauts remparts",
+  "season": "base",
+  "shape": "parapet",
+  "width": 48,
+  "depth": 16,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 16,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 18,
+        "w": 59,
+        "h": 23
+      },
+      "anchor": [
+        25,
+        73
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          32,
+          -8
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 65,
+        "y": 2,
+        "w": 43,
+        "h": 39
+      },
+      "anchor": [
+        9,
+        89
+      ],
+      "footprint": [
+        [
+          -8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          32,
+          -24
+        ],
+        [
+          16,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        12
+      ],
+      "crop": [
+        678,
+        1052,
+        173,
+        49
+      ],
+      "anchor": [
+        24,
+        12
+      ],
+      "lift": 52
+    },
+    "ns": {
+      "size": [
+        16,
+        48
+      ],
+      "crop": [
+        904,
+        989,
+        56,
+        164
+      ],
+      "anchor": [
+        8,
+        48
+      ],
+      "lift": 52
+    }
+  }
+}

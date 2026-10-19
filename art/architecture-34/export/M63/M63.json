@@ -1,0 +1,145 @@
+{
+  "id": "M63",
+  "label": "Escalier frontal de ronde",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/30-enceinte-haute-pierre.png",
+  "sheet": "Enceinte haute de bourg — pierre",
+  "season": "base",
+  "shape": "stairs",
+  "width": 24,
+  "depth": 64,
+  "totalHeight": 48,
+  "walkHeight": 38,
+  "parapetHeight": 10,
+  "wallThickness": 12,
+  "material": "stone",
+  "height": 48,
+  "high": true,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "frames": {
+    "face": {
+      "frame": {
+        "x": 2,
+        "y": 10,
+        "w": 59,
+        "h": 73
+      },
+      "anchor": [
+        13,
+        71
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          44,
+          -32
+        ],
+        [
+          20,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 48
+      },
+      "sourceFacades": [
+        "face",
+        "face"
+      ]
+    },
+    "palier": {
+      "frame": {
+        "x": 73,
+        "y": 2,
+        "w": 67,
+        "h": 81
+      },
+      "anchor": [
+        13,
+        79
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          52,
+          -40
+        ],
+        [
+          28,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 80,
+        "height": 48
+      },
+      "sourceFacades": [
+        "palier",
+        "face"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "face": {
+      "size": [
+        24,
+        102
+      ],
+      "crop": [
+        104,
+        962,
+        114,
+        181
+      ],
+      "anchor": [
+        12,
+        102
+      ],
+      "lift": 0
+    },
+    "palier": {
+      "size": [
+        24,
+        118
+      ],
+      "crop": [
+        360,
+        954,
+        92,
+        196
+      ],
+      "anchor": [
+        12,
+        118
+      ],
+      "lift": 0
+    }
+  }
+}

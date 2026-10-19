@@ -1,0 +1,144 @@
+{
+  "id": "M24",
+  "label": "Auvent",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/18-ouvertures.png",
+  "sheet": "Portes, fenêtres et protection",
+  "season": "base",
+  "shape": "awning",
+  "width": 48,
+  "depth": 24,
+  "totalHeight": 20,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 20,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 9,
+        "w": 63,
+        "h": 28
+      },
+      "anchor": [
+        25,
+        26
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          36,
+          -12
+        ],
+        [
+          -12,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 20
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 69,
+        "y": 2,
+        "w": 51,
+        "h": 35
+      },
+      "anchor": [
+        13,
+        33
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 20
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        836,
+        680,
+        312,
+        123
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        24,
+        48
+      ],
+      "crop": [
+        1308,
+        671,
+        90,
+        124
+      ],
+      "anchor": [
+        12,
+        48
+      ],
+      "lift": 0
+    }
+  }
+}

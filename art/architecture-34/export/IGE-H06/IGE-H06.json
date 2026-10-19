@@ -1,0 +1,145 @@
+{
+  "id": "IGE-H06",
+  "label": "Platelage de ronde",
+  "family": "igea",
+  "kind": "module",
+  "source": "expansion/igea-walls.png",
+  "sheet": "Igea — hauts remparts",
+  "season": "base",
+  "shape": "deck",
+  "width": 48,
+  "depth": 24,
+  "totalHeight": 64,
+  "walkHeight": 52,
+  "parapetHeight": 12,
+  "wallThickness": 16,
+  "material": "stone",
+  "height": 64,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 14,
+        "w": 63,
+        "h": 18
+      },
+      "anchor": [
+        25,
+        65
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          36,
+          -12
+        ],
+        [
+          -12,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 69,
+        "y": 2,
+        "w": 51,
+        "h": 30
+      },
+      "anchor": [
+        13,
+        77
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          36,
+          -24
+        ],
+        [
+          12,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 64
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        24
+      ],
+      "crop": [
+        656,
+        797,
+        186,
+        91
+      ],
+      "anchor": [
+        24,
+        24
+      ],
+      "lift": 52
+    },
+    "ns": {
+      "size": [
+        24,
+        48
+      ],
+      "crop": [
+        889,
+        736,
+        78,
+        174
+      ],
+      "anchor": [
+        12,
+        48
+      ],
+      "lift": 52
+    }
+  }
+}

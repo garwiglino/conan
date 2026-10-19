@@ -1,0 +1,144 @@
+{
+  "id": "M27",
+  "label": "Culée de pont",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/19-franchissements.png",
+  "sheet": "Ponts et accès portuaires",
+  "season": "base",
+  "shape": "abutment",
+  "width": 32,
+  "depth": 24,
+  "totalHeight": 24,
+  "walkHeight": 0,
+  "parapetHeight": 12,
+  "wallThickness": 12,
+  "height": 24,
+  "high": false,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 6,
+        "w": 47,
+        "h": 39
+      },
+      "anchor": [
+        17,
+        37
+      ],
+      "footprint": [
+        [
+          -16,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          28,
+          -12
+        ],
+        [
+          -4,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 24,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 53,
+        "y": 2,
+        "w": 43,
+        "h": 43
+      },
+      "anchor": [
+        13,
+        41
+      ],
+      "footprint": [
+        [
+          -12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          28,
+          -16
+        ],
+        [
+          4,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 32,
+        "height": 24
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        32,
+        24
+      ],
+      "crop": [
+        128,
+        318,
+        268,
+        140
+      ],
+      "anchor": [
+        16,
+        24
+      ],
+      "lift": 0
+    },
+    "ns": {
+      "size": [
+        12,
+        32
+      ],
+      "crop": [
+        553,
+        318,
+        115,
+        142
+      ],
+      "anchor": [
+        6,
+        32
+      ],
+      "lift": 0
+    }
+  }
+}

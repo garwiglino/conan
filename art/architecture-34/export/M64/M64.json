@@ -1,0 +1,145 @@
+{
+  "id": "M64",
+  "label": "Parapet haut raccordable",
+  "family": "shared",
+  "kind": "module",
+  "source": "concepts/30-enceinte-haute-pierre.png",
+  "sheet": "Enceinte haute de bourg — pierre",
+  "season": "base",
+  "shape": "parapet",
+  "width": 48,
+  "depth": 12,
+  "totalHeight": 48,
+  "walkHeight": 38,
+  "parapetHeight": 10,
+  "wallThickness": 12,
+  "material": "stone",
+  "height": 48,
+  "high": true,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "frames": {
+    "ew": {
+      "frame": {
+        "x": 2,
+        "y": 20,
+        "w": 57,
+        "h": 19
+      },
+      "anchor": [
+        25,
+        55
+      ],
+      "footprint": [
+        [
+          -24,
+          0
+        ],
+        [
+          24,
+          0
+        ],
+        [
+          30,
+          -6
+        ],
+        [
+          -18,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 48
+      },
+      "sourceFacades": [
+        "ew",
+        "ew"
+      ]
+    },
+    "ns": {
+      "frame": {
+        "x": 63,
+        "y": 2,
+        "w": 39,
+        "h": 37
+      },
+      "anchor": [
+        7,
+        73
+      ],
+      "footprint": [
+        [
+          -6,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          30,
+          -24
+        ],
+        [
+          18,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 12,
+        "depth": 48,
+        "height": 48
+      },
+      "sourceFacades": [
+        "ns",
+        "ew"
+      ]
+    }
+  },
+  "projection": {
+    "name": "three-quarter orthographic oblique",
+    "depthX": 0.5,
+    "depthY": -0.5,
+    "vertical": 1
+  },
+  "sourceCardinalViews": {
+    "ew": {
+      "size": [
+        48,
+        10
+      ],
+      "crop": [
+        572,
+        1043,
+        191,
+        55
+      ],
+      "anchor": [
+        24,
+        10
+      ],
+      "lift": 38
+    },
+    "ns": {
+      "size": [
+        12,
+        48
+      ],
+      "crop": [
+        874,
+        963,
+        53,
+        187
+      ],
+      "anchor": [
+        6,
+        48
+      ],
+      "lift": 38
+    }
+  }
+}

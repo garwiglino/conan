@@ -39,7 +39,10 @@
     "package:architecture": "python3 scripts/package-architecture.py",
     "build:settlements": "node scripts/build-settlements.cjs && node scripts/embed-world.cjs",
     "test:settlements": "node --test tests/settlements.test.cjs tests/architecture.test.cjs",
-    "check:settlements": "node scripts/check-settlements.cjs"
+    "check:settlements": "node scripts/check-settlements.cjs",
+    "build:architecture-34": "node scripts/export-architecture-34.cjs",
+    "test:architecture-34": "node --test tests/architecture-34.test.cjs",
+    "package:architecture-34": "python3 scripts/package-architecture-34.py"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",
