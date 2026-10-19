@@ -46,7 +46,9 @@ function createWorldSimulation(A,B,W,saved){
   };
   if(!site.supplyRevision){for(const id of Object.keys(site.capacity))ensure(id);ensure('medicinal');ensure('tools');ensure('cloth');site.supplyRevision=1;}
  }
- const systems=(typeof createCampaignSystems==='function'?createCampaignSystems:require('./world-campaign-systems.js'))(A,B,W,state,{stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish});
+ const campaignHooks={stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish};
+ const systems=(typeof createCampaignSystems==='function'?createCampaignSystems:require('./world-campaign-systems.js'))(A,B,W,state,campaignHooks);
+ Object.assign(systems,(typeof createWorldLabourSystems==='function'?createWorldLabourSystems:require('./world-labour-systems.js'))(A,W,state,campaignHooks,systems));
  function requirements(site){const need={...site.needs},region=regions.get(A.byId[site.id].region);
   // Tools, coats and treatments are indivisible at the service counter. Small
   // communities need the same four-lot replenishment target as their workshop,
@@ -152,7 +154,7 @@ function createWorldSimulation(A,B,W,saved){
   let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
   for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<20000;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){if(c.staffReserved){state.sites[c.from].workers+=units.filter(u=>u.role==='crew'&&u.hp>0).length;c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
+    if(c.status==='returning'){if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
     const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at-remaining;c.escrow=0;c.settlement={reason:'delivery',at:c.arrived,refund:c.paid-paid,paidToSeller:paid};
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to},at-remaining);event('caravan',c.to,{cargoId:c.id,detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720,at-remaining);
@@ -167,13 +169,7 @@ function createWorldSimulation(A,B,W,saved){
   if(!c.delivered&&!cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0))abandonCargo(c);return true;
  }
  function loseCargo(c,amount,reason='loss'){if(c.delivered||!finite(amount)||amount<=0)return 0;const n=Math.min(c.amount,amount);c.amount-=n;c.lost=(c.lost||0)+n;history('cargo_loss',{id:c.id,resource:c.resource,amount:n,reason});return n;}
- function resolveWork(work,dt){
-  if(work.status!=='working')return;const site=state.sites[work.site],e=W.events.find(e=>e.id===work.event);
-  if(!site||!e||e.resolved!==null){if(site&&work.staffReserved){site.workers+=work.crew;work.staffReserved=false;}work.status='ended';return;}
-  if(W.active(state.clock).some(e=>e.target===work.site&&['siege','occupation','bandits'].includes(e.type)))return;
-  if(!work.paid){if(stock(site,'tools')<work.tools||stock(site,'timber')<work.timber||site.workers<work.crew||site.treasury<work.crew*2)return;take(site,'tools',work.tools);take(site,'timber',work.timber);site.workers-=work.crew;site.treasury-=work.crew*2;work.staffReserved=true;work.paid=true;}
-  work.remaining-=dt;if(work.remaining<=0){W.resolve(e.id,state.clock);event('repair',e.target,{source:'Équipe de réparation',position:e},1440);work.status='completed';if(work.staffReserved){site.workers+=work.crew;work.staffReserved=false;}history('repair_completed',{event:e.id,site:work.site});}
- }
+ function resolveWork(work,dt){systems.prepareRepair(work);}
  function causalEvents(){
   for(const site of sites()){
    const food=stock(site,'provisions')+foods.reduce((n,id)=>n+stock(site,id),0),shortage=food<site.needs.provisions||stock(site,'water')<site.needs.water;

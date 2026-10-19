@@ -27,8 +27,10 @@ d'une simulation politique ou démographique complète.
 - Une pénurie provient des disponibilités alimentaires/eau, et sa fin exige un
   rétablissement des réserves. Les achats du joueur débitent les réserves réelles.
 - Ponts, éboulements, avalanches et dégâts d'incendie : travaux payés, outils,
-  bois éventuel, équipe indisponible pendant le chantier. Pas de réparation par
-  expiration. Les crues ne se terminent qu'après décrue du niveau simulé.
+  bois éventuel, salaires transférés, provisions finies et ouvriers suivant les
+  routes jusqu’au chantier puis au poste. Les blessures et pertes sont
+  persistantes ; les survivants ne sont disponibles qu’au retour. Pas de
+  réparation par expiration. Voir [les affectations](personnes-affectations.md). Les crues ne se terminent qu'après décrue du niveau simulé.
 - Patrouilles : budget, provisions, effectifs disponibles et autorité locale
   requis pour un mandat. Les morts observés ne réintègrent pas les effectifs.
   Une proximité géographique n'autorise pas une intervention chez une autre autorité.

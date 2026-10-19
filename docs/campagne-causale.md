@@ -53,3 +53,5 @@ Les biens et espèces ne sont ni dupliqués ni récupérés une seconde fois. Si
 Les tests `world-eight-systems.test.cjs` et `world-campaign-runtime.test.cjs` couvrent les règles économiques et leur raccordement au vrai `Game`. Les suites existantes de convois, démographie, justice, soins, voyages et climat restent applicables. La recette Chromium des convois vérifie également le départ d’une équipe de récupération après un signalement réel.
 
 Recette du 18 octobre 2026 : 426 tests JavaScript, 24 tests de bible et 120 contrôles d’interface paysage réussis ; recettes Chromium des convois et habitants sans erreur JavaScript. Intégration HTML idempotente et archive iOS vérifiée.
+
+Les cinq raccordements suivants — absences des habitants, recrutement des gardes, incapacité, expéditions de réparation et salaires — sont décrits dans [Affectations et réparateurs](personnes-affectations.md).

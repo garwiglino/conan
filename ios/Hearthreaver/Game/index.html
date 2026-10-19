@@ -10972,7 +10972,7 @@ function createCampaignSystems(A,B,W,state,H){
  function bindGuard(s,id,hp){let p=people(s).find(p=>p.id===id);if(p)return p;if(hp<=0){p={id,hp:0,dead:true,assignment:'post:'+id,post:true};s.guards.push(p);return p;}p=s.guards.find(p=>!p.dead&&!p.assignment);if(!p&&s.workers>0){s.workers--;s.guardPool++;p={hp:8,dead:false};s.guards.push(p);}if(!p)return null;p.id=id;p.hp=Math.max(0,Math.min(8,hp));p.dead=p.hp<=0;p.assignment='post:'+id;p.post=true;s.guardAvailable=Math.min(s.guardPool,s.guards.filter(p=>!p.dead&&!p.assignment&&p.hp>=2).length);return p;}
  function reserve(s,count,assignment){const chosen=people(s).filter(p=>!p.dead&&!p.assignment&&p.hp>=2).slice(0,count);if(chosen.length<count)return null;for(const p of chosen)p.assignment=assignment;return chosen.map(p=>({id:p.id,personId:p.id,role:'guard',hp:p.hp,hostileUntil:0}));}
  function death(id,person,{role='worker',reserved=false,accountedGuard=false}={}){const s=state.sites[id];if(!s||s.losses[person])return false;const before=s.population;s.losses[person]={at:W.clock,role};s.population=Math.max(0,before-1);for(const key of Object.keys(s.needs))s.needs[key]*=before>0?s.population/before:0;
-  if(role==='guard'){const guard=s.guards.find(p=>p.id===person)||(!accountedGuard?s.guards.find(p=>!p.dead&&!p.assignment):null);if(guard){guard.hp=0;guard.dead=true;guard.id=person;guard.actualId??=person;}if(!accountedGuard)s.guardPool=Math.max(0,s.guardPool-1);if(!reserved&&!accountedGuard&&!guard?.assignment)s.guardAvailable=Math.max(0,s.guardAvailable-1);}else if(!reserved)s.workers=Math.max(0,s.workers-1);history('population_loss',{site:s.id,person,role});return true;}
+  if(role==='guard'){const guard=s.guards.find(p=>p.id===person)||(!accountedGuard?s.guards.find(p=>!p.dead&&!p.assignment):null);if(guard){guard.hp=0;guard.dead=true;guard.id=person;guard.actualId??=person;}if(!accountedGuard)s.guardPool=Math.max(0,s.guardPool-1);if(!reserved&&!accountedGuard&&!guard?.assignment)s.guardAvailable=Math.max(0,s.guardAvailable-1);}else if(H.workerDeath)H.workerDeath(s,person,reserved);else if(!reserved)s.workers=Math.max(0,s.workers-1);history('population_loss',{site:s.id,person,role});return true;}
  function guardHealth(s,u){const p=people(s).find(p=>p.id===(u.personId||u.id));if(!p)return;p.hp=Math.max(0,u.hp);if(p.hp<=0&&!p.dead){p.dead=true;death(s.id,p.id,{role:'guard',reserved:!!p.assignment});}}
  function release(s,units){for(const u of units.filter(u=>u.role==='guard')){guardHealth(s,u);const p=s.guards.find(p=>p.id===(u.personId||u.id));if(p)p.assignment=null;}s.guardAvailable=Math.min(s.guardPool,people(s).filter(p=>!p.dead&&!p.assignment&&p.hp>=2).length);}
  function care(s,at){for(const p of s.guards){if(p.dead||p.assignment&&!p.post||p.hp>=8)continue;(state.care[s.id]||={})[p.id]=true;if(at<(p.nextCare||0)||stock(s,'medicinal')<1||stock(s,'provisions')<1)continue;take(s,'medicinal',1);take(s,'provisions',1);p.hp=Math.min(8,p.hp+2);p.nextCare=at+360;if(p.hp===8)delete state.care[s.id][p.id];history('guard_treated',{site:s.id,person:p.id,hp:p.hp},at);}s.guardAvailable=Math.min(s.guardPool,people(s).filter(p=>!p.dead&&!p.assignment&&p.hp>=2).length);}
@@ -10980,24 +10980,24 @@ function createCampaignSystems(A,B,W,state,H){
  function graphPath(site,point,{routeState=W}={}){const edge=point.edge&&A.edgeById.get(point.edge);let candidates=[];
   const near=A.closestRoad(point.x,point.y),segment=near?.road?.segments.reduce((best,s)=>{const p=A.project(point.x,point.y,s.a,s.b);return !best||p.d<best.p.d?{s,p}:best;},null);
   const target=edge||segment&&A.edgeById.get([segment.s.a[2],segment.s.b[2]].sort().join('|'));if(!target)return null;
-  for(const v of [target.a,target.b]){const id=A.nodes.find(n=>n.vertex===v)?.id||v,path=A.findPath(site,id,{mode:'foot',allowBoat:false,state:routeState});if(!path&&A.byId[site]?.vertex!==v)continue;
+  for(const v of [target.a,target.b]){const id=A.nodes.find(n=>n.vertex===v)?.id||v,path=A.findPath(site,id,{mode:'foot',allowBoat:false,clock:W.clock,state:routeState});if(!path&&A.byId[site]?.vertex!==v)continue;
    const legs=(path||[]).map(l=>({edge:l.edge,from:A.vertices.get(l.from).slice(0,2),to:A.vertices.get(l.to).slice(0,2),length:l.length})),a=A.vertices.get(v),projection=A.project(point.x,point.y,A.vertices.get(target.a),A.vertices.get(target.b)),b=[A.vertices.get(target.a)[0]+(A.vertices.get(target.b)[0]-A.vertices.get(target.a)[0])*projection.t,A.vertices.get(target.a)[1]+(A.vertices.get(target.b)[1]-A.vertices.get(target.a)[1])*projection.t];
    if(Math.hypot(a[0]-b[0],a[1]-b[1])>.001)legs.push({edge:target.id,from:a.slice(0,2),to:b,length:Math.hypot(a[0]-b[0],a[1]-b[1])});candidates.push(legs);
   }return candidates.sort((a,b)=>a.reduce((n,l)=>n+l.length,0)-b.reduce((n,l)=>n+l.length,0))[0]||null;
  }
  function position(m){if(!m.path&&m.anchor)return {...m.anchor};const l=m.path?.[m.leg||0];if(!l){const p=m.path?.at(-1)?.to||[A.byId[m.site||m.home].x,A.byId[m.site||m.home].y];return {x:p[0],y:p[1]};}const t=Math.min(1,(m.progress||0)/Math.max(.001,l.length));return {x:l.from[0]+(l.to[0]-l.from[0])*t,y:l.from[1]+(l.to[1]-l.from[1])*t};}
  function reverse(m){const l=m.path?.[m.leg||0],progress=l?l.length-(m.progress||0):0;m.path=(m.path||[]).slice(0,(m.leg||0)+1).reverse().map(l=>({...l,from:l.to,to:l.from}));m.leg=0;m.progress=progress;}
- function move(m,minutes,at=W.clock){let remaining=Math.max(0,minutes),rate=pace.metresPerMinute(pace.civilianWalk);for(let i=0;i<10000;i++){const l=m.path?.[m.leg||0];if(!l)return {arrived:true,remaining};if(W.edgeStatus(A.edgeById.get(l.edge),at).closed){m.waiting=l.edge;return {arrived:false,remaining:0};}m.waiting=null;const distance=Math.min(Math.max(0,l.length-(m.progress||0)),remaining*rate);m.progress=(m.progress||0)+distance;remaining-=distance/rate;if(m.progress>=l.length-1e-7){m.leg=(m.leg||0)+1;m.progress=0;}else return {arrived:false,remaining:0};}return {arrived:false,remaining:0};}
+ function move(m,minutes,at=W.clock){let remaining=Math.max(0,minutes),rate=pace.metresPerMinute(pace.civilianWalk);for(let i=0;i<10000;i++){const l=m.path?.[m.leg||0];if(!l)return {arrived:true,remaining};if(W.edgeStatus(A.edgeById.get(l.edge),at).closed&&!H.repairApproach?.(m,l,at)){m.waiting=l.edge;return {arrived:false,remaining:0};}m.waiting=null;const distance=Math.min(Math.max(0,l.length-(m.progress||0)),remaining*rate);m.progress=(m.progress||0)+distance;remaining-=distance/rate;if(m.progress>=l.length-1e-7){m.leg=(m.leg||0)+1;m.progress=0;}else return {arrived:false,remaining:0};}return {arrived:false,remaining:0};}
  function settle(c,reason='loss',at=W.clock){if(c.settlement)return c.settlement;const refund=c.delivered?0:Math.max(0,c.paid||0);if(refund)state.sites[c.to].treasury+=refund;c.escrow=0;c.settlement={reason,at:Math.round(at*1e8)/1e8,refund,paidToSeller:c.delivered?(c.paid||0)*c.deliveredAmount/(c.originalAmount||1):0};history('contract_settled',{id:c.id,...c.settlement});return c.settlement;}
  function reportLoss(c,source,at=W.clock){if(!c?.abandoned||c.lossReport)return false;c.lossReport={at:Math.round(at*1e8)/1e8,source};settle(c,'loss',at);const notice=H.event('cargo_loss',c.from,{source,cargoId:c.id,detail:'Le chargement '+c.id+' a été abandonné.'},0,at);c.lossNotice=notice?.id;history('cargo_loss_report',{id:c.id,source},at);return true;}
  function recover(c){if(!c?.abandoned||!c.lossReport||c.amount<=0||c.recoveryMission)return null;const s=state.sites[c.from],path=graphPath(s.id,c.abandonedPosition);if(!path||s.workers<2||s.guardAvailable<2||s.treasury<4||stock(s,'provisions')<4||stock(s,'tools')<1)return null;const id='recovery-'+state.serial++,units=reserve(s,2,id);if(!units)return null;settle(c);s.workers-=2;s.guardAvailable-=2;s.treasury-=4;s.householdFunds+=4;take(s,'provisions',4);take(s,'tools',1);units.unshift(...[0,1].map(i=>({id:id+'-crew-'+i,role:'crew',hp:6})));const m={id,kind:'recovery',site:s.id,cargo:c.id,path,leg:0,progress:0,units,crew:2,status:'outbound',clock:W.clock,staffReserved:true};c.recoveryMission=id;state.missions.push(m);history('recovery_departure',{id,cargo:c.id,site:s.id});return m;}
  function missionDamage(m,id,hp){const u=m?.units?.find(u=>u.id===id);if(!u||!Number.isFinite(hp)||hp<0)return false;const was=u.hp>0;u.hp=Math.max(0,hp);if(u.role==='guard')guardHealth(state.sites[m.site],u);else if(was&&u.hp===0)death(m.site,u.id,{reserved:true});return true;}
- function finishMission(m,at){const s=state.sites[m.site];release(s,m.units||[]);if(m.staffReserved){s.workers+=(m.units||[]).filter(u=>u.role==='crew'&&u.hp>0).length;m.staffReserved=false;}if(m.load){s.stock[m.load.resource]=stock(s,m.load.resource)+m.load.amount;const c=state.shipments.find(c=>c.id===m.cargo);if(c){c.recoveredAmount=(c.recoveredAmount||0)+m.load.amount;c.recovered=true;c.recoveryMission=null;if(c.recoveredAmount>=c.originalAmount&&c.lossNotice)W.resolve(c.lossNotice,at);H.event('caravan',m.site,{source:'Équipe de récupération',cargoId:c.id+'-'+m.id,detail:m.load.amount+' lots récupérés et rapportés au poste.'},720,at);}m.load=null;}if(m.cash){s.treasury+=m.cash;m.cash=0;}m.status='returned';m.clock=at;if(m.event)W.resolve(m.event,at);history('patrol_return',{id:m.id,site:m.site,casualties:(m.units||[]).filter(u=>u.hp<=0).length},at);}
+ function finishMission(m,at){const s=state.sites[m.site];release(s,m.units||[]);if(m.staffReserved){const count=(m.units||[]).filter(u=>u.role==='crew'&&u.hp>0).length;if(H.restoreCrew)H.restoreCrew(s,m.units||[],at);else s.workers+=count;m.staffReserved=false;}if(m.load){s.stock[m.load.resource]=stock(s,m.load.resource)+m.load.amount;const c=state.shipments.find(c=>c.id===m.cargo);if(c){c.recoveredAmount=(c.recoveredAmount||0)+m.load.amount;c.recovered=true;c.recoveryMission=null;if(c.recoveredAmount>=c.originalAmount&&c.lossNotice)W.resolve(c.lossNotice,at);H.event('caravan',m.site,{source:'Équipe de récupération',cargoId:c.id+'-'+m.id,detail:m.load.amount+' lots récupérés et rapportés au poste.'},720,at);}m.load=null;}if(m.cash){s.treasury+=m.cash;m.cash=0;}m.status='returned';m.clock=at;if(m.event)W.resolve(m.event,at);history('patrol_return',{id:m.id,site:m.site,casualties:(m.units||[]).filter(u=>u.hp<=0).length},at);}
  function prepareMission(m){if(m.path)return true;const e=W.events.find(e=>e.id===m.event);if(!e)return false;const path=graphPath(m.site,e,{routeState:null});if(!path)return false;m.path=path;m.leg=path.length;m.progress=0;
   if(!m.units){const site=state.sites[m.site];m.units=reserve(site,Math.max(0,(m.crew||2)-(m.casualties||0)),m.id)||[];const oldIds=Array.from({length:m.crew||2},(_,i)=>'incident-'+m.event+'-'+i).filter(id=>!(m.deadSlots||[]).includes(id));for(const [i,u]of m.units.entries()){const p=site.guards.find(p=>p.id===u.personId),id=oldIds[i];if(!id)continue;if(p){(site.personAliases||={})[p.id]=id;p.id=id;}u.id=u.personId=id;u.legacyPending=true;}}
   m.clock??=state.clock;if(m.status==='returning')reverse(m);else m.status='active';e.managedMovement=true;e.end=null;e.memberIds=m.units.map(u=>u.id);return true;
  }
- function stepMission(m,minutes,at=W.clock,local=false){if(m.status==='returned'||!prepareMission(m))return;if(m.status==='active'&&at>=(m.until||Infinity)&&m.engaged){reverse(m);m.status='returning';}if(m.engaged||!local&&m.physical)return;
+ function stepMission(m,minutes,at=W.clock,local=false){if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.status==='returned'||!prepareMission(m))return;if(m.status==='active'&&at>=(m.until||Infinity)&&m.engaged){reverse(m);m.status='returning';}if(m.engaged||!local&&m.physical)return;
   const living=m.units.filter(u=>u.hp>0),c=m.cargo&&state.shipments.find(c=>c.id===m.cargo);
   if(!living.length){if(m.cash&&c){c.travelFunds=(c.travelFunds||0)+m.cash;m.cash=0;}if(m.load&&c){c.amount+=m.load.amount;c.abandonedPosition=position(m);c.recovered=false;m.load=null;}if(c)c.recoveryMission=null;finishMission(m,at);return;}
   if(m.kind==='recovery'&&!living.some(u=>u.role==='crew')&&m.status!=='returning'){if(m.load&&c){c.amount+=m.load.amount;c.abandonedPosition=position(m);m.load=null;c.recovered=false;}if(c)c.recoveryMission=null;reverse(m);m.status='returning';}
@@ -11027,13 +11027,107 @@ function createCampaignSystems(A,B,W,state,H){
   if(result.arrived){if(band.phase==='outbound'){band.phase='active';band.withdrawAt=at-result.remaining+1440;if(e.type==='band_movement'){e.type='bandits';e.title=A.EVENT_TYPES.bandits.name;e.at=at-result.remaining;H.publish(e);W.revision++;}}else{band.phase='home';band.stash||={};for(const [id,n]of Object.entries(band.inventory)){band.stash[id]=(band.stash[id]||0)+n;}band.inventory={};band.treasury=(band.treasury||0)+(band.purse||0);band.purse=0;W.resolve(e.id,at-result.remaining);history('band_home',{band:e.bandKey});}}
  }
  function adoptEvents(){for(const e of W.events){if(e.resolved!==null||!A.EVENT_TYPES[e.type].group||A.EVENT_TYPES[e.type].guard||e.managedMovement)continue;if(e.type!=='bandits'){e.end=null;continue;}const key=e.bandKey||'legacy-'+e.id,band=state.bands[key]||(state.bands[key]={home:e.home||A.nearestSite(e.x,e.y).id,members:Array.from({length:e.memberIds?.length||A.EVENT_TYPES[e.type].group},(_,i)=>({id:e.memberIds?.[i]||key+'-'+i,hp:4,dead:false}))});e.bandKey=key;prepareBand(band,e);}}
- function tick(at){adoptEvents();for(const b of Object.values(state.bands))if(b.phase==='home'&&at>=(b.nextSupply||0)){const site=state.sites[b.home];b.nextSupply=at+1440;if(B.settlements.some(p=>'town-'+p.atlasId===b.home&&p.criminalNetworks?.length)){for(const [id,n]of Object.entries(b.stash||{})){if(id==='provisions')continue;const price=.5,amount=Math.min(n,Math.max(0,(site.needs[id]||0)*3-stock(site,id)),site.householdFunds/price);if(amount<=0)continue;b.stash[id]-=amount;site.stock[id]=stock(site,id)+amount;site.householdFunds-=amount*price;b.treasury=(b.treasury||0)+amount*price;history('band_fence_sale',{home:b.home,resource:id,amount,paid:amount*price});}}const living=b.members.filter(p=>!p.dead);const food=Math.min(living.length,Math.floor(stock(site,'provisions')),Math.floor(b.treasury));if(food){take(site,'provisions',food);site.treasury+=food;b.treasury-=food;b.stash||={};b.stash.provisions=(b.stash.provisions||0)+food;}for(const p of living){if((b.stash?.provisions||0)>0){b.stash.provisions--;if(p.hp<4&&b.treasury>=1&&stock(site,'medicinal')>=1){take(site,'medicinal',1);site.treasury++;b.treasury--;p.hp=Math.min(4,p.hp+1);}}}}for(const m of state.missions)stepMission(m,Math.max(0,at-(m.clock??at-60)),at);for(const b of Object.values(state.bands))if(b.phase)stepBand(b,Math.max(0,at-(b.clock??at-60)),at);for(const s of sites())care(s,at);}
+ function tick(at){H.tickLabour?.(at);adoptEvents();for(const b of Object.values(state.bands))if(b.phase==='home'&&at>=(b.nextSupply||0)){const site=state.sites[b.home];b.nextSupply=at+1440;if(B.settlements.some(p=>'town-'+p.atlasId===b.home&&p.criminalNetworks?.length)){for(const [id,n]of Object.entries(b.stash||{})){if(id==='provisions')continue;const price=.5,amount=Math.min(n,Math.max(0,(site.needs[id]||0)*3-stock(site,id)),site.householdFunds/price);if(amount<=0)continue;b.stash[id]-=amount;site.stock[id]=stock(site,id)+amount;site.householdFunds-=amount*price;b.treasury=(b.treasury||0)+amount*price;history('band_fence_sale',{home:b.home,resource:id,amount,paid:amount*price});}}const living=b.members.filter(p=>!p.dead);const food=Math.min(living.length,Math.floor(stock(site,'provisions')),Math.floor(b.treasury));if(food){take(site,'provisions',food);site.treasury+=food;b.treasury-=food;b.stash||={};b.stash.provisions=(b.stash.provisions||0)+food;}for(const p of living){if((b.stash?.provisions||0)>0){b.stash.provisions--;if(p.hp<4&&b.treasury>=1&&stock(site,'medicinal')>=1){take(site,'medicinal',1);site.treasury++;b.treasury--;p.hp=Math.min(4,p.hp+1);}}}}for(const m of state.missions)stepMission(m,Math.max(0,at-(m.clock??at-60)),at);for(const b of Object.values(state.bands))if(b.phase)stepBand(b,Math.max(0,at-(b.clock??at-60)),at);for(const s of sites())care(s,at);}
  for(const c of state.shipments)c.escrow??=c.settlement||c.delivered?0:c.paid||0;
  for(const m of state.missions)if(!m.populationLossesRecorded){for(const id of m.deadSlots||[])death(m.site,id,{role:'guard',reserved:true,accountedGuard:m.status==='returned'});m.populationLossesRecorded=true;}
  for(const s of sites()){people(s);if(!s.peopleLossRevision){for(const c of state.shipments.filter(c=>c.from===s.id))for(const u of c.units||[])if(u.hp<=0)death(s.id,u.personId||u.id,{role:u.role==='guard'?'guard':'worker',reserved:true,accountedGuard:u.role==='guard'});s.peopleLossRevision=1;}}
  return {people,bindGuard,reserve,guardHealth,release,death,care,hearth,graphPath,position,reverse,move,settle,recover,missionDamage,stepMission,finishMission,prepareBand,stepBand,adoptEvents,toll,tick,reportLoss};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createCampaignSystems;
+
+/* Named absences and road repair crews share the campaign's finite workforce. */
+function createWorldLabourSystems(A,W,state,H,S){
+ const sites=()=>[...new Set(Object.values(state.sites))];
+ for(const site of sites())site.workerRecords||={};
+ const blocked=p=>!p.dead&&Object.values(p.reasons||{}).some(Boolean);
+ function restoreWorkers(site,count){
+  for(const p of Object.values(site.workerRecords||{}))if(count>0&&blocked(p)&&!p.debited){p.debited=true;count--;}
+  site.workers+=count;
+ }
+ function setWorkerReason(id,person,reason,on){
+  const site=state.sites[id];if(!site||!person)return false;
+  const p=site.workerRecords[person]||={id:person,reasons:{},debited:false,dead:!!site.losses[person]};
+  if(p.dead)return false;if(!!p.reasons[reason]===!!on)return true;const before=blocked(p);if(on)p.reasons[reason]=true;else delete p.reasons[reason];const after=blocked(p);
+  if(!before&&after){p.debited=site.workers>0;if(p.debited)site.workers--;H.history('worker_unavailable',{site:site.id,person,reason});}
+  if(before&&!after){const held=p.debited;p.debited=false;if(held)restoreWorkers(site,1);H.history('worker_available',{site:site.id,person});}
+  return true;
+ }
+ function workerDeath(site,person,reserved){
+  const p=site.workerRecords[person];if(!reserved&&!p?.debited)site.workers=Math.max(0,site.workers-1);
+  if(p){p.dead=true;p.reasons={};p.debited=false;}if(state.care[site.id])delete state.care[site.id][person];
+ }
+ function restoreCrew(site,units,at=state.clock){
+  const living=units.filter(u=>u.role==='crew'&&u.hp>0);
+  for(const u of living)if(u.hp<=1){const p=site.workerRecords[u.id]||={id:u.id,reasons:{},debited:false};p.hp=u.hp;p.anonymous=true;p.reasons.incapacity=true;p.nextCare=at+360;(state.care[site.id]||={})[u.id]=true;}
+  restoreWorkers(site,living.length);
+ }
+ function tickLabour(at){for(const site of sites())for(const p of Object.values(site.workerRecords))if(p.anonymous&&!p.dead&&p.reasons.incapacity&&at>=p.nextCare&&H.stock(site,'medicinal')>=1&&H.stock(site,'provisions')>=1){H.take(site,'medicinal',1);H.take(site,'provisions',1);p.hp=Math.min(6,p.hp+2);setWorkerReason(site.id,p.id,'incapacity',false);delete state.care[site.id]?.[p.id];H.history('worker_treated',{site:site.id,person:p.id,hp:p.hp},at);}}
+ function repairApproach(m,leg,at){
+  if(m.kind!=='repair'||leg.repairApproach!==m.repairEvent)return false;
+  return W.edgeStatus(A.edgeById.get(leg.edge),at).events.filter(e=>A.EVENT_TYPES[e.type].closed).every(e=>e.id===m.repairEvent);
+ }
+ function repairPath(work,e){
+  const node=A.byId[work.site];if(e.target===work.site&&Math.hypot(e.x-node.x,e.y-node.y)<8)return [];
+  const path=S.graphPath(work.site,e);if(!path)return null;
+  const last=path.at(-1);if(last&&last.edge===e.edge){
+   // Approach the damaged passage from an open endpoint without crossing it.
+   const clearance=Math.min(last.length,Math.max(6,(A.roadById[e.target]?.width||5)/2+3)),fraction=(last.length-clearance)/Math.max(.001,last.length);
+   last.to=[last.from[0]+(last.to[0]-last.from[0])*fraction,last.from[1]+(last.to[1]-last.from[1])*fraction];last.length-=clearance;last.repairApproach=e.id;
+  }
+  return path;
+ }
+ function prepareRepair(work){
+  const site=state.sites[work.site],e=W.events.find(e=>e.id===work.event);if(!site)return;
+  if(work.paid&&!work.wagesReconciled){site.householdFunds+=work.crew*2;work.wagesReconciled=true;H.history('repair_legacy_wages',{event:work.event,amount:work.crew*2});}
+  if(work.status!=='working')return;
+  const current=work.mission&&state.missions.find(m=>m.id===work.mission);if(current&&current.status!=='returned')return;
+  if(!e||e.resolved!==null){if(work.staffReserved)restoreWorkers(site,work.crew);work.staffReserved=false;work.status=e?'completed':'ended';return;}
+  if(W.active().some(e=>e.target===work.site&&['siege','occupation','bandits'].includes(e.type)))return;
+  const legacy=!!work.staffReserved,materialsOnSite=!!work.materialsOnSite,materials=legacy?{tools:work.tools,timber:work.timber}:materialsOnSite?{}:{tools:work.tools,timber:work.timber};
+  if(!legacy&&(site.workers<work.crew||site.treasury<work.crew*2||Object.entries(materials).some(([id,n])=>H.stock(site,id)<n))||H.stock(site,'provisions')<work.crew*4)return;
+  const path=repairPath(work,e);if(!path)return;
+  const trip=path.reduce((n,l)=>n+l.length,0)/H.pacing.metresPerMinute(H.pacing.civilianWalk),rations=Math.max(work.crew*4,Math.ceil((trip*2+work.remaining)/720)*work.crew+work.crew*2),wage=legacy?0:work.crew*2;
+  if(!legacy&&(site.workers<work.crew||site.treasury<wage||Object.entries(materials).some(([id,n])=>H.stock(site,id)<n))||H.stock(site,'provisions')<rations)return;
+  if(!legacy){site.workers-=work.crew;for(const [id,n]of Object.entries(materials))H.take(site,id,n);site.treasury-=wage;site.householdFunds+=wage;}
+  H.take(site,'provisions',rations);const id='repair-'+state.serial++,m={id,kind:'repair',populationLossesRecorded:true,site:site.id,repairEvent:e.id,work:work.event,units:Array.from({length:work.crew},(_,i)=>({id:id+'-crew-'+i,role:'crew',hp:6})),crew:work.crew,staffReserved:true,path,leg:0,progress:0,status:'outbound',clock:state.clock,suppliedAt:state.clock,rations,materials,payment:{amount:wage||work.crew*2,at:state.clock,recipient:site.id}};
+  work.paid=true;work.wagesReconciled=true;work.staffReserved=false;work.mission=id;state.missions.push(m);H.history('repair_departure',{id,event:e.id,site:site.id,wage,rations});
+ }
+ function returnRepair(m,reason,at){
+  if(m.status==='returning'||m.status==='returned')return;S.reverse(m);m.status='returning';m.returnReason=reason;H.history('repair_returning',{id:m.id,reason},at);
+ }
+ function finishRepair(m,at){
+  const site=state.sites[m.site],work=state.works.find(w=>w.event===m.work);
+  if(m.staffReserved){restoreCrew(site,m.units,at);m.staffReserved=false;}
+  for(const [id,n]of Object.entries(m.materials||{}))site.stock[id]=H.stock(site,id)+n;m.materials={};
+  site.stock.provisions=H.stock(site,'provisions')+Math.max(0,m.rations);m.rations=0;m.status='returned';m.clock=at;if(work?.mission===m.id)work.mission=null;
+  H.history('repair_crew_return',{id:m.id,survivors:m.units.filter(u=>u.hp>0).length},at);
+ }
+ function stepRepairMission(m,minutes,at=W.clock,local=false){
+  if(m.status==='returned'||!local&&m.physical)return;
+  const work=state.works.find(w=>w.event===m.work),e=W.events.find(e=>e.id===m.repairEvent);
+  let living=m.units.filter(u=>u.hp>0),elapsed=Math.max(0,at-(m.suppliedAt??m.clock)),food=elapsed*living.length/720,unfed=living.length?Math.max(0,food-m.rations)*720/living.length:0;m.rations=Math.max(0,m.rations-food);m.suppliedAt=at;
+  const oldStarved=m.starved||0;m.starved=m.rations>0?0:oldStarved+unfed;const harm=Math.floor(m.starved/180)-Math.floor(oldStarved/180);if(harm>0)for(const u of living)S.missionDamage(m,u.id,Math.max(0,u.hp-harm));living=m.units.filter(u=>u.hp>0);
+  if(!living.length){if(work){work.lostMaterials||=[];if(Object.keys(m.materials||{}).length)work.lostMaterials.push({mission:m.id,position:S.position(m),materials:m.materials});}m.materials={};m.rations=0;finishRepair(m,at);return;}
+  const travelled=m.path.slice(0,m.leg).reduce((n,l)=>n+l.length,0)+(m.path[m.leg]?m.progress:0),returnFood=travelled/H.pacing.metresPerMinute(H.pacing.civilianWalk)*living.length/720;
+  if(!work||!e||e.resolved!==null||m.status!=='returning'&&m.rations<=returnFood||living.every(u=>u.hp<=1)){returnRepair(m,!e||e.resolved!==null?'passage_resolved':m.rations<=returnFood?'low_provisions':'injured_crew',at);if(work&&(!e||e.resolved!==null))work.status=e?'completed':'ended';}
+  if(m.engaged){m.clock=at;return;}
+  let remaining=Math.max(0,minutes);
+  for(let phase=0;phase<4;phase++){
+   if(m.status==='active'){
+    if(W.active(at).some(threat=>A.EVENT_TYPES[threat.type].civilianPrey&&Math.hypot(threat.x-e.x,threat.y-e.y)<80)){m.waiting='hostiles';m.clock=at;return;}
+    m.waiting=null;const rate=living.filter(u=>u.hp>1).length/Math.max(1,work.crew),used=Math.min(remaining,work.remaining/rate);work.remaining=Math.max(0,work.remaining-used*rate);remaining-=used;m.clock=at;
+    if(work.remaining>1e-7)return;
+    W.resolve(e.id,at-remaining);work.status='completed';H.event('repair',e.target,{source:'Équipe de réparation',position:e},1440,at-remaining);H.history('repair_completed',{event:e.id,site:work.site,mission:m.id},at-remaining);returnRepair(m,'completed',at-remaining);
+   }
+   const result=S.move(m,remaining,at);m.clock=at;if(!result.arrived)return;remaining=result.remaining;
+   if(m.status==='returning'){finishRepair(m,at-remaining);return;}
+   m.status='active';work.materialsOnSite=true;m.materials={};if(!remaining)return;
+  }
+ }
+ Object.assign(H,{restoreWorkers,restoreCrew,workerDeath,repairApproach,stepRepairMission,tickLabour});
+ return {restoreWorkers,restoreCrew,setWorkerReason,prepareRepair,stepRepairMission,repairApproach,tickLabour};
+}
+if(typeof module!=='undefined'&&module.exports)module.exports=createWorldLabourSystems;
 
 /* Codex / ChatGPT — persistent campaign economy and causal institutions.
  * Quantities are campaign lots (provisions = rations; water = gourdes), not
@@ -11083,7 +11177,9 @@ function createWorldSimulation(A,B,W,saved){
   };
   if(!site.supplyRevision){for(const id of Object.keys(site.capacity))ensure(id);ensure('medicinal');ensure('tools');ensure('cloth');site.supplyRevision=1;}
  }
- const systems=(typeof createCampaignSystems==='function'?createCampaignSystems:require('./world-campaign-systems.js'))(A,B,W,state,{stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish});
+ const campaignHooks={stock,take,history,pacing,loseCargo,cargoUnits,cargoPosition,event,publish};
+ const systems=(typeof createCampaignSystems==='function'?createCampaignSystems:require('./world-campaign-systems.js'))(A,B,W,state,campaignHooks);
+ Object.assign(systems,(typeof createWorldLabourSystems==='function'?createWorldLabourSystems:require('./world-labour-systems.js'))(A,W,state,campaignHooks,systems));
  function requirements(site){const need={...site.needs},region=regions.get(A.byId[site.id].region);
   // Tools, coats and treatments are indivisible at the service counter. Small
   // communities need the same four-lot replenishment target as their workshop,
@@ -11189,7 +11285,7 @@ function createWorldSimulation(A,B,W,saved){
   let remaining=Math.max(0,dt);if(!local&&remaining>0)delete c.localPosition;
   for(let guard=0;(remaining>1e-7||!c.path[c.leg])&&guard<20000;guard++){
    const leg=c.path[c.leg];if(!leg){
-    if(c.status==='returning'){if(c.staffReserved){state.sites[c.from].workers+=units.filter(u=>u.role==='crew'&&u.hp>0).length;c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
+    if(c.status==='returning'){if(c.staffReserved){systems.restoreCrew(state.sites[c.from],units,at-remaining);c.staffReserved=false;}if(c.guardReserved){systems.release(state.sites[c.from],units);c.guardReserved=false;}c.status=c.abandoned?'abandoned':'delivered';if(c.escortOnly)c.escortReturned=true;if(c.abandoned)systems.reportLoss(c,'Escortes de '+A.byId[c.from].name,at-remaining);state.sites[c.from].householdFunds+=(c.travelFunds||0);c.travelFunds=0;history('cargo_crew_return',{id:c.id},at-remaining);c.clock=at-remaining;return;}
     const site=state.sites[c.to],paid=c.paid*c.amount/(c.originalAmount||c.amount||1);site.stock[c.resource]=stock(site,c.resource)+c.amount;state.sites[c.from].treasury+=paid;site.treasury+=c.paid-paid;c.delivered=true;c.deliveredAmount=c.amount;c.arrived=at-remaining;c.escrow=0;c.settlement={reason:'delivery',at:c.arrived,refund:c.paid-paid,paidToSeller:paid};
     const ledger=state.channels[c.to]||(state.channels[c.to]={});for(const [id,k]of Object.entries(c.news||{}))if(!ledger[id]||(k.heard||0)>(ledger[id].heard||0)||k.resolved!==null&&ledger[id].resolved===null)ledger[id]={...k,heard:state.clock,source:'Caravaniers'};
     history('cargo_delivered',{id:c.id,amount:c.amount,resource:c.resource,to:c.to},at-remaining);event('caravan',c.to,{cargoId:c.id,detail:c.amount.toFixed(0)+' lots de '+(resources.get(c.resource)?.label||c.resource)+' livrés.',source:'Caravaniers'},720,at-remaining);
@@ -11204,13 +11300,7 @@ function createWorldSimulation(A,B,W,saved){
   if(!c.delivered&&!cargoUnits(c).some(u=>u.role==='crew'&&u.hp>0))abandonCargo(c);return true;
  }
  function loseCargo(c,amount,reason='loss'){if(c.delivered||!finite(amount)||amount<=0)return 0;const n=Math.min(c.amount,amount);c.amount-=n;c.lost=(c.lost||0)+n;history('cargo_loss',{id:c.id,resource:c.resource,amount:n,reason});return n;}
- function resolveWork(work,dt){
-  if(work.status!=='working')return;const site=state.sites[work.site],e=W.events.find(e=>e.id===work.event);
-  if(!site||!e||e.resolved!==null){if(site&&work.staffReserved){site.workers+=work.crew;work.staffReserved=false;}work.status='ended';return;}
-  if(W.active(state.clock).some(e=>e.target===work.site&&['siege','occupation','bandits'].includes(e.type)))return;
-  if(!work.paid){if(stock(site,'tools')<work.tools||stock(site,'timber')<work.timber||site.workers<work.crew||site.treasury<work.crew*2)return;take(site,'tools',work.tools);take(site,'timber',work.timber);site.workers-=work.crew;site.treasury-=work.crew*2;work.staffReserved=true;work.paid=true;}
-  work.remaining-=dt;if(work.remaining<=0){W.resolve(e.id,state.clock);event('repair',e.target,{source:'Équipe de réparation',position:e},1440);work.status='completed';if(work.staffReserved){site.workers+=work.crew;work.staffReserved=false;}history('repair_completed',{event:e.id,site:work.site});}
- }
+ function resolveWork(work,dt){systems.prepareRepair(work);}
  function causalEvents(){
   for(const site of sites()){
    const food=stock(site,'provisions')+foods.reduce((n,id)=>n+stock(site,id),0),shortage=food<site.needs.provisions||stock(site,'water')<site.needs.water;
@@ -11673,7 +11763,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
  const sim=g=>g.worldState.simulation,groups=g=>[...(sim(g)?.state.missions||[]).filter(m=>m.status!=='returned').map(m=>({key:m.id,m,band:false})),...Object.entries(sim(g)?.state.bands||{}).filter(([,b])=>b.phase&&b.phase!=='home').map(([key,m])=>({key,m,band:true}))];
  const actors=(g,key)=>[...g.npcs,...g.enemies].filter(n=>n.campaignGroup===key&&!n.dead&&!n.guardState?.dead&&!n.civilian?.dead);
  Game.prototype.bindPostedGuards=function(restore=false){const s=sim(this);if(!s)return;for(const n of this.npcs){if(!n.batracien?.role||n.eventId||n.convoyId||n.campaignGroup)continue;const site=s.state.sites[n.site||n.batracien.site];if(!site)continue;const max=BATRACIEN_CONFIG.combat[n.batracien.role]?.hp||8,p=s.systems.bindGuard(site,n.id,n.batracien.hp/max*8);if(!p)continue;if(restore){n.batracien.hp=p.hp/8*max;n.batracien.dead=p.dead;}else s.systems.guardHealth(site,{id:p.id,hp:n.batracien.hp/max*8});}};
- Game.prototype.saveCampaignActors=function(){const s=sim(this);if(!s)return;for(const {key,m,band}of groups(this)){const a=actors(this,key);for(const n of a){const hp=band?n.hp:n.batracien?.role?n.batracien.hp:n.guardState?.hp??n.civilian?.hp;
+ Game.prototype.saveCampaignActors=function(){const s=sim(this);if(!s)return;for(const {key,m,band}of groups(this)){const a=actors(this,key);for(const n of a){let hp=band?n.hp:n.batracien?.role?n.batracien.hp:n.guardState?.hp??n.civilian?.hp;if(!band){const unit=m.units?.find(u=>u.id===(n.personId||n.id));if(unit&&unit.hp<hp){hp=unit.hp;if(n.guardState)n.guardState.hp=hp;else if(n.civilian){n.civilian.hp=hp;if(hp<=0){n.civilian.dead=true;this.civilianAction(n,'death',true);}}}}
     if(band){const e=this.worldState.events.find(e=>e.id===m.event),slot=e?.memberIds?.indexOf(n.personId);if(slot>=0)s.recordBandHealth(e,slot,hp);}else s.systems.missionDamage(m,n.personId||n.id,hp);
    }m.engaged=a.some(n=>n.wind>0||n.attack>0||n.hurt>0||!band&&(n.eventGuard&&!n.batracien&&this.humanGuardTarget(n,this.ensureHumanGuard(n))||n.dangerState)||band&&(n.ai==='chase'||n.foeId));m.physical=a.length>0&&a.some(n=>dist(n,this.player)<1500)&&!this.journey&&!this.sleeping;
   }};
@@ -11687,16 +11777,16 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
    for(const [i,u]of units.entries()){if(u.dead||u.hp<=0)continue;const id=band?'incident-'+e.id+'-'+e.memberIds.indexOf(u.id):u.id;if(this.atlasDeaths[id])continue;
     const point={x:p.x+(i%2?16:-16),y:p.y+Math.floor(i/2)*16};if(this.solid(point.x,point.y,6,0)){point.x=p.x;point.y=p.y;}if(this.solid(point.x,point.y,6,0))continue;
     if(band){const n=enemy('bandit',point.x,point.y,id);Object.assign(n,{hp:u.hp,eventId:e.id,personId:u.id,campaignGroup:key,world:true});this.enemies.push(n);}
-    else{const guard=u.role==='guard',n={id:u.id,personId:u.personId||u.id,campaignGroup:key,eventId:m.event,eventGuard:guard,world:true,site:m.site,...point,post:{...point},alpha:1,dir:2,look:'nomade',head:30,name:guard?'LA GARDE':'LE RÉCUPÉRATEUR',label:guard?'GARDE':'RÉCUPÉRATION',title:guard?'Garde du poste de '+Atlas.byId[m.site].name:'Équipe de récupération',greet:()=>[m.status==='returning'?'Nous retournons au poste.':'Nous rejoignons notre mission par la route.'],topics:()=>[],bye:()=>['Bonne route.']};
-     if(guard){this.ensureHumanGuard(n);n.guardRestored=true;n.guardState.hp=u.hp;}else this.ensureCivilian(n,{hp:u.hp});this.npcs.push(n);
+    else{const guard=u.role==='guard',n={id:u.id,personId:u.personId||u.id,campaignGroup:key,eventId:m.event,eventGuard:guard,world:true,site:m.site,...point,post:{...point},alpha:1,dir:2,look:'nomade',head:30,name:guard?'LA GARDE':m.kind==='repair'?'LE RÉPARATEUR':'LE RÉCUPÉRATEUR',label:guard?'GARDE':m.kind==='repair'?'RÉPARATION':'RÉCUPÉRATION',title:guard?'Garde du poste de '+Atlas.byId[m.site].name:m.kind==='repair'?'Équipe de réparation':'Équipe de récupération',greet:()=>[m.status==='returning'?'Nous retournons au poste.':'Nous rejoignons notre mission par la route.'],topics:()=>[],bye:()=>['Bonne route.']};
+     if(guard){this.ensureHumanGuard(n);n.guardRestored=true;n.guardState.hp=u.hp;}else{const outfit=m.kind==='repair'?Object.values(CIVILIAN_ART.outfits).find(o=>o.job==='craft'&&o.sex==='masculin'):null;this.ensureCivilian(n,{hp:u.hp,...(outfit?{appearance:{sex:'masculin',outfit:outfit.id||Object.keys(CIVILIAN_ART.outfits).find(k=>CIVILIAN_ART.outfits[k]===outfit)}}:{})});if(m.kind==='repair')n.civilian.job='craft';}this.npcs.push(n);
     }
    }m.physical=actors(this,key).length>0;
   }
  };
  const stepConvoys=Game.prototype.stepWorldConvoys;Game.prototype.stepWorldConvoys=function(dt){for(const c of sim(this)?.state.shipments||[])this.negotiateConvoy(c);return stepConvoys.call(this,dt);};
  Game.prototype.stepCampaignGroups=function(dt){const s=sim(this);if(!s||this.journey||this.sleeping||this.dialogue||this.dead||this.dying)return;this.saveCampaignActors();
-  for(const {key,m,band}of groups(this)){const a=actors(this,key);if(!a.length||m.engaged)continue;const step=(minutes)=>band?s.systems.stepBand(m,minutes,this.clock,true):s.systems.stepMission(m,minutes,this.clock,true);step(0);if((band?m.phase==='home':m.status==='returned')||!m.path?.[m.leg||0])continue;
-   const p=Atlas.toGame(...Object.values(s.systems.position(m))),driver=a.find(n=>!n.dangerState&&!n.hurt),l=m.path[m.leg||0];if(!driver)continue;if(this.worldState.edgeStatus(Atlas.edgeById.get(l.edge),this.clock).closed){m.waiting=l.edge;continue;}
+  for(const {key,m,band}of groups(this)){const a=actors(this,key);if(!a.length)continue;if(m.kind==='repair'&&(m.status==='active'||m.engaged)){s.systems.stepRepairMission(m,m.engaged?0:Math.max(0,this.clock-m.clock),this.clock,true);continue;}if(m.engaged)continue;const step=(minutes)=>band?s.systems.stepBand(m,minutes,this.clock,true):s.systems.stepMission(m,minutes,this.clock,true);step(0);if((band?m.phase==='home':m.status==='returned')||!m.path?.[m.leg||0])continue;
+   const p=Atlas.toGame(...Object.values(s.systems.position(m))),driver=a.find(n=>!n.dangerState&&!n.hurt),l=m.path[m.leg||0];if(!driver)continue;if(this.worldState.edgeStatus(Atlas.edgeById.get(l.edge),this.clock).closed&&!s.systems.repairApproach(m,l,this.clock)){m.waiting=l.edge;continue;}
    if(dist(driver,p)>12){this.walkNpc(driver,p,dt);continue;}
    const t=Math.min(1,((m.progress||0)+2)/Math.max(.001,l.length)),goal=Atlas.toGame(l.from[0]+(l.to[0]-l.from[0])*t,l.from[1]+(l.to[1]-l.from[1])*t);this.walkNpc(driver,goal,dt);const world=Atlas.toWorld(driver.x,driver.y),projected=Atlas.project(world.x,world.y,l.from,l.to).t*l.length,delta=Math.max(0,projected-(m.progress||0));step(delta/WorldPacing.metresPerMinute(WorldPacing.civilianWalk));driver.post={x:driver.x,y:driver.y};
    for(const [i,n]of a.entries())if(n!==driver){n.post={x:driver.x+(i%2?16:-16),y:driver.y+16};this.walkNpc(n,n.post,dt);}
@@ -11730,6 +11820,67 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
  const visibleProps=Renderer.prototype.visibleAtlasProps;Renderer.prototype.visibleAtlasProps=function(){const props=visibleProps.call(this);for(const m of sim(this.g)?.state.missions||[])if(m.kind==='recovery'&&m.status!=='returned'&&m.load){const p=Atlas.toGame(...Object.values(sim(this.g).systems.position(m)));if(dist(p,this.g.player)<1200)props.push({...p,y:p.y-10,kind:'transport_cart',world:true,recoveryMission:m.id});}return props;};
  const menu=Game.prototype.npcMenu;Game.prototype.npcMenu=function(n){const result=menu.call(this,n),s=sim(this),station=this.stations.find(st=>st.actor===n);if(station)result.unshift({label:'Bois de bivouac · 2 lots · '+Math.max(1,Math.ceil(2*s.price(station.site,'firewood')))+' pièces',lines:['Deux lots de bois seront prélevés au relais ; le prix sera versé au vendeur.'],act:()=>this.buyFirewood()});if(station)for(const c of s.state.shipments.filter(c=>c.from===station.site&&c.abandoned&&c.playerObservedAt!==undefined&&!c.lossReport))result.unshift({label:'Signaler la perte du chargement '+c.id,lines:['Je peux décrire le chargement abandonné que j’ai examiné.'],act:()=>this.reportCargoLoss(c.id)});if(station)for(const c of s.state.shipments.filter(c=>c.from===station.site&&c.abandoned&&c.lossReport&&c.amount>0&&!c.recoveryMission))result.unshift({label:'Organiser la récupération du chargement '+c.id,lines:['Le poste engage deux travailleurs et deux gardes, quatre provisions, un outil et quatre pièces. L’équipe ira chercher les marchandises puis les rapportera.'],act:()=>this.recoverAbandonedCargo(c.id)});
   if(n.convoyId){const c=s.state.shipments.find(c=>c.id===n.convoyId);for(const e of this.worldState.active().filter(e=>e.bandKey&&!c.passages?.[e.id]&&Math.hypot(e.x-Atlas.toWorld(n.x,n.y).x,e.y-Atlas.toWorld(n.x,n.y).y)<80))result.unshift({label:'Payer le péage · '+(e.toll||Math.ceil(c.amount*.15))+' pièces',lines:['Ce paiement autorise le passage de ce convoi.'],act:()=>this.payBandToll(c.id,e.id)});}return result;};
+})();
+
+/* One local person cannot also work at home while travelling or incapacitated. */
+(()=>{
+ const sim=g=>g.worldState?.simulation;
+ const enlisted=n=>!!(n?.eventGuard||n?.convoyGuard||n?.convoyId||n?.campaignGroup||n?.guardState||n?.batracien?.role);
+ Game.prototype.registerLabourActors=function(){
+  const campaign=sim(this)?.state;if(!campaign)return;if(this.labourState!==campaign){this.labourState=campaign;this.labourNpcCount=-1;this.labourActors=new Map();this.labourSiteByPerson=new Map([...new Set(Object.values(campaign.sites))].flatMap(site=>Object.keys(site.workerRecords).map(id=>[id,site.id])));}
+  this.labourActors||=new Map();if(this.labourNpcCount===this.npcs.length)return;this.labourNpcCount=this.npcs.length;
+  for(const n of this.npcs){if(enlisted(n)||!(n.resident||/^(relay-|courier-)/.test(n.id)||['elyne','veilleur','zahra'].includes(n.id)))continue;
+   const s=sim(this),id=this.labourSiteByPerson.get(n.id)||n.site||this.couriers?.find(c=>c.id===n.id)?.from||Atlas.nearestSite(...Object.values(Atlas.toWorld(n.x,n.y))).id,site=s?.state.sites[id];if(!site)continue;
+   const record=site.workerRecords[n.id]||={id:n.id,reasons:{},debited:false,dead:!!site.losses[n.id]};record.home||={...(n.post||{x:n.x,y:n.y})};n.labourSite=site.id;this.labourSiteByPerson.set(n.id,site.id);this.labourActors.set(n.id,n);
+  }
+ };
+ Game.prototype.syncLabourActors=function(){
+  const s=sim(this);if(!s)return;this.registerLabourActors();const members=new Map(this.party.map(c=>[c.id,c]));
+  for(const [id,n]of this.labourActors){const record=s.state.sites[n.labourSite]?.workerRecords[id];if(!record)continue;const member=members.get(id);if(n.civilian?.dead&&!member&&!record.dead)s.systems.death(n.labourSite,id);if(record.dead)continue;const incapacitated=!!(n.civilian?.critical||member?.down||!member&&n.civilian?.hp<=1);
+   // A legacy save may have an absent person without an availability record.
+   if(member)s.systems.setWorkerReason(n.labourSite,id,'party',true);
+   s.systems.setWorkerReason(n.labourSite,id,'incapacity',incapacitated);
+   if(!member&&n.civilian?.hp<=1&&!n.civilian.dead&&!n.civilian.critical){record.nextCare??=this.clock+360;s.requestCare(n.labourSite,id);
+    if(this.clock>=record.nextCare&&!n.dangerState&&dist(n,record.home)<48){const site=s.state.sites[n.labourSite];if(s.stock(site,'medicinal')>=1&&s.stock(site,'provisions')>=1){site.stock.medicinal--;site.stock.provisions--;n.civilian.hp=Math.min(6,n.civilian.hp+2);record.nextCare=this.clock+360;s.finishCare(n.labourSite,id);s.systems.setWorkerReason(n.labourSite,id,'incapacity',false);s.history('worker_treated',{site:site.id,person:id,hp:n.civilian.hp});}}
+   }
+  }
+ };
+ const recruit=Game.prototype.recruitCompanion;
+ Game.prototype.recruitCompanion=function(n,...args){
+  if(enlisted(n))return false;this.registerLabourActors();const result=recruit.call(this,n,...args);
+  if(result&&n.labourSite){const s=sim(this),record=s.state.sites[n.labourSite].workerRecords[n.id];const job=this.couriers?.find(c=>c.id===n.id);if(job?.returnTo)record.home={...job.returnTo};s.systems.setWorkerReason(n.labourSite,n.id,'party',true);s.systems.setWorkerReason(n.labourSite,n.id,'returning',false);delete record.returnRoute;delete n.labourReturning;}
+  return result;
+ };
+ const dismiss=Game.prototype.dismissCompanion;
+ Game.prototype.dismissCompanion=function(id){const n=this.partyActor(id),result=dismiss.call(this,id);if(result&&n?.labourSite){const s=sim(this);s.systems.setWorkerReason(n.labourSite,id,'returning',true);s.systems.setWorkerReason(n.labourSite,id,'party',false);n.labourReturning=true;s.state.sites[n.labourSite].workerRecords[id].returnClock=this.clock;this.stepLabourReturns(0);}return result;};
+ const walk=Game.prototype.walkNpc;Game.prototype.walkNpc=function(n,to,dt){if(n.labourReturning&&!this.labourWalking)return false;return walk.call(this,n,to,dt);};
+ Game.prototype.stepLabourReturns=function(dt=0){
+  const s=sim(this);if(!s||!this.labourActors)return;
+  for(const [id,n]of this.labourActors){const site=s.state.sites[n.labourSite],record=site?.workerRecords[id];if(!record?.reasons.returning||record.dead||this.party.some(c=>c.id===id))continue;n.labourReturning=true;const elapsed=Math.max(0,this.clock-(record.returnClock??this.clock));record.returnClock=this.clock;
+   if(n.civilian?.critical||n.civilian?.dead||n.dangerState||this.dialogue?.who===n){if(record.returnRoute)record.returnRoute.clock=this.clock;continue;}
+   const home=record.home,world=Atlas.toWorld(n.x,n.y);let route=record.returnRoute;
+   const near=dist(n,this.player)<1500&&!this.journey&&!this.sleeping;
+   this.labourWalking=true;try{
+    if(!route&&dist(n,home)>48){const path=s.systems.graphPath(site.id,world),node=Atlas.toGame(Atlas.byId[site.id].x,Atlas.byId[site.id].y),homePath=dist(home,node)>48?s.systems.graphPath(site.id,Atlas.toWorld(home.x,home.y)):[];if(!path||!homePath)continue;route=record.returnRoute={site:site.id,path,leg:path.length,progress:0,clock:this.clock};s.systems.reverse(route);route.path.push(...homePath);}
+    let homeSeconds=near?dt:WorldPacing.realSeconds(elapsed);
+    if(route&&route.path[route.leg]){const goal=Atlas.toGame(...Object.values(s.systems.position(route)));route.clock=this.clock;let travelMinutes=elapsed;
+     if(dist(n,goal)>12){const seconds=near?dt:Math.min(16,WorldPacing.realSeconds(elapsed));let used=0;while(used<seconds-1e-7&&dist(n,goal)>2){const step=Math.min(.25,seconds-used);walk.call(this,n,goal,step);used+=step;}travelMinutes=Math.max(0,elapsed-used*1440/WorldPacing.dayRealSeconds);homeSeconds=Math.max(0,homeSeconds-used);}
+     if(!near&&dist(n,goal)<=12){const result=s.systems.move(route,travelMinutes,this.clock);Object.assign(n,Atlas.toGame(...Object.values(s.systems.position(route))));homeSeconds=WorldPacing.realSeconds(result.remaining);}
+     else if(near&&dist(n,goal)<=12){const leg=route.path[route.leg];if(leg&&!this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock).closed){const t=Math.min(1,((route.progress||0)+2)/Math.max(.001,leg.length)),target=Atlas.toGame(leg.from[0]+(leg.to[0]-leg.from[0])*t,leg.from[1]+(leg.to[1]-leg.from[1])*t);walk.call(this,n,target,dt);const w=Atlas.toWorld(n.x,n.y),distance=Atlas.project(w.x,w.y,leg.from,leg.to).t*leg.length;s.systems.move(route,Math.max(0,distance-route.progress)/WorldPacing.metresPerMinute(WorldPacing.civilianWalk),this.clock);}}
+    }
+    if(!route||!route.path[route.leg]){for(let left=Math.min(16,homeSeconds);left>1e-7&&dist(n,home)>12;left-=.25)walk.call(this,n,home,Math.min(.25,left));if(dist(n,home)<=12){s.systems.setWorkerReason(site.id,id,'returning',false);delete record.returnRoute;delete n.labourReturning;n.post={...home};}}
+   }finally{this.labourWalking=false;record.position={x:n.x,y:n.y};}
+  }
+ };
+ const damage=Game.prototype.damageCivilian;Game.prototype.damageCivilian=function(...args){const result=damage.apply(this,args);if(result)this.syncLabourActors();return result;};
+ const advance=Game.prototype.advanceAtlas;Game.prototype.advanceAtlas=function(dt=0){this.syncLabourActors();const result=advance.call(this,dt);this.syncLabourActors();this.stepLabourReturns(dt);return result;};
+ const restore=Game.prototype.finishAtlasRestore;Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);this.registerLabourActors();
+  // Old party arrays were restored directly: reject institutional actors there too.
+  this.party=this.party.filter(c=>!enlisted(this.partyActor(c.id)));
+  for(const [id,n]of this.labourActors){const record=sim(this).state.sites[n.labourSite].workerRecords[id];if(record.reasons.returning&&record.position&&!this.party.some(c=>c.id===id))Object.assign(n,record.position);}
+  this.syncLabourActors();
+ };
+ const serialize=Game.prototype.serialize;Game.prototype.serialize=function(){this.syncLabourActors();return serialize.call(this);};
 })();
 
 // END WORLD ATLAS
