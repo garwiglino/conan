@@ -2,7 +2,7 @@
 
 Auteur : Codex / OpenAI, pour transmission à Claude. Ces ajouts ne modifient pas
 les sprites approuvés. Sources : `scripts/world-justice.js`,
-`scripts/world-justice-runtime.js`, `scripts/world-convoys.js` et
+`scripts/world-justice-runtime.js`, `scripts/world-crime-response.js`, `scripts/world-convoys.js` et
 `scripts/world-simulation.js`.
 
 ## Justice
@@ -21,9 +21,62 @@ Une arrestation volontaire ou une défaite face à une garde compétente appliqu
 une retenue financière bornée et un temps de détention, sans dette permanente,
 retrait d'équipement ou consommation de vie. La recherche prend fin après la
 peine ; défiance, refus de renseignements et prix majorés diminuent avec le temps.
-Les services essentiels à la progression restent accessibles. De nouveaux actes
+Les services essentiels restent récupérables après le retour au calme ; leurs personnages ne disparaissent pas définitivement. De nouveaux actes
 restent de nouvelles infractions. Ce n'est pas encore un code pénal pour le vol,
 les rançons ou tous les différends politiques.
+
+## Coup isolé, crime et retour au calme
+
+Un premier contact léger accepté avertit le joueur et peut faire paniquer les
+civils pendant quatre minutes du monde (dix secondes réelles). Il ne crée ni
+plainte ni hostilité de la garde. Un deuxième contact dans les cinq minutes du
+monde (12,5 secondes réelles), même contre une autre victime, devient une
+agression. L’avertissement est conservé à la sauvegarde. Un contact rejeté par
+l’invulnérabilité ou provenant d’un monstre ne compte pas. Une blessure grave
+(perte de plus de deux points, état critique ou santé restante au plus égale à
+un) et un meurtre constituent immédiatement un crime. Une victime déjà informée
+d’un crime récent ne réinterprète pas une nouvelle attaque comme un accident.
+
+Les civils qui connaissent le crime refusent toute conversation, interrompent
+leurs échanges et fuient le joueur lorsqu’ils le voient à proximité. La peur
+expire à une date fixe, sans renouvellement par la seule présence du joueur :
+
+| Acte connu | Peur dans le monde | Durée réelle à l’horloge normale |
+| --- | --- | --- |
+| Agression | 3 heures | 7 min 30 |
+| Blessure grave | 6 heures | 15 minutes |
+| Meurtre | 12 heures | 30 minutes |
+
+Leur retour au poste reste physique et peut demander quelques secondes de plus.
+Un autre danger réel peut continuer à les mettre à l’abri. Une garde calme ne constitue pas, par le seul mandat visant le joueur, une menace pour les civils. La peur et la justice
+sont distinctes : les poursuites locales durent au plus un, deux ou quatre jours
+selon la gravité, sauf nouveau crime ; la reddition les règle immédiatement.
+Les majorations de prix décroissent séparément pendant deux, quatre ou sept jours.
+Une découverte de corps sans témoin de l’acte n’identifie toujours pas le joueur.
+
+## Renforts et arrestation
+
+Une déposition transmise à un contact réel peut mobiliser un groupe de deux
+gardes, sans attendre la ronde institutionnelle de six heures. Le poste doit
+disposer des deux personnes, de douze pièces et de quatre provisions ; les
+rations et l’eau suivent les règles communes des expéditions. Aucun garde
+supplémentaire n’est inventé si les réserves sont épuisées.
+
+Le groupe rejoint une entrée navigable hors du champ réel de la caméra, avec
+une marge de sécurité. La mobilisation prend au moins une minute du monde et
+inclut le temps de marche entre le poste et cette entrée. Si la caméra révèle
+l’entrée, la matérialisation attend ; une ancienne position sauvegardée ne peut
+pas remplacer la position d’approche et faire apparaître un garde près du joueur.
+La planification est bornée à quatre candidats par essai, espacés de cinq
+secondes réelles, et n’est pas lancée sans effectifs ni ressources.
+
+Les gardes rejoignent le dernier lieu signalé, sans connaître la position cachée
+du joueur. Ils peuvent proposer ou imposer l’arrestation selon les règles
+existantes. Une seule intervention de renfort est active par juridiction ; une
+nouvelle mobilisation est espacée d’au moins une heure du monde. La recherche
+locale dure trente minutes du monde hors combat, puis le groupe rentre au poste.
+Les morts, blessures, ressources et personnes réservées persistent au rechargement.
+Seuls les survivants redeviennent disponibles à leur retour, une seule fois.
 
 ## Convois : état de validation
 
@@ -54,7 +107,8 @@ Les gardes restent réservés jusqu’à l’arrivée effective au poste ; seuls
 
 ## Tests exécutés
 
-- `tests/world-justice.test.cjs` : 16 cas de preuves, sanctions et expiration.
+- `tests/world-justice.test.cjs` : 18 cas de preuves, sanctions et expiration.
+- `tests/world-crime-response.test.cjs` : avertissements, refus, expiration, renforts hors champ, retour et conservation des pertes.
 - `tests/world-justice-runtime.test.cjs` : 9 cas dans le moteur embarqué.
 - `tests/world-simulation.test.cjs` : 13 cas économiques et de persistance.
 - `tests/world-convoys.test.cjs` : 12 cas de matérialisation, arrêt au danger,

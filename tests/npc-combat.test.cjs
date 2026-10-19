@@ -39,7 +39,7 @@ test('without a house to hide in, a threatened civilian cowers visibly instead o
 
 test('patrol guards bleed, turn on an attacker together, hit back and leave a body that never respawns',()=>{
  const {g,guards:[n,m]}=patrol(),p=g.player;Object.assign(p,{x:n.x-14,y:n.y,dir:1});
- assert.equal(g.npcPresent(n),true);g.damageEnemy(n,1);
+ assert.equal(g.npcPresent(n),true);g.damageEnemy(n,1);assert.equal(g.isHostileHumanGuard(n),false);g.damageEnemy(n,1);
  assert.ok(n.guardState.hp<n.guardState.maxHp);assert.equal(g.isHostileHumanGuard(n),true);assert.equal(g.isHostileHumanGuard(m),true);
  assert.equal(g.npcPresent(n),false);assert.ok(g.combatTargets().includes(n));
  let hurt=false;const t=chase(g,n,()=>n.guardState.dead);const hp=p.hp;

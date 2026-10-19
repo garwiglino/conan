@@ -7,7 +7,7 @@ function stage(){const g=new a.Game();g.clock=480;g.worldState=new a.Atlas.World
 }
 function guard(g,p){const e=g.worldState.add('patrol','camp',g.clock,1440),n={id:'incident-'+e.id+'-0',eventId:e.id,eventGuard:true,site:'camp',world:true,x:p.x,y:p.y,post:{...p},alpha:1,dir:2,look:'nomade',head:40,name:'LA GARDE',label:'GARDE',greet:()=>['Halte.'],topics:()=>[],bye:()=>['Passe ton chemin.']};g.npcs.push(n);g.ensureHumanGuard(n);return n;}
 test('real hits collect witnesses only on the same floor with line of sight; monster hits never accuse the player',()=>{
- const {g,residents:[n,w,z]}=stage();z.level=1;g.lineClear=(from)=>from!==w;g.damageCivilian(n,1,g.player);const c=g.worldState.justice.state.cases[0];assert.ok(c);assert.deepEqual(Object.keys(c.witnesses),[n.id]);assert.equal(c.reportedAt,null);
+ const {g,residents:[n,w,z]}=stage();z.level=1;g.lineClear=(from)=>from!==w;g.damageCivilian(n,1,g.player);assert.equal(g.worldState.justice.state.cases.length,0);n.civilian.inv=0;g.damageCivilian(n,1,g.player);const c=g.worldState.justice.state.cases[0];assert.ok(c);assert.deepEqual(Object.keys(c.witnesses),[n.id]);assert.equal(c.reportedAt,null);
  n.civilian.inv=0;g.damageCivilian(n,1,{x:n.x+10,y:n.y,level:0,id:'monster'});assert.equal(c.attacks,1);
 });
 test('killing an unreported witness does not silently file their testimony',()=>{

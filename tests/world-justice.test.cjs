@@ -26,7 +26,7 @@ test('statements submitted late cannot renew the same accusation forever',()=>{
  const {j}=setup(),c=crime(j);j.file(c.id,'w1',490);j.file(c.id,'w2',480+6*1440);assert.ok(c.penaltyUntil<=c.lastAt+7*1440);assert.equal(j.effect(site,null,480+8*1440).wanted,false);
 });
 test('an arrest charges once, is proportionate, ends local pursuit and preserves temporary distrust',()=>{
- const {j}=setup(),c=crime(j);j.file(c.id,'w1',490);const s=j.sentence(site,100,500);assert.ok(s.money>0&&s.money<=100);assert.ok(s.minutes>=240&&s.minutes<=1440);assert.equal(j.sentence(site,100,501),null);assert.equal(j.effect(site,null,s.releaseAt).wanted,false);assert.ok(j.effect(site,null,s.releaseAt).price>1);assert.equal(j.effect(site,null,s.releaseAt).refuse,true);
+ const {j}=setup(),c=crime(j);j.file(c.id,'w1',490);const s=j.sentence(site,100,500);assert.ok(s.money>0&&s.money<=100);assert.ok(s.minutes>=240&&s.minutes<=1440);assert.equal(j.sentence(site,100,501),null);assert.equal(j.effect(site,null,s.releaseAt).wanted,false);assert.ok(j.effect(site,null,s.releaseAt).price>1);assert.equal(j.effect(site,null,s.releaseAt).refuse,false);
 });
 test('poverty creates neither negative money nor everlasting debt; repeated new crimes are not pardoned',()=>{
  const {j}=setup(),c=crime(j);j.file(c.id,'w1',490);assert.equal(j.sentence(site,0,500).money,0);assert.equal(j.effect(site,null,501).wanted,false);const next=crime(j,'assault',['w1'],'victim',510);assert.notEqual(next.id,c.id);j.file(next.id,'w1',515);assert.equal(j.effect(site,null,516).wanted,true);
@@ -54,4 +54,12 @@ test('new observations in the same frame can upgrade a report without deleting t
 test('last-seen information is evidence dated in the past, not the player live position',()=>{
  const {j}=setup(),c=j.record({victim:'victim',site,kind:'murder',witnesses:['guard'],position:{x:10,y:20},at:480});j.file(c.id,'guard',500);assert.deepEqual(j.state.sightings.camp,{x:10,y:20,at:480,by:'guard'});
  const other=setup(j.serialize()).j;assert.equal(other.state.sightings.camp.x,10);assert.equal(other.effect(site,null,501).wanted,true);
+});
+test('only accepted repeated light contacts in the warning window qualify, including after reload',()=>{
+ const {w,j}=setup();assert.equal(j.qualify('one','assault',480),false);assert.equal(setup(j.serialize()).j.qualify('two','assault',485),true);
+ assert.equal(j.qualify('two','assault',486),false);assert.equal(j.qualify('one','grave_injury',500),true);assert.equal(j.qualify('one','murder',520),true);
+});
+test('fear uses the observed crime time, not proximity, a late report or the longer price penalty',()=>{
+ const {j}=setup(),c=crime(j,'murder');j.file(c.id,'w1',490);assert.equal(j.effect(site,'w2',1199).refuse,true);assert.equal(j.effect(site,'w2',1200).refuse,false);
+ j.file(c.id,'w2',1210);assert.equal(j.effect(site,null,1210).refuse,false);assert.ok(j.effect(site,null,1210).price>1);
 });

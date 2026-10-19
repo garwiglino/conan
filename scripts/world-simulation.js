@@ -12,6 +12,7 @@ function createWorldSimulation(A,B,W,saved){
  const state=validState?JSON.parse(JSON.stringify(saved)):{version:1,clock:W.clock,serial:1,sites:{},shipments:[],missions:[],works:[],disputes:{},crimes:[],history:[],channels:{},cooldowns:{}};
  state.history||=[];state.channels||={};state.cooldowns||={};state.crimes||=[];state.works||=[];state.disputes||={};state.shipments||=[];state.missions||=[];state.serial=Math.max(1,Math.floor(state.serial)||1);
  if(validState&&state.clock>W.clock)W.clock=state.clock;
+ for(const m of state.missions)if(!m.kind&&m.incident?.startsWith('warrant-'))Object.assign(m,{kind:'justice',readyAt:m.clock??W.clock,searchUntil:W.clock+30});
  const sites=()=>[...new Set(Object.values(state.sites))];
  for(const node of A.nodes.filter(n=>n.rest&&n.kind!=='dock')){
   if(state.sites[node.id])continue;const profile=profiles.get(node.id),region=regions.get(node.region),population=Math.max(8,Math.min(600,Math.ceil((profile?.designPopulation||800)/100))),needs={provisions:population*2,water:population*3,firewood:population*.2,cloth:population*.025,tools:population*.02};
@@ -215,12 +216,28 @@ function createWorldSimulation(A,B,W,saved){
   for(const site of sites()){
    const node=A.byId[site.id],wanted=W.justice?.effect(site.id,null,state.clock),last=W.justice?.state.sightings[site.id],incident=W.active(state.clock).find(e=>(['bandits','occupation','massacre','crime_scene'].includes(e.type)||e.type==='missing'&&e.missingMission)&&state.channels[site.id]?.[e.id]?.resolved===null&&Math.hypot(e.x-node.x,e.y-node.y)<1000)||(wanted?.wanted?{id:'warrant-'+site.jurisdiction,x:last?.x??node.x,y:last?.y??node.y,warrant:true}:null);
    const jurisdiction=incident?.warrant?site:incident&&state.sites[A.nearestSite(incident.x,incident.y).id];
-   if(!incident||jurisdiction?.authority!==site.authority||site.guardAvailable<2||site.treasury<12||stock(site,'provisions')<4||state.missions.some(m=>(m.site===site.id||m.incident===incident.id)&&m.status!=='returned'))continue;
+   if(!incident||jurisdiction?.authority!==site.authority||site.guardAvailable<2||site.treasury<12||stock(site,'provisions')<4||state.missions.some(m=>(m.site===site.id||m.incident===incident.id||incident.warrant&&m.kind==='justice'&&state.sites[m.site]?.jurisdiction===site.jurisdiction)&&m.status!=='returned'))continue;
    const path=systems.graphPath(site.id,incident);if(!path)continue;const id='mandate-'+state.serial++,units=systems.reserve(site,2,id);if(!units)continue;
    site.guardAvailable-=2;site.treasury-=12;site.householdFunds+=12;take(site,'provisions',4);const road=A.closestRoad(incident.x,incident.y)?.road;if(!road)continue;
    const e=event('patrol',road.id,{source:site.authority,position:node},0);if(!e){systems.release(site,units);continue;}e.authority=site.authority;e.mandateSite=site.id;e.managedMovement=true;e.memberIds=units.map(u=>u.id);e.mandate=incident.warrant?'search_last_seen':'protect_travellers';
-   const mission={id,event:e.id,incident:incident.id,site:site.id,road:road.id,crew:2,units,path,leg:0,progress:0,clock:state.clock,status:'outbound'};systems.supplyExpedition(mission,site,units,path.reduce((n,l)=>n+l.length,0)/pacing.metresPerMinute(pacing.civilianWalk)*2+1440,4);state.missions.push(mission);
+   const mission={id,...(incident.warrant?{kind:'justice',readyAt:state.clock,searchUntil:state.clock+30}:{}),event:e.id,incident:incident.id,site:site.id,road:road.id,crew:2,units,path,leg:0,progress:0,clock:state.clock,status:'outbound'};systems.supplyExpedition(mission,site,units,path.reduce((n,l)=>n+l.length,0)/pacing.metresPerMinute(pacing.civilianWalk)*2+1440,4);state.missions.push(mission);
   }
+ }
+ // A local report may mobilize one finite squad without waiting six hours.
+ function dispatchJustice(siteId,deployment){
+  const site=state.sites[siteId],j=W.justice,now=W.clock;
+  if(!site||!j?.effect(siteId,null,now).wanted||!deployment?.path?.length||!finite(deployment.readyAt)||deployment.readyAt<now)return null;
+  const key='justice-'+site.jurisdiction;
+  if((state.cooldowns[key]||0)>now||state.missions.some(m=>m.kind==='justice'&&state.sites[m.site]?.jurisdiction===site.jurisdiction&&m.status!=='returned')||site.guardAvailable<2||site.treasury<12||stock(site,'provisions')<4)return null;
+  const road=A.closestRoad(deployment.path[0].from[0],deployment.path[0].from[1])?.road;if(!road)return null;
+  const id='arrest-'+state.serial++,units=systems.reserve(site,2,id);if(!units)return null;
+  const e=event('patrol',road.id,{source:site.authority,position:{x:deployment.path[0].from[0],y:deployment.path[0].from[1]}},0,now);
+  if(!e){systems.release(site,units);return null;}
+  site.guardAvailable-=2;site.treasury-=12;site.householdFunds+=12;take(site,'provisions',4);
+  Object.assign(e,{authority:site.authority,mandateSite:siteId,managedMovement:true,memberIds:units.map(u=>u.id),mandate:'search_last_seen'});
+  const m={id,kind:'justice',event:e.id,incident:'warrant-'+site.jurisdiction,site:siteId,road:road.id,crew:2,units,path:deployment.path,leg:0,progress:0,clock:now,status:'outbound',homePath:deployment.homePath||[],readyAt:deployment.readyAt,searchUntil:deployment.readyAt+30};
+  systems.supplyExpedition(m,site,units,1440,4);state.missions.push(m);state.cooldowns[key]=now+60;
+  history('justice_reinforcements',{id,site:siteId,readyAt:m.readyAt,units:units.map(u=>u.id)});return m;
  }
  function institutions(){
   // An identified local band needs a base, members and exposed real traffic.
@@ -262,6 +279,6 @@ function createWorldSimulation(A,B,W,saved){
  function price(id,resource='provisions'){const s=state.sites[id];if(!s)return 1;const cover=stock(s,resource)/Math.max(1,s.needs[resource]||1);return clamp(2-cover/3,.65,3);}
  function purchase(id,food,water,payment=0){const s=state.sites[id];if(!s||!finite(food)||!finite(water)||!finite(payment)||payment<0||food<0||water<0||stock(s,'provisions')<food||stock(s,'water')<water)return false;take(s,'provisions',food);take(s,'water',water);s.treasury+=payment;history('player_purchase',{site:id,food,water});return true;}
  for(const e of W.active(state.clock))publish(e);
- return {state,advance,learn,price,purchase,requirements,systems,beginCargoEncounter,recordBandHealth,requestCare:(id,person)=>{const site=state.sites[id];if(site)(state.care[site.id]||={})[person]=true;},finishCare:(id,person)=>{const site=state.sites[id];if(site&&state.care[site.id])delete state.care[site.id][person];},addShipment,publish,stock,history,cargoPosition,cargoRate,cargoUnits,damageCargoUnit,loseCargo,controlCargo:(id,on)=>on?controlledCargo.add(id):controlledCargo.delete(id),catchUpCargo:(c,at=W.clock)=>{if(state.shipments.includes(c)&&finite(at)&&at>(c.clock??at)&&!controlledCargo.has(c.id))progressCargo(c,at-c.clock,false,at);},stepCargo:(c,minutes,at=W.clock)=>{if(state.shipments.includes(c)&&finite(minutes)&&minutes>=0)progressCargo(c,minutes,true,at);},serialize:()=>JSON.parse(JSON.stringify(state))};
+ return {state,advance,dispatchJustice,learn,price,purchase,requirements,systems,beginCargoEncounter,recordBandHealth,requestCare:(id,person)=>{const site=state.sites[id];if(site)(state.care[site.id]||={})[person]=true;},finishCare:(id,person)=>{const site=state.sites[id];if(site&&state.care[site.id])delete state.care[site.id][person];},addShipment,publish,stock,history,cargoPosition,cargoRate,cargoUnits,damageCargoUnit,loseCargo,controlCargo:(id,on)=>on?controlledCargo.add(id):controlledCargo.delete(id),catchUpCargo:(c,at=W.clock)=>{if(state.shipments.includes(c)&&finite(at)&&at>(c.clock??at)&&!controlledCargo.has(c.id))progressCargo(c,at-c.clock,false,at);},stepCargo:(c,minutes,at=W.clock)=>{if(state.shipments.includes(c)&&finite(minutes)&&minutes>=0)progressCargo(c,minutes,true,at);},serialize:()=>JSON.parse(JSON.stringify(state))};
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldSimulation;

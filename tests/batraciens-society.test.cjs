@@ -46,13 +46,13 @@ test('road coordinates and palette survive reload; malformed path indices and ar
 });
 test('direct player assault makes only nearby witnesses hostile, targetable and able to retaliate in a village',()=>{
  const g=game(),{guard}=arena(g),far=g.npcs.find(n=>n.batracien?.role&&n.site==='town-73');const hp=g.player.hp;
- assert.equal(g.isHostileBatracien(guard),false);g.damageBatracienGuard(guard,1,g.player);assert.equal(g.isHostileBatracien(guard),true);assert.equal(g.isHostileBatracien(far),false);
+ assert.equal(g.isHostileBatracien(guard),false);g.damageBatracienGuard(guard,1,g.player);assert.equal(g.isHostileBatracien(guard),false);g.damageBatracienGuard(guard,1,g.player);assert.equal(g.isHostileBatracien(guard),true);assert.equal(g.isHostileBatracien(far),false);
  g.targetId=guard.id;assert.equal(g.target(),guard);assert.ok(g.combatTargets().includes(guard));assert.equal(g.talkTo(guard),true);assert.ok(g.dialogue.menu.options.some(o=>o.label==='Se rendre'));g.dialogue=null;
  g.inSafe=()=>({x:g.player.x,y:g.player.y});for(let i=0;i<120;i++){g.time+=.04;g.stepBatracienWardens(.04);}assert.ok(g.player.hp<hp);
 });
 test('nearby civilian injury or a fatal first hit triggers witnesses, including a human civilian',()=>{
- for(const fatal of [false,true]){const g=game(),{guard,civil}=arena(g);Object.assign(civil,{x:guard.x+28,y:guard.y});g.damageCivilian(civil,fatal?99:1,g.player);assert.equal(g.isHostileBatracien(guard),true);assert.equal(civil.civilian.dead,fatal);}
- const g=game(),{guard}=arena(g),human=g.npcs.find(n=>n.civilian&&!n.batracien&&n.id!=='elyne');Object.assign(human,{x:guard.x+24,y:guard.y,level:0});g.damageCivilian(human,1,g.player);assert.ok(g.isHostileBatracien(guard));
+ for(const fatal of [false,true]){const g=game(),{guard,civil}=arena(g);Object.assign(civil,{x:guard.x+28,y:guard.y});g.damageCivilian(civil,fatal?99:1,g.player);if(!fatal){assert.equal(g.isHostileBatracien(guard),false);civil.civilian.inv=0;g.damageCivilian(civil,1,g.player);}assert.equal(g.isHostileBatracien(guard),true);assert.equal(civil.civilian.dead,fatal);}
+ const g=game(),{guard}=arena(g),human=g.npcs.find(n=>n.civilian&&!n.batracien&&n.id!=='elyne');Object.assign(human,{x:guard.x+24,y:guard.y,level:0});g.damageCivilian(human,1,g.player);human.civilian.inv=0;g.damageCivilian(human,1,g.player);assert.ok(g.isHostileBatracien(guard));
 });
 test('monster damage, unseen assaults and other floors never accuse the player',()=>{
  const g=game(),{guard,civil}=arena(g);Object.assign(civil,{x:guard.x+28,y:guard.y});g.damageCivilian(civil,1,{x:civil.x+10,y:civil.y,level:0,kind:'snake'});assert.equal(g.isHostileBatracien(guard),false);
@@ -65,7 +65,7 @@ test('guards use native player power, riposte consumption, hit pause, blood and 
 });
 test('shield blocks are not bleeding wounds, and heavy blows break guard',()=>{
  const g=game(),{guard}=arena(g);guard.batracien.action='guard';guard.dir=1;g.player.combo=0;const hp=guard.batracien.hp,fx=g.bloodFX.length;g.damageEnemy(guard,1);
- assert.equal(guard.batracien.hp,hp);assert.equal(g.bloodFX.length,fx);assert.ok(g.isHostileBatracien(guard));guard.batracien.action='guard';g.player.combo=3;g.damageEnemy(guard,2);assert.ok(guard.batracien.hp<hp);assert.ok(g.bloodFX.length>fx);
+ assert.equal(guard.batracien.hp,hp);assert.equal(g.bloodFX.length,fx);assert.equal(g.isHostileBatracien(guard),false);guard.batracien.action='guard';g.player.combo=3;g.damageEnemy(guard,2);assert.ok(guard.batracien.hp<hp);assert.ok(g.bloodFX.length>fx);
 });
 test('parrying an angry guard or its javelin interrupts the same attack and selects it',()=>{
  const g=game(),{guard}=arena(g);g.reportBatracienAssault(guard,g.player);g.player.dir=3;g.player.guard=true;g.player.parry=.18;guard.batracien.action='thrust';guard.batracien.elapsed=.1;guard.batracien.targetId='player';guard.batracien.lockedDir=1;
@@ -81,7 +81,7 @@ test('civilians bleed and leave stains using enemy blood FX, without XP or dupli
  assert.equal(g.bloodFX.length,2);assert.equal(g.bloodFX[0].fatal,false);assert.equal(g.bloodFX[1].fatal,true);assert.equal(g.bloodFX[1].bone,false);g.updateEffects(.5);assert.ok(g.blood.length>0);assert.equal(g.player.xp,xp);assert.equal(g.player.kills,kills);assert.ok(!g.remains.some(r=>r.x===civil.x&&r.y===civil.y));
 });
 test('anger survives saves, local warrants outlast anger, and both expire by world clock',()=>{
- const g=game(),{guard}=arena(g);g.damageBatracienGuard(guard,1,g.player);const save=json(g.serialize()),copy=new api.Game(save),n=copy.npcs.find(a=>a.id===guard.id);assert.ok(copy.isHostileBatracien(n));assert.equal(n.batracien.hp,guard.batracien.hp);
+ const g=game(),{guard}=arena(g);g.damageBatracienGuard(guard,1,g.player);g.damageBatracienGuard(guard,1,g.player);const save=json(g.serialize()),copy=new api.Game(save),n=copy.npcs.find(a=>a.id===guard.id);assert.ok(copy.isHostileBatracien(n));assert.equal(n.batracien.hp,guard.batracien.hp);
  copy.clock=n.batracien.hostileUntil+.01;assert.equal(copy.justiceEffect(n).wanted,true);assert.equal(copy.isHostileBatracien(n),true);
  copy.clock=Math.max(...copy.worldState.justice.state.cases.map(c=>c.wantedUntil))+.01;assert.equal(copy.justiceEffect(n).wanted,false);assert.equal(copy.isHostileBatracien(n),false);assert.ok(!copy.combatTargets().includes(n));
  const row=save.atlas.batraciens.people.find(a=>a.id===guard.id);row.hostileUntil=Infinity;const bad=new api.Game(save);assert.ok(Number.isFinite(bad.npcs.find(a=>a.id===guard.id).batracien.hostileUntil));

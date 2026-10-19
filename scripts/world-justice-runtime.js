@@ -16,8 +16,8 @@
  Game.prototype.justiceWitnesses=function(victim){
   return this.npcs.filter(n=>alive(n)&&n.id!=='fairy'&&!this.party.some(c=>c.id===n.id)&&this.sameLevel(n,victim)&&dist(n,victim)<=180&&(n===victim||this.lineClear(n,victim)&&this.lineClear(n,this.player))).map(n=>({id:n.id,guard:this.isJusticeGuard(n),site:this.justiceSite(n)}));
  };
- Game.prototype.recordJusticeViolence=function(n,witnesses){
-  const j=law(this);if(!j)return;const kind=dead(n)?'murder':n.civilian?.critical||Math.min(n.civilian?.hp??Infinity,n.guardState?.hp??Infinity,n.batracien?.hp??Infinity)<=1?'grave_injury':'assault';
+ Game.prototype.recordJusticeViolence=function(n,witnesses,kind=null){
+  const j=law(this);if(!j)return;kind||=dead(n)?'murder':n.civilian?.critical||Math.min(n.civilian?.hp??Infinity,n.guardState?.hp??Infinity,n.batracien?.hp??Infinity)<=1?'grave_injury':'assault';
   const site=this.justiceSite(n),c=j.record({victim:n.id,site,kind,witnesses:witnesses.map(w=>w.id),position:Atlas.toWorld(this.player.x,this.player.y),at:this.clock});if(!c)return;
   if(dead(n))j.witnessDied(n.id);
   for(const w of witnesses){const actor=this.npcs.find(a=>a.id===w.id);if(w.guard&&alive(actor)&&j.localSite(w.site)?.jurisdiction===c.jurisdiction)this.fileJusticeStatement(c.id,w.id);}
@@ -32,12 +32,27 @@
   }
   this.worldState.simulation?.history('violent_death',{person:n.id,site,scene:scene.id});
  };
- // Wrap accepted damage, rather than an attack input or a blocked/expired hitbox.
+ // Damage handlers used to anger every guard before knowing whether a hit
+ // was accepted or criminal. Defer that reaction until the actual injury exists.
+ const reportAssault=Game.prototype.reportBatracienAssault;
+ Game.prototype.reportBatracienAssault=function(n,source){if(this._justiceDamage&&source===this.player)return false;return reportAssault.call(this,n,source);};
  for(const name of ['damageCivilian','damageHumanGuard','damageBatracienGuard']){
   const native=Game.prototype[name];Game.prototype[name]=function(n,amount,source){
-   const culpable=playerSource(this,source)&&alive(n)&&Number.isFinite(amount)&&amount>0,witnesses=culpable?this.justiceWitnesses(n):null,result=native.call(this,n,amount,source);
+   const culpable=playerSource(this,source)&&alive(n)&&Number.isFinite(amount)&&amount>0,witnesses=culpable?this.justiceWitnesses(n):null;
+   if(this.isHumanGuard(n))this.ensureHumanGuard(n);else if(!n.batracien?.role)this.ensureCivilian(n);
+   const hp=()=>name==='damageHumanGuard'?(n.guardState?.hp??Infinity):name==='damageBatracienGuard'?(n.batracien?.hp??Infinity):(n.civilian?.hp??Infinity),before=hp(),old=this._justiceDamage;
+   this._justiceDamage=old||culpable;let result;try{result=native.call(this,n,amount,source);}finally{this._justiceDamage=old;}
    const attempt=!result&&culpable&&n.civilian?.critical&&this.sameLevel(n,this.player)&&dist(n,this.player)<60&&this.lineClear(n,this.player)&&this.clock>=(n.justiceAttemptAfter||0);
-   if(result&&culpable||attempt){if(attempt)n.justiceAttemptAfter=this.clock+1;this.recordJusticeViolence(n,witnesses);if(source!==this.player||attempt)this.reportBatracienAssault(n,this.player);}
+   if(result&&culpable||attempt){
+    const kind=dead(n)?'murder':attempt||n.civilian?.critical||hp()<=1||before-hp()>2?'grave_injury':'assault';
+    const qualified=law(this)?.qualify(n.id,kind,this.clock),effect=this.justiceEffect(n),crime=qualified||effect.wanted||effect.refuse;if(attempt)n.justiceAttemptAfter=this.clock+1;
+    if(crime){this.recordJusticeViolence(n,witnesses,kind);this.reportBatracienAssault(n,this.player);this.refreshJusticeFear(true);}
+    else{
+     this.alarmWitnesses(n,this.player);
+     for(const actor of this.npcs)if(actor.dangerState?.attacker==='player'&&actor.dangerState.hitAt===this.time)actor.dangerState.justicePanicUntil=this.clock+4;
+     this.emit('notice',{title:'Attention à ton arme',text:'Un coup isolé peut être accidentel. Cesse immédiatement : une nouvelle attaque sera une agression.'});this.emit('save');
+    }
+   }
    if(result&&dead(n)){law(this)?.witnessDied(n.id);this.recordJusticeDeath(n);this.emit('save');}return result;
   };
  }
@@ -96,7 +111,7 @@
  Game.prototype.stepCouriers=function(minutes){const all=this.couriers;try{this.couriers=all.filter(c=>!this.npcs.find(n=>n.id===c.id)?.justiceReport);return couriers.call(this,minutes);}finally{this.couriers=all;}};
  const speech=Game.prototype.worldSpeech;
  Game.prototype.worldSpeech=function(){const lines=speech.call(this);if(this.dialogue||this.journey||this.sleeping||this.dead||this.dying)return lines;for(const n of this.npcs)if(alive(n)&&n.justiceDiscoverySay&&this.time-n.justiceDiscoverySay.at<3.1&&this.sameLevel(n,this.player)&&dist(n,this.player)<260)lines.push({actor:n,text:n.justiceDiscoverySay.text,until:n.justiceDiscoverySay.at+3.1});return lines.slice(0,2);};
- for(const name of ['isHostileHumanGuard','isHostileBatracien']){const native=Game.prototype[name];Game.prototype[name]=function(n){if(this._justiceCustody)return false;return native.call(this,n)||!!(this.isJusticeGuard(n)&&law(this)?.effect(this.justiceSite(n),null,this.clock).wanted);};}
+ for(const name of ['isHostileHumanGuard','isHostileBatracien']){const native=Game.prototype[name];Game.prototype[name]=function(n){if(this._justiceCustody)return false;return native.call(this,n)||!!((name!=='isHostileBatracien'||n?.batracien?.role)&&(name!=='isHostileHumanGuard'||this.isHumanGuard(n))&&this.isJusticeGuard(n)&&law(this)?.effect(this.justiceSite(n),null,this.clock).wanted);};}
  for(const name of ['atlasNews','npcDirections']){const native=Game.prototype[name];Game.prototype[name]=function(n){if(this.justiceEffect(n).refuse)return ['Après ce qui s’est passé, je ne te donnerai pas de renseignements. Laisse passer du temps et n’aggrave pas ton cas.'];return native.call(this,n);};}
  const quote=Game.prototype.supplyQuote;
  Game.prototype.supplyQuote=function(...args){const q=quote.apply(this,args);if(q){const e=this.justiceEffect();return {...q,cost:Math.ceil(q.cost*e.price),justiceMarkup:e.price};}return q;};
