@@ -1,0 +1,4162 @@
+{
+  "version": 1,
+  "phase": "human_runtime_library",
+  "date": "2026-10-19",
+  "scope": "human_fixed_activity_stations_without_transports",
+  "ruleScope": "all_races",
+  "characterReference": {
+    "file": "art/humains/activites/concepts/postes/humain-echelle.png",
+    "source": "native T01-masculin, hair 01, adult, no hat",
+    "nativeUnhattedBounds": {
+      "face": [
+        14,
+        19
+      ],
+      "droite": [
+        12,
+        19
+      ],
+      "dos": [
+        14,
+        19
+      ],
+      "gauche": [
+        12,
+        19
+      ]
+    },
+    "feet": [
+      40,
+      52
+    ],
+    "note": "Image headers use an approximate 22 px dressed reference; native guide and source pixels control final scale. Proposed dimensions/contact heights are authoring targets, not calibrated runtime sockets."
+  },
+  "composition": [
+    "decor.back",
+    "npc.separateLayers",
+    "decor.front"
+  ],
+  "portablePolicy": "Weapons, handheld tools, active material and cargo remain actor/item entities; no furniture in animation frames",
+  "transports": "deferred_empty_separate_sprites",
+  "liveAnimationMigration": "human_activity_library_actor_only",
+  "assets": [
+    {
+      "number": 1,
+      "id": "workbench",
+      "label": "Établi commun",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          32,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "workbench@64,96:operator",
+            "reservationKey": "workbench@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              88
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              82
+            ],
+            "approach": [
+              64,
+              80
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 2,
+      "id": "chopping_block",
+      "label": "Billot",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 2
+      },
+      "proposedCanvas": [
+        16,
+        12
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          16,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "chopping_block@64,96:operator",
+            "reservationKey": "chopping_block@64,96:operator",
+            "role": "operator",
+            "feet": [
+              54,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              59,
+              86
+            ],
+            "approach": [
+              46,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "id": "sawhorse",
+      "label": "Chevalet de sciage",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 3
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          28,
+          16
+        ],
+        "sockets": {
+          "operator": {
+            "id": "sawhorse@64,96:operator",
+            "reservationKey": "sawhorse@64,96:operator",
+            "role": "operator",
+            "feet": [
+              48,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              53,
+              85
+            ],
+            "approach": [
+              40,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 4,
+      "id": "anvil",
+      "label": "Enclume sur souche",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 4
+      },
+      "proposedCanvas": [
+        24,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          22,
+          16
+        ],
+        "sockets": {
+          "operator": {
+            "id": "anvil@64,96:operator",
+            "reservationKey": "anvil@64,96:operator",
+            "role": "operator",
+            "feet": [
+              51,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              56,
+              85
+            ],
+            "approach": [
+              43,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 5,
+      "id": "forge",
+      "label": "Forge et soufflet fixe",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 1
+      },
+      "proposedCanvas": [
+        48,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          48,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "forge@64,96:operator",
+            "reservationKey": "forge@64,96:operator",
+            "role": "operator",
+            "feet": [
+              78,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              78,
+              89
+            ],
+            "approach": [
+              78,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 6,
+      "id": "smelter",
+      "label": "Four de fusion",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 2
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          30,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "smelter@64,96:operator",
+            "reservationKey": "smelter@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              88
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 7,
+      "id": "quench_trough",
+      "label": "Auge de trempe",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 3
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 6,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          36,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "quench_trough@64,96:operator",
+            "reservationKey": "quench_trough@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              87
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              83
+            ],
+            "approach": [
+              64,
+              79
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 8,
+      "id": "potters_wheel",
+      "label": "Tour de potier",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        24
+      ],
+      "posture": "assis",
+      "proposedContactHeight": 6,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          32,
+          18
+        ],
+        "sockets": {
+          "operator": {
+            "id": "potters_wheel@64,96:operator",
+            "reservationKey": "potters_wheel@64,96:operator",
+            "role": "operator",
+            "feet": [
+              76,
+              97
+            ],
+            "facing": "gauche",
+            "contact": [
+              70,
+              84
+            ],
+            "approach": [
+              84,
+              97
+            ],
+            "support": {
+              "kind": "seat",
+              "surface": [
+                76,
+                93
+              ],
+              "height": 4
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "gauche",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 9,
+      "id": "pottery_kiln",
+      "label": "Four de potier",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          32,
+          26
+        ],
+        "sockets": {
+          "operator": {
+            "id": "pottery_kiln@64,96:operator",
+            "reservationKey": "pottery_kiln@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              85
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 10,
+      "id": "glass_bench",
+      "label": "Banc de verrier",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 2
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "assis",
+      "proposedContactHeight": 5,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          32,
+          16
+        ],
+        "sockets": {
+          "operator": {
+            "id": "glass_bench@64,96:operator",
+            "reservationKey": "glass_bench@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              97
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              87
+            ],
+            "approach": [
+              64,
+              89
+            ],
+            "support": {
+              "kind": "seat",
+              "surface": [
+                64,
+                93
+              ],
+              "height": 4
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 11,
+      "id": "glass_furnace",
+      "label": "Four de verrier",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 3
+      },
+      "proposedCanvas": [
+        40,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          34,
+          26
+        ],
+        "sockets": {
+          "operator": {
+            "id": "glass_furnace@64,96:operator",
+            "reservationKey": "glass_furnace@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              115
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              86
+            ],
+            "approach": [
+              64,
+              123
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 12,
+      "id": "loom",
+      "label": "Métier à tisser",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          32,
+          26
+        ],
+        "sockets": {
+          "operator": {
+            "id": "loom@64,96:operator",
+            "reservationKey": "loom@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              84
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 13,
+      "id": "fiber_rack",
+      "label": "Râtelier à fibres",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          40,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "fiber_rack@64,96:operator",
+            "reservationKey": "fiber_rack@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              86
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              81
+            ],
+            "approach": [
+              64,
+              78
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 14,
+      "id": "hide_frame",
+      "label": "Cadre à peaux",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 2
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          36,
+          26
+        ],
+        "sockets": {
+          "operator": {
+            "id": "hide_frame@64,96:operator",
+            "reservationKey": "hide_frame@64,96:operator",
+            "role": "operator",
+            "feet": [
+              44,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              49,
+              84
+            ],
+            "approach": [
+              36,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 15,
+      "id": "dye_vat",
+      "label": "Cuve de teinture",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 3
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 6,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          32,
+          18
+        ],
+        "sockets": {
+          "operator": {
+            "id": "dye_vat@64,96:operator",
+            "reservationKey": "dye_vat@64,96:operator",
+            "role": "operator",
+            "feet": [
+              46,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              51,
+              86
+            ],
+            "approach": [
+              38,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 16,
+      "id": "rope_bench",
+      "label": "Banc de corderie",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 4
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "size": [
+          42,
+          20
+        ],
+        "sockets": {
+          "operator": {
+            "id": "rope_bench@64,96:operator",
+            "reservationKey": "rope_bench@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              86
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              77
+            ],
+            "approach": [
+              64,
+              78
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 17,
+      "id": "well",
+      "label": "Puits à treuil",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          28,
+          20
+        ],
+        "sockets": {
+          "operator": {
+            "id": "well@64,96:operator",
+            "reservationKey": "well@64,96:operator",
+            "role": "operator",
+            "feet": [
+              48,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              53,
+              84
+            ],
+            "approach": [
+              40,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 18,
+      "id": "grain_mill",
+      "label": "Meule et trémie",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 2
+      },
+      "proposedCanvas": [
+        32,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          28,
+          18
+        ],
+        "sockets": {
+          "operator": {
+            "id": "grain_mill@64,96:operator",
+            "reservationKey": "grain_mill@64,96:operator",
+            "role": "operator",
+            "feet": [
+              48,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              53,
+              86
+            ],
+            "approach": [
+              40,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 19,
+      "id": "oil_press",
+      "label": "Presse à huile",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 3
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          28,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "oil_press@64,96:operator",
+            "reservationKey": "oil_press@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              88
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 20,
+      "id": "kitchen_table",
+      "label": "Table de cuisine",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          32,
+          12
+        ],
+        "sockets": {
+          "operator": {
+            "id": "kitchen_table@64,96:operator",
+            "reservationKey": "kitchen_table@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              88
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              84
+            ],
+            "approach": [
+              64,
+              80
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 21,
+      "id": "cooking_hearth",
+      "label": "Foyer et marmite fixe",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          32,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "cooking_hearth@64,96:operator",
+            "reservationKey": "cooking_hearth@64,96:operator",
+            "role": "operator",
+            "feet": [
+              45,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              55,
+              90
+            ],
+            "approach": [
+              37,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 22,
+      "id": "bread_oven",
+      "label": "Four de cuisson",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 2
+      },
+      "proposedCanvas": [
+        32,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          28,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "bread_oven@64,96:operator",
+            "reservationKey": "bread_oven@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              84
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 23,
+      "id": "apothecary_table",
+      "label": "Table de remèdes",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 3
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          32,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "apothecary_table@64,96:operator",
+            "reservationKey": "apothecary_table@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              88
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              82
+            ],
+            "approach": [
+              64,
+              80
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 24,
+      "id": "care_bed",
+      "label": "Lit de soins vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        16
+      ],
+      "posture": "couche",
+      "proposedContactHeight": 4,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          36,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "care_bed@64,96:operator",
+            "reservationKey": "care_bed@64,96:operator",
+            "role": "operator",
+            "feet": [
+              44,
+              98
+            ],
+            "facing": "droite",
+            "contact": [
+              48,
+              91
+            ],
+            "approach": [
+              36,
+              98
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          },
+          "patient": {
+            "id": "care_bed@64,96:patient",
+            "reservationKey": "care_bed@64,96:patient",
+            "role": "patient",
+            "feet": [
+              64,
+              98
+            ],
+            "facing": "droite",
+            "contact": [
+              64,
+              91
+            ],
+            "approach": [
+              56,
+              98
+            ],
+            "support": {
+              "kind": "bed",
+              "surface": [
+                60,
+                91
+              ],
+              "height": 5
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 25,
+      "id": "sleeping_mat",
+      "label": "Couchage vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        12
+      ],
+      "posture": "couche",
+      "proposedContactHeight": 1,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          36,
+          10
+        ],
+        "sockets": {
+          "operator": {
+            "id": "sleeping_mat@64,96:operator",
+            "reservationKey": "sleeping_mat@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              98
+            ],
+            "facing": "droite",
+            "contact": [
+              64,
+              94
+            ],
+            "approach": [
+              56,
+              98
+            ],
+            "support": {
+              "kind": "bed",
+              "surface": [
+                60,
+                94
+              ],
+              "height": 2
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 26,
+      "id": "sitting_bench",
+      "label": "Banc d’assise",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 2
+      },
+      "proposedCanvas": [
+        24,
+        12
+      ],
+      "posture": "assis",
+      "proposedContactHeight": 4,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          28,
+          10
+        ],
+        "sockets": {
+          "operator": {
+            "id": "sitting_bench@64,96:operator",
+            "reservationKey": "sitting_bench@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              97
+            ],
+            "facing": "droite",
+            "contact": [
+              64,
+              90
+            ],
+            "approach": [
+              56,
+              97
+            ],
+            "support": {
+              "kind": "seat",
+              "surface": [
+                64,
+                93
+              ],
+              "height": 4
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 27,
+      "id": "meal_table",
+      "label": "Table et tabourets",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 3
+      },
+      "proposedCanvas": [
+        40,
+        20
+      ],
+      "posture": "assis",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          44,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "meal_table@64,96:operator",
+            "reservationKey": "meal_table@64,96:operator",
+            "role": "operator",
+            "feet": [
+              81,
+              97
+            ],
+            "facing": "gauche",
+            "contact": [
+              75,
+              87
+            ],
+            "approach": [
+              89,
+              97
+            ],
+            "support": {
+              "kind": "seat",
+              "surface": [
+                81,
+                93
+              ],
+              "height": 4
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "gauche",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 28,
+      "id": "market_stall",
+      "label": "Étal vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 4
+      },
+      "proposedCanvas": [
+        40,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          36,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "market_stall@64,96:operator",
+            "reservationKey": "market_stall@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              95
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              87
+            ],
+            "approach": [
+              64,
+              87
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 29,
+      "id": "clerks_desk",
+      "label": "Pupitre et tabouret",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 1
+      },
+      "proposedCanvas": [
+        32,
+        20
+      ],
+      "posture": "assis",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          32,
+          16
+        ],
+        "sockets": {
+          "operator": {
+            "id": "clerks_desk@64,96:operator",
+            "reservationKey": "clerks_desk@64,96:operator",
+            "role": "operator",
+            "feet": [
+              75,
+              97
+            ],
+            "facing": "gauche",
+            "contact": [
+              69,
+              87
+            ],
+            "approach": [
+              83,
+              97
+            ],
+            "support": {
+              "kind": "seat",
+              "surface": [
+                75,
+                93
+              ],
+              "height": 4
+            },
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "gauche",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 30,
+      "id": "beehive",
+      "label": "Ruche",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 2
+      },
+      "proposedCanvas": [
+        24,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          22,
+          20
+        ],
+        "sockets": {
+          "operator": {
+            "id": "beehive@64,96:operator",
+            "reservationKey": "beehive@64,96:operator",
+            "role": "operator",
+            "feet": [
+              51,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              56,
+              84
+            ],
+            "approach": [
+              43,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 31,
+      "id": "stable_stall",
+      "label": "Module d’étable vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 3
+      },
+      "proposedCanvas": [
+        48,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 0,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          40,
+          26
+        ],
+        "sockets": {
+          "operator": {
+            "id": "stable_stall@64,96:operator",
+            "reservationKey": "stable_stall@64,96:operator",
+            "role": "operator",
+            "feet": [
+              42,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              47,
+              91
+            ],
+            "approach": [
+              34,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 32,
+      "id": "feeding_trough",
+      "label": "Mangeoire et abreuvoir",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 4
+      },
+      "proposedCanvas": [
+        48,
+        16
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 5,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "size": [
+          40,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "feeding_trough@64,96:operator",
+            "reservationKey": "feeding_trough@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              86
+            ],
+            "facing": "face",
+            "contact": [
+              64,
+              80
+            ],
+            "approach": [
+              64,
+              78
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          },
+          "water": {
+            "id": "feeding_trough@64,96:water",
+            "reservationKey": "feeding_trough@64,96:operator",
+            "role": "water",
+            "feet": [
+              74,
+              89
+            ],
+            "facing": "face",
+            "contact": [
+              74,
+              87
+            ],
+            "approach": [
+              74,
+              81
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "face",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 33,
+      "id": "care_stall",
+      "label": "Stalle de traite et tonte vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 1
+      },
+      "proposedCanvas": [
+        48,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 0,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          42,
+          18
+        ],
+        "sockets": {
+          "operator": {
+            "id": "care_stall@64,96:operator",
+            "reservationKey": "care_stall@64,96:operator",
+            "role": "operator",
+            "feet": [
+              41,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              46,
+              86
+            ],
+            "approach": [
+              33,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 34,
+      "id": "enclosure_gate",
+      "label": "Enclos et portillon",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 2
+      },
+      "proposedCanvas": [
+        48,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          36,
+          18
+        ],
+        "sockets": {
+          "operator": {
+            "id": "enclosure_gate@64,96:operator",
+            "reservationKey": "enclosure_gate@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              87
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 35,
+      "id": "clothesline",
+      "label": "Étendage vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 3
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 12,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          40,
+          16
+        ],
+        "sockets": {
+          "operator": {
+            "id": "clothesline@64,96:operator",
+            "reservationKey": "clothesline@64,96:operator",
+            "role": "operator",
+            "feet": [
+              42,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              47,
+              84
+            ],
+            "approach": [
+              34,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 36,
+      "id": "drying_rack",
+      "label": "Séchoir vide",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          34,
+          20
+        ],
+        "sockets": {
+          "operator": {
+            "id": "drying_rack@64,96:operator",
+            "reservationKey": "drying_rack@64,96:operator",
+            "role": "operator",
+            "feet": [
+              45,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              50,
+              85
+            ],
+            "approach": [
+              37,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 37,
+      "id": "sluice",
+      "label": "Vanne d’irrigation",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 1
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          18,
+          22
+        ],
+        "sockets": {
+          "operator": {
+            "id": "sluice@64,96:operator",
+            "reservationKey": "sluice@64,96:operator",
+            "role": "operator",
+            "feet": [
+              53,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              58,
+              84
+            ],
+            "approach": [
+              45,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 38,
+      "id": "crop_patch",
+      "label": "Parcelle cultivable",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 2
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "accroupi",
+      "proposedContactHeight": 0,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "atlas_reference",
+        "source": "scrub",
+        "size": [
+          64,
+          64
+        ],
+        "sockets": {
+          "operator": {
+            "id": "crop_patch@64,96:operator",
+            "reservationKey": "crop_patch@64,96:operator",
+            "role": "operator",
+            "feet": [
+              42,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              47,
+              96
+            ],
+            "approach": [
+              34,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "any",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 39,
+      "id": "orchard_tree",
+      "label": "Arbre de verger",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 3
+      },
+      "proposedCanvas": [
+        40,
+        40
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 10,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "atlas_reference",
+        "source": "world_oak_0",
+        "size": [
+          64,
+          64
+        ],
+        "sockets": {
+          "operator": {
+            "id": "orchard_tree@64,96:operator",
+            "reservationKey": "orchard_tree@64,96:operator",
+            "role": "operator",
+            "feet": [
+              50,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              55,
+              89
+            ],
+            "approach": [
+              42,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "any",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 40,
+      "id": "resin_tree",
+      "label": "Arbre résinier",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        40
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "atlas_reference",
+        "source": "world_pine_0",
+        "size": [
+          64,
+          64
+        ],
+        "sockets": {
+          "operator": {
+            "id": "resin_tree@64,96:operator",
+            "reservationKey": "resin_tree@64,96:operator",
+            "role": "operator",
+            "feet": [
+              50,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              55,
+              89
+            ],
+            "approach": [
+              42,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "any",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 41,
+      "id": "charcoal_clamp",
+      "label": "Meule de charbon",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 1
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 4,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          40,
+          20
+        ],
+        "sockets": {
+          "operator": {
+            "id": "charcoal_clamp@64,96:operator",
+            "reservationKey": "charcoal_clamp@64,96:operator",
+            "role": "operator",
+            "feet": [
+              64,
+              99
+            ],
+            "facing": "dos",
+            "contact": [
+              64,
+              91
+            ],
+            "approach": [
+              64,
+              107
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "dos",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 42,
+      "id": "ore_node",
+      "label": "Filon de minerai",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 2
+      },
+      "proposedCanvas": [
+        32,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "atlas_reference",
+        "source": "world_boulder_0",
+        "size": [
+          64,
+          64
+        ],
+        "sockets": {
+          "operator": {
+            "id": "ore_node@64,96:operator",
+            "reservationKey": "ore_node@64,96:operator",
+            "role": "operator",
+            "feet": [
+              50,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              55,
+              89
+            ],
+            "approach": [
+              42,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "any",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 43,
+      "id": "quarry_block",
+      "label": "Bloc de carrière",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 3
+      },
+      "proposedCanvas": [
+        32,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          32,
+          18
+        ],
+        "sockets": {
+          "operator": {
+            "id": "quarry_block@64,96:operator",
+            "reservationKey": "quarry_block@64,96:operator",
+            "role": "operator",
+            "feet": [
+              46,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              51,
+              90
+            ],
+            "approach": [
+              38,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 44,
+      "id": "fixed_screen",
+      "label": "Crible fixe",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 4
+      },
+      "proposedCanvas": [
+        32,
+        20
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          36,
+          20
+        ],
+        "sockets": {
+          "operator": {
+            "id": "fixed_screen@64,96:operator",
+            "reservationKey": "fixed_screen@64,96:operator",
+            "role": "operator",
+            "feet": [
+              44,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              49,
+              84
+            ],
+            "approach": [
+              36,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 45,
+      "id": "salt_basin",
+      "label": "Bassin salin",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 1
+      },
+      "proposedCanvas": [
+        40,
+        16
+      ],
+      "posture": "accroupi",
+      "proposedContactHeight": 0,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          40,
+          14
+        ],
+        "sockets": {
+          "operator": {
+            "id": "salt_basin@64,96:operator",
+            "reservationKey": "salt_basin@64,96:operator",
+            "role": "operator",
+            "feet": [
+              42,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              47,
+              88
+            ],
+            "approach": [
+              34,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 46,
+      "id": "wall_scaffold",
+      "label": "Mur et échafaudage bas",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 2
+      },
+      "proposedCanvas": [
+        40,
+        32
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          40,
+          24
+        ],
+        "sockets": {
+          "operator": {
+            "id": "wall_scaffold@64,96:operator",
+            "reservationKey": "wall_scaffold@64,96:operator",
+            "role": "operator",
+            "feet": [
+              42,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              47,
+              84
+            ],
+            "approach": [
+              34,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 47,
+      "id": "dock_bollard",
+      "label": "Quai et borne d’amarrage",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 3
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 7,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          38,
+          22
+        ],
+        "sockets": {
+          "operator": {
+            "id": "dock_bollard@64,96:operator",
+            "reservationKey": "dock_bollard@64,96:operator",
+            "role": "operator",
+            "feet": [
+              43,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              48,
+              84
+            ],
+            "approach": [
+              35,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    },
+    {
+      "number": 48,
+      "id": "bank_platform",
+      "label": "Accès de quai et rive",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 4
+      },
+      "proposedCanvas": [
+        40,
+        24
+      ],
+      "posture": "debout",
+      "proposedContactHeight": 0,
+      "viewsRequired": [
+        "fixed"
+      ],
+      "independentWorldEntity": true,
+      "includeInCharacterFrames": false,
+      "emptyOfActorsAndPortableItems": true,
+      "plannedLayers": [
+        "back",
+        "front"
+      ],
+      "socketStatus": "fixed_layout_available",
+      "socketNeeds": [
+        "feet",
+        "facing",
+        "handContact",
+        "approach",
+        "support",
+        "occlusion",
+        "occupancy"
+      ],
+      "runtime": {
+        "kind": "fixture",
+        "source": "art/humains/activites/concepts/postes/03-sites.png",
+        "size": [
+          28,
+          22
+        ],
+        "sockets": {
+          "operator": {
+            "id": "bank_platform@64,96:operator",
+            "reservationKey": "bank_platform@64,96:operator",
+            "role": "operator",
+            "feet": [
+              48,
+              96
+            ],
+            "facing": "droite",
+            "contact": [
+              53,
+              84
+            ],
+            "approach": [
+              40,
+              96
+            ],
+            "support": null,
+            "occupancy": "exclusive",
+            "actorKind": "humanoid",
+            "occlusion": "fixed_fixture_layout"
+          }
+        },
+        "ground": [
+          64,
+          96
+        ],
+        "view": "fixed",
+        "operatorFacing": "droite",
+        "complementaryPlanes": [
+          "back",
+          "front"
+        ]
+      }
+    }
+  ],
+  "stationCoverage": {
+    "soil": {
+      "assets": [
+        "crop_patch"
+      ]
+    },
+    "canal": {
+      "assets": [
+        "sluice"
+      ]
+    },
+    "tree": {
+      "assets": [
+        "orchard_tree",
+        "resin_tree"
+      ]
+    },
+    "sheep": {
+      "assets": [
+        "care_stall",
+        "feeding_trough",
+        "enclosure_gate"
+      ]
+    },
+    "bench": {
+      "assets": [
+        "workbench"
+      ]
+    },
+    "water": {
+      "assets": [
+        "bank_platform"
+      ]
+    },
+    "log": {
+      "assets": [
+        "chopping_block"
+      ]
+    },
+    "sawhorse": {
+      "assets": [
+        "sawhorse"
+      ]
+    },
+    "pot": {
+      "assets": [
+        "cooking_hearth"
+      ]
+    },
+    "charcoal": {
+      "assets": [
+        "charcoal_clamp"
+      ]
+    },
+    "rock": {
+      "assets": [
+        "ore_node",
+        "quarry_block"
+      ]
+    },
+    "pile": {
+      "assets": [
+        "fixed_screen"
+      ]
+    },
+    "salt": {
+      "assets": [
+        "salt_basin"
+      ]
+    },
+    "forge": {
+      "assets": [
+        "forge",
+        "smelter"
+      ]
+    },
+    "anvil": {
+      "assets": [
+        "anvil"
+      ]
+    },
+    "trough": {
+      "assets": [
+        "quench_trough",
+        "feeding_trough"
+      ]
+    },
+    "wheel": {
+      "assets": [
+        "potters_wheel"
+      ]
+    },
+    "kiln": {
+      "assets": [
+        "pottery_kiln"
+      ]
+    },
+    "glass": {
+      "assets": [
+        "glass_bench",
+        "glass_furnace"
+      ]
+    },
+    "fiber_rack": {
+      "assets": [
+        "fiber_rack"
+      ]
+    },
+    "loom": {
+      "assets": [
+        "loom"
+      ]
+    },
+    "hide_rack": {
+      "assets": [
+        "hide_frame"
+      ]
+    },
+    "dye": {
+      "assets": [
+        "dye_vat"
+      ]
+    },
+    "clothesline": {
+      "assets": [
+        "clothesline"
+      ]
+    },
+    "rope_rack": {
+      "assets": [
+        "rope_bench"
+      ]
+    },
+    "bollard": {
+      "assets": [
+        "dock_bollard"
+      ]
+    },
+    "well": {
+      "assets": [
+        "well"
+      ]
+    },
+    "mill": {
+      "assets": [
+        "grain_mill"
+      ]
+    },
+    "press": {
+      "assets": [
+        "oil_press"
+      ]
+    },
+    "kitchen": {
+      "assets": [
+        "kitchen_table",
+        "bread_oven",
+        "drying_rack"
+      ]
+    },
+    "hive": {
+      "assets": [
+        "beehive"
+      ]
+    },
+    "medicine": {
+      "assets": [
+        "apothecary_table"
+      ]
+    },
+    "patient": {
+      "assets": [
+        "care_bed"
+      ]
+    },
+    "wall": {
+      "assets": [
+        "wall_scaffold"
+      ]
+    },
+    "hull": {
+      "exception": "Deferred with empty boats; no hull baked into repair animation"
+    },
+    "path": {
+      "exception": "No fixture: navigation/ground only"
+    },
+    "crate": {
+      "exception": "Portable cargo remains separate from fixed scenery"
+    },
+    "horse": {
+      "exception": "Separate living entity; approved horse art preserved"
+    },
+    "cart": {
+      "exception": "Deferred: empty transport asset"
+    },
+    "boat": {
+      "exception": "Deferred: empty transport asset"
+    },
+    "gangway": {
+      "assets": [
+        "bank_platform"
+      ]
+    },
+    "market": {
+      "assets": [
+        "market_stall",
+        "clerks_desk"
+      ]
+    }
+  },
+  "extraBindings": {
+    "sit_down": [
+      "sitting_bench"
+    ],
+    "seated": [
+      "sitting_bench"
+    ],
+    "stand_up": [
+      "sitting_bench"
+    ],
+    "lie_down": [
+      "sleeping_mat"
+    ],
+    "sleep": [
+      "sleeping_mat"
+    ],
+    "wake": [
+      "sleeping_mat"
+    ],
+    "eat": [
+      "meal_table"
+    ],
+    "drink": [
+      "meal_table"
+    ],
+    "groom": [
+      "stable_stall"
+    ],
+    "lead": [
+      "enclosure_gate"
+    ],
+    "feed": [
+      "feeding_trough"
+    ],
+    "milk": [
+      "care_stall"
+    ],
+    "shear": [
+      "care_stall"
+    ]
+  },
+  "conceptFiles": [
+    {
+      "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+      "sha256": "ec0a55b71200a6e3c96883aeea7adac8b8e2f876c233c6af42e8cd404a9fb6a7"
+    },
+    {
+      "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+      "sha256": "d9bcc6ca520682316eb98c39cca2f96d8cebb69b781fd2178039f99df9b6f761"
+    },
+    {
+      "file": "art/humains/activites/concepts/postes/03-sites.png",
+      "sha256": "17bab2e8bd388923712c788a8d94aa9e68bc6d044307d8bc3ef430b32e138c6f"
+    },
+    {
+      "file": "art/humains/activites/concepts/postes/04-sockets-occultation.png",
+      "sha256": "367cce90c65a1d1eeb7976ef62d625fb24778088fd6473cdad7b422aa45c153d"
+    },
+    {
+      "file": "art/humains/activites/concepts/postes/humain-echelle.png",
+      "sha256": "3a7ab79822686641ce134c8b75a039dd481476c134d60d9dc705a24e811f6f00"
+    }
+  ],
+  "naturalPolicy": "Existing native props and terrain; external atlas providers in the live world, unchanged snapshots for offline preview",
+  "runtimeSources": [
+    "sprites/decors/humains-grilles.js",
+    "sprites/decors/atlas-nature.js",
+    "sprites/decors/igea-hiver.js",
+    "sprites/decors/postes-humains.js",
+    "sprites/humains/scene.js"
+  ]
+}

@@ -1,0 +1,7399 @@
+{
+  "version": 1,
+  "scope": "visual_assets_and_playback_not_world_spawning",
+  "cell": [
+    80,
+    80
+  ],
+  "anchor": [
+    40,
+    52
+  ],
+  "directions": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "roles": {
+    "civilian": {
+      "id": "civilian",
+      "label": "Habitant",
+      "group": "civil",
+      "cut": 1,
+      "hat": null,
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "farmer": {
+      "id": "farmer",
+      "label": "Cultivateur",
+      "group": "work",
+      "cut": 1,
+      "hat": "straw",
+      "activities": [
+        "hoe",
+        "sow",
+        "harvest",
+        "uproot",
+        "bundle",
+        "irrigate",
+        "clear_snow"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "gardener": {
+      "id": "gardener",
+      "label": "Jardin et récoltes légères",
+      "group": "work",
+      "cut": 2,
+      "hat": "kerchief",
+      "activities": [
+        "sow",
+        "harvest_fruit",
+        "prune",
+        "cut_fiber"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "shepherd": {
+      "id": "shepherd",
+      "label": "Éleveur",
+      "group": "work",
+      "cut": 1,
+      "hat": "felt",
+      "activities": [
+        "feed",
+        "herd",
+        "milk",
+        "shear",
+        "skin",
+        "deice_trough"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "hunter": {
+      "id": "hunter",
+      "label": "Chasseur",
+      "group": "work",
+      "cut": 3,
+      "hat": "hood",
+      "activities": [
+        "skin"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "bow",
+      "shield": false,
+      "body": "kaldor:cuir-traqueur",
+      "armed": false
+    },
+    "fisher": {
+      "id": "fisher",
+      "label": "Pêcheur",
+      "group": "work",
+      "cut": 3,
+      "hat": "rain",
+      "activities": [
+        "net",
+        "cast_net",
+        "haul_net",
+        "rope"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "forester": {
+      "id": "forester",
+      "label": "Forestier",
+      "group": "work",
+      "cut": 4,
+      "hat": "hood",
+      "activities": [
+        "fell",
+        "hew",
+        "saw",
+        "clear_snow",
+        "stoke_fire"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "resiner": {
+      "id": "resiner",
+      "label": "Résinier",
+      "group": "work",
+      "cut": 4,
+      "hat": "felt",
+      "activities": [
+        "resin",
+        "pitch"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "charcoal_burner": {
+      "id": "charcoal_burner",
+      "label": "Charbonnier",
+      "group": "work",
+      "cut": 4,
+      "hat": "work_cap",
+      "activities": [
+        "charcoal_load",
+        "charcoal_rake",
+        "shovel",
+        "stoke_fire"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "miner": {
+      "id": "miner",
+      "label": "Mineur",
+      "group": "work",
+      "cut": 4,
+      "hat": "leather_cap",
+      "activities": [
+        "mine",
+        "shovel",
+        "sort",
+        "pan_gold",
+        "clear_snow"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "quarrier": {
+      "id": "quarrier",
+      "label": "Carrier et tailleur",
+      "group": "work",
+      "cut": 4,
+      "hat": "leather_cap",
+      "activities": [
+        "quarry",
+        "stonecut",
+        "shovel",
+        "clear_snow"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "clay_worker": {
+      "id": "clay_worker",
+      "label": "Argile et sable",
+      "group": "work",
+      "cut": 4,
+      "hat": "work_cap",
+      "activities": [
+        "shovel",
+        "sieve",
+        "prepare_clay"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "salt_worker": {
+      "id": "salt_worker",
+      "label": "Saunier",
+      "group": "work",
+      "cut": 1,
+      "hat": "straw",
+      "activities": [
+        "rake_salt",
+        "shovel",
+        "sieve"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "smith": {
+      "id": "smith",
+      "label": "Forgeron",
+      "group": "work",
+      "cut": 4,
+      "hat": "work_cap",
+      "activities": [
+        "bellows",
+        "forge",
+        "smelt",
+        "quench",
+        "craft"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "potter": {
+      "id": "potter",
+      "label": "Poterie",
+      "group": "work",
+      "cut": 4,
+      "hat": "kerchief",
+      "activities": [
+        "prepare_clay",
+        "pottery",
+        "kiln_load"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "glassworker": {
+      "id": "glassworker",
+      "label": "Verrier",
+      "group": "work",
+      "cut": 4,
+      "hat": "work_cap",
+      "activities": [
+        "glass_blow",
+        "glass_roll",
+        "kiln_load"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "spinner": {
+      "id": "spinner",
+      "label": "Filage",
+      "group": "work",
+      "cut": 2,
+      "hat": "kerchief",
+      "activities": [
+        "spin"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "weaver": {
+      "id": "weaver",
+      "label": "Tissage",
+      "group": "work",
+      "cut": 3,
+      "hat": "linen_cap",
+      "activities": [
+        "loom",
+        "stitch"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "seamster": {
+      "id": "seamster",
+      "label": "Couture",
+      "group": "work",
+      "cut": 2,
+      "hat": "linen_cap",
+      "activities": [
+        "stitch"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "basketmaker": {
+      "id": "basketmaker",
+      "label": "Vannerie",
+      "group": "work",
+      "cut": 3,
+      "hat": "kerchief",
+      "activities": [
+        "weave",
+        "cut_fiber"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "tanner": {
+      "id": "tanner",
+      "label": "Tanneur",
+      "group": "work",
+      "cut": 4,
+      "hat": "work_cap",
+      "activities": [
+        "tan",
+        "stretch_hide",
+        "skin"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "dyer": {
+      "id": "dyer",
+      "label": "Teinturerie",
+      "group": "work",
+      "cut": 4,
+      "hat": "kerchief",
+      "activities": [
+        "stir",
+        "dye_dip",
+        "wring",
+        "hang"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "ropemaker": {
+      "id": "ropemaker",
+      "label": "Cordier",
+      "group": "work",
+      "cut": 3,
+      "hat": "work_cap",
+      "activities": [
+        "twist_rope",
+        "rope"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "water_carrier": {
+      "id": "water_carrier",
+      "label": "Porteur d’eau",
+      "group": "transport",
+      "cut": 2,
+      "hat": "straw",
+      "activities": [
+        "draw_water",
+        "pour",
+        "carry",
+        "put_down",
+        "load",
+        "clear_snow",
+        "deice_trough"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "miller": {
+      "id": "miller",
+      "label": "Meunier et presseur",
+      "group": "work",
+      "cut": 4,
+      "hat": "linen_cap",
+      "activities": [
+        "mill_feed",
+        "mill_collect",
+        "press_oil"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "cook": {
+      "id": "cook",
+      "label": "Cuisine et réserves",
+      "group": "work",
+      "cut": 2,
+      "hat": "linen_cap",
+      "activities": [
+        "chop_food",
+        "cook",
+        "salt_food",
+        "pack_food",
+        "pour",
+        "stoke_fire"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "beekeeper": {
+      "id": "beekeeper",
+      "label": "Apiculteur",
+      "group": "work",
+      "cut": 2,
+      "hat": "beekeeper",
+      "activities": [
+        "smoke_hive",
+        "honey",
+        "wax"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "herbalist": {
+      "id": "herbalist",
+      "label": "Herboristerie",
+      "group": "work",
+      "cut": 2,
+      "hat": "kerchief",
+      "activities": [
+        "harvest_fruit",
+        "medicinal",
+        "mortar"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "healer": {
+      "id": "healer",
+      "label": "Soins",
+      "group": "work",
+      "cut": 2,
+      "hat": "linen_cap",
+      "activities": [
+        "medicinal",
+        "mortar",
+        "bandage"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "builder": {
+      "id": "builder",
+      "label": "Bâtisseur",
+      "group": "work",
+      "cut": 4,
+      "hat": "work_cap",
+      "activities": [
+        "saw",
+        "joinery",
+        "masonry",
+        "stonecut"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "shipwright": {
+      "id": "shipwright",
+      "label": "Charpentier naval",
+      "group": "work",
+      "cut": 4,
+      "hat": "rain",
+      "activities": [
+        "saw",
+        "joinery",
+        "repair_boat",
+        "coat_pitch"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "porter": {
+      "id": "porter",
+      "label": "Manutentionnaire",
+      "group": "transport",
+      "cut": 3,
+      "hat": "work_cap",
+      "activities": [
+        "carry",
+        "load",
+        "put_down",
+        "lash",
+        "clear_snow"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "groom": {
+      "id": "groom",
+      "label": "Palefrenier",
+      "group": "transport",
+      "cut": "TR01",
+      "hat": "native",
+      "activities": [
+        "groom",
+        "lead",
+        "feed",
+        "mount",
+        "ride",
+        "dismount",
+        "clear_snow",
+        "deice_trough"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "caravaner": {
+      "id": "caravaner",
+      "label": "Caravanier",
+      "group": "transport",
+      "cut": "TR02",
+      "hat": "native",
+      "activities": [
+        "carry",
+        "load",
+        "put_down",
+        "lash",
+        "lead",
+        "drive",
+        "mount",
+        "ride",
+        "dismount"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "boatman": {
+      "id": "boatman",
+      "label": "Batelier",
+      "group": "transport",
+      "cut": "TR03",
+      "hat": "native",
+      "activities": [
+        "rope",
+        "row",
+        "pole",
+        "helm",
+        "board",
+        "disembark"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "harbourmaster": {
+      "id": "harbourmaster",
+      "label": "Maître de port",
+      "group": "transport",
+      "cut": "TR04",
+      "hat": "native",
+      "activities": [
+        "ledger",
+        "weigh",
+        "count",
+        "handover",
+        "rope"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "courier": {
+      "id": "courier",
+      "label": "Courrier",
+      "group": "transport",
+      "cut": "TR02",
+      "hat": "felt",
+      "activities": [
+        "message",
+        "lead",
+        "mount",
+        "ride",
+        "ride_trot",
+        "dismount"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "merchant": {
+      "id": "merchant",
+      "label": "Commerce",
+      "group": "civil",
+      "cut": 3,
+      "hat": "felt",
+      "activities": [
+        "ledger",
+        "weigh",
+        "count",
+        "handover"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "administrator": {
+      "id": "administrator",
+      "label": "Administration",
+      "group": "civil",
+      "cut": 3,
+      "hat": "felt",
+      "activities": [
+        "ledger",
+        "message"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "mediator": {
+      "id": "mediator",
+      "label": "Médiation",
+      "group": "civil",
+      "cut": 3,
+      "hat": null,
+      "activities": [
+        "ledger"
+      ],
+      "sexes": [
+        "masculin",
+        "feminin"
+      ],
+      "weapon": null,
+      "shield": false
+    },
+    "priest": {
+      "id": "priest",
+      "label": "Officiant du Serpent",
+      "group": "civil",
+      "cut": 3,
+      "hat": "ritual",
+      "activities": [
+        "pray"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false,
+      "body": "kaldor:robe-serpent"
+    },
+    "teremor_royal": {
+      "id": "teremor_royal",
+      "label": "Garnison royale",
+      "group": "military",
+      "cut": 3,
+      "hat": "casque-nasal",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": true,
+      "faction": "teremor",
+      "body": "kaldor:cotte-mailles",
+      "armed": true,
+      "livery": "royal"
+    },
+    "teremor_household": {
+      "id": "teremor_household",
+      "label": "Garde seigneuriale",
+      "group": "military",
+      "cut": 3,
+      "hat": "casque-nasal",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": true,
+      "faction": "teremor",
+      "body": "kaldor:brigandine-mercenaire",
+      "armed": true,
+      "livery": "household"
+    },
+    "teremor_militia": {
+      "id": "teremor_militia",
+      "label": "Milice locale",
+      "group": "military",
+      "cut": 3,
+      "hat": "open_cap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": true,
+      "faction": "teremor",
+      "body": null,
+      "armed": true,
+      "livery": "militia"
+    },
+    "sylverive_guard": {
+      "id": "sylverive_guard",
+      "label": "Garde de cité",
+      "group": "military",
+      "cut": 3,
+      "hat": "open_cap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": true,
+      "faction": "sylverive",
+      "body": "kaldor:cotte-mailles",
+      "armed": true,
+      "livery": "city"
+    },
+    "sylverive_escort": {
+      "id": "sylverive_escort",
+      "label": "Escorte contractuelle",
+      "group": "military",
+      "cut": 3,
+      "hat": "open_cap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": true,
+      "faction": "sylverive",
+      "body": "kaldor:brigandine-mercenaire",
+      "armed": true,
+      "livery": "contract"
+    },
+    "igea_household": {
+      "id": "igea_household",
+      "label": "Maisonnée d’Igea",
+      "group": "military",
+      "cut": 3,
+      "hat": "casque-fourre",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "axe",
+      "shield": true,
+      "faction": "igea",
+      "body": "kaldor:peau-ours",
+      "armed": true,
+      "livery": "valley"
+    },
+    "igea_passage": {
+      "id": "igea_passage",
+      "label": "Garde de passage",
+      "group": "military",
+      "cut": 3,
+      "hat": "casque-fourre",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": true,
+      "faction": "igea",
+      "body": "kaldor:pelisse-grand-froid",
+      "armed": true,
+      "livery": "passage"
+    },
+    "igea_guest": {
+      "id": "igea_guest",
+      "label": "Garnison invitée",
+      "group": "military",
+      "cut": 3,
+      "hat": "casque-fourre",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": true,
+      "faction": "teremor",
+      "body": "kaldor:cotte-mailles",
+      "armed": true,
+      "livery": "royal",
+      "climate": "neige",
+      "stationedIn": "igea"
+    },
+    "sarak_urban": {
+      "id": "sarak_urban",
+      "label": "Soldat urbain",
+      "group": "military",
+      "cut": 3,
+      "hat": "desert_helmet",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": true,
+      "faction": "sarak",
+      "body": "kaldor:kaftan-steppes",
+      "armed": true,
+      "livery": "urban",
+      "climate": "aride"
+    },
+    "sarak_cavalry": {
+      "id": "sarak_cavalry",
+      "label": "Cavalier de Sarak",
+      "group": "military",
+      "cut": 3,
+      "hat": "desert_helmet",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": false,
+      "faction": "sarak",
+      "body": "kaldor:kaftan-steppes",
+      "armed": true,
+      "livery": "rider",
+      "mounted": true,
+      "climate": "aride"
+    },
+    "sarak_cavalry_blade": {
+      "id": "sarak_cavalry_blade",
+      "label": "Cavalier à lame de Sarak",
+      "group": "military",
+      "cut": 3,
+      "hat": "desert_helmet",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": false,
+      "faction": "sarak",
+      "body": "kaldor:kaftan-steppes",
+      "armed": true,
+      "livery": "rider",
+      "mounted": true,
+      "climate": "aride"
+    },
+    "sarak_escort": {
+      "id": "sarak_escort",
+      "label": "Escorte de piste",
+      "group": "military",
+      "cut": 3,
+      "hat": "desert_wrap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": false,
+      "faction": "sarak",
+      "body": "kaldor:voiles-nomade",
+      "armed": true,
+      "livery": "trail",
+      "climate": "aride"
+    },
+    "varan_port": {
+      "id": "varan_port",
+      "label": "Garde portuaire de Varan",
+      "group": "military",
+      "cut": 3,
+      "hat": "open_cap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": true,
+      "faction": "varan",
+      "body": null,
+      "armed": true,
+      "livery": "port",
+      "climate": "marais"
+    },
+    "varan_local": {
+      "id": "varan_local",
+      "label": "Garde locale de Varan",
+      "group": "military",
+      "cut": 3,
+      "hat": "rain",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "staff",
+      "shield": false,
+      "faction": "varan",
+      "body": "kaldor:cuir-traqueur",
+      "armed": true,
+      "livery": "local",
+      "climate": "jungle"
+    },
+    "tagon_port": {
+      "id": "tagon_port",
+      "label": "Garde portuaire de Tagon",
+      "group": "military",
+      "cut": 3,
+      "hat": "open_cap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": true,
+      "faction": "tagon",
+      "body": "kaldor:brigandine-mercenaire",
+      "armed": true,
+      "livery": "port",
+      "climate": "jungle"
+    },
+    "tagon_crew": {
+      "id": "tagon_crew",
+      "label": "Équipage armé",
+      "group": "military",
+      "cut": 3,
+      "hat": "sailor",
+      "activities": [
+        "rope",
+        "row",
+        "helm"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": false,
+      "faction": "tagon",
+      "body": "kaldor:corsaire",
+      "armed": true,
+      "livery": "crew",
+      "climate": "jungle"
+    },
+    "watchers": {
+      "id": "watchers",
+      "label": "Veilleurs",
+      "group": "military",
+      "cut": 3,
+      "hat": "casque-nasal",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "spear",
+      "shield": true,
+      "faction": "watchers",
+      "body": "kaldor:cotte-mailles",
+      "armed": true,
+      "livery": "watchers"
+    },
+    "bowman": {
+      "id": "bowman",
+      "label": "Étude d’archer",
+      "group": "military",
+      "cut": 3,
+      "hat": "hood",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "bow",
+      "shield": false,
+      "faction": "study",
+      "body": null,
+      "armed": true,
+      "study": true
+    },
+    "crossbowman": {
+      "id": "crossbowman",
+      "label": "Étude d’arbalétrier",
+      "group": "military",
+      "cut": 3,
+      "hat": "open_cap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "crossbow",
+      "shield": false,
+      "faction": "study",
+      "body": "kaldor:brigandine-mercenaire",
+      "armed": true,
+      "study": true
+    },
+    "javeliner": {
+      "id": "javeliner",
+      "label": "Étude de javelinier",
+      "group": "military",
+      "cut": 3,
+      "hat": "desert_wrap",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "javelin",
+      "shield": false,
+      "faction": "study",
+      "body": null,
+      "armed": true,
+      "study": true
+    },
+    "inland_bandits": {
+      "id": "inland_bandits",
+      "label": "Bande des routes",
+      "group": "network",
+      "cut": 3,
+      "hat": "hood",
+      "activities": [
+        ""
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "blade",
+      "shield": false,
+      "network": "inland_bandits",
+      "armed": true
+    },
+    "mine_deserters": {
+      "id": "mine_deserters",
+      "label": "Déserteurs des mines",
+      "group": "network",
+      "cut": 4,
+      "hat": "leather_cap",
+      "activities": [
+        "mine",
+        "sort"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": "axe",
+      "shield": false,
+      "network": "mine_deserters",
+      "armed": true
+    },
+    "customs_smugglers": {
+      "id": "customs_smugglers",
+      "label": "Transporteur clandestin",
+      "group": "network",
+      "cut": "TR02",
+      "hat": "native",
+      "activities": [
+        "carry",
+        "load",
+        "put_down",
+        "handover"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false,
+      "network": "customs_smugglers"
+    },
+    "captive_brokers": {
+      "id": "captive_brokers",
+      "label": "Intermédiaire local",
+      "group": "network",
+      "cut": 3,
+      "hat": "felt",
+      "activities": [
+        "ledger",
+        "count"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false,
+      "network": "captive_brokers"
+    },
+    "maritime_receivers": {
+      "id": "maritime_receivers",
+      "label": "Receleur maritime",
+      "group": "network",
+      "cut": "TR03",
+      "hat": "sailor",
+      "activities": [
+        "rope",
+        "handover"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false,
+      "network": "maritime_receivers"
+    },
+    "illicit_collectors": {
+      "id": "illicit_collectors",
+      "label": "Collecteur hors concession",
+      "group": "network",
+      "cut": 4,
+      "hat": "hood",
+      "activities": [
+        "resin",
+        "fell",
+        "harvest_fruit"
+      ],
+      "sexes": [
+        "masculin"
+      ],
+      "weapon": null,
+      "shield": false,
+      "network": "illicit_collectors"
+    }
+  },
+  "clips": {
+    "idle": {
+      "id": "idle",
+      "label": "Repos debout",
+      "family": "life",
+      "recipe": "idle",
+      "frames": 4,
+      "durations": [
+        450,
+        220,
+        350,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 1.28
+    },
+    "walk": {
+      "id": "walk",
+      "label": "Marche",
+      "family": "life",
+      "recipe": "walk",
+      "frames": 8,
+      "durations": [
+        100,
+        90,
+        90,
+        100,
+        100,
+        90,
+        90,
+        100
+      ],
+      "loop": true,
+      "stride": 24,
+      "markers": [
+        {
+          "id": "foot_left",
+          "frame": 0
+        },
+        {
+          "id": "foot_right",
+          "frame": 4
+        }
+      ],
+      "duration": 0.76
+    },
+    "flee": {
+      "id": "flee",
+      "label": "Fuite",
+      "family": "life",
+      "recipe": "flee",
+      "frames": 8,
+      "durations": [
+        75,
+        65,
+        65,
+        75,
+        75,
+        65,
+        65,
+        75
+      ],
+      "loop": true,
+      "stride": 32,
+      "markers": [
+        {
+          "id": "foot_left",
+          "frame": 0
+        },
+        {
+          "id": "foot_right",
+          "frame": 4
+        }
+      ],
+      "duration": 0.56
+    },
+    "startle": {
+      "id": "startle",
+      "label": "Sursaut",
+      "family": "life",
+      "recipe": "startle",
+      "frames": 4,
+      "durations": [
+        90,
+        65,
+        110,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [],
+      "duration": 0.445
+    },
+    "talk": {
+      "id": "talk",
+      "label": "Parler",
+      "family": "social",
+      "recipe": "talk",
+      "frames": 4,
+      "durations": [
+        300,
+        120,
+        240,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 0.92
+    },
+    "listen": {
+      "id": "listen",
+      "label": "Écouter",
+      "family": "social",
+      "recipe": "listen",
+      "frames": 4,
+      "durations": [
+        550,
+        180,
+        300,
+        450
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 1.48
+    },
+    "greet": {
+      "id": "greet",
+      "label": "Saluer",
+      "family": "social",
+      "recipe": "greet",
+      "frames": 6,
+      "durations": [
+        180,
+        160,
+        240,
+        140,
+        180,
+        260
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [],
+      "duration": 1.16
+    },
+    "sit_down": {
+      "id": "sit_down",
+      "label": "S’asseoir",
+      "family": "life",
+      "recipe": "sit_down",
+      "frames": 5,
+      "durations": [
+        120,
+        100,
+        90,
+        100,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "seat_contact",
+          "frame": 4
+        }
+      ],
+      "duration": 0.57
+    },
+    "seated": {
+      "id": "seated",
+      "label": "Repos assis",
+      "family": "life",
+      "recipe": "seated",
+      "frames": 4,
+      "durations": [
+        600,
+        240,
+        400,
+        360
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 1.6
+    },
+    "stand_up": {
+      "id": "stand_up",
+      "label": "Se relever",
+      "family": "life",
+      "recipe": "stand_up",
+      "frames": 5,
+      "durations": [
+        110,
+        100,
+        90,
+        110,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [],
+      "duration": 0.59
+    },
+    "cower": {
+      "id": "cower",
+      "label": "Se protéger",
+      "family": "life",
+      "recipe": "cower",
+      "frames": 4,
+      "durations": [
+        260,
+        140,
+        230,
+        170
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 0.8
+    },
+    "hit": {
+      "id": "hit",
+      "label": "Coup reçu",
+      "family": "life",
+      "recipe": "hit",
+      "frames": 5,
+      "durations": [
+        55,
+        85,
+        115,
+        120,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "cancel_action",
+          "frame": 0
+        }
+      ],
+      "duration": 0.535
+    },
+    "death": {
+      "id": "death",
+      "label": "Chute et mort",
+      "family": "life",
+      "recipe": "death",
+      "frames": 8,
+      "durations": [
+        80,
+        100,
+        120,
+        100,
+        70,
+        70,
+        100,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "fall_contact",
+          "frame": 6
+        }
+      ],
+      "duration": 0.82
+    },
+    "wounded": {
+      "id": "wounded",
+      "label": "Repos blessé",
+      "family": "life",
+      "recipe": "wounded",
+      "frames": 4,
+      "durations": [
+        650,
+        340,
+        450,
+        650
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 2.09
+    },
+    "eat": {
+      "id": "eat",
+      "label": "Manger",
+      "family": "life",
+      "recipe": "eat",
+      "frames": 8,
+      "durations": [
+        280,
+        150,
+        180,
+        240,
+        150,
+        160,
+        180,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "consume",
+          "frame": 3
+        }
+      ],
+      "duration": 1.64
+    },
+    "drink": {
+      "id": "drink",
+      "label": "Boire",
+      "family": "life",
+      "recipe": "drink",
+      "frames": 8,
+      "durations": [
+        260,
+        180,
+        180,
+        260,
+        180,
+        180,
+        180,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "consume",
+          "frame": 3
+        }
+      ],
+      "duration": 1.72
+    },
+    "lie_down": {
+      "id": "lie_down",
+      "label": "S’allonger",
+      "family": "life",
+      "recipe": "lie_down",
+      "frames": 8,
+      "durations": [
+        180,
+        150,
+        160,
+        170,
+        180,
+        200,
+        220,
+        340
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [],
+      "duration": 1.6
+    },
+    "sleep": {
+      "id": "sleep",
+      "label": "Dormir",
+      "family": "life",
+      "recipe": "sleep",
+      "frames": 4,
+      "durations": [
+        900,
+        650,
+        850,
+        700
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 3.1
+    },
+    "wake": {
+      "id": "wake",
+      "label": "Se lever du couchage",
+      "family": "life",
+      "recipe": "wake",
+      "frames": 8,
+      "durations": [
+        300,
+        180,
+        160,
+        180,
+        150,
+        180,
+        220,
+        300
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [],
+      "duration": 1.67
+    },
+    "mourn": {
+      "id": "mourn",
+      "label": "Veiller un mort",
+      "family": "social",
+      "recipe": "mourn",
+      "frames": 4,
+      "durations": [
+        800,
+        450,
+        650,
+        800
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 2.7
+    },
+    "surrender": {
+      "id": "surrender",
+      "label": "Mains levées",
+      "family": "reaction",
+      "recipe": "surrender",
+      "frames": 8,
+      "durations": [
+        140,
+        140,
+        170,
+        200,
+        180,
+        180,
+        200,
+        400
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "disarm",
+          "frame": 1
+        }
+      ],
+      "duration": 1.61
+    },
+    "shelter": {
+      "id": "shelter",
+      "label": "Attendre à l’abri",
+      "family": "life",
+      "recipe": "cower",
+      "frames": 4,
+      "durations": [
+        450,
+        300,
+        450,
+        600
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "navigationRequired": true,
+      "duration": 1.8
+    },
+    "clear_snow": {
+      "id": "clear_snow",
+      "label": "Déneiger un accès",
+      "family": "work",
+      "recipe": "clear_snow",
+      "frames": 8,
+      "durations": [
+        280,
+        240,
+        180,
+        160,
+        240,
+        170,
+        210,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "snow_scoop",
+          "frame": 2
+        },
+        {
+          "id": "snow_deposit",
+          "frame": 5
+        }
+      ],
+      "props": [
+        "shovel"
+      ],
+      "station": "path",
+      "duration": 1.78
+    },
+    "deice_trough": {
+      "id": "deice_trough",
+      "label": "Briser la mince glace de l’abreuvoir",
+      "family": "work",
+      "recipe": "deice_trough",
+      "frames": 8,
+      "durations": [
+        300,
+        220,
+        190,
+        90,
+        160,
+        200,
+        230,
+        340
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "ice_contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "mallet"
+      ],
+      "station": "trough",
+      "duration": 1.73
+    },
+    "stoke_fire": {
+      "id": "stoke_fire",
+      "label": "Alimenter le foyer en bois sec",
+      "family": "work",
+      "recipe": "stoke_fire",
+      "frames": 8,
+      "durations": [
+        300,
+        220,
+        180,
+        150,
+        220,
+        210,
+        240,
+        360
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "fuel_place",
+          "frame": 4
+        }
+      ],
+      "props": [
+        "log"
+      ],
+      "station": "pot",
+      "duration": 1.88
+    },
+    "warm_hands": {
+      "id": "warm_hands",
+      "label": "Se réchauffer au foyer",
+      "family": "life",
+      "recipe": "warm_hands",
+      "frames": 8,
+      "durations": [
+        550,
+        350,
+        450,
+        350,
+        500,
+        350,
+        450,
+        550
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "station": "pot",
+      "duration": 3.55
+    },
+    "hoe": {
+      "id": "hoe",
+      "label": "Biner",
+      "family": "work",
+      "recipe": "hoe",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "hoe"
+      ],
+      "station": "soil",
+      "duration": 1.5
+    },
+    "sow": {
+      "id": "sow",
+      "label": "Semer",
+      "family": "work",
+      "recipe": "sow",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "plant",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "seed_bag"
+      ],
+      "station": "soil",
+      "duration": 1.5
+    },
+    "harvest": {
+      "id": "harvest",
+      "label": "Moissonner",
+      "family": "work",
+      "recipe": "harvest",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "sickle",
+        "sheaf"
+      ],
+      "station": "soil",
+      "duration": 1.5
+    },
+    "uproot": {
+      "id": "uproot",
+      "label": "Arracher et ramasser",
+      "family": "work",
+      "recipe": "uproot",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "collect",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "basket"
+      ],
+      "station": "soil",
+      "duration": 1.5
+    },
+    "bundle": {
+      "id": "bundle",
+      "label": "Lier une gerbe",
+      "family": "work",
+      "recipe": "bundle",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "sheaf",
+        "twine"
+      ],
+      "station": "soil",
+      "duration": 1.5
+    },
+    "irrigate": {
+      "id": "irrigate",
+      "label": "Ouvrir un canal",
+      "family": "work",
+      "recipe": "irrigate",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "shovel"
+      ],
+      "station": "canal",
+      "duration": 1.5
+    },
+    "harvest_fruit": {
+      "id": "harvest_fruit",
+      "label": "Cueillir fruits et plantes",
+      "family": "work",
+      "recipe": "harvest_fruit",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "collect",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "basket"
+      ],
+      "station": "tree",
+      "duration": 1.5
+    },
+    "prune": {
+      "id": "prune",
+      "label": "Tailler un verger",
+      "family": "work",
+      "recipe": "prune",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "knife"
+      ],
+      "station": "tree",
+      "duration": 1.5
+    },
+    "cut_fiber": {
+      "id": "cut_fiber",
+      "label": "Récolter les fibres",
+      "family": "work",
+      "recipe": "cut_fiber",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "sickle",
+        "fiber"
+      ],
+      "station": "soil",
+      "duration": 1.5
+    },
+    "feed": {
+      "id": "feed",
+      "label": "Nourrir les animaux",
+      "family": "work",
+      "recipe": "feed",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "hay"
+      ],
+      "station": "sheep",
+      "duration": 1.5
+    },
+    "herd": {
+      "id": "herd",
+      "label": "Mener le troupeau",
+      "family": "work",
+      "recipe": "herd",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "staff"
+      ],
+      "station": "sheep",
+      "duration": 1.5
+    },
+    "milk": {
+      "id": "milk",
+      "label": "Traire",
+      "family": "work",
+      "recipe": "milk",
+      "frames": 8,
+      "durations": [
+        300,
+        180,
+        220,
+        140,
+        220,
+        180,
+        220,
+        320
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "bucket"
+      ],
+      "station": "sheep",
+      "duration": 1.78
+    },
+    "shear": {
+      "id": "shear",
+      "label": "Tondre",
+      "family": "work",
+      "recipe": "shear",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "shears"
+      ],
+      "station": "sheep",
+      "duration": 1.5
+    },
+    "skin": {
+      "id": "skin",
+      "label": "Préparer une peau",
+      "family": "work",
+      "recipe": "skin",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "knife",
+        "hide"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "net": {
+      "id": "net",
+      "label": "Réparer un filet",
+      "family": "work",
+      "recipe": "net",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "net",
+        "needle"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "cast_net": {
+      "id": "cast_net",
+      "label": "Lancer le filet",
+      "family": "work",
+      "recipe": "cast_net",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "release",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "net"
+      ],
+      "station": "water",
+      "duration": 1.5
+    },
+    "haul_net": {
+      "id": "haul_net",
+      "label": "Relever une prise",
+      "family": "work",
+      "recipe": "haul_net",
+      "frames": 8,
+      "durations": [
+        280,
+        220,
+        220,
+        150,
+        230,
+        240,
+        220,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "net",
+        "fish"
+      ],
+      "station": "water",
+      "duration": 1.86
+    },
+    "fell": {
+      "id": "fell",
+      "label": "Abattre un arbre",
+      "family": "work",
+      "recipe": "fell",
+      "frames": 8,
+      "durations": [
+        320,
+        240,
+        210,
+        80,
+        200,
+        260,
+        230,
+        360
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "axe"
+      ],
+      "station": "tree",
+      "duration": 1.9
+    },
+    "hew": {
+      "id": "hew",
+      "label": "Fendre au billot",
+      "family": "work",
+      "recipe": "hew",
+      "frames": 8,
+      "durations": [
+        300,
+        220,
+        200,
+        70,
+        180,
+        240,
+        220,
+        330
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "axe"
+      ],
+      "station": "log",
+      "duration": 1.76
+    },
+    "saw": {
+      "id": "saw",
+      "label": "Scier au chevalet",
+      "family": "work",
+      "recipe": "saw",
+      "frames": 8,
+      "durations": [
+        220,
+        170,
+        190,
+        150,
+        220,
+        170,
+        190,
+        150
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "saw"
+      ],
+      "station": "sawhorse",
+      "duration": 1.46
+    },
+    "resin": {
+      "id": "resin",
+      "label": "Recueillir la résine",
+      "family": "work",
+      "recipe": "resin",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "scraper",
+        "jar"
+      ],
+      "station": "tree",
+      "duration": 1.5
+    },
+    "pitch": {
+      "id": "pitch",
+      "label": "Préparer la poix",
+      "family": "work",
+      "recipe": "pitch",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "ladle"
+      ],
+      "station": "pot",
+      "duration": 1.5
+    },
+    "charcoal_load": {
+      "id": "charcoal_load",
+      "label": "Charger une meule",
+      "family": "work",
+      "recipe": "charcoal_load",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "log"
+      ],
+      "station": "charcoal",
+      "duration": 1.5
+    },
+    "charcoal_rake": {
+      "id": "charcoal_rake",
+      "label": "Ratisser le charbon",
+      "family": "work",
+      "recipe": "charcoal_rake",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "rake"
+      ],
+      "station": "charcoal",
+      "duration": 1.5
+    },
+    "mine": {
+      "id": "mine",
+      "label": "Extraire le minerai",
+      "family": "work",
+      "recipe": "mine",
+      "frames": 8,
+      "durations": [
+        350,
+        250,
+        220,
+        80,
+        220,
+        250,
+        240,
+        400
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "pickaxe"
+      ],
+      "station": "rock",
+      "duration": 2.01
+    },
+    "shovel": {
+      "id": "shovel",
+      "label": "Pelleter",
+      "family": "work",
+      "recipe": "shovel",
+      "frames": 8,
+      "durations": [
+        260,
+        220,
+        210,
+        100,
+        200,
+        240,
+        220,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "shovel"
+      ],
+      "station": "pile",
+      "duration": 1.73
+    },
+    "sort": {
+      "id": "sort",
+      "label": "Trier les matières",
+      "family": "work",
+      "recipe": "sort",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "ore"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "pan_gold": {
+      "id": "pan_gold",
+      "label": "Laver à la batée",
+      "family": "work",
+      "recipe": "pan_gold",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "pan"
+      ],
+      "station": "water",
+      "duration": 1.5
+    },
+    "quarry": {
+      "id": "quarry",
+      "label": "Extraire la pierre",
+      "family": "work",
+      "recipe": "quarry",
+      "frames": 8,
+      "durations": [
+        380,
+        240,
+        200,
+        85,
+        220,
+        240,
+        220,
+        400
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "pickaxe"
+      ],
+      "station": "rock",
+      "duration": 1.985
+    },
+    "stonecut": {
+      "id": "stonecut",
+      "label": "Tailler au burin",
+      "family": "work",
+      "recipe": "stonecut",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "mallet",
+        "chisel"
+      ],
+      "station": "rock",
+      "duration": 1.5
+    },
+    "rake_salt": {
+      "id": "rake_salt",
+      "label": "Récolter le sel",
+      "family": "work",
+      "recipe": "rake_salt",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "rake"
+      ],
+      "station": "salt",
+      "duration": 1.5
+    },
+    "sieve": {
+      "id": "sieve",
+      "label": "Cribler le sable",
+      "family": "work",
+      "recipe": "sieve",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "sieve"
+      ],
+      "station": "pile",
+      "duration": 1.5
+    },
+    "bellows": {
+      "id": "bellows",
+      "label": "Actionner le soufflet",
+      "family": "work",
+      "recipe": "bellows",
+      "frames": 8,
+      "durations": [
+        300,
+        220,
+        200,
+        170,
+        230,
+        240,
+        220,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "bellows"
+      ],
+      "station": "forge",
+      "duration": 1.88
+    },
+    "forge": {
+      "id": "forge",
+      "label": "Forger sur enclume",
+      "family": "work",
+      "recipe": "forge",
+      "frames": 8,
+      "durations": [
+        280,
+        200,
+        180,
+        60,
+        160,
+        200,
+        180,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "hammer",
+        "tongs"
+      ],
+      "station": "anvil",
+      "duration": 1.56
+    },
+    "smelt": {
+      "id": "smelt",
+      "label": "Couler le métal",
+      "family": "work",
+      "recipe": "smelt",
+      "frames": 8,
+      "durations": [
+        280,
+        220,
+        240,
+        140,
+        280,
+        220,
+        220,
+        350
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "crucible"
+      ],
+      "station": "forge",
+      "duration": 1.95
+    },
+    "quench": {
+      "id": "quench",
+      "label": "Tremper une pièce",
+      "family": "work",
+      "recipe": "quench",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "tongs"
+      ],
+      "station": "trough",
+      "duration": 1.5
+    },
+    "craft": {
+      "id": "craft",
+      "label": "Travailler à l’établi",
+      "family": "work",
+      "recipe": "joinery",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "mallet"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "pottery": {
+      "id": "pottery",
+      "label": "Façonner une poterie",
+      "family": "work",
+      "recipe": "pottery",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "clay"
+      ],
+      "station": "wheel",
+      "duration": 1.5
+    },
+    "prepare_clay": {
+      "id": "prepare_clay",
+      "label": "Pétrir l’argile",
+      "family": "work",
+      "recipe": "knead",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "clay"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "kiln_load": {
+      "id": "kiln_load",
+      "label": "Enfourner et défourner",
+      "family": "work",
+      "recipe": "kiln_load",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "pot"
+      ],
+      "station": "kiln",
+      "duration": 1.5
+    },
+    "glass_blow": {
+      "id": "glass_blow",
+      "label": "Souffler le verre",
+      "family": "work",
+      "recipe": "glass_blow",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "blowpipe"
+      ],
+      "station": "glass",
+      "duration": 1.5
+    },
+    "glass_roll": {
+      "id": "glass_roll",
+      "label": "Rouler et former le verre",
+      "family": "work",
+      "recipe": "glass_roll",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "blowpipe"
+      ],
+      "station": "glass",
+      "duration": 1.5
+    },
+    "spin": {
+      "id": "spin",
+      "label": "Filer au fuseau",
+      "family": "work",
+      "recipe": "spin",
+      "frames": 8,
+      "durations": [
+        220,
+        140,
+        160,
+        130,
+        180,
+        140,
+        180,
+        230
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "spindle"
+      ],
+      "station": "fiber_rack",
+      "duration": 1.38
+    },
+    "loom": {
+      "id": "loom",
+      "label": "Tisser une étoffe",
+      "family": "work",
+      "recipe": "loom",
+      "frames": 8,
+      "durations": [
+        240,
+        160,
+        190,
+        110,
+        210,
+        160,
+        190,
+        260
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "shuttle"
+      ],
+      "station": "loom",
+      "duration": 1.52
+    },
+    "stitch": {
+      "id": "stitch",
+      "label": "Coudre et raccommoder",
+      "family": "work",
+      "recipe": "stitch",
+      "frames": 8,
+      "durations": [
+        210,
+        130,
+        150,
+        100,
+        160,
+        130,
+        150,
+        250
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "needle",
+        "cloth"
+      ],
+      "station": "bench",
+      "duration": 1.28
+    },
+    "weave": {
+      "id": "weave",
+      "label": "Tresser un panier",
+      "family": "work",
+      "recipe": "weave",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "basket",
+        "fiber"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "tan": {
+      "id": "tan",
+      "label": "Racler une peau",
+      "family": "work",
+      "recipe": "tan",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "scraper",
+        "hide"
+      ],
+      "station": "hide_rack",
+      "duration": 1.5
+    },
+    "stretch_hide": {
+      "id": "stretch_hide",
+      "label": "Tendre le cuir",
+      "family": "work",
+      "recipe": "stretch_hide",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "hide"
+      ],
+      "station": "hide_rack",
+      "duration": 1.5
+    },
+    "stir": {
+      "id": "stir",
+      "label": "Remuer la teinture",
+      "family": "work",
+      "recipe": "stir",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "ladle"
+      ],
+      "station": "dye",
+      "duration": 1.5
+    },
+    "dye_dip": {
+      "id": "dye_dip",
+      "label": "Tremper une étoffe",
+      "family": "work",
+      "recipe": "dye_dip",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "cloth"
+      ],
+      "station": "dye",
+      "duration": 1.5
+    },
+    "wring": {
+      "id": "wring",
+      "label": "Essorer une étoffe",
+      "family": "work",
+      "recipe": "wring",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "cloth"
+      ],
+      "station": "dye",
+      "duration": 1.5
+    },
+    "hang": {
+      "id": "hang",
+      "label": "Suspendre le linge",
+      "family": "work",
+      "recipe": "hang",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "cloth"
+      ],
+      "station": "clothesline",
+      "duration": 1.5
+    },
+    "twist_rope": {
+      "id": "twist_rope",
+      "label": "Tordre un cordage",
+      "family": "work",
+      "recipe": "twist_rope",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "rope"
+      ],
+      "station": "rope_rack",
+      "duration": 1.5
+    },
+    "rope": {
+      "id": "rope",
+      "label": "Lover et amarrer",
+      "family": "work",
+      "recipe": "rope",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "rope"
+      ],
+      "station": "bollard",
+      "duration": 1.5
+    },
+    "draw_water": {
+      "id": "draw_water",
+      "label": "Puiser au puits",
+      "family": "work",
+      "recipe": "draw_water",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "bucket"
+      ],
+      "station": "well",
+      "duration": 1.5
+    },
+    "pour": {
+      "id": "pour",
+      "label": "Remplir et transvaser",
+      "family": "work",
+      "recipe": "pour",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "jug",
+        "bucket"
+      ],
+      "station": "trough",
+      "duration": 1.5
+    },
+    "mill_feed": {
+      "id": "mill_feed",
+      "label": "Alimenter la meule",
+      "family": "work",
+      "recipe": "mill_feed",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "grain_bag"
+      ],
+      "station": "mill",
+      "duration": 1.5
+    },
+    "mill_collect": {
+      "id": "mill_collect",
+      "label": "Ensacher la farine",
+      "family": "work",
+      "recipe": "mill_collect",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "flour_bag"
+      ],
+      "station": "mill",
+      "duration": 1.5
+    },
+    "press_oil": {
+      "id": "press_oil",
+      "label": "Presser l’huile",
+      "family": "work",
+      "recipe": "press_oil",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "lever"
+      ],
+      "station": "press",
+      "duration": 1.5
+    },
+    "chop_food": {
+      "id": "chop_food",
+      "label": "Découper les aliments",
+      "family": "work",
+      "recipe": "chop_food",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "knife"
+      ],
+      "station": "kitchen",
+      "duration": 1.5
+    },
+    "cook": {
+      "id": "cook",
+      "label": "Remuer la marmite",
+      "family": "work",
+      "recipe": "cook",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "ladle"
+      ],
+      "station": "pot",
+      "duration": 1.5
+    },
+    "salt_food": {
+      "id": "salt_food",
+      "label": "Saler et conserver",
+      "family": "work",
+      "recipe": "salt_food",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "salt"
+      ],
+      "station": "kitchen",
+      "duration": 1.5
+    },
+    "pack_food": {
+      "id": "pack_food",
+      "label": "Conditionner les provisions",
+      "family": "work",
+      "recipe": "pack_food",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "parcel"
+      ],
+      "station": "kitchen",
+      "duration": 1.5
+    },
+    "smoke_hive": {
+      "id": "smoke_hive",
+      "label": "Enfumer une ruche",
+      "family": "work",
+      "recipe": "smoke_hive",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "smoker"
+      ],
+      "station": "hive",
+      "duration": 1.5
+    },
+    "honey": {
+      "id": "honey",
+      "label": "Prélever le miel",
+      "family": "work",
+      "recipe": "honey",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "collect",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "honeycomb",
+        "jar"
+      ],
+      "station": "hive",
+      "duration": 1.5
+    },
+    "wax": {
+      "id": "wax",
+      "label": "Filtrer et fondre la cire",
+      "family": "work",
+      "recipe": "wax",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "sieve"
+      ],
+      "station": "pot",
+      "duration": 1.5
+    },
+    "medicinal": {
+      "id": "medicinal",
+      "label": "Trier les remèdes",
+      "family": "work",
+      "recipe": "medicinal",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "herbs"
+      ],
+      "station": "medicine",
+      "duration": 1.5
+    },
+    "mortar": {
+      "id": "mortar",
+      "label": "Piler au mortier",
+      "family": "work",
+      "recipe": "mortar",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "pestle"
+      ],
+      "station": "medicine",
+      "duration": 1.5
+    },
+    "bandage": {
+      "id": "bandage",
+      "label": "Poser un bandage",
+      "family": "work",
+      "recipe": "bandage",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "care",
+          "frame": 4
+        }
+      ],
+      "props": [
+        "bandage"
+      ],
+      "station": "patient",
+      "duration": 1.5
+    },
+    "joinery": {
+      "id": "joinery",
+      "label": "Assembler et cheviller",
+      "family": "work",
+      "recipe": "joinery",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "mallet",
+        "peg"
+      ],
+      "station": "bench",
+      "duration": 1.5
+    },
+    "masonry": {
+      "id": "masonry",
+      "label": "Réparer un ouvrage",
+      "family": "work",
+      "recipe": "masonry",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "trowel"
+      ],
+      "station": "wall",
+      "duration": 1.5
+    },
+    "repair_boat": {
+      "id": "repair_boat",
+      "label": "Calfater une coque",
+      "family": "work",
+      "recipe": "repair_boat",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "mallet",
+        "caulking"
+      ],
+      "station": "hull",
+      "duration": 1.5
+    },
+    "coat_pitch": {
+      "id": "coat_pitch",
+      "label": "Enduire la coque",
+      "family": "work",
+      "recipe": "coat_pitch",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "brush"
+      ],
+      "station": "hull",
+      "duration": 1.5
+    },
+    "carry": {
+      "id": "carry",
+      "label": "Porter une charge",
+      "family": "work",
+      "recipe": "carry",
+      "frames": 8,
+      "durations": [
+        120,
+        110,
+        110,
+        120,
+        120,
+        110,
+        110,
+        120
+      ],
+      "loop": true,
+      "stride": 20,
+      "markers": [
+        {
+          "id": "foot_left",
+          "frame": 0
+        },
+        {
+          "id": "foot_right",
+          "frame": 4
+        }
+      ],
+      "props": [
+        "crate"
+      ],
+      "station": "path",
+      "duration": 0.92
+    },
+    "load": {
+      "id": "load",
+      "label": "Soulever une charge",
+      "family": "work",
+      "recipe": "load",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "grip",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "crate"
+      ],
+      "station": "crate",
+      "duration": 1.5
+    },
+    "put_down": {
+      "id": "put_down",
+      "label": "Poser une charge",
+      "family": "work",
+      "recipe": "put_down",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "release",
+          "frame": 5
+        }
+      ],
+      "props": [
+        "crate"
+      ],
+      "station": "crate",
+      "duration": 1.5
+    },
+    "lash": {
+      "id": "lash",
+      "label": "Arrimer la cargaison",
+      "family": "work",
+      "recipe": "lash",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "rope"
+      ],
+      "station": "crate",
+      "duration": 1.5
+    },
+    "groom": {
+      "id": "groom",
+      "label": "Panser un cheval",
+      "family": "work",
+      "recipe": "groom",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "brush"
+      ],
+      "station": "horse",
+      "duration": 1.5
+    },
+    "lead": {
+      "id": "lead",
+      "label": "Mener un attelage",
+      "family": "work",
+      "recipe": "lead",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": 24,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "reins"
+      ],
+      "station": "horse",
+      "duration": 1.5
+    },
+    "drive": {
+      "id": "drive",
+      "label": "Conduire une charrette",
+      "family": "work",
+      "recipe": "drive",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "reins"
+      ],
+      "station": "cart",
+      "duration": 1.5
+    },
+    "mount": {
+      "id": "mount",
+      "label": "Monter en selle",
+      "family": "work",
+      "recipe": "mount",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "saddle_contact",
+          "frame": 5
+        }
+      ],
+      "props": [
+        "reins"
+      ],
+      "station": "horse",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "ride": {
+      "id": "ride",
+      "label": "Chevaucher au pas",
+      "family": "work",
+      "recipe": "ride",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": 36,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "reins"
+      ],
+      "station": "horse",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "ride_trot": {
+      "id": "ride_trot",
+      "label": "Chevaucher au trot",
+      "family": "work",
+      "recipe": "ride_trot",
+      "frames": 8,
+      "durations": [
+        100,
+        85,
+        100,
+        85,
+        100,
+        85,
+        100,
+        85
+      ],
+      "loop": true,
+      "stride": 44,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "reins"
+      ],
+      "station": "horse",
+      "navigationRequired": true,
+      "duration": 0.74
+    },
+    "dismount": {
+      "id": "dismount",
+      "label": "Descendre de selle",
+      "family": "work",
+      "recipe": "dismount",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "ground_contact",
+          "frame": 6
+        }
+      ],
+      "props": [
+        "reins"
+      ],
+      "station": "horse",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "row": {
+      "id": "row",
+      "label": "Ramer",
+      "family": "work",
+      "recipe": "row",
+      "frames": 8,
+      "durations": [
+        280,
+        200,
+        180,
+        170,
+        260,
+        220,
+        220,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "oar"
+      ],
+      "station": "boat",
+      "navigationRequired": true,
+      "duration": 1.83
+    },
+    "pole": {
+      "id": "pole",
+      "label": "Manœuvrer à la perche",
+      "family": "work",
+      "recipe": "pole",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "pole"
+      ],
+      "station": "boat",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "helm": {
+      "id": "helm",
+      "label": "Tenir la barre",
+      "family": "work",
+      "recipe": "helm",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "tiller"
+      ],
+      "station": "boat",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "board": {
+      "id": "board",
+      "label": "Embarquer",
+      "family": "work",
+      "recipe": "board",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "board_contact",
+          "frame": 6
+        }
+      ],
+      "props": [],
+      "station": "gangway",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "disembark": {
+      "id": "disembark",
+      "label": "Débarquer",
+      "family": "work",
+      "recipe": "disembark",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "ground_contact",
+          "frame": 6
+        }
+      ],
+      "props": [],
+      "station": "gangway",
+      "navigationRequired": true,
+      "duration": 1.5
+    },
+    "ledger": {
+      "id": "ledger",
+      "label": "Écrire au registre",
+      "family": "work",
+      "recipe": "ledger",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "ledger",
+        "quill"
+      ],
+      "station": "market",
+      "duration": 1.5
+    },
+    "weigh": {
+      "id": "weigh",
+      "label": "Peser une marchandise",
+      "family": "work",
+      "recipe": "weigh",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "weight"
+      ],
+      "station": "market",
+      "duration": 1.5
+    },
+    "count": {
+      "id": "count",
+      "label": "Compter la monnaie",
+      "family": "work",
+      "recipe": "count",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "props": [
+        "coins"
+      ],
+      "station": "market",
+      "duration": 1.5
+    },
+    "handover": {
+      "id": "handover",
+      "label": "Remettre un objet",
+      "family": "work",
+      "recipe": "handover",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "transfer",
+          "frame": 4
+        }
+      ],
+      "props": [
+        "parcel"
+      ],
+      "station": "market",
+      "duration": 1.5
+    },
+    "message": {
+      "id": "message",
+      "label": "Remettre un message",
+      "family": "work",
+      "recipe": "message",
+      "frames": 8,
+      "durations": [
+        240,
+        180,
+        190,
+        90,
+        170,
+        160,
+        190,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "transfer",
+          "frame": 4
+        }
+      ],
+      "props": [
+        "scroll"
+      ],
+      "station": "market",
+      "duration": 1.5
+    },
+    "negotiate": {
+      "id": "negotiate",
+      "label": "Négocier et arbitrer",
+      "family": "social",
+      "recipe": "negotiate",
+      "frames": 8,
+      "durations": [
+        350,
+        200,
+        250,
+        200,
+        240,
+        220,
+        250,
+        400
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 2.11
+    },
+    "pray": {
+      "id": "pray",
+      "label": "Recueillement et rite",
+      "family": "social",
+      "recipe": "pray",
+      "frames": 8,
+      "durations": [
+        550,
+        300,
+        350,
+        450,
+        350,
+        300,
+        350,
+        650
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 3.3
+    },
+    "armed_idle": {
+      "id": "armed_idle",
+      "label": "Attente armée",
+      "family": "combat",
+      "recipe": "armed_idle",
+      "frames": 4,
+      "durations": [
+        500,
+        300,
+        400,
+        350
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 1.55
+    },
+    "armed_walk": {
+      "id": "armed_walk",
+      "label": "Marche armée",
+      "family": "combat",
+      "recipe": "armed_walk",
+      "frames": 8,
+      "durations": [
+        125,
+        110,
+        110,
+        125,
+        125,
+        110,
+        110,
+        125
+      ],
+      "loop": true,
+      "stride": 24,
+      "markers": [
+        {
+          "id": "foot_left",
+          "frame": 0
+        },
+        {
+          "id": "foot_right",
+          "frame": 4
+        }
+      ],
+      "duration": 0.94
+    },
+    "warn": {
+      "id": "warn",
+      "label": "Sommation",
+      "family": "combat",
+      "recipe": "warn",
+      "frames": 8,
+      "durations": [
+        180,
+        180,
+        220,
+        300,
+        200,
+        180,
+        200,
+        300
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "warn",
+          "frame": 3
+        }
+      ],
+      "duration": 1.76
+    },
+    "salute": {
+      "id": "salute",
+      "label": "Salut de service",
+      "family": "combat",
+      "recipe": "salute",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [],
+      "duration": 1.155
+    },
+    "order": {
+      "id": "order",
+      "label": "Donner un ordre",
+      "family": "combat",
+      "recipe": "order",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "order",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "inspect": {
+      "id": "inspect",
+      "label": "Contrôler les papiers",
+      "family": "combat",
+      "recipe": "inspect",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "inspect",
+          "frame": 4
+        }
+      ],
+      "duration": 1.155
+    },
+    "arrest": {
+      "id": "arrest",
+      "label": "Interpeller et accompagner",
+      "family": "combat",
+      "recipe": "arrest",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "arrest",
+          "frame": 4
+        }
+      ],
+      "duration": 1.155
+    },
+    "draw": {
+      "id": "draw",
+      "label": "Dégainer",
+      "family": "combat",
+      "recipe": "draw",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "weapon_drawn",
+          "frame": 4
+        }
+      ],
+      "duration": 1.155
+    },
+    "sheathe": {
+      "id": "sheathe",
+      "label": "Rengainer",
+      "family": "combat",
+      "recipe": "sheathe",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "weapon_stowed",
+          "frame": 5
+        }
+      ],
+      "duration": 1.155
+    },
+    "guard_raise": {
+      "id": "guard_raise",
+      "label": "Lever le bouclier",
+      "family": "combat",
+      "recipe": "guard_raise",
+      "frames": 4,
+      "durations": [
+        150,
+        130,
+        100,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "guard_ready",
+          "frame": 3
+        }
+      ],
+      "duration": 0.56
+    },
+    "guard_hold": {
+      "id": "guard_hold",
+      "label": "Tenir la garde",
+      "family": "combat",
+      "recipe": "guard_hold",
+      "frames": 4,
+      "durations": [
+        300,
+        240,
+        280,
+        300
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 1.12
+    },
+    "block": {
+      "id": "block",
+      "label": "Encaisser au bouclier",
+      "family": "combat",
+      "recipe": "block",
+      "frames": 5,
+      "durations": [
+        60,
+        75,
+        110,
+        150,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "blocked",
+          "frame": 1
+        }
+      ],
+      "duration": 0.575
+    },
+    "guard_break": {
+      "id": "guard_break",
+      "label": "Garde brisée",
+      "family": "combat",
+      "recipe": "guard_break",
+      "frames": 5,
+      "durations": [
+        80,
+        110,
+        150,
+        180,
+        280
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "stun",
+          "frame": 1
+        }
+      ],
+      "duration": 0.8
+    },
+    "weapon_guard": {
+      "id": "weapon_guard",
+      "label": "Parer avec l’arme",
+      "family": "combat",
+      "recipe": "weapon_guard",
+      "frames": 4,
+      "durations": [
+        350,
+        220,
+        300,
+        350
+      ],
+      "loop": true,
+      "stride": null,
+      "markers": [],
+      "duration": 1.22
+    },
+    "spear_thrust": {
+      "id": "spear_thrust",
+      "label": "Estoc de lance",
+      "family": "combat",
+      "recipe": "spear_thrust",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "blade_cut": {
+      "id": "blade_cut",
+      "label": "Taille à la lame",
+      "family": "combat",
+      "recipe": "blade_cut",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "blade_reverse": {
+      "id": "blade_reverse",
+      "label": "Revers de lame",
+      "family": "combat",
+      "recipe": "blade_reverse",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "axe_chop": {
+      "id": "axe_chop",
+      "label": "Frappe de hache",
+      "family": "combat",
+      "recipe": "axe_chop",
+      "frames": 8,
+      "durations": [
+        250,
+        180,
+        180,
+        65,
+        150,
+        160,
+        180,
+        300
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "duration": 1.465
+    },
+    "staff_sweep": {
+      "id": "staff_sweep",
+      "label": "Balayage de bâton",
+      "family": "combat",
+      "recipe": "staff_sweep",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "bow_shot": {
+      "id": "bow_shot",
+      "label": "Tir à l’arc",
+      "family": "combat",
+      "recipe": "bow_shot",
+      "frames": 8,
+      "durations": [
+        180,
+        180,
+        250,
+        65,
+        110,
+        140,
+        180,
+        250
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "release_projectile",
+          "frame": 3
+        }
+      ],
+      "duration": 1.355
+    },
+    "crossbow_shot": {
+      "id": "crossbow_shot",
+      "label": "Tir à l’arbalète",
+      "family": "combat",
+      "recipe": "crossbow_shot",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "release_projectile",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "crossbow_reload": {
+      "id": "crossbow_reload",
+      "label": "Armer l’arbalète",
+      "family": "combat",
+      "recipe": "crossbow_reload",
+      "frames": 8,
+      "durations": [
+        220,
+        240,
+        300,
+        180,
+        240,
+        240,
+        220,
+        300
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "loaded",
+          "frame": 5
+        }
+      ],
+      "duration": 1.94
+    },
+    "javelin_throw": {
+      "id": "javelin_throw",
+      "label": "Lancer le javelot",
+      "family": "combat",
+      "recipe": "javelin_throw",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "release_projectile",
+          "frame": 3
+        }
+      ],
+      "duration": 1.155
+    },
+    "armed_hit": {
+      "id": "armed_hit",
+      "label": "Blessure armée",
+      "family": "combat",
+      "recipe": "armed_hit",
+      "frames": 5,
+      "durations": [
+        55,
+        85,
+        115,
+        120,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "cancel_attack",
+          "frame": 0
+        }
+      ],
+      "duration": 0.535
+    },
+    "armed_death": {
+      "id": "armed_death",
+      "label": "Mort équipée",
+      "family": "combat",
+      "recipe": "armed_death",
+      "frames": 8,
+      "durations": [
+        80,
+        100,
+        120,
+        100,
+        70,
+        70,
+        100,
+        180
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "fall_contact",
+          "frame": 6
+        }
+      ],
+      "duration": 0.82
+    },
+    "disarm": {
+      "id": "disarm",
+      "label": "Déposer les armes",
+      "family": "combat",
+      "recipe": "disarm",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "drop_weapon",
+          "frame": 4
+        }
+      ],
+      "duration": 1.155
+    },
+    "mounted_thrust": {
+      "id": "mounted_thrust",
+      "label": "Estoc en selle",
+      "family": "combat",
+      "recipe": "mounted_thrust",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "navigationRequired": true,
+      "duration": 1.155
+    },
+    "mounted_cut": {
+      "id": "mounted_cut",
+      "label": "Taille en selle",
+      "family": "combat",
+      "recipe": "mounted_cut",
+      "frames": 8,
+      "durations": [
+        180,
+        140,
+        150,
+        65,
+        100,
+        130,
+        160,
+        230
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "contact",
+          "frame": 3
+        }
+      ],
+      "navigationRequired": true,
+      "duration": 1.155
+    },
+    "dress": {
+      "id": "dress",
+      "label": "Enfiler sa tenue",
+      "family": "life",
+      "recipe": "dress",
+      "frames": 8,
+      "durations": [
+        140,
+        110,
+        170,
+        120,
+        150,
+        110,
+        180,
+        160
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "outfit_swap",
+          "frame": 3
+        }
+      ],
+      "duration": 1.14
+    },
+    "hat_on": {
+      "id": "hat_on",
+      "label": "Mettre une coiffe",
+      "family": "life",
+      "recipe": "hat_on",
+      "frames": 5,
+      "durations": [
+        130,
+        160,
+        170,
+        130,
+        170
+      ],
+      "loop": false,
+      "stride": null,
+      "markers": [
+        {
+          "id": "hat_swap",
+          "frame": 2
+        }
+      ],
+      "duration": 0.76
+    }
+  },
+  "headgear": {
+    "straw": "Chapeau de paille",
+    "kerchief": "Foulard noué",
+    "linen_cap": "Bonnet de toile",
+    "work_cap": "Calot de travail",
+    "leather_cap": "Coiffe de cuir",
+    "felt": "Bonnet de feutre",
+    "hood": "Capuchon forestier",
+    "rain": "Coiffe de pluie",
+    "beekeeper": "Protection textile de rucher",
+    "open_cap": "Calotte de garde",
+    "desert_helmet": "Casque avec couvre-nuque",
+    "desert_wrap": "Coiffe de piste",
+    "sailor": "Bonnet de marin",
+    "ritual": "Bandeau rituel",
+    "native": "Coiffe native coordonnée"
+  },
+  "sourceBodies": [
+    "T01-masculin",
+    "T01-feminin",
+    "T02-masculin",
+    "T02-feminin",
+    "T03-masculin",
+    "T03-feminin",
+    "T04-masculin",
+    "T04-feminin",
+    "A01-masculin",
+    "A01-feminin",
+    "A02-masculin",
+    "A02-feminin",
+    "A03-masculin",
+    "A03-feminin",
+    "A04-masculin",
+    "A04-feminin",
+    "N01-masculin",
+    "N01-feminin",
+    "N02-masculin",
+    "N02-feminin",
+    "N03-masculin",
+    "N03-feminin",
+    "N04-masculin",
+    "N04-feminin",
+    "J01-masculin",
+    "J01-feminin",
+    "J02-masculin",
+    "J02-feminin",
+    "J03-masculin",
+    "J03-feminin",
+    "J04-masculin",
+    "J04-feminin",
+    "M01-masculin",
+    "M01-feminin",
+    "M02-masculin",
+    "M02-feminin",
+    "M03-masculin",
+    "M03-feminin",
+    "M04-masculin",
+    "M04-feminin",
+    "E01-masculin",
+    "E02-masculin",
+    "E01-feminin",
+    "E02-feminin",
+    "TR01-masculin",
+    "TR02-masculin",
+    "TR03-masculin",
+    "TR04-masculin",
+    "kaldor:brigandine-mercenaire",
+    "kaldor:corsaire",
+    "kaldor:cotte-mailles",
+    "kaldor:cuir-traqueur",
+    "kaldor:harnais-arene",
+    "kaldor:kaftan-steppes",
+    "kaldor:pagne-noue",
+    "kaldor:peau-ours",
+    "kaldor:pelisse-grand-froid",
+    "kaldor:robe-serpent",
+    "kaldor:voiles-nomade"
+  ],
+  "sourceModules": [
+    "masculin-adulte",
+    "masculin-mur",
+    "masculin-age",
+    "masculin-hair-01",
+    "masculin-hair-02",
+    "masculin-hair-05",
+    "masculin-hair-06",
+    "masculin-hair-07",
+    "masculin-hair-08",
+    "masculin-hair-09",
+    "masculin-hair-10",
+    "masculin-hair-11",
+    "masculin-hair-12",
+    "masculin-hair-13",
+    "masculin-hair-14",
+    "feminin-adulte",
+    "feminin-mur",
+    "feminin-age",
+    "feminin-hair-01",
+    "feminin-hair-02",
+    "feminin-hair-03",
+    "feminin-hair-04",
+    "feminin-hair-05",
+    "feminin-hair-07",
+    "feminin-hair-08",
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B06",
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "H01-lin-sable",
+    "H01-sauge-pale",
+    "H01-ocre-doux",
+    "H02-ivoire-indigo",
+    "H02-lin-argile",
+    "H02-dune-sauge",
+    "H03-laine-ardoise",
+    "H03-laine-mousse",
+    "H03-laine-bruyere",
+    "H04-sapin",
+    "H04-bleu-nuit",
+    "H04-garance",
+    "H05-chaume",
+    "H05-lichen",
+    "H05-argile",
+    "H06-feuille",
+    "H06-terre-rouge",
+    "H06-indigo",
+    "H07-lin-roseau",
+    "H07-lin-gris",
+    "H07-lin-argile",
+    "H08-vert-jonc",
+    "H08-bleu-tourbe",
+    "H08-brun-ecorce",
+    "H09-avoine",
+    "H09-argile",
+    "H09-ardoise",
+    "H10-mousse",
+    "H10-garance",
+    "H10-bleu-route",
+    "H11-chenal",
+    "H11-ocre",
+    "H11-brique",
+    "H12-bleu-port",
+    "H12-vert-patine",
+    "H12-lie-de-vin"
+  ],
+  "concepts": [
+    {
+      "path": "art/humains/activites/concepts/metiers.png",
+      "label": "Outils et ateliers · référence initiale"
+    },
+    {
+      "path": "art/humains/activites/concepts/postes-transports.png",
+      "label": "Postes et transports · référence initiale"
+    },
+    {
+      "path": "art/humains/activites/concepts/equipements.png",
+      "label": "Armes et couvre-chefs · référence initiale"
+    },
+    {
+      "path": "art/humains/activites/concepts/cheval-chibi.png",
+      "label": "Cheval chibi et pose en selle · référence retenue"
+    },
+    {
+      "path": "art/humains/activites/concepts/postes/01-ateliers.png",
+      "label": "Postes séparés · ateliers"
+    },
+    {
+      "path": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+      "label": "Postes séparés · vie et ferme"
+    },
+    {
+      "path": "art/humains/activites/concepts/postes/03-sites.png",
+      "label": "Postes séparés · sites et récoltes"
+    },
+    {
+      "path": "art/humains/activites/concepts/postes/04-sockets-occultation.png",
+      "label": "Sockets et plans avant/arrière"
+    }
+  ],
+  "accessoryReferences": {
+    "hoe": [
+      "metiers",
+      1
+    ],
+    "shovel": [
+      "metiers",
+      1
+    ],
+    "sickle": [
+      "metiers",
+      2
+    ],
+    "sheaf": [
+      "metiers",
+      2
+    ],
+    "seed_bag": [
+      "metiers",
+      3
+    ],
+    "basket": [
+      "metiers",
+      3
+    ],
+    "knife": [
+      "metiers",
+      4
+    ],
+    "fiber": [
+      "metiers",
+      4
+    ],
+    "bucket": [
+      "metiers",
+      5
+    ],
+    "shears": [
+      "metiers",
+      5
+    ],
+    "net": [
+      "metiers",
+      6
+    ],
+    "needle": [
+      "metiers",
+      6
+    ],
+    "axe": [
+      "metiers",
+      7
+    ],
+    "log": [
+      "metiers",
+      7
+    ],
+    "saw": [
+      "metiers",
+      8
+    ],
+    "sawhorse": [
+      "metiers",
+      8
+    ],
+    "scraper": [
+      "metiers",
+      9
+    ],
+    "jar": [
+      "metiers",
+      9
+    ],
+    "charcoal": [
+      "metiers",
+      10
+    ],
+    "rake": [
+      "metiers",
+      10
+    ],
+    "pickaxe": [
+      "metiers",
+      11
+    ],
+    "ore": [
+      "metiers",
+      11
+    ],
+    "rock": [
+      "metiers",
+      12
+    ],
+    "chisel": [
+      "metiers",
+      12
+    ],
+    "mallet": [
+      "metiers",
+      12
+    ],
+    "pan": [
+      "metiers",
+      13
+    ],
+    "sieve": [
+      "metiers",
+      13
+    ],
+    "salt": [
+      "metiers",
+      14
+    ],
+    "anvil": [
+      "metiers",
+      15
+    ],
+    "hammer": [
+      "metiers",
+      15
+    ],
+    "tongs": [
+      "metiers",
+      15
+    ],
+    "bellows": [
+      "metiers",
+      16
+    ],
+    "forge": [
+      "metiers",
+      16
+    ],
+    "crucible": [
+      "metiers",
+      17
+    ],
+    "trough": [
+      "metiers",
+      18
+    ],
+    "wheel": [
+      "metiers",
+      19
+    ],
+    "clay": [
+      "metiers",
+      19
+    ],
+    "kiln": [
+      "metiers",
+      20
+    ],
+    "blowpipe": [
+      "metiers",
+      21
+    ],
+    "glass": [
+      "metiers",
+      21
+    ],
+    "spindle": [
+      "metiers",
+      22
+    ],
+    "loom": [
+      "metiers",
+      23
+    ],
+    "shuttle": [
+      "metiers",
+      23
+    ],
+    "cloth": [
+      "metiers",
+      24
+    ],
+    "hide": [
+      "metiers",
+      26
+    ],
+    "hide_rack": [
+      "metiers",
+      26
+    ],
+    "dye": [
+      "metiers",
+      27
+    ],
+    "rope": [
+      "metiers",
+      28
+    ],
+    "rope_rack": [
+      "metiers",
+      28
+    ],
+    "hive": [
+      "metiers",
+      29
+    ],
+    "smoker": [
+      "metiers",
+      29
+    ],
+    "honeycomb": [
+      "metiers",
+      29
+    ],
+    "herbs": [
+      "metiers",
+      30
+    ],
+    "pestle": [
+      "metiers",
+      30
+    ],
+    "bandage": [
+      "metiers",
+      30
+    ],
+    "well": [
+      "postes-transports",
+      1
+    ],
+    "mill": [
+      "postes-transports",
+      2
+    ],
+    "grain_bag": [
+      "postes-transports",
+      2
+    ],
+    "flour_bag": [
+      "postes-transports",
+      2
+    ],
+    "press": [
+      "postes-transports",
+      3
+    ],
+    "lever": [
+      "postes-transports",
+      3
+    ],
+    "pot": [
+      "postes-transports",
+      4
+    ],
+    "ladle": [
+      "postes-transports",
+      4
+    ],
+    "kitchen": [
+      "postes-transports",
+      5
+    ],
+    "fish": [
+      "postes-transports",
+      5
+    ],
+    "clothesline": [
+      "postes-transports",
+      6
+    ],
+    "medicine": [
+      "postes-transports",
+      7
+    ],
+    "patient": [
+      "postes-transports",
+      8
+    ],
+    "bedroll": [
+      "postes-transports",
+      8
+    ],
+    "wall": [
+      "postes-transports",
+      9
+    ],
+    "trowel": [
+      "postes-transports",
+      9
+    ],
+    "hull": [
+      "postes-transports",
+      10
+    ],
+    "caulking": [
+      "postes-transports",
+      10
+    ],
+    "brush": [
+      "postes-transports",
+      10
+    ],
+    "bollard": [
+      "postes-transports",
+      11
+    ],
+    "boat": [
+      "postes-transports",
+      12
+    ],
+    "oar": [
+      "postes-transports",
+      12
+    ],
+    "pole": [
+      "postes-transports",
+      12
+    ],
+    "tiller": [
+      "postes-transports",
+      12
+    ],
+    "gangway": [
+      "postes-transports",
+      13
+    ],
+    "horse": [
+      "cheval-chibi",
+      1
+    ],
+    "reins": [
+      "postes-transports",
+      14
+    ],
+    "cart": [
+      "postes-transports",
+      15
+    ],
+    "crate": [
+      "postes-transports",
+      16
+    ],
+    "parcel": [
+      "postes-transports",
+      17
+    ],
+    "scroll": [
+      "postes-transports",
+      17
+    ],
+    "coins": [
+      "postes-transports",
+      17
+    ],
+    "market": [
+      "postes-transports",
+      18
+    ],
+    "ledger": [
+      "postes-transports",
+      18
+    ],
+    "quill": [
+      "postes-transports",
+      18
+    ],
+    "weight": [
+      "postes-transports",
+      18
+    ],
+    "jug": [
+      "postes-transports",
+      19
+    ],
+    "cup": [
+      "postes-transports",
+      19
+    ],
+    "bowl": [
+      "postes-transports",
+      19
+    ],
+    "bench": [
+      "postes-transports",
+      20
+    ],
+    "blade": [
+      "equipements",
+      1
+    ],
+    "spear": [
+      "equipements",
+      2
+    ],
+    "battle_axe": [
+      "equipements",
+      3
+    ],
+    "staff": [
+      "equipements",
+      4
+    ],
+    "bow": [
+      "equipements",
+      5
+    ],
+    "crossbow": [
+      "equipements",
+      6
+    ],
+    "javelin": [
+      "equipements",
+      7
+    ],
+    "shield": [
+      "equipements",
+      8
+    ],
+    "heater_shield": [
+      "equipements",
+      9
+    ],
+    "sheath": [
+      "equipements",
+      10
+    ],
+    "soil": [
+      "metiers",
+      2
+    ],
+    "tree": [
+      "metiers",
+      7
+    ],
+    "pile": [
+      "metiers",
+      11
+    ],
+    "water": [
+      "postes-transports",
+      12
+    ],
+    "path": [
+      "postes-transports",
+      13
+    ],
+    "canal": [
+      "postes-transports",
+      1
+    ],
+    "fiber_rack": [
+      "metiers",
+      22
+    ],
+    "hay": [
+      "metiers",
+      2
+    ],
+    "sheep": [
+      "metiers",
+      5
+    ],
+    "peg": [
+      "metiers",
+      12
+    ],
+    "twine": [
+      "metiers",
+      28
+    ]
+  },
+  "independentStations": {
+    "workbench": {
+      "id": "workbench",
+      "number": 1,
+      "label": "Établi commun",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "chopping_block": {
+      "id": "chopping_block",
+      "number": 2,
+      "label": "Billot",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "sawhorse": {
+      "id": "sawhorse",
+      "number": 3,
+      "label": "Chevalet de sciage",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "anvil": {
+      "id": "anvil",
+      "number": 4,
+      "label": "Enclume sur souche",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "forge": {
+      "id": "forge",
+      "number": 5,
+      "label": "Forge et soufflet fixe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "smelter": {
+      "id": "smelter",
+      "number": 6,
+      "label": "Four de fusion",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "quench_trough": {
+      "id": "quench_trough",
+      "number": 7,
+      "label": "Auge de trempe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "potters_wheel": {
+      "id": "potters_wheel",
+      "number": 8,
+      "label": "Tour de potier",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "gauche",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "pottery_kiln": {
+      "id": "pottery_kiln",
+      "number": 9,
+      "label": "Four de potier",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "glass_bench": {
+      "id": "glass_bench",
+      "number": 10,
+      "label": "Banc de verrier",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "glass_furnace": {
+      "id": "glass_furnace",
+      "number": 11,
+      "label": "Four de verrier",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "loom": {
+      "id": "loom",
+      "number": 12,
+      "label": "Métier à tisser",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "fiber_rack": {
+      "id": "fiber_rack",
+      "number": 13,
+      "label": "Râtelier à fibres",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "hide_frame": {
+      "id": "hide_frame",
+      "number": 14,
+      "label": "Cadre à peaux",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "dye_vat": {
+      "id": "dye_vat",
+      "number": 15,
+      "label": "Cuve de teinture",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "rope_bench": {
+      "id": "rope_bench",
+      "number": 16,
+      "label": "Banc de corderie",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "well": {
+      "id": "well",
+      "number": 17,
+      "label": "Puits à treuil",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "grain_mill": {
+      "id": "grain_mill",
+      "number": 18,
+      "label": "Meule et trémie",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "oil_press": {
+      "id": "oil_press",
+      "number": 19,
+      "label": "Presse à huile",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "kitchen_table": {
+      "id": "kitchen_table",
+      "number": 20,
+      "label": "Table de cuisine",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "cooking_hearth": {
+      "id": "cooking_hearth",
+      "number": 21,
+      "label": "Foyer et marmite fixe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "bread_oven": {
+      "id": "bread_oven",
+      "number": 22,
+      "label": "Four de cuisson",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "apothecary_table": {
+      "id": "apothecary_table",
+      "number": 23,
+      "label": "Table de remèdes",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "care_bed": {
+      "id": "care_bed",
+      "number": 24,
+      "label": "Lit de soins vide",
+      "posture": "couche",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "sleeping_mat": {
+      "id": "sleeping_mat",
+      "number": 25,
+      "label": "Couchage vide",
+      "posture": "couche",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "sitting_bench": {
+      "id": "sitting_bench",
+      "number": 26,
+      "label": "Banc d’assise",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "meal_table": {
+      "id": "meal_table",
+      "number": 27,
+      "label": "Table et tabourets",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "gauche",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "market_stall": {
+      "id": "market_stall",
+      "number": 28,
+      "label": "Étal vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "clerks_desk": {
+      "id": "clerks_desk",
+      "number": 29,
+      "label": "Pupitre et tabouret",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "gauche",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "beehive": {
+      "id": "beehive",
+      "number": 30,
+      "label": "Ruche",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "stable_stall": {
+      "id": "stable_stall",
+      "number": 31,
+      "label": "Module d’étable vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "feeding_trough": {
+      "id": "feeding_trough",
+      "number": 32,
+      "label": "Mangeoire et abreuvoir",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "face",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "care_stall": {
+      "id": "care_stall",
+      "number": 33,
+      "label": "Stalle de traite et tonte vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "enclosure_gate": {
+      "id": "enclosure_gate",
+      "number": 34,
+      "label": "Enclos et portillon",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "clothesline": {
+      "id": "clothesline",
+      "number": 35,
+      "label": "Étendage vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "drying_rack": {
+      "id": "drying_rack",
+      "number": 36,
+      "label": "Séchoir vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "sluice": {
+      "id": "sluice",
+      "number": 37,
+      "label": "Vanne d’irrigation",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "water_edge",
+      "conceptGrid": true
+    },
+    "crop_patch": {
+      "id": "crop_patch",
+      "number": 38,
+      "label": "Parcelle cultivable",
+      "posture": "accroupi",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 2
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "scrub",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "cultivated_ground",
+      "conceptGrid": false
+    },
+    "orchard_tree": {
+      "id": "orchard_tree",
+      "number": 39,
+      "label": "Arbre de verger",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 3
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "world_oak_0",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false
+    },
+    "resin_tree": {
+      "id": "resin_tree",
+      "number": 40,
+      "label": "Arbre résinier",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 4
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "world_pine_0",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false
+    },
+    "charcoal_clamp": {
+      "id": "charcoal_clamp",
+      "number": 41,
+      "label": "Meule de charbon",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "ore_node": {
+      "id": "ore_node",
+      "number": 42,
+      "label": "Filon de minerai",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 2
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "world_boulder_0",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false
+    },
+    "quarry_block": {
+      "id": "quarry_block",
+      "number": 43,
+      "label": "Bloc de carrière",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "fixed_screen": {
+      "id": "fixed_screen",
+      "number": 44,
+      "label": "Crible fixe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "salt_basin": {
+      "id": "salt_basin",
+      "number": 45,
+      "label": "Bassin salin",
+      "posture": "accroupi",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "wall_scaffold": {
+      "id": "wall_scaffold",
+      "number": 46,
+      "label": "Mur et échafaudage bas",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true
+    },
+    "dock_bollard": {
+      "id": "dock_bollard",
+      "number": 47,
+      "label": "Quai et borne d’amarrage",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "water_edge",
+      "conceptGrid": true
+    },
+    "bank_platform": {
+      "id": "bank_platform",
+      "number": 48,
+      "label": "Accès de quai et rive",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "water_edge",
+      "conceptGrid": true
+    },
+    "snow_access": {
+      "id": "snow_access",
+      "number": 49,
+      "label": "Accès à déneiger",
+      "posture": "debout",
+      "concept": null,
+      "kind": "atlas_reference",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false
+    }
+  },
+  "igeaWinter": {
+    "season": "igea_winter",
+    "stations": {
+      "workbench": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "anvil": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "forge": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "smelter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "quench_trough": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "potters_wheel": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pottery_kiln": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "glass_bench": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "glass_furnace": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "loom": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "fiber_rack": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "hide_frame": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "dye_vat": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "rope_bench": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "grain_mill": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "oil_press": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "kitchen_table": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "cooking_hearth": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "bread_oven": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "apothecary_table": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "care_bed": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "sleeping_mat": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "sitting_bench": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "meal_table": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "clerks_desk": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "feeding_trough": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "clothesline": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "drying_rack": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "fixed_screen": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "wall_scaffold": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "chopping_block": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "sawhorse": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "well": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "market_stall": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "stable_stall": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "care_stall": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "enclosure_gate": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "resin_tree": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "charcoal_clamp": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "ore_node": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "quarry_block": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "dock_bollard": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "bank_platform": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "snow_access": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "sluice": {
+        "setting": "dormant",
+        "reason": "Canal d’irrigation arrêté pendant le gel."
+      },
+      "crop_patch": {
+        "setting": "dormant",
+        "reason": "Pas de semis ni de récolte sur un sol enneigé."
+      },
+      "salt_basin": {
+        "setting": "dormant",
+        "reason": "Évaporation solaire interrompue."
+      },
+      "beehive": {
+        "setting": "dormant",
+        "reason": "Ruche laissée fermée pendant l’hivernage."
+      },
+      "orchard_tree": {
+        "setting": "dormant",
+        "reason": "Verger en repos ; pas de cueillette sous la neige."
+      }
+    },
+    "suspended": {
+      "hoe": "Sol gelé ou couvert de neige.",
+      "sow": "Semis reportés au dégel.",
+      "harvest": "Moisson hors saison.",
+      "uproot": "Récolte de plein champ hors saison.",
+      "bundle": "Pas de gerbes fraîches à récolter.",
+      "irrigate": "Irrigation arrêtée pendant le gel.",
+      "harvest_fruit": "Récolte extérieure hors saison.",
+      "cut_fiber": "Fibres récoltées avant l’hiver.",
+      "shear": "La laine protège les animaux du froid.",
+      "resin": "Écoulement de résine insuffisant au froid.",
+      "rake_salt": "Évaporation solaire hors saison.",
+      "smoke_hive": "Ne pas ouvrir ni enfumer une ruche en hivernage.",
+      "honey": "Prélèvement du miel reporté.",
+      "prune": "Taille reportée à une fenêtre hors gel."
+    },
+    "conditions": {
+      "cast_net": [
+        "openWater",
+        "Pêche seulement sur une eau libre de glace."
+      ],
+      "haul_net": [
+        "openWater",
+        "Pêche seulement sur une eau libre de glace."
+      ],
+      "pan_gold": [
+        "openWater",
+        "Lavage seulement sur une eau libre et accessible."
+      ],
+      "row": [
+        "openWater",
+        "Navigation seulement sur une eau libre de glace."
+      ],
+      "pole": [
+        "openWater",
+        "Navigation seulement sur une eau libre de glace."
+      ],
+      "helm": [
+        "openWater",
+        "Navigation seulement sur une eau libre de glace."
+      ],
+      "board": [
+        "openWater",
+        "Embarquement seulement sur une eau libre de glace."
+      ],
+      "disembark": [
+        "openWater",
+        "Débarquement seulement sur une eau libre de glace."
+      ],
+      "masonry": [
+        "frostProtected",
+        "Mortier utilisable seulement dans une zone protégée du gel."
+      ],
+      "mine": [
+        "mineAccessible",
+        "Mine accessible, étayée et ravitaillée."
+      ],
+      "quarry": [
+        "quarryAccessible",
+        "Front de taille accessible et débarrassé de la glace."
+      ],
+      "herd": [
+        "pastureAccessible",
+        "Déplacement limité aux pâtures et chemins praticables."
+      ]
+    },
+    "newActivities": [
+      "clear_snow",
+      "deice_trough",
+      "stoke_fire",
+      "warm_hands"
+    ]
+  },
+  "actorOnly": true,
+  "horse": {
+    "profile": [
+      40,
+      32
+    ],
+    "frontBack": [
+      24,
+      32
+    ],
+    "source": "concepts/cheval-chibi.png"
+  },
+  "sourceHashes": {
+    "sources-natives.js": "1490f728c7ba5138909e44a96d9d87e9cdda79906bd6dff90788927ff1b02b1d",
+    "catalogue.js": "cfd44862f87318e402561da073863d1cdcc6aac367a3a06d87ca69b96496fbf4",
+    "rig.js": "41003521a48c8fccda99a99292125ba088ca1eb85dfce4767b51cca17484f0de",
+    "cheval.js": "30047217bd9f4852d339a7279bbcd49f04c56d320cf400830f0ce5d4a00f51f7",
+    "accessoires.js": "1b5e66d0d758723ebc4bdf030b998e4b3dc8ce1726f906a4fec4f75c4f650873",
+    "modularite.js": "85d7b93750492294f2e19b8bc1aec36b64d3bd29a657810898d56c6db07532bc",
+    "activites.js": "b09553f0f48b3ac285c1eb3906bd32ff12676f55d3bec330eb39a294a8985592",
+    "../decors/humains-grilles.js": "86428e134f2f02a3cdf38ccea920e35b64d422d0f6436d67306daa3d5668ab28",
+    "../decors/atlas-nature.js": "4aaa86a4a058e7bbc67baa2efd4b96a85d3ac3d7cfc24366f583c4b471a874ff",
+    "../decors/igea-hiver.js": "a5d1560cb9fb14be522b4a3670cf32fea9ffab53be6f924eff079d51ed544ce1",
+    "../decors/postes-humains.js": "2e2d087a79608f5debe320add2b19dbd2f9929428175f09439a38dd90b715e13",
+    "scene.js": "1c867cd810f7fcebffad68cccfc2f46b85006020daa1e8cbeb33c41739d8e5d1"
+  }
+}

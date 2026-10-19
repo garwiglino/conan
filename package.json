@@ -20,11 +20,20 @@
     "analyze:mix": "node scripts/analyze-audio-mix.cjs",
     "build:kaldor": "node scripts/embed-kaldor.cjs",
     "build:kaldor-outfits": "node scripts/build-kaldor-outfits.cjs && node scripts/embed-kaldor.cjs",
-    "build:batraciens": "node scripts/build-batraciens.cjs"
+    "build:batraciens": "node scripts/build-batraciens.cjs",
+    "build:human-sources": "node scripts/build-human-sources.cjs",
+    "preview:humans": "node scripts/preview-human-activities.cjs",
+    "test:humans": "node --test tests/human-activities.test.cjs tests/human-stations.test.cjs tests/human-igea-winter.test.cjs tests/human-modularity.test.cjs tests/human-headgear.test.cjs",
+    "check:human-workshop": "node scripts/check-human-workshop.cjs",
+    "test:human-headgear": "node --test tests/human-headgear.test.cjs",
+    "test:human-modularity": "node --test tests/human-modularity.test.cjs",
+    "preview:igea": "node scripts/render-igea-winter.cjs",
+    "build:human-stations": "node scripts/build-human-stations.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",
     "jsdom": "30.1.2",
-    "web-audio-engine": "0.13.4"
+    "web-audio-engine": "0.13.4",
+    "playwright": "1.62.1"
   }
 }

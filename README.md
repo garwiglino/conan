@@ -1,5 +1,10 @@
 # Hearthreaver — Le retour de Kaldor
 
+[Atelier des humains : tenues, métiers, armées et animations](art/humains/activites/atelier.html)
+· [Sources et utilisation de la bibliothèque JavaScript](docs/humains-activites.md).
+Ce catalogue visuel est consultable séparément du jeu.
+[Consultation et préparation de l’intégration ultérieure](docs/humains-integration-differee.md).
+
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
 
 Le héros est **Kaldor « the Flamebearer »**. Dans la version jouable actuelle, il commence au Campement des Exilés avec la fée ; Elyne, à proximité, rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. La prison de test a été retirée.
@@ -99,3 +104,10 @@ La musique du titre démarre dès l’introduction et continue sans redémarrer 
 Les [batraciens civils et gardes](docs/batraciens.md) utilisent les dessins JavaScript approuvés et des palettes déterministes, sans redessin. Le registre ajoute 62 civils et 11 gardes dans 14 localités humides de Varan, Tagon et Teremor, sous les règles existantes de sécurité. Certains groupes de brigands et patrouilles déjà générés dans ces milieux utilisent les rôles armés ; aucun peuple ne devient hostile par défaut. Sources, apparences et animations sont intégrées au HTML web et iOS. [Atelier des palettes et animations](art/batraciens-preview.html).
 
 Les routines locales ajoutent des déplacements, des discussions entre habitants et six liaisons routières. Les gardes témoins répondent aux agressions du joueur, avec le ciblage et les effets de blessure communs au combat. Voir `docs/batraciens.md`.
+
+Postes humains indépendants : [guide JavaScript](docs/humains-postes-javascript.md),
+[48 concepts retenus](docs/humains-postes-concepts.md), sockets et atlas naturels réutilisés.
+
+- [Sprites humains d’Igea en saison enneigée](docs/humains-igea-hiver.md) : réutilisation des postes, neige sélective et gestes hivernaux.
+
+- [Vêtements et animations modulaires des humains](docs/humains-modularite.md) : pièces natives articulées, combinaisons de vêtements et vérifications.

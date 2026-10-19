@@ -1,0 +1,2408 @@
+{
+  "season": "igea_winter",
+  "scope": "sprite_library_and_workshop",
+  "lore": [
+    "docs/world-bible/02-peuples-et-villes.md",
+    "docs/world-bible/03-ressources-et-echanges.md",
+    "docs/world-bible/04-danger-et-evenements.md"
+  ],
+  "existingFurnitureGrids": 44,
+  "newFurnitureGrids": 0,
+  "retainedStations": 44,
+  "snowPaletteSource": "WorldTerrainArt.colors.snow",
+  "stations": {
+    "workbench": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "workbench@64,96:operator",
+          "reservationKey": "workbench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            88
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            82
+          ],
+          "approach": [
+            64,
+            80
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "chopping_block": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "chopping_block@64,96:operator",
+          "reservationKey": "chopping_block@64,96:operator",
+          "role": "operator",
+          "feet": [
+            54,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            59,
+            86
+          ],
+          "approach": [
+            46,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "sawhorse": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          3,
+          0,
+          7
+        ],
+        [
+          24,
+          27,
+          0,
+          7
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "sawhorse@64,96:operator",
+          "reservationKey": "sawhorse@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            53,
+            85
+          ],
+          "approach": [
+            40,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "anvil": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "anvil@64,96:operator",
+          "reservationKey": "anvil@64,96:operator",
+          "role": "operator",
+          "feet": [
+            51,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            56,
+            85
+          ],
+          "approach": [
+            43,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "forge": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "forge@64,96:operator",
+          "reservationKey": "forge@64,96:operator",
+          "role": "operator",
+          "feet": [
+            78,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            78,
+            89
+          ],
+          "approach": [
+            78,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "smelter": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "smelter@64,96:operator",
+          "reservationKey": "smelter@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            88
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "quench_trough": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "quench_trough@64,96:operator",
+          "reservationKey": "quench_trough@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            87
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            83
+          ],
+          "approach": [
+            64,
+            79
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "potters_wheel": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "potters_wheel@64,96:operator",
+          "reservationKey": "potters_wheel@64,96:operator",
+          "role": "operator",
+          "feet": [
+            76,
+            97
+          ],
+          "facing": "gauche",
+          "contact": [
+            70,
+            84
+          ],
+          "approach": [
+            84,
+            97
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              76,
+              93
+            ],
+            "height": 4
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "pottery_kiln": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "pottery_kiln@64,96:operator",
+          "reservationKey": "pottery_kiln@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            85
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "glass_bench": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "glass_bench@64,96:operator",
+          "reservationKey": "glass_bench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            97
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            87
+          ],
+          "approach": [
+            64,
+            89
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              64,
+              93
+            ],
+            "height": 4
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "glass_furnace": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "glass_furnace@64,96:operator",
+          "reservationKey": "glass_furnace@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            115
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            86
+          ],
+          "approach": [
+            64,
+            123
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "loom": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "loom@64,96:operator",
+          "reservationKey": "loom@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            84
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "fiber_rack": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "fiber_rack@64,96:operator",
+          "reservationKey": "fiber_rack@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            86
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            81
+          ],
+          "approach": [
+            64,
+            78
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "hide_frame": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "hide_frame@64,96:operator",
+          "reservationKey": "hide_frame@64,96:operator",
+          "role": "operator",
+          "feet": [
+            44,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            49,
+            84
+          ],
+          "approach": [
+            36,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "dye_vat": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "dye_vat@64,96:operator",
+          "reservationKey": "dye_vat@64,96:operator",
+          "role": "operator",
+          "feet": [
+            46,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            51,
+            86
+          ],
+          "approach": [
+            38,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "rope_bench": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "rope_bench@64,96:operator",
+          "reservationKey": "rope_bench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            86
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            77
+          ],
+          "approach": [
+            64,
+            78
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "well": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          27,
+          0,
+          5
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "well@64,96:operator",
+          "reservationKey": "well@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            53,
+            84
+          ],
+          "approach": [
+            40,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "grain_mill": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "grain_mill@64,96:operator",
+          "reservationKey": "grain_mill@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            53,
+            86
+          ],
+          "approach": [
+            40,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "oil_press": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "oil_press@64,96:operator",
+          "reservationKey": "oil_press@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            88
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "kitchen_table": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "kitchen_table@64,96:operator",
+          "reservationKey": "kitchen_table@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            88
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            84
+          ],
+          "approach": [
+            64,
+            80
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "cooking_hearth": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "cooking_hearth@64,96:operator",
+          "reservationKey": "cooking_hearth@64,96:operator",
+          "role": "operator",
+          "feet": [
+            45,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            90
+          ],
+          "approach": [
+            37,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "bread_oven": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "bread_oven@64,96:operator",
+          "reservationKey": "bread_oven@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            84
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "apothecary_table": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "apothecary_table@64,96:operator",
+          "reservationKey": "apothecary_table@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            88
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            82
+          ],
+          "approach": [
+            64,
+            80
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "care_bed": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "care_bed@64,96:operator",
+          "reservationKey": "care_bed@64,96:operator",
+          "role": "operator",
+          "feet": [
+            44,
+            98
+          ],
+          "facing": "droite",
+          "contact": [
+            48,
+            91
+          ],
+          "approach": [
+            36,
+            98
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        },
+        "patient": {
+          "id": "care_bed@64,96:patient",
+          "reservationKey": "care_bed@64,96:patient",
+          "role": "patient",
+          "feet": [
+            64,
+            98
+          ],
+          "facing": "droite",
+          "contact": [
+            64,
+            91
+          ],
+          "approach": [
+            56,
+            98
+          ],
+          "support": {
+            "kind": "bed",
+            "surface": [
+              60,
+              91
+            ],
+            "height": 5
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "sleeping_mat": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "sleeping_mat@64,96:operator",
+          "reservationKey": "sleeping_mat@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            98
+          ],
+          "facing": "droite",
+          "contact": [
+            64,
+            94
+          ],
+          "approach": [
+            56,
+            98
+          ],
+          "support": {
+            "kind": "bed",
+            "surface": [
+              60,
+              94
+            ],
+            "height": 2
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "sitting_bench": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "sitting_bench@64,96:operator",
+          "reservationKey": "sitting_bench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            97
+          ],
+          "facing": "droite",
+          "contact": [
+            64,
+            90
+          ],
+          "approach": [
+            56,
+            97
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              64,
+              93
+            ],
+            "height": 4
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "meal_table": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "meal_table@64,96:operator",
+          "reservationKey": "meal_table@64,96:operator",
+          "role": "operator",
+          "feet": [
+            81,
+            97
+          ],
+          "facing": "gauche",
+          "contact": [
+            75,
+            87
+          ],
+          "approach": [
+            89,
+            97
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              81,
+              93
+            ],
+            "height": 4
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "market_stall": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          35,
+          0,
+          8
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "market_stall@64,96:operator",
+          "reservationKey": "market_stall@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            95
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            87
+          ],
+          "approach": [
+            64,
+            87
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "clerks_desk": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "clerks_desk@64,96:operator",
+          "reservationKey": "clerks_desk@64,96:operator",
+          "role": "operator",
+          "feet": [
+            75,
+            97
+          ],
+          "facing": "gauche",
+          "contact": [
+            69,
+            87
+          ],
+          "approach": [
+            83,
+            97
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              75,
+              93
+            ],
+            "height": 4
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "beehive": {
+      "setting": "dormant",
+      "reason": "Ruche laissée fermée pendant l’hivernage.",
+      "caps": [
+        [
+          3,
+          18,
+          0,
+          6
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "beehive@64,96:operator",
+          "reservationKey": "beehive@64,96:operator",
+          "role": "operator",
+          "feet": [
+            51,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            56,
+            84
+          ],
+          "approach": [
+            43,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "stable_stall": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          4,
+          0,
+          7
+        ],
+        [
+          35,
+          39,
+          0,
+          7
+        ],
+        [
+          5,
+          34,
+          0,
+          3
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "stable_stall@64,96:operator",
+          "reservationKey": "stable_stall@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            47,
+            91
+          ],
+          "approach": [
+            34,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "feeding_trough": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "feeding_trough@64,96:operator",
+          "reservationKey": "feeding_trough@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            86
+          ],
+          "facing": "face",
+          "contact": [
+            64,
+            80
+          ],
+          "approach": [
+            64,
+            78
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        },
+        "water": {
+          "id": "feeding_trough@64,96:water",
+          "reservationKey": "feeding_trough@64,96:operator",
+          "role": "water",
+          "feet": [
+            74,
+            89
+          ],
+          "facing": "face",
+          "contact": [
+            74,
+            87
+          ],
+          "approach": [
+            74,
+            81
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "care_stall": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          4,
+          0,
+          5
+        ],
+        [
+          37,
+          41,
+          0,
+          5
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "care_stall@64,96:operator",
+          "reservationKey": "care_stall@64,96:operator",
+          "role": "operator",
+          "feet": [
+            41,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            46,
+            86
+          ],
+          "approach": [
+            33,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "enclosure_gate": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          35,
+          0,
+          6
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "enclosure_gate@64,96:operator",
+          "reservationKey": "enclosure_gate@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            87
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "clothesline": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "clothesline@64,96:operator",
+          "reservationKey": "clothesline@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            47,
+            84
+          ],
+          "approach": [
+            34,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "drying_rack": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "drying_rack@64,96:operator",
+          "reservationKey": "drying_rack@64,96:operator",
+          "role": "operator",
+          "feet": [
+            45,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            50,
+            85
+          ],
+          "approach": [
+            37,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "sluice": {
+      "setting": "dormant",
+      "reason": "Canal d’irrigation arrêté pendant le gel.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "sluice@64,96:operator",
+          "reservationKey": "sluice@64,96:operator",
+          "role": "operator",
+          "feet": [
+            53,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            58,
+            84
+          ],
+          "approach": [
+            45,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "crop_patch": {
+      "setting": "dormant",
+      "reason": "Pas de semis ni de récolte sur un sol enneigé.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "crop_patch@64,96:operator",
+          "reservationKey": "crop_patch@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            47,
+            96
+          ],
+          "approach": [
+            34,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "orchard_tree": {
+      "setting": "dormant",
+      "reason": "Verger en repos ; pas de cueillette sous la neige.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "orchard_tree@64,96:operator",
+          "reservationKey": "orchard_tree@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            89
+          ],
+          "approach": [
+            42,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "resin_tree": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "resin_tree@64,96:operator",
+          "reservationKey": "resin_tree@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            89
+          ],
+          "approach": [
+            42,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "charcoal_clamp": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "charcoal_clamp@64,96:operator",
+          "reservationKey": "charcoal_clamp@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            99
+          ],
+          "facing": "dos",
+          "contact": [
+            64,
+            91
+          ],
+          "approach": [
+            64,
+            107
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "ore_node": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "ore_node@64,96:operator",
+          "reservationKey": "ore_node@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            89
+          ],
+          "approach": [
+            42,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "quarry_block": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          3,
+          0,
+          8
+        ],
+        [
+          28,
+          31,
+          0,
+          8
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "quarry_block@64,96:operator",
+          "reservationKey": "quarry_block@64,96:operator",
+          "role": "operator",
+          "feet": [
+            46,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            51,
+            90
+          ],
+          "approach": [
+            38,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "fixed_screen": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "fixed_screen@64,96:operator",
+          "reservationKey": "fixed_screen@64,96:operator",
+          "role": "operator",
+          "feet": [
+            44,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            49,
+            84
+          ],
+          "approach": [
+            36,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "salt_basin": {
+      "setting": "dormant",
+      "reason": "Évaporation solaire interrompue.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "salt_basin@64,96:operator",
+          "reservationKey": "salt_basin@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            47,
+            88
+          ],
+          "approach": [
+            34,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "wall_scaffold": {
+      "setting": "sheltered",
+      "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "wall_scaffold@64,96:operator",
+          "reservationKey": "wall_scaffold@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            47,
+            84
+          ],
+          "approach": [
+            34,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "dock_bollard": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [
+        [
+          0,
+          3,
+          0,
+          6
+        ],
+        [
+          33,
+          37,
+          0,
+          6
+        ]
+      ],
+      "socket": {
+        "operator": {
+          "id": "dock_bollard@64,96:operator",
+          "reservationKey": "dock_bollard@64,96:operator",
+          "role": "operator",
+          "feet": [
+            43,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            48,
+            84
+          ],
+          "approach": [
+            35,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "bank_platform": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "bank_platform@64,96:operator",
+          "reservationKey": "bank_platform@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            53,
+            84
+          ],
+          "approach": [
+            40,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    },
+    "snow_access": {
+      "setting": "exposed",
+      "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées.",
+      "caps": [],
+      "socket": {
+        "operator": {
+          "id": "snow_access@64,96:operator",
+          "reservationKey": "snow_access@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            56,
+            97
+          ],
+          "approach": [
+            40,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      }
+    }
+  },
+  "activities": {
+    "idle": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "walk": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "flee": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "startle": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "talk": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "listen": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "greet": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "sit_down": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "seated": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "stand_up": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "cower": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "hit": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "death": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "wounded": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "eat": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "drink": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "lie_down": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "sleep": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "wake": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mourn": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "surrender": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "shelter": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "clear_snow": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Entretien hivernal d’Igea."
+    },
+    "deice_trough": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Entretien hivernal d’Igea."
+    },
+    "stoke_fire": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Entretien hivernal d’Igea."
+    },
+    "warm_hands": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Entretien hivernal d’Igea."
+    },
+    "hoe": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Sol gelé ou couvert de neige."
+    },
+    "sow": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Semis reportés au dégel."
+    },
+    "harvest": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Moisson hors saison."
+    },
+    "uproot": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Récolte de plein champ hors saison."
+    },
+    "bundle": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Pas de gerbes fraîches à récolter."
+    },
+    "irrigate": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Irrigation arrêtée pendant le gel."
+    },
+    "harvest_fruit": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Récolte extérieure hors saison."
+    },
+    "prune": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Taille reportée à une fenêtre hors gel."
+    },
+    "cut_fiber": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Fibres récoltées avant l’hiver."
+    },
+    "feed": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "herd": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "pastureAccessible",
+      "reason": "Déplacement limité aux pâtures et chemins praticables."
+    },
+    "milk": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "shear": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "La laine protège les animaux du froid."
+    },
+    "skin": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "net": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "cast_net": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Pêche seulement sur une eau libre de glace."
+    },
+    "haul_net": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Pêche seulement sur une eau libre de glace."
+    },
+    "fell": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "hew": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "saw": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "resin": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Écoulement de résine insuffisant au froid."
+    },
+    "pitch": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "charcoal_load": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "charcoal_rake": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mine": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "mineAccessible",
+      "reason": "Mine accessible, étayée et ravitaillée."
+    },
+    "shovel": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "sort": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "pan_gold": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Lavage seulement sur une eau libre et accessible."
+    },
+    "quarry": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "quarryAccessible",
+      "reason": "Front de taille accessible et débarrassé de la glace."
+    },
+    "stonecut": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "rake_salt": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Évaporation solaire hors saison."
+    },
+    "sieve": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "bellows": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "forge": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "smelt": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "quench": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "craft": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "pottery": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "prepare_clay": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "kiln_load": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "glass_blow": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "glass_roll": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "spin": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "loom": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "stitch": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "weave": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "tan": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "stretch_hide": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "stir": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "dye_dip": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "wring": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "hang": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "twist_rope": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "rope": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "draw_water": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "pour": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mill_feed": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mill_collect": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "press_oil": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "chop_food": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "cook": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "salt_food": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "pack_food": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "smoke_hive": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Ne pas ouvrir ni enfumer une ruche en hivernage."
+    },
+    "honey": {
+      "allowed": false,
+      "state": "suspended",
+      "reason": "Prélèvement du miel reporté."
+    },
+    "wax": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "medicinal": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mortar": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "bandage": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "joinery": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "masonry": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "frostProtected",
+      "reason": "Mortier utilisable seulement dans une zone protégée du gel."
+    },
+    "repair_boat": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "coat_pitch": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "carry": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "load": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "put_down": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "lash": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "groom": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "lead": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "drive": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mount": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "ride": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "ride_trot": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "dismount": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "row": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Navigation seulement sur une eau libre de glace."
+    },
+    "pole": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Navigation seulement sur une eau libre de glace."
+    },
+    "helm": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Navigation seulement sur une eau libre de glace."
+    },
+    "board": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Embarquement seulement sur une eau libre de glace."
+    },
+    "disembark": {
+      "allowed": false,
+      "state": "conditional",
+      "requires": "openWater",
+      "reason": "Débarquement seulement sur une eau libre de glace."
+    },
+    "ledger": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "weigh": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "count": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "handover": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "message": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "negotiate": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "pray": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "armed_idle": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "armed_walk": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "warn": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "salute": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "order": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "inspect": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "arrest": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "draw": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "sheathe": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "guard_raise": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "guard_hold": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "block": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "guard_break": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "weapon_guard": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "spear_thrust": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "blade_cut": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "blade_reverse": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "axe_chop": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "staff_sweep": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "bow_shot": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "crossbow_shot": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "crossbow_reload": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "javelin_throw": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "armed_hit": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "armed_death": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "disarm": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mounted_thrust": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "mounted_cut": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "dress": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    },
+    "hat_on": {
+      "allowed": true,
+      "state": "winter",
+      "reason": "Activité maintenue ; poste et accès dégagés."
+    }
+  },
+  "newActivities": [
+    "clear_snow",
+    "deice_trough",
+    "stoke_fire",
+    "warm_hands"
+  ]
+}
