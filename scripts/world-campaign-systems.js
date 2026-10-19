@@ -1,5 +1,6 @@
 /* Persistent people, graph expeditions and conserved goods/money. */
 function createCampaignSystems(A,B,W,state,H){
+ const lawMission=m=>m.kind==='justice'||m.kind==='justice_patrol';
  const sites=()=>[...new Set(Object.values(state.sites))],stock=H.stock,take=H.take,history=H.history,pace=H.pacing;
  for(const s of sites()){
   s.losses||={};s.guards||=[];
@@ -29,7 +30,7 @@ function createCampaignSystems(A,B,W,state,H){
   }return candidates.sort((a,b)=>a.reduce((n,l)=>n+l.length,0)-b.reduce((n,l)=>n+l.length,0))[0]||null;
  }
  function position(m){if(!m.path&&m.anchor)return {...m.anchor};const l=m.path?.[m.leg||0];if(!l){const p=m.path?.at(-1)?.to||[A.byId[m.site||m.home].x,A.byId[m.site||m.home].y];return {x:p[0],y:p[1]};}const t=Math.min(1,(m.progress||0)/Math.max(.001,l.length));return {x:l.from[0]+(l.to[0]-l.from[0])*t,y:l.from[1]+(l.to[1]-l.from[1])*t};}
- function reverse(m){const l=m.path?.[m.leg||0],progress=l?l.length-(m.progress||0):0;m.path=(m.path||[]).slice(0,(m.leg||0)+1).reverse().map(l=>({...l,from:l.to,to:l.from}));if(m.kind==='justice'&&m.status!=='returning'&&m.homePath?.length)m.path.push(...m.homePath.map(l=>({...l})));m.leg=0;m.progress=progress;}
+ function reverse(m){const l=m.path?.[m.leg||0],progress=l?l.length-(m.progress||0):0;m.path=(m.path||[]).slice(0,(m.leg||0)+1).reverse().map(l=>({...l,from:l.to,to:l.from}));if(lawMission(m)&&m.status!=='returning'&&m.homePath?.length)m.path.push(...m.homePath.map(l=>({...l})));m.leg=0;m.progress=progress;}
  function move(m,minutes,at=W.clock){let remaining=Math.max(0,minutes);for(let i=0;i<10000;i++){const l=m.path?.[m.leg||0];if(!l)return {arrived:true,remaining};if(!l.local&&W.edgeStatus(A.edgeById.get(l.edge),at).closed&&!H.repairApproach?.(m,l,at)){m.waiting=l.edge;return {arrived:false,remaining:0};}m.waiting=null;const rate=l.mode==='boat'?A.modes.boat.metresPerMinute:pace.metresPerMinute(pace.civilianWalk),distance=Math.min(Math.max(0,l.length-(m.progress||0)),remaining*rate);m.progress=(m.progress||0)+distance;remaining-=distance/rate;if(m.progress>=l.length-1e-7){m.leg=(m.leg||0)+1;m.progress=0;}else return {arrived:false,remaining:0};}return {arrived:false,remaining:0};}
  function settle(c,reason='loss',at=W.clock){if(c.settlement)return c.settlement;const refund=c.delivered?0:Math.max(0,c.paid||0);if(refund)state.sites[c.to].treasury+=refund;c.escrow=0;c.settlement={reason,at:Math.round(at*1e8)/1e8,refund,paidToSeller:c.delivered?(c.paid||0)*c.deliveredAmount/(c.originalAmount||1):0};history('contract_settled',{id:c.id,...c.settlement});return c.settlement;}
  function reportLoss(c,source,at=W.clock){if(!c?.abandoned||c.lossReport)return false;c.lossReport={at:Math.round(at*1e8)/1e8,source};settle(c,'loss',at);const notice=H.event('cargo_loss',c.from,{source,cargoId:c.id,detail:'Le chargement '+c.id+' a été abandonné.'},0,at);c.lossNotice=notice?.id;history('cargo_loss_report',{id:c.id,source},at);return true;}
@@ -62,10 +63,10 @@ function createCampaignSystems(A,B,W,state,H){
   m.clock??=state.clock;if(m.status==='returning')reverse(m);else m.status='active';e.managedMovement=true;e.end=null;e.memberIds=m.units.map(u=>u.id);return true;
  }
  function stepMission(m,minutes,at=W.clock,local=false){
-  if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.kind==='justice'){if(at<m.readyAt&&!W.justice?.effect(m.site,null,at).wanted){finishMission(m,at);return;}if(at<m.readyAt){m.clock=at;return;}minutes=Math.min(minutes,Math.max(0,at-m.readyAt));}if(m.status==='returned'||!prepareMission(m))return;if(m.rations===undefined){supplyExpedition(m,state.sites[m.site],m.units||[],1440);m.suppliedAt=at;}
+  if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(lawMission(m)){if(at<m.readyAt&&!W.justice?.effect(m.site,null,at).wanted){finishMission(m,at);return;}if(at<m.readyAt){m.clock=at;return;}minutes=Math.min(minutes,Math.max(0,at-m.readyAt));}if(m.status==='returned'||!prepareMission(m))return;if(m.rations===undefined){supplyExpedition(m,state.sites[m.site],m.units||[],1440);m.suppliedAt=at;}
   let cursor=at-Math.max(0,minutes);do{const end=Math.min(at,cursor+60);consumeExpedition(m,end,m.units||[],(u,hp)=>missionDamage(m,u.id,hp));stepMissionSlice(m,end-cursor,end,local);cursor=end;}while(cursor<at-1e-7&&m.status!=='returned');
  }
- function stepMissionSlice(m,minutes,at=W.clock,local=false){if(m.kind==='justice'&&m.status!=='returning'&&m.status!=='returned'&&(!W.justice?.effect(m.site,null,at).wanted||at>=m.searchUntil)){reverse(m);m.status='returning';m.engaged=false;}if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.status==='returned'||!prepareMission(m))return;if(m.status==='active'&&at>=(m.until||Infinity)&&m.engaged){reverse(m);m.status='returning';}if(m.engaged||!local&&m.physical)return;
+ function stepMissionSlice(m,minutes,at=W.clock,local=false){if(lawMission(m)&&m.status!=='returning'&&m.status!=='returned'&&(!W.justice?.effect(m.site,null,at).wanted||at>=m.searchUntil)){reverse(m);m.status='returning';m.engaged=false;}if(m.kind==='repair')return H.stepRepairMission?.(m,minutes,at,local);if(m.status==='returned'||!prepareMission(m))return;if(m.status==='active'&&at>=(m.until||Infinity)&&m.engaged){reverse(m);m.status='returning';}if(m.engaged||!local&&m.physical)return;
   const living=m.units.filter(u=>u.hp>0),c=m.cargo&&state.shipments.find(c=>c.id===m.cargo);
   if(!living.length){if(m.cash&&c){c.travelFunds=(c.travelFunds||0)+m.cash;m.cash=0;}if(m.load&&c){c.amount+=m.load.amount;c.abandonedPosition=position(m);c.recovered=false;m.load=null;}if(c)c.recoveryMission=null;finishMission(m,at);return;}
   if(m.kind==='recovery'&&!living.some(u=>u.role==='crew'&&u.hp>1)&&m.status!=='returning'){if(m.load&&c){c.amount+=m.load.amount;c.abandonedPosition=position(m);m.load=null;c.recovered=false;}if(c)c.recoveryMission=null;reverse(m);m.status='returning';}
@@ -75,11 +76,12 @@ function createCampaignSystems(A,B,W,state,H){
    if(m.status==='active'){if(at<(m.until||Infinity)&&!W.events.find(e=>e.id===m.incident)?.resolved){m.clock=at;return;}reverse(m);m.status='returning';remaining=Math.min(remaining,Math.max(0,at-(m.until||at)));}
    const result=move(m,remaining,at);m.clock=at;const p=position(m),e=W.events.find(e=>e.id===m.event);if(e){if(Math.hypot(e.x-p.x,e.y-p.y)>1)W.revision++;e.x=p.x;e.y=p.y;}if(!result.arrived)return;remaining=result.remaining;
    if(m.status==='returning'){finishMission(m,at-remaining);return;}
+   if(m.kind==='justice_mail'){if(m.status!=='returning'&&m.units.some(u=>u.hp>1)){W.justice?.receive(m.to,m.news,at-remaining);m.deliveredAt=at-remaining;}reverse(m);m.status='returning';continue;}
    if(m.kind==='recovery'){
     if(c&&W.active(at).some(e=>A.EVENT_TYPES[e.type].civilianPrey&&Math.hypot(e.x-p.x,e.y-p.y)<80)){m.waiting='hostiles';return;}
     if(c&&Math.hypot(c.abandonedPosition.x-p.x,c.abandonedPosition.y-p.y)>8){m.waiting='cargo_out_of_reach';reverse(m);m.status='returning';continue;}
     if(c&&(c.travelFunds||0)>0){m.cash=c.travelFunds;c.travelFunds=0;}if(c&&c.amount>0){m.load={resource:c.resource,amount:c.amount};c.amount=0;c.recovered=true;history('cargo_recovered',{id:c.id,mission:m.id,amount:m.load.amount});}reverse(m);m.status='returning';
-   }else{m.status='active';m.until=m.kind==='justice'?Math.min(m.searchUntil,at-remaining+30):at-remaining+1440;return;}
+   }else{m.status='active';m.until=lawMission(m)?m.searchUntil:at-remaining+1440;return;}
   }
  }
  function toll(c,e,payment){const band=state.bands[e?.bandKey];if((c.tollBreaches?.[e?.id]||0)>W.clock||!band||band.phase!=='active'||!band.members.some(m=>!m.dead)||c.passages?.[e.id])return 0;const price=Math.max(1,e.toll||Math.ceil(c.amount*.15));if(payment===undefined){if((c.travelFunds||0)<price)return 0;c.travelFunds-=price;}else if(!Number.isFinite(payment)||payment<price)return 0;band.purse=(band.purse||0)+price;(c.passages||={})[e.id]=true;history('band_toll',{band:e.bandKey,cargo:c.id,amount:price});return price;}

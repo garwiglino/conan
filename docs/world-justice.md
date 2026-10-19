@@ -19,8 +19,8 @@ doivent réellement voir leur cible pour la poursuivre.
 
 Une arrestation volontaire ou une défaite face à une garde compétente applique
 une retenue financière bornée et un temps de détention, sans dette permanente,
-retrait d'équipement ou consommation de vie. La recherche prend fin après la
-peine ; défiance, refus de renseignements et prix majorés diminuent avec le temps.
+retrait d'équipement ou consommation de vie. La recherche pour les faits connus de ce tribunal prend fin après la
+peine ; une preuve plus grave reçue ultérieurement ne facture que le complément. défiance, refus de renseignements et prix majorés diminuent avec le temps.
 Les services essentiels restent récupérables après le retour au calme ; leurs personnages ne disparaissent pas définitivement. De nouveaux actes
 restent de nouvelles infractions. Ce n'est pas encore un code pénal pour le vol,
 les rançons ou tous les différends politiques.
@@ -72,9 +72,8 @@ secondes réelles, et n’est pas lancée sans effectifs ni ressources.
 
 Les gardes rejoignent le dernier lieu signalé, sans connaître la position cachée
 du joueur. Ils peuvent proposer ou imposer l’arrestation selon les règles
-existantes. Une seule intervention de renfort est active par juridiction ; une
-nouvelle mobilisation est espacée d’au moins une heure du monde. La recherche
-locale dure trente minutes du monde hors combat, puis le groupe rentre au poste.
+existantes. Les plafonds territoriaux et les délais varient avec le niveau indiqué ci-dessous.
+Après sa recherche bornée, le groupe rentre physiquement au poste.
 Les morts, blessures, ressources et personnes réservées persistent au rechargement.
 Seuls les survivants redeviennent disponibles à leur retour, une seule fois.
 
@@ -121,3 +120,93 @@ Les gardes restent réservés jusqu’à l’arrivée effective au poste ; seuls
 
 Ces suites et la recette navigateur couvrent les comportements décrits. Elles ne constituent pas une validation exhaustive du
 monde vivant ni de l'ensemble du jeu.
+
+
+## Recherche territoriale et autorités
+
+Le niveau est calculé séparément pour chacune des **14 régions**, dans les cinq
+continents. Le mandat est celui de l’autorité canonique de la région : Teremor,
+Cités de Sylverive, Autorités d’Igea, Monarchie de Sarak, Cités de Varan ou Ports
+de Tagon. Deux régions de même autorité gardent des recherches distinctes.
+Le camp relève de Roche-Sèche, à Sarak. L’emprise d’un lieu habité ou d’un
+quai conserve son administration, même si la cellule de terrain frontalière
+porte le nom d’une autre région : l’embarcadère d’Aulneport reste ainsi
+rattaché à sa ville, comme dans le repérage des lieux. Une frontière juridique arrête les
+poursuites de police ; elle n’annule pas la légitime défense d’un garde attaqué.
+
+L’interface montre cinq sceaux et le niveau dans le cartouche du lieu, sans
+recouvrir les commandes. Pendant l’alerte, l’autorité poursuivante remplace le
+sous-titre du lieu ; le bouton accessible nomme aussi la région et cette autorité.
+Cliquer ou activer ce bouton au clavier ouvre « Autorités et recherches » sur la
+carte : chaque région indique son niveau, ses victimes identifiées, l’autorité
+poursuivante, les patrouilles mobilisées et la fin des mandats. Le niveau régional
+résume les preuves reçues quelque part dans la zone ; **chaque poste doit recevoir
+les faits avant de pouvoir arrêter Kaldor**. Aucun crime sans identification et
+signalement n’alimente ces indicateurs.
+
+| Niveau | Chaleur minimale | Intervention (équipes de 2) | Patrouilles routières supplémentaires | Délai entre interventions | Recherche sur place |
+| --- | --- | --- | --- | --- | --- |
+| 0 · Libre | 0 | 0 | 0 | — | — |
+| 1 · Signalé | 1 | 1 | 0 | 60 min | 40 min |
+| 2 · Recherché | 3 | 1 | 1 | 45 min | 50 min |
+| 3 · Traqué | 6 | 2 | 2 | 30 min | 60 min |
+| 4 · Chasse à l’homme | 10 | 2 | 3 | 20 min | 70 min |
+| 5 · Alerte majeure | 18 | 3 | 4 | 15 min | 80 min |
+
+Toutes les durées sont en minutes du monde ; les nombres sont des plafonds
+simultanés, retours compris, jamais des créations garanties. Les ressources,
+les gardes disponibles et les routes praticables limitent les départs. La
+planification des patrouilles et des dépêches a lieu au plus toutes les cinq
+minutes du monde, avec deux nouveaux départs maximum de chaque catégorie par
+passage. Les essais de chemins sont bornés à huit pour les patrouilles et quatre
+pour les messagers ; les postes sont examinés à tour de rôle pour qu’un passage
+fermé ne monopolise pas la planification. Une même route n’est pas doublonnée dans une zone. Les patrouilles
+suivent le graphe routier terrestre, avec une approche dans leur région,
+respectent les fermetures, attendent sur leur secteur puis reviennent.
+La hausse du niveau ne localise pas magiquement le joueur : les interventions
+utilisent son dernier signalement daté.
+
+Une agression vaut 1, une blessure grave 3 et un meurtre 6. Une victime garde
+ajoute respectivement 1, 2 ou 4 ; l’intimidation connue d’un témoin ajoute 2.
+Ainsi, un meurtre de civil identifié mène au niveau 3, celui d’un garde au niveau
+4, et deux gardes tués et identifiés au niveau 5. Chaque mort reste définitive dans
+les effectifs ; tuer les renforts ne supprime aucune déposition déjà reçue.
+Un épisode continu sur la même victime s’aggrave sans compter plusieurs meurtres.
+La chaleur commence à décroître après le premier quart du mandat ; le niveau
+baisse progressivement jusqu’à expiration. Une lettre ne renouvelle pas le délai.
+La peur conserve ses propres durées fixes (3/6/12 heures), sans fuite à vie.
+
+### Témoins, appartenances et transmission
+
+Le fait conserve le nom, l’espèce, le rôle et l’affiliation de la victime, ainsi
+que l’identité et l’appartenance des témoins réels. Les compagnons et alliés
+personnels ne déposent pas contre Kaldor. Un réseau clandestin explicitement
+identifié ne coopère pas contre une affiliation extérieure, sauf si le témoin est
+lui-même la victime. Un conflit déclaré entre factions empêcherait une telle
+coopération ; les relations canoniques actuelles ne sont pas des guerres ouvertes.
+L’espèce, seule, ne crée ni solidarité automatique ni culpabilité collective :
+les règles de la bible interdisent précisément cette déduction. Un accord de
+commerce ou d’escorte n’est pas un traité de police ou d’extradition.
+
+Les dépêches emploient un travailleur réel, deux pièces et deux provisions du
+poste. Le messager marche par les routes ouvertes, reçoit ses rations et revient ;
+il peut être blessé ou tué. Seule son arrivée transmet le mandat. Les caravanes
+transportent aussi une copie des signalements effectivement connus au départ,
+y compris au retour. Une aggravation ultérieure exige une nouvelle transmission.
+La coopération est bornée à la même région et à la même autorité, sans alliance
+policière inventée. La sauvegarde conserve les copies reçues, leurs dates, les
+missions, les pertes, et les faits déjà jugés. Un tribunal ne peut sanctionner une
+gravité qu’il n’a pas reçue ; de nouvelles preuves plus graves laissent uniquement
+le complément de responsabilité à régler.
+
+### Références de conception consultées
+
+- [OpenMW, `MechanicsManager::commitCrime` et `canReportCrime`](https://github.com/OpenMW/openmw/blob/master/apps/openmw/mwmechanics/mechanicsmanagerimp.cpp) : témoins capables de signaler, perception locale, exception des compagnons, distinction entre provocation et infractions. Ici, la visibilité directe du crime reste exigée.
+- [Endless Sky, `Politics::Offend`](https://github.com/endless-sky/endless-sky/blob/master/source/Politics.cpp) : conséquences dépendant des gouvernements et des faits, distinction entre provocation temporaire et réputation.
+
+Ces références éclairent les choix ; les règles d’autorité et d’appartenance sont
+celles de notre bible, sans importer une hostilité raciale ou un partage universel
+des primes.
+
+Validation ajoutée : `tests/world-pursuit.test.cjs`,
+`tests/world-pursuit-runtime.test.cjs` et `scripts/check-world-pursuit.cjs`.

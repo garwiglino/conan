@@ -4,7 +4,7 @@ const site='camp',other=A.nodes.find(n=>n.rest&&n.id!==site).id;
 function setup(saved){const w={clock:480},j=create(A,w,saved);return {w,j};}
 function crime(j,kind='murder',witnesses=['w1','w2'],victim='victim',at=480){return j.record({site,kind,witnesses,victim,at});}
 test('an unseen crime is a fact, not an omniscient bounty or world-wide reputation',()=>{
- const {j}=setup(),c=crime(j);assert.equal(j.effect(site).wanted,false);assert.equal(j.effect(site,'w1').refuse,true);assert.equal(j.effect(other,'w1').refuse,false);assert.equal(j.file(c.id,'invented',490),false);
+ const {j}=setup(),c=crime(j);assert.equal(j.effect(site).wanted,false);assert.equal(j.effect(site,'w1').refuse,true);assert.equal(j.effect(other,'w1').refuse,true);assert.equal(j.effect(other,'w1').wanted,false);assert.equal(j.file(c.id,'invented',490),false);
 });
 test('a witness killed before reporting cannot testify; another living witness still can',()=>{
  const {j}=setup(),c=crime(j);j.witnessDied('w1');assert.equal(j.file(c.id,'w1',490),false);assert.equal(j.effect(site).wanted,false);assert.equal(j.file(c.id,'w2',500),true);assert.equal(j.effect(site,null,500).wanted,true);

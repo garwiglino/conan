@@ -49,3 +49,7 @@
 #screen.panels-x .joystick:not(.active){left:calc(var(--gl) - var(--pc) + (var(--pc) - var(--joy-size))/2)!important}
 #screen.panels-x .action-pad{right:calc(var(--gr) - var(--pc) + 4px)!important;bottom:calc(env(safe-area-inset-bottom) + 8px)!important}
 @media(max-height:430px){.journey-shell{padding:8px}.journey-shell header{margin-bottom:6px}#screen.panels-x .console-bar{top:calc(env(safe-area-inset-top) + 6px)}#screen.panels-x .tools{gap:3px!important}}
+
+#pursuitButton{position:absolute;z-index:8;background:transparent;border:0;border-radius:0;padding:0;box-shadow:none;cursor:pointer;touch-action:manipulation}#pursuitButton[hidden]{display:none!important}#pursuitButton:focus-visible{outline:2px solid #e5bd79;outline-offset:2px}#pursuitRegions article{padding:9px 7px;border-bottom:1px solid #574733}#pursuitRegions p{margin:5px 0;font-size:.85em;line-height:1.45}#pursuitRegions .pursuit-current{border-left:3px solid #e5a071;background:#30251e}
+
+#worldPursuit,#pursuitRegions{min-width:0;overflow-wrap:anywhere}#pursuitRegions article{min-width:0}

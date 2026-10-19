@@ -79,9 +79,9 @@
   if(this.clock<(this._justiceResponseDue??0)||this.time<(this._justiceResponseTry||0))return;
   this._justiceResponseTry=this.time+5;
   const site=this.justiceSite(),effect=j.effect(site,null,this.clock),last=j.state.sightings[site];
-  if(!effect.wanted||!last||this.clock-last.at>30)return;
+  if(!effect.wanted||!last||this.clock-last.at>j.response(site,this.clock).searchMinutes)return;
   const post=s.state.sites[site],jurisdiction=post?.jurisdiction;if(!post||post.guardAvailable<2||post.treasury<12||(post.stock.provisions||0)<4)return;
-  if(s.state.missions.some(m=>m.kind==='justice'&&s.state.sites[m.site]?.jurisdiction===jurisdiction&&m.status!=='returned')||(s.state.cooldowns['justice-'+jurisdiction]||0)>this.clock)return;
+  if(s.state.missions.filter(m=>m.kind==='justice'&&j.zone(m.site)?.id===j.zone(site)?.id&&m.status!=='returned').length>=j.response(site,this.clock).responseSquads||(s.state.cooldowns['justice-'+j.zone(site)?.id]||0)>this.clock)return;
   const deployment=this.planJusticeDeployment(site,last);if(deployment)s.dispatchJustice(site,deployment);
  };
  const update=Game.prototype.update;

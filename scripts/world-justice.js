@@ -5,10 +5,11 @@
 function createWorldJustice(A,W,saved){
  'use strict';
  saved||={};
- const finite=Number.isFinite,day=1440;
+ const finite=Number.isFinite,day=1440;let territorial=null;
  const rules=Object.freeze({assault:{weight:1,wanted:day,penalty:2*day,fear:180},grave_injury:{weight:3,wanted:2*day,penalty:4*day,fear:360},murder:{weight:6,wanted:4*day,penalty:7*day,fear:720}});
  const state={version:1,serial:1,cases:[],sentences:[],scenes:[],sightings:{},warning:null};
  if(saved?.version===1){
+  state.territorial=saved.territorial;
   state.serial=Number.isInteger(saved.serial)&&saved.serial>0?saved.serial:1;
   for(const c of Array.isArray(saved.cases)?saved.cases:[]){
    if(!c||typeof c.id!=='string'||!A.byId[c.site]||typeof c.jurisdiction!=='string'||typeof c.victim!=='string'||!rules[c.kind]||![c.at,c.lastAt].every(finite)||c.reportedAt!==null&&![c.reportedAt,c.wantedUntil,c.penaltyUntil].every(finite)||!c.witnesses||typeof c.witnesses!=='object')continue;
@@ -57,18 +58,21 @@ function createWorldJustice(A,W,saved){
  }
  function witnessDied(id){for(const c of state.cases)if(c.witnesses[id])c.witnesses[id].dead=true;for(const s of state.scenes)if(s.discoveries[id])s.discoveries[id].dead=true;}
  function pending(id,at=W.clock){return state.cases.filter(c=>c.witnesses[id]&&!c.witnesses[id].dead&&c.witnesses[id].filedCount<c.witnesses[id].seenCount&&at-c.witnesses[id].seenAt<=7*day);}
+ function legalKnowledge(c,site,at){return territorial?territorial.knowledge(c,site,at):c.jurisdiction===localSite(site)?.jurisdiction&&c.reportedAt!==null&&c.reportedAt<=at?c:null;}
+ function outstanding(c){return c&&(c.servedAt===null||Number.isFinite(c.servedWeight)&&(territorial?territorial.weight(c):rules[c.knownKind||c.kind].weight)>c.servedWeight);}
  function effect(site,person=null,at=W.clock){
   const s=localSite(site);if(!s)return {wanted:false,score:0,price:1,refuse:false,until:0,cases:[]};
-  const known=state.cases.filter(c=>c.jurisdiction===s.jurisdiction&&(c.reportedAt!==null&&c.reportedAt<=at||person&&c.witnesses[person]&&c.witnesses[person].seenAt<=at));
+  const known=state.cases.map(c=>legalKnowledge(c,site,at)||(person&&c.witnesses[person]?.seenAt<=at?{...c,reportedAt:null}:null)).filter(Boolean);
   let score=0,until=0,fearUntil=0;for(const c of known){const personal=person&&c.witnesses[person],kind=personal&&rules[personal.kind].weight>rules[c.knownKind||personal.kind].weight?personal.kind:c.knownKind||personal?.kind||c.kind,fearAt=personal?.seenAt??Math.max(...Object.values(c.witnesses).filter(k=>k.filedAt!==null).map(k=>k.seenAt),c.at),fearEnd=fearAt+rules[kind].fear,end=c.reportedAt===null?(personal?.seenAt??c.lastAt)+rules[kind].penalty:c.penaltyUntil;fearUntil=Math.max(fearUntil,fearEnd);if(end<=at)continue;const span=rules[kind].penalty;score+=(rules[kind].weight+((c.reportedAt!==null?c.knownIntimidation:c.intimidation)?2:0))*Math.min(1,(end-at)/span);until=Math.max(until,end);}
-  score=Math.min(12,score);return {wanted:known.some(c=>c.reportedAt!==null&&c.servedAt===null&&c.wantedUntil>at),score,price:1+Math.min(.75,score*.12),refuse:fearUntil>at,fearUntil,until,cases:known};
+  score=Math.min(12,score);return {wanted:known.some(c=>legalKnowledge(c,site,at)&&c.reportedAt!==null&&outstanding(c)&&c.wantedUntil>at),score,price:1+Math.min(.75,score*.12),refuse:fearUntil>at,fearUntil,until,cases:known};
  }
  function sentence(site,money,at=W.clock){
   const s=localSite(site);if(!s||!finite(money)||money<0||!finite(at))return null;
-  const cases=state.cases.filter(c=>c.jurisdiction===s.jurisdiction&&c.reportedAt!==null&&c.reportedAt<=at&&c.servedAt===null&&c.wantedUntil>at);if(!cases.length)return null;
-  const weight=Math.min(12,cases.reduce((n,c)=>n+rules[c.knownKind||c.kind].weight+(c.knownIntimidation?2:0),0)),minutes=Math.min(1440,240+weight*120),rate=Math.min(.5,.12+weight*.04),fine=Math.min(Math.floor(money),Math.ceil(6+money*rate));
-  const serial=state.serial++,snt={id:'sentence-'+serial,serial,site,at,releaseAt:at+minutes,minutes,money:fine,caseIds:cases.map(c=>c.id)};
-  for(const c of cases){c.servedAt=at;c.sentence=snt.id;}state.sentences.push(snt);return snt;
+  const cases=state.cases.map(c=>({c,view:legalKnowledge(c,site,at)})).filter(({view})=>outstanding(view)&&view.wantedUntil>at);if(!cases.length)return null;
+  const legalWeight=v=>territorial?territorial.weight(v):rules[v.knownKind||v.kind].weight+(v.knownIntimidation?2:0);
+  const weight=Math.min(12,cases.reduce((n,{c,view})=>n+Math.max(0,legalWeight(view)-(c.servedWeight||0)),0)),minutes=Math.min(1440,240+weight*120),rate=Math.min(.5,.12+weight*.04),fine=Math.min(Math.floor(money),Math.ceil(6+money*rate));
+  const serial=state.serial++,snt={id:'sentence-'+serial,serial,site,at,releaseAt:at+minutes,minutes,money:fine,caseIds:cases.map(({c})=>c.id)};
+  for(const {c,view}of cases){c.servedAt=at;c.servedWeight=Math.max(c.servedWeight||0,legalWeight(view));c.sentence=snt.id;}state.sentences.push(snt);return snt;
  }
  function death({victim,site,x,y,level=0,at=W.clock}){
   if(typeof victim!=='string'||!localSite(site)||![x,y,at].every(finite)||state.scenes.some(s=>s.victims.some(v=>v.id===victim)))return null;
@@ -88,6 +92,7 @@ function createWorldJustice(A,W,saved){
   k.filedAt=at;k.filedCount=k.victims.length;s.reportedAt??=at;s.reportedVictims=[...new Set([...s.reportedVictims,...k.victims])];return true;
  }
  function sighting(site,position,person,at=W.clock,knownAt=W.clock){if(!localSite(site)||!position||![position.x,position.y,at].every(finite)||!effect(site,null,Math.max(knownAt,at)).wanted)return false;const old=state.sightings[site];if(old&&old.at>at)return false;state.sightings[site]={x:position.x,y:position.y,at,by:person};return true;}
- return {state,rules,qualify,localSite,record,file,witnessDied,pending,effect,sentence,death,discover,discoveries,fileDiscovery,sighting,serialize:()=>JSON.parse(JSON.stringify(state))};
+ const api={state,rules,outstanding,qualify,localSite,record,file,witnessDied,pending,effect,sentence,death,discover,discoveries,fileDiscovery,sighting,serialize:()=>JSON.parse(JSON.stringify(state))};
+ territorial=(typeof createTerritorialJustice==='function'?createTerritorialJustice:require('./world-pursuit.js'))(A,W,api,W.simulation?.justiceContext||{});Object.assign(api,territorial);return api;
 }
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice;
