@@ -209,12 +209,118 @@
       "width": 1536,
       "height": 1024,
       "revision": 1
+    },
+    {
+      "boardId": "23-habitat-teremor",
+      "file": "art/humains/architecture/concepts/23-habitat-teremor.png",
+      "generationSource": "exec-c604ee99-db32-4197-ae18-a07ec21152f8.png",
+      "sha256": "9db942f2f4c688220711033f11e1bb9a30d1ccde3a8ad5d3d6259ed7a83ffd74",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "24-habitat-sylverive",
+      "file": "art/humains/architecture/concepts/24-habitat-sylverive.png",
+      "generationSource": "exec-f2f58252-5542-47a3-b31d-9339b5aa6d5f.png",
+      "sha256": "8ab4e554dd337d7466769d69586a8683b859942dff3603cdc88cdc3042166aaf",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "25-habitat-igea",
+      "file": "art/humains/architecture/concepts/25-habitat-igea.png",
+      "generationSource": "exec-8c53efde-7a3a-4ae9-ba9f-d6b184429800.png",
+      "sha256": "8c64c65f8b032be4e910cdd3936bfd0e3de5a6ad9738055d6efe87599e8f335e",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "26-habitat-sarak",
+      "file": "art/humains/architecture/concepts/26-habitat-sarak.png",
+      "generationSource": "exec-f095c584-5655-496e-9572-cb5ec76d8e7d.png",
+      "sha256": "59e4c2e69dfeed707427707552c87237688947485f2ca18c576964580bd9a062",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "27-habitat-varan",
+      "file": "art/humains/architecture/concepts/27-habitat-varan.png",
+      "generationSource": "exec-20d449c5-c19c-4d8a-9680-80641f193223.png",
+      "sha256": "f23c9eadb3d0c77015f17dee834af1eab2e0e41b790b6271ac75578cbbe451b0",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "28-habitat-tagon",
+      "file": "art/humains/architecture/concepts/28-habitat-tagon.png",
+      "generationSource": "exec-a91936df-b97b-4669-9196-3afd8746b4d4.png",
+      "sha256": "050ebd21bd606f60894a2f728df6cb39d70c82b21d5b83ccbc9d0fdd7bf88745",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "29-enceinte-haute-bois",
+      "file": "art/humains/architecture/concepts/29-enceinte-haute-bois.png",
+      "generationSource": "exec-3d08f8a1-1f10-4651-81d7-622978b61f09.png",
+      "sha256": "9392fdcb323ced6cde33461105c3b732795a0062b24938f60f06d85b89014d3e",
+      "width": 1024,
+      "height": 1536,
+      "revision": 1
+    },
+    {
+      "boardId": "30-enceinte-haute-pierre",
+      "file": "art/humains/architecture/concepts/30-enceinte-haute-pierre.png",
+      "generationSource": "exec-22f17f3d-7822-4f83-8912-50ddff2818d0.png",
+      "sha256": "68caa72c83c5d7c0d3033fa79123efe4986e99c2661f5550b3b3c17b10d3b5d5",
+      "width": 1024,
+      "height": 1536,
+      "revision": 1
+    },
+    {
+      "boardId": "31-courtine-haute-chateau",
+      "file": "art/humains/architecture/concepts/31-courtine-haute-chateau.png",
+      "generationSource": "exec-c603be3c-fa60-4550-9131-b1bebbf5cbc9.png",
+      "sha256": "6a172804b4160775d58b54a23825655eea28df5a0dcc983901de5de1b645b08b",
+      "width": 1024,
+      "height": 1536,
+      "revision": 1
+    },
+    {
+      "boardId": "32-portes-hautes-tours",
+      "file": "art/humains/architecture/concepts/32-portes-hautes-tours.png",
+      "generationSource": "exec-e616e423-75bf-4c63-b403-f362e7608e47.png",
+      "sha256": "149c53925929079a2bdd3293526c146bc20e9e00b7df05627b758e2a3f34cd0f",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
+    },
+    {
+      "boardId": "33-habitat-igea-hiver",
+      "file": "art/humains/architecture/concepts/33-habitat-igea-hiver.png",
+      "generationSource": "exec-11d0d99d-fd2e-4114-88b3-22f5d1bb6824.png",
+      "sha256": "81d3e8419f087fbf712b778b770db6ad005d043adf4d2c54112a57d3c523fcbb",
+      "width": 1536,
+      "height": 1024,
+      "revision": 1
     }
   ],
   "projectionGuide": {
     "file": "art/humains/architecture/principe-modules.png",
     "generationSource": "exec-f13288bc-7234-44cf-92be-bad74e49e527.png",
     "sha256": "a72b54f81ba29755fab8b5b89cf5391b64fc51850a98bf13b1bf8aa909b52210",
+    "width": 1536,
+    "height": 1024
+  },
+  "highWallScaleGuide": {
+    "file": "art/humains/architecture/echelle-enceintes-hautes.png",
+    "generationSource": "exec-1f2f3862-876d-47c3-b7bc-736befd35c98.png",
+    "sha256": "93e6ec6d0f5f27511f76b24317a9bb5042e1b1bf43a3bc80cf9d64d18fedc975",
     "width": 1536,
     "height": 1024
   }

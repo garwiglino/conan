@@ -1,6 +1,6 @@
 # Architecture humaine — concepts de villes et villages
 
-Ce lot est un dossier de conception : **22 planches, un guide de raccord, 60 modèles de bâtiments, 48 pièces modulaires et 4 variantes hivernales**. Les PNG précèdent la fabrication JavaScript, selon la méthode retenue pour les postes. Ils ne constituent pas un atlas de sprites runtime ni des quartiers déjà placés.
+Ce lot est un dossier de conception : **33 planches, deux guides, 88 modèles de bâtiments, 72 pièces modulaires et 8 variantes hivernales**. Les PNG précèdent la fabrication JavaScript, selon la méthode retenue pour les postes. Ils ne constituent pas un atlas de sprites runtime ni des quartiers déjà placés.
 
 [Galerie des concepts](../art/humains/architecture/index.html) · [Catalogue et briefs](../data/humains/architecture/concepts.json) · [Couverture des localités](../data/humains/architecture/settlement-coverage.json).
 
@@ -49,6 +49,35 @@ Les six ports océaniques explicitement reconnus dans les fiches sont Branchebas
 | 20 | Citerne, gouttière, encadrement de vanne, conduit, salubrité, cheminée, évent | M33–M40 |
 | 21 | Couvertures, palier, échafaudage, ossature en chantier | M41–M48 |
 | 22 | Les quatre modèles d’Igea sous neige saisonnière | T09-hiver–T12-hiver |
+| 23 | Teremor : petite chaumière, pierre, étage, maisons jumelées | H01–H04 |
+| 24 | Sylverive : ruelle, artisan, galerie, logis collectif | H05–H08 |
+| 25 | Igea : petit logis, rondins, étage, grande maisonnée | H09–H12 |
+| 26 | Sarak : adobe, patio, terrasse, deux logis | H13–H16 |
+| 27 | Varan : logis surélevé, maison ventilée, enduit, véranda | H17–H20 |
+| 28 | Tagon : côtier, lisière, jumelées, galerie | H21–H24 |
+| 29 | Enceinte haute bois : travée, fin, angles, T, ronde, escalier, parapet | M49–M56 |
+| 30 | Enceinte haute pierre de bourg, même programme modulaire | M57–M64 |
+| 31 | Courtine haute de château, même programme modulaire | M65–M72 |
+| 32 | Portes bois/pierre/châtelet et tour de flanquement assorties | F09–F12 |
+| 33 | Les quatre nouvelles maisons d’Igea sous neige | H09-hiver–H12-hiver |
+
+## Variantes d’habitation et enceintes hautes
+
+L’extension ajoute **24 modèles d’habitation** : quatre pour chacun des cinq territoires humains, plus quatre pour les cités de Sylverive, qui restent dans Teremor. Ce sont des silhouettes domestiques distinctes, avec différentes tailles, moyens, couvertures et répartitions des volumes ; elles ne sont pas de simples recolorations d’entrepôts. Chaque maison conserve ses quatre vues cardinales. Les quatre variantes d’Igea sont également proposées sous neige saisonnière, avec entrées et marches dégagées.
+
+Les références H01–H24 sont reliées aux 83 localités par `housingVariantConcepts`. Le champ `conditionalSnowHousingConcepts` réserve les versions hivernales aux implantations d’Igea selon les conditions réelles. Cela enrichit les possibilités d’aménagement sans placer de bâtiment ou déplacer un point d’accès.
+
+| Kit d’enceinte haute | Modules | Hauteur totale cible | Marche de ronde cible | Épaisseur cible | Porte / tour assortie |
+|---|---|---|---|---|---|
+| Bois de village | M49–M56 | 40 px | 32 px | 8 px | F09 |
+| Pierre de bourg | M57–M64 | 48 px | 38 px | 12 px | F10 |
+| Courtine de château | M65–M72 | 64 px | 52 px | 16 px | F11, F12 |
+
+La [référence d’échelle des enceintes hautes](../art/humains/architecture/echelle-enceintes-hautes.png) compare ces trois familles au personnage natif de 19 pixels. Ce sont des **dimensions natives de fabrication proposées**, pas des mesures garanties des PNG générés. Le bois fait environ deux hauteurs d’homme, le bourg deux et demie, et la courtine de château plus de trois. Les murs bas déjà catalogués conservent leur usage de clôture, séparation ou parapet.
+
+Chaque kit haut comprend travée droite, terminaison, angles intérieur/extérieur, T, platelage de ronde, escalier frontal et parapet séparé. Les platelages restent vus du dessus ; les parapets s’accolent à leur bord. M55, M63 et M71 ont uniquement une orientation frontale, comme M16 et M31 ; leur seconde illustration montre un raccord au palier. Les contours de l’emprise et les branches des angles restent dans les axes de la carte, avec une caméra fixe.
+
+Les raccords d’un kit partagent une altitude de marche et une épaisseur définies. Mélanger directement une courtine de 64 px et un mur de 40 px laisserait un décalage : il faut choisir une même famille ou fabriquer explicitement une transition, qui n’est pas fournie dans ce lot. Les champs `fortificationKits` et `optionalHighFortificationFamilies` de la couverture rendent ce choix explicite. Ces enceintes sont des options soumises aux moyens, mission, matériaux et terrain du lieu ; aucun village ne reçoit automatiquement un château.
 
 ## Échelle et vues
 
@@ -88,4 +117,4 @@ En Igea, la neige se limite aux couvertures exposées et rebords inutilisés ; p
 
 ## Reproduction
 
-`python scripts/build-human-architecture-concepts.py` régénère le catalogue et les briefs texte, sans toucher aux PNG. `python scripts/build-human-architecture-gallery.py` reconstruit la galerie et les correspondances à partir de la bible actuelle. Les images sont conservées à part avec leur provenance. Ce lot n’importe aucune bibliothèque d’architecture dans le jeu principal et ne modifie aucun habitant ou atlas de terrain.
+`python scripts/build-human-architecture-concepts.py` régénère le catalogue et les briefs texte, sans toucher aux PNG ; il charge les variantes de `scripts/human_architecture_expansion.py`. `python scripts/build-human-architecture-gallery.py` reconstruit la galerie et les correspondances à partir de la bible actuelle. Les images sont conservées à part avec leur provenance. Ce lot n’importe aucune bibliothèque d’architecture dans le jeu principal et ne modifie aucun habitant ou atlas de terrain.

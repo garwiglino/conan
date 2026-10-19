@@ -180,6 +180,9 @@ BOARDS.append(group('22-igea-hiver','Igea — neige saisonnière','seasonal',[
  for i,l,b,e in [(x['id'],x['label'],x['brief'],x['nativeEnvelope']) for x in BOARDS[2]['items']]
 ], 'Garder pierre et bois identiques à la planche Igea sans neige. Neige bleu très pâle seulement en couverture exposée.'))
 
+from human_architecture_expansion import expansion
+BOARDS.extend(expansion(group))
+
 COMMON = '''Créer une planche de CONCEPT ART PIXEL ART pour Hearthreaver, cohérente avec les références de postes humains et le personnage natif joint. Game Boy chibi en couleurs limitées, vrais amas de pixels carrés nets, pas de rendu peint, pas de lissage, contour très sombre #100c14, petits volumes géométriques lisibles. Fond UNI uni vert sombre #202e29. Planche de fabrication claire, aucune scène, aucun paysage, pas d'isométrie.
 La référence humaine exacte fait 19 pixels natifs de haut, pas 22 ou 24. Chaque ouverture de porte laisse passer un humain de 19 px : hauteur utile environ 24 px, largeur simple 16 px. Petites maisons environ 64-80 px de large, grands bâtiments 96-144 px, tours jusqu'à 128 px haut ; dessiner avec un même grossissement pixel partout. Un petit humain séparé en haut sert uniquement de règle, jamais intégré à un bâtiment. Socles/bandes de sol, terrain, herbe, arbres, eau, rochers, sable, routes, trottoirs, neige au sol : INTERDITS. Les bâtiments finissent directement à leur base structurelle. Les étages et escaliers sont des structures, pas des tuiles de sol. Pas de meubles, machines de poste, outils, véhicules, animaux ou personnages dans les bâtiments. Pas de texte dans les textures, pas d'armoiries, pas de drapeaux ou symboles religieux inventés. Texte de légende français court hors des objets.
 CAMÉRA STRICTEMENT CARDINALE : façades droites parallèles à l'image, verticales verticales, bases horizontales. On ne voit JAMAIS simultanément une façade et un mur latéral. Les pentes de vrais toits sont permises, mais AUCUN angle 3/4 ou bâtiment isométrique. Dessiner comme des ÉLÉVATIONS orthographiques cardinales de sprites RPG, caméra sans rotation diagonale. Chaque vue représente le MÊME volume, la même largeur/profondeur, les mêmes portes, cheminées et ouvertures autour du bâtiment. Ne pas réinventer une porte sur chaque face. Droite/gauche sont les deux profils du même bâti ; dos = vraie façade arrière. Les annexes, marches et cheminées passent du bon côté et s'occultent logiquement. Pas de lettres parasites dans les sprites.
@@ -201,12 +204,17 @@ def prompt(board):
     else:
         layout = '''Disposition paysage, grand titre en haut puis QUATRE rangées et QUATRE colonnes. Chaque rangée contient un seul bâtiment répété en QUATRE VUES DISTINCTES du même modèle. Colonnes exactement FACE / DROITE / DOS / GAUCHE. Quatre bâtiments au total, SEIZE dessins. Respecter les profils étroits lorsque la profondeur est plus faible que la largeur. Numéro et nom au début de chaque ligne. Dimensions natives largeur × profondeur × hauteur dans brief = proportions cibles, pas texte à recopier partout. Petit socket cyan séparé au pied de la vraie entrée de chaque vue où l'entrée est visible ; si la porte est sur face cachée, aucun socket faux devant le mur arrière. Le socket ne fait pas partie de l'art. Le premier plan d'un seuil pourra masquer les pieds, toiture/haut du mur sont détachables lors de la transcription future ; ne pas faire de vue intérieure coupée dans ces seize vues.'''
     rows='\n'.join(f"{n+1}. {x['id']} — {x['label']} : {x['brief']} Proportions natives cibles {x['nativeEnvelope']}." for n,x in enumerate(board['items']))
+    if board.get('layout')=='high_wall_portrait':
+        h=board['heightPx']
+        layout=layout.replace('Disposition paysage','FORMAT PORTRAIT VERTICAL, image 1024x1536 ou 1536x2048. Disposition portrait')
+        layout+=f'''\nRÈGLE VISUELLE DE HAUTEUR : un module droit est UNE TRAVÉE courte de48px de long et {h}px de HAUT, pas sept travées étirées côte à côte. La face du mur droit doit être presque CARRÉE ou PLUS HAUTE QUE LARGE. Dessiner au maximum quatre ou cinq grandes pierres de largeur, mais au moins dix assises de pierres de hauteur si pierre ; si bois, longues palissades massives sur toute la hauteur. Pas de paroi deux ou trois fois plus large que haute : ce serait encore un muret. Un humain de19px, dessiné séparément à côté du pied de la première paroi, doit être clairement plus petit : le mur est {h/19:.2f}fois sa hauteur. Utiliser le MÊME zoom pour l'humain et les murs. Dans la colonne N–S le couronnement reste une LONGUE bande vue par-dessus ; ne pas étirer un profil terminal. Les plateformes et escaliers peuvent être plus bas en dessin, c'est leur surface qui est vue par-dessus. Les murs doivent surtout montrer une longue élévation, de la base au parapet, hauteur visible sans raccourcir pour remplir une cellule horizontale.'''
     common=COMMON
     priority='Priorité absolue : chaque cellule est une vraie élévation de face ou de profil, jamais de biais.'
     if board['kind']=='module':
         common=COMMON.split('CAMÉRA STRICTEMENT CARDINALE :')[0]+MODULE_CAMERA
         priority='Priorité absolue : les deux orientations sont des segments utilisables dans la carte, sommet visible, caméra RPG unique. Les VERTICAUX montrent une vraie longueur N–S, pas le bout de l’objet vu de profil.'
-    return common+'\nTITRE : '+board['title'].upper()+'\n'+layout+'\nMATÉRIAUX : '+board['material']+'\nCONTENU EXACT :\n'+rows+'\n'+priority+' Pixel art très proche des postes de référence, volumes chibi sobres et fonctionnels.'
+    extra='\n'+board['additionalBrief'] if board.get('additionalBrief') else ''
+    return common+'\nTITRE : '+board['title'].upper()+'\n'+layout+'\nMATÉRIAUX : '+board['material']+'\nCONTENU EXACT :\n'+rows+extra+'\n'+priority+' Pixel art très proche des postes de référence, volumes chibi sobres et fonctionnels.'
 
 def build():
     OUT.mkdir(parents=True,exist_ok=True)
@@ -216,6 +224,7 @@ def build():
       'stairsProjection':'M16/M31 : uniquement de face, montée vers le haut de la carte ; seconde case = exemple de raccord au palier',
       'platformProjection':'surface praticable vue du dessus dans les deux orientations ; barrières indépendantes accolées aux bords, passage d’escalier ouvert',
       'projectionReference':'art/humains/architecture/principe-modules.png',
+      'highWallScaleReference':'art/humains/architecture/echelle-enceintes-hautes.png',
       'nativeEnvelopeMeaning':'[largeur, profondeur, hauteur], cibles de fabrication non mesurées sur PNG généré',
       'sources':['docs/world-bible/01-geopolitique.md','docs/world-bible/02-peuples-et-villes.md',
                  'docs/world-bible/03-ressources-et-echanges.md','docs/world-bible/05-societes-et-criminalite.md',

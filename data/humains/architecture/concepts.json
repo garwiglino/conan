@@ -16,6 +16,7 @@
   "stairsProjection": "M16/M31 : uniquement de face, montée vers le haut de la carte ; seconde case = exemple de raccord au palier",
   "platformProjection": "surface praticable vue du dessus dans les deux orientations ; barrières indépendantes accolées aux bords, passage d’escalier ouvert",
   "projectionReference": "art/humains/architecture/principe-modules.png",
+  "highWallScaleReference": "art/humains/architecture/echelle-enceintes-hautes.png",
   "nativeEnvelopeMeaning": "[largeur, profondeur, hauteur], cibles de fabrication non mesurées sur PNG généré",
   "sources": [
     "docs/world-bible/01-geopolitique.md",
@@ -1534,6 +1535,967 @@
           ]
         }
       ]
+    },
+    {
+      "id": "23-habitat-teremor",
+      "title": "Teremor — variantes d’habitation",
+      "kind": "building",
+      "material": "Bois brun, pierre grise chaude, enduit écru, chaume ocre et tuiles terre cuite. Quatre maisons civiles de silhouettes et moyens différents, sans décoration superflue.",
+      "image": "art/humains/architecture/concepts/23-habitat-teremor.png",
+      "items": [
+        {
+          "id": "H01",
+          "label": "Petite chaumière",
+          "brief": "Logis modeste à une pièce, chaume à deux pans, mur enduit écru et bois. Façade large avec porte au centre, unique cheminée au fond à gauche. Toit à grande pente sur FACE/DOS ; pignons sur DROITE/GAUCHE.",
+          "nativeEnvelope": [
+            64,
+            48,
+            56
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Teremor"
+        },
+        {
+          "id": "H02",
+          "label": "Maison de pierre",
+          "brief": "Petite maison familiale basse en pierre grise chaude, toit tuiles brunes à deux pans, porte en façade à gauche, deux fenêtres. Même axe de faîte et mêmes ouvertures projetées sur les quatre vues.",
+          "nativeEnvelope": [
+            80,
+            64,
+            64
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Teremor"
+        },
+        {
+          "id": "H03",
+          "label": "Logis à étage",
+          "brief": "Maison familiale en enduit et colombage, un étage, petite lucarne frontale, toit tuiles. Porte uniquement façade, pas de boutique ou annexe de métier.",
+          "nativeEnvelope": [
+            64,
+            56,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Teremor"
+        },
+        {
+          "id": "H04",
+          "label": "Maisons jumelées",
+          "brief": "Deux petits logements accolés sous un toit commun allongé en tuiles, deux portes frontales, deux cheminées. La mitoyenneté change vraiment la silhouette ; ne pas faire un autre manoir.",
+          "nativeEnvelope": [
+            112,
+            64,
+            72
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Teremor"
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Teremor"
+    },
+    {
+      "id": "24-habitat-sylverive",
+      "title": "Sylverive — logements de cité",
+      "kind": "building",
+      "material": "Famille de Teremor adaptée au tissu urbain de Sylverive : pierre, enduit, bois sombre et tuiles brunes. Les façades restent civiles, pas quatre entrepôts.",
+      "image": "art/humains/architecture/concepts/24-habitat-sylverive.png",
+      "items": [
+        {
+          "id": "H05",
+          "label": "Logis de ruelle",
+          "brief": "Petite maison urbaine étroite à deux niveaux, rez-de-chaussée pierre et étage enduit, toit tuiles, façade étroite, murs latéraux aveugles pour mitoyenneté.",
+          "nativeEnvelope": [
+            48,
+            64,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sylverive"
+        },
+        {
+          "id": "H06",
+          "label": "Maison d’artisan habitée",
+          "brief": "Maison civile à étage, colombage soigné, entrée latérale de façade et grande fenêtre domestique ; aucun atelier, étal ou outil. Pignon avant/arrière et pentes de toiture sur les profils.",
+          "nativeEnvelope": [
+            64,
+            64,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sylverive"
+        },
+        {
+          "id": "H07",
+          "label": "Maison familiale à galerie",
+          "brief": "Maison confortable à deux niveaux, maçonnerie claire, étroite galerie frontale en bois, volets, toit brun ; galerie vide et sans escalier latéral.",
+          "nativeEnvelope": [
+            96,
+            72,
+            96
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sylverive"
+        },
+        {
+          "id": "H08",
+          "label": "Logis collectif de port",
+          "brief": "Petit immeuble de deux logements superposés, entrée commune, petites fenêtres régulières, enduit crème et bois, toit tuiles. Aucun bateau, ancre, quai, eau ou magasin.",
+          "nativeEnvelope": [
+            80,
+            72,
+            104
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sylverive"
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Sylverive"
+    },
+    {
+      "id": "25-habitat-igea",
+      "title": "Igea — maisons de vallée",
+      "kind": "building",
+      "material": "Pierre froide grise, bois brun, bardeaux sombres, isolation et sas sobres. Toits adaptés aux intempéries. État de saison sans neige, pas de toundra ou forêt dessinée.",
+      "image": "art/humains/architecture/concepts/25-habitat-igea.png",
+      "items": [
+        {
+          "id": "H09",
+          "label": "Petit logis de pierre",
+          "brief": "Petite maison basse de pierre épaisse, toit pentu en bardeaux sombres, sas frontal court, une cheminée à gauche. État sans neige.",
+          "nativeEnvelope": [
+            64,
+            56,
+            64
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Igea"
+        },
+        {
+          "id": "H10",
+          "label": "Maison de rondins",
+          "brief": "Maison familiale en rondins bruns sur soubassement pierre, toit pentu, façade large à deux fenêtres et porte centrale. Faîte parallèle à façade, pignons sur les profils. Sans neige.",
+          "nativeEnvelope": [
+            80,
+            64,
+            72
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Igea"
+        },
+        {
+          "id": "H11",
+          "label": "Maison de vallée à étage",
+          "brief": "Logement compact à un étage en pierre et bois, toit pentu, entrée protégée mais sans escalier de profil. Deux fenêtres en haut, une porte en façade, cheminée au fond. Sans neige.",
+          "nativeEnvelope": [
+            72,
+            64,
+            96
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Igea"
+        },
+        {
+          "id": "H12",
+          "label": "Grande maison de maisonnée",
+          "brief": "Long logement collectif de vallée, ailes gauche/droite sous deux volumes de toit raccordés, deux portes frontales, bois et pierre. Intérieur vide, pas de forge, caserne ou grenier. Sans neige.",
+          "nativeEnvelope": [
+            128,
+            72,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Igea"
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Igea"
+    },
+    {
+      "id": "26-habitat-sarak",
+      "title": "Sarak — variantes de maisons",
+      "kind": "building",
+      "material": "Adobe sable et argile, pierre ocre, bois sombre en petite quantité et toile écrue d’ombrage. Variantes domestiques pratiques des bassins habités, pas de désert/sol dessiné.",
+      "image": "art/humains/architecture/concepts/26-habitat-sarak.png",
+      "items": [
+        {
+          "id": "H13",
+          "label": "Petit logis d’adobe",
+          "brief": "Petit habitat de terre crue, une porte ombragée et petite fenêtre haute, toit terrasse à parapet plein simple, pas de créneaux militaires.",
+          "nativeEnvelope": [
+            64,
+            56,
+            48
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sarak"
+        },
+        {
+          "id": "H14",
+          "label": "Maison à patio",
+          "brief": "Maison familiale en U autour d’un petit patio intérieur, vue cardinale sans vue du dessus ; porte unique sur façade. Enduit sable et linteaux bois, terrasse simple, stores écrus.",
+          "nativeEnvelope": [
+            96,
+            80,
+            64
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sarak"
+        },
+        {
+          "id": "H15",
+          "label": "Logis à étage et terrasse",
+          "brief": "Maison urbaine compacte à étage en pierre ocre et enduit clair, petites fenêtres, terrasse protégée par parapet plein. Accès de terrasse intérieur, aucun escalier de profil.",
+          "nativeEnvelope": [
+            64,
+            64,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sarak"
+        },
+        {
+          "id": "H16",
+          "label": "Maisonnée à deux logis",
+          "brief": "Deux habitations familiales accolées, volumes bas en adobe clair de hauteurs légèrement différentes, deux portes frontales protégées par auvents. Pas de palais, coupole ou symbole religieux.",
+          "nativeEnvelope": [
+            112,
+            72,
+            64
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Sarak"
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Sarak"
+    },
+    {
+      "id": "27-habitat-varan",
+      "title": "Varan — maisons ventilées",
+      "kind": "building",
+      "material": "Bois brun chaud, pierre grise, fibres et bardeaux, grandes aérations et débords. Le bâti humain est sur un sol viable ou sur supports courts ; aucune maison dans un arbre.",
+      "image": "art/humains/architecture/concepts/27-habitat-varan.png",
+      "items": [
+        {
+          "id": "H17",
+          "label": "Petit logis surélevé",
+          "brief": "Petite habitation bois sur courts piliers pierre, plancher haut de 6px natifs seulement, deux marches DE FACE à l’entrée, toit fibres à large débord. Escalier seulement en façade, caché derrière le volume depuis le dos.",
+          "nativeEnvelope": [
+            64,
+            56,
+            64
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Varan"
+        },
+        {
+          "id": "H18",
+          "label": "Maison familiale ventilée",
+          "brief": "Deux volumes d’habitation en bois à aérations hautes, soubassement pierre sec, toiture bardeaux large, porte et porche frontal sans escalier latéral.",
+          "nativeEnvelope": [
+            96,
+            72,
+            80
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Varan"
+        },
+        {
+          "id": "H19",
+          "label": "Logis de bourg en enduit",
+          "brief": "Maison humaine sur fondation pierre drainée, murs enduit crème et montants bois, un petit étage, toit à débords. Pas de plateforme naturelle ni marais.",
+          "nativeEnvelope": [
+            72,
+            64,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Varan"
+        },
+        {
+          "id": "H20",
+          "label": "Maison à véranda abritée",
+          "brief": "Logement familial large en bois, véranda frontale couverte vide, volets ajourés, toiture à deux pans. Plancher de véranda proche du sol, aucune volée de marches latérale.",
+          "nativeEnvelope": [
+            112,
+            72,
+            80
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Varan"
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Varan"
+    },
+    {
+      "id": "28-habitat-tagon",
+      "title": "Tagon — maisons côtières et forestières",
+      "kind": "building",
+      "material": "Bois brun/miel, pierre chaude, fibres paille et bardeaux. Architecture humaine sobre de l’habitat côtier et intérieur ; pas de hutte perchée ni de navire.",
+      "image": "art/humains/architecture/concepts/28-habitat-tagon.png",
+      "items": [
+        {
+          "id": "H21",
+          "label": "Petit logis côtier",
+          "brief": "Petite maison basse de bois sur base pierre, toit fibres dorées renforcé, volets et une porte frontale ; pas de coquillages décoratifs géants.",
+          "nativeEnvelope": [
+            64,
+            56,
+            64
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Tagon"
+        },
+        {
+          "id": "H22",
+          "label": "Maison de lisière",
+          "brief": "Maison familiale de bois foncé et enduit, grand toit fibres, petit porche centré, pignons latéraux et vraie façade arrière. Pas d’arbre ou végétation.",
+          "nativeEnvelope": [
+            80,
+            64,
+            72
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Tagon"
+        },
+        {
+          "id": "H23",
+          "label": "Maisons de bourg jumelées",
+          "brief": "Deux logis mitoyens à un étage bas, rez-de-chaussée pierre et haut bois, toiture bardeaux, deux entrées en façade. Pas de boutique ni entrepôt.",
+          "nativeEnvelope": [
+            112,
+            72,
+            88
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Tagon"
+        },
+        {
+          "id": "H24",
+          "label": "Maison familiale à galerie",
+          "brief": "Maison confortable en bois miel et pierre, galerie frontale étroite, étage aéré, toit fibres/bardeaux. Aucun escalier de profil, aucune machinerie navale.",
+          "nativeEnvelope": [
+            96,
+            72,
+            96
+          ],
+          "function": "human_housing",
+          "regionalFamily": "Tagon"
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Tagon"
+    },
+    {
+      "id": "29-enceinte-haute-bois",
+      "title": "Enceinte haute de village — bois",
+      "kind": "module",
+      "material": "Rondins bruns massifs et renforts bois, couronnement simple, petites embases pierre. Hauteur totale40px, marche de ronde32px. Compatible village tempéré, vallée d’Igea ou habitat forestier selon ressources ; pas de neige automatique.",
+      "image": "art/humains/architecture/concepts/29-enceinte-haute-bois.png",
+      "items": [
+        {
+          "id": "M49",
+          "label": "Mur haut droit",
+          "brief": "Vrai mur de protection haut 40px natifs, fondation et élévation massives E–O ; version N–S = TOUT le couronnement longitudinal vu par-dessus, PAS un pilier dressé. Raccords de même hauteur.",
+          "nativeEnvelope": [
+            48,
+            8,
+            40
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M50",
+          "label": "Terminaison haute",
+          "brief": "Fin propre d’une enceinte haute avec extrémité fermée, même épaisseur et hauteur que le mur droit. La version N–S court sur toute sa longueur dans la carte.",
+          "nativeEnvelope": [
+            32,
+            8,
+            40
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M51",
+          "label": "Angle extérieur haut",
+          "brief": "Vrai L dans les axes de la carte : sommet continu et deux branches longues ; extérieur visible, pas une façade plate avec un poteau.",
+          "nativeEnvelope": [
+            48,
+            48,
+            40
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M52",
+          "label": "Angle intérieur haut",
+          "brief": "Vrai L inversé, montrant le côté intérieur et les consoles de support ; sommet sans fente, emprise orthogonale.",
+          "nativeEnvelope": [
+            48,
+            48,
+            40
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M53",
+          "label": "Jonction haute en T",
+          "brief": "Trois branches réelles dans la carte, couronnement continu, même hauteur de murs et épaisseur, pas une élévation plate.",
+          "nativeEnvelope": [
+            48,
+            48,
+            40
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M54",
+          "label": "Platelage de ronde haut",
+          "brief": "Plateforme porteuse vide VUE DU DESSUS dans les deux axes, hauteur de marche 32px. Pas de barrière intégrée : parapet séparé. Les supports courts suggèrent l’altitude sans masquer la surface praticable.",
+          "nativeEnvelope": [
+            48,
+            24,
+            32
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M55",
+          "label": "Escalier frontal de ronde",
+          "brief": "UNIQUE VUE DE FACE : volée de marches horizontales qui monte vers le haut de l’écran jusqu’au palier de ronde à 32px. AUCUN profil latéral. Deuxième case = même escalier frontal raccordé à un palier vide vu du dessus.",
+          "nativeEnvelope": [
+            24,
+            64,
+            32
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "front"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M56",
+          "label": "Parapet haut raccordable",
+          "brief": "Garde-corps plein de protection, créneaux si pierre, à poser EXACTEMENT au bord du platelage. Version N–S = dessus du parapet sur toute sa longueur, raccords haut/bas. Pas de barrière intégrée au plancher.",
+          "nativeEnvelope": [
+            48,
+            8,
+            8
+          ],
+          "wallFamily": "high_village_timber",
+          "wallHeightPx": 40,
+          "walkHeightPx": 32,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        }
+      ],
+      "category": "high_fortifications",
+      "wallFamily": "high_village_timber",
+      "heightPx": 40,
+      "walkHeightPx": 32,
+      "thicknessPx": 8,
+      "layout": "high_wall_portrait",
+      "additionalBrief": "Ces murs doivent être visiblement HAUTS : humain19px, mur40px de haut ; dessiner à une échelle uniforme, pas un muret arrivant aux épaules. En E–O on voit la grande élévation du mur sous la petite bande de couronnement ; en N–S on voit la bande LONGUE de couronnement dans le plan de carte, avec dalles/sommets successifs et courte face proche en bas. L’altitude physique est la même : on ne réduit pas le mur N–S en clôture basse. Le platelage de ronde est à hauteur32px et le parapet séparé s’accole à son bord. Escalier M55 : FACE UNIQUEMENT et RACCORDEMENT PALIER, pas une version de côté. Ajouter un petit exemple d’enceinte en L, haut mur, platelage vu du dessus et escalier FRONTAL. Aucun sol, eau, bâtiment ou paysage. Échelle humain19px séparée en haut. Même caméra que le guide des modules."
+    },
+    {
+      "id": "30-enceinte-haute-pierre",
+      "title": "Enceinte haute de bourg — pierre",
+      "kind": "module",
+      "material": "Pierre grise chaude maçonnée, mortier discret, créneaux sobres. Hauteur totale48px, marche de ronde38px. Palette ocre de Sarak possible sans changer la géométrie.",
+      "image": "art/humains/architecture/concepts/30-enceinte-haute-pierre.png",
+      "items": [
+        {
+          "id": "M57",
+          "label": "Mur haut droit",
+          "brief": "Vrai mur de protection haut 48px natifs, fondation et élévation massives E–O ; version N–S = TOUT le couronnement longitudinal vu par-dessus, PAS un pilier dressé. Raccords de même hauteur.",
+          "nativeEnvelope": [
+            48,
+            12,
+            48
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M58",
+          "label": "Terminaison haute",
+          "brief": "Fin propre d’une enceinte haute avec extrémité fermée, même épaisseur et hauteur que le mur droit. La version N–S court sur toute sa longueur dans la carte.",
+          "nativeEnvelope": [
+            32,
+            12,
+            48
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M59",
+          "label": "Angle extérieur haut",
+          "brief": "Vrai L dans les axes de la carte : sommet continu et deux branches longues ; extérieur visible, pas une façade plate avec un poteau.",
+          "nativeEnvelope": [
+            48,
+            48,
+            48
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M60",
+          "label": "Angle intérieur haut",
+          "brief": "Vrai L inversé, montrant le côté intérieur et les consoles de support ; sommet sans fente, emprise orthogonale.",
+          "nativeEnvelope": [
+            48,
+            48,
+            48
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M61",
+          "label": "Jonction haute en T",
+          "brief": "Trois branches réelles dans la carte, couronnement continu, même hauteur de murs et épaisseur, pas une élévation plate.",
+          "nativeEnvelope": [
+            48,
+            48,
+            48
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M62",
+          "label": "Platelage de ronde haut",
+          "brief": "Plateforme porteuse vide VUE DU DESSUS dans les deux axes, hauteur de marche 38px. Pas de barrière intégrée : parapet séparé. Les supports courts suggèrent l’altitude sans masquer la surface praticable.",
+          "nativeEnvelope": [
+            48,
+            24,
+            38
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M63",
+          "label": "Escalier frontal de ronde",
+          "brief": "UNIQUE VUE DE FACE : volée de marches horizontales qui monte vers le haut de l’écran jusqu’au palier de ronde à 38px. AUCUN profil latéral. Deuxième case = même escalier frontal raccordé à un palier vide vu du dessus.",
+          "nativeEnvelope": [
+            24,
+            64,
+            38
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "front"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M64",
+          "label": "Parapet haut raccordable",
+          "brief": "Garde-corps plein de protection, créneaux si pierre, à poser EXACTEMENT au bord du platelage. Version N–S = dessus du parapet sur toute sa longueur, raccords haut/bas. Pas de barrière intégrée au plancher.",
+          "nativeEnvelope": [
+            48,
+            12,
+            10
+          ],
+          "wallFamily": "high_village_stone",
+          "wallHeightPx": 48,
+          "walkHeightPx": 38,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        }
+      ],
+      "category": "high_fortifications",
+      "wallFamily": "high_village_stone",
+      "heightPx": 48,
+      "walkHeightPx": 38,
+      "thicknessPx": 12,
+      "layout": "high_wall_portrait",
+      "additionalBrief": "Ces murs doivent être visiblement HAUTS : humain19px, mur48px de haut ; dessiner à une échelle uniforme, pas un muret arrivant aux épaules. En E–O on voit la grande élévation du mur sous la petite bande de couronnement ; en N–S on voit la bande LONGUE de couronnement dans le plan de carte, avec dalles/sommets successifs et courte face proche en bas. L’altitude physique est la même : on ne réduit pas le mur N–S en clôture basse. Le platelage de ronde est à hauteur38px et le parapet séparé s’accole à son bord. Escalier M63 : FACE UNIQUEMENT et RACCORDEMENT PALIER, pas une version de côté. Ajouter un petit exemple d’enceinte en L, haut mur, platelage vu du dessus et escalier FRONTAL. Aucun sol, eau, bâtiment ou paysage. Échelle humain19px séparée en haut. Même caméra que le guide des modules."
+    },
+    {
+      "id": "31-courtine-haute-chateau",
+      "title": "Courtine haute de château",
+      "kind": "module",
+      "material": "Gros blocs de pierre grise, base renforcée sobre, parapet crénelé massif. Hauteur totale64px, marche de ronde52px ; environ3,4fois un humain natif19px. Pas de mur démesuré ou de décor de guerre.",
+      "image": "art/humains/architecture/concepts/31-courtine-haute-chateau.png",
+      "items": [
+        {
+          "id": "M65",
+          "label": "Mur haut droit",
+          "brief": "Vrai mur de protection haut 64px natifs, fondation et élévation massives E–O ; version N–S = TOUT le couronnement longitudinal vu par-dessus, PAS un pilier dressé. Raccords de même hauteur.",
+          "nativeEnvelope": [
+            48,
+            16,
+            64
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M66",
+          "label": "Terminaison haute",
+          "brief": "Fin propre d’une enceinte haute avec extrémité fermée, même épaisseur et hauteur que le mur droit. La version N–S court sur toute sa longueur dans la carte.",
+          "nativeEnvelope": [
+            32,
+            16,
+            64
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M67",
+          "label": "Angle extérieur haut",
+          "brief": "Vrai L dans les axes de la carte : sommet continu et deux branches longues ; extérieur visible, pas une façade plate avec un poteau.",
+          "nativeEnvelope": [
+            48,
+            48,
+            64
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M68",
+          "label": "Angle intérieur haut",
+          "brief": "Vrai L inversé, montrant le côté intérieur et les consoles de support ; sommet sans fente, emprise orthogonale.",
+          "nativeEnvelope": [
+            48,
+            48,
+            64
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M69",
+          "label": "Jonction haute en T",
+          "brief": "Trois branches réelles dans la carte, couronnement continu, même hauteur de murs et épaisseur, pas une élévation plate.",
+          "nativeEnvelope": [
+            48,
+            48,
+            64
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M70",
+          "label": "Platelage de ronde haut",
+          "brief": "Plateforme porteuse vide VUE DU DESSUS dans les deux axes, hauteur de marche 52px. Pas de barrière intégrée : parapet séparé. Les supports courts suggèrent l’altitude sans masquer la surface praticable.",
+          "nativeEnvelope": [
+            48,
+            24,
+            52
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M71",
+          "label": "Escalier frontal de ronde",
+          "brief": "UNIQUE VUE DE FACE : volée de marches horizontales qui monte vers le haut de l’écran jusqu’au palier de ronde à 52px. AUCUN profil latéral. Deuxième case = même escalier frontal raccordé à un palier vide vu du dessus.",
+          "nativeEnvelope": [
+            24,
+            64,
+            52
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "front"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        },
+        {
+          "id": "M72",
+          "label": "Parapet haut raccordable",
+          "brief": "Garde-corps plein de protection, créneaux si pierre, à poser EXACTEMENT au bord du platelage. Version N–S = dessus du parapet sur toute sa longueur, raccords haut/bas. Pas de barrière intégrée au plancher.",
+          "nativeEnvelope": [
+            48,
+            16,
+            12
+          ],
+          "wallFamily": "high_castle_stone",
+          "wallHeightPx": 64,
+          "walkHeightPx": 52,
+          "orientations": [
+            "east_west",
+            "north_south"
+          ],
+          "scaleStatus": "native_targets_not_measured_png",
+          "connectorGridPx": 16
+        }
+      ],
+      "category": "high_fortifications",
+      "wallFamily": "high_castle_stone",
+      "heightPx": 64,
+      "walkHeightPx": 52,
+      "thicknessPx": 16,
+      "layout": "high_wall_portrait",
+      "additionalBrief": "Ces murs doivent être visiblement HAUTS : humain19px, mur64px de haut ; dessiner à une échelle uniforme, pas un muret arrivant aux épaules. En E–O on voit la grande élévation du mur sous la petite bande de couronnement ; en N–S on voit la bande LONGUE de couronnement dans le plan de carte, avec dalles/sommets successifs et courte face proche en bas. L’altitude physique est la même : on ne réduit pas le mur N–S en clôture basse. Le platelage de ronde est à hauteur52px et le parapet séparé s’accole à son bord. Escalier M71 : FACE UNIQUEMENT et RACCORDEMENT PALIER, pas une version de côté. Ajouter un petit exemple d’enceinte en L, haut mur, platelage vu du dessus et escalier FRONTAL. Aucun sol, eau, bâtiment ou paysage. Échelle humain19px séparée en haut. Même caméra que le guide des modules."
+    },
+    {
+      "id": "32-portes-hautes-tours",
+      "title": "Enceintes hautes — portes et tours",
+      "kind": "building",
+      "material": "Matériaux du kit bois haut ou pierre haute. Ouvertures à l’échelle humain19px. Pas de drapeaux, armoiries, soldats, terrain ou armes. Entrées et parapets détachables ultérieurement.",
+      "image": "art/humains/architecture/concepts/32-portes-hautes-tours.png",
+      "items": [
+        {
+          "id": "F09",
+          "label": "Porte haute de village en bois",
+          "brief": "Portail charpenté de40px de hauteur de mur adjacent, galerie de ronde à32px, petite toiture, passage24px de hauteur utile entièrement ouvert. Deux petites ailes de raccord. Quatre vues cardinales réellement distinctes, escalier d’accès intérieur et non latéral visible.",
+          "nativeEnvelope": [
+            112,
+            48,
+            80
+          ],
+          "wallFamily": "high_village_timber"
+        },
+        {
+          "id": "F10",
+          "label": "Porte haute de bourg en pierre",
+          "brief": "Porte fortifiée pour mur48px, ronde38px, maçonnerie grise, passage ouvert24px hauteur et32px largeur, loge haute sans blason. Quatre vues, mur plein sur profils ; pas un passage sur chaque face.",
+          "nativeEnvelope": [
+            128,
+            64,
+            96
+          ],
+          "wallFamily": "high_village_stone"
+        },
+        {
+          "id": "F11",
+          "label": "Châtelet de courtine haute",
+          "brief": "Porte de château à deux tours carrées sobres, raccord mur64px/ronde52px, passage ouvert32px hauteur, deux ailes de rempart très courtes, aucun pont-levis ou fossé. Vue arrière montre la galerie, profils montrent profondeur et raccords, pas une copie de façade.",
+          "nativeEnvelope": [
+            144,
+            80,
+            128
+          ],
+          "wallFamily": "high_castle_stone"
+        },
+        {
+          "id": "F12",
+          "label": "Tour carrée de flanquement haute",
+          "brief": "Tour maçonnée carrée simple pour courtine64px, porte de service au niveau du sol, raccords de ronde à52px sur côtés, plate-forme haute et créneaux. Pas de grande flèche de château féérique ; dessiner les mêmes ouvertures et raccords dans les4vues.",
+          "nativeEnvelope": [
+            80,
+            80,
+            128
+          ],
+          "wallFamily": "high_castle_stone"
+        }
+      ],
+      "category": "high_fortifications"
+    },
+    {
+      "id": "33-habitat-igea-hiver",
+      "title": "Igea — variantes d’habitation sous neige",
+      "kind": "seasonal",
+      "material": "Même pierre, rondins et bardeaux que les quatre variantes d’Igea. Neige saisonnière bleu très pâle sur couvertures, aucun autre changement de bâtiment.",
+      "image": "art/humains/architecture/concepts/33-habitat-igea-hiver.png",
+      "items": [
+        {
+          "id": "H09-hiver",
+          "label": "Petit logis de pierre — hiver",
+          "brief": "Petite maison basse de pierre épaisse, toit pentu en bardeaux sombres, sas frontal court, une cheminée à gauche.  Conserver EXACTEMENT la silhouette, les portes et la géométrie de la maison sans neige ; ajouter seulement la neige sur toits exposés et rebords inutilisés. Accès et marches dégagés, aucun sol enneigé.",
+          "nativeEnvelope": [
+            64,
+            56,
+            64
+          ]
+        },
+        {
+          "id": "H10-hiver",
+          "label": "Maison de rondins — hiver",
+          "brief": "Maison familiale en rondins bruns sur soubassement pierre, toit pentu, façade large à deux fenêtres et porte centrale. Faîte parallèle à façade, pignons sur les profils.  Conserver EXACTEMENT la silhouette, les portes et la géométrie de la maison sans neige ; ajouter seulement la neige sur toits exposés et rebords inutilisés. Accès et marches dégagés, aucun sol enneigé.",
+          "nativeEnvelope": [
+            80,
+            64,
+            72
+          ]
+        },
+        {
+          "id": "H11-hiver",
+          "label": "Maison de vallée à étage — hiver",
+          "brief": "Logement compact à un étage en pierre et bois, toit pentu, entrée protégée mais sans escalier de profil. Deux fenêtres en haut, une porte en façade, cheminée au fond.  Conserver EXACTEMENT la silhouette, les portes et la géométrie de la maison sans neige ; ajouter seulement la neige sur toits exposés et rebords inutilisés. Accès et marches dégagés, aucun sol enneigé.",
+          "nativeEnvelope": [
+            72,
+            64,
+            96
+          ]
+        },
+        {
+          "id": "H12-hiver",
+          "label": "Grande maison de maisonnée — hiver",
+          "brief": "Long logement collectif de vallée, ailes gauche/droite sous deux volumes de toit raccordés, deux portes frontales, bois et pierre. Intérieur vide, pas de forge, caserne ou grenier.  Conserver EXACTEMENT la silhouette, les portes et la géométrie de la maison sans neige ; ajouter seulement la neige sur toits exposés et rebords inutilisés. Accès et marches dégagés, aucun sol enneigé.",
+          "nativeEnvelope": [
+            128,
+            72,
+            88
+          ]
+        }
+      ],
+      "category": "housing_variants",
+      "regionalFamily": "Igea",
+      "seasonalBaseBoard": "25-habitat-igea"
     }
   ]
 }
