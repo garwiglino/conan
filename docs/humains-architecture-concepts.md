@@ -1,6 +1,6 @@
 # Architecture humaine — concepts de villes et villages
 
-Ce lot est un dossier de conception : **22 planches, 60 modèles de bâtiments, 48 pièces modulaires et 4 variantes hivernales**. Les PNG précèdent la fabrication JavaScript, selon la méthode retenue pour les postes. Ils ne constituent pas un atlas de sprites runtime ni des quartiers déjà placés.
+Ce lot est un dossier de conception : **22 planches, un guide de raccord, 60 modèles de bâtiments, 48 pièces modulaires et 4 variantes hivernales**. Les PNG précèdent la fabrication JavaScript, selon la méthode retenue pour les postes. Ils ne constituent pas un atlas de sprites runtime ni des quartiers déjà placés.
 
 [Galerie des concepts](../art/humains/architecture/index.html) · [Catalogue et briefs](../data/humains/architecture/concepts.json) · [Couverture des localités](../data/humains/architecture/settlement-coverage.json).
 
@@ -54,7 +54,11 @@ Les six ports océaniques explicitement reconnus dans les fiches sont Branchebas
 
 Le civil natif approuvé mesure **19 pixels** de haut sans coiffe. Les enveloppes `[largeur, profondeur, hauteur]` du catalogue sont des **cibles natives** pour la transcription, pas une mesure des images générées. Une porte simple vise environ 16 pixels de largeur utile et 24 de hauteur. Une petite maison tient typiquement dans 64–80 pixels de largeur ; les grandes enveloppes atteignent 96–144 pixels et les tours 128 pixels de haut. Les façades ne doivent pas être réduites pour faire tenir un intérieur jouable dans une seule image : l’aménagement intérieur peut utiliser un plan séparé et les mêmes unités de personnages/postes.
 
-Chaque bâtiment dispose de quatre propositions cardinales : **face, droite, dos, gauche**. Chaque module possède **face et côté**, avec épaisseur réellement plus mince si nécessaire. Les diagonales de charpente, rampes et pentes de toiture sont des formes physiques ; elles ne changent pas la caméra en vue isométrique. Les jonctions L et T restent orthogonales.
+Chaque bâtiment dispose de quatre propositions cardinales : **face, droite, dos, gauche**. Les modules se déclinent selon les **directions dans la carte : est–ouest (horizontal) et nord–sud (vertical)**, avec une caméra RPG fixe laissant voir leur dessus. La version nord–sud montre toute la longueur du couronnement, des sommets de pieux ou du tablier vers le haut de l’image ; elle ne représente pas le bout d’un mur vu par la tranche. On reconstruit les surfaces visibles et leur occultation au lieu de tourner une image plate de 90 degrés. Les jonctions L/T ont de vraies branches orthogonales dans les deux axes.
+
+**Escaliers M16/M31 : de face uniquement**, marches horizontales visibles, montée vers le haut de la carte. Ils ne reçoivent pas une variante de profil pour remplir artificiellement la paire horizontal/vertical : la seconde case montre leur raccord au palier. **Plateformes, quais, ponts et paliers : surface praticable vue du dessus**, dans chacune de leurs orientations. Les barrières sont des pièces modulaires indépendantes accolées aux bords, de même section et perspective, avec le passage d’escalier laissé libre. Les jambes, supports ou grandes façades ne doivent pas cacher le plateau.
+
+Le [guide de perspective et raccords](../art/humains/architecture/principe-modules.png) montre les murs dans les deux axes, un vrai angle, les plateformes, l’escalier frontal et leur assemblage. Il remplace l’interprétation initiale « face/côté » en élévations techniques pour les modules. Les diagonales physiques de charpente et de toit ne changent pas la caméra en isométrique.
 
 Pour la fabrication, établir d’abord un **plan de référence unique** : orientation du faîtage, largeur/profondeur, portes, annexes, cheminées et fondations. Les propositions PNG peuvent conserver des écarts entre détails de vues ; il faudra les normaliser sur ce plan avant de déclarer les quatre sprites géométriquement compatibles. Ne pas extraire automatiquement des rectangles du PNG en prétendant disposer de coordonnées natives exactes.
 

@@ -144,56 +144,62 @@
     {
       "boardId": "16-structures",
       "file": "art/humains/architecture/concepts/16-structures.png",
-      "generationSource": "exec-ed279c5a-0ff5-4886-a270-f1a6acceb2ac.png",
-      "sha256": "364304f4fe1121cb35a6eab4e66fc31b22ffb3a6bfeccee761f0a72d747419ad",
+      "generationSource": "exec-39349f5b-f5c1-4c22-8ae7-0cfa8075389c.png",
+      "sha256": "45dce662ad26a25f87e15d0587835d91e3a5740bca6cc4802ea405a3c89dc5d8",
       "width": 1536,
       "height": 1024,
-      "revision": 1
+      "revision": 2,
+      "perspectiveRevision": 2
     },
     {
       "boardId": "17-enceintes",
       "file": "art/humains/architecture/concepts/17-enceintes.png",
-      "generationSource": "exec-2fd6fe68-eaba-46b4-8628-9eb38309db2e.png",
-      "sha256": "ea9aca0005cb34d8efb5463262b0b0e5fa1b14a2ebb6efeef8c3eb04c297337b",
+      "generationSource": "exec-ee306943-3603-4a65-a277-3f27d03c2ad4.png",
+      "sha256": "9bb556503fd09073f094dd404955d4aca33953b5e076bae2cb347c17793fc748",
       "width": 1536,
       "height": 1024,
-      "revision": 1
+      "revision": 2,
+      "perspectiveRevision": 2
     },
     {
       "boardId": "18-ouvertures",
       "file": "art/humains/architecture/concepts/18-ouvertures.png",
-      "generationSource": "exec-95047e85-20ab-4480-a547-255e605ba58b.png",
-      "sha256": "5d1e0d52412aed95816db4b2155eb06118e2aa41e1e21f916907f6606fd588cb",
+      "generationSource": "exec-18ee171c-dbf5-41bd-a7b2-745b872ce31e.png",
+      "sha256": "2c6fd19d42666f595c4a741c6ca01582dae28b54eb10957e4f791225e18ad803",
       "width": 1536,
       "height": 1024,
-      "revision": 1
+      "revision": 2,
+      "perspectiveRevision": 2
     },
     {
       "boardId": "19-franchissements",
       "file": "art/humains/architecture/concepts/19-franchissements.png",
-      "generationSource": "exec-a860b559-e327-4961-8213-52e792547895.png",
-      "sha256": "29a5dedc2e62a71719196581edf41d1d6f893c335f24d6f07a9042e693502c9a",
+      "generationSource": "exec-f8741ab4-45d6-408c-bc05-ab22f768dc99.png",
+      "sha256": "c704b73ea3baaea66780bdcdf3951090e1c219d0f38f6d19b5a19f40ff5af290",
       "width": 1536,
       "height": 1024,
-      "revision": 1
+      "revision": 2,
+      "perspectiveRevision": 2
     },
     {
       "boardId": "20-eau-salubrite",
       "file": "art/humains/architecture/concepts/20-eau-salubrite.png",
-      "generationSource": "exec-ed949846-7cb8-4d14-82aa-4fe8a13ca0fe.png",
-      "sha256": "51a2a0fcfe605628d1fba2650de758e4f1341409d104f215c7c302b900abfbe4",
+      "generationSource": "exec-40949a84-7071-4f1f-9252-becbf745c036.png",
+      "sha256": "e702ea0b6cdc344eebcefa3853f0c5f71fae141dbe2b214ac3dc1325baca2711",
       "width": 1536,
       "height": 1024,
-      "revision": 1
+      "revision": 2,
+      "perspectiveRevision": 2
     },
     {
       "boardId": "21-toitures-chantier",
       "file": "art/humains/architecture/concepts/21-toitures-chantier.png",
-      "generationSource": "exec-1921c25f-7faa-4302-8dde-fe846989ffa8.png",
-      "sha256": "0c882831af1067da52347cb4a9ddf4a23f1418329e23064a1ae493935a9aa168",
+      "generationSource": "exec-eb6dfeef-b90d-48d5-8ac4-4411c6593a8e.png",
+      "sha256": "2cbfb392247615ceea1ec9403e58aba2506dc732e6447674415bce9905b1c326",
       "width": 1536,
       "height": 1024,
-      "revision": 1
+      "revision": 2,
+      "perspectiveRevision": 2
     },
     {
       "boardId": "22-igea-hiver",
@@ -204,5 +210,12 @@
       "height": 1024,
       "revision": 1
     }
-  ]
+  ],
+  "projectionGuide": {
+    "file": "art/humains/architecture/principe-modules.png",
+    "generationSource": "exec-f13288bc-7234-44cf-92be-bad74e49e527.png",
+    "sha256": "a72b54f81ba29755fab8b5b89cf5391b64fc51850a98bf13b1bf8aa909b52210",
+    "width": 1536,
+    "height": 1024
+  }
 }

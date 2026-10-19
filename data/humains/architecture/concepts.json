@@ -1,5 +1,5 @@
 {
-  "schema": 1,
+  "schema": 2,
   "status": "concepts_only_not_runtime",
   "humanNativeHeightPx": 19,
   "buildingDirections": [
@@ -9,9 +9,13 @@
     "gauche"
   ],
   "moduleDirections": [
-    "face",
-    "cote"
+    "east_west",
+    "north_south"
   ],
+  "moduleProjection": "caméra RPG fixe surplombante, sommet visible ; orientation dans le plan de carte, jamais une simple tranche vue de profil",
+  "stairsProjection": "M16/M31 : uniquement de face, montée vers le haut de la carte ; seconde case = exemple de raccord au palier",
+  "platformProjection": "surface praticable vue du dessus dans les deux orientations ; barrières indépendantes accolées aux bords, passage d’escalier ouvert",
+  "projectionReference": "art/humains/architecture/principe-modules.png",
   "nativeEnvelopeMeaning": "[largeur, profondeur, hauteur], cibles de fabrication non mesurées sur PNG généré",
   "sources": [
     "docs/world-bible/01-geopolitique.md",
@@ -773,6 +777,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -783,6 +791,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -793,6 +805,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -803,6 +819,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -813,6 +833,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -823,6 +847,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -833,6 +861,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -843,6 +875,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         }
       ]
@@ -862,6 +898,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -872,6 +912,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -882,6 +926,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -892,6 +940,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -902,6 +954,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -912,6 +968,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -922,6 +982,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -932,6 +996,9 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "front"
           ]
         }
       ]
@@ -951,6 +1018,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -961,6 +1032,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -971,6 +1046,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -981,6 +1060,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -991,6 +1074,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1001,6 +1088,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1011,6 +1102,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1021,6 +1116,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         }
       ]
@@ -1040,6 +1139,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1050,6 +1153,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1060,6 +1167,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1070,6 +1181,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1080,6 +1195,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1090,6 +1209,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1100,6 +1223,9 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "front"
           ]
         },
         {
@@ -1110,6 +1236,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         }
       ]
@@ -1129,6 +1259,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1139,6 +1273,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1149,6 +1287,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1159,6 +1301,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1169,6 +1315,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1179,6 +1329,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1189,6 +1343,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1199,6 +1357,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         }
       ]
@@ -1218,6 +1380,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1228,6 +1394,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1238,6 +1408,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1248,6 +1422,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1258,6 +1436,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1268,6 +1450,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1278,6 +1464,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         },
         {
@@ -1288,6 +1478,10 @@
             32,
             32,
             32
+          ],
+          "orientations": [
+            "east_west",
+            "north_south"
           ]
         }
       ]
