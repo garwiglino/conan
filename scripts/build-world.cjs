@@ -28,6 +28,8 @@ const regionById=Object.fromEntries(data.regions.map(r=>[r.id,r]));data.boundari
 // Land behind the natural borders, sampled for the atlas map: run lengths per row,
 // alternating open and closed and starting with open.
 {const step=spec.maskStep,cols=Math.ceil(data.width/step),rows=[];for(let j=0;j*step<data.height;j++){const runs=[];let closed=false,run=0;for(let i=0;i<cols;i++){const x=(i+.5)*step,y=(j+.5)*step,v=!!atlas.cellAt(x,y)?.land&&!atlas.passable(x,y);if(v===closed)run++;else{runs.push(run);closed=v;run=1;}}runs.push(run);rows.push(runs);}data.layout.closed={step,cols,rows};}
+data.rectilinearRoads=require('./build-world-orthogonal.cjs').build(data);
+fs.writeFileSync(path.join(root,'data/world/orthogonal-roads.json'),JSON.stringify(data.rectilinearRoads)+'\n');
 fs.writeFileSync(path.join(root,'data/world/atlas.json'),JSON.stringify(data));
 console.log(refinements.length+' coastal segments refined');
 console.log(`${data.cells.length} macro cells, ${data.sites.length} settlements, ${data.routes.length} routes; compact layout ${spec.id}, ${data.width/1000} × ${data.height/1000} km`);

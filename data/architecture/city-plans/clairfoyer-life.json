@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "site": "town-1",
+  "planRevision": "734272d030e614b8",
+  "sources": ["clairfoyer-districts.json", "docs/world-bible/02-peuples-et-villes.md", "docs/world-bible/03-ressources-et-echanges.md"],
+  "policy": "Stable representatives of the existing workforce, not additional census. Local services use existing stocks and create no yields, patients, cargo or animals. The road traveller keeps her itinerary.",
+  "fixtures": {
+    "clos": ["sitting_bench", "sleeping_mat"],
+    "metiers": ["workbench", "sawhorse", "rope_bench", "fiber_rack", "potters_wheel"],
+    "rive": ["sitting_bench", "clothesline"],
+    "halles": ["meal_table", "market_stall", "clerks_desk", "kitchen_table"],
+    "conseil": ["care_bed", "apothecary_table", "sitting_bench", "clerks_desk"],
+    "etapes": ["meal_table", "sitting_bench", "market_stall"],
+    "bois": ["sawhorse", "workbench"],
+    "greniers": ["workbench", "fixed_screen", "clerks_desk"],
+    "sud": ["care_stall", "sitting_bench", "clerks_desk"],
+    "ancien-relais": ["clerks_desk", "sitting_bench"],
+    "resine": ["workbench", "drying_rack", "clerks_desk"]
+  },
+  "people": [
+    {"key":"cour", "district":"clos", "fixture":"sitting_bench", "role":"civilian", "action":"seated", "label":"VOISINE", "purpose":"Entraide et veille de la cour commune", "gate":[], "hours":[9,20]},
+    {"actor":"resident-town-1-0", "key":"couture", "district":"metiers", "fixture":"workbench", "role":"seamster", "action":"stitch", "label":"RETOUCHES", "purpose":"Réparation des vêtements, sans filature ni forge", "gate":["cloth","tools"], "hours":[8,18]},
+    {"key":"outils", "district":"metiers", "fixture":"sawhorse", "role":"builder", "action":"joinery", "label":"MENUISIER", "purpose":"Réparation légère des équipements", "gate":["timber","tools"], "hours":[8,18]},
+    {"key":"linge", "district":"rive", "fixture":"clothesline", "role":"dyer", "action":"hang", "label":"LINGÈRE", "purpose":"Entretien domestique, sans pêcherie ni eau potable présumée", "gate":["cloth"], "hours":[9,17]},
+    {"key":"marche", "district":"halles", "fixture":"market_stall", "role":"merchant", "action":"weigh", "label":"MARCHANDE", "purpose":"Pesée des réserves réellement disponibles", "gateAny":["provisions","grain","resin","honey"], "hours":[7,18]},
+    {"key":"comptes", "district":"halles", "fixture":"clerks_desk", "role":"merchant", "action":"ledger", "label":"COMMIS", "purpose":"Comptes du marché et échanges", "gate":[], "hours":[7,18]},
+    {"key":"cuisine", "district":"halles", "fixture":"kitchen_table", "role":"cook", "action":"chop_food", "label":"CUISINE", "purpose":"Préparation liée aux provisions de la ville", "gate":["provisions"], "hours":[7,19]},
+    {"key":"soins", "district":"conseil", "fixture":"apothecary_table", "role":"healer", "action":"mortar", "label":"APOTHICAIRE", "purpose":"Préparation des remèdes ; aucun patient fictif ni soin gratuit", "gate":["medicinal"], "hours":[8,19]},
+    {"key":"conseil", "district":"conseil", "fixture":"clerks_desk", "role":"administrator", "action":"ledger", "label":"GREFFE", "purpose":"Registres et accueil des demandes", "gate":[], "hours":[8,18]},
+    {"key":"etapes", "district":"etapes", "fixture":"market_stall", "role":"merchant", "action":"count", "label":"COMPTOIR", "purpose":"Petit commerce de transit", "gateAny":["provisions","resin","tools","cloth"], "hours":[8,20]},
+    {"key":"bois", "district":"bois", "fixture":"sawhorse", "role":"forester", "action":"saw", "label":"SCIEUR", "purpose":"Entretien du bois livré, sans abattage fictif", "gate":["timber","tools"], "hours":[8,18]},
+    {"key":"greniers", "district":"greniers", "fixture":"clerks_desk", "role":"administrator", "action":"ledger", "label":"INTENDANCE", "purpose":"Inventaire des réserves existantes", "gate":[], "hours":[7,18]},
+    {"key":"convois", "district":"sud", "fixture":"clerks_desk", "role":"administrator", "action":"ledger", "label":"EXPÉDITIONS", "purpose":"Suivi des convois réels ; aucun cheval ou chargement créé", "gate":[], "hours":[7,19]},
+    {"key":"resine", "district":"resine", "fixture":"clerks_desk", "role":"merchant", "action":"ledger", "label":"RÉSINES", "purpose":"Réception et comptage de la production canonique de résine", "gate":["resin"], "hours":[8,18]},
+    {"actor":"resident-batracien-town-1-0", "district":"ancien-relais", "fixture":"clerks_desk", "action":"ledger", "purpose":"Accueil et registres du relais", "gate":[], "hours":[7,20]},
+    {"actor":"resident-batracien-town-1-1", "district":"metiers", "fixture":"rope_bench", "action":"net", "purpose":"Réparation de filets, sans pêche à terre", "gate":["cloth","tools"], "hours":[8,18]},
+    {"actor":"resident-batracien-town-1-2", "district":"metiers", "fixture":"fiber_rack", "action":"weave", "purpose":"Vannerie, distincte du tissage sur métier", "gateAny":["fiber","cloth"], "hours":[8,18]},
+    {"actor":"resident-batracien-town-1-3", "district":"metiers", "fixture":"potters_wheel", "action":"pottery", "purpose":"Poterie seulement si le système de production l'autorise", "productionJob":"pottery", "hours":[8,18]}
+  ]
+}

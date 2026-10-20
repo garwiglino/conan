@@ -26,8 +26,8 @@ test('dead carriers abandon the shipment, saved casualties never regenerate or d
 });
 test('near/far handoff has one position, catches up between hourly ticks and preserves survivors',()=>{
  const {g,s,c}=stage();g.stepWorldConvoys(.04);const actors=g.convoyActors(c),guard=actors.find(n=>n.convoyGuard),crew=actors.find(n=>!n.convoyGuard);g.damageHumanGuard(guard,2,{x:guard.x+1,y:guard.y,level:0});g.damageCivilian(crew,1,{x:crew.x+1,y:crew.y,level:0});
- const health=s.cargoUnits(c).map(u=>[u.id,u.hp]),position=g.convoyPosition(c),progress=c.progress;Object.assign(g.player,{x:position.x+3000,y:position.y});for(const n of actors){n.hurt=0;delete n.dangerState;}g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,0);assert.equal(c.progress,progress);
- g.clock+=1;g.worldState.clock=g.clock;g.syncWorldConvoys();assert.ok(c.progress>progress,'distant cargo advances even between hourly ticks');assert.deepEqual(s.cargoUnits(c).map(u=>[u.id,u.hp]),health);
+ const health=s.cargoUnits(c).map(u=>[u.id,u.hp]),position=g.convoyPosition(c),progress=c.progress,leg=c.leg;Object.assign(g.player,{x:position.x+3000,y:position.y});for(const n of actors){n.hurt=0;delete n.dangerState;}g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,0);assert.equal(c.progress,progress);
+ g.clock+=1;g.worldState.clock=g.clock;g.syncWorldConvoys();assert.ok(c.leg>leg||c.progress>progress,'distant cargo advances across road bends even between hourly ticks');assert.deepEqual(s.cargoUnits(c).map(u=>[u.id,u.hp]),health);
  const expected=g.convoyPosition(c);Object.assign(g.player,{x:expected.x+100,y:expected.y});g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,4);assert.ok(Math.hypot(g.convoyPosition(c).x-expected.x,g.convoyPosition(c).y-expected.y)<.01);g.syncWorldConvoys();assert.equal(g.convoyActors(c).length,4,'no duplicate roster');assert.deepEqual(s.cargoUnits(c).map(u=>[u.id,u.hp]),health);
 });
 test('a full Game save restores the nearby convoy without resurrecting guards or losing wounds',()=>{

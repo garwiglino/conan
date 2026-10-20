@@ -20,7 +20,7 @@ test('all authored city streets, entrance paths and thresholds use only logical 
  for(const r of p.walkways){assert.ok(O.axisAligned(r.points),r.id);assert.ok(O.axisAligned(r.threshold.points),r.id+' threshold');}assert.equal(p.activation.runtimeChanged,false);
 });
 test('world draft preserves every terrestrial route, vertex and bridge reference without activating it',()=>{
- const A=require('../scripts/world-model')(require('../data/world/atlas.json')),p=require('../data/world/orthogonal-roads-draft.json'),source=A.roads.filter(r=>r.type!=='searoutes');assert.equal(p.roads.length,source.length);
+ const A=require('../scripts/world-model')({...require('../data/world/atlas.json'),rectilinearRoads:undefined}),p=require('../data/world/orthogonal-roads-draft.json'),source=A.roads.filter(r=>r.type!=='searoutes');assert.equal(p.roads.length,source.length);
  for(const r of source){const s=p.roads.find(s=>s.id===r.id);assert.ok(s,r.id);assert.ok(O.axisAligned(s.points),r.id);near(s.referenceLengthM,O.length(r.pts));for(const v of r.pts)assert.ok(s.points.slice(1).some((b,i)=>A.project(v[0],v[1],s.points[i],b).d<1e-5),`${r.id} vertex ${v[2]} missing`);}
  assert.equal(p.bridges.length,A.crossings.length);assert.ok(p.bridges.every(b=>b.preserved));assert.equal(p.runtimeChanged,false);assert.equal(p.pushAllowed,false);
 });

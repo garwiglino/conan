@@ -22,6 +22,8 @@
    }
    for(const lane of s.lanes){const r={...lane,x:p.x+lane.x,y:p.y+lane.y};clear.put(r,r);r.paved=node.regionalCentre;lanes.put(r,r);}
    for(const f of s.fixtures||[]){const l=layout(f.id),r={x:p.x+f.x+l.foot.x-16,y:p.y+f.y+l.foot.y-16,w:l.foot.w+32,h:l.foot.h+32};clear.put(r,r);const a={x:p.x+f.x+l.approach[0]-10,y:p.y+f.y+l.approach[1]-10,w:20,h:20};clear.put(a,a);}
+   for(const f of s.fixtures||[])for(let i=1;i<(f.access?.length||0);i++){const a=f.access[i-1],b=f.access[i],r={x:p.x+Math.min(a[0],b[0])-12,y:p.y+Math.min(a[1],b[1])-12,w:Math.abs(b[0]-a[0])+24,h:Math.abs(b[1]-a[1])+24};clear.put(r,r);}
+   for(const f of s.hinterlandFields||[]){const r={x:p.x+f.x-64,y:p.y+f.y-64,w:128,h:128};clear.put(r,r);}
    sites.set(s.id,{...s,buildings:placed});
   }for(const s of sites.values())if(s.layoutKind){const n=Atlas.byId[s.id];Atlas.registerSettlementAreas(s.id,s.districts.flatMap(d=>(d.areas||[d.bounds]).map(r=>({x:n.x+r.x/16,y:n.y+r.y/16,w:r.w/16,h:r.h/16}))));}return districts={collision,art,clear,lanes,sites,buildings,custom:[...sites.values()].filter(s=>s.layoutKind)};
  }
@@ -68,7 +70,7 @@
  const solid=Game.prototype.solid;
  Game.prototype.solid=function(x,y,r=5,level=0){
   const d=this.settlements;if(d&&!level){for(const o of d.collision.near(x,y,r))for(const b of o.geometry.solids)if(b.zMin<19&&b.zMax>0&&A.contains(b,x,y,r))return true;
-   for(const o of this.humanFixtureIndex?.near(x,y,r)||[]){if(o.id==='crop_patch')continue;const s=o.feet,q=o.foot;const inside=x>q.x&&x<q.x+q.w&&y>q.y&&y<q.y+q.h;if(!inside&&(Math.hypot(x-s[0],y-s[1])<7||Math.hypot(x-o.approach[0],y-o.approach[1])<7)||r<=4&&o.socket.support&&Math.hypot(x-s[0],y-s[1])<2)continue;if(x+r>q.x&&x-r<q.x+q.w&&y+r>q.y&&y-r<q.y+q.h)return true;}
+   for(const o of this.humanFixtureIndex?.near(x,y,r)||[]){if(o.id==='crop_patch')continue;const s=o.feet,q=o.foot;const inside=x>q.x&&x<q.x+q.w&&y>q.y&&y<q.y+q.h;if(!inside&&(Math.hypot(x-s[0],y-s[1])<7||Math.hypot(x-o.approach[0],y-o.approach[1])<7)||r<=4&&o.socket.support&&(Math.hypot(x-s[0],y-s[1])<2||Atlas.project(x,y,o.approach,s).d<5))continue;if(x+r>q.x&&x-r<q.x+q.w&&y+r>q.y&&y-r<q.y+q.h)return true;}
   }return solid.call(this,x,y,r,level);
  };
  const props=Renderer.prototype.visibleAtlasProps;
@@ -89,6 +91,7 @@
  };
  const JOBS={hoe:['farmer','hoe','crop_patch'],sow:['farmer','sow','crop_patch'],craft:['smith','craft','workbench'],pottery:['potter','pottery','potters_wheel'],weave:['weaver','loom','loom'],stir:['cook','cook','cooking_hearth'],net:['fisher','net','drying_rack'],groom:['groom','groom','care_stall'],load:['caravaner','load','market_stall'],rope:['boatman','rope','rope_bench'],ledger:['merchant','ledger','clerks_desk'],carry:['porter','carry',null]};
  Game.prototype.humanWorkSpec=function(n){
+  if(n.cityLife)return this.cityWorkSpec(n);
   const c=n.civilian,s=this.worldState.simulation?.state.sites[n.labourSite||n.site],spec=JOBS[c?.job];if(!spec||!n.resident||n.batracien||!s||!this.worldState.simulation.systems.jobCanProduce(s,c.job)||!this.settlements.sites.has(n.site))return null;
   let [role,action,fixture]=spec;if(!H.ROLES[role].sexes.includes(c.appearance.sex)){if(['hoe','sow'].includes(c.job)){role='gardener';action='sow';}else return null;}
   // Carrying and animal/boat actions require the corresponding live entity;
@@ -98,17 +101,17 @@
  };
  Game.prototype.ensureHumanWorkstations=function(){
   if(this.humanStationCount===this.npcs.length)return;this.humanStationCount=this.npcs.length;const walkable=new Map(),baseFree=(x,y)=>{const key=x+','+y;if(!walkable.has(key))walkable.set(key,{x,y,free:!this.solid(x,y,4,0)});return walkable.get(key).free;};
-  for(const n of this.npcs){if(this.humanWorkstations.has(n.id))continue;const spec=this.humanWorkSpec(n);if(!spec)continue;
+  for(const n of this.npcs){if(n.cityLife||this.humanWorkstations.has(n.id))continue;const spec=this.humanWorkSpec(n);if(!spec)continue;
    const local=layout(spec.fixture),g=P.geometry(spec.fixture),district=this.settlements.sites.get(n.site),crop=spec.fixture==='crop_patch';
-   if(crop&&district.layoutKind)continue; // City fields belong to the authored hinterland, never to house gaps.
    const models=spec.fixture==='workbench'?['B09','B12','B05','CF07','CF13','CF21']:['B05','CF07'],candidates=[];
+   if(crop&&district.layoutKind)for(const f of district.hinterlandFields||[])candidates.push({x:Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y).x+f.x,y:Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y).y+f.y,sheltered:false,roadOrigin:{x:Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y).x+f.roadX,y:Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y).y+f.roadY}});
    for(const b of district.buildings){
-    if(crop&&b.role==='housing'){const r=b.geometry.foot;for(const side of [-1,1])candidates.push({x:r.x+(side<0?-32:r.w+32),y:r.y+r.h/2,sheltered:false});}
+    if(crop&&!district.layoutKind&&b.role==='housing'){const r=b.geometry.foot;for(const side of [-1,1])candidates.push({x:r.x+(side<0?-32:r.w+32),y:r.y+r.h/2,sheltered:false});}
     else if(!crop&&models.includes(b.id)&&A.entry(b.id).openHall){for(const spot of b.geometry.workspots)candidates.push({...spot,sheltered:true,building:b.uid,roadOrigin:b.frontage?{x:Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y).x+b.frontage.target[0]*16,y:Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y).y+b.frontage.target[1]*16}:undefined});}
    }
    const centre=Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y),angle=(civilianHash(n.id)%24)/24*Math.PI*2,origin={x:centre.x+Math.round(Math.cos(angle)*40),y:centre.y+Math.round(Math.sin(angle)*40)};
    candidates.sort((p,q)=>Math.hypot(p.x-origin.x,p.y-origin.y)-Math.hypot(q.x-origin.x,q.y-origin.y));
-   const stored=this.humanStationRecords.get(n.id);if(stored?.id===spec.fixture&&Math.hypot(stored.x-centre.x,stored.y-centre.y)<district.radius*16+64)candidates.unshift({x:stored.x+local.feet[0],y:stored.y+local.feet[1],sheltered:!!stored.sheltered,building:stored.building,restored:true});
+   const stored=this.humanStationRecords.get(n.id);if(stored?.id===spec.fixture&&(district.layoutKind?contains(district.bounds,stored.x-centre.x,stored.y-centre.y,64):Math.hypot(stored.x-centre.x,stored.y-centre.y)<district.radius*16+64))candidates.unshift({x:stored.x+local.feet[0],y:stored.y+local.feet[1],sheltered:!!stored.sheltered,building:stored.building,restored:true});
    for(const target of candidates){
     if(!target.restored&&!district.layoutKind&&Math.hypot(target.x-origin.x,target.y-origin.y)>500)continue;
     const x=Math.floor(target.x/16)*16+8-local.feet[0],y=Math.floor(target.y/16)*16+8-local.feet[1],foot={...local.foot,x:x+local.foot.x,y:y+local.foot.y};
@@ -130,7 +133,7 @@
  };
  const step=Game.prototype.stepCivilianAnimations;
  Game.prototype.stepCivilianAnimations=function(dt){step.call(this,dt);if(!this.humanWorkstations)return;this.ensureHumanWorkstations();for(const n of this.npcs)if(n.resident&&!n.batracien&&this.settlements.sites.has(n.site)&&n.civilian?.action===n.civilian?.job&&!this.humanWorkstations.has(n.id))this.civilianAction(n,'idle');
-  for(const [id,w]of this.humanWorkstations){if(!w.actor)continue;const n=this.npcs.find(n=>n.id===id),c=n?.civilian;if(c&&!c.dead&&['sit_down','seated','stand_up'].includes(c.action)&&!w.socket.support){this.civilianAction(n,'idle');continue;}if(!c||c.dead||c.action!==c.job)continue;
+  for(const [id,w]of this.humanWorkstations){if(!w.actor||w.cityFixture)continue;const n=this.npcs.find(n=>n.id===id),c=n?.civilian;if(c&&!c.dead&&['sit_down','seated','stand_up'].includes(c.action)&&!w.socket.support){this.civilianAction(n,'idle');continue;}if(!c||c.dead||c.action!==c.job)continue;
    if(!this.humanWorkSpec(n)||!this.worldState.simulation.systems.jobCanWork(this.worldState.simulation.state.sites[n.labourSite||n.site],c.job)||isSnow(this,n)&&!P.Winter.availability(w.action,{season:'igea_winter'}).allowed||n.dangerState||n.worldChat||n.justiceReport||n.labourReturning||n.convoyId||n.campaignGroup||n.reliefPost||this.dialogue?.who===n||this.party.some(m=>m.id===id)||Math.hypot(n.x-w.feet[0],n.y-w.feet[1])>2){this.civilianAction(n,'idle');continue;}
    n.dir=['dos','droite','face','gauche'].indexOf(w.socket.facing);
   }
@@ -138,7 +141,7 @@
  Game.prototype.settlementPathEdges=function(n,to){if(n.level||!this.settlements||Math.abs(Math.floor(n.x/16)-Math.floor(to.x/16))>36||Math.abs(Math.floor(n.y/16)-Math.floor(to.y/16))>36)return null;const r={x:Math.min(n.x,to.x)-8,y:Math.min(n.y,to.y)-8,w:Math.abs(n.x-to.x)+16,h:Math.abs(n.y-to.y)+16};if(!this.settlements.collision.rect(r).size&&!this.humanFixtureIndex.rect(r).size)return null;return(from,end)=>this.npcSegmentFree(n,from,end);};
  const stepPeople=Game.prototype.stepNpcs;
  Game.prototype.stepNpcs=function(dt){stepPeople.call(this,dt);if(!this.humanWorkstations||!(dt>0)||this.dialogue||this.journey||this.sleeping)return;
-  let planned=false;for(const [id,w]of this.humanWorkstations){if(!w.actor)continue;const n=this.npcs.find(n=>n.id===id),c=n?.civilian;if(!n||c?.dead||c?.critical||c?.hp<=1||n.dangerState||n.worldChat||n.justiceReport||n.labourReturning||n.convoyId||n.campaignGroup||n.reliefPost||this.party.some(p=>p.id===id))continue;
+  let planned=false;for(const [id,w]of this.humanWorkstations){if(!w.actor||w.cityFixture)continue;const n=this.npcs.find(n=>n.id===id),c=n?.civilian;if(!n||c?.dead||c?.critical||c?.hp<=1||n.dangerState||n.worldChat||n.justiceReport||n.labourReturning||n.convoyId||n.campaignGroup||n.reliefPost||this.party.some(p=>p.id===id))continue;
    if(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2)continue;
    if(!n.path?.length){if(planned||this.time<(w.retryAt||0))continue;planned=true;w.retryAt=this.time+1;}
    this.walkNpc(n,{x:w.feet[0],y:w.feet[1]},dt);
@@ -155,15 +158,15 @@
   for(const o of d.art.rect(view)){const b=o.bounds;if(b.x+b.w<view.x||b.x>view.x+view.w||b.y+b.h<view.y||b.y>view.y+view.h)continue;
    out.push(...Art.objects(this,o,isSnow(g,o)));
   }
-  for(const w of g.humanWorkstations?.values()||[]){if(w.id==='crop_patch'&&isSnow(g,w))continue;if(Math.abs(w.x-(view.x+view.w/2))>view.w/2+70||Math.abs(w.y-(view.y+view.h/2))>view.h/2+100)continue;const im=fixtureImage(w,isSnow(g,w),this);
+  for(const w of g.humanWorkstations?.values()||[]){if(w.cityFixture||w.id==='crop_patch'&&isSnow(g,w))continue;if(Math.abs(w.x-(view.x+view.w/2))>view.w/2+70||Math.abs(w.y-(view.y+view.h/2))>view.h/2+100)continue;const im=fixtureImage(w,isSnow(g,w),this);
    const p=this.projectionActive?WorldProjection.point(w.x,w.y):w;w.handOverlay=null;
    for(const chunk of im.chunks)out.push({always:true,y:p.y+chunk.depth,fn:()=>this.c.drawImage(chunk.cv,p.x+chunk.x,p.y+chunk.y)});
-   if(w.actor)out.push({always:true,y:p.y+Math.max(...im.chunks.map(c=>c.depth))+.2,fn:()=>{const a=w.handOverlay;if(a)this.c.drawImage(a.im,a.x-40,a.y-52);}});
+   const bound=w.actor?w:[...g.humanWorkstations.values()].find(b=>b.cityFixture===w.uid);if(bound)bound.handOverlay=null;if(bound)out.push({always:true,y:p.y+Math.max(...im.chunks.map(c=>c.depth))+.2,fn:()=>{const a=bound.handOverlay;if(a)this.c.drawImage(a.im,a.x-40,a.y-52);}});
   }return out;
  };
  const draw=Renderer.prototype.npcDraw;
  Renderer.prototype.npcDraw=function(n){const c=n.civilian,w=this.g.humanWorkstations?.get(n.id);if(!c||n.batracien||!n.resident||!this.g.settlements.sites.has(n.site))return draw.call(this,n);
-  const physical=n._logical||n,working=w&&c.action===c.job&&this.g.humanWorkSpec(n)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2,action=working?w.action:H.activitiesFor('civilian').includes(c.action)?c.action:'idle',role=working?w.role:'civilian',a=c.appearance;
+  const physical=n._logical||n,working=w&&c.action===c.job&&this.g.humanWorkSpec(n)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2,action=working?w.action:H.activitiesFor('civilian').includes(c.action)?c.action:'idle',role=w?.cityFixture?w.role:working?w.role:'civilian',a=c.appearance;
   const dir=['dos','droite','face','gauche'][n.dir??2],climate=({teremor:'tempere',sylverive:'tempere',igea:'neige',sarak:'aride',varan:'marais',tagon:'jungle'})[this.g.settlements.sites.get(n.site)?.family]||'tempere';
   const frame=H.frameAt(action,c.elapsed||0,H.CLIPS[action].stride?c.distance:undefined),interaction=(working||w?.socket.support&&['sit_down','seated','stand_up'].includes(c.action)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2)?P.interaction(fixtureImage(w,isSnow(this.g,w),this).decor):undefined;
   const outfit=H.Sources.outfits[a.outfit]?a.outfit:Object.keys(H.Sources.outfits).find(id=>H.Sources.outfits[id].source===a.outfit);

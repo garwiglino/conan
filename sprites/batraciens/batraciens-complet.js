@@ -3021,19 +3021,29 @@ const API=(function(){const module={exports:{}};const require=(id)=>id.includes(
  function recolorBase(image,sex,palette){const source=BASES[sex].PALETTE,target=paletteFor(sex,palette),look=new Map(Object.entries(source).map(([k,h])=>[parseInt(h.slice(1),16),color(target[k])]));const out=new Uint8ClampedArray(image.data.length);
   for(let i=0;i<out.length;i+=4)if(image.data[i+3])out.set(look.get((image.data[i]<<16)|(image.data[i+1]<<8)|image.data[i+2]),i);return {...image,data:out};
  }
+ // Optional furniture socket. Keep the authored feet and torso; the existing
+ // articulated arms follow the translated grips. Default source pixels stay exact.
+ function attachStation(layers,sex,action,view,p,options){
+  const target=options.interaction?.workTarget;if(!target||!p.hands||!['ledger','net','weave','pottery'].includes(action))return;
+  if(target.length!==2||!target.every(Number.isFinite))throw new TypeError('Invalid station contact');
+  const ref=poseFor(action,0,view),scratch=Object.fromEntries(LAYERS.map(k=>[k,new Pixels(k==='body'||k==='hands'?paletteFor(sex,options.palette):TOOL_COLORS)]));makeTools(scratch,sex,action,view,ref,0,options);
+  const at=ref.contact?.point||[ref.hands.reduce((v,h)=>v+h[0],0)/2,ref.hands.reduce((v,h)=>v+h[1],0)/2],dx=Math.round(target[0]-at[0]),dy=Math.round(target[1]-at[1]);
+  for(const name of ['tools_back','tools_front','effects']){const data=layers[name].data,copy=data.slice();data.fill(0);for(let y=0;y<80;y++)for(let x=0;x<80;x++){const xx=x+dx,yy=y+dy;if(xx>=0&&xx<80&&yy>=0&&yy<80)data.set(copy.subarray((y*80+x)*4,(y*80+x)*4+4),(yy*80+xx)*4);}}
+  p.hands=p.hands.map(h=>plus(h,dx,dy));if(p.contact)p.contact={...p.contact,point:plus(p.contact.point,dx,dy)};p.externalContact=target.slice();
+ }
  function renderLayers(options={}){
   const sex=sexName(options.sex),action=canonical(options.action),view=directionName(options.dir),frame=checkFrame(action,options.frame===undefined?0:options.frame),palette=paletteName(sex,options.palette);
   const bodyPal=paletteFor(sex,palette),layers=Object.fromEntries(LAYERS.map(k=>[k,new Pixels(k==='body'||k==='hands'?bodyPal:TOOL_COLORS)]));
   let p=poseFor(action,frame,view),joints=[];
   if(action==='idle'||action==='walk'){
    const baseAction=action;layers.body.data.set(recolorBase(BASES[sex].raster(baseAction,view,frame),sex,palette).data);
-  }else{makeTools(layers,sex,action,view,p,frame,options);joints=drawBody(layers,sex,view,p);
+  }else{makeTools(layers,sex,action,view,p,frame,options);attachStation(layers,sex,action,view,p,options);joints=drawBody(layers,sex,view,p);
    const neutral=(action==='sit_down'&&frame===0)||(action==='stand_up'&&frame===CLIPS[action].frames-1)||(['hit','startle'].includes(action)&&(frame===0||frame===CLIPS[action].frames-1))||(action==='death'&&frame===0)||(action==='cower_enter'&&frame===0)||(action==='cower_exit'&&frame===CLIPS[action].frames-1)||(action==='unload'&&frame===CLIPS[action].frames-1);
    if(neutral){layers.body.data.set(recolorBase(BASES[sex].raster('idle',view,0),sex,palette).data);layers.hands.data.fill(0);joints=[];}
   }
   const result=Object.fromEntries(LAYERS.map(k=>[k,{width:80,height:80,anchor:ANCHOR,data:layers[k].data}]));
   return {layers:result,metadata:{sex,palette,action,direction:view,engineDirection:DIRECTIONS.indexOf(view),frame,anchor:ANCHOR,
-   tool:p.tool,hands:p.hands,joints,contact:p.contact,socketCoordinateSpace:'engine_80px',rootMotion:[0,0],sceneRequired:action==='punt'?'boat':null}};
+   tool:p.tool,hands:p.hands,joints,contact:p.contact,externalContact:p.externalContact,socketCoordinateSpace:'engine_80px',rootMotion:[0,0],sceneRequired:action==='punt'?'boat':null}};
  }
  function raster(options={}){const format=options.format||'engine',which=options.layer||(options.scene?'composite':'actor'),r=renderLayers(options);let image;
   if(which==='composite')image=composite(LAYERS.map(k=>r.layers[k]));else if(which==='actor')image=composite(ACTOR_LAYERS.map(k=>r.layers[k]));else if(Object.hasOwn(r.layers,which))image=r.layers[which];else throw new RangeError('Calque inconnu : '+which);
@@ -3043,7 +3053,7 @@ const API=(function(){const module={exports:{}};const require=(id)=>id.includes(
  class Atlas{
   constructor(options={}){this.sex=sexName(options.sex);this._palette=paletteName(this.sex,options.palette);this.canvasFactory=options.canvasFactory||canvasFactory;this.maxFrames=options.maxFrames===undefined?128:integer(options.maxFrames,'maxFrames');if(this.maxFrames<1||this.maxFrames>256)throw new RangeError('maxFrames : 1..256');this.cache=new Map();}
   get palette(){return this._palette;}set palette(name){const n=paletteName(this.sex,name);if(n!==this._palette){this._palette=n;this.clear();}}
-  get(action='idle',dir=2,frame=0,options={}){const id=canonical(action),view=directionName(dir);checkFrame(id,frame);const layer=options.layer||(options.scene?'composite':'actor');const key=[id,view,frame,layer,options.catch!==false].join(':');
+  get(action='idle',dir=2,frame=0,options={}){const id=canonical(action),view=directionName(dir);checkFrame(id,frame);const layer=options.layer||(options.scene?'composite':'actor');const key=[id,view,frame,layer,options.catch!==false,JSON.stringify(options.interaction||null)].join(':');
    if(this.cache.has(key)){const v=this.cache.get(key);this.cache.delete(key);this.cache.set(key,v);return v;}
    const im=raster({...options,sex:this.sex,palette:this.palette,action:id,dir:view,frame,format:'engine'}),cv=this.canvasFactory(80,80);cv.width=cv.height=80;const c=cv.getContext('2d');if(!c)throw new Error('Canvas 2D indisponible.');const data=c.createImageData(80,80);data.data.set(im.data);c.putImageData(data,0,0);
    this.cache.set(key,cv);while(this.cache.size>this.maxFrames)this.cache.delete(this.cache.keys().next().value);return cv;

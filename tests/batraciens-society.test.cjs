@@ -40,8 +40,8 @@ test('road travel stops at closures rather than cutting across terrain',()=>{
  const p={x:n.x,y:n.y};g.stepBatracienRoutine(n,.04);assert.equal(n.x,p.x);assert.equal(n.y,p.y);assert.equal(r.progress,160);assert.equal(n.batracien.action,'idle');
 });
 test('road coordinates and palette survive reload; malformed path indices and arbitrary warps are rejected',()=>{
- const g=game(),n=g.npcs.find(n=>n.id==='resident-batracien-town-55-4'),r=n.batracien.routine,route=S.route(n.id);r.edge=0;r.progress=1600;r.approach=false;r.wait=0;const p=S.roadPoint(route,0,1600);Object.assign(n,p);n.post={...p};assert.equal(g.solid(n.x,n.y,6,0),false);
- const save=json(g.serialize()),copy=new api.Game(save),rn=copy.npcs.find(a=>a.id===n.id);assert.ok(Math.hypot(rn.x-n.x,rn.y-n.y)<.01);assert.equal(rn.batracien.palette,n.batracien.palette);assert.equal(rn.batracien.routine.edge,0);
+ const g=game(),n=g.npcs.find(n=>n.id==='resident-batracien-town-55-4'),r=n.batracien.routine,route=S.route(n.id),leg=route.segments.findIndex(s=>s.length>2400);assert.ok(leg>=0);r.edge=leg;r.progress=1600;r.approach=false;r.wait=0;const p=S.roadPoint(route,leg,1600);Object.assign(n,p);n.post={...p};assert.equal(g.solid(n.x,n.y,6,0),false);
+ const save=json(g.serialize()),copy=new api.Game(save),rn=copy.npcs.find(a=>a.id===n.id);assert.ok(Math.hypot(rn.x-n.x,rn.y-n.y)<.01);assert.equal(rn.batracien.palette,n.batracien.palette);assert.equal(rn.batracien.routine.edge,leg);
  const row=save.atlas.batraciens.people.find(a=>a.id===n.id);row.routine.edge=-99;row.x=1e15;row.y=NaN;assert.equal(copy.validBatracienRoutePosition(n.id,row),false);
 });
 test('direct player assault makes only nearby witnesses hostile, targetable and able to retaliate in a village',()=>{
@@ -99,7 +99,7 @@ test('combat blocks both a prepared transport and sleep without spending money o
  const g=game(),{guard}=arena(g);g.reportBatracienAssault(guard,g.player);g.restTent=()=>({rest:true});const c=g.clock,coins=g.player.coins;assert.equal(g.startJourney({to:'town-73'}),false);assert.equal(g.sleep(1440),false);assert.equal(g.clock,c);assert.equal(g.player.coins,coins);
 });
 test('distant road travellers leave their stop, advance on land only, and never enter the visible area by fast-forward',()=>{
- const g=game(),n=g.npcs.find(n=>n.id==='resident-batracien-town-55-4'),r=n.batracien.routine,path=S.route(n.id);g.solid=()=>false;g.lineClear=()=>true;r.wait=0;r.approach=false;r.progress=160;
- Object.assign(n,S.roadPoint(path,0,160));n.post={x:n.x,y:n.y};const old={x:n.x,y:n.y};Object.assign(g.player,S.roadPoint(path,0,2200));g.atlasLastClock=g.clock;g.clock+=1;g.advanceAtlas(0);
- assert.ok(Math.hypot(n.x-old.x,n.y-old.y)>0);assert.ok(Math.hypot(n.x-g.player.x,n.y-g.player.y)>=999);assert.equal(r.edge,0);assert.ok(r.progress>160&&r.progress<2200);
+ const g=game(),n=g.npcs.find(n=>n.id==='resident-batracien-town-55-4'),r=n.batracien.routine,path=S.route(n.id),leg=path.segments.findIndex(s=>s.length>2400);assert.ok(leg>=0);g.solid=()=>false;g.lineClear=()=>true;r.wait=0;r.approach=false;r.edge=leg;r.progress=160;
+ Object.assign(n,S.roadPoint(path,leg,160));n.post={x:n.x,y:n.y};const old={x:n.x,y:n.y};Object.assign(g.player,S.roadPoint(path,leg,2200));g.atlasLastClock=g.clock;g.clock+=1;g.advanceAtlas(0);
+ assert.ok(Math.hypot(n.x-old.x,n.y-old.y)>0);assert.ok(Math.hypot(n.x-g.player.x,n.y-g.player.y)>=999);assert.equal(r.edge,leg);assert.ok(r.progress>160&&r.progress<2200);
 });

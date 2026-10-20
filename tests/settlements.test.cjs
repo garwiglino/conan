@@ -23,8 +23,8 @@ test('all native entrances and staffed transport arrivals are clear in the actua
 test('work sockets keep existing identities, population and production; danger and snow stop work',()=>{
  const g=new a.Game(),population=JSON.stringify(Object.fromEntries(Object.entries(g.worldState.simulation.state.sites).map(([id,s])=>[id,[s.population,s.workers,s.stock,s.treasury]]))),people=g.npcs.length;
  g.stepCivilianAnimations(.04);assert.ok([...g.humanWorkstations.values()].filter(w=>w.actor).length>5);assert.equal(g.npcs.length,people);assert.equal(JSON.stringify(Object.fromEntries(Object.entries(g.worldState.simulation.state.sites).map(([id,s])=>[id,[s.population,s.workers,s.stock,s.treasury]]))),population);
- for(const [id,w]of g.humanWorkstations){if(!w.actor)continue;const n=g.npcs.find(n=>n.id===id);assert.ok(n.resident);assert.ok(!g.solid(...w.feet,4,0));assert.ok(!g.solid(...w.approach,4,0));assert.ok(g.worldState.simulation.systems.jobCanProduce(g.worldState.simulation.state.sites[n.labourSite||n.site],n.civilian.job));}
- const [id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id);n.x=w.feet[0];n.y=w.feet[1];n.civilian.restClock=0;g.time+=.1;g.stepCivilianAnimations(.04);g.time+=.1;g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,n.civilian.job);
+ for(const [id,w]of g.humanWorkstations){if(!w.actor||w.cityFixture)continue;const n=g.npcs.find(n=>n.id===id);assert.ok(n.resident);assert.ok(!g.solid(...w.feet,4,0));assert.ok(!g.solid(...w.approach,4,0));assert.ok(g.worldState.simulation.systems.jobCanProduce(g.worldState.simulation.state.sites[n.labourSite||n.site],n.civilian.job));}
+ const [id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&!w.cityFixture&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id);n.x=w.feet[0];n.y=w.feet[1];n.civilian.restClock=0;g.time+=.1;g.stepCivilianAnimations(.04);g.time+=.1;g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,n.civilian.job);
  n.justiceReport={};g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,'idle');delete n.justiceReport;n.dangerState={mode:'sheltered'};g.stepCivilianAnimations(.04);assert.notEqual(n.civilian.action,n.civilian.job);
 });
 test('save/restore derives the same districts without serialising generated geometry or reviving the dead',()=>{
@@ -47,11 +47,11 @@ test('every doorway connects through the walkable district to its existing centr
  }
 });
 test('assigned work sockets have an actual local walking route and a physical shelter for artisans',()=>{
- const g=new a.Game();g.stepCivilianAnimations(.04);for(const [id,w]of g.humanWorkstations){if(!w.actor)continue;const n=g.npcs.find(n=>n.id===id),goal={x:w.feet[0],y:w.feet[1]},route=a.Atlas.localPath(g.settlements.sites.get(n.site).layoutKind?{x:w.approach[0],y:w.approach[1]}:a.Atlas.toGame(a.Atlas.byId[n.site].x,a.Atlas.byId[n.site].y),goal,(x,y)=>!g.solid(x,y,4,0));assert.ok(route.length,id+' unreachable work');if(w.id!=='crop_patch'){assert.equal(w.sheltered,true);const building=g.settlements.buildings.find(b=>b.uid===w.building);assert.ok(building&&A.entry(building.id).openHall);}}
+ const g=new a.Game();g.stepCivilianAnimations(.04);for(const [id,w]of g.humanWorkstations){if(!w.actor||w.cityFixture)continue;const n=g.npcs.find(n=>n.id===id),goal={x:w.feet[0],y:w.feet[1]},route=a.Atlas.localPath(g.settlements.sites.get(n.site).layoutKind?{x:w.approach[0],y:w.approach[1]}:a.Atlas.toGame(a.Atlas.byId[n.site].x,a.Atlas.byId[n.site].y),goal,(x,y)=>!g.solid(x,y,4,0));assert.ok(route.length,id+' unreachable work');if(w.id!=='crop_patch'){assert.equal(w.sheltered,true);const building=g.settlements.buildings.find(b=>b.uid===w.building);assert.ok(building&&A.entry(building.id).openHall);}}
 });
 
 test('stationary work stops when every required input or deposit is exhausted',()=>{
- const g=new a.Game();g.stepCivilianAnimations(.04);const [id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id),site=g.worldState.simulation.state.sites[n.labourSite||n.site];
+ const g=new a.Game();g.stepCivilianAnimations(.04);const [id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&!w.cityFixture&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id),site=g.worldState.simulation.state.sites[n.labourSite||n.site];
  n.x=w.feet[0];n.y=w.feet[1];n.civilian.lastX=n.x;n.civilian.lastY=n.y;n.civilian.moveTime=-1;n.civilian.restClock=0;g.time+=.1;g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,n.civilian.job);
  for(const key of Object.keys(site.stock))site.stock[key]=0;for(const key of Object.keys(site.deposits))site.deposits[key]=0;
  g.time+=.1;g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,'idle');assert.ok(g.humanWorkstations.has(id));
@@ -64,16 +64,16 @@ test('saved companions displaced by the new architecture recover a nearby free p
 });
 
 test('new workers start at their authored workplace and living positions persist on reload',()=>{
- const g=new a.Game();assert.ok([...g.humanWorkstations.values()].filter(w=>w.actor).length>5);for(const [id,w]of g.humanWorkstations){if(!w.actor)continue;const n=g.npcs.find(n=>n.id===id);assert.ok(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2,id+' misplaced initial worker');}
+ const g=new a.Game();assert.ok([...g.humanWorkstations.values()].filter(w=>w.actor).length>5);for(const [id,w]of g.humanWorkstations){if(!w.actor||w.cityFixture)continue;const n=g.npcs.find(n=>n.id===id);assert.ok(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2,id+' misplaced initial worker');}
  const [id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&w.sheltered),n=g.npcs.find(n=>n.id===id);const candidates=[[16,0],[-16,0],[0,24],[0,-24]].map(([x,y])=>({x:n.x+x,y:n.y+y})),p=candidates.find(p=>!g.solid(p.x,p.y,4,0));assert.ok(p);Object.assign(n,p);const h=new a.Game(g.serialize()),restored=h.npcs.find(v=>v.id===id);assert.deepEqual([restored.x,restored.y],[n.x,n.y]);
 });
 
 test('standing workplaces do not render sitting poses without a physical seat',()=>{
- const g=new a.Game(),[id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id);n.civilian.restClock=40;g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,'idle');assert.equal(w.socket.support,null);
+ const g=new a.Game(),[id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&!w.cityFixture&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id);n.civilian.restClock=40;g.stepCivilianAnimations(.04);assert.equal(n.civilian.action,'idle');assert.equal(w.socket.support,null);
 });
 
 test('workers walk around a tabletop between clear tile centres instead of retrying a blocked edge',()=>{
- const g=new a.Game(),[id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id),b=g.settlements.buildings.find(b=>b.uid===w.building),door=b.geometry.portals[0];Object.assign(n,{x:door.x+door.nx*30,y:door.y+door.ny*30});n.civilian.action='idle';n.civilian.elapsed=1;n.path=[];assert.ok(!g.solid(n.x,n.y,4,0));
+ const g=new a.Game(),[id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&!w.cityFixture&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id),b=g.settlements.buildings.find(b=>b.uid===w.building),door=b.geometry.portals[0];Object.assign(n,{x:door.x+door.nx*30,y:door.y+door.ny*30});n.civilian.action='idle';n.civilian.elapsed=1;n.path=[];assert.ok(!g.solid(n.x,n.y,4,0));
  let steps=0;while(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])>2&&steps++<800){const from={x:n.x,y:n.y};g.walkNpc(n,{x:w.feet[0],y:w.feet[1]},.04);assert.ok(Math.hypot(n.x-from.x,n.y-from.y)<=1.281);assert.ok(!g.solid(n.x,n.y,4,0));}
  assert.ok(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2,'The real sweep must agree with the planned route');
 });

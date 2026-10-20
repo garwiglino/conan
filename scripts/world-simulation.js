@@ -75,7 +75,7 @@ function createWorldSimulation(A,B,W,saved){
   }
   if(A.roadById[e.target]&&!e.edge&&['bandits','bridge','landslide','avalanche','fire','flood'].includes(e.type)){
    const road=A.roadById[e.target],s=road.segments.reduce((best,s)=>{const d=A.project(e.x,e.y,s.a,s.b).d;return !best||d<best.d?{s,d}:best;},null)?.s;
-   if(s){e.edge=[s.a[2],s.b[2]].sort().join('|');e.radius=40;}
+   if(s){e.edge=s.edge;e.radius=40;}
   }
   const target=site||A.byId[e.target]?.id||A.nearestSite(e.x,e.y).id;const ledger=state.channels[target]||(state.channels[target]={});if(!ledger[e.id]||ledger[e.id].resolved!==e.resolved)ledger[e.id]={heard:state.clock,at:e.at,resolved:e.resolved,source:'Habitants de '+(A.byId[target]?.name||'la région')};
  }

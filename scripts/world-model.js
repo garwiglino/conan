@@ -106,21 +106,29 @@ const createWorldAtlas = (raw) => {
  for(const r of roads){const cs=roadCells(r);if(r.type==='trails'&&r.id!=='prison-road'&&cs.every(c=>c.height<58&&c.biome!==12))r.modes.push('cart');}
  const roadById=Object.fromEntries(roads.map(r=>[r.id,r])),segments=[],roadIndex=new Index(2048),riverIndex=new Index(2048),vertices=new Map(),adj=new Map();
  const curseCells=new Set(raw.zones.flatMap(z=>z.cells));
- function addEdge(a,b,r,len){const key=[a[2],b[2]].sort().join('|');let e=edgeById.get(key);if(!e){e={id:key,a:a[2],b:b[2],length:len,roads:[],modes:[],danger:1};edgeById.set(key,e);for(const [u,v]of [[a[2],b[2]],[b[2],a[2]]]){if(!adj.has(u))adj.set(u,[]);adj.get(u).push({to:v,edge:e});}}e.roads.push(r.id);e.modes=[...new Set([...e.modes,...r.modes])];e.danger=Math.max(e.danger,r.danger);}
+ function addEdge(a,b,r,len,points){const key=[a[2],b[2]].sort().join('|');let e=edgeById.get(key);if(!e){e={id:key,a:a[2],b:b[2],length:len,points,referenceLength:distance(a,b),roads:[],modes:[],danger:1};edgeById.set(key,e);for(const [u,v]of [[a[2],b[2]],[b[2],a[2]]]){if(!adj.has(u))adj.set(u,[]);adj.get(u).push({to:v,edge:e});}}e.roads.push(r.id);e.modes=[...new Set([...e.modes,...r.modes])];e.danger=Math.max(e.danger,r.danger);}
  const edgeById=new Map();
- for(const r of roads){r.cumulative=[0];r.length=0;r.segments=[];for(const p of r.pts)vertices.set(p[2],p);for(let i=1;i<r.pts.length;i++){const a=r.pts[i-1],b=r.pts[i],len=distance(a,b),s={r,a,b,length:len,start:r.length,i};r.length+=len;r.cumulative.push(r.length);r.segments.push(s);segments.push(s);roadIndex.put(s,Math.min(a[0],b[0])-25,Math.min(a[1],b[1])-25,Math.max(a[0],b[0])+25,Math.max(a[1],b[1])+25);addEdge(a,b,r,len);}}
+ function pointOnLine(points,d){for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],len=distance(a,b);if(d<=len||i===points.length-1){const t=len?clamp(d/len,0,1):0;return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}d-=len;}return points[0].slice(0,2);}
+ for(const r of roads){const source=r.pts;r.sourcePts=source;r.pts=[];r.cumulative=[0];r.length=0;r.referenceLength=0;r.segments=[];r.orthogonal=!!raw.rectilinearRoads&&r.type!=='searoutes';for(const p of source)vertices.set(p[2],p);
+  for(let part=1;part<source.length;part++){const from=source[part-1],to=source[part],edge=[from[2],to[2]].sort().join('|'),authored=r.orthogonal?raw.rectilinearRoads.edges[edge]:null;
+   if(r.orthogonal&&!authored)throw Error('Missing orthogonal road edge '+edge);
+   const line=authored?(authored.a===from[2]?authored.points:authored.points.slice().reverse()):[from,to],length=line.slice(1).reduce((n,p,i)=>n+distance(line[i],p),0);r.referenceLength+=distance(from,to);
+   const path=line.map((p,i)=>i===0?from:i===line.length-1?to:[p[0],p[1],'bend-'+edge+'-'+Math.round(p[0]*1e6)+'-'+Math.round(p[1]*1e6)]);addEdge(from,to,r,length,path);if(!r.pts.length)r.pts.push(path[0]);
+   for(let j=1;j<path.length;j++){const a=path[j-1],b=path[j],len=distance(a,b),s={r,a,b,edge,length:len,start:r.length,i:r.pts.length};r.length+=len;r.pts.push(b);r.cumulative.push(r.length);vertices.set(b[2],b);r.segments.push(s);segments.push(s);roadIndex.put(s,Math.min(a[0],b[0])-25,Math.min(a[1],b[1])-25,Math.max(a[0],b[0])+25,Math.max(a[1],b[1])+25);}
+  }
+ }
  // Evaluate only the cells traversed by each graph edge, never the whole road.
  for(const e of edgeById.values()){
   const a=vertices.get(e.a),b=vertices.get(e.b),base=Math.min(...e.roads.map(id=>roadById[id].danger)),count=Math.max(1,Math.min(24,Math.ceil(e.length/250))),values=[],reasons=new Set();
-  e.x=(a[0]+b[0])/2;e.y=(a[1]+b[1])/2;
-  for(let i=0;i<count;i++){const u=(i+.5)/count,c=cellAt(a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u);let v=base;
+  [e.x,e.y]=pointOnLine(e.points,e.length/2);
+  for(let i=0;i<count;i++){const u=(i+.5)/count,p=pointOnLine(e.points,u*e.length),c=cellAt(...p);let v=base;
    if(c?.land&&c.height>60){v+=1;reasons.add('Relief montagneux');}
    if(c&&curseCells.has(c.id)){v+=2;reasons.add('Terres maudites');}
    values.push(clamp(v,0,5));
   }e.danger=values.reduce((a,b)=>a+b,0)/values.length;e.peakDanger=Math.max(...values);e.terrainReasons=[...reasons];
  }
  // NPC road summaries remain averages; local encounters use the actual edge.
- for(const r of roads)r.danger=r.segments.reduce((sum,s)=>sum+edgeById.get([s.a[2],s.b[2]].sort().join('|')).danger*s.length,0)/(r.length||1);
+ for(const r of roads)r.danger=r.segments.reduce((sum,s)=>sum+edgeById.get(s.edge).danger*s.length,0)/(r.length||1);
  function edgeRisk(edge,clock=480,state=null){
   const status=state?.edgeStatus(edge,clock)||{closed:false,risk:0,events:[]},sky=state?.weatherAt?.(clock,edge.x,edge.y),sea=edge.modes.includes('boat')&&!edge.modes.includes('horse');
   const weather=sky?(sea?Math.max(sky.storm||0,(sky.wind||0)*.6)*(sky.rain>.5?1.5:1):(sky.blizzard||0)+(sky.rain||0)*(edge.terrainReasons.includes('Relief montagneux')?.5:.15)):0;
@@ -202,24 +210,25 @@ const createWorldAtlas = (raw) => {
     if(cost<(best.get(v)??Infinity)){best.set(v,cost);prev.set(v,{from:u.id,to:v,edge:e.id,road:r.id,mode:m,length:e.length});q.push({id:v,cost});}
    }
   }
-  if(!best.has(goal))return null;const result=[];let v=goal;while(v!==start){const e=prev.get(v);if(!e)return null;result.unshift(e);v=e.from;}return result;
+  if(!best.has(goal))return null;const result=[];let v=goal;while(v!==start){const e=prev.get(v);if(!e)return null;result.unshift(e);v=e.from;}return result.flatMap(l=>{const e=edgeById.get(l.edge),ps=l.from===e.a?e.points:e.points.slice().reverse();return ps.slice(1).map((p,i)=>({...l,from:ps[i][2],to:p[2],length:distance(ps[i],p)}));});
  }
  function routePlan(from,to,options={}){const path=findPath(from,to,options);if(!path||!path.length)return null;const clock=options.clock??480,stages=[],dangerLegs=path.map(l=>{const e=edgeById.get(l.edge),risk=edgeRisk(e,clock,options.state);return {...risk,road:l.road,length:l.length};});let time=clock,effort=0,distanceTotal=0,cost=0,lastMode=null,lastRoad=null;
   for(const leg of path){const r=roadById[leg.road],a=vertices.get(leg.from),b=vertices.get(leg.to),rate=modes[leg.mode].metresPerMinute;
    if(leg.mode==='boat'&&lastMode!=='boat'){const wait=(r.interval-time%r.interval)%r.interval;if(wait){stages.push({kind:'wait',minutes:wait,x:a[0],y:a[1],label:'Attend l’embarquement à '+nearestSite(a[0],a[1]).name});time+=wait;}}
    const delay=options.state?.edgeStatus(edgeById.get(leg.edge),time).delay||0;if(delay&&lastRoad!==r.id){stages.push({kind:'wait',minutes:delay,x:a[0],y:a[1],label:'Départ retardé sur '+r.name});time+=delay;}
-   let left=leg.length,done=0;
-   while(left>1e-7){if(leg.mode!=='boat'&&effort>=480-1e-7){const x=a[0]+(b[0]-a[0])*done/leg.length,y=a[1]+(b[1]-a[1])*done/leg.length,n=siteAt(x,y,100),minutes=600;stages.push({kind:'rest',minutes,x,y,label:n?'Se repose à '+n.name:'Bivouaque sur '+r.name});time+=minutes;effort=0;}
-    const length=Math.min(left,leg.mode==='boat'?rate*180:Math.max(1,(480-effort)*rate)),minutes=length/rate,u=done/leg.length,v=(done+length)/leg.length;
+   const line=[a,b];
+   for(let part=1;part<line.length;part++){const a=line[part-1],b=line[part],partLength=distance(a,b);let left=partLength,done=0;
+   while(left>1e-7){if(leg.mode!=='boat'&&effort>=480-1e-7){const x=a[0]+(b[0]-a[0])*done/partLength,y=a[1]+(b[1]-a[1])*done/partLength,n=siteAt(x,y,100),minutes=600;stages.push({kind:'rest',minutes,x,y,label:n?'Se repose à '+n.name:'Bivouaque sur '+r.name});time+=minutes;effort=0;}
+    const length=Math.min(left,leg.mode==='boat'?rate*180:Math.max(1,(480-effort)*rate)),minutes=length/rate,u=done/partLength,v=(done+length)/partLength;
     stages.push({kind:'move',minutes,road:r.id,edge:leg.edge,mode:leg.mode,length,from:[a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u],to:[a[0]+(b[0]-a[0])*v,a[1]+(b[1]-a[1])*v],label:modes[leg.mode].verb+' via '+r.name});time+=minutes;effort+=leg.mode==='boat'?0:minutes;done+=length;left-=length;
-   }
+   }}
    distanceTotal+=leg.length;cost+=leg.length/1000*modes[leg.mode].costPerKm;lastMode=leg.mode;lastRoad=r.id;
   }
   return {from,to,mode:options.mode||'horse',preference:options.preference||'fast',allowBoat:options.allowBoat!==false,stages,distance:distanceTotal,minutes:time-clock,cost:Math.ceil(cost),boat:path.some(l=>l.mode==='boat'),danger:clamp(dangerLegs.reduce((sum,l)=>sum+l.value*l.length,0)/distanceTotal,0,Math.max(...dangerLegs.map(l=>l.peak))),maxDanger:Math.max(...dangerLegs.map(l=>l.peak)),dangerLegs,dangerAt:clock,screenSeconds:clamp(6+Math.log1p(distanceTotal/5000)*2.5,6,24),plannedAt:clock};
  }
- const crossings=[];
+ const crossings=raw.rectilinearRoads?raw.rectilinearRoads.bridges.map(c=>({...c})):[];
  function intersection(a,b,c,d){const ux=b[0]-a[0],uy=b[1]-a[1],vx=d[0]-c[0],vy=d[1]-c[1],det=ux*vy-uy*vx;if(Math.abs(det)<1e-7)return null;const t=((c[0]-a[0])*vy-(c[1]-a[1])*vx)/det,u=((c[0]-a[0])*uy-(c[1]-a[1])*ux)/det;return t>=0&&t<=1&&u>=0&&u<=1?{x:a[0]+t*ux,y:a[1]+t*uy}:null;}
- for(const s of segments){if(s.r.type==='searoutes')continue;const seen=new Set();for(let d=0;d<=s.length;d+=1024){const f=d/s.length,x=s.a[0]+(s.b[0]-s.a[0])*f,y=s.a[1]+(s.b[1]-s.a[1])*f;for(const r of riverIndex.near(x,y)){if(seen.has(r))continue;seen.add(r);const p=intersection(s.a,s.b,r.a,r.b);if(p&&cellAt(p.x,p.y)?.land)crossings.push({...p,id:'bridge-'+crossings.length,road:s.r.id,river:r.r.id,kind:'bridge',width:s.r.width});}}}
+ if(!raw.rectilinearRoads)for(const s of segments){if(s.r.type==='searoutes')continue;const seen=new Set();for(let d=0;d<=s.length;d+=1024){const f=d/s.length,x=s.a[0]+(s.b[0]-s.a[0])*f,y=s.a[1]+(s.b[1]-s.a[1])*f;for(const r of riverIndex.near(x,y)){if(seen.has(r))continue;seen.add(r);const p=intersection(s.a,s.b,r.a,r.b);if(p&&cellAt(p.x,p.y)?.land)crossings.push({...p,id:'bridge-'+crossings.length,road:s.r.id,river:r.r.id,kind:'bridge',width:s.r.width});}}}
  const EVENT_TYPES={
   flood:{name:'Crue',category:'Terrain',closed:true},landslide:{name:'Éboulement',category:'Terrain',closed:true},avalanche:{name:'Avalanche',category:'Terrain',closed:true},fire:{name:'Incendie',category:'Terrain',closed:true},
   bridge:{name:'Pont endommagé',category:'Routes',closed:true},repair:{name:'Passage rouvert',category:'Routes'},bandits:{name:'Brigands signalés',category:'Sécurité',risk:3},patrol:{name:'Patrouille renforcée',category:'Sécurité',risk:-1},

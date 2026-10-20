@@ -17,15 +17,15 @@ function graph(routes){
  return{nodes,edges,parts};
 }
 function axisAligned(points){return points.slice(1).every((p,i)=>Math.abs(p[0]-points[i][0])<EPS||Math.abs(p[1]-points[i][1])<EPS);}
-function build(routes,{valid=()=>true,sampleStep=3}={}){
+function build(routes,{valid=()=>true,sampleStep=3,offsets=[0,-8,8,-16,16,-32,32]}={}){
  const g=graph(routes),placed=[];
  const near=(p,a,b)=>{const d=sub(b,a),q=d[0]**2+d[1]**2,t=q?Math.max(0,Math.min(1,((p[0]-a[0])*d[0]+(p[1]-a[1])*d[1])/q)):0;return Math.hypot(p[0]-a[0]-t*d[0],p[1]-a[1]-t*d[1]);};
  for(const e of [...g.edges.values()].sort((a,b)=>b.width-a.width||b.referenceLengthM-a.referenceLengthM||a.id.localeCompare(b.id))){
   const a=g.nodes.get(e.u).point,b=g.nodes.get(e.v).point,p=a,q=b,candidates=[];
   const add=middle=>{const pts=compact([a,p,...middle,q,b]);if(axisAligned(pts))candidates.push(pts);};add([[p[0],q[1]]]);add([[q[0],p[1]]]);
-  for(const d of [0,-8,8,-16,16,-32,32]){const x=(p[0]+q[0])/2+d,y=(p[1]+q[1])/2+d;add([[x,p[1]],[x,q[1]]]);add([[p[0],y],[q[0],y]]);}
+  for(const d of offsets){const x=(p[0]+q[0])/2+d,y=(p[1]+q[1])/2+d;add([[x,p[1]],[x,q[1]]]);add([[p[0],y],[q[0],y]]);}
   let best,bestScore=Infinity;
-  for(const points of candidates){let bad=false,score=length(points)+(points.length-2)*12;for(let i=1;i<points.length;i++)for(let j=i+2;j<points.length;j++)if(hits(points[i-1],points[i],points[j-1],points[j]).length)bad=true;for(let i=1;i<points.length;i++){const u=points[i-1],v=points[i],n=Math.max(1,Math.ceil(length([u,v])/sampleStep));for(let k=0;k<=n;k++){const t=k/n,z=[u[0]+(v[0]-u[0])*t,u[1]+(v[1]-u[1])*t];if(!valid(z,e.width)){bad=true;break;}score+=near(z,a,b)*.03;}if(bad)break;for(const old of placed){if(old.edge.u===e.u||old.edge.u===e.v||old.edge.v===e.u||old.edge.v===e.v)continue;for(let j=1;j<old.points.length;j++)score+=hits(u,v,old.points[j-1],old.points[j]).length*250;}}
+  for(const points of candidates){let bad=false,score=length(points)+(points.length-2)*12;for(let i=1;i<points.length;i++)for(let j=i+2;j<points.length;j++)if(hits(points[i-1],points[i],points[j-1],points[j]).length)bad=true;for(let i=1;i<points.length;i++){const u=points[i-1],v=points[i],n=Math.max(1,Math.ceil(length([u,v])/sampleStep));for(let k=0;k<=n;k++){const t=k/n,z=[u[0]+(v[0]-u[0])*t,u[1]+(v[1]-u[1])*t];if(!valid(z,e.width,e)){bad=true;break;}score+=near(z,a,b)*.03;}if(bad)break;for(const old of placed){if(old.edge.u===e.u||old.edge.u===e.v||old.edge.v===e.u||old.edge.v===e.v)continue;for(let j=1;j<old.points.length;j++)score+=hits(u,v,old.points[j-1],old.points[j]).length*250;}}
    if(!bad&&score<bestScore){best=points;bestScore=score;}
   }
   if(!best)throw Error('No dry orthogonal route for edge '+e.id);e.points=best;e.physicalLengthM=length(best);placed.push({edge:e,points:best});

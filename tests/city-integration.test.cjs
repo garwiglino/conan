@@ -29,9 +29,20 @@ test('all city streets, thresholds and paths are walkable by the real player wit
  assert.deepEqual(failures,[]);assert.ok(samples>70000);assert.equal(plan.walkways.length,plan.buildings.length);
 });
 test('placed furniture has independent sockets exactly aligned with projected native actor feet',()=>{
- const site=g.settlements.sites.get('town-1');assert.equal(site.fixtures.length,24);
+ const site=g.settlements.sites.get('town-1');assert.equal(site.fixtures.length,Object.values(require('../data/architecture/city-plans/clairfoyer-life.json').fixtures).flat().length);
  for(const f of site.fixtures){const w=g.humanWorkstations.get(f.uid),native=P.sockets(f.id).operator,anchor=Projection.point(w.x,w.y),feet=Projection.point(...w.feet);assert.equal(w.actor,null);assert.ok(Math.abs(feet.x-anchor.x-(native.feet[0]-64))<1e-8);assert.ok(Math.abs(feet.y-anchor.y-(native.feet[1]-96))<1e-8);assert.equal(g.solid(...w.approach,5,0),false,f.uid);if(['care_bed','sleeping_mat','apothecary_table'].includes(w.id))assert.equal(w.sheltered,true);}
  for(const id of Object.keys(P.ASSETS))assert.ok(api.HearthreaverIsometricStations.ASSETS[id]);
+});
+test('the approved houses retain a clear doorstep and stay outside the street corridor',()=>{
+ const O=require('../scripts/city-plans/orthogonal-network.cjs');
+ for(const b of plan.buildings.filter(b=>b.capacity)){
+  const f=b.foot,p=b.apron,d=Math.hypot(Math.max(f.x-p.x,0,p.x-f.x-f.w),Math.max(f.y-p.y,0,p.y-f.y-f.h));assert.ok(Math.abs(d-1.5)<1e-6,b.uid+' doorstep setback');
+  for(const s of plan.streets)for(let i=1;i<s.points.length;i++){const r=O.rect(s.points[i-1],s.points[i],s.width+1.4);assert.equal(f.x<r.x+r.w&&f.x+f.w>r.x&&f.y<r.y+r.h&&f.y+f.h>r.y,false,b.uid+' too close to '+s.id);}
+ }
+});
+test('an existing Clairfoyer farmer receives a real new station in the hinterland without adding people or stocks',()=>{
+ const n=g.npcs.find(n=>n.site==='town-1'&&g.humanWorkSpec(n)?.fixture==='crop_patch');assert.ok(n);const w=g.humanWorkstations.get(n.id),site=g.settlements.sites.get(n.site);assert.ok(w);assert.equal(w.id,'crop_patch');assert.ok(!g.solid(...w.feet,4,0)&&!g.solid(...w.approach,4,0));
+ const p={x:w.x-centre.x,y:w.y-centre.y};assert.ok(!site.districts.some(d=>d.areas.some(r=>p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h)),'field outside the urban blocks');
 });
 test('the whole approved house fades behind the hero while its physical foundation remains blocked',()=>{
  const Art=require('../scripts/architecture-render').createRenderer(A);Art.setCanvasFactory(require('@napi-rs/canvas').createCanvas);let found;

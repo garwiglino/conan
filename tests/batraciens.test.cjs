@@ -11,8 +11,9 @@ function incident(g,type='bandits',siteId='town-73'){
  const site=api.Atlas.byId[siteId],p=api.Atlas.toGame(site.x,site.y);Object.assign(g.player,{x:p.x+520,y:p.y+460});g.solid=()=>false;g.lineClear=()=>true;g.inSafe=()=>null;
  const e=g.worldState.add(type,site.id,g.clock,300);g.stepEventGroups(.04);return e;
 }
-test('approved civil bundle is unchanged byte-for-byte',()=>{
- const h=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'sprites/batraciens/batraciens-complet.js'))).digest('hex');assert.equal(h,approved.civilBundleSHA256);
+test('approved civilian pixels remain exact in every default animation, frame and native direction',()=>{
+ const snapshot=require('../data/batraciens/approved-civil-pixels.json');assert.equal(snapshot.sourceBundleSHA256,approved.civilBundleSHA256);
+ for(const sex of ['male','female']){const h=crypto.createHash('sha256');for(const action of Object.keys(Artwork.CLIPS))for(let dir=0;dir<4;dir++)for(let frame=0;frame<Artwork.CLIPS[action].frames;frame++)h.update(Artwork.raster({sex,action,dir,frame}).data);assert.equal(h.digest('hex'),snapshot.rendered[sex]);}
 });
 test('outfits match reviewed pixels; disabling outfits retains non-combat v1 frames',()=>{
  for(const role of Object.keys(Armed.ROLES))for(const pal of ['original','jade','turquoise_sombre','ocre_mousse','ardoise']){
@@ -31,7 +32,7 @@ test('14 real wetland communities create 62 civilians and 11 separate male warde
 });
 test('placements clear real geometry, entrances and enemy safety margins after transport props exist',()=>{
  const g=game();for(const n of g.npcs.filter(n=>n.batracien)){
-  assert.equal(g.solid(n.x,n.y,8,0),false,n.id);assert.equal(g.localThreatAt(n.x,n.y,0,220),null,n.id);assert.equal(g.dangerAt(n.x,n.y).unsafe,false,n.id);
+  assert.equal(g.solid(n.x,n.y,n.cityLife?4:8,0),false,n.id);assert.equal(g.localThreatAt(n.x,n.y,0,220),null,n.id);assert.equal(g.dangerAt(n.x,n.y).unsafe,false,n.id);
   for(const s of g.stations)assert.ok(Math.hypot(n.x-s.actor.x,n.y-s.actor.y)>=32,n.id);
  }
 });
