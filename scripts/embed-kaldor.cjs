@@ -74,7 +74,22 @@ for(const target of ['damageEnemy(e,','damageCivilian(n,','damageHumanGuard(n,',
  html=html.replaceAll('this.'+target+'p.combo===3?2:1','this.'+target+'this.weaponDamage(p.combo===3?2:1)');
 replaceOnce("let state='idle',frame=0;if(kind==='guardian'", "if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');let state='idle',frame=0;if(kind==='guardian'");
 html=html.replace("&&actor.weapon!=='exile'",'');
-replaceOnce("if(frame===2&&!p.attackStep)","if((frame===2||frame===3)&&!p.attackStep)");
+html=html.replaceAll("if(frame===2&&!p.attackStep)","if((frame===2||frame===3)&&!p.attackStep)");
+// One damage event per swing, shared by monsters, people, guards and props.
+// The logical phases 2 and 3 both display the single held impact drawing.
+replaceOnce('this.swing++;p.attackStep=false;', 'this.swing++;p.attackStep=false;p.impactDone=false;p.impactTick=false;p.comboRecoilShown=false;');
+replaceOnce("p[k]=Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));",
+ "p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));");
+replaceOnce('const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.attackCD<.065&&p.attack<.065;',
+ 'const buffered=p.attackBuffer>0,link=(buffered||input.attack)&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0;');
+const impactAnchor='if(p.attack>0){const frame=attackFrame(p.attack,p.combo,p.weapon);';
+const impactEvent="p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;";
+replaceOnce(impactAnchor,impactEvent+impactAnchor);
+replaceOnce('if((frame===2||frame===3)&&!p.attackStep)', 'if(p.impactTick&&!p.attackStep)');
+// Contact shake shares the existing reduced-motion preference and world-only
+// translation. Keep the stronger native hurt shake instead of adding to it.
+const contactCamera="const contactShake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);if(Math.abs(contactShake)>Math.abs(shake))shake=contactShake;";
+replaceOnce('c.fillStyle=PAL.ink;c.fillRect(0,0,W,H);c.save();c.beginPath();c.rect(0,T,W,VH);',contactCamera+'c.fillStyle=PAL.ink;c.fillRect(0,0,W,H);c.save();c.beginPath();c.rect(0,T,W,VH);');
 // The ready beat uses the original breathing idle, not a frozen attack cell.
 const oldSampling="if(kind==='hero'&&state==='attack'&&actor.weapon)frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);";
 const sampling="if(kind==='hero'&&state==='attack'&&actor.weapon){frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);if(frame===5){state='idle';frame=HearthreaverKaldorCivilianArt.frameAt('idle',time);}}";

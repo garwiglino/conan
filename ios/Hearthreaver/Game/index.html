@@ -1433,7 +1433,7 @@ class Game{
  direction(x,y){return Math.abs(x)>Math.abs(y)?(x>0?1:3):(y>0?2:0);}
  turnTo(cur,dx,dy){const nd=this.direction(dx,dy);if(nd===cur)return cur;const [cx,cy]=this.facing(cur),along=cx*dx+cy*dy;if(along>0&&along>=.8*Math.max(Math.abs(dx),Math.abs(dy)))return cur;return nd;}
  facing(dir){return [[0,-1],[1,0],[0,1],[-1,0]][dir];}
- swingSword(){const p=this.player;if(p.attackCD>0||p.dash>0||this.dead||this.won)return;p.combo=p.comboWindow>0?(p.combo+1)%4:0;p.comboWindow=attackLength(p.combo,p.weapon)+.35;this.swing++;p.attackStep=false;this.hits.clear();p.attackBuffer=0;p.guard=false;p.attack=attackLength(p.combo,p.weapon);p.attackCD=p.attack+(p.combo===3?.08:.015);this.emit('sword',{combo:p.combo,weapon:p.weapon});}
+ swingSword(){const p=this.player;if(p.attackCD>0||p.dash>0||this.dead||this.won)return;p.combo=p.comboWindow>0?(p.combo+1)%4:0;p.comboWindow=attackLength(p.combo,p.weapon)+.35;this.swing++;p.attackStep=false;p.impactDone=false;p.impactTick=false;p.comboRecoilShown=false;this.hits.clear();p.attackBuffer=0;p.guard=false;p.attack=attackLength(p.combo,p.weapon);p.attackCD=p.attack+(p.combo===3?.08:.015);this.emit('sword',{combo:p.combo,weapon:p.weapon});}
  dodge(dx=0,dy=0){const p=this.player;if(p.dashCD>0||this.dead||this.won)return;if(!dx&&!dy)[dx,dy]=this.facing(p.dir);const l=Math.hypot(dx,dy);p.dashX=dx/l;p.dashY=dy/l;p.dash=.15;p.dashCD=.8;p.inv=Math.max(p.inv,.28);p.attack=0;p.attackBuffer=0;p.guard=false;p.parry=0;this.usedDash=true;this.emit('dodge');}
  defend(from){const p=this.player;if(!p.guard||!from||from.unblockable)return false;const [fx,fy]=this.facing(p.dir),vx=from.x-p.x,vy=from.y-p.y,d=Math.max(1,Math.hypot(vx,vy));if((fx*vx+fy*vy)/d<.25)return false;
   const attacker=from.owner?this.combatTargets().find(e=>e.id===from.owner):from;
@@ -1512,7 +1512,7 @@ class Game{
  bossStep(e,dt){stepBoss(this,e,dt);}
 
  update(dt,input={}){dt=clamp(dt,0,.04);this.time+=dt;for(const event of this.weather.step(dt,this.sky(),this.player,!this.sleeping&&!this.dying&&!this.dead&&!this.won))this.emit('thunder',event);this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}this.stepNpcs(dt);if(this.dying){this.stepDying(dt);return;}if(this.sleeping){this.stepSleep(dt);return;}this.updateEffects(dt);if(this.tickMechanisms(dt))return;if(this.dead||this.won)return;this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.saveTimer+=dt;if(this.saveTimer>5){this.saveTimer=0;this.emit('save');}const p=this.player;
-  for(const k of ['attack','attackCD','dash','dashCD','inv','comboWindow','hurt','parry','parryCD','guardFlash','riposte','hitPause','attackBuffer'])p[k]=Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));
+  for(const k of ['attack','attackCD','dash','dashCD','inv','comboWindow','hurt','parry','parryCD','guardFlash','riposte','hitPause','attackBuffer'])p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));
   if(this.heldStep(p,dt))input={};
   if(p.useTime>0)input={};p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);if(p.spawnFX>SPAWN_T-.9)input={};let dx=input.x||0,dy=input.y||0,l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l;}p.moving=!!l;p.steer=!!l;
   const guardEdge=!!input.guard&&!p.guardHeld;p.guardHeld=!!input.guard;
@@ -1522,7 +1522,7 @@ class Game{
   const attackEdge=!!input.attackPressed||(!!input.attack&&!p.attackHeld);p.attackHeld=!!input.attack;
   if(attackEdge&&p.attackCD>0&&p.attack<.23){p.attackBuffer=.26;p.bufferX=dx;p.bufferY=dy;}
   this.faceTarget();if(input.dodge)this.dodge(dx,dy);
-  const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.attackCD<.065&&p.attack<.065;
+  const buffered=p.attackBuffer>0,link=(buffered||input.attack)&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0;
   if((input.attack||buffered)&&(p.attackCD<=0||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const ax=buffered?p.bufferX:dx,ay=buffered?p.bufferY:dy;if(ax||ay)this.aimAttack(ax,ay);else if(!this.target())this.aimAttack(...this.facing(p.dir));this.faceTarget();if((ax||ay)&&!this.target())p.dir=this.direction(ax,ay);this.swingSword();}if(input.interact)this.interact();
   if(p.dash>0){this.movePlayer(p,p.dashX*dt*120,p.dashY*dt*120);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}
   else if(l&&(p.attack<=0||this.target())){if(p.attack<=0)p.dir=this.turnTo(p.dir,dx,dy);const ox=p.x,oy=p.y,speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,dx*dt*speed,dy*dt*speed);const moved=Math.hypot(p.x-ox,p.y-oy);p.moving=moved>.001;if(p.moving)p.anim+=moved/5.5;else p.anim=0;}
@@ -1533,7 +1533,7 @@ class Game{
   if(this.bossActive&&!this.arenaLock&&!this.won&&p.y<183&&p.x>340&&p.x<460){this.arenaLock=true;this.emit('door',{open:false});}
   this.arena=clamp((this.arena||0)+(this.arenaLock?dt*4:-dt*2),0,1);
   if(this.gate&&p.y>=0&&p.y<190&&p.x>320&&p.x<480&&!this.bossActive&&!this.story?.templeFreed){this.bossActive=true;{const b=this.enemies.find(e=>e.kind==='boss');if(b){b.appearAt=this.time;for(let i=0;i<28;i++){const a=i/28*Math.PI*2,s=14+i%4*9;this.particles.push({x:b.x+Math.cos(a)*4,y:b.y-8,vx:Math.cos(a)*s,vy:Math.sin(a)*s*.6-12,life:.6+i%3*.15,size:2,color:['#3c2a4a','#6a4c7a','#a7cda0','#241a2e'][i%4]});}this.emit('bosscue',{cue:'nova_wind'});}}if(!this.worldFlags.bossTalk){this.worldFlags.bossTalk=true;this.talk('LE PRÊTRE DU SERPENT',['Kaldor… Tu as osé briser les sceaux de Nharos.','Tu ne quitteras pas ce sanctuaire vivant.'],this.enemies.find(e=>e.kind==='boss'),50);}}
-  if(p.attack>0){const frame=attackFrame(p.attack,p.combo,p.weapon);if((frame===2||frame===3)&&!p.attackStep){p.attackStep=true;const [fx,fy]=this.facing(p.dir);this.move(p,fx*HearthreaverWeapons.attackStep(p.weapon,p.combo),fy*HearthreaverWeapons.attackStep(p.weapon,p.combo));}if(frame===2||frame===3)for(const e of this.combatTargets()){if(e.dead||this.hits.has(e.id)||(e.kind==='boss'&&!this.bossActive))continue;if(bladeHits(p,e,frame)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}if(frame===2||frame===3)this.hitProps(p,frame);}
+  p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;if(p.attack>0){const frame=attackFrame(p.attack,p.combo,p.weapon);if(p.impactTick&&!p.attackStep){p.attackStep=true;const [fx,fy]=this.facing(p.dir);this.move(p,fx*HearthreaverWeapons.attackStep(p.weapon,p.combo),fy*HearthreaverWeapons.attackStep(p.weapon,p.combo));}if(frame===2||frame===3)for(const e of this.combatTargets()){if(e.dead||this.hits.has(e.id)||(e.kind==='boss'&&!this.bossActive))continue;if(bladeHits(p,e,frame)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}if(frame===2||frame===3)this.hitProps(p,frame);}
   let playerSafe;for(const e of this.enemies){if(e.dead)continue;if(e.batracien){this.stepBatracienEnemy(e,dt);continue;}if(!this.sameLevel(e,p)){e.wind=0;e.attack=0;e.anim=0;continue;}e.hurt=Math.max(0,(e.hurt||0)-dt);e.flash=Math.max(0,e.flash-dt);e.attack=Math.max(0,e.attack-dt);e.stun=Math.max(0,e.stun-dt);e.cooldown=Math.max(0,e.cooldown-dt);if(e.kind==='boss'){if(this.bossActive)this.bossStep(e,dt);continue;}if(e.stun>0)continue;if(this.fightNpcFoe?.(e,dt))continue;let d=dist(e,p),hx=p.x-e.x,hy=p.y-e.y;
    e.defenseCD=Math.max(0,e.defenseCD-dt);e.guardRaise=Math.max(0,e.guardRaise-dt);const sz=playerSafe===undefined?(playerSafe=this.safeZone(p)):playerSafe,br=this.brain(e,p,d,dt,sz);if(sz&&e.wind>0)e.wind=0;
    if(e.guardTime>0){e.guardTime=Math.max(0,e.guardTime-dt);e.dir=this.direction(hx,hy);e.anim=0;continue;}
@@ -5701,6 +5701,11 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  // Continuous authored geometry below remains for swept collision and smears.
  const DRAWINGS=freeze([1,1,2,2,3.5,5]);
  function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
+ // Even a long engine tick must expose the recoil before a buffered link.
+ function advance(remaining,dt,id,combo=0){
+  const next=Math.max(0,remaining-dt),row=times(id,combo);
+  return sample(remaining,id,combo)===2&&sample(next,id,combo)===5?row[4]+row[5]-1e-6:next;
+ }
  // The arms and hands are existing sprite layers. Choreography translates
  // those intact images to the grip; it never generates an arm or changes its shape.
  const isPole=id=>['staff','spear','glaive'].includes(get(id).family);
@@ -5893,6 +5898,9 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
 
  function pose(id,dir,f,combo=0){
   if(combo===3)return finisherPose(id,dir,Math.max(0,Math.min(5,f)));
+  // The turnaround after contact is the next stroke's loaded pose. Reuse the
+  // whole drawing (body, legs, hands and depth), so a link never resets to idle.
+  if(f===3.5)return pose(id,dir,1,combo+1);
   f=Math.max(0,Math.min(5,f));const i=Math.floor(f),fraction=f-i,w=get(id),spear=w.family==='spear';
   // Slow load, fast delivery, then an overshoot and a weighted recovery.
   const weight=Math.max(2,Math.min(3.2,2+w.weightKg*.25));
@@ -5911,14 +5919,14 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function vector(id,dir,f,combo){const p=pose(id,dir,f,combo);return [...p.h,p.u[0]*p.reach,p.u[1]*p.reach];}
  function segmentDistance(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/l)):0;return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
  function hits(actor,target,f){
-  if((f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
+  if(actor.impactTick===false||(f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
   let from=f-1,to=f;
   // A live strike jumps straight from its held load to its impact drawing.
   // Sweep that visible jump once; held contact never casts a future recovery.
   const finisher=(actor.combo||0)===3;
   if(Number.isFinite(actor.attack)&&actor.attack>0){
    to=2;if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
-   from=f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
+   from=actor.impactTick===true||f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
   }
   const density=finisher?(from>=2?1:get(actor.weapon).finisher.kind==='whirl'?128:40):20;
   const steps=Math.max(1,Math.ceil(density*(to-from)));
@@ -6065,7 +6073,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function comboNames(id){const w=get(id),names=[...(w.family==='spear'?SPEAR_NAMES:MOTIONS[w.family].names)];names[3]=w.finisher.name;return names;}
  const cadence=id=>[0,1,2,3].reduce((n,c)=>n+duration(START,c),0)/[0,1,2,3].reduce((n,c)=>n+duration(id,c),0);
  const attackStep=(id,combo=0)=>{const f=get(id).family,pairs={dagger:[2,4],sword:[3,6],sabre:[4,7],axe:[3,6],mace:[2,4],staff:[4,7],spear:[4,9],glaive:[4,8]};return pairs[f][combo===3?1:0];};
- const hitPause=(id,combo=0)=>Math.min(.105,.022+get(id).weightKg*.012+(combo===3?.018:0));
+ const hitPause=(id,combo=0)=>Math.min(.065,.025+get(id).weightKg*.006+(combo===3?.012:0));
  const holster=id=>get(id).family==='spear'?{delay:3.7,stow:.33,draw:.21}:{delay:3.7,stow:Math.min(.46,Math.max(.22,.21+get(id).weightKg*.06)),draw:Math.min(.31,Math.max(.16,.15+get(id).weightKg*.045))};
  function preview(id,seconds,mode='attack',idleFrame=0){
   const t=Math.max(0,seconds),gait=Math.floor(t*10)%8;
@@ -6083,7 +6091,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
    if(at<h.draw)return {state:'draw_walk',frame:Math.min(4,Math.floor(at/h.draw*5))*8+gait,combo:0,label:'Dégainage'};
    return {state:'walk',frame:gait,combo:0,label:'Garde retrouvée'};
   }
-  const lengths=[0,1,2,3].map(c=>duration(id,c)+.075);let at=t%lengths.reduce((a,b)=>a+b,0);
+  const lengths=[0,1,2,3].map(c=>duration(id,c)+(c===3?.25:-times(id,c)[5]));let at=t%lengths.reduce((a,b)=>a+b,0);
   for(let combo=0;combo<4;combo++){
    if(at<lengths[combo]){const len=duration(id,combo),remaining=len-at,phase=frame(remaining,id,combo);
     const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]:'Garde')};
@@ -6116,7 +6124,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });
 
 /* Hearthreaver — Kaldor, long-haired barbarian hero, authored pixel art v3.
@@ -7847,7 +7855,7 @@ class Renderer{
   for(const xx of[x-18,x+15]){box(this.c,xx,y-12,3,25,I[2]);box(this.c,xx,y-12,1,25,I[4]);}box(this.c,x-18,y-12,36,1,I[3]);box(this.c,x-18,y+12,36,1,I[1]);}
  chest(o){const s=this.propCache[o.open?'chest_open':'chest'];this.c.drawImage(s,Math.round(o.x)-32,Math.round(o.y)-56);}
  frame(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,T=this.top,VH=H-T,K=this.k||1,snap=v=>Math.round(v*K)/K;c.setTransform(K,0,0,K,0,0);const lift=p.elevation!==undefined?p.elevation:(p.level?12:0),dw=g.dialogue&&g.dialogue.who;let fx=p.x,fy=p.y-lift;if(dw){fx=(p.x+dw.x)/2;fy=(p.y-lift+dw.y-(dw.level?12:0)-(g.dialogue.head||40)-26)/2+14;}const now=g.time,dtc=Math.min(.1,Math.max(0,now-(this.lastT??now)));this.lastT=now;const F=this.focus||(this.focus={x:fx,y:fy});if(dw)this.easeT=.45;if(this.easeT>0){const k=1-Math.pow(.0005,dtc);F.x+=(fx-F.x)*k;F.y+=(fy-F.y)*k;if(!dw)this.easeT-=dtc;}else{F.x=fx;F.y=fy;}const bounds=g.atlas?{left:-Atlas.origin.x*16,top:-Atlas.origin.y*16,right:(Atlas.raw.width-Atlas.origin.x)*16,bottom:(Atlas.raw.height-Atlas.origin.y)*16}:{left:0,top:0,right:MW*16,bottom:MH*16};this.cam.x=snap(clamp(F.x-W/2,bounds.left,bounds.right-W));this.cam.y=snap(clamp(F.y-VH/2-14,bounds.top,bounds.bottom-VH));let shake=g.shake>0&&!(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches)?Math.round(Math.sin(g.time*132)*2*Math.min(1,g.shake/.08)):0;
-  c.fillStyle=PAL.ink;c.fillRect(0,0,W,H);c.save();c.beginPath();c.rect(0,T,W,VH);c.clip();c.translate(-this.cam.x+shake,T-this.cam.y);this.drawAtlasGround();c.drawImage(this.bg,0,0);
+  const contactShake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);if(Math.abs(contactShake)>Math.abs(shake))shake=contactShake;c.fillStyle=PAL.ink;c.fillRect(0,0,W,H);c.save();c.beginPath();c.rect(0,T,W,VH);c.clip();c.translate(-this.cam.x+shake,T-this.cam.y);this.drawAtlasGround();c.drawImage(this.bg,0,0);
   const wf=this.waterFX;if(wf){const ax=Math.max(wf.x,Math.floor(this.cam.x)-2),ay=Math.max(wf.y,Math.floor(this.cam.y)-2),bx=Math.min(wf.x+wf.w,Math.ceil(this.cam.x+W)+2),by=Math.min(wf.y+wf.h,Math.ceil(this.cam.y+VH)+2);if(bx>ax&&by>ay)c.drawImage(wf.frames[Math.floor(g.time*4)%4],ax-wf.x,ay-wf.y,bx-ax,by-ay,ax,ay,bx-ax,by-ay);}
   renderRainGround(this,c,W,VH);
   this.drawMechanisms();
@@ -16824,6 +16832,51 @@ const KaldorArsenal=(()=>{
  bladeHits=function(p,e,f){return !p.weapon?legacyHits(p,e,f):W.hits(p,e,f);};
  attackFrame=function(remaining,combo=-1,weapon){return !weapon||combo<0?legacyFrame(remaining,combo):W.frame(remaining,weapon,combo);};
  attackLength=function(combo,weapon){return !weapon?legacyLength(combo):W.duration(weapon,combo);};
+ // One pixel at most, once per confirmed impact, shared by every target type.
+ function contactShake(g){
+  const p=g.player;if(!p.impactTick||p.attack<=0||g.weaponShake?.swing===g.swing)return;
+  const weight=W.get(p.weapon).weightKg,heavy=p.combo===3;
+  const duration=Math.min(.09,.065+weight*.003+(heavy?.01:0));
+  g.weaponShake={swing:g.swing,remaining:duration,duration,amplitude:Math.min(1,.7+weight*.04+(heavy?.1:0))};
+ }
+ function cameraShake(shake,reduced=false){
+  if(reduced||!shake||shake.remaining<=0)return 0;
+  const t=1-Math.min(1,shake.remaining/shake.duration);
+  return Math.round(Math.cos(t*Math.PI*3)*shake.amplitude*(1-t*.35));
+ }
+ for(const method of ['damageEnemy','damageHumanGuard','damageBatracienGuard','hitProp']){
+  const damage=Game.prototype[method];
+  const health=n=>n.guardState?.hp??n.batracien?.hp??n.civilian?.hp??n.hp;
+  Game.prototype[method]=function(n,...args){
+   const before=health(n),result=damage.call(this,n,...args);
+   const applied=Number.isFinite(before)?health(n)<before:result===true;
+   if(applied&&(method==='damageEnemy'||args[1]===this.player))contactShake(this);
+   return result;
+  };
+ }
+ // Freeze simulation at contact, including the victim and impact particles.
+ // Input remains live: a press during this short pause is queued for the link.
+ const updateCombat=Game.prototype.update;
+ Game.prototype.update=function(dt,input={}){
+  dt=clamp(Number(dt)||0,0,.04);const p=this.player;p.impactTick=false;
+  // Decay in real update time, including hit stop, so the camera settles quickly.
+  if(this.weaponShake)this.weaponShake.remaining=Math.max(0,this.weaponShake.remaining-dt);
+  if(p.hitPause>0&&!this.dialogue&&!this.sleeping&&!this.dying&&!this.dead&&!this.won&&!this.journey){
+   if(input.attackPressed||(input.attack&&!p.attackHeld)){p.attackBuffer=.26;p.bufferX=input.x||0;p.bufferY=input.y||0;}
+   p.attackHeld=!!input.attack;
+   const stop=Math.min(dt,p.hitPause);p.hitPause=Math.max(0,p.hitPause-stop);dt-=stop;
+   // Do not leave the previous tick's damage event live during the freeze.
+   p.impactTick=false;
+   if(dt<1e-7)return;
+  }
+  return updateCombat.call(this,dt,input);
+ };
+ const civilianDamage=Game.prototype.damageCivilian;
+ Game.prototype.damageCivilian=function(n,amount,source){
+  const applied=civilianDamage.call(this,n,amount,source);
+  if(applied&&source===this.player){this.player.hitPause=Math.max(this.player.hitPause||0,W.hitPause(this.player.weapon,this.player.combo));contactShake(this);}
+  return applied;
+ };
  // The rack stays empty after pickup, with the weapon's actual silhouette.
  const prop=Renderer.prototype.prop;
  function drawWeapon(c,id,hx,hy,ux,uy){
@@ -16885,7 +16938,7 @@ const KaldorArsenal=(()=>{
  const row=KaldorWardrobe.inventoryHTML,bind=KaldorWardrobe.bindInventory;
  KaldorWardrobe.inventoryHTML=function(g){return row.call(this,g)+inventoryHTML(g);};
  KaldorWardrobe.bindInventory=function(body,g,refresh){bind.call(this,body,g,refresh);bindInventory(body,g,refresh);};
- return {normalize,stands,inventoryHTML,bindInventory,drawWeapon};
+ return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake};
 })();
 
 /* Carried equipment and first-discovery loot. Race chooses a craft tradition,

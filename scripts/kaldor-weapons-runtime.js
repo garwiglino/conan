@@ -59,6 +59,51 @@ const KaldorArsenal=(()=>{
  bladeHits=function(p,e,f){return !p.weapon?legacyHits(p,e,f):W.hits(p,e,f);};
  attackFrame=function(remaining,combo=-1,weapon){return !weapon||combo<0?legacyFrame(remaining,combo):W.frame(remaining,weapon,combo);};
  attackLength=function(combo,weapon){return !weapon?legacyLength(combo):W.duration(weapon,combo);};
+ // One pixel at most, once per confirmed impact, shared by every target type.
+ function contactShake(g){
+  const p=g.player;if(!p.impactTick||p.attack<=0||g.weaponShake?.swing===g.swing)return;
+  const weight=W.get(p.weapon).weightKg,heavy=p.combo===3;
+  const duration=Math.min(.09,.065+weight*.003+(heavy?.01:0));
+  g.weaponShake={swing:g.swing,remaining:duration,duration,amplitude:Math.min(1,.7+weight*.04+(heavy?.1:0))};
+ }
+ function cameraShake(shake,reduced=false){
+  if(reduced||!shake||shake.remaining<=0)return 0;
+  const t=1-Math.min(1,shake.remaining/shake.duration);
+  return Math.round(Math.cos(t*Math.PI*3)*shake.amplitude*(1-t*.35));
+ }
+ for(const method of ['damageEnemy','damageHumanGuard','damageBatracienGuard','hitProp']){
+  const damage=Game.prototype[method];
+  const health=n=>n.guardState?.hp??n.batracien?.hp??n.civilian?.hp??n.hp;
+  Game.prototype[method]=function(n,...args){
+   const before=health(n),result=damage.call(this,n,...args);
+   const applied=Number.isFinite(before)?health(n)<before:result===true;
+   if(applied&&(method==='damageEnemy'||args[1]===this.player))contactShake(this);
+   return result;
+  };
+ }
+ // Freeze simulation at contact, including the victim and impact particles.
+ // Input remains live: a press during this short pause is queued for the link.
+ const updateCombat=Game.prototype.update;
+ Game.prototype.update=function(dt,input={}){
+  dt=clamp(Number(dt)||0,0,.04);const p=this.player;p.impactTick=false;
+  // Decay in real update time, including hit stop, so the camera settles quickly.
+  if(this.weaponShake)this.weaponShake.remaining=Math.max(0,this.weaponShake.remaining-dt);
+  if(p.hitPause>0&&!this.dialogue&&!this.sleeping&&!this.dying&&!this.dead&&!this.won&&!this.journey){
+   if(input.attackPressed||(input.attack&&!p.attackHeld)){p.attackBuffer=.26;p.bufferX=input.x||0;p.bufferY=input.y||0;}
+   p.attackHeld=!!input.attack;
+   const stop=Math.min(dt,p.hitPause);p.hitPause=Math.max(0,p.hitPause-stop);dt-=stop;
+   // Do not leave the previous tick's damage event live during the freeze.
+   p.impactTick=false;
+   if(dt<1e-7)return;
+  }
+  return updateCombat.call(this,dt,input);
+ };
+ const civilianDamage=Game.prototype.damageCivilian;
+ Game.prototype.damageCivilian=function(n,amount,source){
+  const applied=civilianDamage.call(this,n,amount,source);
+  if(applied&&source===this.player){this.player.hitPause=Math.max(this.player.hitPause||0,W.hitPause(this.player.weapon,this.player.combo));contactShake(this);}
+  return applied;
+ };
  // The rack stays empty after pickup, with the weapon's actual silhouette.
  const prop=Renderer.prototype.prop;
  function drawWeapon(c,id,hx,hy,ux,uy){
@@ -120,5 +165,5 @@ const KaldorArsenal=(()=>{
  const row=KaldorWardrobe.inventoryHTML,bind=KaldorWardrobe.bindInventory;
  KaldorWardrobe.inventoryHTML=function(g){return row.call(this,g)+inventoryHTML(g);};
  KaldorWardrobe.bindInventory=function(body,g,refresh){bind.call(this,body,g,refresh);bindInventory(body,g,refresh);};
- return {normalize,stands,inventoryHTML,bindInventory,drawWeapon};
+ return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake};
 })();

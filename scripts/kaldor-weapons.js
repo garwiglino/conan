@@ -38,6 +38,11 @@
  // Continuous authored geometry below remains for swept collision and smears.
  const DRAWINGS=freeze([1,1,2,2,3.5,5]);
  function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
+ // Even a long engine tick must expose the recoil before a buffered link.
+ function advance(remaining,dt,id,combo=0){
+  const next=Math.max(0,remaining-dt),row=times(id,combo);
+  return sample(remaining,id,combo)===2&&sample(next,id,combo)===5?row[4]+row[5]-1e-6:next;
+ }
  // The arms and hands are existing sprite layers. Choreography translates
  // those intact images to the grip; it never generates an arm or changes its shape.
  const isPole=id=>['staff','spear','glaive'].includes(get(id).family);
@@ -230,6 +235,9 @@
 
  function pose(id,dir,f,combo=0){
   if(combo===3)return finisherPose(id,dir,Math.max(0,Math.min(5,f)));
+  // The turnaround after contact is the next stroke's loaded pose. Reuse the
+  // whole drawing (body, legs, hands and depth), so a link never resets to idle.
+  if(f===3.5)return pose(id,dir,1,combo+1);
   f=Math.max(0,Math.min(5,f));const i=Math.floor(f),fraction=f-i,w=get(id),spear=w.family==='spear';
   // Slow load, fast delivery, then an overshoot and a weighted recovery.
   const weight=Math.max(2,Math.min(3.2,2+w.weightKg*.25));
@@ -248,14 +256,14 @@
  function vector(id,dir,f,combo){const p=pose(id,dir,f,combo);return [...p.h,p.u[0]*p.reach,p.u[1]*p.reach];}
  function segmentDistance(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/l)):0;return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
  function hits(actor,target,f){
-  if((f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
+  if(actor.impactTick===false||(f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
   let from=f-1,to=f;
   // A live strike jumps straight from its held load to its impact drawing.
   // Sweep that visible jump once; held contact never casts a future recovery.
   const finisher=(actor.combo||0)===3;
   if(Number.isFinite(actor.attack)&&actor.attack>0){
    to=2;if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
-   from=f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
+   from=actor.impactTick===true||f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
   }
   const density=finisher?(from>=2?1:get(actor.weapon).finisher.kind==='whirl'?128:40):20;
   const steps=Math.max(1,Math.ceil(density*(to-from)));
@@ -402,7 +410,7 @@
  function comboNames(id){const w=get(id),names=[...(w.family==='spear'?SPEAR_NAMES:MOTIONS[w.family].names)];names[3]=w.finisher.name;return names;}
  const cadence=id=>[0,1,2,3].reduce((n,c)=>n+duration(START,c),0)/[0,1,2,3].reduce((n,c)=>n+duration(id,c),0);
  const attackStep=(id,combo=0)=>{const f=get(id).family,pairs={dagger:[2,4],sword:[3,6],sabre:[4,7],axe:[3,6],mace:[2,4],staff:[4,7],spear:[4,9],glaive:[4,8]};return pairs[f][combo===3?1:0];};
- const hitPause=(id,combo=0)=>Math.min(.105,.022+get(id).weightKg*.012+(combo===3?.018:0));
+ const hitPause=(id,combo=0)=>Math.min(.065,.025+get(id).weightKg*.006+(combo===3?.012:0));
  const holster=id=>get(id).family==='spear'?{delay:3.7,stow:.33,draw:.21}:{delay:3.7,stow:Math.min(.46,Math.max(.22,.21+get(id).weightKg*.06)),draw:Math.min(.31,Math.max(.16,.15+get(id).weightKg*.045))};
  function preview(id,seconds,mode='attack',idleFrame=0){
   const t=Math.max(0,seconds),gait=Math.floor(t*10)%8;
@@ -420,7 +428,7 @@
    if(at<h.draw)return {state:'draw_walk',frame:Math.min(4,Math.floor(at/h.draw*5))*8+gait,combo:0,label:'Dégainage'};
    return {state:'walk',frame:gait,combo:0,label:'Garde retrouvée'};
   }
-  const lengths=[0,1,2,3].map(c=>duration(id,c)+.075);let at=t%lengths.reduce((a,b)=>a+b,0);
+  const lengths=[0,1,2,3].map(c=>duration(id,c)+(c===3?.25:-times(id,c)[5]));let at=t%lengths.reduce((a,b)=>a+b,0);
   for(let combo=0;combo<4;combo++){
    if(at<lengths[combo]){const len=duration(id,combo),remaining=len-at,phase=frame(remaining,id,combo);
     const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]:'Garde')};
@@ -453,5 +461,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });
