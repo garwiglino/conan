@@ -47,7 +47,7 @@ Les tempêtes maritimes répondent aussi aux vents forts et aux blizzards, sans 
 
 ## Audio
 
-La musique d'exploration est composée par famille de biome (9 morceaux) plus une musique de voyage, en 8 bits : pulses 12,5/25/50 %, triangle 4 bits, dents de scie en paliers et bruit LFSR. Chaque morceau a son mode, son tempo et sa rythmique (voir `audio/LISEZMOI.md` et `scripts/chiptune-songs.cjs`). Les 18 partitions de faune jour/nuit restent séparées : quatre pistes disponibles plus conducteur ; les pistes non pertinentes sont volontairement silencieuses (notamment pas d'insectes dans les glaces).
+La musique d'exploration est composée par famille de biome (9 morceaux) plus une musique de voyage, en dark fantasy : modes mineurs, cors, chœur grave, cordes, timbales, tambours de guerre et enclume, synthétisés par le séquenceur 8 bits du jeu (dents de scie en paliers, pulses, triangle 4 bits, bruit LFSR) avec les voix du thème titre. Chaque morceau a son mode, son tempo et sa rythmique (voir `audio/LISEZMOI.md` et `scripts/chiptune-songs.cjs`). Les 18 partitions de faune jour/nuit restent séparées : quatre pistes disponibles plus conducteur ; les pistes non pertinentes sont volontairement silencieuses (notamment pas d'insectes dans les glaces).
 
 Les fichiers MIDI type 1 et les notes JSON jouées sont générés ensemble : `scripts/build-music.cjs` pour les musiques, `scripts/build-biome-audio.cjs` pour la faune. Les programmes General MIDI servent de repères à l'édition ; le jeu utilise ses propres timbres, notamment pour les cris d'animaux, qui ne seront donc pas identiques dans un lecteur MIDI généraliste. Les cris sont stylisés et synthétiques, pas des enregistrements zoologiques. Le vent continu reste synthétisé en stéréo.
 

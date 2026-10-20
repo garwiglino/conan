@@ -1,4 +1,4 @@
-// Construit les 13 musiques 8 bits du jeu depuis scripts/chiptune-songs.cjs :
+// Construit les 13 musiques du jeu depuis scripts/chiptune-songs.cjs :
 // audio/music-scores.json (joué par le séquenceur du jeu) et un MIDI type 1 par morceau.
 // Les deux sorties viennent des mêmes événements ; les tests vérifient qu'elles concordent.
 const fs = require('fs'), path = require('path'), {buildAll, TPB} = require('./chiptune-songs.cjs');
@@ -40,4 +40,4 @@ for (const [name, score] of Object.entries(scores)) {
   if (score.intro) midi(name + '-intro.mid', name + '-intro', {...score.intro, programs: score.programs});
 }
 fs.writeFileSync(path.join(dir, 'music-scores.json'), JSON.stringify(scores) + '\n');
-console.log('Built ' + Object.keys(scores).length + ' chiptune scores on a strict grid, with matching type-1 MIDI files.');
+console.log('Built ' + Object.keys(scores).length + ' scores on a strict grid, with matching type-1 MIDI files.');

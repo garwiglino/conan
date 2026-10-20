@@ -17,10 +17,12 @@ class AudioContext {
 }
 const SLOTS=['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed','biome_travel','combat','boss','gameover'];
 
-test('every biome, travel, combat, boss and defeat slot plays a composed chiptune score',()=>{
+test('every biome, travel, combat, boss and defeat slot plays a composed score on the game synthesizer',()=>{
  assert.deepEqual(Object.keys(api.MUSIC_SCORES).sort(),[...SLOTS].sort());
- for(const name of SLOTS){const s=api.MUSIC_DATA[name];assert.equal(s,api.MUSIC_SCORES[name],name);assert.equal(s.style,'chip');
-  for(const [part,t]of Object.entries(s.timbres)){assert.equal(t.kind,undefined,name+' '+part);if(part!=='drums')assert.ok(['p125','p25','p50','tri','saw'].includes(t.w),name+' '+part);}}
+ for(const name of SLOTS){const s=api.MUSIC_DATA[name];assert.equal(s,api.MUSIC_SCORES[name],name);assert.equal(s.style,'chip');assert.ok(s.tracks.lead.length,name);
+  for(const [part,t]of Object.entries(s.timbres)){if(part==='drums')continue;
+   // Chip waves, or the title theme's brass, choir, timpani and bell voices built on them.
+   assert.ok(t.kind?['brass','choir','timpani','bell'].includes(t.kind):['p125','p25','p50','tri','saw'].includes(t.w),name+' '+part);}}
  for(const family of ['forest','coast','desert','steppe','tropical','wetland','boreal','polar','cursed'])assert.ok(api.MUSIC_DATA['biome_'+family]);
 });
 

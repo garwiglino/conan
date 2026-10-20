@@ -9,7 +9,7 @@
  color-scheme:dark;
  --ground:#15100e; --panel:#211814; --panel-hi:#2d211b; --line:#3e2e25;
  --ink:#f3e7d6; --muted:#ad9a88; --ember:#ff7a3c; --gold:#e9b85c; --ash:#6d5a4c;
- --lane-lead:#ff7a3c; --lane-harm:#e9b85c; --lane-arp:#7fc4b8; --lane-saw:#9b8bd6; --lane-bass:#d96a8a; --lane-drums:#cfc3b2;
+ --lane-lead:#ff7a3c; --lane-harm:#e9b85c; --lane-arp:#7fc4b8; --lane-saw:#9b8bd6; --lane-bass:#d96a8a; --lane-timpani:#c98a4b; --lane-drums:#cfc3b2;
  --display:"Silkscreen","Courier New",monospace; --body:"Atkinson Hyperlegible",system-ui,sans-serif; --data:"VT323","Courier New",monospace;
 }
 body{background:var(--ground);color:var(--ink);font:16px/1.5 var(--body);}
@@ -62,18 +62,18 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <div class="wrap">
  <header>
-  <div class="eyebrow">Hearthreaver · son 8 bits</div>
+  <div class="eyebrow">Hearthreaver · dark fantasy</div>
   <h1>Atelier <span>musical</span></h1>
-  <p class="lede">Les treize musiques du jeu, jouées par le même séquenceur que le jeu : pulses, triangle et bruit façon NES. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
+  <p class="lede">Les treize musiques du jeu, jouées par le même séquenceur que le jeu : cors, chœur grave, cordes, timbales, tambours de guerre et enclume, synthétisés avec les ondes 8 bits du jeu. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
  </header>
 
  <section class="player" aria-label="Lecture">
   <div class="now">
-   <div style="min-width:0"><h2 id="nowTitle">Sous les chênes</h2><p id="nowMood">Forêts tempérées : ré dorien, marche tranquille.</p></div>
-   <div class="facts" id="nowFacts"><span>100 BPM</span><span>16 pas</span><span>32 mesures</span></div>
+   <div style="min-width:0"><h2 id="nowTitle">Les chênes noirs</h2><p id="nowMood">Forêts : ré éolien, cor solitaire sur une lyre, chœur grave et tambour lointain.</p></div>
+   <div class="facts" id="nowFacts"><span>76 BPM</span><span>16 pas</span><span>28 mesures</span></div>
   </div>
-  <div class="counter"><span id="barCount">Mesure — / 32</span><div class="beats" id="beats" aria-hidden="true"><i class="down"></i><i></i><i></i><i></i></div></div>
-  <canvas class="roll" id="roll" width="960" height="300" aria-label="Grille de la mesure en cours : une colonne par pas, une ligne par instrument"></canvas>
+  <div class="counter"><span id="barCount">Mesure — / 28</span><div class="beats" id="beats" aria-hidden="true"><i class="down"></i><i></i><i></i><i></i></div></div>
+  <canvas class="roll" id="roll" width="960" height="330" aria-label="Grille de la mesure en cours : une colonne par pas, une ligne par instrument"></canvas>
   <div class="controls">
    <button class="btn primary" id="playBtn" type="button">▶ Écouter</button>
    <button class="btn" id="stopBtn" type="button">■ Arrêter</button>
@@ -88,7 +88,8 @@ button{font:inherit;color:inherit;cursor:pointer}
  <section class="notes">
   <h3>Ce qui change dans le jeu</h3>
   <ul>
-   <li>Chaque biome a sa propre composition (mode, tempo, rythme) au lieu d'un même squelette transposé.</li>
+   <li>Couleur dark fantasy : modes mineurs et phrygiens, quintes à vide, cors à l'unisson, chœur grave, cordes qui martèlent, tambours de guerre, enclume et gong.</li>
+   <li>Les voix sont celles du thème titre (cuivres, chœur, timbales, cloches), construites sur les ondes 8 bits du jeu. Chaque biome a sa propre composition : mode, tempo, rythme.</li>
    <li>Les mesures sont vérifiées à la construction : une mesure qui ne remplit pas exactement ses 16 pas (ou 12 en balancé) bloque le build.</li>
    <li>Le séquenceur programme les notes 0,8 s à l'avance : une image lente, pendant un chargement du monde, ne fait plus sauter de notes.</li>
    <li>Combat, boss, défaite et voyage sont recomposés dans le même esprit et calibrés au même niveau que les anciens.</li>
@@ -104,7 +105,7 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
 (()=>{
  const $=id=>document.getElementById(id);
  const GROUPS=[['Exploration',['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed']],['Voyage',['biome_travel']],['Combat',['combat','boss']],['Défaite',['gameover']]];
- const LANES=[['lead','Mélodie','--lane-lead'],['harm','Contrechant','--lane-harm'],['arp','Arpège','--lane-arp'],['saw','Nappe','--lane-saw'],['bass','Basse','--lane-bass'],['drums','Batterie','--lane-drums']];
+ const LANES=[['lead','Mélodie','--lane-lead'],['harm','Contrechant','--lane-harm'],['arp','Cordes et harpe','--lane-arp'],['saw','Chœur','--lane-saw'],['bass','Basse','--lane-bass'],['timpani','Timbales','--lane-timpani'],['drums','Batterie','--lane-drums']];
  const css=name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
  let ctx=null,music=null,selected='biome_forest',playing=null,volume=.7,silent=null;const muted=new Set();
  const fmt=s=>{const m=Math.floor(s/60),r=Math.round(s%60);return m+' min '+String(r).padStart(2,'0');};
@@ -136,7 +137,7 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
  // Grille : une colonne par pas, une ligne par instrument, la hauteur de la note dans sa ligne.
  const cv=$('roll'),g2=cv.getContext('2d');
  // Sur un écran étroit, la grille garde des lignes assez hautes pour être lues.
- const fit=()=>{const h=innerWidth<520?560:300;if(cv.height!==h)cv.height=h;};fit();addEventListener('resize',fit);
+ const fit=()=>{const h=innerWidth<520?620:330;if(cv.height!==h)cv.height=h;};fit();addEventListener('resize',fit);
  function position(){
   if(!music||!playing)return null;const now=ctx.currentTime-(ctx.outputLatency||ctx.baseLatency||0),intro=music.intro&&now<music.intro.end?music.intro:null,song=intro||music.current;
   if(!song||now<song.t0)return null;const d=intro?MUSIC_DATA[playing].intro:MUSIC_DATA[playing],beat=60/d.bpm,barDur=beat*4,pos=(now-song.t0)%(d.bars*barDur);

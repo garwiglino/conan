@@ -1,9 +1,10 @@
-// Page d'écoute des musiques 8 bits : le séquenceur Music du jeu, copié tel quel depuis index.html,
+// Page d'écoute des musiques : le séquenceur Music du jeu et ses voix, copiés tels quels depuis index.html,
 // et les partitions de audio/music-scores.json. Usage : node scripts/build-music-atelier.cjs [fragment.html]
 const fs = require('fs'), path = require('path');
 const root = path.resolve(__dirname, '..'), html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const pick = (re, what) => { const m = re.exec(html); if (!m) throw new Error('introuvable dans index.html : ' + what); return m[0]; };
 const engine = [pick(/^const MUSIC_VOLUME=.*$/m, 'MUSIC_VOLUME'), pick(/^const MUSIC_AHEAD=.*$/m, 'MUSIC_AHEAD'),
+  pick(/^function titleVoice\(m,song,tr,t,dur,note,vel\)\{[\s\S]*?\n\}(?=\n)/m, 'voix cuivres, chœur, timbales et cloches'),
   pick(/\/\/ music\.js — séquenceur chiptune[\s\S]*?(?=\n\/\/ jingles 8-bit)/, 'classe Music')].join('\n');
 const silent = pick(/(?<=^const SILENT_WAV=)'[^']*'/m, 'SILENT_WAV');
 const scores = fs.readFileSync(path.join(root, 'audio/music-scores.json'), 'utf8').trim();
