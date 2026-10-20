@@ -13,13 +13,15 @@ const smin=(a,b,k)=>{const h=Math.max(k-Math.abs(a-b),0)/k;return Math.min(a,b)-
 function wavy(p,a,b,amp){let best=1e9;const n=24;let prev=null;for(let k=0;k<=n;k++){const t=k/n,ox=-(b[1]-a[1]),oy=b[0]-a[0],l=Math.hypot(ox,oy)||1,o=amp*Math.sin(Math.PI*t)*(a[0]+a[1]>b[0]+b[1]?-1:1),q=[a[0]+(b[0]-a[0])*t+ox/l*o,a[1]+(b[1]-a[1])*t+oy/l*o];if(prev)best=Math.min(best,seg(p,prev,q));prev=q;}return best;}
 function distance(mask,u,v,meander=0){
  const p=[u,v],c=[16,16],arms=DIRS.filter(([bit])=>mask&bit);
- if(meander&&arms.length&&!(arms.length===2&&[3,6,12,9].includes(mask))){let d=1e9;for(const [,m]of arms)d=smin(d,wavy(p,c,m,meander),arms.length>2?7:.01);return d;}
+ if(meander&&arms.length&&!(arms.length===2&&[3,6,12,9].includes(mask)))return join(arms.map(([bit,m])=>[bit,wavy(p,c,m,meander)]));
  if(!arms.length)return Math.hypot(u-16,v-16)-4;
  // Virage : quart de cercle centré sur le coin commun, rayon d'une demi-case.
  if(arms.length===2&&(mask===3||mask===6||mask===12||mask===9)){const corner={3:[32,0],6:[32,32],12:[0,32],9:[0,0]}[mask];return Math.abs(Math.hypot(u-corner[0],v-corner[1])-16);}
- let d=1e9;for(const [,m]of arms)d=smin(d,seg(p,c,m),arms.length>2?7:.01);
- return d;
+ return join(arms.map(([bit,m])=>[bit,seg(p,c,m)]));
 }
+// Union des bras : congé arrondi seulement dans les angles intérieurs (bras
+// perpendiculaires), jamais de renflement du côté fermé d'un T.
+function join(list){let d=Math.min(...list.map(a=>a[1]));if(list.length>2)for(const [a,da]of list)for(const [b,db]of list)if(a<b&&(a|b)!==5&&(a|b)!==10)d=Math.min(d,smin(da,db,7));return d;}
 function piece(mask,{half=7,meander=0,swell=0,colours=['herbe4','terre3','terre4','terre5']}={}){
  const g=new Grid(64,32);
  for(let py=0;py<32;py++)for(let px=0;px<64;px++){

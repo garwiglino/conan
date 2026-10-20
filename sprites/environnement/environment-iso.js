@@ -14,7 +14,10 @@ const C=n=>{const i=NAME.get(n);if(!i)throw RangeError('couleur '+n);return i;};
 const SHIFT=[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];for(let i=1;i<PAL.length;i++){const [r,t]=ASSETS.toneOf[i-1],list=RAMP[r];SHIFT[i]=[];for(let d=-8;d<=8;d++)SHIFT[i][d+8]=C(r+Math.max(0,Math.min(list-1,t+d)));}
 const shift=(c,d)=>c&&d?SHIFT[c][d+8]:c;
 // Base64, ou suites « r: » [longueur - 1, valeur] produites par le build.
-function bytes(s){if(s instanceof Uint8Array)return s;const raw=a=>typeof atob==='function'?Uint8Array.from(atob(a),c=>c.charCodeAt(0)):Uint8Array.from(Buffer.from(a,'base64'));if(!s.startsWith('r:'))return raw(s);const r=raw(s.slice(2));let n=0;for(let i=0;i<r.length;i+=2)n+=r[i]+1;const out=new Uint8Array(n);for(let i=0,o=0;i<r.length;i+=2){out.fill(r[i+1],o,o+r[i]+1);o+=r[i]+1;}return out;}
+const B64=new Uint8Array(128);'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('').forEach((c,i)=>{B64[c.charCodeAt(0)]=i;});
+// Décodage base64 sans atob ni Buffer (worker, WebView, contexte isolé).
+function raw(a){let n=a.length;while(n&&a[n-1]==='=')n--;const out=new Uint8Array(n*3>>2);for(let i=0,o=0;i<n;i+=4){const v=B64[a.charCodeAt(i)]<<18|B64[a.charCodeAt(i+1)]<<12|(i+2<n?B64[a.charCodeAt(i+2)]<<6:0)|(i+3<n?B64[a.charCodeAt(i+3)]:0);out[o++]=v>>16&255;if(o<out.length)out[o++]=v>>8&255;if(o<out.length)out[o++]=v&255;}return out;}
+function bytes(s){if(s instanceof Uint8Array)return s;if(!s.startsWith('r:'))return raw(s);const r=raw(s.slice(2));let n=0;for(let i=0;i<r.length;i+=2)n+=r[i]+1;const out=new Uint8Array(n);for(let i=0,o=0;i<r.length;i+=2){out.fill(r[i+1],o,o+r[i]+1);o+=r[i]+1;}return out;}
 function decode(t){return {...t,px:bytes(t.px),ht:t.ht?bytes(t.ht):null,...(t.sh?{sh:bytes(t.sh)}:{})};}
 const TEX={};for(const [k,v]of Object.entries(ASSETS.textures))TEX[k]=decode(v);
 const STAMPS=(ASSETS.decals||[]).map(decode);
@@ -204,5 +207,5 @@ function* renderSteps(o){
 function render(o){const steps=renderSteps(o);let next;do{next=steps.next();}while(!next.done);return next.value;}
 // Flore : variantes décodées {name, w, h, ax, ay, px, sh} ; ombre à l'opacité du calque Piskel.
 const FLORA={};for(const [k,v]of Object.entries(ASSETS.flora||{}))FLORA[k]={shadow:v.shadow,frames:v.frames.map(decode)};
-return {render,renderSteps,palette:PAL,rgb:RGB,shift,C,flora:FLORA,sets:Object.keys(SETS)};
+return {render,renderSteps,palette:PAL,rgb:RGB,shift,C,flora:FLORA,sets:Object.keys(SETS),shapes:SHAPES};
 });

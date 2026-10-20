@@ -3,6 +3,8 @@
 (()=>{
 'use strict';
 const P=WorldProjection,T=HearthreaverIsometricTerrain;
+// Biomes redessinés (sources Piskel de Teremor) : sol, chemins, places et flore.
+const ENV=typeof createEnvironmentArt==='function'&&typeof HearthreaverTeremor==='object'?createEnvironmentArt(HearthreaverTeremor):null;
 const update=Game.prototype.update,direction=Game.prototype.direction;
 Game.prototype.update=function(dt,controls={}){const aim=P.input(controls.x||0,controls.y||0);return update.call(this,dt,{...controls,...aim});};
 Game.prototype.direction=function(x,y){const q=P.point(x,y);return direction.call(this,q.x,q.y);};
@@ -12,7 +14,7 @@ function logical(renderer,fn){const g=renderer.g,cam=renderer.cam,W=renderer.W,H
 function config(g){return {core:g.world.tiles.map(row=>Array.from(row)),trails:g.world.trails,lanes:[...g.settlements.sites.values()].flatMap(s=>{const n=Atlas.byId[s.id],p=Atlas.toGame(n.x,n.y);return s.lanes.map(l=>({...l,x:p.x+l.x,y:p.y+l.y,paved:!!n.regionalCentre}));})};}
 function workerSource(cfg){
  const pacing='{'+Object.entries(WorldPacing).map(([key,value])=>typeof value==='function'?value.toString():JSON.stringify(key)+':'+JSON.stringify(value)).join(',')+'}';
- return '"use strict";const WorldPacing='+pacing+';const createWorldAtlas='+createWorldAtlas.toString()+';const T=('+T.create.toString()+')('+JSON.stringify(HearthreaverTerrainPalettes)+');const makeArt='+createProjectedWorldArt.toString()+';const cfg='+JSON.stringify(cfg)+';let art;onmessage=e=>{const m=e.data;if(m.kind==="init"){art=makeArt(createWorldAtlas(m.raw),T,cfg);postMessage({kind:"ready"});return;}if(!art)return;const im=art.render(m.cx*512,m.cy*512,512,512,m.clock);postMessage({...m,...im},[im.data.buffer,...im.features.map(f=>f.data.buffer)]);};';
+ return '"use strict";const WorldPacing='+pacing+';const createWorldAtlas='+createWorldAtlas.toString()+';const T=('+T.create.toString()+')('+JSON.stringify(HearthreaverTerrainPalettes)+');const makeArt='+createProjectedWorldArt.toString()+';const ENV='+(ENV?'('+createEnvironmentArt.toString()+')('+JSON.stringify(HearthreaverTeremor)+')':'null')+';const cfg='+JSON.stringify(cfg)+';let art;onmessage=e=>{const m=e.data;if(m.kind==="init"){art=makeArt(createWorldAtlas(m.raw),T,cfg,ENV);postMessage({kind:"ready"});return;}if(!art)return;const im=art.render(m.cx*512,m.cy*512,512,512,m.clock);postMessage({...m,...im},[im.data.buffer,...im.features.map(f=>f.data.buffer)]);};';
 }
 const props=Renderer.prototype.visibleAtlasProps,architecture=Renderer.prototype.architectureDrawObjects,map=Renderer.prototype.map;
 Renderer.prototype.visibleAtlasProps=function(){if(!this.projectionActive)return props.call(this);return logical(this,()=>props.call(this)).map(o=>this.projectionView.wrap(o));};
@@ -20,7 +22,7 @@ Renderer.prototype.architectureDrawObjects=function(){if(!this.projectionActive)
 Renderer.prototype.map=function(){const g=this.g;this.g=this.logicalGame||g;try{return map.call(this);}finally{this.g=g;}};
 Renderer.prototype.drawAtlasGround=function(){
  const g=this.logicalGame||this.g,clock=Math.floor(g.clock);g.atlas.setClock(clock);logical(this,()=>this.refreshColdSiteProps?.(clock));
- if(this.isometricTerrainGame!==g){this.atlasArtStream?.worker?.terminate();this.atlasGround=new Map();const cfg=config(g);this.projectedTerrain=createProjectedWorldArt(Atlas,T,cfg);this.atlasArtStream=new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'),globalThis,this.projectedTerrain,()=>workerSource(cfg));this.isometricTerrainGame=g;this.flatTerrainTiles=new Map();}
+ if(this.isometricTerrainGame!==g){this.atlasArtStream?.worker?.terminate();this.atlasGround=new Map();const cfg=config(g);this.projectedTerrain=createProjectedWorldArt(Atlas,T,cfg,ENV);this.atlasArtStream=new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'),globalThis,this.projectedTerrain,()=>workerSource(cfg));this.isometricTerrainGame=g;this.flatTerrainTiles=new Map();}
  const view=P.rect({x:this.cam.x-48,y:this.cam.y-48,w:this.W+96,h:this.H+160}),a=Atlas.toWorld(view.x,view.y),b=Atlas.toWorld(view.x+view.w,view.y+view.h),centre=Atlas.toWorld(g.player.x,g.player.y),visible=[];
  for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++)visible.push([cx,cy]);
  visible.sort((a,b)=>a[0]+a[1]-b[0]-b[1]);this.atlasArtStream.focus(Math.floor(centre.x/32),Math.floor(centre.y/32),visible);this.atlasArtStream.setClock(clock);this.atlasVisible=[];this.projectedCliffs=[];
@@ -41,6 +43,26 @@ Renderer.prototype.drawAtlasGround=function(){
  }
  while(this.atlasGround.size>16)this.atlasGround.delete(this.atlasGround.keys().next().value);
  this.atlasArtStream.prefetch(Math.floor(centre.x/32),Math.floor(centre.y/32));
+};
+// Flore de la forêt redessinée : mêmes emplacements et mêmes objets du monde,
+// sprites Teremor ancrés au pied, ombre portée à l'opacité de son calque Piskel.
+const FOREST_PROPS={world_oak_0:['chene_a','chene_b','bouleau_a'],world_oak_1:['chene_b','chene_c','buisson_a'],world_oak_2:['chene_c','chene_a','bouleau_b'],world_boulder_2:['rocher_a','rocher_b'],world_fern:['fougere','buisson_b'],world_mushrooms:['champignons'],world_flowers:['fleurs']};
+let floraSprites=null;
+function floraSprite(name){
+ if(!floraSprites){floraSprites=new Map();const paint=(px,w,h)=>{const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d'),im=x.createImageData(w,h);for(let k=0;k<px.length;k++)if(px[k])im.data.set(ENV.rgb[px[k]],k*4);x.putImageData(im,0,0);return cv;};
+  for(const v of Object.values(ENV.flora))for(const f of v.frames)floraSprites.set(f.name,{img:paint(f.px,f.w,f.h),shadow:paint(f.sh,f.w,f.h),alpha:v.shadow,ax:f.ax,ay:f.ay});}
+ return floraSprites.get(name);
+}
+function floraOf(o){
+ const kinds=FOREST_PROPS[o.kind];if(!ENV||!o.world||!kinds)return null;const L=o._logical||o;
+ if(L._teremor===undefined){const w=Atlas.toWorld(L.x,L.y),cell=Atlas.cellAt(w.x,w.y),r=Math.abs(Math.sin(L.x*12.9898+L.y*78.233)*43758.5453)%1;L._teremor=cell?.biome===6&&!Atlas.curseCells.has(cell?.id)?kinds[Math.floor(r*kinds.length)]:null;}
+ return L._teremor&&floraSprite(L._teremor);
+}
+const prop=Renderer.prototype.prop;
+Renderer.prototype.prop=function(o){
+ const s=this.projectionActive&&!o.broken&&floraOf(o);if(!s)return prop.call(this,o);
+ const c=this.c,dx=o.shake>0?Math.round(Math.sin(o.shake*70)*o.shake*9):0,x=Math.round(o.x)+dx,y=Math.round(o.y);
+ c.save();c.globalAlpha*=s.alpha;c.drawImage(s.shadow,x-s.ax,y-s.ay);c.restore();c.drawImage(s.img,x-s.ax,y-s.ay);
 };
 Renderer.prototype.platformUnder=function(){const g=this.logicalGame,p=g.player,d=g.deck;return !p.level&&!p.onStairs&&p.x>d.x-12&&p.x<d.x+d.w+12&&p.y>d.y&&p.y<d.y+d.h+25;};
 Renderer.prototype.projectedStairsDepth=function(){const s=this.logicalGame.stairs;return P.point(s.x,s.bottom).y;};
