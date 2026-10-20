@@ -23,7 +23,7 @@
    for(const lane of s.lanes){const r={...lane,x:p.x+lane.x,y:p.y+lane.y};clear.put(r,r);r.paved=node.regionalCentre;lanes.put(r,r);}
    for(const f of s.fixtures||[]){const l=layout(f.id),r={x:p.x+f.x+l.foot.x-16,y:p.y+f.y+l.foot.y-16,w:l.foot.w+32,h:l.foot.h+32};clear.put(r,r);const a={x:p.x+f.x+l.approach[0]-10,y:p.y+f.y+l.approach[1]-10,w:20,h:20};clear.put(a,a);}
    sites.set(s.id,{...s,buildings:placed});
-  }for(const s of sites.values())if(s.layoutKind){const n=Atlas.byId[s.id];Atlas.registerSettlementAreas(s.id,s.districts.map(d=>({x:n.x+d.bounds.x/16,y:n.y+d.bounds.y/16,w:d.bounds.w/16,h:d.bounds.h/16})));}return districts={collision,art,clear,lanes,sites,buildings,custom:[...sites.values()].filter(s=>s.layoutKind)};
+  }for(const s of sites.values())if(s.layoutKind){const n=Atlas.byId[s.id];Atlas.registerSettlementAreas(s.id,s.districts.flatMap(d=>(d.areas||[d.bounds]).map(r=>({x:n.x+r.x/16,y:n.y+r.y/16,w:r.w/16,h:r.h/16}))));}return districts={collision,art,clear,lanes,sites,buildings,custom:[...sites.values()].filter(s=>s.layoutKind)};
  }
  const cleared=(d,x,y)=>!!d&&[...d.clear.near(x,y)].some(r=>contains(r,x,y,8));
  const init=Game.prototype.initAtlas;
