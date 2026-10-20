@@ -1,0 +1,97 @@
+{
+  "id": "M22",
+  "label": "Claustra de ventilation",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 32,
+  "depth": 8,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "screen",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 45,
+      "height": 49,
+      "anchor": [
+        10,
+        26
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          32,
+          16
+        ],
+        [
+          24,
+          20
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 8,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 45,
+      "height": 49,
+      "anchor": [
+        42,
+        30
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -32,
+          16
+        ],
+        [
+          -40,
+          12
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 8,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

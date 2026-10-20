@@ -1,0 +1,97 @@
+{
+  "id": "M20",
+  "label": "Fenêtre à volets",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 20,
+  "depth": 8,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "window-shutters",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 33,
+      "height": 43,
+      "anchor": [
+        10,
+        26
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          20,
+          10
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 20,
+        "depth": 8,
+        "height": 24
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 33,
+      "height": 43,
+      "anchor": [
+        30,
+        30
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -20,
+          10
+        ],
+        [
+          -28,
+          6
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 20,
+        "depth": 8,
+        "height": 24
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

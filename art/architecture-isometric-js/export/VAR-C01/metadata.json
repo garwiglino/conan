@@ -1,0 +1,356 @@
+{
+  "id": "VAR-C01",
+  "label": "Logis modeste",
+  "family": "varan",
+  "kind": "building",
+  "season": "base",
+  "width": 64,
+  "depth": 48,
+  "height": 48,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "house",
+    "wall": "wood",
+    "roof": "straw",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 12,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": true
+  },
+  "frames": {
+    "face": {
+      "width": 113,
+      "height": 85,
+      "anchor": [
+        48,
+        35
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          64,
+          32
+        ],
+        [
+          16,
+          56
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 23,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 35.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 23.299999999999997,
+            "y": 36,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 36,
+            "eave": 30,
+            "peak": 48
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    },
+    "droite": {
+      "width": 113,
+      "height": 94,
+      "anchor": [
+        112,
+        63
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -64,
+          32
+        ],
+        [
+          -112,
+          8
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 35.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 23.299999999999997,
+            "y": 36,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 36,
+            "eave": 30,
+            "peak": 48
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    },
+    "dos": {
+      "width": 113,
+      "height": 93,
+      "anchor": [
+        64,
+        95
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -64,
+          -32
+        ],
+        [
+          -16,
+          -56
+        ],
+        [
+          48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 35.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 23.299999999999997,
+            "y": 36,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 36,
+            "eave": 30,
+            "peak": 48
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    },
+    "gauche": {
+      "width": 113,
+      "height": 85,
+      "anchor": [
+        0,
+        67
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          112,
+          -8
+        ],
+        [
+          48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 23,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 35.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 23.299999999999997,
+            "y": 36,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 36,
+            "eave": 30,
+            "peak": 48
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    }
+  }
+}

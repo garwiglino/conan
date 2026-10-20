@@ -1,0 +1,97 @@
+{
+  "id": "M26",
+  "label": "Arche de pont pierre",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 24,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "bridge-stone",
+  "high": false,
+  "walkHeight": 24,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 81,
+      "height": 66,
+      "anchor": [
+        28,
+        26
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          24,
+          36
+        ],
+        [
+          -24,
+          12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 81,
+      "height": 66,
+      "anchor": [
+        76,
+        38
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -72,
+          12
+        ],
+        [
+          -24,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "id": "M16",
+  "label": "Escalier de rempart",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 24,
+  "depth": 48,
+  "height": 20,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "shape": "stairs",
+  "high": false,
+  "walkHeight": 20,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "face": {
+      "width": 77,
+      "height": 61,
+      "anchor": [
+        50,
+        22
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -24,
+          36
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 20
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 48,
+            "rise": 20,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "palier": {
+      "width": 93,
+      "height": 69,
+      "anchor": [
+        50,
+        30
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -24,
+          36
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 48,
+        "height": 20
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 48,
+            "rise": 20,
+            "landing": 16
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

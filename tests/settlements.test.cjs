@@ -1,6 +1,6 @@
 'use strict';
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
-const data=require('../data/architecture/settlements.json'),A=require('../sprites/architecture/architecture'),localities=require('../sprites/architecture/localities'),{overlap,segmentRect}=require('../scripts/build-settlements.cjs'),{loadGame,canvas}=require('./game-harness.cjs');let a;
+const data=require('../data/architecture/settlements.json'),A=require('../sprites/architecture/architecture-game'),localities=require('../sprites/architecture/localities'),{overlap,segmentRect}=require('../scripts/build-settlements.cjs'),{loadGame,canvas}=require('./game-harness.cjs');let a;
 before(async()=>a=await loadGame());
 test('all 83 canonical localities have native regional districts without moving their centres',()=>{
  assert.equal(data.sites.length,83);assert.equal(data.layout,a.Atlas.layout.id);assert.equal(data.tilePixels,16);
@@ -32,7 +32,7 @@ test('save/restore derives the same districts without serialising generated geom
  assert.equal(saved.architecture,undefined);assert.equal(h.settlements,g.settlements);assert.equal(h.npcs.find(p=>p.id===n.id).civilian.dead,true);assert.ok(h.humanWorkstations.has(n.id),'A death must not remove furniture');assert.deepEqual([h.humanWorkstations.get(n.id).x,h.humanWorkstations.get(n.id).y],[g.humanWorkstations.get(n.id).x,g.humanWorkstations.get(n.id).y]);assert.equal(h.settlementDiagnostics().buildings,g.settlementDiagnostics().buildings);
 });
 test('architecture draws visible roofs by their full bounds, including negative coordinates, without querying every town',()=>{
- const g=new a.Game(),r=new a.Renderer(canvas.createCanvas(640,400),canvas.createCanvas(1,1),g);r.resize(320,200,{t:0,b:0,l:0,r:0},2);const b=g.settlements.buildings.find(b=>b.x<0),f=A.entry(b.id).frames[b.dir];r.cam={x:b.x-40,y:b.y-f.size[1]-5};const objects=r.architectureDrawObjects();assert.ok(objects.some(o=>o.y===b.y));assert.ok(objects.length<30);assert.ok(objects.every(o=>o.always));const visible=r.visibleAtlasProps();for(const o of g.atlasProps)if(/^(world_(oak|pine|cypress|boulder)|palm)/.test(o.kind))assert.ok(visible.includes(o),'A static natural collider must remain visible');
+ const g=new a.Game(),r=new a.Renderer(canvas.createCanvas(640,400),canvas.createCanvas(1,1),g);r.resize(320,200,{t:0,b:0,l:0,r:0},2);const b=g.settlements.buildings.find(b=>b.x<0),f=A.entry(b.id).frames[b.dir];r.cam={x:b.x-40,y:b.y-f.size[1]-5};const objects=r.architectureDrawObjects();assert.ok(objects.some(o=>o.architecture===b.uid));assert.ok(objects.length<300);assert.ok(objects.every(o=>o.always));const visible=r.visibleAtlasProps();for(const o of g.atlasProps)if(/^(world_(oak|pine|cypress|boulder)|palm)/.test(o.kind))assert.ok(visible.includes(o),'A static natural collider must remain visible');
 });
 test('every doorway connects through the walkable district to its existing centre',()=>{
  const g=new a.Game();for(const s of g.settlements.sites.values()){

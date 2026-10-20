@@ -1,0 +1,117 @@
+{
+  "id": "M31",
+  "label": "Escalier d’accostage",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 24,
+  "depth": 32,
+  "height": 12,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "shape": "stairs",
+  "high": false,
+  "walkHeight": 12,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "face": {
+      "width": 61,
+      "height": 45,
+      "anchor": [
+        34,
+        14
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -8,
+          28
+        ],
+        [
+          -32,
+          16
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 32,
+        "height": 12
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 32,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "palier": {
+      "width": 77,
+      "height": 53,
+      "anchor": [
+        34,
+        22
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -8,
+          28
+        ],
+        [
+          -32,
+          16
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 32,
+        "height": 12
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 32,
+            "rise": 12,
+            "landing": 16
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

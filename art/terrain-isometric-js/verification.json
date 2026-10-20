@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "projectionMatchesArchitecture": true,
+    "all1837NativeRenders": true,
+    "groundCoverageWithoutGaps": true,
+    "pathAndRiverSeams": true,
+    "cliffAndStairHeights": true,
+    "realAtlasCodesAndAnalyticRoads": true,
+    "unitTestsPassed": 7,
+    "browserScenesPixelExact": 11,
+    "browserControls": [
+      "catalogue filter",
+      "real atlas comparison",
+      "projection grid",
+      "mobile 844x390"
+    ],
+    "gameWorldProjectionEnabled": false,
+    "remoteWrites": false
+  },
+  "sourceSha256": {
+    "sprites/terrain/terrain-isometric.js": "325e8c8066d99427bbea3eac9322d7adb739cc6598ca306e31d36be827a1f583",
+    "sprites/terrain/terrain-isometric-scene.js": "0db4cf29fde7883a4cffb032d8e3c354ce02e7b64400bebabf070be6ed73b5f7",
+    "sprites/terrain/isometric-palettes.json": "848a4e055375175e96999dbc9f1b8f200edef4435d244c2906529c3848f3b0c9"
+  }
+}

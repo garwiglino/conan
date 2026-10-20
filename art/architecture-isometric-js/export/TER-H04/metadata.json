@@ -1,0 +1,98 @@
+{
+  "id": "TER-H04",
+  "label": "Angle intérieur",
+  "family": "teremor",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 48,
+  "height": 64,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "corner-inner",
+  "high": true,
+  "walkHeight": 52,
+  "wallThickness": 16,
+  "parapetHeight": 12,
+  "material": "stone",
+  "frames": {
+    "ew": {
+      "width": 69,
+      "height": 111,
+      "anchor": [
+        50,
+        60
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          0,
+          48
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 101,
+      "height": 95,
+      "anchor": [
+        98,
+        84
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -96,
+          0
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

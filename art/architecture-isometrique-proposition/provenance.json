@@ -1,0 +1,86 @@
+[
+  {
+    "sheet": 1,
+    "output": "planche-01.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-e286f874-c70d-4405-a3db-5a2976312fe7.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 2,
+    "output": "planche-02.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-a249942d-ae11-423f-a9b9-5170f3f4ae12.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 3,
+    "output": "planche-03.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-c9843dcd-ea7f-42b4-9d35-e5bf1abaa0f9.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 4,
+    "output": "planche-04.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-7e429ae4-bd50-4cda-88fc-8dd06a449bbc.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 5,
+    "output": "planche-05.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-26558a35-567b-411d-aad7-0d308f1ed0b2.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 6,
+    "output": "planche-06.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-4efcad20-0c42-4c7a-8d0e-672b4ab54e80.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 7,
+    "output": "planche-07.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-ff774bb8-1fc0-4f28-a080-138e67dffc6f.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 8,
+    "output": "planche-08.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-4dabcb5c-d084-4627-85a0-a71721d787a8.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 9,
+    "output": "planche-09.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-d15cd516-588e-4277-869d-09c0d25a7341.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 10,
+    "output": "planche-10.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-655005b1-5306-4646-a90c-8496602d89af.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 11,
+    "output": "planche-11.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-71e9b144-fcad-46bd-86d8-0a1815e912ff.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  },
+  {
+    "sheet": 12,
+    "output": "planche-12.png",
+    "generator": "image_gen.imagegen",
+    "source": "Generated images are saved to /workspace/generated_images as /workspace/generated_images/exec-2a938d31-03a2-4c15-a42e-200b5f802535.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "status": "Concept généré, contrôle métrique natif non effectué"
+  }
+]

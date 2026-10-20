@@ -1,0 +1,97 @@
+{
+  "id": "M28",
+  "label": "Quai bois",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 32,
+  "height": 12,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "quay-wood",
+  "high": false,
+  "walkHeight": 12,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 85,
+      "height": 56,
+      "anchor": [
+        34,
+        14
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          16,
+          40
+        ],
+        [
+          -32,
+          16
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 32,
+        "height": 12
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 85,
+      "height": 56,
+      "anchor": [
+        82,
+        30
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -80,
+          8
+        ],
+        [
+          -32,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 32,
+        "height": 12
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

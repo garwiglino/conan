@@ -1,0 +1,97 @@
+{
+  "id": "M07",
+  "label": "Pignon de toiture",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 16,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "gable",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 8,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 54,
+      "height": 41,
+      "anchor": [
+        18,
+        6
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          -16,
+          8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 24
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 54,
+      "height": 42,
+      "anchor": [
+        66,
+        22
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -64,
+          16
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 24
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

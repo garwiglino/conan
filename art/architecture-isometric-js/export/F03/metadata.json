@@ -1,0 +1,326 @@
+{
+  "id": "F03",
+  "label": "Arsenal",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 72,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "military",
+    "wall": "stone",
+    "roof": "slate",
+    "rise": 22,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false,
+    "battlements": false,
+    "openTower": false
+  },
+  "frames": {
+    "face": {
+      "width": 171,
+      "height": 148,
+      "anchor": [
+        73,
+        64
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          24,
+          84
+        ],
+        [
+          -72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 23,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 56,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "military",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    },
+    "droite": {
+      "width": 171,
+      "height": 148,
+      "anchor": [
+        169,
+        100
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -168,
+          12
+        ],
+        [
+          -72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 21,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 56,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "military",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    },
+    "dos": {
+      "width": 171,
+      "height": 148,
+      "anchor": [
+        97,
+        148
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -24,
+          -84
+        ],
+        [
+          72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 56,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "military",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 171,
+      "height": 148,
+      "anchor": [
+        1,
+        112
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          168,
+          -12
+        ],
+        [
+          72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 56,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "military",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    }
+  }
+}

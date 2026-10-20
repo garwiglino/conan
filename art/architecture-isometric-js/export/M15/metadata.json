@@ -1,0 +1,97 @@
+{
+  "id": "M15",
+  "label": "Chemin de ronde",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 24,
+  "height": 20,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "deck",
+  "high": false,
+  "walkHeight": 20,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 77,
+      "height": 60,
+      "anchor": [
+        26,
+        22
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          24,
+          36
+        ],
+        [
+          -24,
+          12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 20
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 77,
+      "height": 60,
+      "anchor": [
+        74,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -72,
+          12
+        ],
+        [
+          -24,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 20
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

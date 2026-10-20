@@ -1,0 +1,316 @@
+{
+  "id": "B03",
+  "label": "Bergerie",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "barn",
+    "wall": "stone",
+    "roof": "straw",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 161,
+      "height": 124,
+      "anchor": [
+        64,
+        44
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          32,
+          80
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 22,
+      "geometry": {
+        "openings": [
+          {
+            "x": 35,
+            "y": 61.15,
+            "z": 0,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "barn",
+          "wall": "stone",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 161,
+      "height": 124,
+      "anchor": [
+        160,
+        76
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -160,
+          16
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [
+          {
+            "x": 35,
+            "y": 61.15,
+            "z": 0,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "barn",
+          "wall": "stone",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 161,
+      "height": 124,
+      "anchor": [
+        96,
+        124
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -32,
+          -80
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 18,
+      "geometry": {
+        "openings": [
+          {
+            "x": 35,
+            "y": 61.15,
+            "z": 0,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "barn",
+          "wall": "stone",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 161,
+      "height": 124,
+      "anchor": [
+        0,
+        92
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          160,
+          -16
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 35,
+            "y": 61.15,
+            "z": 0,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "barn",
+          "wall": "stone",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

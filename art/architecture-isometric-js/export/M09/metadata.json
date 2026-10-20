@@ -1,0 +1,97 @@
+{
+  "id": "M09",
+  "label": "Palissade droite",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 8,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "stockade",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 62,
+      "height": 65,
+      "anchor": [
+        10,
+        33
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          40,
+          28
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 62,
+      "height": 65,
+      "anchor": [
+        59,
+        37
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -56,
+          20
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

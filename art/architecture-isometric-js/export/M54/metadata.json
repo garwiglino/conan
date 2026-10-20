@@ -1,0 +1,98 @@
+{
+  "id": "M54",
+  "label": "Platelage de ronde haut",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 24,
+  "height": 40,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "deck",
+  "high": true,
+  "walkHeight": 30,
+  "wallThickness": 12,
+  "parapetHeight": 10,
+  "material": "wood",
+  "frames": {
+    "ew": {
+      "width": 77,
+      "height": 80,
+      "anchor": [
+        26,
+        42
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          24,
+          36
+        ],
+        [
+          -24,
+          12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 40
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 77,
+      "height": 70,
+      "anchor": [
+        74,
+        44
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -72,
+          12
+        ],
+        [
+          -24,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 40
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

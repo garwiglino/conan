@@ -1,0 +1,117 @@
+{
+  "id": "M08",
+  "label": "Faîtage",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 8,
+  "height": 8,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "ridge",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 8,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 63,
+      "height": 42,
+      "anchor": [
+        11,
+        9
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          40,
+          28
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 8
+      },
+      "colors": 11,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 0,
+            "y": 0,
+            "width": 48,
+            "depth": 8,
+            "eave": 0,
+            "peak": 8
+          }
+        ],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 63,
+      "height": 42,
+      "anchor": [
+        59,
+        13
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -56,
+          20
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 8
+      },
+      "colors": 11,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 0,
+            "y": 0,
+            "width": 48,
+            "depth": 8,
+            "eave": 0,
+            "peak": 8
+          }
+        ],
+        "recipe": null
+      }
+    }
+  }
+}

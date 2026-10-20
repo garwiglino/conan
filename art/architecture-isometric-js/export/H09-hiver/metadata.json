@@ -1,0 +1,316 @@
+{
+  "id": "H09-hiver",
+  "label": "Petit logis de pierre — hiver",
+  "family": "igea",
+  "kind": "building",
+  "season": "winter",
+  "width": 64,
+  "depth": 56,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "house",
+    "wall": "stone",
+    "roof": "wood",
+    "rise": 28,
+    "chimney": true,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 123,
+      "height": 104,
+      "anchor": [
+        57,
+        44
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          64,
+          32
+        ],
+        [
+          8,
+          60
+        ],
+        [
+          -56,
+          28
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 54,
+            "eave": 28,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "stone",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 123,
+      "height": 104,
+      "anchor": [
+        121,
+        72
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -64,
+          32
+        ],
+        [
+          -120,
+          4
+        ],
+        [
+          -56,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 54,
+            "eave": 28,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "stone",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 123,
+      "height": 105,
+      "anchor": [
+        65,
+        105
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -64,
+          -32
+        ],
+        [
+          -8,
+          -60
+        ],
+        [
+          56,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 54,
+            "eave": 28,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "stone",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 123,
+      "height": 115,
+      "anchor": [
+        1,
+        87
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          120,
+          -4
+        ],
+        [
+          56,
+          28
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 21,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 62,
+            "depth": 54,
+            "eave": 28,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "stone",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

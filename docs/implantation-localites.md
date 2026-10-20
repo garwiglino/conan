@@ -1,12 +1,13 @@
 # Implantation des localités dans le jeu
 
-Les ressources du commit `e9837bd` sont désormais chargées dans le jeu web et
-iOS. Le lot humain provient notamment de `1c310b5` (activités et postes), avec
+Les bâtiments utilisent désormais les pixels isométriques avec patine dans le jeu
+web et iOS. Les anciennes élévations du commit `e9837bd` restent des références
+de catalogue et de données historiques. Le lot humain provient notamment de `1c310b5` (activités et postes), avec
 les vêtements, coiffes et poses conservés dans `sprites/humains/`.
 
-## Première implantation
+## Implantation isométrique
 
-Les 83 localités de l’atlas disposent de **1 691 bâtiments** natifs. Les centres
+Les 83 localités de l’atlas disposent de **1 914 bâtiments** natifs. Les centres
 régionaux reçoivent jusqu’à 48 constructions, les ports jusqu’à 30 et les autres
 localités jusqu’à 18, selon la place réellement praticable. Chaque localité
 conserve au moins quatre bâtiments d’habitation. Il s’agit d’un premier quartier
@@ -35,6 +36,12 @@ réutilisent les pixels des pistes et dallages déjà chargés dans le jeu.
 
 Une tuile mesure toujours un mètre et 16 pixels. Les bâtiments utilisent leurs
 pixels natifs, leurs plans tournés et leurs portes, sans redimensionnement. Les
+empreintes en losange sont projetées sur le plan du monde, avec des collisions
+polygonales issues des mêmes volumes que les dessins. Le terrain et les
+personnages conservent leur repère existant. Les dessins sont découpés en bandes
+de profondeur au sol pour se trier avec les pieds des personnages, puis mis en
+cache dans une limite de 96 modèles. Les 696 vues sont compilées en données
+JavaScript indexées avant distribution ; aucun PNG n’est chargé en jeu. Les
 maisons fermées possèdent un seuil accessible ; ce lot n’ajoute pas d’intérieurs
 explorables. Les halles ouvertes gardent leurs supports physiques et leurs
 passages. Le camp scénarisé et les quais conservent leur implantation propre.
@@ -54,7 +61,9 @@ poste indépendant si leur métier correspond à une capacité locale et si un
 emplacement libre existe. Les postes d’artisan sont installés dans une halle
 ou un atelier ouvert ; les parcelles se trouvent à côté des habitations, hors
 des rues. Le socket fixe la place des pieds, l’approche et la direction du geste.
-Les meubles restent dans le monde lorsque leur occupant part ou meurt.
+Les meubles restent dans le monde lorsque leur occupant part ou meurt. Un
+nouveau poste doit aussi posséder une sortie libre et un chemin local vérifié
+depuis le centre, en tenant compte du meuble à installer.
 
 Un nouvel habitant est placé à son poste avant sa première apparition. Les
 positions des habitants déjà vivants sont conservées au rechargement. Après

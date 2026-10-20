@@ -1,0 +1,117 @@
+{
+  "id": "M18",
+  "label": "Vantaux de grand portail",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 40,
+  "depth": 8,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "gate-leaves",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 50,
+      "height": 60,
+      "anchor": [
+        14,
+        30
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          20
+        ],
+        [
+          32,
+          24
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 40,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 13,
+      "geometry": {
+        "openings": [
+          {
+            "x": 2,
+            "y": 7.9,
+            "z": 0,
+            "width": 36,
+            "clearance": 28,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 50,
+      "height": 58,
+      "anchor": [
+        54,
+        37
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -40,
+          20
+        ],
+        [
+          -48,
+          16
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 40,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [
+          {
+            "x": 2,
+            "y": 7.9,
+            "z": 0,
+            "width": 36,
+            "clearance": 28,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

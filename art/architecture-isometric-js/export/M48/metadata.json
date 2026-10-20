@@ -1,0 +1,97 @@
+{
+  "id": "M48",
+  "label": "Ossature en chantier",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 24,
+  "height": 40,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "frame",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 77,
+      "height": 81,
+      "anchor": [
+        26,
+        42
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          24,
+          36
+        ],
+        [
+          -24,
+          12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 40
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 77,
+      "height": 81,
+      "anchor": [
+        74,
+        54
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -72,
+          12
+        ],
+        [
+          -24,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 40
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

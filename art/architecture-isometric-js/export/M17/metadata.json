@@ -1,0 +1,117 @@
+{
+  "id": "M17",
+  "label": "Porte de maison",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 20,
+  "depth": 8,
+  "height": 28,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "door",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 30,
+      "height": 46,
+      "anchor": [
+        14,
+        26
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          20,
+          10
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 20,
+        "depth": 8,
+        "height": 28
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [
+          {
+            "x": 2,
+            "y": 7.9,
+            "z": 0,
+            "width": 16,
+            "clearance": 24,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 30,
+      "height": 44,
+      "anchor": [
+        34,
+        33
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -20,
+          10
+        ],
+        [
+          -28,
+          6
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 20,
+        "depth": 8,
+        "height": 28
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [
+          {
+            "x": 2,
+            "y": 7.9,
+            "z": 0,
+            "width": 16,
+            "clearance": 24,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "id": "B23",
+  "label": "Salle de mémoire et rites",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 72,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "rites",
+    "wall": "plaster",
+    "roof": "slate",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 171,
+      "height": 157,
+      "anchor": [
+        73,
+        72
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          24,
+          84
+        ],
+        [
+          -72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 88
+      },
+      "colors": 27,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "rites",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 171,
+      "height": 157,
+      "anchor": [
+        169,
+        108
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -168,
+          12
+        ],
+        [
+          -72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 88
+      },
+      "colors": 23,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "rites",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 171,
+      "height": 156,
+      "anchor": [
+        97,
+        156
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -24,
+          -84
+        ],
+        [
+          72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 88
+      },
+      "colors": 21,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "rites",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 171,
+      "height": 157,
+      "anchor": [
+        1,
+        120
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          168,
+          -12
+        ],
+        [
+          72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 88
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 70,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "rites",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

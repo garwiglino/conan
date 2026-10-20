@@ -1,0 +1,97 @@
+{
+  "id": "M13",
+  "label": "Jonction en T",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 48,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "junction-t",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 83,
+      "height": 76,
+      "anchor": [
+        32,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          0,
+          48
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 32
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 83,
+      "height": 76,
+      "anchor": [
+        80,
+        49
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -96,
+          0
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 32
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

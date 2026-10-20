@@ -42,7 +42,18 @@
     "check:settlements": "node scripts/check-settlements.cjs",
     "build:architecture-34": "node scripts/export-architecture-34.cjs",
     "test:architecture-34": "node --test tests/architecture-34.test.cjs",
-    "package:architecture-34": "python3 scripts/package-architecture-34.py"
+    "package:architecture-34": "python3 scripts/package-architecture-34.py",
+    "build:architecture-isometric": "node scripts/export-architecture-isometric.cjs",
+    "test:architecture-isometric": "node --test tests/architecture-isometric.test.cjs",
+    "package:architecture-isometric": "python3 scripts/package-architecture-isometric.py",
+    "compile:architecture-isometric": "node scripts/compile-isometric-runtime.cjs",
+    "embed:architecture": "node scripts/embed-architecture.cjs",
+    "test:architecture-game": "node --test tests/architecture-game.test.cjs tests/architecture-occlusion.test.cjs tests/settlements.test.cjs",
+    "preview:architecture-occlusion": "node scripts/preview-architecture-occlusion.cjs",
+    "build:terrain-isometric": "node scripts/export-terrain-isometric.cjs",
+    "test:terrain-isometric": "node --test tests/terrain-isometric.test.cjs",
+    "check:terrain-isometric": "node scripts/check-terrain-isometric.cjs",
+    "package:terrain-isometric": "python3 scripts/package-terrain-isometric.py"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

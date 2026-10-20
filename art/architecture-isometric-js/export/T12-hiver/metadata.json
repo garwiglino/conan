@@ -1,0 +1,316 @@
+{
+  "id": "T12-hiver",
+  "label": "Loge de mineurs — hiver",
+  "family": "igea",
+  "kind": "building",
+  "season": "winter",
+  "width": 112,
+  "depth": 64,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "miners",
+    "wall": "log",
+    "roof": "wood",
+    "rise": 28,
+    "chimney": true,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 179,
+      "height": 138,
+      "anchor": [
+        65,
+        50
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          56
+        ],
+        [
+          48,
+          88
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49,
+            "y": 61.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 62,
+            "eave": 36,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "miners",
+          "wall": "log",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 179,
+      "height": 138,
+      "anchor": [
+        177,
+        82
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          56
+        ],
+        [
+          -176,
+          24
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49,
+            "y": 61.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 62,
+            "eave": 36,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "miners",
+          "wall": "log",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 179,
+      "height": 138,
+      "anchor": [
+        113,
+        138
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          -56
+        ],
+        [
+          -48,
+          -88
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 23,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49,
+            "y": 61.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 62,
+            "eave": 36,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "miners",
+          "wall": "log",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 179,
+      "height": 144,
+      "anchor": [
+        1,
+        112
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          -56
+        ],
+        [
+          176,
+          -24
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49,
+            "y": 61.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 62,
+            "eave": 36,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "miners",
+          "wall": "log",
+          "roof": "wood",
+          "rise": 28,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

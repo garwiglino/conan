@@ -1,0 +1,98 @@
+{
+  "id": "M61",
+  "label": "Jonction haute en T",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 48,
+  "height": 48,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "junction-t",
+  "high": true,
+  "walkHeight": 38,
+  "wallThickness": 12,
+  "parapetHeight": 10,
+  "material": "stone",
+  "frames": {
+    "ew": {
+      "width": 83,
+      "height": 92,
+      "anchor": [
+        32,
+        50
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          0,
+          48
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 83,
+      "height": 88,
+      "anchor": [
+        80,
+        61
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -96,
+          0
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

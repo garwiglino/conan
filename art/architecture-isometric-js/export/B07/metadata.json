@@ -1,0 +1,352 @@
+{
+  "id": "B07",
+  "label": "Auberge-relais",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 112,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "inn",
+    "wall": "plaster",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": true,
+    "storeys": 2,
+    "raised": 0,
+    "annex": true,
+    "balcony": true,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 168,
+      "height": 156,
+      "anchor": [
+        76,
+        65
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          56
+        ],
+        [
+          32,
+          96
+        ],
+        [
+          -80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 29,
+      "geometry": {
+        "openings": [
+          {
+            "x": 37,
+            "y": 67.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 86,
+            "depth": 68,
+            "eave": 54,
+            "peak": 80
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": 22.200000000000003,
+            "width": 25,
+            "depth": 44.8,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "inn",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": true,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 182,
+      "height": 147,
+      "anchor": [
+        180,
+        100
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          56
+        ],
+        [
+          -192,
+          16
+        ],
+        [
+          -80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 26,
+      "geometry": {
+        "openings": [
+          {
+            "x": 37,
+            "y": 67.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 86,
+            "depth": 68,
+            "eave": 54,
+            "peak": 80
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": 22.200000000000003,
+            "width": 25,
+            "depth": 44.8,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "inn",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": true,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 168,
+      "height": 144,
+      "anchor": [
+        91,
+        144
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          -56
+        ],
+        [
+          -32,
+          -96
+        ],
+        [
+          80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 25,
+      "geometry": {
+        "openings": [
+          {
+            "x": 37,
+            "y": 67.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 86,
+            "depth": 68,
+            "eave": 54,
+            "peak": 80
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": 22.200000000000003,
+            "width": 25,
+            "depth": 44.8,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "inn",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": true,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 182,
+      "height": 155,
+      "anchor": [
+        1,
+        119
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          -56
+        ],
+        [
+          192,
+          -16
+        ],
+        [
+          80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 30,
+      "geometry": {
+        "openings": [
+          {
+            "x": 37,
+            "y": 67.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 86,
+            "depth": 68,
+            "eave": 54,
+            "peak": 80
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": 22.200000000000003,
+            "width": 25,
+            "depth": 44.8,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "inn",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": true,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}
