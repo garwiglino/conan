@@ -11,7 +11,7 @@ test('spear has four distinct blows and weighted anticipation/strike/recovery ti
 });
 test('spear loads from guard, accelerates into contact and follows through with the body',()=>{
  for(let c=0;c<4;c++){
-  assert.equal(W.sample(W.duration(id,c),id,c),0,'preparation starts in ready pose');
+  assert.equal(W.sample(W.duration(id,c),id,c),1,'attack starts in its held preparation pose');
   const a=W.pose(id,1,1.25,c),b=W.pose(id,1,1.5,c),z=W.pose(id,1,1.75,c);
   assert.ok(Math.hypot(z.h[0]-b.h[0],z.h[1]-b.h[1])>Math.hypot(b.h[0]-a.h[0],b.h[1]-a.h[1]));
   assert.ok(W.pose(id,1,1,c).body[0]<0);assert.ok(W.pose(id,1,3,c).body[0]>0);
@@ -19,7 +19,7 @@ test('spear loads from guard, accelerates into contact and follows through with 
  }
  const pixels=new Map(),sink={set(x,y,c){pixels.set(Math.round(x)+','+Math.round(y),c);}};
  W.trail(sink,id,1,.75,0);assert.equal(pixels.size,0,'no smear on loading');
- W.trail(sink,id,1,2.5,0);assert.ok(pixels.size>0,'smear follows the actual delivery');
+ W.trail(sink,id,1,2,0);assert.ok(pixels.size>0,'smear follows the actual delivery');
  pixels.clear();W.trail(sink,id,1,4.5,0);assert.equal(pixels.size,0,'no new cut painted during recovery');
 });
 test('every spear sub-pose keeps the drawn tip inside the engine frame and its active sweep',()=>{

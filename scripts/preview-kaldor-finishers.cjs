@@ -10,13 +10,13 @@ const {loadGame,canvas,root}=require('../tests/game-harness.cjs'),W=require('./k
  for(let n=0;n<96;n++){
   const cv=canvas.createCanvas(960,1190),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.fillStyle='#141d1c';c.fillRect(0,0,960,1190);
   c.font='bold 22px sans-serif';c.fillStyle='#efd7a4';c.fillText('Quatrièmes coups · une frappe, un impact · vitesse réelle',18,28);
-  c.font='14px sans-serif';c.fillStyle='#afc0b4';c.fillText('12 exemples · rotations natives, poids et effets propres aux armes · bras et tenues conservés',18,51);
+  c.font='14px sans-serif';c.fillStyle='#afc0b4';c.fillText('12 exemples · 4 poses franches, vrai idle et effets propres aux armes · bras et tenues conservés',18,51);
   for(let i=0;i<ids.length;i++){
-   const w=W.get(ids[i]),look=W.preview(w.id,n/24,'finisher'),x=i%3*320,y=68+Math.floor(i/3)*280;
+   const w=W.get(ids[i]),look=W.preview(w.id,n/24,'finisher',A.frameAt('idle',n/24)),x=i%3*320,y=68+Math.floor(i/3)*280;
    A.wield(w.id);A.wear('brigandine-mercenaire');
    c.fillStyle='#25332e';c.fillRect(x+5,y,310,271);c.fillStyle='#efd7a4';c.font='bold 14px sans-serif';c.fillText(w.label,x+14,y+23,290);
    c.fillStyle='#afc0b4';c.font='12px sans-serif';c.fillText(w.hands+' main'+(w.hands===2?'s':'')+' · '+(w.finisher.magic?'Manifestation magique':'Frappe physique'),x+14,y+43,292);
-   c.drawImage(A.nativeFrame(2,look.state,look.frame,3,api.swordPose),0,0,80,80,x+40,y+25,240,240);
+   c.drawImage(A.nativeFrame(2,look.state,look.frame,look.combo,api.swordPose),0,0,80,80,x+40,y+25,240,240);
    c.fillStyle='#efd7a4';c.fillText(w.finisher.name,x+14,y+246,290);c.fillStyle='#afc0b4';c.fillText(look.label.split(' · ').at(-1),x+14,y+263,290);
   }
   fs.writeFileSync(path.join(out,String(n).padStart(3,'0')+'.png'),cv.toBuffer('image/png'));

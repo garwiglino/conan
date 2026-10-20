@@ -8,7 +8,7 @@ test('each of the 48 arms has four named, distinct combos and real mass/balance'
    const paths=[0,1,2,3].map(c=>JSON.stringify([1,2,3,4].map(f=>W.pose(w.id,d,f,c))));assert.equal(new Set(paths).size,4,w.id+':'+d);
    for(let c=0;c<4;c++){
     const times=W.times(w.id,c);assert.equal(times.length,6);assert.ok(times[1]>times[2]);assert.ok(times[5]>times[2]);
-    assert.equal(W.sample(W.duration(w.id,c),w.id,c),0);
+    assert.equal(W.sample(W.duration(w.id,c),w.id,c),1);
     const before=W.pose(w.id,d,0,c),after=W.pose(w.id,d,5,c),ready=W.guard(w.id,d);assert.deepEqual(before.h,after.h);assert.deepEqual(after.h,ready.h);
     if(d===1||d===3){assert.ok(W.pose(w.id,d,1,c).body.some(n=>n!==0));assert.ok(W.pose(w.id,d,3,c).body.some(n=>n!==0));}
     for(let f=0;f<=5;f+=.125){const p=W.pose(w.id,d,f,c),x=40+p.h[0]+p.u[0]*p.reach,y=52+p.h[1]+p.u[1]*p.reach;assert.ok(x>1&&x<78&&y>1&&y<78,w.id+' tip '+d+':'+c+':'+f);}
@@ -19,9 +19,9 @@ test('each of the 48 arms has four named, distinct combos and real mass/balance'
  assert.ok(W.hitPause('brise-givre',3)>W.hitPause('aiguille-corail',3));
  assert.ok(W.get('brise-givre').damage>W.get('aiguille-corail').damage*3);
 });
-test('all stowed weapons lie diagonally with their silhouette centered on the spine',()=>{
+test('stowed weapons stay centered, with upright side-view spears and staffs',()=>{
  for(const w of W.all)for(let d=0;d<4;d++){
-  const s=W.storage(w.id,d);assert.deepEqual(s.center,[d===1?-3:d===3?3:0,-10]);assert.ok(Math.abs(s.u[0])>.4&&Math.abs(s.u[1])>.6,w.id+' diagonal');assert.ok(Math.abs(Math.hypot(...s.u)-1)<1e-10);
+  const s=W.storage(w.id,d);assert.deepEqual(s.center,[d===1?-3:d===3?3:0,-10]);if(['spear','staff'].includes(w.family)&&(d===1||d===3)){assert.equal(s.u[0],0);assert.equal(s.u[1],-1);}else assert.ok(Math.abs(s.u[0])>.4&&Math.abs(s.u[1])>.6,w.id+' diagonal');assert.ok(Math.abs(Math.hypot(...s.u)-1)<1e-10);
   const points=[],b={set(x,y){points.push([Math.round(x),Math.round(y)]);},line(x,y,X,Y,c,z){const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)this.set(x+(X-x)*i/n,y+(Y-y)*i/n);}};
   W.paintStored(b,w.id,d);
   const mid=k=>(Math.min(...points.map(p=>p[k]))+Math.max(...points.map(p=>p[k])))/2;
@@ -30,9 +30,9 @@ test('all stowed weapons lie diagonally with their silhouette centered on the sp
 });
 test('weapon afterimages follow mass and stay confined to the attack delivery',()=>{
  function pixels(id,f){const m=new Map();W.trail({set(x,y,c,z){m.set(Math.round(x)+','+Math.round(y),{c,z});}},id,1,f,0);return m;}
- for(const w of W.all){assert.equal(pixels(w.id,.5).size,0);assert.equal(pixels(w.id,4.5).size,0);assert.ok(pixels(w.id,2.5).size>0);}
- assert.ok([...pixels('brise-givre',2.5).values()].some(p=>p.z<0),'heavy weapon has earlier silhouettes');
- assert.ok(![...pixels('aiguille-corail',2.5).values()].some(p=>p.z<0),'dagger uses a short streak');
+ for(const w of W.all){assert.equal(pixels(w.id,.5).size,0);assert.equal(pixels(w.id,4.5).size,0);assert.ok(pixels(w.id,2).size>0);}
+ assert.ok([...pixels('brise-givre',2).values()].some(p=>p.z<0),'heavy weapon has earlier silhouettes');
+ assert.ok(![...pixels('aiguille-corail',2).values()].some(p=>p.z<0),'dagger uses a short streak');
 });
 
 test('mass-based stowing keeps attacks responsive and every preview frame valid',()=>{
@@ -74,4 +74,32 @@ test('a spear reverse can contact with the visible butt instead of a phantom for
  const id='lance-boisclair',p=W.pose(id,1,3,1),actor={x:0,y:0,dir:1,combo:1,weapon:id};
  const target={x:p.h[0]-p.u[0]*6,y:p.h[1]-p.u[1]*6+9,r:.1};
  assert.ok(target.x>p.h[0]);assert.ok(W.hits(actor,target,3));
+});
+
+test('every combo holds exactly preparation, impact, recoil and ready with no in-between drawings',()=>{
+ for(const w of W.all)for(let combo=0;combo<4;combo++){
+  const frames=new Set(),len=W.duration(w.id,combo);
+  for(let t=0;t<=len;t+=.0005)frames.add(W.sample(len-t,w.id,combo));
+  assert.deepEqual([...frames],[1,2,3.5,5],w.id+':'+combo);
+  const t=W.times(w.id,combo);assert.ok(t[2]+t[3]>=.045-1e-9,'contact cannot be skipped at 25 fps');const load=len-t[0]-t[1]/2,contact=len-t[0]-t[1]-t[2]/2;
+  const q=W.pose(w.id,2,2,combo),a={x:0,y:0,dir:2,combo,weapon:w.id,attack:load};
+  const victim={x:q.h[0]+q.u[0]*(q.reach-1),y:q.h[1]+q.u[1]*(q.reach-1)+9,r:.1};
+  assert.equal(W.hits(a,victim,2),false,w.id+' preparation never hits');a.attack=contact;
+  assert.equal(W.hits(a,victim,2),true,w.id+' displayed contact hits');
+  let count=0;const b={set(){count++;}};
+  for(const f of [1,3.5,5])W.trail(b,w.id,2,f,combo);assert.equal(count,0);
+  W.trail(b,w.id,2,2,combo);assert.ok(count>0,w.id+' impact smear retained');
+  if(combo===3&&w.finisher.magic){count=0;W.finisherEffects(b,w.id,2,2);assert.ok(count>0,w.id+' magic retained');}
+ }
+});
+
+test('the shipped hero renderer returns to the original breathing idle during the ready beat',async()=>{
+ const {loadGame,canvas}=require('./game-harness.cjs'),api=await loadGame(),A=api.HearthreaverKaldorCivilianArt;await A.preload();
+ const atlas=new api.CharacterAtlas(),cv=canvas.createCanvas(80,80),calls=[];
+ atlas.get=(kind,dir,state,frame)=>{calls.push({state,frame});return cv;};
+ for(const w of W.all)for(let combo=0;combo<4;combo++){
+  const len=W.duration(w.id,combo),t=W.times(w.id,combo),actor={x:40,y:52,dir:2,weapon:w.id,combo,attack:t[5]/2,attackHeld:true};
+  for(const time of [.1,.55,.8,1.1]){atlas.draw(cv.getContext('2d'),'hero',actor,time);const look=calls.at(-1);assert.equal(look.state,'idle');assert.equal(look.frame,A.frameAt('idle',time));}
+  let elapsed=t[0];for(const [phase,drawing] of [[1,1],[2,2],[3,2],[4,3.5]]){actor.attack=len-elapsed-t[phase]/2;atlas.draw(cv.getContext('2d'),'hero',actor,2);assert.deepEqual(calls.at(-1),{state:'attack',frame:drawing});elapsed+=t[phase];}
+ }
 });

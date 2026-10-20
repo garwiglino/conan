@@ -439,16 +439,16 @@
  // shrinks while it points at the camera, then grows into the scabbard.
  function weaponBlend(dir,state,frame,hand,shift=[0,0]){
   const custom=customWeapon(),store=custom?storagePose(dir):null;
-  const g=custom?weapons().guard(wielded,dir):GUARD[dir],end=custom?{w:store.h,v:store.u}:sheath[dir],[ex,ey]=unit(end.v[0],end.v[1]);
+  const g=custom?weapons().carry(wielded,dir):GUARD[dir],end=custom?{w:store.h,v:store.u}:sheath[dir],[ex,ey]=unit(end.v[0],end.v[1]);
   const total=state==='draw'||state==='draw_walk'?5:6;
   const phase=state.endsWith('_walk')?Math.floor(frame/8):frame;
   const f=Math.max(0,Math.min(1,(phase+1)/total));
   const t=state.startsWith('draw')?1-f:f;
   const mx=end.w[0]-(custom?0:ex)+shift[0],my=end.w[1]-(custom?0:ey)+shift[1];
   const m=Math.min(1,t/.6),r=Math.max(0,Math.min(1,(t-.3)/.7));
-  const vx=g.u[0]+(ex-g.u[0])*r,vy=g.u[1]+(ey-g.u[1])*r;
-  return {h:[hand[0]+(mx-hand[0])*m,hand[1]+(my-hand[1])*m],u:unit(vx,vy),
-   length:Math.max(.3,Math.hypot(vx,vy)),t};
+  const vx=g.u[0]+(ex-g.u[0])*r,vy=g.u[1]+(ey-g.u[1])*r,projected=custom&&g.profile&&g.scale;
+  return {h:[hand[0]+(mx-hand[0])*m,hand[1]+(my-hand[1])*m],u:projected?[vx,vy]:unit(vx,vy),
+   length:(projected?1:Math.max(.3,Math.hypot(vx,vy)))*((g.scale||1)+(1-(g.scale||1))*t),t};
  }
 
  const HAIR_COLORS=Object.freeze(['#2e2029','#523a34','#927052']);
@@ -498,10 +498,10 @@
  // Reuse each existing sleeve/hand silhouette as a rigid image. Face/back
  // have two already disconnected arms, profiles have one visible silhouette.
  // No procedural limb, new fist, elbow cut, stretch, rotation or added contour.
- function nativeArmLayers(dir,h,u,shift=[0,0],freeOffset=[0,0]){
+ function nativeArmLayers(dir,h,u,shift=[0,0],freeOffset=[0,0],gripSpan){
   const [front,fc]=canvas80(),[back,bc]=canvas80(),w=weapons().get(wielded);
   const view=[2,1,0,3][dir],parts=KALDOR_WEAPON_LIMBS.outfits[worn.outfit][view];
-  const mainSide=dir===0?'right':'left',grip=weapons().fitGrip(wielded,dir,h,u);
+  const mainSide=dir===0?'right':'left',grip=weapons().fitGrip(wielded,dir,h,u,gripSpan);
   parts.forEach((part,i)=>{
    const main=part.side===null||part.side===mainSide;
    const target=main?grip.h:w.hands===2?grip.support:[part.palm[0]+freeOffset[0],part.palm[1]+freeOffset[1]];
@@ -549,16 +549,16 @@
  // the body when it is in front of the hero seen from the back, or on its way
  // over the shoulder into the scabbard in the other views.
  function heldSword(dir,state,frame,p,npcPixels,shift){
-  const profile=dir===1||dir===3,g=customWeapon()?weapons().guard(wielded,dir):GUARD[dir];
-  // The back view hides the NPC hands under the hair: use the guard grip.
+  const profile=dir===1||dir===3,normal=state==='idle'||state==='walk'||BLEND_STATES.has(state),g=customWeapon()?(normal?weapons().carry(wielded,dir):weapons().guard(wielded,dir)):GUARD[dir];
+  // The back view hides the NPC hands under the hair: use the authored grip.
   const hand=(!customWeapon()&&dir===2&&handPoint(npcPixels,outfitData(worn.outfit)))||[g.h[0]+shift[0],g.h[1]+shift[1]];
-  const held=BLEND_STATES.has(state)?weaponBlend(dir,state,frame,hand,shift):{h:hand,u:g.u,length:1,t:0};
+  const held=BLEND_STATES.has(state)?weaponBlend(dir,state,frame,hand,shift):{h:hand,u:g.u,length:g.scale||1,t:0};
   held.behind=dir===0?held.t<.5:held.t>=(profile?.3:.5);
   const sword=buffer(),hands=buffer(),grip=held.behind&&dir!==2?sword:hands;
   let arms=null;
   if(customWeapon()){
-   const h=weapons().fitGrip(wielded,dir,[held.h[0]-shift[0],held.h[1]-shift[1]],held.u).h;
-   held.h=[h[0]+shift[0],h[1]+shift[1]];arms=nativeArmLayers(dir,h,held.u,shift);
+   const h=weapons().fitGrip(wielded,dir,[held.h[0]-shift[0],held.h[1]-shift[1]],held.u,g.span).h;
+   held.h=[h[0]+shift[0],h[1]+shift[1]];arms=nativeArmLayers(dir,h,held.u,shift,[0,0],g.span);
   }
   const [hx,hy]=held.h,[ux,uy]=held.u;
   paintSword(sword,hx,hy,ux,uy,{hands:0,blade:BLADE*held.length});

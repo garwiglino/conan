@@ -24,7 +24,7 @@ test('spinning finishers turn the existing character through all four native vie
    const target={x:p.h[0]+p.u[0]*(p.reach-2),y:p.h[1]+p.u[1]*(p.reach-2)+9,r:1};
    assert.ok(W.hits({x:0,y:0,weapon:w.id,dir:d,combo:3},target,2),w.id+' drawn sweep hits');
    assert.ok(!W.hits({x:0,y:0,weapon:w.id,dir:d,combo:3},{...target,level:1},2));
-  }assert.equal(new Set([1,1.25,1.5,1.75].map(f=>W.pose(w.id,d,f,3).view)).size,4,'runtime quarter samples show every native view');assert.equal(views.size,4);assert.equal(W.pose(w.id,d,2,3).view,d);assert.equal(W.pose(w.id,d,5,3).view,d);
+  }assert.equal(new Set([1,1.25,1.5,1.75].map(f=>W.pose(w.id,d,f,3).view)).size,4,'continuous trail construction retains every native view');assert.equal(views.size,4);assert.equal(W.pose(w.id,d,2,3).view,d);assert.equal(W.pose(w.id,d,5,3).view,d);
  }
 });
 test('effect palettes are weapon-specific, bounded, and expire before the next attack',()=>{
@@ -61,17 +61,18 @@ test('the actual fourth-combo combat loop hits a victim once across delivery and
  assert.equal(blows,1);assert.equal(g.player.dir,2);assert.equal(g.player.weapon,'sarisse-horizon');
 });
 test('the dedicated fourth-strike preview has an explicit pause between each single blow',()=>{
- for(const w of W.all){assert.equal(W.preview(w.id,0,'finisher').frame,5);let active=0;
-  for(let t=.2;t<W.duration(w.id,3)+.2;t+=.01){const p=W.preview(w.id,t,'finisher');assert.equal(p.combo,3);assert.ok(p.frame>=0&&p.frame<=5);if(p.frame<5)active++;}
-  assert.ok(active>0);assert.equal(W.preview(w.id,W.duration(w.id,3)+.3,'finisher').frame,5);
+ for(const w of W.all){assert.equal(W.preview(w.id,0,'finisher').state,'idle');let active=0;
+  for(let t=.2;t<W.duration(w.id,3)+.2;t+=.01){const p=W.preview(w.id,t,'finisher');assert.equal(p.combo,3);assert.ok(p.frame>=0&&p.frame<=5);if(p.state==='attack')active++;}
+  assert.ok(active>0);assert.equal(W.preview(w.id,W.duration(w.id,3)+.3,'finisher').state,'idle');
  }
 });
 
-test('live finisher contact waits for the blade instead of freezing anticipation with an early hit',()=>{
+test('live finisher contact begins on the discrete impact drawing, never in anticipation',()=>{
  for(const w of W.all){
   const q=W.pose(w.id,2,2,3),target={x:q.h[0]+q.u[0]*(q.reach-1),y:q.h[1]+q.u[1]*(q.reach-1)+9,r:.1};
   const times=W.times(w.id,3),len=W.duration(w.id,3),actor={x:0,y:0,weapon:w.id,dir:2,combo:3,attack:len-times[1]-.001};
-  assert.equal(W.frame(actor.attack,w.id,3),2);assert.equal(W.hits(actor,target,2),false,w.id+' not before visible delivery');
+  actor.attack=len-times[1]*.5;assert.equal(W.hits(actor,target,2),false,w.id+' no contact in preparation');
+  actor.attack=len-times[1]-.001;assert.equal(W.frame(actor.attack,w.id,3),2);assert.equal(W.hits(actor,target,2),true,w.id+' contact connects on the displayed impact drawing');
   actor.attack=len-times[1]-times[2]-.001;assert.equal(W.frame(actor.attack,w.id,3),3);assert.equal(W.hits(actor,target,3),true,w.id+' actual held contact');
  }
 });
@@ -79,7 +80,7 @@ test('a slower frame crossing into impact still sweeps the last part of a spinni
  for(const w of W.all.filter(w=>w.finisher.kind==='whirl')){
   const times=W.times(w.id,3),actor={x:0,y:0,weapon:w.id,dir:2,combo:3,attack:W.duration(w.id,3)-times[1]-times[2]-.001};
   const previous=Math.max(1,W.sample(actor.attack+.04,w.id,3)),q=W.pose(w.id,2,(previous+2)/2,3);
-  assert.ok(previous<2);assert.ok(W.hits(actor,{x:q.h[0]+q.u[0]*(q.reach-2),y:q.h[1]+q.u[1]*(q.reach-2)+9,r:.1},3),w.id+' does not drop the final arc at low frame rate');
+  assert.ok(previous<=2);assert.ok(W.hits(actor,{x:q.h[0]+q.u[0]*(q.reach-2),y:q.h[1]+q.u[1]*(q.reach-2)+9,r:.1},3),w.id+' does not drop the final arc at low frame rate');
  }
 });
 

@@ -107,7 +107,7 @@ const KaldorArsenal=(()=>{
   const tick=now=>{
    if(!cv.isConnected)return;
    const t=(now-start)/1000,id=g.arsenal.equipped;Art.wield(id);
-   const look=W.preview(id,t,previewMotion),state=look.state,f=look.frame,combo=look.combo;
+   const look=W.preview(id,t,previewMotion,Art.frameAt('idle',t)),state=look.state,f=look.frame,combo=look.combo;
    const im=Art.nativeFrame(previewDirection,state,f,combo,swordPose),c=cv.getContext('2d');c.clearRect(0,0,80,80);c.imageSmoothingEnabled=false;if(im)c.drawImage(im,0,0);
    requestAnimationFrame(tick);
   };requestAnimationFrame(tick);

@@ -19,30 +19,30 @@
  const MOTIONS=freeze(data.motions);
  // Cut dead time, especially the floating follow-through and return. Tempo and
  // inertia remain relative to each individual weapon.
- const BEAT=freeze([1,.83,.72,.78,.65,.70]);
+ const BEAT=freeze([1,.70,.35,.66,.46,.48]);
+ // Keep the visible contact window reachable even at the engine's 40ms tick.
+ const contactWindow=row=>{row[3]=Math.max(row[3],.045-row[2]);return row;};
  function times(id,combo=0){
   const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
-  if(w.family==='spear')return SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1));
+  if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)));
   const row=MOTIONS[w.family].times[combo],reference={sword:1.8,sabre:1.25,dagger:.6,axe:1.9,mace:2.1,staff:1.6,glaive:2.7}[w.family];
   const inertia=Math.max(.84,Math.min(1.22,1+(w.weightKg/reference-1)*.16));
-  return row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1));
+  return contactWindow(row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1)));
  }
  const duration=(id,combo=0)=>times(id,combo).reduce((a,b)=>a+b,0);
  function frame(remaining,id,combo=0){
   const row=times(id,combo);let t=duration(id,combo)-Math.max(0,remaining);
   for(let i=0;i<6;i++){if(t<row[i]-1e-7)return i;t-=row[i];}return 5;
  }
- // Few deliberate drawings: held anticipation, a fast crossing and a readable
- // contact. Collision still sweeps the complete path between those drawings.
- function sample(remaining,id,combo=0){
-  const row=times(id,combo),steps=4;let t=duration(id,combo)-Math.max(0,remaining);
-  for(let i=0;i<6;i++){if(t<row[i]-1e-7)return Math.max(0,i-1+Math.floor(t/row[i]*steps)/steps);t-=row[i];}return 5;
- }
+ // Four held drawings only: anticipation, contact, recoil and ready.
+ // Continuous authored geometry below remains for swept collision and smears.
+ const DRAWINGS=freeze([1,1,2,2,3.5,5]);
+ function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
  // The arms and hands are existing sprite layers. Choreography translates
  // those intact images to the grip; it never generates an arm or changes its shape.
  const isPole=id=>['staff','spear','glaive'].includes(get(id).family);
  const handSpan=(id,dir)=>isPole(id)?dir===2?6:3.5:2;
- const fitGrip=(id,dir,h,u)=>{const span=handSpan(id,dir);return {h:[...h],u,span,
+ const fitGrip=(id,dir,h,u,span=handSpan(id,dir))=>{return {h:[...h],u,span,
   support:get(id).hands===2?[h[0]-u[0]*span,h[1]-u[1]*span]:null};};
  const forward=dir=>[[0,-1],[1,0],[0,1],[-1,0]][dir];
  const smooth=t=>t*t*(3-2*t);
@@ -66,6 +66,14 @@
   const h=dir===0?[4,-8]:dir===2?[-7,-6]:dir===1?[1,-6]:[-2,-6];
   const u=pole?(dir===0?[.12,-.993]:dir===2?[-.12,.993]:dir===1?[.985,-.173]:[-.985,-.173]):dir===0?[.6,-.8]:dir===2?[-.65,-.76]:dir===1?[.58,-.815]:[-.58,-.815];
   return {h,u,reach:w.length+2,profile};
+ }
+ // Normal carrying differs from combat guard: shaft upright across the
+ // chest, high leading hand and low supporting hand. The transverse diagonal
+ // projects vertically in profile, retaining its shortened vertical component.
+ function carry(id,dir){
+  const w=get(id);if(!['spear','staff'].includes(w.family))return {...guard(id,dir),span:handSpan(id,dir)};
+  const side=dir===0||dir===3?-1:1,profile=dir===1||dir===3;
+  return {h:[side*(profile?5:3),profile?-9:-8],u:[profile?0:side*.76,-Math.sqrt(1-.76**2)],reach:w.length*.72+2,profile,span:8,scale:.72};
  }
  // Keep the entire painted weapon and its effects in the common 80px cell.
  // This adjusts the original hand-layer position; it never changes a limb.
@@ -225,12 +233,12 @@
  function hits(actor,target,f){
   if((f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
   let from=f-1,to=f;
-  // For a live fourth strike, sweep ONLY the drawings already reached this
-  // tick. Casting the whole future delivery triggered hit-pause in the load.
+  // A live strike jumps straight from its held load to its impact drawing.
+  // Sweep that visible jump once; held contact never casts a future recovery.
   const finisher=(actor.combo||0)===3;
-  if(finisher&&Number.isFinite(actor.attack)&&actor.attack>0){
-   to=Math.min(2,sample(actor.attack,actor.weapon,3));if(to<=1)return false;
-   from=Math.max(1,Math.min(to,sample(actor.attack+.04,actor.weapon,3)));
+  if(Number.isFinite(actor.attack)&&actor.attack>0){
+   to=2;if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
+   from=f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
   }
   const density=finisher?(from>=2?1:get(actor.weapon).finisher.kind==='whirl'?128:40):20;
   const steps=Math.max(1,Math.ceil(density*(to-from)));
@@ -279,8 +287,8 @@
  }
  function trail(b,id,dir,f,combo,rear=b){
   const w=get(id),profile=w.family==='spear'?{trailWidth:3,ghosts:0}:MOTIONS[w.family];
-  if(f<1.125||f>(combo===3?2.7:3.5))return;
-  const p=PALETTES[w.material],previous=Math.max(1,f-(w.family==='dagger'?.5:.85));
+  if(f!==2)return;
+  const p=PALETTES[w.material],previous=1;
   const sink=q=>combo===3&&w.finisher.kind==='whirl'&&q.z===0?rear:b;
   const width=profile.trailWidth*(.85+Math.min(.35,w.weightKg*.1));
   // Dithered silhouettes record earlier WEAPON positions, without touching
@@ -379,12 +387,12 @@
  const attackStep=(id,combo=0)=>{const f=get(id).family,pairs={dagger:[2,4],sword:[3,6],sabre:[4,7],axe:[3,6],mace:[2,4],staff:[4,7],spear:[4,9],glaive:[4,8]};return pairs[f][combo===3?1:0];};
  const hitPause=(id,combo=0)=>Math.min(.105,.022+get(id).weightKg*.012+(combo===3?.018:0));
  const holster=id=>get(id).family==='spear'?{delay:3.7,stow:.33,draw:.21}:{delay:3.7,stow:Math.min(.46,Math.max(.22,.21+get(id).weightKg*.06)),draw:Math.min(.31,Math.max(.16,.15+get(id).weightKg*.045))};
- function preview(id,seconds,mode='attack'){
+ function preview(id,seconds,mode='attack',idleFrame=0){
   const t=Math.max(0,seconds),gait=Math.floor(t*10)%8;
   if(mode==='finisher'){
    const len=duration(id,3),at=t%(len+1),strike=at-.2;
-   if(strike<0||strike>=len)return {state:'attack',frame:5,combo:3,label:comboNames(id)[3]+' · Garde'};
-   const phase=frame(len-strike,id,3);return {state:'attack',frame:sample(len-strike,id,3),combo:3,label:comboNames(id)[3]+' · '+['Garde','Charge','Frappe unique','Impact','Retrait','Reprise'][phase]};
+   if(strike<0||strike>=len)return {state:'idle',frame:idleFrame,combo:3,label:comboNames(id)[3]+' · Garde'};
+   const phase=frame(len-strike,id,3),drawing=sample(len-strike,id,3);return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo:3,label:comboNames(id)[3]+' · '+['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]};
   }
   if(mode==='walk')return {state:'walk',frame:gait,combo:0,label:'Marche armée'};
   if(mode==='holster'){
@@ -398,7 +406,7 @@
   const lengths=[0,1,2,3].map(c=>duration(id,c)+.075);let at=t%lengths.reduce((a,b)=>a+b,0);
   for(let combo=0;combo<4;combo++){
    if(at<lengths[combo]){const len=duration(id,combo),remaining=len-at,phase=frame(remaining,id,combo);
-    return {state:'attack',frame:at<len?sample(remaining,id,combo):5,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Garde','Préparation','Accélération','Impact','Suite du geste','Reprise'][phase]:'Garde')};
+    const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]:'Garde')};
    }at-=lengths[combo];
   }
  }
@@ -416,9 +424,9 @@
  function storage(id,dir){
   const key=get(id).id+':'+dir;if(storedPoses.has(key))return storedPoses.get(key);
   const w=get(id),pointUp=['spear','staff','glaive','axe','mace'].includes(w.family);
-  // Same shoulder-to-opposite-hip diagonal as the original sword. The visible
-  // midpoint remains on the spine; pole heads use the opposite end of that axis.
-  const v=[[-8,10],[6,9],[8,10],[-6,9]][dir],len=Math.hypot(...v),sign=pointUp?-1:1,u=v.map(n=>sign*n/len);
+  // Keep the midpoint on the spine. Spear/staff profiles stand vertically;
+  // front/back and other arms keep the original shoulder-to-opposite-hip axis.
+  const v=['spear','staff'].includes(w.family)&&(dir===1||dir===3)?[0,1]:[[-8,10],[6,9],[8,10],[-6,9]][dir],len=Math.hypot(...v),sign=pointUp?-1:1,u=v.map(n=>n===0?0:sign*n/len);
   const center=[dir===1?-3:dir===3?3:0,-10];
   let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
   const bounds={set(x,y){x=Math.round(x);y=Math.round(y);x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);},line(x,y,X,Y){this.set(x,y);this.set(X,Y);}};
@@ -428,5 +436,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,pose,vector,guard,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });

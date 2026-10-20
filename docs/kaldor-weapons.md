@@ -8,7 +8,7 @@ Les nouvelles animations déplacent les **calques originaux des bras, manches, g
 
 La donnée `hands` choisit une ou deux mains. Avec une main, l’autre bras garde sa position native ; avec deux, les deux prises suivent le manche, écartées davantage sur une lance, une vouge ou un bâton. Les translations restent en pixels entiers, communes aux manches et aux mains. Les cheveux, casques et corps conservent leur assemblage modulaire.
 
-Les trajectoires des nouvelles armes sont partagées par le rendu et le balayage physique : point de prise, direction et allonge. Les estocs des lances et dagues diffèrent des tailles des sabres et épées, des balayages du bâton et des frappes pesantes des haches et masses. La lance enchaîne un estoc vif, un revers de hampe, une taille croisée et une fente longue : préparations distinctes, transfert du corps et appuis natifs, accélération sur la frappe puis reprise plus lourde. Elle conserve des durées propres à chaque coup. Les attaques possèdent des poses intermédiaires, des smears au passage actif et un retour en garde. Le rendu conserve le cadre 80 × 80, ancré aux pieds (40,52).
+Les trajectoires des nouvelles armes sont partagées par le rendu et le balayage physique : point de prise, direction et allonge. Les estocs des lances et dagues diffèrent des tailles des sabres et épées, des balayages du bâton et des frappes pesantes des haches et masses. La lance enchaîne un estoc vif, un revers de hampe, une taille croisée et une fente longue : préparations distinctes, transfert du corps et appuis natifs, accélération sur la frappe puis reprise plus lourde. Elle conserve des durées propres à chaque coup. Les attaques ne jouent que la préparation, l’impact, l’après-impact et la garde ; les smears apparaissent sur l’impact, puis la garde retrouve le vrai idle. Le rendu conserve le cadre 80 × 80, ancré aux pieds (40,52).
 
 Après 3,7 secondes sans attaquer ni parer, l’arme se range au milieu du dos, aussi en marchant, avec une durée adaptée à son poids. Les lances/bâtons/haches/masses sont attachés au dos ; les lames rejoignent un fourreau. L’attaque interrompt immédiatement le rangement ; la parade dégaine visuellement selon le poids, sans retarder la défense. Le rig des tenues et les casques restent réutilisés.
 
@@ -37,7 +37,7 @@ Les trois premiers coups chargent leur élan puis suivent leur trajectoire. Le q
 
 Les dagues ont une courte traînée ; les sabres une trace courbe ; les haches, masses et vouges gardent jusqu’à deux silhouettes de retard de l’arme, en tramage opaque. Aucun smear n’apparaît pendant la préparation ou une reprise inactive. La pause d’impact et le pas d’attaque varient aussi selon l’arme. Les dégâts des armes lourdes compensent leur moindre cadence ; les dagues restent faibles par frappe et de courte portée.
 
-Le rangement place le **milieu de la silhouette complète sur la colonne du dos**, en oblique comme l’épée de départ, et conserve ce point pendant le mouvement de la tenue. De profil, l’attache est derrière le torse. La même destination sert au rangement et au dégainage. Les durées dépendent du poids ; celles de la lance validée restent 0,33 s et 0,21 s. Le délai automatique reste 3,7 s et une attaque interrompt toujours le rangement immédiatement.
+Le rangement place le **milieu de la silhouette complète sur la colonne du dos** et conserve ce point pendant le mouvement de la tenue. Les lances et bâtons sont droits et verticaux vus de profil, et restent obliques vus de dos et de face ; les autres armes conservent la diagonale de l’épée de départ. De profil, l’attache est derrière le torse. La même destination sert au rangement et au dégainage. Les durées dépendent du poids ; celles de la lance validée restent 0,33 s et 0,21 s. Le délai automatique reste 3,7 s et une attaque interrompt toujours le rangement immédiatement.
 
 ## Porteurs, butin et encart
 
@@ -143,7 +143,7 @@ L’export natif ne modifie pas les sources des tenues. `build:kaldor` embarque 
 
 [Aperçu demandé : Lance de Boisclair, trois tenues et quatre vues](../art/boisclair-combo-v2.gif). L’aperçu est ralenti pour lire les déplacements ; il montre les quatre attaques, la marche, le rangement et la reprise. [Atelier complet](../art/weapons-preview.html).
 
-[Étude précédente, face et profil à vitesse réelle](../art/armory-strikes.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).
+[Coups en quatre poses, face et profil à vitesse réelle](../art/armory-strikes.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).
 
 ## Révision des frappes
 
@@ -151,7 +151,7 @@ L’export natif ne modifie pas les sources des tenues. `build:kaldor` embarque 
 
 ### Prise des armes d’hast de face
 
-Lances, harpons, vouges et bâtons partagent une garde diagonale. À deux mains, l’écartement de base des prises est de six pixels le long de la hampe, projetés en profondeur pendant une rotation : les mains suivent le manche et changent naturellement de côté lorsque le geste traverse le corps. Les trois premières frappes alternent gauche, droite, gauche ; les tailles et revers croisent en sens opposés. Le quatrième suit sa chorégraphie propre : percée, arrachement, fauchée ou tourbillon selon l’arme. Les estocs déplacent les prises dans l’axe de la pointe, avec une diagonale opposée sur la fente finale. Les armes à une main gardent leur bras libre. Seules des translations entières des calques existants sont utilisées. Les profils, le dos et les cadences restent ceux de la révision précédente.
+Lances, harpons, vouges et bâtons partagent une garde diagonale. À deux mains, l’écartement de base des prises est de six pixels le long de la hampe, projetés en profondeur pendant une rotation : les mains suivent le manche et changent naturellement de côté lorsque le geste traverse le corps. Les trois premières frappes alternent gauche, droite, gauche ; les tailles et revers croisent en sens opposés. Le quatrième suit sa chorégraphie propre : percée, arrachement, fauchée ou tourbillon selon l’arme. Les estocs déplacent les prises dans l’axe de la pointe, avec une diagonale opposée sur la fente finale. Les armes à une main gardent leur bras libre. Seules des translations entières des calques existants sont utilisées. Ces prises sont conservées en profil et de dos ; les cadences restent propres aux armes.
 
 [Aperçu des prises de face](../art/pole-grips.gif) · `node scripts/preview-kaldor-strikes.cjs --pole-grips`.
 
@@ -161,11 +161,11 @@ La taille croisée basse est conservée en troisième position. La fin de combo 
 
 Chaque entrée de `catalogue.json` possède `finisher` : nom, geste, poussée, inclinaison, palette et manifestation magique éventuelle. Le mouvement se compose d’une charge (0–1), d’une seule délivrance (1–2), d’un contact tenu (2–3) puis d’un retrait (3–5). La position de la main et la direction de la lame restent identiques pendant le contact : il n’y a pas de deuxième coup caché dans la pose d’impact. Les durées conservent le tempo et le poids de l’arme.
 
-Les tourbillons utilisent successivement les quatre vues natives du joueur, sans rotation ni étirement de ses pixels. La hampe balaie une ellipse horizontale à hauteur de taille : le raccourcissement en profondeur concerne uniquement l’arme, et la moitié arrière du geste passe derrière le corps. La reprise de face ramène d’abord les mains à l’extérieur de la hanche, puis relève la lame hors du visage. Corps, cheveux, tête, casque et prises suivent ce changement de vue. La même trajectoire complète pilote le rendu, les traînées et le balayage de collision ; le tour circulaire utilise un échantillonnage plus dense pour ne pas laisser de trous. Sur une attaque en cours, la collision ne balaie que les poses déjà atteintes pendant le pas de simulation : les dégâts et la pause d’impact ne peuvent plus précéder visuellement l’arrivée de la lame. Le joueur ne touche une même cible qu’une fois par attaque, grâce au registre de coups existant. Les étages et la ligne de vue restent vérifiés.
+La trajectoire des tourbillons est construite à partir des quatre vues natives du joueur, sans rotation ni étirement de ses pixels ; la lecture conserve seulement les quatre poses franches. La hampe balaie une ellipse horizontale à hauteur de taille : le raccourcissement en profondeur concerne uniquement l’arme, et la moitié arrière du geste passe derrière le corps. La reprise de face ramène d’abord les mains à l’extérieur de la hanche, puis relève la lame hors du visage. Corps, cheveux, tête, casque et prises conservent les calques natifs. La même trajectoire complète pilote le rendu, les traînées et le balayage de collision ; le tour circulaire utilise un échantillonnage plus dense pour ne pas laisser de trous. Sur une attaque en cours, la collision balaie le saut visible de la préparation à l’impact puis reste au point de contact : les dégâts et la pause d’impact ne peuvent plus précéder visuellement l’arrivée de la lame. Le joueur ne touche une même cible qu’une fois par attaque, grâce au registre de coups existant. Les étages et la ligne de vue restent vérifiés.
 
 Les onze pièces indiquées comme magiques projettent des éclats de givre, braises, signes de jade, embruns, grains de sable, lumière d’étoile ou sillages de vent. Ces effets restent attachés au geste et s’effacent avant l’attaque suivante. Ils ne créent ni projectile autonome ni nouvelle altération d’état : les dégâts du quatrième coup restent ceux de la mêlée, doublés comme auparavant. Les armes courantes conservent des frappes physiques et des traces de mouvement ou d’impact.
 
-L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/preview-kaldor-finishers.cjs` produit [l’aperçu animé](../art/weapon-finishers.gif) et [la planche des 48 armes](../art/weapon-finishers.png). Les études précédentes restent des étapes de conception ; cet aperçu et l’atelier reflètent les finishers actuels.
+L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/preview-kaldor-finishers.cjs` produit [l’aperçu animé](../art/weapon-finishers.gif) et [la planche des 48 armes](../art/weapon-finishers.png). Cet aperçu, celui des huit familles et l’atelier reflètent la lecture en quatre poses.
 
 | Arme | Quatrième coup | Mouvement | Manifestation magique |
 |---|---|---|---|
@@ -221,3 +221,17 @@ L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/previ
 ## Arme légendaire au départ
 
 **Flamme de Clairfoyer** est une pièce légendaire à deux mains, disponible sur un râtelier à droite du point d’apparition réel du joueur au campement des dunes (environ 29 pixels). Son origine reste Clairfoyer, en Teremor ; elle a été confiée aux voyageurs du camp. Elle conserve sa force ×2,05 et son finisher **Brasier de Clairfoyer**. Le joueur la ramasse normalement et choisit de l’équiper ; le râtelier reste vide après l’acquisition, y compris sur une sauvegarde qui la possédait déjà à son ancien emplacement.
+
+### Lecture en quatre poses
+
+Chaque coup passe directement de la préparation à l’impact, puis à une pose d’après-impact, avant de retrouver le vrai idle armé et sa respiration. Aucun dessin intermédiaire n’est joué. La préparation et la récupération restent adaptées au poids et à la cadence de chaque arme ; les durées ont été raccourcies pour un rythme plus sec. Le contact reste lisible et détectable à 25 images/s.
+
+Le smear apparaît uniquement sur le dessin d’impact et représente le trajet complet de l’arme. Les effets propres aux quatrièmes coups sont conservés, avec leurs couleurs, leurs résidus et leur profondeur derrière le corps. Les trajectoires continues servent au balayage des collisions et aux effets, sans ajouter de poses au joueur. Les calques des mains, des bras et des tenues restent entiers.
+
+### Tenue normale des lances et bâtons
+
+Au repos et pendant la marche, les lances et bâtons sont portés en diagonale devant le torse (environ 40° au-dessus de l’horizontale), pointe relevée, au lieu d’être pointés dans la direction du déplacement. De profil, cette diagonale transversale se projette verticalement devant le torse : elle ne pointe pas vers l’avant. Sa composante verticale et le raccourcissement en profondeur sont conservés, y compris sur les prises pendant le rangement et le dégainage. La partie haute est affichée à 72 % de sa longueur de frappe, pour une silhouette plus compacte ; les coups conservent leur longueur et leur allonge. Le rangement et le dégainage interpolent cette présentation vers la silhouette rangée. La prise à deux mains place la main principale en haut et la seconde plus bas sur le même manche, avec huit pixels d’écartement. Le profil conserve l’occlusion naturelle du bras éloigné. Les trois javelots et lances à une main gardent leur bras libre.
+
+Cette pose de port est distincte de la garde de combat : coups, parade et poses de préparation restent inchangés. Le rangement et le dégainage partent de cette tenue normale ; dans le dos, la hampe est verticale de profil et diagonale de dos. Les bras et manches des onze tenues restent des images entières déplacées sans déformation.
+
+[Aperçu de la tenue normale dans les quatre vues](../art/pole-carry.gif) · `node scripts/preview-kaldor-pole-carry.cjs`.

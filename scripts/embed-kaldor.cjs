@@ -74,7 +74,12 @@ for(const target of ['damageEnemy(e,','damageCivilian(n,','damageHumanGuard(n,',
  html=html.replaceAll('this.'+target+'p.combo===3?2:1','this.'+target+'this.weaponDamage(p.combo===3?2:1)');
 replaceOnce("let state='idle',frame=0;if(kind==='guardian'", "if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');let state='idle',frame=0;if(kind==='guardian'");
 html=html.replace("&&actor.weapon!=='exile'",'');
-replaceOnce("const im=this.get(kind,actor.dir,state,frame,actor.flash>0,", "if(kind==='hero'&&state==='attack'&&actor.weapon)frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);const im=this.get(kind,actor.dir,state,frame,actor.flash>0,");
+replaceOnce("if(frame===2&&!p.attackStep)","if((frame===2||frame===3)&&!p.attackStep)");
+// The ready beat uses the original breathing idle, not a frozen attack cell.
+const oldSampling="if(kind==='hero'&&state==='attack'&&actor.weapon)frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);";
+const sampling="if(kind==='hero'&&state==='attack'&&actor.weapon){frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);if(frame===5){state='idle';frame=HearthreaverKaldorCivilianArt.frameAt('idle',time);}}";
+html=html.replaceAll(oldSampling,'').replaceAll(sampling,'');
+replaceOnce("const im=this.get(kind,actor.dir,state,frame,actor.flash>0,",sampling+"const im=this.get(kind,actor.dir,state,frame,actor.flash>0,");
 replaceOnce("helmet:['hand','PRENDRE']}","helmet:['hand','PRENDRE'],weapon:['hand','PRENDRE']}");
 replaceOnce("t=COMBO_TIMES[c]||ATTACK_TIMES;this.play(","t=HearthreaverWeapons.times(ev.weapon,c,COMBO_TIMES);this.play(");
 // Replace the obsolete fixed-sword label; the arsenal above is authoritative.
