@@ -61,7 +61,7 @@
     "draft:environment": "node scripts/environment/piskel-draft.cjs",
     "preview:environment": "node scripts/environment/preview-scene.cjs art/environnement/teremor/apercus && node scripts/environment/preview-sheets.cjs art/environnement/teremor/apercus && node scripts/environment/preview-town.cjs art/environnement/teremor/apercus && node scripts/environment/preview-sarak.cjs art/environnement/sarak/apercus",
     "build:city": "node scripts/design-clairfoyer-grid.cjs && node scripts/design-clairfoyer-districts.cjs --active && node scripts/embed-world.cjs",
-    "test:city": "node --test tests/city-integration.test.cjs tests/city-life.test.cjs tests/isometric-furniture.test.cjs tests/clairfoyer-district-architecture.test.cjs",
+    "test:city": "node --test tests/city-integration.test.cjs tests/city-life.test.cjs tests/city-wayfinding.test.cjs tests/isometric-furniture.test.cjs tests/clairfoyer-district-architecture.test.cjs",
     "check:city": "node scripts/check-city-game.cjs",
     "build:world-roads": "node scripts/build-world-orthogonal.cjs && node scripts/embed-world.cjs",
     "test:world-roads": "node --test tests/world-orthogonal.test.cjs tests/orthogonal-roads.test.cjs",

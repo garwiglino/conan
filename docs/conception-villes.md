@@ -20,6 +20,8 @@ Les dangers, blessures, conversations, missions, renforts et compagnons prennent
 
 La navigation du programme est calculée une fois et réutilisée, avec de courtes étapes locales. Les captures Chromium réelles et mesures de cache sont dans `art/city-plans/vie/verification.json` ; elles contrôlent le rendu web et le format mobile, sans prétendre mesurer un appareil iOS physique. `game.cityLifeDiagnostics()` expose quartier, activité, logement et état courant.
 
+Le point canonique `town-1` reste le relais d’arrivée des transports, environ 885 m à l’est des Halles : arriver à « Clairfoyer » ne place donc pas le joueur au centre bâti. Le HUD distingue maintenant le relais du quartier courant. La première arrivée propose le fanion des Halles si aucun autre lieu n’est suivi ; les quêtes et les autres objectifs suivis sont conservés. La carte offre onze destinations de quartier après la découverte de la ville, chacune sur un accès extérieur traversable. Ces repères sont masqués à l’échelle continentale sauf sélection ou suivi. Les anciennes sauvegardes obtiennent ces repères sans déplacement du joueur ni modification du plan. `tests/city-wayfinding.test.cjs` contrôle accès, sauvegardes et guidage ; `node scripts/check-city-wayfinding.cjs` vérifie la carte et capture l’arrivée et les Halles à 10 h en Chromium bureau/mobile, avec le HTML iOS et sans Worker. Ce contrôle ne constitue pas un test sur iPhone.
+
 Reconstruction : `npm run build:city`, puis `npm run test:city`, `npm run check:city` et `npm run check:city-life`. Le paquet iOS est reconstruit avec `npm run package:ios`.
 
 ## Archives des propositions précédentes

@@ -1,0 +1,140 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "browser": "Chromium",
+  "worker": false,
+  "results": [
+    {
+      "mobile": false,
+      "arrival": {
+        "detail": "Relais d'arrivée",
+        "navigation": "district-town-1-halles",
+        "distance": 885.2011070937497,
+        "position": {
+          "x": -494316.8,
+          "y": -82379.20000000001
+        }
+      },
+      "halles": {
+        "detail": "Les Halles du Boisclair",
+        "arrived": true,
+        "position": {
+          "x": -508316.8,
+          "y": -84523.20000000001
+        }
+      },
+      "districts": [
+        {
+          "id": "district-town-1-resine",
+          "name": "Clairfoyer · La Cour des Résiniers"
+        },
+        {
+          "id": "district-town-1-conseil",
+          "name": "Clairfoyer · La Cour du Conseil"
+        },
+        {
+          "id": "district-town-1-etapes",
+          "name": "Clairfoyer · La Rue des Étapes"
+        },
+        {
+          "id": "district-town-1-ancien-relais",
+          "name": "Clairfoyer · Le Relais de l’Arrivée"
+        },
+        {
+          "id": "district-town-1-sud",
+          "name": "Clairfoyer · Le Relais du Sud"
+        },
+        {
+          "id": "district-town-1-clos",
+          "name": "Clairfoyer · Les Clos communs"
+        },
+        {
+          "id": "district-town-1-metiers",
+          "name": "Clairfoyer · Les Cours des Métiers"
+        },
+        {
+          "id": "district-town-1-bois",
+          "name": "Clairfoyer · Les Cours du Bois"
+        },
+        {
+          "id": "district-town-1-greniers",
+          "name": "Clairfoyer · Les Greniers du Marché"
+        },
+        {
+          "id": "district-town-1-halles",
+          "name": "Clairfoyer · Les Halles du Boisclair"
+        },
+        {
+          "id": "district-town-1-rive",
+          "name": "Clairfoyer · Les Maisons de la Rive"
+        }
+      ]
+    },
+    {
+      "mobile": true,
+      "arrival": {
+        "detail": "Relais d'arrivée",
+        "navigation": "district-town-1-halles",
+        "distance": 885.2011070937497,
+        "position": {
+          "x": -494316.8,
+          "y": -82379.20000000001
+        }
+      },
+      "halles": {
+        "detail": "Les Halles du Boisclair",
+        "arrived": true,
+        "position": {
+          "x": -508316.8,
+          "y": -84523.20000000001
+        }
+      },
+      "districts": [
+        {
+          "id": "district-town-1-resine",
+          "name": "Clairfoyer · La Cour des Résiniers"
+        },
+        {
+          "id": "district-town-1-conseil",
+          "name": "Clairfoyer · La Cour du Conseil"
+        },
+        {
+          "id": "district-town-1-etapes",
+          "name": "Clairfoyer · La Rue des Étapes"
+        },
+        {
+          "id": "district-town-1-ancien-relais",
+          "name": "Clairfoyer · Le Relais de l’Arrivée"
+        },
+        {
+          "id": "district-town-1-sud",
+          "name": "Clairfoyer · Le Relais du Sud"
+        },
+        {
+          "id": "district-town-1-clos",
+          "name": "Clairfoyer · Les Clos communs"
+        },
+        {
+          "id": "district-town-1-metiers",
+          "name": "Clairfoyer · Les Cours des Métiers"
+        },
+        {
+          "id": "district-town-1-bois",
+          "name": "Clairfoyer · Les Cours du Bois"
+        },
+        {
+          "id": "district-town-1-greniers",
+          "name": "Clairfoyer · Les Greniers du Marché"
+        },
+        {
+          "id": "district-town-1-halles",
+          "name": "Clairfoyer · Les Halles du Boisclair"
+        },
+        {
+          "id": "district-town-1-rive",
+          "name": "Clairfoyer · Les Maisons de la Rive"
+        }
+      ]
+    }
+  ],
+  "browserErrors": []
+}

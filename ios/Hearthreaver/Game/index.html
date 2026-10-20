@@ -9784,7 +9784,7 @@ function refreshTransportPanel(){for(const id of ['transportDestination','transp
  $('transportRoute').innerHTML=p?'<div class="world-stats">'+(p.distance/1000).toFixed(1).replace('.',',')+' km · '+atlasDuration(p.minutes)+' · '+p.cost+' pièces</div><p>'+ 'Danger moyen : '+p.danger.toFixed(1).replace('.',',')+'/5 · Pic : '+p.maxDanger.toFixed(1).replace('.',',')+'/5.</p><p>Rations conseillées : '+need.food+'</p>'+(g.journeyClimateText?'<p>'+atlasEscape(g.journeyClimateText(p))+'</p>':'')+'<details><summary>Étapes, haltes et danger</summary><p>'+(p.boat?'Traversée maritime et correspondances incluses.':'Parcours terrestre.')+'</p><p>Passage le plus dangereux : '+atlasEscape(Atlas.roadById[p.dangerLegs.reduce((a,b)=>b.peak>a.peak?b:a).road].name)+'.</p><p>État actuel du monde au départ. '+atlasEscape([...new Set(p.dangerLegs.flatMap(l=>l.reasons))].join(' · ')||'Aucun incident actif sur ce parcours.')+'</p><ol>'+p.stages.map(s=>'<li>'+atlasEscape(s.label)+' · '+atlasDuration(s.minutes)+'</li>').join('')+'</ol></details>':'<p>Aucun itinéraire disponible avec ce transport. Choisis un autre lieu ou autorise les bateaux.</p>';
  $('transportSupplies').textContent=g.player.coins+' pièces · '+Math.floor(g.supplies.food)+' rations · '+g.supplies.water.toFixed(1)+' gourdes';$('transportGo').disabled=!ready;const missing=p&&g.supplies.food<need.food;$('transportGo').textContent=missing?'Partir avec ressources actuelles':'Partir';$('transportAdvice').textContent=!p?'':threat?'Un groupe hostile bloque ce trajet. Choisis un autre itinéraire ou attends.':g.player.coins<p.cost?'Il manque '+(p.cost-g.player.coins)+' pièces pour le transport.':missing?'Réserves conseillées manquantes : '+Math.max(0,need.food-Math.floor(g.supplies.food))+' rations.':'Réserves suffisantes.';const quote=g.supplyQuote(g.journeySupplyDays(p));$('transportBuy').textContent=quote?'Acheter '+quote.food+' rations · '+quote.cost+' pièces':'Ravitaillement indisponible';$('transportBuy').disabled=!quote||(!quote.food&&!quote.water)||g.player.coins<quote.cost;$('transportPurchaseHint').textContent=quote&&p&&g.player.coins>=quote.cost&&g.player.coins-quote.cost<p.cost?'Cet achat ne laissera pas assez de pièces pour payer le voyage. Tu peux partir sans acheter.':quote&&p&&g.supplies.food+quote.food<need.food?'Le trajet dépasse la capacité de 999 rations. Prévois une halte intermédiaire pour te ravitailler.':'';
 }
-function worldVisiblePlaces(){const filter=$('worldFilter').value;return game.mapPlaces.filter(n=>game.canTrackPlace(n)&&(filter==='all'||n.category===filter)&&(n.id===atlasSelected||n.id===game.navigation||filter!=='all'||n.category==='places'&&n.kind!=='dock'||atlasMapView.zoom>=64/Atlas.scale));}
+function worldVisiblePlaces(){const filter=$('worldFilter').value;return game.mapPlaces.filter(n=>game.canTrackPlace(n)&&(filter==='all'||n.category===filter)&&(n.kind!=='district'||n.id===atlasSelected||n.id===game.navigation||atlasMapView.zoom>=64/Atlas.scale)&&(n.id===atlasSelected||n.id===game.navigation||filter!=='all'||n.category==='places'&&n.kind!=='dock'||atlasMapView.zoom>=64/Atlas.scale));}
 function worldFogClip(c,{w,h,scale,ox,oy}){c.beginPath();for(const [row,ranges]of game.explorationRows){const y=oy+row*FOG_METRES*scale,size=FOG_METRES*scale;if(y>h||y+size<0)continue;for(const [a,b]of ranges){const left=Math.max(0,ox+a*size),right=Math.min(w,ox+(b+1)*size);if(right>left)c.rect(left,Math.max(0,y),right-left,Math.min(h,y+size)-Math.max(0,y));}}c.clip();}
 function worldMapTransform(){const c=$('worldCanvas'),r=c.getBoundingClientRect(),scale=Math.min(r.width/Atlas.raw.width,r.height/Atlas.raw.height)*.91*atlasMapView.zoom;return {w:r.width,h:r.height,scale,ox:r.width/2-Atlas.raw.width/2*scale+atlasMapView.x,oy:r.height/2-Atlas.raw.height/2*scale+atlasMapView.y};}
 // Land beyond the natural borders is darkened once into a small image of the layout.
@@ -20650,6 +20650,33 @@ const CITY_LIFE_DATA={
  const serialize=Game.prototype.serialize;
  Game.prototype.serialize=function(){const out=serialize.call(this);if(out.atlas)out.atlas.cityLife={version:1,revision:SETTLEMENT_DATA.revision,people:this.npcs.filter(n=>n.cityLife).map(n=>({id:n.id,inside:n.cityLife.inside}))};return out;};
  Game.prototype.cityLifeDiagnostics=function(){return this.npcs.filter(n=>n.cityLife).map(n=>{const p=profiles[n.cityLife.profile];return {id:n.id,district:p.district,activity:p.action,fixture:p.fixture,status:n.cityLife.status||'ready',home:n.cityLife.route?.building,reachable:!!n.cityLife.route,inside:n.cityLife.inside};});};
+})();
+
+/* The transport vertex is the arrival relay, not the centre of the authored city.
+ * Keep that geography, but give the player actual district destinations. */
+(()=>{
+ const id='town-1',targetID='district-town-1-halles';
+ const init=Game.prototype.initAtlas;
+ Game.prototype.initAtlas=function(...args){const out=init.apply(this,args),site=this.settlements.sites.get(id),node=Atlas.byId[id];if(!site?.layoutKind)return out;
+  for(const district of site.districts){const fixture=site.fixtures.find(f=>f.district===district.id),building=site.buildings.find(b=>b.uid===fixture?.building);if(!building?.apron)continue;
+   this.mapPlaces.push({id:'district-'+id+'-'+district.id,siteId:id,category:'places',kind:'district',district:district.id,name:site.name+' · '+district.name,x:node.x+building.apron.x,y:node.y+building.apron.y,radius:6});
+  }
+  return out;
+ };
+ const location=Game.prototype.updateLocation;
+ Game.prototype.updateLocation=function(...args){const result=location.apply(this,args),site=this.settlements?.sites.get(id);if(!site?.layoutKind||this.player.level)return result;
+  const node=Atlas.byId[id],world=Atlas.toWorld(this.player.x,this.player.y),x=(world.x-node.x)*16,y=(world.y-node.y)*16,district=site.districts.find(d=>d.areas.some(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h));
+  if(!district)return result;
+  if(result?.site===id)result.detail=district.id==='ancien-relais'?"Relais d'arrivée":district.name;
+  if(district.id==='ancien-relais'&&!this.clairfoyerArrivalHinted&&!this.journey&&!this.dialogue){const centre=this.mapPlaces.find(p=>p.id===targetID);if(!centre)return result;
+   this.clairfoyerArrivalHinted=true;this.discovered.add(id);
+   if(!this.navigation||this.navigation===id)this.navigation=centre.id;
+   const distance=Math.round(Math.hypot(centre.x-world.x,centre.y-world.y));
+   const guide=this.navigation===centre.id?'Suis le fanion ou choisis un quartier sur la carte.':'Choisis les Halles sur la carte pour les suivre.';
+   this.emit('notice',{title:'Centre de Clairfoyer',text:"Tu es au relais d'arrivée. Les Halles sont à "+distance+" m vers l'ouest. "+guide});
+  }
+  return result;
+ };
 })();
 
 // END NATIVE JAVASCRIPT ARCHITECTURE

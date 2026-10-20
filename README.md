@@ -4,6 +4,8 @@
 
 **Clairfoyer intégré :** trame à angles droits, blocs inégaux, cours carrées et rectangulaires, rues décalées, onze palettes de quartier, nouveaux bâtiments et postes isométriques. [Captures du jeu](art/city-plans/jeu/index.html) · [Plan des quartiers](art/city-plans/quartiers/clairfoyer-quartiers.png) · [Conception et limites](docs/conception-villes.md). Dix-huit habitants représentatifs suivent leur métier, leurs ressources et leurs trajets logement–travail. [Vie des quartiers en jeu](art/city-plans/vie/index.html). Les personnages conservent quatre directions ; les 82 autres localités gardent leur implantation existante.
 
+**Trouver le centre de Clairfoyer :** l’arrivée des transports est au relais, à environ 885 m à l’est des Halles. À l’arrivée, le HUD indique « Relais d’arrivée » et propose un guidage vers les Halles si aucun autre lieu n’est suivi. Dans **Carte**, choisir **Clairfoyer · Les Halles du Boisclair**, puis **Suivre ce lieu** ; les onze quartiers deviennent disponibles après la visite de Clairfoyer. [Captures de l’arrivée et des Halles](art/city-plans/acces/index.html).
+
 [Atelier des humains : tenues, métiers, armées et animations](art/humains/activites/atelier.html)
 · [Sources et utilisation de la bibliothèque JavaScript](docs/humains-activites.md).
 Ce catalogue visuel est consultable séparément du jeu.
