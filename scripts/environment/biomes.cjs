@@ -33,7 +33,7 @@ const BIOMES={
    // Couleurs posées par le compositeur : rebord des falaises, berge vue
    // au-dessus de l'eau, écume, ombre du tablier ; grandes plages du sol.
    accents:{lipLit:'sable7',lipShade:'sable6',drape:'sable4',drape2:'sable3',bankFace:'sable4',bankFace2:'sable3',waterDeep:'oasis1',foam:'oasis7',plank:'bois3',deckShade:'bois2',deckShade2:'bois1',deckLip:'bois5'},
-   macro:{scale:[220,80],hi:.42,lo:-.46,dither:.8}
+   macro:{scale:[220,80],hi:.4,lo:-.6,dither:.8}
   };
  }
 };

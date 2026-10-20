@@ -52,7 +52,7 @@ function createProjectedWorldArt(atlas,T,config={},env=null){
  // l'autre) ; les campements du désert n'ont pas de place.
  const PLAZAS={
   forest:{town:['flags','fan','bricks','setts'],port:['flags','setts'],relay:['cobble','setts'],ruin:['cobble'],refuge:['cobble'],camp:['cobble'],dock:['cobble']},
-  desert:{town:['cabochon','hex','flags','setts'],port:['flags','hex'],relay:['cobble','flags'],ruin:['cobble'],refuge:['cobble'],camp:[],dock:['flags']}
+  desert:{town:['cabochon','hex','flags','cobble'],port:['flags','hex'],relay:['cobble','flags'],ruin:['cobble'],refuge:['cobble'],camp:[],dock:['flags']}
  };
  const plazaOf=(site,family)=>{const list=(PLAZAS[family]||PLAZAS.forest)[site.kind]||['cobble'];if(!list.length)return null;let h=0;for(const ch of String(site.id))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return list[(h>>>3)%list.length];};
  // Les routes (code 1) deviennent des pièces de chemin, sauf sur la place qu'elles traversent.
@@ -95,7 +95,8 @@ function createProjectedWorldArt(atlas,T,config={},env=null){
    const merge=im=>{for(let k=0;k<im.priority.length;k++){const p=im.priority[k];if(p===2||p===1&&!data[k*4+3])data.set(im.data.subarray(k*4,k*4+4),k*4);}for(const f of im.features)features.push(f);};
    const screen=[x0-y0,(x0+y0)/2],world=new Set(),local=new Set();for(const {d}of tiles)if(d.env)(d.local?local:world).add(d.family);
    // Une passe par biome dans le réseau de l'atlas, puis la zone de départ dans son réseau.
-   for(const family of world){const sampler={tile:(i,j)=>placeTile(i,j,family),use:(i,j)=>familyOfTile(i,j)===family&&!isLocal(i,j),piece};merge(yield* ENVS[family].renderSteps({sampler,base:[x0,y0],screen}));}
+   // Les ruelles s'arrêtent au bord de la place : elle garde son pavage d'un seul tenant.
+   for(const family of world){const onPlaza=(ci,cj)=>[[0,0],[1,0],[0,1],[1,1]].every(([a,b])=>placeTile(ci*2+a,cj*2+b,family).code===2),sampler={tile:(i,j)=>placeTile(i,j,family),use:(i,j)=>familyOfTile(i,j)===family&&!isLocal(i,j),piece:(ci,cj)=>onPlaza(ci,cj)?null:piece(ci,cj)};merge(yield* ENVS[family].renderSteps({sampler,base:[x0,y0],screen}));}
    for(const family of local){const sampler={tile:localTile,use:(I,J)=>{const c=coreAt(I,J);return c>=0&&c!==6;},roads:localRoads};merge(yield* ENVS[family].renderSteps({sampler,base:[x0-dU,y0-dV],screen}));}
   }
   return {width:1024,height:544,data,features};
