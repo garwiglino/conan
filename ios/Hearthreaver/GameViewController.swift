@@ -12,6 +12,11 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
 
     private var webView: WKWebView?
     private var saves: SaveMirror?
+    private let updater = GameUpdater()
+    private var hasStartedGame = false
+    private var lastUpdateCheck = Date.distantPast
+    private var startupStatus: UILabel?
+    private var updateButton: UIButton?
 
     // Plein écran natif : pas de barre d'état, barre d'accueil discrète,
     // et les gestes système sur les bords demandent un second glissement (pas de sortie accidentelle en jouant).
@@ -88,6 +93,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         // Si l'app a été installée sans le jeu (projet allégé), le premier lancement le télécharge.
         let firstRun = !GameUpdater.hasLocalGame
         let status = UILabel()
+        startupStatus = status
         status.text = firstRun ? "TÉLÉCHARGEMENT DU JEU…" : "MISE À JOUR DU JEU…"
         status.textColor = UIColor(red: 241 / 255, green: 227 / 255, blue: 189 / 255, alpha: 1)
         status.font = .monospacedSystemFont(ofSize: 13, weight: .semibold)
@@ -102,15 +108,76 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         ])
         UIView.animate(withDuration: 0.25, delay: firstRun ? 0 : 0.7, options: [], animations: { status.alpha = 1 })
 
-        let updater = GameUpdater()
-        updater.check(wait: firstRun ? 120 : 5) { [weak self] _ in
+        lastUpdateCheck = Date()
+        updater.check(wait: firstRun ? 120 : 5, onUpdateReady: { [weak self] in
+            self?.offerGameUpdate()
+        }) { [weak self] _ in
             guard GameUpdater.hasLocalGame else {
                 status.alpha = 1
                 status.text = "CONNEXION INTERNET NÉCESSAIRE\nAU PREMIER LANCEMENT.\n\nFERME ET ROUVRE L’APP."
                 return
             }
-            status.removeFromSuperview()
-            self?.webView?.load(URLRequest(url: GameSchemeHandler.startURL))
+            self?.loadLatestGame()
+        }
+    }
+
+    private func loadLatestGame() {
+        startupStatus?.removeFromSuperview()
+        startupStatus = nil
+        updateButton?.removeFromSuperview()
+        updateButton = nil
+        hasStartedGame = true
+        webView?.load(URLRequest(url: GameSchemeHandler.startURL, cachePolicy: .reloadIgnoringLocalCacheData))
+    }
+
+    /// Revenir depuis l'écran d'accueil ne recrée pas le contrôleur.
+    /// Vérifier en silence, sans interrompre une partie ni multiplier les requêtes.
+    func checkForGameUpdate() {
+        guard hasStartedGame, !updater.isChecking,
+              Date().timeIntervalSince(lastUpdateCheck) >= 60 else { return }
+        lastUpdateCheck = Date()
+        updater.check(wait: 0, onUpdateReady: { [weak self] in
+            self?.offerGameUpdate()
+        }) { [weak self] updated in
+            if updated { self?.offerGameUpdate() }
+        }
+    }
+
+    private func offerGameUpdate() {
+        guard hasStartedGame else { loadLatestGame(); return }
+        guard updateButton == nil else { return }
+        let button = UIButton(type: .system)
+        button.setTitle("MISE À JOUR PRÊTE · APPLIQUER", for: .normal)
+        button.setTitleColor(UIColor(red: 241 / 255, green: 227 / 255, blue: 189 / 255, alpha: 1), for: .normal)
+        button.titleLabel?.font = .monospacedSystemFont(ofSize: 12, weight: .semibold)
+        button.backgroundColor = .hearthreaverInk
+        button.layer.cornerRadius = 8
+        button.contentEdgeInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        button.accessibilityLabel = "Appliquer la mise à jour en conservant la partie"
+        button.addTarget(self, action: #selector(applyGameUpdate), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            button.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            button.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor, constant: -16)
+        ])
+        updateButton = button
+    }
+
+    @objc private func applyGameUpdate() {
+        guard let webView, let button = updateButton else { return }
+        button.isEnabled = false
+        button.setTitle("ENREGISTREMENT…", for: .normal)
+        // La sauvegarde web est synchrone et son miroir natif est averti avant
+        // le rechargement. Ne jamais effacer le stockage ou changer son origine.
+        webView.evaluateJavaScript("window.dispatchEvent(new Event('hearthreaver-suspend'));true") { [weak self] _, error in
+            guard error == nil else {
+                button.isEnabled = true
+                button.setTitle("RÉESSAYER LA MISE À JOUR", for: .normal)
+                return
+            }
+            self?.loadLatestGame()
         }
     }
 
@@ -134,7 +201,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
 
     // Si iOS ferme le moteur web en arrière-plan (mémoire), on recharge le jeu : la sauvegarde est reprise.
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        webView.load(URLRequest(url: GameSchemeHandler.startURL))
+        loadLatestGame()
     }
 }
 

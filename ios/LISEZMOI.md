@@ -30,13 +30,17 @@ Avec un compte Apple gratuit, l'app doit être réinstallée depuis Xcode tous l
 - Si rien n'a changé, ou s'il n'y a pas de réseau, elle lance directement la dernière version reçue.
 - La sauvegarde est conservée.
 
-Pour recevoir une mise à jour, ferme complètement l'app (glisse-la vers le haut dans le sélecteur d'apps), puis rouvre-la. Une mise à jour poussée sur GitHub est disponible au bout de 5 minutes au plus.
+Pour recevoir une mise à jour, ferme complètement l'app (glisse-la vers le haut dans le sélecteur d'apps), puis rouvre-la. GitHub peut conserver temporairement une réponse en cache ; la durée dépend aussi de la connexion et du téléchargement. Le jeu autonome dépasse maintenant 30 Mo.
+
+Depuis la version **1.5 (build 6)**, si le téléchargement dépasse les cinq secondes d’attente initiale, la partie locale démarre et le transfert continue pendant au plus 120 secondes. Lorsqu’une nouvelle copie valide est enregistrée, le bouton **MISE À JOUR PRÊTE · APPLIQUER** apparaît. Ce bouton enregistre la partie avant de charger la nouvelle copie ; aucune partie en cours n’est rechargée automatiquement. Revenir dans l’app vérifie aussi les mises à jour en silence, avec au moins une minute entre deux vérifications. Hors ligne, une copie incomplète ou une erreur HTTP ne remplace jamais le jeu installé.
+
+**Pour une app déjà installée avec l’ancien mécanisme :** laisse-la ouverte et connectée pour que le téléchargement se termine, puis ferme-la complètement et rouvre-la. Le correctif du téléchargement et du bouton est du code Swift : pour l’obtenir, reconstruis et installe la version 1.5 par-dessus l’app, avec le même Bundle Identifier et la même Team, sans la désinstaller. Les modifications du monde et des personnages restent des mises à jour HTML automatiques.
 
 Xcode n'est nécessaire que pour réinstaller l'app (tous les 7 jours avec un compte gratuit), ou si la partie Swift change.
 
 Le nouveau menu et le nom Hearthreaver dans le jeu arrivent par cette mise à jour après publication. Le nom sous l'icône iOS et l'icône elle-même appartiennent à l'app native : reconstruis-la depuis les sources fournies pour les changer, en conservant le même identifiant pour retrouver ta sauvegarde.
 
-Le projet, la cible, le schéma partagé et le produit s'appellent **Hearthreaver** (version 1.4, build 5). L'icône H/R rouge et or avec son épée est incluse dans `Hearthreaver/Assets.xcassets`. Ouvre le nouveau projet et sélectionne le schéma **Hearthreaver**. Conserve exactement le Bundle Identifier et la Team de ta précédente installation si tu les avais personnalisés ; installe cette version par-dessus, sans désinstaller l'app.
+Le projet, la cible, le schéma partagé et le produit s'appellent **Hearthreaver** (version 1.5, build 6). L'icône H/R rouge et or avec son épée est incluse dans `Hearthreaver/Assets.xcassets`. Ouvre le nouveau projet et sélectionne le schéma **Hearthreaver**. Conserve exactement le Bundle Identifier et la Team de ta précédente installation si tu les avais personnalisés ; installe cette version par-dessus, sans désinstaller l'app.
 
 Le verrouillage natif en paysage nécessite lui aussi cette réinstallation depuis Xcode. Une ancienne installation reçoit immédiatement le menu adapté et la protection contre le jeu en portrait via la mise à jour web, mais ses orientations système restent celles de son ancien binaire.
 
