@@ -366,12 +366,12 @@ const Batraciens = (() => {
  }
  const oldNpcDraw=Renderer.prototype.npcDraw;
  Renderer.prototype.npcDraw=function(n){if(!n.batracien)return oldNpcDraw.call(this,n);if(this.g.isHostileBatracien?.(n))return this.enemy(n);const b=n.batracien,c=this.c;if((n.alpha??1)<=0||this.cam&&(n.x<this.cam.x-96||n.x>this.cam.x+this.W+96||n.y<this.cam.y-96||n.y>this.cam.y+this.H+96))return;
-  const api=b.role?Armed:Art,frame=api.frameAt(b.action,b.elapsed,b.distance),atlas=atlasFor(this,n),dead=b.dead||n.civilian?.dead;
+  const api=b.role?Armed:Art,frame=api.frameAt(b.action,b.elapsed,b.distance),atlas=atlasFor(this,n),dead=b.dead||n.civilian?.dead,w=this.g.humanWorkstations?.get(n.id),physical=n._logical||n,station=w?.cityFixture&&b.action===b.job&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<2?w:null,interaction=station?{workTarget:[40+w.socket.contact[0]-w.socket.feet[0],52+w.socket.contact[1]-w.socket.feet[1]]}:undefined;
   c.save();try{c.globalAlpha*=n.alpha??1;c.imageSmoothingEnabled=false;
-   if(!b.role&&b.work&&!member(this.g,n)){const activeWork=b.action===b.job||b.job==='fish_cast'&&b.action.startsWith('fish_'),f=activeWork?frame:0,action=activeWork?b.action:b.job;
+   if(!b.role&&b.work&&!w?.cityFixture&&!member(this.g,n)){const activeWork=b.action===b.job||b.job==='fish_cast'&&b.action.startsWith('fish_'),f=activeWork?frame:0,action=activeWork?b.action:b.job;
     for(const layer of ['scene_back']){const im=atlas.get(action,b.workDir,f,{layer,catch:false});c.drawImage(im,Math.round(b.work.x)-40,Math.round(b.work.y)-52);}
    }
-   this.shadow(n.x,n.y,dead?12:10);const im=atlas.get(b.action,n.dir??2,frame,{catch:false,...(globalThis.KaldorArmaments?.batracienOptions(n)||{})});c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
+   this.shadow(n.x,n.y,dead?12:10);const im=atlas.get(b.action,n.dir??2,frame,{catch:false,interaction,...(globalThis.KaldorArmaments?.batracienOptions(n)||{})});c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
    if(!dead){this.npcNameplate(n);const m=this.g.npcPresent(n)&&this.g.npcMark(n);if(m)this.questMark(n.x,n.y-35,m);}
   }finally{c.restore();}
   this.coldBreath?.(n);

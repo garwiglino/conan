@@ -23,10 +23,11 @@ function createCampaignSystems(A,B,W,state,H){
  function hearth(id,at=W.clock){const s=state.sites[id];if(!s)return false;if(s.fireUntil>at)return true;const fuel=Math.max(.01,(s.needs.firewood||.24)/24);if(stock(s,'firewood')+1e-9<fuel)return false;take(s,'firewood',fuel);s.fireUntil=at+60;return true;}
  function graphPath(site,point,{routeState=W,allowBoat=false}={}){const edge=point.edge&&A.edgeById.get(point.edge);let candidates=[];
   const near=A.closestRoad(point.x,point.y),segment=near?.road?.segments.reduce((best,s)=>{const p=A.project(point.x,point.y,s.a,s.b);return !best||p.d<best.p.d?{s,p}:best;},null);
-  const target=edge||segment&&A.edgeById.get([segment.s.a[2],segment.s.b[2]].sort().join('|'));if(!target||!target.modes.includes('foot')&&!(allowBoat&&target.modes.includes('boat')))return null;
+  const target=edge||segment&&A.edgeById.get(segment.s.edge);if(!target||!target.modes.includes('foot')&&!(allowBoat&&target.modes.includes('boat')))return null;
   for(const v of [target.a,target.b]){const id=A.nodes.find(n=>n.vertex===v)?.id||v,path=A.findPath(site,id,{mode:'foot',allowBoat,clock:W.clock,state:routeState});if(!path&&A.byId[site]?.vertex!==v)continue;
-   const legs=(path||[]).map(l=>({edge:l.edge,mode:l.mode,from:A.vertices.get(l.from).slice(0,2),to:A.vertices.get(l.to).slice(0,2),length:l.length})),a=A.vertices.get(v),projection=A.project(point.x,point.y,A.vertices.get(target.a),A.vertices.get(target.b)),b=[A.vertices.get(target.a)[0]+(A.vertices.get(target.b)[0]-A.vertices.get(target.a)[0])*projection.t,A.vertices.get(target.a)[1]+(A.vertices.get(target.b)[1]-A.vertices.get(target.a)[1])*projection.t];
-   if(Math.hypot(a[0]-b[0],a[1]-b[1])>.001)legs.push({edge:target.id,from:a.slice(0,2),to:b,length:Math.hypot(a[0]-b[0],a[1]-b[1])});candidates.push(legs);
+   const legs=(path||[]).map(l=>({edge:l.edge,mode:l.mode,from:A.vertices.get(l.from).slice(0,2),to:A.vertices.get(l.to).slice(0,2),length:l.length})),line=v===target.a?target.points:target.points.slice().reverse();let closest;
+   for(let i=1;i<line.length;i++){const p=A.project(point.x,point.y,line[i-1],line[i]);if(!closest||p.d<closest.d)closest={...p,i};}
+   for(let i=1;i<=closest.i;i++){const a=line[i-1].slice(0,2),b=i===closest.i?[closest.x,closest.y]:line[i].slice(0,2),length=Math.hypot(a[0]-b[0],a[1]-b[1]);if(length>.001)legs.push({edge:target.id,from:a,to:b,length});}candidates.push(legs);
   }return candidates.sort((a,b)=>a.reduce((n,l)=>n+l.length,0)-b.reduce((n,l)=>n+l.length,0))[0]||null;
  }
  function position(m){if(!m.path&&m.anchor)return {...m.anchor};const l=m.path?.[m.leg||0];if(!l){const p=m.path?.at(-1)?.to||[A.byId[m.site||m.home].x,A.byId[m.site||m.home].y];return {x:p[0],y:p[1]};}const t=Math.min(1,(m.progress||0)/Math.max(.001,l.length));return {x:l.from[0]+(l.to[0]-l.from[0])*t,y:l.from[1]+(l.to[1]-l.from[1])*t};}

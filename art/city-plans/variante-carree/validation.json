@@ -1,0 +1,32 @@
+{
+  "revision": "14387e9a2643c939",
+  "variant": "square-grid",
+  "grid": {
+    "columns": 6,
+    "rows": 6,
+    "blockSideM": 128,
+    "bounds": {
+      "x": -1164,
+      "y": -444,
+      "w": 768,
+      "h": 768
+    },
+    "throughStreets": 14,
+    "smallZigzags": 0
+  },
+  "buildings": 2601,
+  "entrancesChecked": 2601,
+  "allPathsCardinal": true,
+  "streetNetworkConnected": true,
+  "minimumFoundationGapM": 4,
+  "populationPreserved": true,
+  "orientations": {
+    "face": 568,
+    "droite": 716,
+    "dos": 775,
+    "gauche": 542
+  },
+  "baselineUnchanged": true,
+  "runtimeActivated": false,
+  "pushed": false
+}

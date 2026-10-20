@@ -1,0 +1,39 @@
+{
+  "planRevision": "c90107da6364aa74",
+  "results": [
+    {
+      "dir": "face",
+      "wholeHouseFade": true,
+      "foundationBlocked": true,
+      "behindWalkable": true,
+      "opacityAfter750ms": 0.3308156819112319,
+      "restoredOpacity": 0.9893563459934813
+    },
+    {
+      "dir": "droite",
+      "wholeHouseFade": true,
+      "foundationBlocked": true,
+      "behindWalkable": true,
+      "opacityAfter750ms": 0.3308156819112319,
+      "restoredOpacity": 0.9893563459934813
+    },
+    {
+      "dir": "dos",
+      "wholeHouseFade": true,
+      "foundationBlocked": true,
+      "behindWalkable": true,
+      "opacityAfter750ms": 0.3308156819112319,
+      "restoredOpacity": 0.9893563459934813
+    },
+    {
+      "dir": "gauche",
+      "wholeHouseFade": true,
+      "foundationBlocked": true,
+      "behindWalkable": true,
+      "opacityAfter750ms": 0.3308156819112319,
+      "restoredOpacity": 0.9893563459934813
+    }
+  ],
+  "runtimeActivated": false,
+  "pushed": false
+}

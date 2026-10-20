@@ -66,7 +66,11 @@
   const s=sim(this);if(!s||!this.labourActors)return;
   for(const [id,n]of this.labourActors){const site=s.state.sites[n.labourSite],record=site?.workerRecords[id];if(!record?.reasons.returning||record.dead||this.party.some(c=>c.id===id))continue;n.labourReturning=true;const elapsed=Math.max(0,this.clock-(record.returnClock??this.clock));record.returnClock=this.clock;
    if(n.civilian?.critical||n.civilian?.dead||n.dangerState||this.dialogue?.who===n){if(record.returnRoute)record.returnRoute.clock=this.clock;continue;}
-   const home=record.home,world=Atlas.toWorld(n.x,n.y);let route=record.returnRoute;
+   const destination=record.home,home=this.labourReturnTarget?.(n,destination)||destination,world=Atlas.toWorld(n.x,n.y),arrived=()=>dist(n,destination)<=12;let route=record.returnRoute;
+   // A person already beside their workplace returns locally. A trip back to
+   // the canonical town anchor would send inner-city workers kilometres away.
+   if(!route&&dist(n,home)<=480){const near=dist(n,this.player)<1500&&!this.journey&&!this.sleeping,seconds=near?dt:Math.min(16,WorldPacing.realSeconds(elapsed));this.labourWalking=true;try{for(let left=seconds;left>1e-7&&dist(n,home)>(n.cityLife?1.25:12);left-=.25)walk.call(this,n,home,Math.min(.25,left));if(arrived()){delete record.cityReturn;this.cityReturnPaths?.delete(id);s.systems.setWorkerReason(site.id,id,'returning',false);delete n.labourReturning;n.post={...destination};}}finally{this.labourWalking=false;record.position={x:n.x,y:n.y};}continue;}
+
    const near=dist(n,this.player)<1500&&!this.journey&&!this.sleeping;
    this.labourWalking=true;try{
     if(!route&&dist(n,home)>48){const path=s.systems.graphPath(site.id,world,{allowBoat:true}),node=Atlas.toGame(Atlas.byId[site.id].x,Atlas.byId[site.id].y),homePath=dist(home,node)>48?s.systems.graphPath(site.id,Atlas.toWorld(home.x,home.y)):[];if(!path||!homePath)continue;route=record.returnRoute={site:site.id,path,leg:path.length,progress:0,clock:this.clock};s.systems.reverse(route);route.path.push(...homePath);}
@@ -76,7 +80,7 @@
      if(!near&&dist(n,goal)<=12){const result=s.systems.move(route,travelMinutes,this.clock);Object.assign(n,Atlas.toGame(...Object.values(s.systems.position(route))));homeSeconds=WorldPacing.realSeconds(result.remaining);}
      else if(near&&dist(n,goal)<=12){const leg=route.path[route.leg];if(leg&&!this.worldState.edgeStatus(Atlas.edgeById.get(leg.edge),this.clock).closed){const t=Math.min(1,((route.progress||0)+2)/Math.max(.001,leg.length)),target=Atlas.toGame(leg.from[0]+(leg.to[0]-leg.from[0])*t,leg.from[1]+(leg.to[1]-leg.from[1])*t);walk.call(this,n,target,Math.min(dt,WorldPacing.realSeconds(availableMinutes)));const w=Atlas.toWorld(n.x,n.y),distance=Atlas.project(w.x,w.y,leg.from,leg.to).t*leg.length;s.systems.move(route,Math.max(0,distance-route.progress)/WorldPacing.metresPerMinute(WorldPacing.civilianWalk),this.clock);}}
     }
-    if(!route||!route.path[route.leg]){for(let left=Math.min(16,homeSeconds);left>1e-7&&dist(n,home)>12;left-=.25)walk.call(this,n,home,Math.min(.25,left));if(dist(n,home)<=12){s.systems.setWorkerReason(site.id,id,'returning',false);delete record.returnRoute;delete n.labourReturning;n.post={...home};}}
+    if(!route||!route.path[route.leg]){for(let left=Math.min(16,homeSeconds);left>1e-7&&dist(n,home)>(n.cityLife?1.25:12);left-=.25)walk.call(this,n,home,Math.min(.25,left));if(arrived()){delete record.cityReturn;this.cityReturnPaths?.delete(id);s.systems.setWorkerReason(site.id,id,'returning',false);delete record.returnRoute;delete n.labourReturning;n.post={...destination};}}
    }finally{n.alpha=record.returnRoute?.path[record.returnRoute.leg]?.mode==='boat'?0:1;this.labourWalking=false;record.position={x:n.x,y:n.y};}
   }
  };

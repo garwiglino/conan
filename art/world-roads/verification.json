@@ -1,0 +1,46 @@
+{
+  "mode": "worker",
+  "results": [
+    {
+      "target": "forest",
+      "x": 18236.639593440505,
+      "y": 17239.737991837734,
+      "road": "road-5",
+      "cache": 4,
+      "pending": 5,
+      "free": true,
+      "playerUnchanged": true,
+      "roadRevision": "5d4352816ff991d4",
+      "file": "forest.png"
+    },
+    {
+      "target": "desert",
+      "x": 47019.100000000006,
+      "y": 22067.8,
+      "road": "road-73",
+      "cache": 9,
+      "pending": 5,
+      "free": true,
+      "playerUnchanged": true,
+      "roadRevision": "5d4352816ff991d4",
+      "file": "desert.png"
+    },
+    {
+      "target": "bridge",
+      "x": 18236.639593440505,
+      "y": 17542.275983675467,
+      "id": "bridge-0",
+      "road": "road-5",
+      "river": 184,
+      "kind": "bridge",
+      "width": 2.8,
+      "cache": 14,
+      "pending": 5,
+      "free": true,
+      "playerUnchanged": true,
+      "roadRevision": "5d4352816ff991d4",
+      "file": "bridge.png"
+    }
+  ],
+  "errors": []
+}

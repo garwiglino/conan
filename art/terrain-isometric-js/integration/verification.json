@@ -17,8 +17,8 @@
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
+        "buildings": 4530,
+        "workstations": 50,
         "actorFrames": 0,
         "fixtureFrames": 0,
         "architecture": {
@@ -31,26 +31,26 @@
     {
       "id": "town-1",
       "logical": [
-        -494521,
-        -82406.85
+        -508049,
+        -84175.15
       ],
       "projected": [
-        -412114.15,
-        -288463.925
+        -423873.85,
+        -296112.075
       ],
-      "cache": 8,
-      "pending": 5,
+      "cache": 11,
+      "pending": 3,
       "occluders": 0,
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
-        "actorFrames": 2,
-        "fixtureFrames": 1,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 0,
         "architecture": {
-          "models": 15,
-          "pixelArea": 778889,
+          "models": 5,
+          "pixelArea": 327005,
           "maxModels": 96
         }
       }
@@ -65,19 +65,19 @@
         -134150.15,
         -181664.925
       ],
-      "cache": 12,
+      "cache": 16,
       "pending": 5,
       "occluders": 0,
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
-        "actorFrames": 2,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
         "fixtureFrames": 1,
         "architecture": {
-          "models": 27,
-          "pixelArea": 1454642,
+          "models": 19,
+          "pixelArea": 1142589,
           "maxModels": 96
         }
       }
@@ -98,20 +98,20 @@
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
-        "actorFrames": 2,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
         "fixtureFrames": 2,
         "architecture": {
-          "models": 37,
-          "pixelArea": 1959282,
+          "models": 31,
+          "pixelArea": 1777630,
           "maxModels": 96
         }
       }
     }
   ],
   "occlusion": {
-    "alpha": 0.32017202790471316,
+    "alpha": 0.32,
     "free": true,
     "foundationSolid": true
   },

@@ -1,5 +1,56 @@
 # Postes humains indépendants — JavaScript
 
+## Mobilier isométrique intégré
+
+L’atelier [Mobilier isométrique](../art/mobilier-isometrique/index.html) reprend
+les **49 entrées actuelles** : 44 meubles et structures redessinés en géométrie
+JavaScript, quatre références du décor naturel et l’accès logique au déneigement.
+Ce lot est validé et activé dans le jeu sur demande du joueur. Le prototype huit directions a été abandonné ;
+les personnages conservent leurs quatre vues et les durées de leurs activités.
+
+`sprites/decors/mobilier-isometrique.js` utilise le rasteriseur des bâtiments,
+la projection `(u-v, (u+v)/2-z)`, les contours natifs, le grain et l’usure des
+matériaux. Les onze palettes de quartier changent les matériaux, sans modifier
+les emprises ou les sockets. Établi : plateau à 9 unités natives ; banc : assise
+à 5 ; couchage : support bas. Les planches utilisent le même zoom pour tous les
+objets, et `echelle-joueur.png` montre le vrai joueur livré à côté des meubles.
+
+`sprites/decors/postes-isometriques.js` fournit l’adaptateur compatible avec les
+postes existants : vue fixe, socket opérateur, patient distinct, contact, approche,
+support, réservation exclusive et plans avant/arrière complémentaires. Les
+approches debout évitent l’emprise solide. Les pixels d’eau viennent du terrain
+existant ; les quais et vannes ne fabriquent aucune étendue d’eau. La politique
+hivernale reste celle du dépôt et ses caps de neige suivent la nouvelle géométrie.
+
+L’assemblage s’obtient avec `HumanScene.withStations(IsometricStations)` ; le jeu livré utilise cet assemblage et le nouvel adaptateur de postes. Les cannes de verrier
+conservent leur longueur et atteignent le four et les supports. Le couchage
+transmet un angle de support de 63,435° au transformateur des calques déjà utilisé
+pour s’allonger : sa silhouette couchée suit ainsi la pente du lit. Aucun dessin
+de personnage à huit vues n’est conservé. Le PNJ qui soigne et le patient occupent
+des sockets distincts ; le patient ne fait jamais partie du sprite du lit.
+
+Les 92 clips humains déjà associés à des postes restent associés aux mêmes
+identifiants. Le pupitre peut aussi montrer le clip existant `ledger`, et le
+séchoir `hang`. Le dépôt n’a pas de clip dédié au boulanger : le four de cuisson
+est dessiné et possède son socket, avec un aperçu au repos. Aucun métier,
+inventaire, résultat de production ou comportement économique n’a été inventé.
+Le contrat reste indépendant de la race ; la vérification d’animations de ce lot
+porte sur les calques humains, sans annoncer une migration des packs des autres
+races.
+
+```sh
+node scripts/render-isometric-furniture.cjs
+node --test tests/isometric-furniture.test.cjs tests/human-stations.test.cjs tests/human-activities.test.cjs tests/human-igea-winter.test.cjs
+node scripts/check-isometric-furniture.cjs
+```
+
+Les contrôles incluent 5 836 compositions humaines (corps autorisés, quatre
+demandes de direction, toutes les images), les contacts des outils, les supports
+des lits, les réservations, les emprises, les variantes de quartier et les 49
+entrées de l’atelier dans Chromium. Les tests d’intégration complètent ces contrôles avec les collisions réelles du joueur, les approches des 24 meubles fixes de Clairfoyer, les sauvegardes et des captures Chromium du monde.
+
+## Bibliothèque livrée et références initiales
+
 Les 48 références approuvées sont disponibles dans `sprites/decors/` :
 44 structures transcrites en grilles entières à palette fixe et quatre entrées
 naturelles réutilisant l’atlas existant. Le renderer ne télécharge aucun PNG.
