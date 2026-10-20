@@ -1,0 +1,29 @@
+name: iOS updater
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ios/Hearthreaver/*.swift'
+      - 'ios/Hearthreaver.xcodeproj/**'
+      - 'tests/ios-updater/**'
+      - '.github/workflows/ios-updater.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exercise update timing, offline fallback and cache preservation
+        run: |
+          swiftc -swift-version 5 ios/Hearthreaver/GameUpdater.swift tests/ios-updater/main.swift -o /tmp/hearthreaver-updater-tests
+          /tmp/hearthreaver-updater-tests
+      - name: Compile the complete iOS application for Simulator
+        run: >-
+          xcodebuild -project ios/Hearthreaver.xcodeproj
+          -scheme Hearthreaver -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath /tmp/hearthreaver-derived
+          CODE_SIGNING_ALLOWED=NO build
