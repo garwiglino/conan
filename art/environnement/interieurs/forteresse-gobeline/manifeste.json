@@ -1,0 +1,301 @@
+{
+ "interieur": "Forteresse gobeline",
+ "palette": "palette-forteresse-gobeline.gpl",
+ "rampes": [
+  "cachot",
+  "lueur",
+  "torche",
+  "fer",
+  "rouille",
+  "chiffon",
+  "planche",
+  "paille",
+  "gobelin",
+  "bouleau",
+  "mousse",
+  "eau",
+  "fleur",
+  "ocre"
+ ],
+ "echelle": "1 px par unité ; 16 unités par mètre ; case de salle de 2 m = losange 64 × 32",
+ "dimensions": {
+  "case": 32,
+  "mur": 48,
+  "epaisseur": 8,
+  "muret": 6
+ },
+ "fichiers": [
+  {
+   "fichier": "sols/dalles.piskel",
+   "role": "sol",
+   "id": "dalles"
+  },
+  {
+   "fichier": "sols/paves.piskel",
+   "role": "sol",
+   "id": "paves"
+  },
+  {
+   "fichier": "sols/terre.piskel",
+   "role": "sol",
+   "id": "terre"
+  },
+  {
+   "fichier": "sols/planches.piskel",
+   "role": "sol",
+   "id": "planches"
+  },
+  {
+   "fichier": "murs/nord.piskel",
+   "role": "mur",
+   "orientation": "nord",
+   "ancre": [
+    7,
+    52
+   ],
+   "cadres": [
+    "mur-a",
+    "mur-b",
+    "mur-c",
+    "mur-ruine",
+    "mur-breche",
+    "meurtriere",
+    "fenetre",
+    "baniere",
+    "chaines"
+   ]
+  },
+  {
+   "fichier": "portes/nord.piskel",
+   "role": "mur",
+   "orientation": "nord",
+   "ancre": [
+    10,
+    52
+   ],
+   "cadres": [
+    "arche",
+    "porte",
+    "porte-ouverte",
+    "porte-verrouillee",
+    "herse",
+    "herse-levee",
+    "escalier-montant"
+   ]
+  },
+  {
+   "fichier": "murs/torche-nord.piskel",
+   "role": "mur",
+   "orientation": "nord",
+   "ancre": [
+    9,
+    52
+   ],
+   "anime": "mur-torche",
+   "fps": 8
+  },
+  {
+   "fichier": "murs/ouest.piskel",
+   "role": "mur",
+   "orientation": "ouest",
+   "ancre": [
+    40,
+    52
+   ],
+   "cadres": [
+    "mur-a",
+    "mur-b",
+    "mur-c",
+    "mur-ruine",
+    "mur-breche",
+    "meurtriere",
+    "fenetre",
+    "baniere",
+    "chaines"
+   ]
+  },
+  {
+   "fichier": "portes/ouest.piskel",
+   "role": "mur",
+   "orientation": "ouest",
+   "ancre": [
+    40,
+    52
+   ],
+   "cadres": [
+    "arche",
+    "porte",
+    "porte-ouverte",
+    "porte-verrouillee",
+    "herse",
+    "herse-levee",
+    "escalier-montant"
+   ]
+  },
+  {
+   "fichier": "murs/torche-ouest.piskel",
+   "role": "mur",
+   "orientation": "ouest",
+   "ancre": [
+    40,
+    52
+   ],
+   "anime": "mur-torche",
+   "fps": 8
+  },
+  {
+   "fichier": "murets/sud.piskel",
+   "role": "muret",
+   "orientation": "sud",
+   "ancre": [
+    8,
+    6
+   ],
+   "cadres": [
+    "muret",
+    "muret-debut",
+    "muret-casse"
+   ]
+  },
+  {
+   "fichier": "murets/est.piskel",
+   "role": "muret",
+   "orientation": "est",
+   "ancre": [
+    32,
+    6
+   ],
+   "cadres": [
+    "muret",
+    "muret-debut",
+    "muret-casse"
+   ]
+  },
+  {
+   "fichier": "angles/angles.piskel",
+   "role": "angle",
+   "ancre": [
+    16,
+    56
+   ],
+   "cadres": [
+    "angle-nord",
+    "bout-nord",
+    "bout-ouest",
+    "angle-sud"
+   ]
+  },
+  {
+   "fichier": "escaliers/descendant.piskel",
+   "role": "escalier",
+   "ancre": [
+    29,
+    0
+   ],
+   "cadres": [
+    "escalier-descendant-nord",
+    "escalier-descendant-ouest"
+   ]
+  },
+  {
+   "fichier": "objets/piliers.piskel",
+   "role": "objet",
+   "ancre": [
+    17,
+    55
+   ],
+   "cadres": [
+    "pilier-carre",
+    "pilier-rond",
+    "pilier-brise"
+   ]
+  },
+  {
+   "fichier": "objets/ruines.piskel",
+   "role": "objet",
+   "ancre": [
+    18,
+    15
+   ],
+   "cadres": [
+    "eboulis",
+    "blocs"
+   ]
+  },
+  {
+   "fichier": "objets/mobilier.piskel",
+   "role": "objet",
+   "ancre": [
+    16,
+    32
+   ],
+   "cadres": [
+    "caisse",
+    "caisses",
+    "tonneau",
+    "coffre",
+    "coffre-verrouille",
+    "coffre-ouvert",
+    "table",
+    "ratelier",
+    "paillasse"
+   ]
+  },
+  {
+   "fichier": "objets/gobelins.piskel",
+   "role": "objet",
+   "ancre": [
+    19,
+    45
+   ],
+   "cadres": [
+    "totem",
+    "etendard",
+    "cage",
+    "marmite",
+    "tresor"
+   ]
+  },
+  {
+   "fichier": "objets/brasero.piskel",
+   "role": "objet",
+   "ancre": [
+    27,
+    25
+   ],
+   "anime": "brasero",
+   "fps": 8
+  },
+  {
+   "fichier": "decors/decors-sol.piskel",
+   "role": "decors",
+   "ancre": [
+    5,
+    3
+   ],
+   "cadres": [
+    "fissure",
+    "flaque",
+    "os",
+    "crane",
+    "paille",
+    "mousse",
+    "tache",
+    "gravats",
+    "grille",
+    "traces"
+   ]
+  },
+  {
+   "fichier": "decors/toile.piskel",
+   "role": "toile",
+   "ancre": [
+    8,
+    46
+   ],
+   "cadres": [
+    "toile"
+   ]
+  }
+ ]
+}

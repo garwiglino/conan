@@ -1,0 +1,99 @@
+GIMP Palette
+Name: Forteresse-gobeline
+Columns: 8
+#
+ 45  56  48	mousse0
+ 67  81  58	mousse1
+101 112  70	mousse2
+137 145  83	mousse3
+174 183 115	mousse4
+ 20  35  49	eau0
+ 27  52  67	eau1
+ 35  71  85	eau2
+ 44  91 102	eau3
+ 58 114 119	eau4
+ 87 142 137	eau5
+139 182 165	eau6
+205 226 204	eau7
+ 42  38  41	bouleau0
+112 102  94	bouleau1
+155 145 121	bouleau2
+194 183 155	bouleau3
+222 213 182	bouleau4
+237 230 205	bouleau5
+237 230 205	fleur0
+239 211 106	fleur1
+215 154  60	fleur2
+184  87  74	fleur3
+138 111 166	fleur4
+ 95  76 134	fleur5
+127 156 207	fleur6
+ 42  28  38	ocre0
+ 71  39  44	ocre1
+107  58  53	ocre2
+145  81  63	ocre3
+181 109  74	ocre4
+209 141  93	ocre5
+229 174 120	ocre6
+242 207 152	ocre7
+ 12  11  17	cachot0
+ 21  19  28	cachot1
+ 30  27  39	cachot2
+ 40  37  51	cachot3
+ 52  47  64	cachot4
+ 66  60  78	cachot5
+ 82  75  93	cachot6
+101  93 110	cachot7
+125 116 131	cachot8
+ 31  24  27	lueur0
+ 47  36  39	lueur1
+ 67  51  49	lueur2
+ 91  67  59	lueur3
+118  88  71	lueur4
+147 112  86	lueur5
+179 139 103	lueur6
+210 170 124	lueur7
+ 58  20  16	torche0
+110  34  20	torche1
+168  54  26	torche2
+214  90  31	torche3
+240 138  42	torche4
+249 187  71	torche5
+253 226 127	torche6
+255 246 208	torche7
+ 16  17  22	fer0
+ 29  31  38	fer1
+ 47  50  59	fer2
+ 71  75  85	fer3
+102 107 116	fer4
+141 145 152	fer5
+184 187 189	fer6
+ 46  25  19	rouille0
+ 79  40  24	rouille1
+116  57  29	rouille2
+154  81  38	rouille3
+ 30  18  18	chiffon0
+ 51  26  25	chiffon1
+ 74  35  32	chiffon2
+ 99  45  39	chiffon3
+125  59  49	chiffon4
+150  80  66	chiffon5
+ 28  21  19	planche0
+ 44  32  27	planche1
+ 62  45  36	planche2
+ 84  60  46	planche3
+108  78  58	planche4
+135 100  74	planche5
+162 126  93	planche6
+ 47  39  27	paille0
+ 74  61  38	paille1
+101  86  49	paille2
+128 112  63	paille3
+154 138  82	paille4
+180 164 108	paille5
+ 20  26  18	gobelin0
+ 31  42  25	gobelin1
+ 44  59  33	gobelin2
+ 61  79  41	gobelin3
+ 82 102  52	gobelin4
+108 128  66	gobelin5

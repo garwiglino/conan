@@ -3,7 +3,9 @@
  *  - art/environnement/<biome>/png/ : chaque élément en PNG (sols, pavages,
  *    pièces de chemin, falaises, flore, décors) et catalogue.json ;
  *  - art/environnement/guide/ : planches du guide d'assemblage (grille,
- *    pièces numérotées, disposition des maisons, places et ruelles).
+ *    pièces numérotées, disposition des maisons, places et ruelles) ;
+ *  - art/environnement/interieurs/<id>/png/ et leurs planches : voir
+ *    interieur-kit.cjs.
  *   node scripts/environment/export-kit.cjs [--verifier] */
 const fs=require('node:fs'),path=require('node:path'),{createCanvas,loadImage}=require('@napi-rs/canvas');
 const piskel=require('./piskel.cjs'),{biomes}=require('./build-environment.cjs'),{NAMES,ORDER}=require('./teremor-pieces.cjs');
@@ -173,10 +175,11 @@ async function kit(scratch=require('node:os').tmpdir()){
  for(const biome of biomes()){for(const [rel,buf]of await exportBiome(biome))files.set(biome+'/png/'+rel,buf);
   files.set('guide/pieces-'+biome+'.png',piecesPlate(biome));files.set('guide/disposition-'+biome+'.png',await dispositionPlate(biome,scratch));}
  files.set('guide/grille.png',gridPlate());
+ for(const [rel,buf]of await require('./interieur-kit.cjs').kit())files.set(rel,buf);
  return files;
 }
 // Fichiers déjà présents dans les dossiers générés (pour retirer ceux qui ne le sont plus).
-function existing(){const out=[],walk=d=>{if(!fs.existsSync(d))return;for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);f.isDirectory()?walk(p):out.push(path.relative(ART,p));}};for(const b of biomes())walk(path.join(ART,b,'png'));walk(path.join(ART,'guide'));return out.filter(f=>!f.endsWith('.md'));}
+function existing(){const out=[],walk=d=>{if(!fs.existsSync(d))return;for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);f.isDirectory()?walk(p):out.push(path.relative(ART,p));}};for(const b of biomes())walk(path.join(ART,b,'png'));for(const i of require('./interieurs.cjs').names)walk(path.join(ART,'interieurs',i,'png'));walk(path.join(ART,'guide'));return out.filter(f=>!f.endsWith('.md'));}
 module.exports={kit,exportBiome,district,KITS};
 if(require.main===module)(async()=>{
  const files=await kit(),stale=existing().filter(f=>!files.has(f));
@@ -184,5 +187,5 @@ if(require.main===module)(async()=>{
   if(bad.length){console.error(bad.slice(0,20).join('\n')+'\nnpm run kit:environment');process.exitCode=1;}else console.log('kit à jour ('+files.size+' fichiers)');return;}
  for(const f of stale)fs.unlinkSync(path.join(ART,f));
  for(const [rel,buf]of files){const p=path.join(ART,rel);fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,buf);}
- console.log(files.size+' fichiers dans art/environnement/<biome>/png et art/environnement/guide');
+ console.log(files.size+' fichiers dans art/environnement/<biome>/png, interieurs/<id>/png et guide');
 })().catch(e=>{console.error(e);process.exit(1);});

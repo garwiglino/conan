@@ -9,6 +9,8 @@ Ce dossier rassemble les tuiles redessinées des biomes, prêtes à alimenter le
 
 Les bâtiments communs (B01 grange, B05 halle de marché, B07 auberge-relais…) vont dans les deux biomes. Les tailles et les portes de chaque bâtiment sont dans le catalogue d'architecture (`sprites/architecture/architecture-isometric.js`, `entry(id)`).
 
+Les intérieurs sont des salles fermées entourées de noir. Le premier est la **forteresse gobeline** (`interieurs/forteresse-gobeline/`), un donjon de pierre sombre ; voir la section « Intérieurs ». Le jeu n'a pas encore de rendu d'intérieur : le kit est prêt à brancher.
+
 ## Contenu
 
 - `<biome>/png/` : **les images à utiliser**, une par élément. Le fichier `catalogue.json` donne pour chacune son rôle, sa taille, son ancre, son masque ou son opacité.
@@ -20,10 +22,13 @@ Les bâtiments communs (B01 grange, B05 halle de marché, B07 auberge-relais…)
   - `flore/` : chaque arbre, buisson ou rocher, et son ombre `-ombre`.
   - `decors/` : petits décors peints à plat sur le sol.
 - `<biome>/` (hors `png/`) : les sources Piskel à retoucher, la palette `.gpl` et le `manifeste.json` (voir le `LISEZMOI.md` du biome).
+- `interieurs/<id>/` : les intérieurs, avec leurs sources Piskel, leur palette, leur `manifeste.json` et leurs PNG dans `png/` (catalogue `png/catalogue.json`).
 - `guide/` : les planches de ce guide.
   - `grille.png` : la grille et les masques.
   - `pieces-<biome>.png` : toutes les pièces numérotées.
   - `disposition-<biome>.png` : un bourg type, rendu et plan côte à côte.
+  - `salle-<intérieur>.png` : une salle type, rendu et plan côte à côte.
+  - `pieces-<intérieur>.png` : toutes les pièces d'un intérieur, chacune sur sa case.
 - `jeu.json` : l'interrupteur des biomes dans le jeu.
 
 ## 1. Grille et ordre d'affichage
@@ -122,16 +127,46 @@ La planche montre un bourg type : le rendu à gauche, le plan des mêmes cases �
 - **Places.** Un seul pavage par place. Les maisons qui la bordent gardent leur marge, et les rues s'y arrêtent.
 - **Désert.** Les campements n'ont pas de place pavée. Les palmiers se groupent autour des puits et des oasis, les rochers et les arbres morts restent hors des rues.
 
-## 8. Brancher dans le jeu
+## 8. Intérieurs
+
+![salle type](guide/salle-forteresse-gobeline.png)
+
+Un intérieur est un espace fermé entouré de noir, comme dans les jeux de ce genre. La planche montre la salle type de la forteresse gobeline, avec le rendu à gauche et le plan des mêmes cases à droite. Toutes les pièces sont sur `guide/pieces-forteresse-gobeline.png`. Le code de référence qui fait l'assemblage est `scripts/environment/interieur-scene.cjs` : `layout()` choisit les pièces, `compose()` les dessine.
+
+- **Grille.** Une case de salle fait **2 m** : 32 unités, un losange de 64 × 32 px, comme une pièce de chemin. i va vers l'est et j vers le sud. Le coin nord de la case (i, j) est en u = 32 i, v = 32 j. Un mur fait 48 unités de haut (3 m) et 8 d'épaisseur.
+- **Plan.** On décrit la salle case par case : soit du vide, soit un sol (`dalles`, `paves`, `terre`, `planches`). Le vide reste **noir**, sans sol ni décor.
+- **Sol.** Il se pose comme dehors : la texture est lue en coordonnées écran, et le relief `-hauteur` départage deux sols voisins.
+- **Grands murs au fond.** Sur chaque bord **nord** ou **ouest** d'une case de sol qui touche le vide, on pose un module de `murs/nord/` ou `murs/ouest/`. Son ancre va sur le coin nord de la case, et son épaisseur est du côté du vide.
+  - Murs pleins : `mur-a`, `mur-b` ou `mur-c`, tirés au hasard mais toujours les mêmes pour une case donnée.
+  - Variantes : `mur-ruine`, `mur-breche`, `meurtriere`, `fenetre`, `baniere`, `chaines`, `mur-torche` (animée).
+- **Murets devant.** Sur chaque bord **sud** ou **est** qui touche le vide, on pose un muret arasé de 6 unités (`murets/sud/`, `murets/est/`). On voit ainsi l'intérieur par-dessus. L'ancre va sur le coin ouest de la case pour un muret sud, sur le coin est pour un muret est. Quand la case au sud-ouest est aussi du sol, le muret sud prend `muret-debut` : c'est le muret est de cette case qui tient l'angle.
+- **Angles.** Pour chaque sommet de la grille, on regarde ses quatre cases. S'il n'y a qu'une case de sol, l'angle dépend de sa position :
+  - au sud-est du sommet : `angle-nord` (fond, entre deux grands murs) ;
+  - au sud-ouest : `bout-nord` (pilier d'about) ;
+  - au nord-est : `bout-ouest` (pilier d'about) ;
+  - au nord-ouest : `angle-sud` (devant, entre deux murets).
+
+  L'ancre de l'angle est le sommet.
+- **Ouvertures.** Une porte remplace un module de grand mur : `arche`, `porte`, `porte-ouverte`, `porte-verrouillee`, `herse`, `herse-levee`, `escalier-montant`. Entre deux salles, la porte se pose sur le bord nord ou ouest de la case du sud ou de l'est, et son épaisseur empiète sur la case de l'autre salle. On ne met aucun objet sur la case devant une ouverture. L'escalier montant occupe la case devant lui.
+- **Escalier descendant.** `escalier-descendant-nord` (ou `-ouest`) se pose par-dessus le sol d'une case, ancre au coin nord de la case.
+- **Objets et décors.** L'ancre d'un objet est son pied, en unités du monde. Les décors au sol se peignent juste après le sol. La `toile` va dans le coin nord d'une salle, ancre au coin nord de la case du coin.
+- **Ombres et lueurs.** Les calques `-ombre.png` (opacité 0,5) puis `-lueur.png` (0,35 pour le feu, 0,3 pour la lune) se peignent **seulement sur les pixels de sol**, avant toutes les pièces. Les torches et le brasero ont 4 images, à 8 images/s.
+- **Ordre.** On dessine d'abord le sol, les décors au sol, les trémies, les ombres et les lueurs. Viennent ensuite les pièces debout, triées par i + j de la case qui les porte, puis par u + v. Pour un mur ou un muret, c'est la case de vide qui porte son épaisseur. Un personnage se trie comme un objet.
+- **Lumière.** Pour finir, tout s'assombrit loin des sources de lumière, jusqu'à 30 % de la luminosité. Les sources sont les pièces qui ont un champ `lumiere` dans le catalogue : torches, brasero, marmite et fenêtres. On garde des paliers de 1/8, tramés (Bayer 4 × 4), pour rester en pixel art. Le personnage peut porter sa propre source.
+- **Cloisons.** Un grand mur entre deux salles cache le sol sur environ 1,5 case derrière lui. Quand un personnage passe derrière, on dessine ce mur à 40 % d'opacité.
+
+## 9. Brancher dans le jeu
 
 1. Mettre les biomes voulus dans `jeu.json`, par exemple `{"biomes_actifs": ["teremor", "sarak"]}`.
 2. Lancer `npm run build:environment`, puis `python3 scripts/package-ios.py`. Cela réintègre le jeu web et iOS et refait `Hearthreaver-iOS.zip`.
 
 Le jeu dessine alors les régions du biome avec le compositeur (`sprites/environnement/environment-iso.js`) et les données `sprites/environnement/<biome>-data.js`. Les autres biomes ne changent pas, et les murs de la zone de départ gardent leur dessin. Pour revenir aux tuiles actuelles, on vide la liste et on relance la seconde commande.
 
-## 9. Retoucher et régénérer
+Les intérieurs n'ont pas encore de rendu dans le jeu. Pour les brancher, on reprend les règles de la section 8 : `png/catalogue.json` donne chaque pièce, son ancre, ses calques et sa lumière, et `scripts/environment/interieur-scene.cjs` sert de modèle.
 
-1. Retoucher le `.piskel` dans piskelapp.com (voir `<biome>/LISEZMOI.md`).
-2. `npm run build:environment` : données du jeu.
+## 10. Retoucher et régénérer
+
+1. Retoucher le `.piskel` dans piskelapp.com (voir `<biome>/LISEZMOI.md` ou `interieurs/<id>/LISEZMOI.md`).
+2. `npm run build:environment` : données du jeu (biomes seulement).
 3. `npm run kit:environment` : PNG, catalogues et planches de ce dossier.
 4. `npm run test:environment` : vérifie que tout est à jour et raccordé.
