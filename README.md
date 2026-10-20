@@ -7,7 +7,9 @@ Ce catalogue visuel est consultable séparément du jeu.
 
 Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile).
 
-**Architecture humaine trois quarts — ressources prêtes, non intégrées au jeu :** [nouvel atelier et comparaison](art/architecture-34/index.html), [catalogue et API](docs/architecture-trois-quarts.md), [pack trois quarts](art/architecture-34/architecture-34-complete.zip). Les 106 bâtiments, 8 variantes d’hiver et 120 modules conservent leurs familles régionales et l’échelle de l’humain de 19 px. [Anciennes élévations conservées](art/architecture/atelier.html).
+**Nouveaux concepts PNG trois quarts — à valider avant fabrication JavaScript :** [galerie et comparaison avec les originaux](art/architecture-concepts-34/index.html), [inventaire et statut de cette reprise](docs/architecture-concepts-png-trois-quarts.md). Les 45 planches reprennent les 234 références existantes. Aucun nouveau sprite n’est intégré au jeu.
+
+**Ancienne reconstruction trois quarts — archive non validée :** [nouvel atelier et comparaison](art/architecture-34/index.html), [catalogue et API](docs/architecture-trois-quarts.md), [pack trois quarts](art/architecture-34/architecture-34-complete.zip). Les 106 bâtiments, 8 variantes d’hiver et 120 modules conservent leurs familles régionales et l’échelle de l’humain de 19 px. [Anciennes élévations conservées](art/architecture/atelier.html).
 
 **Architecture humaine en JavaScript — intégrée aux localités :** [atelier natif et assemblages](art/architecture/atelier.html), [catalogue complet et API](docs/architecture-javascript.md), [pack des sources, sprites et calques](art/architecture/architecture-complete.zip). 106 bâtiments, 8 variantes d’hiver et 120 modules, à l’échelle de l’humain de 19 px.
 

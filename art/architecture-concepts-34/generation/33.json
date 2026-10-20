@@ -1,0 +1,12 @@
+{
+  "number": 33,
+  "output": "33-33-habitat-igea-hiver.png",
+  "generatedFile": "/workspace/generated_images/exec-334db849-eef0-491d-a552-f3128a0a0b3d.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "ef50b7aaa57e9da179baea2a47e9c83bbba6a96fad77632084d6e7844db4f753",
+  "sourceSha256": "81d3e8419f087fbf712b778b770db6ad005d043adf4d2c54112a57d3c523fcbb",
+  "status": "generated-awaiting-review"
+}

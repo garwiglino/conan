@@ -1,0 +1,12 @@
+{
+  "number": 24,
+  "output": "24-24-habitat-sylverive.png",
+  "generatedFile": "/workspace/generated_images/exec-fa791abc-0614-4ff9-87a9-ddf3f733c8be.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "90a91b8d3f3a252f7fa621d801c72193091bfb8b6891091a779f9cb9f9146d49",
+  "sourceSha256": "8ab4e554dd337d7466769d69586a8683b859942dff3603cdc88cdc3042166aaf",
+  "status": "generated-awaiting-review"
+}

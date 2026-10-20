@@ -1,0 +1,12 @@
+{
+  "number": 25,
+  "output": "25-25-habitat-igea.png",
+  "generatedFile": "/workspace/generated_images/exec-d323c3ac-16c5-4297-a1b0-2bc644ee24e2.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "0ccd58c1bb245d37a1eb19a27681bdf1a6d1f45be519f79d341eb4ee3a2d8fd2",
+  "sourceSha256": "8c64c65f8b032be4e910cdd3936bfd0e3de5a6ad9738055d6efe87599e8f335e",
+  "status": "generated-awaiting-review"
+}

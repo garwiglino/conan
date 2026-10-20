@@ -1,0 +1,12 @@
+{
+  "number": 35,
+  "output": "35-teremor-walls.png",
+  "generatedFile": "/workspace/generated_images/exec-1bfd7534-22d5-454a-85c2-cf1c98618c58.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "99e79ed5c7634cee044aa608fcd7594ec6ac00b777d18b511ada637758633f63",
+  "sourceSha256": "c55c7fb2bbab299fb5feac7d626a9286876ac0858b85b6b632fd7d8f376a56ce",
+  "status": "generated-awaiting-review"
+}

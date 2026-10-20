@@ -1,0 +1,12 @@
+{
+  "number": 9,
+  "output": "09-09-ateliers.png",
+  "generatedFile": "/workspace/generated_images/exec-7c7e40ce-4fbb-4e9a-868c-5b006ef7a2f4.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "0a06eeb268cfec52964a3e1abb2a2abfa2b14cfcc819d58a176e1984606526b0",
+  "sourceSha256": "3f04dc77698e735f64fb2c22b2a03fb96b245d25a40e78cd53caa5217fd505c9",
+  "status": "generated-awaiting-review"
+}

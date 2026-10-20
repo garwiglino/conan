@@ -1,0 +1,12 @@
+{
+  "number": 15,
+  "output": "15-15-sites.png",
+  "generatedFile": "/workspace/generated_images/exec-9423f2a4-b700-4667-8f1d-6eb3eb0ed9a9.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "25119ef385e601f2d6608999036a52474fe5f6f8ef2d1e020532ccf3716b7885",
+  "sourceSha256": "127de88773db44a12d0486bc9e3cf6d7fb1a3b0ff66e5acb6c8f765a0c432d4b",
+  "status": "generated-awaiting-review"
+}

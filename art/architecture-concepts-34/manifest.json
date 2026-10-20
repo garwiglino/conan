@@ -1,0 +1,1809 @@
+{
+  "version": 1,
+  "status": "45 concepts PNG redessinés — à valider, sans conversion JavaScript",
+  "projection": "Vue trois quarts classique de RPG, caméra parallèle fixe",
+  "humanScaleTarget": 19,
+  "noBanners": true,
+  "boards": [
+    {
+      "number": 1,
+      "id": "01-teremor",
+      "title": "Teremor — habitat tempéré",
+      "kind": "building",
+      "family": "teremor",
+      "source": "concepts/01-teremor.png",
+      "sourceSha256": "d1d74ceab26b25ceb1ce0daf3574e28aca9ddc6d6487eeae02bface679334058",
+      "entries": [
+        {
+          "id": "T01",
+          "label": "Chaumière"
+        },
+        {
+          "id": "T02",
+          "label": "Longère de ferme"
+        },
+        {
+          "id": "T03",
+          "label": "Maison mitoyenne et boutique"
+        },
+        {
+          "id": "T04",
+          "label": "Petit manoir"
+        }
+      ],
+      "output": "01-01-teremor.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "129031284fa926b262d1111e9050ae7a1a33ce83a665dc845f57d239c4fdfbcd",
+      "original": "references/01.png"
+    },
+    {
+      "number": 2,
+      "id": "02-sylverive",
+      "title": "Sylverive — cité et commerce",
+      "kind": "building",
+      "family": "sylverive",
+      "source": "concepts/02-sylverive.png",
+      "sourceSha256": "90ba33594905a2b39df623fae0ebc5c0a4795a6fa86bddc510ce99436c9434a9",
+      "entries": [
+        {
+          "id": "T05",
+          "label": "Maison de négociant"
+        },
+        {
+          "id": "T06",
+          "label": "Entrepôt portuaire"
+        },
+        {
+          "id": "T07",
+          "label": "Maison des chartes"
+        },
+        {
+          "id": "T08",
+          "label": "Manufacture textile"
+        }
+      ],
+      "output": "02-02-sylverive.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "3c6b8032d44a8b064688912cd545b33b9e566aa81ca2dc10814db279fb6213cf",
+      "original": "references/02.png"
+    },
+    {
+      "number": 3,
+      "id": "03-igea",
+      "title": "Igea — habitat et réserves",
+      "kind": "building",
+      "family": "igea",
+      "source": "concepts/03-igea.png",
+      "sourceSha256": "245ef3e177cf0a9ae88835123e31011f1bccc2b3ad35af22c767f8f10e3fc780",
+      "entries": [
+        {
+          "id": "T09",
+          "label": "Maison longue"
+        },
+        {
+          "id": "T10",
+          "label": "Refuge de passage"
+        },
+        {
+          "id": "T11",
+          "label": "Grenier surélevé"
+        },
+        {
+          "id": "T12",
+          "label": "Loge de mineurs"
+        }
+      ],
+      "output": "03-03-igea.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "a6bf938f1a07f56b66935190a45ffbb562067d2e095f452375e78631133d06a7",
+      "original": "references/03.png"
+    },
+    {
+      "number": 4,
+      "id": "04-sarak",
+      "title": "Sarak — bassins et étapes",
+      "kind": "building",
+      "family": "sarak",
+      "source": "concepts/04-sarak.png",
+      "sourceSha256": "3343acda7ea12585760e29c551498f08a6771a3f0c83c64b7722aa87f3764237",
+      "entries": [
+        {
+          "id": "T13",
+          "label": "Maison à cour"
+        },
+        {
+          "id": "T14",
+          "label": "Demeure de bourg"
+        },
+        {
+          "id": "T15",
+          "label": "Relais de caravane"
+        },
+        {
+          "id": "T16",
+          "label": "Réserve fraîche"
+        }
+      ],
+      "output": "04-04-sarak.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "de90b93625108887604e9172e635e515cd8fecf06f226b8c4bf86c7a8d093de6",
+      "original": "references/04.png"
+    },
+    {
+      "number": 5,
+      "id": "05-varan",
+      "title": "Varan — habitats humides",
+      "kind": "building",
+      "family": "varan",
+      "source": "concepts/05-varan.png",
+      "sourceSha256": "0c547602462a1d35b208844bc3cf1e9d3dccac733e61a3c29da642165cc97ba3",
+      "entries": [
+        {
+          "id": "T17",
+          "label": "Maison sur plancher haut"
+        },
+        {
+          "id": "T18",
+          "label": "Maison de bourg drainé"
+        },
+        {
+          "id": "T19",
+          "label": "Halle ventilée"
+        },
+        {
+          "id": "T20",
+          "label": "Dépôt surélevé"
+        }
+      ],
+      "output": "05-05-varan.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "1d8990d521759fdc71a98c0b93c34c6da6b0b5cd9a0e3fd3b4f85501d2406a91",
+      "original": "references/05.png"
+    },
+    {
+      "number": 6,
+      "id": "06-tagon",
+      "title": "Tagon — côtes et arrière-pays",
+      "kind": "building",
+      "family": "tagon",
+      "source": "concepts/06-tagon.png",
+      "sourceSha256": "0d5a96d8baa50de8038abd06c6c90268ac1b33b8b48b5551867f5062d8d9909e",
+      "entries": [
+        {
+          "id": "T21",
+          "label": "Maison côtière"
+        },
+        {
+          "id": "T22",
+          "label": "Maison forestière"
+        },
+        {
+          "id": "T23",
+          "label": "Maison des marins"
+        },
+        {
+          "id": "T24",
+          "label": "Dépôt de bois naval"
+        }
+      ],
+      "output": "06-06-tagon.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "116fc2cd0f0ef6db7b88c627f422f20e3397e91bdd7536b16ab012ae5520b68d",
+      "original": "references/06.png"
+    },
+    {
+      "number": 7,
+      "id": "07-fermes",
+      "title": "Dépendances rurales",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/07-fermes.png",
+      "sourceSha256": "bb852fc95f28d57ffce23784269755394f6ccee7b1433c5eb8f3cf1e773b5b5b",
+      "entries": [
+        {
+          "id": "B01",
+          "label": "Grange"
+        },
+        {
+          "id": "B02",
+          "label": "Étable fermée"
+        },
+        {
+          "id": "B03",
+          "label": "Bergerie"
+        },
+        {
+          "id": "B04",
+          "label": "Abri pastoral démontable"
+        }
+      ],
+      "output": "07-07-fermes.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "fe51c69f6fdee58c9c79626b0c4cfc1b59afaa99ceac2a695a39aaeabf6db90c",
+      "original": "references/07.png"
+    },
+    {
+      "number": 8,
+      "id": "08-echanges",
+      "title": "Marchés et relais",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/08-echanges.png",
+      "sourceSha256": "7493e1ec7f5025a5fa067b56274c58d091c0a40fc29e7d1458e6177e834a195a",
+      "entries": [
+        {
+          "id": "B05",
+          "label": "Halle de marché"
+        },
+        {
+          "id": "B06",
+          "label": "Grenier collectif"
+        },
+        {
+          "id": "B07",
+          "label": "Auberge-relais"
+        },
+        {
+          "id": "B08",
+          "label": "Comptoir d’échange"
+        }
+      ],
+      "output": "08-08-echanges.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "3b716243e468b2b14e50d5b1aa892ad2ef1410738404e30558b7f0b247d81cad",
+      "original": "references/08.png"
+    },
+    {
+      "number": 9,
+      "id": "09-ateliers",
+      "title": "Ateliers à nuisances",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/09-ateliers.png",
+      "sourceSha256": "3f04dc77698e735f64fb2c22b2a03fb96b245d25a40e78cd53caa5217fd505c9",
+      "entries": [
+        {
+          "id": "B09",
+          "label": "Forge couverte"
+        },
+        {
+          "id": "B10",
+          "label": "Atelier de cuisson"
+        },
+        {
+          "id": "B11",
+          "label": "Tannerie"
+        },
+        {
+          "id": "B12",
+          "label": "Atelier de charpente"
+        }
+      ],
+      "output": "09-09-ateliers.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "0a06eeb268cfec52964a3e1abb2a2abfa2b14cfcc819d58a176e1984606526b0",
+      "original": "references/09.png"
+    },
+    {
+      "number": 10,
+      "id": "10-alimentation",
+      "title": "Transformation alimentaire",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/10-alimentation.png",
+      "sourceSha256": "19dc54fd5cb962ff7e4edb64b0c681c45709021e602920c0ad38641dfe707730",
+      "entries": [
+        {
+          "id": "B13",
+          "label": "Moulin à vent"
+        },
+        {
+          "id": "B14",
+          "label": "Moulin à eau"
+        },
+        {
+          "id": "B15",
+          "label": "Fournil"
+        },
+        {
+          "id": "B16",
+          "label": "Fumoir et séchoir"
+        }
+      ],
+      "output": "10-10-alimentation.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "f813793ccc0ddd693d7ded1cd6a8254192c6b4c439626af61132d2207c7e988e",
+      "original": "references/10.png"
+    },
+    {
+      "number": 11,
+      "id": "11-fibres",
+      "title": "Textile et transformations",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/11-fibres.png",
+      "sourceSha256": "72758405928cd4aad5621828bebb2859350a481c1b7d2755709ac46543633d0d",
+      "entries": [
+        {
+          "id": "B17",
+          "label": "Maison des tisserands"
+        },
+        {
+          "id": "B18",
+          "label": "Teinturerie"
+        },
+        {
+          "id": "B19",
+          "label": "Corderie"
+        },
+        {
+          "id": "B20",
+          "label": "Huilerie et pressoir"
+        }
+      ],
+      "output": "11-11-fibres.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "f7f12047d5964f71601d32df2c54e03d29b2c33d065b9b5fdc65da97d979585f",
+      "original": "references/11.png"
+    },
+    {
+      "number": 12,
+      "id": "12-public",
+      "title": "Vie publique et mémoire",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/12-public.png",
+      "sourceSha256": "e1f0bd4c33f594431acf62be2b8797823ee5989fbeb655ef4465b9656d6f7e51",
+      "entries": [
+        {
+          "id": "B21",
+          "label": "Maison de conseil"
+        },
+        {
+          "id": "B22",
+          "label": "Maison de soins"
+        },
+        {
+          "id": "B23",
+          "label": "Salle de mémoire et rites"
+        },
+        {
+          "id": "B24",
+          "label": "Salle commune et refuge"
+        }
+      ],
+      "output": "12-12-public.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "7529fc7132e1ca984669a83035dbc45008bb9a0b1a65950942d387cc92d49374",
+      "original": "references/12.png"
+    },
+    {
+      "number": 13,
+      "id": "13-garde",
+      "title": "Garde et défense habitée",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/13-garde.png",
+      "sourceSha256": "d5fa4db0d144decd82741aad4b6131e423a42edede959ca45ec1d6c753620efa",
+      "entries": [
+        {
+          "id": "F01",
+          "label": "Poste de garde"
+        },
+        {
+          "id": "F02",
+          "label": "Caserne"
+        },
+        {
+          "id": "F03",
+          "label": "Arsenal"
+        },
+        {
+          "id": "F04",
+          "label": "Donjon résidentiel"
+        }
+      ],
+      "output": "13-13-garde.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "5ccc7d62b274773b1ab00797f86e9fba5bc3c60484414a47f4472b1b9006d26e",
+      "original": "references/13.png"
+    },
+    {
+      "number": 14,
+      "id": "14-fortifications",
+      "title": "Tours et portes d’enceinte",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/14-fortifications.png",
+      "sourceSha256": "2d20ee91e63b794a7be8305fd446f8c7c3fb3a30a9861a048a6701da6bb1b113",
+      "entries": [
+        {
+          "id": "F05",
+          "label": "Tour de guet bois"
+        },
+        {
+          "id": "F06",
+          "label": "Tour de rempart pierre"
+        },
+        {
+          "id": "F07",
+          "label": "Porte de palissade"
+        },
+        {
+          "id": "F08",
+          "label": "Porte de rempart"
+        }
+      ],
+      "output": "14-14-fortifications.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "7fe4c0f3a3652898eeb2588d1d1d9710034b82721b72d1e1fea81a77dc399358",
+      "original": "references/14.png"
+    },
+    {
+      "number": 15,
+      "id": "15-sites",
+      "title": "Dépendances des districts",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/15-sites.png",
+      "sourceSha256": "127de88773db44a12d0486bc9e3cf6d7fb1a3b0ff66e5acb6c8f765a0c432d4b",
+      "entries": [
+        {
+          "id": "X01",
+          "label": "Portail de mine"
+        },
+        {
+          "id": "X02",
+          "label": "Loge de carrière"
+        },
+        {
+          "id": "X03",
+          "label": "Hangar des salines"
+        },
+        {
+          "id": "X04",
+          "label": "Chantier naval couvert"
+        }
+      ],
+      "output": "15-15-sites.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "25119ef385e601f2d6608999036a52474fe5f6f8ef2d1e020532ccf3716b7885",
+      "original": "references/15.png"
+    },
+    {
+      "number": 16,
+      "id": "16-structures",
+      "title": "Structure et enveloppes",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/16-structures.png",
+      "sourceSha256": "45dce662ad26a25f87e15d0587835d91e3a5740bca6cc4802ea405a3c89dc5d8",
+      "entries": [
+        {
+          "id": "M01",
+          "label": "Panneau colombage"
+        },
+        {
+          "id": "M02",
+          "label": "Panneau pierre"
+        },
+        {
+          "id": "M03",
+          "label": "Panneau adobe"
+        },
+        {
+          "id": "M04",
+          "label": "Fondation sur poteaux"
+        },
+        {
+          "id": "M05",
+          "label": "Poutre de liaison"
+        },
+        {
+          "id": "M06",
+          "label": "Poteau de charpente"
+        },
+        {
+          "id": "M07",
+          "label": "Pignon de toiture"
+        },
+        {
+          "id": "M08",
+          "label": "Faîtage"
+        }
+      ],
+      "output": "16-16-structures.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "32eae84a000e325259318bd3260a460d75a44a51ab26533eddaa7a82e324aa53",
+      "original": "references/16.png"
+    },
+    {
+      "number": 17,
+      "id": "17-enceintes",
+      "title": "Murs et chemins de ronde",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/17-enceintes.png",
+      "sourceSha256": "9bb556503fd09073f094dd404955d4aca33953b5e076bae2cb347c17793fc748",
+      "entries": [
+        {
+          "id": "M09",
+          "label": "Palissade droite"
+        },
+        {
+          "id": "M10",
+          "label": "Courtine droite"
+        },
+        {
+          "id": "M11",
+          "label": "Terminaison"
+        },
+        {
+          "id": "M12",
+          "label": "Jonction en L"
+        },
+        {
+          "id": "M13",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "M14",
+          "label": "Parapet bas"
+        },
+        {
+          "id": "M15",
+          "label": "Chemin de ronde"
+        },
+        {
+          "id": "M16",
+          "label": "Escalier de rempart"
+        }
+      ],
+      "output": "17-17-enceintes.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "d7b56400b1fd392fe8fb333feceadcb76267a3c07122eb488e90eb7ab5bd1f94",
+      "original": "references/17.png"
+    },
+    {
+      "number": 18,
+      "id": "18-ouvertures",
+      "title": "Portes, fenêtres et protection",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/18-ouvertures.png",
+      "sourceSha256": "2c6fd19d42666f595c4a741c6ca01582dae28b54eb10957e4f791225e18ad803",
+      "entries": [
+        {
+          "id": "M17",
+          "label": "Porte de maison"
+        },
+        {
+          "id": "M18",
+          "label": "Vantaux de grand portail"
+        },
+        {
+          "id": "M19",
+          "label": "Arc de passage"
+        },
+        {
+          "id": "M20",
+          "label": "Fenêtre à volets"
+        },
+        {
+          "id": "M21",
+          "label": "Fenêtre grillagée"
+        },
+        {
+          "id": "M22",
+          "label": "Claustra de ventilation"
+        },
+        {
+          "id": "M23",
+          "label": "Garde-corps de galerie"
+        },
+        {
+          "id": "M24",
+          "label": "Auvent"
+        }
+      ],
+      "output": "18-18-ouvertures.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "149bd4a0eae5da2855bac90e4d56a40bf65ffa2ab4b5fe504d02529b9b71d6f4",
+      "original": "references/18.png"
+    },
+    {
+      "number": 19,
+      "id": "19-franchissements",
+      "title": "Ponts et accès portuaires",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/19-franchissements.png",
+      "sourceSha256": "648076deda198525fd19b8cb6b6b2c530306279116762c4a20de7dc689e979c7",
+      "entries": [
+        {
+          "id": "M25",
+          "label": "Travée de pont bois"
+        },
+        {
+          "id": "M26",
+          "label": "Arche de pont pierre"
+        },
+        {
+          "id": "M27",
+          "label": "Culée de pont"
+        },
+        {
+          "id": "M28",
+          "label": "Quai bois"
+        },
+        {
+          "id": "M29",
+          "label": "Quai pierre"
+        },
+        {
+          "id": "M30",
+          "label": "Extrémité de jetée"
+        },
+        {
+          "id": "M31",
+          "label": "Escalier d’accostage"
+        },
+        {
+          "id": "M32",
+          "label": "Rampe de chargement"
+        }
+      ],
+      "output": "19-19-franchissements.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "72180f51916effbbb76c811ec8a7faa8920795dc748b2173f13deb1228658281",
+      "original": "references/19.png"
+    },
+    {
+      "number": 20,
+      "id": "20-eau-salubrite",
+      "title": "Eau et salubrité — structures seules",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/20-eau-salubrite.png",
+      "sourceSha256": "e702ea0b6cdc344eebcefa3853f0c5f71fae141dbe2b214ac3dc1325baca2711",
+      "entries": [
+        {
+          "id": "M33",
+          "label": "Paroi de citerne"
+        },
+        {
+          "id": "M34",
+          "label": "Gouttière et descente"
+        },
+        {
+          "id": "M35",
+          "label": "Encadrement de vanne"
+        },
+        {
+          "id": "M36",
+          "label": "Conduit sur supports"
+        },
+        {
+          "id": "M37",
+          "label": "Cloison de latrines"
+        },
+        {
+          "id": "M38",
+          "label": "Grille d’évacuation"
+        },
+        {
+          "id": "M39",
+          "label": "Cheminée"
+        },
+        {
+          "id": "M40",
+          "label": "Évent de toiture"
+        }
+      ],
+      "output": "20-20-eau-salubrite.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "d399e84423230a5b762ad60a91e5b136daafa0dccfa0d2d5fd9af87010608ae8",
+      "original": "references/20.png"
+    },
+    {
+      "number": 21,
+      "id": "21-toitures-chantier",
+      "title": "Couvertures et assemblages",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/21-toitures-chantier.png",
+      "sourceSha256": "2cbfb392247615ceea1ec9403e58aba2506dc732e6447674415bce9905b1c326",
+      "entries": [
+        {
+          "id": "M41",
+          "label": "Toiture terrasse"
+        },
+        {
+          "id": "M42",
+          "label": "Travée chaume"
+        },
+        {
+          "id": "M43",
+          "label": "Travée fibres"
+        },
+        {
+          "id": "M44",
+          "label": "Travée bardeaux"
+        },
+        {
+          "id": "M45",
+          "label": "Travée tuiles"
+        },
+        {
+          "id": "M46",
+          "label": "Palier extérieur"
+        },
+        {
+          "id": "M47",
+          "label": "Travée échafaudage"
+        },
+        {
+          "id": "M48",
+          "label": "Ossature en chantier"
+        }
+      ],
+      "output": "21-21-toitures-chantier.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "b043345c869fc51801edb1a96a561f16febd15bc308b392771b62034324556af",
+      "original": "references/21.png"
+    },
+    {
+      "number": 22,
+      "id": "22-igea-hiver",
+      "title": "Igea — neige saisonnière",
+      "kind": "seasonal",
+      "family": "igea",
+      "source": "concepts/22-igea-hiver.png",
+      "sourceSha256": "7b5abba1bfaf4d16999b14373e74692d8ee88d30e22df365d7f0d900985001ee",
+      "entries": [
+        {
+          "id": "T09-hiver",
+          "label": "Maison longue — hiver"
+        },
+        {
+          "id": "T10-hiver",
+          "label": "Refuge de passage — hiver"
+        },
+        {
+          "id": "T11-hiver",
+          "label": "Grenier surélevé — hiver"
+        },
+        {
+          "id": "T12-hiver",
+          "label": "Loge de mineurs — hiver"
+        }
+      ],
+      "output": "22-22-igea-hiver.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "8aac84efc7b39890ce7493ff81fa623a66fbcb827d51f76a8c469874a1cec4ca",
+      "original": "references/22.png"
+    },
+    {
+      "number": 23,
+      "id": "23-habitat-teremor",
+      "title": "Teremor — variantes d’habitation",
+      "kind": "building",
+      "family": "teremor",
+      "source": "concepts/23-habitat-teremor.png",
+      "sourceSha256": "9db942f2f4c688220711033f11e1bb9a30d1ccde3a8ad5d3d6259ed7a83ffd74",
+      "entries": [
+        {
+          "id": "H01",
+          "label": "Petite chaumière"
+        },
+        {
+          "id": "H02",
+          "label": "Maison de pierre"
+        },
+        {
+          "id": "H03",
+          "label": "Logis à étage"
+        },
+        {
+          "id": "H04",
+          "label": "Maisons jumelées"
+        }
+      ],
+      "output": "23-23-habitat-teremor.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "61164292bbde635c3eaa4a5fc72fd62c7422e566fa882355e7e70365ff034d11",
+      "original": "references/23.png"
+    },
+    {
+      "number": 24,
+      "id": "24-habitat-sylverive",
+      "title": "Sylverive — logements de cité",
+      "kind": "building",
+      "family": "sylverive",
+      "source": "concepts/24-habitat-sylverive.png",
+      "sourceSha256": "8ab4e554dd337d7466769d69586a8683b859942dff3603cdc88cdc3042166aaf",
+      "entries": [
+        {
+          "id": "H05",
+          "label": "Logis de ruelle"
+        },
+        {
+          "id": "H06",
+          "label": "Maison d’artisan habitée"
+        },
+        {
+          "id": "H07",
+          "label": "Maison familiale à galerie"
+        },
+        {
+          "id": "H08",
+          "label": "Logis collectif de port"
+        }
+      ],
+      "output": "24-24-habitat-sylverive.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "90a91b8d3f3a252f7fa621d801c72193091bfb8b6891091a779f9cb9f9146d49",
+      "original": "references/24.png"
+    },
+    {
+      "number": 25,
+      "id": "25-habitat-igea",
+      "title": "Igea — maisons de vallée",
+      "kind": "building",
+      "family": "igea",
+      "source": "concepts/25-habitat-igea.png",
+      "sourceSha256": "8c64c65f8b032be4e910cdd3936bfd0e3de5a6ad9738055d6efe87599e8f335e",
+      "entries": [
+        {
+          "id": "H09",
+          "label": "Petit logis de pierre"
+        },
+        {
+          "id": "H10",
+          "label": "Maison de rondins"
+        },
+        {
+          "id": "H11",
+          "label": "Maison de vallée à étage"
+        },
+        {
+          "id": "H12",
+          "label": "Grande maison de maisonnée"
+        }
+      ],
+      "output": "25-25-habitat-igea.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "0ccd58c1bb245d37a1eb19a27681bdf1a6d1f45be519f79d341eb4ee3a2d8fd2",
+      "original": "references/25.png"
+    },
+    {
+      "number": 26,
+      "id": "26-habitat-sarak",
+      "title": "Sarak — variantes de maisons",
+      "kind": "building",
+      "family": "sarak",
+      "source": "concepts/26-habitat-sarak.png",
+      "sourceSha256": "59e4c2e69dfeed707427707552c87237688947485f2ca18c576964580bd9a062",
+      "entries": [
+        {
+          "id": "H13",
+          "label": "Petit logis d’adobe"
+        },
+        {
+          "id": "H14",
+          "label": "Maison à patio"
+        },
+        {
+          "id": "H15",
+          "label": "Logis à étage et terrasse"
+        },
+        {
+          "id": "H16",
+          "label": "Maisonnée à deux logis"
+        }
+      ],
+      "output": "26-26-habitat-sarak.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "181a4eb947976874e391f86be2ae2f6d5679bdd2c98378779a432d68b4988cc9",
+      "original": "references/26.png"
+    },
+    {
+      "number": 27,
+      "id": "27-habitat-varan",
+      "title": "Varan — maisons ventilées",
+      "kind": "building",
+      "family": "varan",
+      "source": "concepts/27-habitat-varan.png",
+      "sourceSha256": "f23c9eadb3d0c77015f17dee834af1eab2e0e41b790b6271ac75578cbbe451b0",
+      "entries": [
+        {
+          "id": "H17",
+          "label": "Petit logis surélevé"
+        },
+        {
+          "id": "H18",
+          "label": "Maison familiale ventilée"
+        },
+        {
+          "id": "H19",
+          "label": "Logis de bourg en enduit"
+        },
+        {
+          "id": "H20",
+          "label": "Maison à véranda abritée"
+        }
+      ],
+      "output": "27-27-habitat-varan.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "aaf75ba6b2715152854db770243e6941f20b6651939a60bb2c6dc242bb180ac6",
+      "original": "references/27.png"
+    },
+    {
+      "number": 28,
+      "id": "28-habitat-tagon",
+      "title": "Tagon — maisons côtières et forestières",
+      "kind": "building",
+      "family": "tagon",
+      "source": "concepts/28-habitat-tagon.png",
+      "sourceSha256": "050ebd21bd606f60894a2f728df6cb39d70c82b21d5b83ccbc9d0fdd7bf88745",
+      "entries": [
+        {
+          "id": "H21",
+          "label": "Petit logis côtier"
+        },
+        {
+          "id": "H22",
+          "label": "Maison de lisière"
+        },
+        {
+          "id": "H23",
+          "label": "Maisons de bourg jumelées"
+        },
+        {
+          "id": "H24",
+          "label": "Maison familiale à galerie"
+        }
+      ],
+      "output": "28-28-habitat-tagon.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "81623cc8e5f2b55c7de90daab658fa0244aacaf042b03541c761669fb79f1a38",
+      "original": "references/28.png"
+    },
+    {
+      "number": 29,
+      "id": "29-enceinte-haute-bois",
+      "title": "Enceinte haute de village — bois",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/29-enceinte-haute-bois.png",
+      "sourceSha256": "9392fdcb323ced6cde33461105c3b732795a0062b24938f60f06d85b89014d3e",
+      "entries": [
+        {
+          "id": "M49",
+          "label": "Mur haut droit"
+        },
+        {
+          "id": "M50",
+          "label": "Terminaison haute"
+        },
+        {
+          "id": "M51",
+          "label": "Angle extérieur haut"
+        },
+        {
+          "id": "M52",
+          "label": "Angle intérieur haut"
+        },
+        {
+          "id": "M53",
+          "label": "Jonction haute en T"
+        },
+        {
+          "id": "M54",
+          "label": "Platelage de ronde haut"
+        },
+        {
+          "id": "M55",
+          "label": "Escalier frontal de ronde"
+        },
+        {
+          "id": "M56",
+          "label": "Parapet haut raccordable"
+        }
+      ],
+      "output": "29-29-enceinte-haute-bois.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4eb0055435639baf6e8b945593585befe06e72adf8ad3d3db6184a11fcb207be",
+      "original": "references/29.png"
+    },
+    {
+      "number": 30,
+      "id": "30-enceinte-haute-pierre",
+      "title": "Enceinte haute de bourg — pierre",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/30-enceinte-haute-pierre.png",
+      "sourceSha256": "68caa72c83c5d7c0d3033fa79123efe4986e99c2661f5550b3b3c17b10d3b5d5",
+      "entries": [
+        {
+          "id": "M57",
+          "label": "Mur haut droit"
+        },
+        {
+          "id": "M58",
+          "label": "Terminaison haute"
+        },
+        {
+          "id": "M59",
+          "label": "Angle extérieur haut"
+        },
+        {
+          "id": "M60",
+          "label": "Angle intérieur haut"
+        },
+        {
+          "id": "M61",
+          "label": "Jonction haute en T"
+        },
+        {
+          "id": "M62",
+          "label": "Platelage de ronde haut"
+        },
+        {
+          "id": "M63",
+          "label": "Escalier frontal de ronde"
+        },
+        {
+          "id": "M64",
+          "label": "Parapet haut raccordable"
+        }
+      ],
+      "output": "30-30-enceinte-haute-pierre.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ca16d548ffd5970e16d47964a4de07a6377c36efe06e55f0b04e6bead2f6d136",
+      "original": "references/30.png"
+    },
+    {
+      "number": 31,
+      "id": "31-courtine-haute-chateau",
+      "title": "Courtine haute de château",
+      "kind": "module",
+      "family": "shared",
+      "source": "concepts/31-courtine-haute-chateau.png",
+      "sourceSha256": "8312b6cd7690077a87e88d8daab3b79978e8e52d27084420f639d5f319ff0e76",
+      "entries": [
+        {
+          "id": "M65",
+          "label": "Mur haut droit"
+        },
+        {
+          "id": "M66",
+          "label": "Terminaison haute"
+        },
+        {
+          "id": "M67",
+          "label": "Angle extérieur haut"
+        },
+        {
+          "id": "M68",
+          "label": "Angle intérieur haut"
+        },
+        {
+          "id": "M69",
+          "label": "Jonction haute en T"
+        },
+        {
+          "id": "M70",
+          "label": "Platelage de ronde haut"
+        },
+        {
+          "id": "M71",
+          "label": "Escalier frontal de ronde"
+        },
+        {
+          "id": "M72",
+          "label": "Parapet haut raccordable"
+        }
+      ],
+      "output": "31-31-courtine-haute-chateau.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "57f497934b8005248e16942d337b6b2f8b14d5eb18e439f029cc44a6395639d8",
+      "original": "references/31.png"
+    },
+    {
+      "number": 32,
+      "id": "32-portes-hautes-tours",
+      "title": "Enceintes hautes — portes et tours",
+      "kind": "building",
+      "family": "shared",
+      "source": "concepts/32-portes-hautes-tours.png",
+      "sourceSha256": "149c53925929079a2bdd3293526c146bc20e9e00b7df05627b758e2a3f34cd0f",
+      "entries": [
+        {
+          "id": "F09",
+          "label": "Porte haute de village en bois"
+        },
+        {
+          "id": "F10",
+          "label": "Porte haute de bourg en pierre"
+        },
+        {
+          "id": "F11",
+          "label": "Châtelet de courtine haute"
+        },
+        {
+          "id": "F12",
+          "label": "Tour carrée de flanquement haute"
+        }
+      ],
+      "output": "32-32-portes-hautes-tours.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "53d2ba0394129fcde06799285c5d7e53037eaac03dd7059c86fd218a605e10c5",
+      "original": "references/32.png"
+    },
+    {
+      "number": 33,
+      "id": "33-habitat-igea-hiver",
+      "title": "Igea — variantes d’habitation sous neige",
+      "kind": "seasonal",
+      "family": "igea",
+      "source": "concepts/33-habitat-igea-hiver.png",
+      "sourceSha256": "81d3e8419f087fbf712b778b770db6ad005d043adf4d2c54112a57d3c523fcbb",
+      "entries": [
+        {
+          "id": "H09-hiver",
+          "label": "Petit logis de pierre — hiver"
+        },
+        {
+          "id": "H10-hiver",
+          "label": "Maison de rondins — hiver"
+        },
+        {
+          "id": "H11-hiver",
+          "label": "Maison de vallée à étage — hiver"
+        },
+        {
+          "id": "H12-hiver",
+          "label": "Grande maison de maisonnée — hiver"
+        }
+      ],
+      "output": "33-33-habitat-igea-hiver.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "ef50b7aaa57e9da179baea2a47e9c83bbba6a96fad77632084d6e7844db4f753",
+      "original": "references/33.png"
+    },
+    {
+      "number": 34,
+      "id": "teremor-houses",
+      "title": "Teremor — maisons civiles",
+      "kind": "building",
+      "family": "teremor",
+      "source": "expansion/teremor-houses.png",
+      "sourceSha256": "14c8a87be2837ee5f2b4e3f71377caa0393985ca2c8e6a7524b980e19e5c52cd",
+      "entries": [
+        {
+          "id": "TER-C01",
+          "label": "Logis modeste"
+        },
+        {
+          "id": "TER-C02",
+          "label": "Maison familiale"
+        },
+        {
+          "id": "TER-C03",
+          "label": "Demeure aisée"
+        }
+      ],
+      "output": "34-teremor-houses.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "9823e0dfaa0b1e16e92a4935391e326d62bbf205d70b970ea189b5daf2579a02",
+      "original": "references/34.png"
+    },
+    {
+      "number": 35,
+      "id": "teremor-walls",
+      "title": "Teremor — hauts remparts",
+      "kind": "module",
+      "family": "teremor",
+      "source": "expansion/teremor-walls.png",
+      "sourceSha256": "c55c7fb2bbab299fb5feac7d626a9286876ac0858b85b6b632fd7d8f376a56ce",
+      "entries": [
+        {
+          "id": "TER-H01",
+          "label": "Mur droit"
+        },
+        {
+          "id": "TER-H02",
+          "label": "Terminaison"
+        },
+        {
+          "id": "TER-H03",
+          "label": "Angle extérieur"
+        },
+        {
+          "id": "TER-H04",
+          "label": "Angle intérieur"
+        },
+        {
+          "id": "TER-H05",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "TER-H06",
+          "label": "Platelage de ronde"
+        },
+        {
+          "id": "TER-H07",
+          "label": "Escalier frontal et palier"
+        },
+        {
+          "id": "TER-H08",
+          "label": "Parapet indépendant"
+        }
+      ],
+      "output": "35-teremor-walls.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "99e79ed5c7634cee044aa608fcd7594ec6ac00b777d18b511ada637758633f63",
+      "original": "references/35.png"
+    },
+    {
+      "number": 36,
+      "id": "sylverive-houses",
+      "title": "Sylverive — maisons civiles",
+      "kind": "building",
+      "family": "sylverive",
+      "source": "expansion/sylverive-houses.png",
+      "sourceSha256": "71a4baf9f80da87a8c474f1f6748f19b4d3db72ac8b734037304043af5fc77f1",
+      "entries": [
+        {
+          "id": "SYL-C01",
+          "label": "Logis modeste"
+        },
+        {
+          "id": "SYL-C02",
+          "label": "Maison familiale"
+        },
+        {
+          "id": "SYL-C03",
+          "label": "Demeure aisée"
+        }
+      ],
+      "output": "36-sylverive-houses.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "c2da0586a143afece7aed700347163f97eab63f83b948185e26b338f39b0e7d0",
+      "original": "references/36.png"
+    },
+    {
+      "number": 37,
+      "id": "sylverive-walls",
+      "title": "Sylverive — hauts remparts",
+      "kind": "module",
+      "family": "sylverive",
+      "source": "expansion/sylverive-walls.png",
+      "sourceSha256": "502c78f02140a26ed63699c48bc0c7f07ce95bc41f26ed0f8676d567d479e0f9",
+      "entries": [
+        {
+          "id": "SYL-H01",
+          "label": "Mur droit"
+        },
+        {
+          "id": "SYL-H02",
+          "label": "Terminaison"
+        },
+        {
+          "id": "SYL-H03",
+          "label": "Angle extérieur"
+        },
+        {
+          "id": "SYL-H04",
+          "label": "Angle intérieur"
+        },
+        {
+          "id": "SYL-H05",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "SYL-H06",
+          "label": "Platelage de ronde"
+        },
+        {
+          "id": "SYL-H07",
+          "label": "Escalier frontal et palier"
+        },
+        {
+          "id": "SYL-H08",
+          "label": "Parapet indépendant"
+        }
+      ],
+      "output": "37-sylverive-walls.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5656b7096d5e9227f74de37acb86e2e2adcc0090c2c1bbfdee60b11607fa3d0e",
+      "original": "references/37.png"
+    },
+    {
+      "number": 38,
+      "id": "igea-houses",
+      "title": "Igea — maisons civiles",
+      "kind": "building",
+      "family": "igea",
+      "source": "expansion/igea-houses.png",
+      "sourceSha256": "f45b370df4e557271f764dd7b45dcafe7e612cc15d64d5ee217d737cf5fda1a2",
+      "entries": [
+        {
+          "id": "IGE-C01",
+          "label": "Logis modeste"
+        },
+        {
+          "id": "IGE-C02",
+          "label": "Maison familiale"
+        },
+        {
+          "id": "IGE-C03",
+          "label": "Demeure aisée"
+        }
+      ],
+      "output": "38-igea-houses.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "7658667183992e11a778f011998e492fcb88b6b6f279f6f2bf9ee97c116f591e",
+      "original": "references/38.png"
+    },
+    {
+      "number": 39,
+      "id": "igea-walls",
+      "title": "Igea — hauts remparts",
+      "kind": "module",
+      "family": "igea",
+      "source": "expansion/igea-walls.png",
+      "sourceSha256": "27d7b92a8af0db7b388bcaf884ceb2b0d5f002f2555cebc17c74c0a66623c5de",
+      "entries": [
+        {
+          "id": "IGE-H01",
+          "label": "Mur droit"
+        },
+        {
+          "id": "IGE-H02",
+          "label": "Terminaison"
+        },
+        {
+          "id": "IGE-H03",
+          "label": "Angle extérieur"
+        },
+        {
+          "id": "IGE-H04",
+          "label": "Angle intérieur"
+        },
+        {
+          "id": "IGE-H05",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "IGE-H06",
+          "label": "Platelage de ronde"
+        },
+        {
+          "id": "IGE-H07",
+          "label": "Escalier frontal et palier"
+        },
+        {
+          "id": "IGE-H08",
+          "label": "Parapet indépendant"
+        }
+      ],
+      "output": "39-igea-walls.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "522c6926de5ab1c069707bf090638de518fbf182ddf39ded50c1123583730c98",
+      "original": "references/39.png"
+    },
+    {
+      "number": 40,
+      "id": "sarak-houses",
+      "title": "Sarak — maisons civiles",
+      "kind": "building",
+      "family": "sarak",
+      "source": "expansion/sarak-houses.png",
+      "sourceSha256": "a670100658110c3e641ec889606f957fac89a656dad0fc31e464b5878d53e311",
+      "entries": [
+        {
+          "id": "SAR-C01",
+          "label": "Logis modeste"
+        },
+        {
+          "id": "SAR-C02",
+          "label": "Maison familiale"
+        },
+        {
+          "id": "SAR-C03",
+          "label": "Demeure aisée"
+        }
+      ],
+      "output": "40-sarak-houses.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "f91e0875c885cce112b2d62a84b2abed136e4b5b8e49c003b664998ce6a71253",
+      "original": "references/40.png"
+    },
+    {
+      "number": 41,
+      "id": "sarak-walls",
+      "title": "Sarak — hauts remparts",
+      "kind": "module",
+      "family": "sarak",
+      "source": "expansion/sarak-walls.png",
+      "sourceSha256": "82c663b724333232351761868c6d144331e7348490cb9db791b4e759e88c84cb",
+      "entries": [
+        {
+          "id": "SAR-H01",
+          "label": "Mur droit"
+        },
+        {
+          "id": "SAR-H02",
+          "label": "Terminaison"
+        },
+        {
+          "id": "SAR-H03",
+          "label": "Angle extérieur"
+        },
+        {
+          "id": "SAR-H04",
+          "label": "Angle intérieur"
+        },
+        {
+          "id": "SAR-H05",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "SAR-H06",
+          "label": "Platelage de ronde"
+        },
+        {
+          "id": "SAR-H07",
+          "label": "Escalier frontal et palier"
+        },
+        {
+          "id": "SAR-H08",
+          "label": "Parapet indépendant"
+        }
+      ],
+      "output": "41-sarak-walls.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6e1b0fd5f7ad1eb5131e9ce6044997319bac9e3ecb881e0bcba217f07c68d48f",
+      "original": "references/41.png"
+    },
+    {
+      "number": 42,
+      "id": "varan-houses",
+      "title": "Varan — maisons civiles",
+      "kind": "building",
+      "family": "varan",
+      "source": "expansion/varan-houses.png",
+      "sourceSha256": "481bff1b90e036e534bc5c5fa1b6414ab16574f8b6b1838e15858b26c0e5a095",
+      "entries": [
+        {
+          "id": "VAR-C01",
+          "label": "Logis modeste"
+        },
+        {
+          "id": "VAR-C02",
+          "label": "Maison familiale"
+        },
+        {
+          "id": "VAR-C03",
+          "label": "Demeure aisée"
+        }
+      ],
+      "output": "42-varan-houses.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "0a686e426c901a61872c250ee9930d67bd7f695cc1248b9790a4c1eb40d4085b",
+      "original": "references/42.png"
+    },
+    {
+      "number": 43,
+      "id": "varan-walls",
+      "title": "Varan — hauts remparts",
+      "kind": "module",
+      "family": "varan",
+      "source": "expansion/varan-walls.png",
+      "sourceSha256": "a35365784b41df809cdce218df7e9817e98610284420e2eae66920350858572e",
+      "entries": [
+        {
+          "id": "VAR-H01",
+          "label": "Mur droit"
+        },
+        {
+          "id": "VAR-H02",
+          "label": "Terminaison"
+        },
+        {
+          "id": "VAR-H03",
+          "label": "Angle extérieur"
+        },
+        {
+          "id": "VAR-H04",
+          "label": "Angle intérieur"
+        },
+        {
+          "id": "VAR-H05",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "VAR-H06",
+          "label": "Platelage de ronde"
+        },
+        {
+          "id": "VAR-H07",
+          "label": "Escalier frontal et palier"
+        },
+        {
+          "id": "VAR-H08",
+          "label": "Parapet indépendant"
+        }
+      ],
+      "output": "43-varan-walls.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dd909224e5727f653f2a3fca154da2720c02b92568ede5675fcc96b6fe595ef5",
+      "original": "references/43.png"
+    },
+    {
+      "number": 44,
+      "id": "tagon-houses",
+      "title": "Tagon — maisons civiles",
+      "kind": "building",
+      "family": "tagon",
+      "source": "expansion/tagon-houses.png",
+      "sourceSha256": "ce88219411ba82a18fb3ab8da81d0a0d0d129cdd67eccf592675ab4e14ae17a9",
+      "entries": [
+        {
+          "id": "TAG-C01",
+          "label": "Logis modeste"
+        },
+        {
+          "id": "TAG-C02",
+          "label": "Maison familiale"
+        },
+        {
+          "id": "TAG-C03",
+          "label": "Demeure aisée"
+        }
+      ],
+      "output": "44-tagon-houses.png",
+      "status": "À valider",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "8cb0f34ec2889ba57550ce12f872d5fda35d25ec7ef69c97c46c5bfc0147b044",
+      "original": "references/44.png"
+    },
+    {
+      "number": 45,
+      "id": "tagon-walls",
+      "title": "Tagon — hauts remparts",
+      "kind": "module",
+      "family": "tagon",
+      "source": "expansion/tagon-walls.png",
+      "sourceSha256": "8611d355875611ee0f2244277b2528bcdb701278c64452bea9f4d449d4b808d2",
+      "entries": [
+        {
+          "id": "TAG-H01",
+          "label": "Mur droit"
+        },
+        {
+          "id": "TAG-H02",
+          "label": "Terminaison"
+        },
+        {
+          "id": "TAG-H03",
+          "label": "Angle extérieur"
+        },
+        {
+          "id": "TAG-H04",
+          "label": "Angle intérieur"
+        },
+        {
+          "id": "TAG-H05",
+          "label": "Jonction en T"
+        },
+        {
+          "id": "TAG-H06",
+          "label": "Platelage de ronde"
+        },
+        {
+          "id": "TAG-H07",
+          "label": "Escalier frontal et palier"
+        },
+        {
+          "id": "TAG-H08",
+          "label": "Parapet indépendant"
+        }
+      ],
+      "output": "45-tagon-walls.png",
+      "status": "À valider",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "685d7e98eeb3a0d573e3f8eec03cc9c9a3873af2c1500712b1bc43cdde8e3612",
+      "original": "references/45.png"
+    }
+  ],
+  "spriteConversion": "not-started",
+  "requiresArtValidation": true,
+  "counts": {
+    "sheets": 45,
+    "assets": 234,
+    "buildings": 106,
+    "winter": 8,
+    "modules": 120
+  }
+}

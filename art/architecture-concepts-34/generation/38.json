@@ -1,0 +1,12 @@
+{
+  "number": 38,
+  "output": "38-igea-houses.png",
+  "generatedFile": "/workspace/generated_images/exec-99b79bad-eb6e-4ff4-9359-79ac575ce86e.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "7658667183992e11a778f011998e492fcb88b6b6f279f6f2bf9ee97c116f591e",
+  "sourceSha256": "f45b370df4e557271f764dd7b45dcafe7e612cc15d64d5ee217d737cf5fda1a2",
+  "status": "generated-awaiting-review"
+}

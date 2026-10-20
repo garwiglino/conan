@@ -1,0 +1,12 @@
+{
+  "number": 37,
+  "output": "37-sylverive-walls.png",
+  "generatedFile": "/workspace/generated_images/exec-9a8d940e-e442-4c72-8516-77879a326f6b.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "5656b7096d5e9227f74de37acb86e2e2adcc0090c2c1bbfdee60b11607fa3d0e",
+  "sourceSha256": "502c78f02140a26ed63699c48bc0c7f07ce95bc41f26ed0f8676d567d479e0f9",
+  "status": "generated-awaiting-review"
+}

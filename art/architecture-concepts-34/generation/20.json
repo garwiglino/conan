@@ -1,0 +1,12 @@
+{
+  "number": 20,
+  "output": "20-20-eau-salubrite.png",
+  "generatedFile": "/workspace/generated_images/exec-b24f8b58-b1ee-4e68-a59c-736ec34f6b9f.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "d399e84423230a5b762ad60a91e5b136daafa0dccfa0d2d5fd9af87010608ae8",
+  "sourceSha256": "e702ea0b6cdc344eebcefa3853f0c5f71fae141dbe2b214ac3dc1325baca2711",
+  "status": "generated-awaiting-review"
+}

@@ -1,0 +1,12 @@
+{
+  "number": 5,
+  "output": "05-05-varan.png",
+  "generatedFile": "/workspace/generated_images/exec-cd9fcaa6-3ce5-44c6-a78f-7b7e0181df23.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "1d8990d521759fdc71a98c0b93c34c6da6b0b5cd9a0e3fd3b4f85501d2406a91",
+  "sourceSha256": "0c547602462a1d35b208844bc3cf1e9d3dccac733e61a3c29da642165cc97ba3",
+  "status": "generated-awaiting-review"
+}

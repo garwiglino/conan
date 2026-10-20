@@ -1,0 +1,12 @@
+{
+  "number": 19,
+  "output": "19-19-franchissements.png",
+  "generatedFile": "/workspace/generated_images/exec-11487c1b-0085-4950-86d0-74c1f58e9f91.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "72180f51916effbbb76c811ec8a7faa8920795dc748b2173f13deb1228658281",
+  "sourceSha256": "648076deda198525fd19b8cb6b6b2c530306279116762c4a20de7dc689e979c7",
+  "status": "generated-awaiting-review"
+}

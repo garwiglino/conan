@@ -1,0 +1,12 @@
+{
+  "number": 3,
+  "output": "03-03-igea.png",
+  "generatedFile": "/workspace/generated_images/exec-bf064cab-3803-45b2-9b3e-cb2abcb38434.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "a6bf938f1a07f56b66935190a45ffbb562067d2e095f452375e78631133d06a7",
+  "sourceSha256": "245ef3e177cf0a9ae88835123e31011f1bccc2b3ad35af22c767f8f10e3fc780",
+  "status": "generated-awaiting-review"
+}

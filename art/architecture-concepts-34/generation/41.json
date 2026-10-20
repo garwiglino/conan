@@ -1,0 +1,12 @@
+{
+  "number": 41,
+  "output": "41-sarak-walls.png",
+  "generatedFile": "/workspace/generated_images/exec-6ecdf3b5-65bf-46d6-83ec-df871271be56.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "6e1b0fd5f7ad1eb5131e9ce6044997319bac9e3ecb881e0bcba217f07c68d48f",
+  "sourceSha256": "82c663b724333232351761868c6d144331e7348490cb9db791b4e759e88c84cb",
+  "status": "generated-awaiting-review"
+}

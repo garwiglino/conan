@@ -1,0 +1,12 @@
+{
+  "number": 6,
+  "output": "06-06-tagon.png",
+  "generatedFile": "/workspace/generated_images/exec-34d0191d-9adb-4e72-a9a2-4c3a36529d66.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "116fc2cd0f0ef6db7b88c627f422f20e3397e91bdd7536b16ab012ae5520b68d",
+  "sourceSha256": "0d5a96d8baa50de8038abd06c6c90268ac1b33b8b48b5551867f5062d8d9909e",
+  "status": "generated-awaiting-review"
+}

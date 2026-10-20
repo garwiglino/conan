@@ -1,0 +1,12 @@
+{
+  "number": 10,
+  "output": "10-10-alimentation.png",
+  "generatedFile": "/workspace/generated_images/exec-68d1ee34-e85f-47bd-b099-2fc7ad53d2ab.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "f813793ccc0ddd693d7ded1cd6a8254192c6b4c439626af61132d2207c7e988e",
+  "sourceSha256": "19dc54fd5cb962ff7e4edb64b0c681c45709021e602920c0ad38641dfe707730",
+  "status": "generated-awaiting-review"
+}

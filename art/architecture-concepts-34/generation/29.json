@@ -1,0 +1,12 @@
+{
+  "number": 29,
+  "output": "29-29-enceinte-haute-bois.png",
+  "generatedFile": "/workspace/generated_images/exec-9f976847-30c0-4a42-a0dd-1e2abe61c339.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "4eb0055435639baf6e8b945593585befe06e72adf8ad3d3db6184a11fcb207be",
+  "sourceSha256": "9392fdcb323ced6cde33461105c3b732795a0062b24938f60f06d85b89014d3e",
+  "status": "generated-awaiting-review"
+}

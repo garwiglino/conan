@@ -1,0 +1,12 @@
+{
+  "number": 2,
+  "output": "02-02-sylverive.png",
+  "generatedFile": "/workspace/generated_images/exec-f6a1062a-8042-48e8-ba7b-f9e247337bc7.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "3c6b8032d44a8b064688912cd545b33b9e566aa81ca2dc10814db279fb6213cf",
+  "sourceSha256": "90ba33594905a2b39df623fae0ebc5c0a4795a6fa86bddc510ce99436c9434a9",
+  "status": "generated-awaiting-review"
+}

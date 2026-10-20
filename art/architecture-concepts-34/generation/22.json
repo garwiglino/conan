@@ -1,0 +1,12 @@
+{
+  "number": 22,
+  "output": "22-22-igea-hiver.png",
+  "generatedFile": "/workspace/generated_images/exec-1052e0d6-d722-4d62-b402-8c3072ecccdd.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "8aac84efc7b39890ce7493ff81fa623a66fbcb827d51f76a8c469874a1cec4ca",
+  "sourceSha256": "7b5abba1bfaf4d16999b14373e74692d8ee88d30e22df365d7f0d900985001ee",
+  "status": "generated-awaiting-review"
+}

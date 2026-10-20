@@ -1,0 +1,12 @@
+{
+  "number": 12,
+  "output": "12-12-public.png",
+  "generatedFile": "/workspace/generated_images/exec-f113cda5-34ae-418d-a3f1-6eb2b5a0b0ba.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "7529fc7132e1ca984669a83035dbc45008bb9a0b1a65950942d387cc92d49374",
+  "sourceSha256": "e1f0bd4c33f594431acf62be2b8797823ee5989fbeb655ef4465b9656d6f7e51",
+  "status": "generated-awaiting-review"
+}

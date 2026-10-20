@@ -1,0 +1,12 @@
+{
+  "number": 42,
+  "output": "42-varan-houses.png",
+  "generatedFile": "/workspace/generated_images/exec-1d4b902c-1311-45e4-9ace-ee090f10864f.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "0a686e426c901a61872c250ee9930d67bd7f695cc1248b9790a4c1eb40d4085b",
+  "sourceSha256": "481bff1b90e036e534bc5c5fa1b6414ab16574f8b6b1838e15858b26c0e5a095",
+  "status": "generated-awaiting-review"
+}

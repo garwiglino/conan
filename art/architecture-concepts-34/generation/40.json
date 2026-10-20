@@ -1,0 +1,12 @@
+{
+  "number": 40,
+  "output": "40-sarak-houses.png",
+  "generatedFile": "/workspace/generated_images/exec-84ec088b-42d3-4804-b1e8-623a5a78f6b4.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "f91e0875c885cce112b2d62a84b2abed136e4b5b8e49c003b664998ce6a71253",
+  "sourceSha256": "a670100658110c3e641ec889606f957fac89a656dad0fc31e464b5878d53e311",
+  "status": "generated-awaiting-review"
+}

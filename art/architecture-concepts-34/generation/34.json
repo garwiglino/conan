@@ -1,0 +1,12 @@
+{
+  "number": 34,
+  "output": "34-teremor-houses.png",
+  "generatedFile": "/workspace/generated_images/exec-f5495b46-978d-4cc3-9ebc-9499123e3b37.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "9823e0dfaa0b1e16e92a4935391e326d62bbf205d70b970ea189b5daf2579a02",
+  "sourceSha256": "14c8a87be2837ee5f2b4e3f71377caa0393985ca2c8e6a7524b980e19e5c52cd",
+  "status": "generated-awaiting-review"
+}

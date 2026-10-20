@@ -1,0 +1,12 @@
+{
+  "number": 7,
+  "output": "07-07-fermes.png",
+  "generatedFile": "/workspace/generated_images/exec-7ca3c231-ec93-459f-a938-d7ae0b691037.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "fe51c69f6fdee58c9c79626b0c4cfc1b59afaa99ceac2a695a39aaeabf6db90c",
+  "sourceSha256": "bb852fc95f28d57ffce23784269755394f6ccee7b1433c5eb8f3cf1e773b5b5b",
+  "status": "generated-awaiting-review"
+}

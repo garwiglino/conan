@@ -1,0 +1,12 @@
+{
+  "number": 11,
+  "output": "11-11-fibres.png",
+  "generatedFile": "/workspace/generated_images/exec-61024fba-f6cc-4c6b-9c4c-167a5647238c.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "f7f12047d5964f71601d32df2c54e03d29b2c33d065b9b5fdc65da97d979585f",
+  "sourceSha256": "72758405928cd4aad5621828bebb2859350a481c1b7d2755709ac46543633d0d",
+  "status": "generated-awaiting-review"
+}

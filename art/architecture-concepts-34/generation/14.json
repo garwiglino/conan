@@ -1,0 +1,12 @@
+{
+  "number": 14,
+  "output": "14-14-fortifications.png",
+  "generatedFile": "/workspace/generated_images/exec-fc615e82-80c3-4f18-a916-60f11656b476.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "7fe4c0f3a3652898eeb2588d1d1d9710034b82721b72d1e1fea81a77dc399358",
+  "sourceSha256": "2d20ee91e63b794a7be8305fd446f8c7c3fb3a30a9861a048a6701da6bb1b113",
+  "status": "generated-awaiting-review"
+}

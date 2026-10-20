@@ -1,0 +1,12 @@
+{
+  "number": 18,
+  "output": "18-18-ouvertures.png",
+  "generatedFile": "/workspace/generated_images/exec-807a59a7-fe80-444b-ba8b-7e6896ed18c8.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "149bd4a0eae5da2855bac90e4d56a40bf65ffa2ab4b5fe504d02529b9b71d6f4",
+  "sourceSha256": "2c6fd19d42666f595c4a741c6ca01582dae28b54eb10957e4f791225e18ad803",
+  "status": "generated-awaiting-review"
+}

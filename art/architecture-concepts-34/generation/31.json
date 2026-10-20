@@ -1,0 +1,12 @@
+{
+  "number": 31,
+  "output": "31-31-courtine-haute-chateau.png",
+  "generatedFile": "/workspace/generated_images/exec-6dff91fa-a3e0-4cee-b522-49f6593d52da.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "57f497934b8005248e16942d337b6b2f8b14d5eb18e439f029cc44a6395639d8",
+  "sourceSha256": "8312b6cd7690077a87e88d8daab3b79978e8e52d27084420f639d5f319ff0e76",
+  "status": "generated-awaiting-review"
+}

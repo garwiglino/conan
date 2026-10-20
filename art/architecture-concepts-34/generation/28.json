@@ -1,0 +1,12 @@
+{
+  "number": 28,
+  "output": "28-28-habitat-tagon.png",
+  "generatedFile": "/workspace/generated_images/exec-a4b3e347-488a-42b7-9472-d51f1b6eecd1.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "81623cc8e5f2b55c7de90daab658fa0244aacaf042b03541c761669fb79f1a38",
+  "sourceSha256": "050ebd21bd606f60894a2f728df6cb39d70c82b21d5b83ccbc9d0fdd7bf88745",
+  "status": "generated-awaiting-review"
+}

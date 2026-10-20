@@ -1,0 +1,12 @@
+{
+  "number": 44,
+  "output": "44-tagon-houses.png",
+  "generatedFile": "/workspace/generated_images/exec-5e7668b8-54b7-4275-9848-12f9bb19777e.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "8cb0f34ec2889ba57550ce12f872d5fda35d25ec7ef69c97c46c5bfc0147b044",
+  "sourceSha256": "ce88219411ba82a18fb3ab8da81d0a0d0d129cdd67eccf592675ab4e14ae17a9",
+  "status": "generated-awaiting-review"
+}

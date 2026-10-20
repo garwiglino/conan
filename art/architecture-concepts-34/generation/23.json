@@ -1,0 +1,12 @@
+{
+  "number": 23,
+  "output": "23-23-habitat-teremor.png",
+  "generatedFile": "/workspace/generated_images/exec-027e6ca8-bee7-440a-8f21-bdc172ec563e.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "61164292bbde635c3eaa4a5fc72fd62c7422e566fa882355e7e70365ff034d11",
+  "sourceSha256": "9db942f2f4c688220711033f11e1bb9a30d1ccde3a8ad5d3d6259ed7a83ffd74",
+  "status": "generated-awaiting-review"
+}

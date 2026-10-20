@@ -1,0 +1,12 @@
+{
+  "number": 21,
+  "output": "21-21-toitures-chantier.png",
+  "generatedFile": "/workspace/generated_images/exec-8ce3a926-dc32-47e6-9530-07b961031fc5.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "b043345c869fc51801edb1a96a561f16febd15bc308b392771b62034324556af",
+  "sourceSha256": "2cbfb392247615ceea1ec9403e58aba2506dc732e6447674415bce9905b1c326",
+  "status": "generated-awaiting-review"
+}

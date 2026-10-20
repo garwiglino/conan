@@ -1,0 +1,12 @@
+{
+  "number": 32,
+  "output": "32-32-portes-hautes-tours.png",
+  "generatedFile": "/workspace/generated_images/exec-dcb2ac28-bd4b-414f-b554-8a817e09447e.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "53d2ba0394129fcde06799285c5d7e53037eaac03dd7059c86fd218a605e10c5",
+  "sourceSha256": "149c53925929079a2bdd3293526c146bc20e9e00b7df05627b758e2a3f34cd0f",
+  "status": "generated-awaiting-review"
+}

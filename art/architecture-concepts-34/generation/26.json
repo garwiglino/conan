@@ -1,0 +1,12 @@
+{
+  "number": 26,
+  "output": "26-26-habitat-sarak.png",
+  "generatedFile": "/workspace/generated_images/exec-990e2129-f326-44fc-9d1c-a16130810c65.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "181a4eb947976874e391f86be2ae2f6d5679bdd2c98378779a432d68b4988cc9",
+  "sourceSha256": "59e4c2e69dfeed707427707552c87237688947485f2ca18c576964580bd9a062",
+  "status": "generated-awaiting-review"
+}

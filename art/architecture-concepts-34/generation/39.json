@@ -1,0 +1,12 @@
+{
+  "number": 39,
+  "output": "39-igea-walls.png",
+  "generatedFile": "/workspace/generated_images/exec-710bfd27-4dd4-4350-95ec-47a92cce8ec4.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "522c6926de5ab1c069707bf090638de518fbf182ddf39ded50c1123583730c98",
+  "sourceSha256": "27d7b92a8af0db7b388bcaf884ceb2b0d5f002f2555cebc17c74c0a66623c5de",
+  "status": "generated-awaiting-review"
+}

@@ -1,0 +1,12 @@
+{
+  "number": 4,
+  "output": "04-04-sarak.png",
+  "generatedFile": "/workspace/generated_images/exec-d36517e5-04f3-4b99-bde7-ca55d67195d7.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "de90b93625108887604e9172e635e515cd8fecf06f226b8c4bf86c7a8d093de6",
+  "sourceSha256": "3343acda7ea12585760e29c551498f08a6771a3f0c83c64b7722aa87f3764237",
+  "status": "generated-awaiting-review"
+}

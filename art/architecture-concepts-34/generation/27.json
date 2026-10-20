@@ -1,0 +1,12 @@
+{
+  "number": 27,
+  "output": "27-27-habitat-varan.png",
+  "generatedFile": "/workspace/generated_images/exec-da56199c-609d-4f7b-b62b-4cde4e60758a.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "aaf75ba6b2715152854db770243e6941f20b6651939a60bb2c6dc242bb180ac6",
+  "sourceSha256": "f23c9eadb3d0c77015f17dee834af1eab2e0e41b790b6271ac75578cbbe451b0",
+  "status": "generated-awaiting-review"
+}

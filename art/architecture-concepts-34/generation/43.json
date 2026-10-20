@@ -1,0 +1,12 @@
+{
+  "number": 43,
+  "output": "43-varan-walls.png",
+  "generatedFile": "/workspace/generated_images/exec-94e69cd1-16c1-42b6-b42d-11354319d78b.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "dd909224e5727f653f2a3fca154da2720c02b92568ede5675fcc96b6fe595ef5",
+  "sourceSha256": "a35365784b41df809cdce218df7e9817e98610284420e2eae66920350858572e",
+  "status": "generated-awaiting-review"
+}

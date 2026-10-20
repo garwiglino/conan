@@ -1,0 +1,12 @@
+{
+  "number": 13,
+  "output": "13-13-garde.png",
+  "generatedFile": "/workspace/generated_images/exec-199fad2f-cc4d-4e40-8763-22ce8195d959.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "5ccc7d62b274773b1ab00797f86e9fba5bc3c60484414a47f4472b1b9006d26e",
+  "sourceSha256": "d5fa4db0d144decd82741aad4b6131e423a42edede959ca45ec1d6c753620efa",
+  "status": "generated-awaiting-review"
+}

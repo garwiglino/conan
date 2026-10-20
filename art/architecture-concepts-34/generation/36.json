@@ -1,0 +1,12 @@
+{
+  "number": 36,
+  "output": "36-sylverive-houses.png",
+  "generatedFile": "/workspace/generated_images/exec-b3d12900-10cf-4978-bfee-030def3af974.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "c2da0586a143afece7aed700347163f97eab63f83b948185e26b338f39b0e7d0",
+  "sourceSha256": "71a4baf9f80da87a8c474f1f6748f19b4d3db72ac8b734037304043af5fc77f1",
+  "status": "generated-awaiting-review"
+}

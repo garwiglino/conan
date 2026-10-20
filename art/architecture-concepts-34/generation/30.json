@@ -1,0 +1,12 @@
+{
+  "number": 30,
+  "output": "30-30-enceinte-haute-pierre.png",
+  "generatedFile": "/workspace/generated_images/exec-6a338ce8-dfa1-4b21-a751-461888fa6d43.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "ca16d548ffd5970e16d47964a4de07a6377c36efe06e55f0b04e6bead2f6d136",
+  "sourceSha256": "68caa72c83c5d7c0d3033fa79123efe4986e99c2661f5550b3b3c17b10d3b5d5",
+  "status": "generated-awaiting-review"
+}

@@ -1,0 +1,12 @@
+{
+  "number": 17,
+  "output": "17-17-enceintes.png",
+  "generatedFile": "/workspace/generated_images/exec-dfe13a0d-11a9-466f-9669-eeccf8f5b561.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "d7b56400b1fd392fe8fb333feceadcb76267a3c07122eb488e90eb7ab5bd1f94",
+  "sourceSha256": "9bb556503fd09073f094dd404955d4aca33953b5e076bae2cb347c17793fc748",
+  "status": "generated-awaiting-review"
+}

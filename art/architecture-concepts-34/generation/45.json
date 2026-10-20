@@ -1,0 +1,12 @@
+{
+  "number": 45,
+  "output": "45-tagon-walls.png",
+  "generatedFile": "/workspace/generated_images/exec-5d0c70d9-f928-4ac4-9452-369d54b7dc5d.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "sha256": "685d7e98eeb3a0d573e3f8eec03cc9c9a3873af2c1500712b1bc43cdde8e3612",
+  "sourceSha256": "8611d355875611ee0f2244277b2528bcdb701278c64452bea9f4d449d4b808d2",
+  "status": "generated-awaiting-review"
+}

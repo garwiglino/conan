@@ -1,0 +1,12 @@
+{
+  "number": 1,
+  "output": "01-01-teremor.png",
+  "generatedFile": "/workspace/generated_images/exec-e4d72b3f-e648-4086-813b-9541925a8b28.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "129031284fa926b262d1111e9050ae7a1a33ce83a665dc845f57d239c4fdfbcd",
+  "sourceSha256": "d1d74ceab26b25ceb1ce0daf3574e28aca9ddc6d6487eeae02bface679334058",
+  "status": "generated-awaiting-review"
+}

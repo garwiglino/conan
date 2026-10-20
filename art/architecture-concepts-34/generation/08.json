@@ -1,0 +1,12 @@
+{
+  "number": 8,
+  "output": "08-08-echanges.png",
+  "generatedFile": "/workspace/generated_images/exec-7d3f3021-3c46-4438-ba9b-dcf69c8c3d55.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "sha256": "3b716243e468b2b14e50d5b1aa892ad2ef1410738404e30558b7f0b247d81cad",
+  "sourceSha256": "7493e1ec7f5025a5fa067b56274c58d091c0a40fc29e7d1458e6177e834a195a",
+  "status": "generated-awaiting-review"
+}
