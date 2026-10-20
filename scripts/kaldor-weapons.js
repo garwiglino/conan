@@ -23,16 +23,20 @@
  // Contact must survive a 40ms tick. Recoil gets its own readable budget:
  // light weapons settle briskly; heavy weapons and finishers take more weight.
  const postHold=(id,combo=0)=>Math.min(.115,.058+get(id).weightKg*.012+(combo===3?.014:0));
+ // Shared slowdown preserves every weapon's relative phase timings.
+ // Contact stays short: anticipation and settling carry the extra weight.
+ const MOMENTUM_TIME=1.25;
  const contactWindow=(row,id,combo)=>{
   // Split anticipation instead of adding another long wind-up. The load still
   // gets its original extreme; one brief lead-in shows the body winding into it.
-  const lead=Math.min(.060,Math.max(.045,row[1]*.32));
-  row[0]=lead;row[1]=Math.max(.041,row[1]-lead);
+  const lead=Math.min(.068,Math.max(.052,row[1]*.32));
+  row[0]=lead;row[1]=Math.max(.050,(row[1]-lead)*1.12);
   // The only damaging drawing occupies slot 2. Slot 3 is now a non-damaging
   // continuation along the same arc, before the held extreme and braking.
   row[2]=Math.max(.045,row[2]);
   row[3]=Math.max(.041,Math.min(.055,.038+get(id).weightKg*.003));
-  row[4]=Math.max(row[4],postHold(id,combo));return row;
+  row[4]=Math.max(row[4],postHold(id,combo))*1.15;row[5]*=1.12;
+  return row.map((t,i)=>i===2?t:t*MOMENTUM_TIME);
  };
  function times(id,combo=0){
   const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
@@ -157,7 +161,7 @@
   const [fx,fy]=forward(dir),mirror=dir===3||dir===0?-1:1;
   const finish=combo===3?1.12:1,two=w.hands===2,span=style.span*(two?.92:1);
   const advance=[-1,1,2,1][f-1]*style.drive*finish;
-  const body=[Math.round(fx*advance),Math.round(fy*advance*.45+(f===3&&stroke==='overhead'?1:0))];
+  const body=[Math.round(fx*advance*.6),Math.round(fy*advance*.28+(f===3&&stroke==='overhead'?1:0))];
   let x=row[0]*span,y=row[1],ux=row[2],uy=row[3];
   // The finishing estoc uses the opposite shoulder, rather than repeating
   // the first thrust's left diagonal. Keep its extension on that same axis.
@@ -186,21 +190,33 @@
    const contact=contactPose(id,dir,combo,body);u=contact.u;h=confineGrip(w,[contact.h[0]+fx,contact.h[1]+fy],u);
   }
   return {h,u,reach:w.length+2,body,leg:f===1?combo===1?3:0:f===2||f===3?combo===2?7:4:5,
-   head:[body[0]+(profile?fx*(f===1?-1:1):Math.round(x*.12)),body[1]+(f===3?1:0)],
-   hair:[-fx*(f===2||f===3?2:-1),f===1?1:0],lunge:f>=2&&f<=4,z:dir===0?0:1};
+   head:[body[0]+(profile?fx*(f===1?-1:0):Math.round(x*.04)),body[1]+(f===3?1:0)],
+   hair:[-fx*(f===2||f===3?1:-1),0],lunge:f>=2&&f<=4,z:dir===0?0:1};
  }
  // Trace the active end through contact instead of independently guessing a
  // recovery angle. The signed swing continues beyond impact; heavier heads
  // make a deeper overshoot. Hands travel with it, with the torso catching up.
  const turn=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
  const angleOf=p=>Math.atan2(p.u[1],p.u[0]);
+ // Keep the grip between the shoulders and lower chest. The blade supplies
+ // the wide arc; moving intact sleeve images far away cannot create an elbow.
+ function compactGrip(id,dir,h,u,body,extraLoad=0){
+  const half=get(id).hands===2?handSpan(id,dir)/2:0;
+  const mid=[h[0]-u[0]*half-body[0],h[1]-u[1]*half-body[1]];
+  mid[0]=Math.max(-6,Math.min(6,mid[0]));
+  mid[1]=Math.max(dir===0?-17:-13-extraLoad,Math.min(dir===0?-2:-4,mid[1]));
+  const hand=[body[0]+mid[0]+u[0]*half,body[1]+mid[1]+u[1]*half];
+  // A rising edge stays outside the head, with the wrist at the shoulder.
+  if(dir!==0&&u[1]<-.25)hand[0]=body[0]+(u[0]<0?-1:1)*Math.max(6.5,Math.abs(hand[0]-body[0]));
+  return confineGrip(get(id),hand,u);
+ }
  function windUp(id,dir,load,hit,stroke,finish=false){
   const w=get(id),[fx,fy]=forward(dir),a=angleOf(hit),delta=turn(angleOf(load),a),thrust=stroke==='thrust';
   const angle=thrust?a:a-Math.sign(delta)*Math.min(175*Math.PI/180,Math.abs(delta)+(22+w.weightKg*2)*Math.PI/180);
-  const u=[Math.cos(angle),Math.sin(angle)],away=thrust?[-fx,-fy]:load.h.map((v,k)=>v-hit.h[k]),len=Math.hypot(...away)||1,pull=5+Math.min(2,w.weightKg*.6)+(finish?2:0);
+  const u=[Math.cos(angle),Math.sin(angle)],away=thrust?[-fx,-fy]:load.h.map((v,k)=>v-hit.h[k]),len=Math.hypot(...away)||1,pull=2+Math.min(1,w.weightKg*.3)+(finish?1:0);
   const raw=load.h.map((v,k)=>v+away[k]/len*pull);if(thrust&&finish&&(dir===1||dir===3))raw[1]-=2;raw[1]=Math.max(-24,Math.min(thrust&&dir===0?(finish?-3:-5):-3,raw[1]));
-  const body=[load.body[0]-fx*2,load.body[1]-fy];
-  return {...load,h:confineGrip(w,raw,u),u,body,head:[body[0]-fx,body[1]],hair:[fx*2,-1],leg:load.leg??0,
+  const body=[load.body[0]-fx,load.body[1]];
+  return {...load,h:compactGrip(id,dir,raw,u,body,finish&&thrust&&dir===2?1+Math.min(.75,Math.abs(w.finisher.tilt)):0),u,body,head:[body[0]-fx,body[1]],hair:[fx,0],leg:load.leg??0,
    z:(dir===1||dir===3)&&u[0]*fx<-.1?0:dir===0?0:1};
  }
  function followThrough(id,dir,combo,load,hit,stroke){
@@ -208,14 +224,15 @@
   const sign=Math.sign(incoming)|| (dir===3?-1:1),thrust=stroke==='thrust';
   const degrees=stroke==='reverse'&&side?Math.min(176,164+w.weightKg*2):stroke==='rise'&&!side?Math.min(174,155+w.weightKg*3):Math.min(126,104+w.weightKg*4);
   const angle=a+(thrust?0:sign*degrees*Math.PI/180),u=[Math.cos(angle),Math.sin(angle)];
-  const tangent=[-hit.u[1]*sign,hit.u[0]*sign],travel=11+Math.min(3,w.weightKg*.8);
+  const tangent=[-hit.u[1]*sign,hit.u[0]*sign],travel=6+Math.min(2,w.weightKg*.5);
   const carry=side?(stroke==='reverse'?-2:stroke==='rise'?1:-4):3;
   let h=thrust?hit.h.map((v,k)=>v+forward(dir)[k]*(combo===3?8:6)):hit.h.map((v,k)=>v+tangent[k]*travel+forward(dir)[k]*carry);
-  if(!side&&!thrust){h[1]+=stroke==='rise'?-11:stroke==='reverse'?0:1;}
+  if(!side&&!thrust){h[1]+=stroke==='rise'?-4:stroke==='reverse'?0:1;}
   if(!thrust)h[1]=Math.max(-25,Math.min(-3,h[1]));
   h=confineGrip(w,h,u);
-  const body=[Math.round(fx*(4+Math.min(3,w.weightKg*.7))),Math.round(fy*2.5+(side?(stroke==='rise'?-1:2):(stroke==='rise'?0:1)))];
-  return {...hit,h,u,body,head:[body[0]-fx,body[1]+(stroke==='rise'?-1:1)],hair:[-fx*3,1],leg:4,lunge:true,
+  const body=[Math.round(fx*(1.6+Math.min(1,w.weightKg*.3)+(combo===3?.5:0))),Math.round(fy*(combo===3?1.5:.8))];
+  h=compactGrip(id,dir,h,u,body);
+  return {...hit,h,u,body,head:[body[0]-fx,body[1]],hair:[-fx,0],leg:hit.leg??4,lunge:true,
    z:side&&u[0]*fx<-.1?0:dir===0?0:1};
  }
  const hermite=(a,b,m,n,t)=>(2*t*t*t-3*t*t+1)*a+(t*t*t-2*t*t+t)*m+(-2*t*t*t+3*t*t)*b+(t*t*t-t*t)*n;
@@ -257,7 +274,7 @@
    const load=finisherPose(id,dir,1),hit=finisherPose(id,dir,2);
    let post=followThrough(id,dir,3,load,hit,v.kind==='lunge'?'thrust':'cut');
    if(v.kind==='whirl'){
-    const angle=Math.atan2(fy,fx)+1.55,orbit=Math.max(4,Math.min(8,31-w.length-2));
+    const angle=Math.atan2(fy,fx)+1.55,orbit=Math.max(4,Math.min(6,31-w.length-2));
     post={...post,u:[Math.cos(angle),Math.sin(angle)*.35],h:[Math.cos(angle)*orbit+post.body[0],-9+Math.sin(angle)*2+post.body[1]],view:dir};
     post.h=confineGrip(w,post.h,post.u);post.z=post.u[1]<0?0:1;
    }
@@ -265,7 +282,7 @@
     const t=1-(1-(f-3)*2)**3,a=angleOf(hit),b=a+turn(a,angleOf(post));
     const p=curvePose(hit,post,t,post.h.map((x,k)=>x-hit.h[k]),[0,0],a,b,b-a,0);
     if(v.kind==='whirl'){
-     const angle=Math.atan2(fy,fx)+1.55*t,orbit=Math.max(4,Math.min(8,31-w.length-2));
+     const angle=Math.atan2(fy,fx)+1.55*t,orbit=Math.max(4,Math.min(6,31-w.length-2));
      p.u=[Math.cos(angle),Math.sin(angle)*.35];p.h=[Math.cos(angle)*orbit+p.body[0],-9+Math.sin(angle)*2+p.body[1]];p.z=p.u[1]<0?0:1;
     }
     p.h=confineGrip(w,p.h,p.u);return p;
@@ -284,11 +301,11 @@
    load[0]+=v.tilt*(profile?mirror:1)*3;load[1]-=Math.abs(v.tilt)*2;
    loadAngle=(profile?(dir===3?Math.PI:0)+(smash?-2.0:-1.25)*mirror:dir===0?(smash?-.5:1.0):(smash?-1.7:2.5))+v.tilt*.65*mirror;
   }
-  const landed=[Math.round(fx*(2+v.drive*.08)),Math.round(fy*.7+(smash?1:0))];
+  const landed=[Math.round(fx*(1+v.drive*.04)),Math.round(fy*.5)];
   // A body turn sweeps a horizontal waist-height ellipse in perspective,
   // never a vertical wheel pasted over the face. Only weapon projection changes.
-  const orbit=Math.max(4,Math.min(8,31-w.length-2));
-  const wind=profile?[-fx*(7+v.tilt*2),0]:[dir===0?-9-v.tilt*2:9+v.tilt*2,0];
+  const orbit=Math.max(4,Math.min(6,31-w.length-2));
+  const wind=profile?[-fx*(3+v.tilt),0]:[dir===0?-4-v.tilt:4+v.tilt,0];
   if(whirl){loadAngle=a-.65;load=[Math.cos(loadAngle)*orbit+Math.round(fx*1.5)+wind[0],-9+Math.sin(loadAngle)*2+Math.round(fy*.5)+wind[1]];}
   const prepared=windUp(id,dir,{h:load,u:[Math.cos(loadAngle),Math.sin(loadAngle)],body:[-fx,smash?1:0],head:[0,0],hair:[0,0]}, {h:contact,u:edge},thrust?'thrust':'cut',true);
   if(!whirl){load=prepared.h;loadAngle=angleOf(prepared);}
@@ -316,7 +333,7 @@
   }
   const u=[Math.cos(angle),Math.sin(angle)*depth];h=confineGrip(w,h,u);
   return {h,u,reach:w.length+2,body,view,leg,head:[body[0],body[1]+(f>=2&&f<=3?1:0)],
-   hair:[f>=1&&f<2?-fx*2:0,smash&&f<2?1:0],lunge:f>=1&&f<4.5,z:whirl&&f>=1&&f<=3?(u[1]<0?0:1):view===0?0:1};
+   hair:[f>=1&&f<2?-fx:0,0],lunge:f>=1&&f<4.5,z:whirl&&f>=1&&f<=3?(u[1]<0?0:1):view===0?0:1};
  }
 
  function pose(id,dir,f,combo=0){
@@ -529,7 +546,7 @@
  const hasArmament=id=>typeof id==='string'&&Object.hasOwn(byId,id);
  function comboNames(id){const w=get(id),names=[...(w.family==='spear'?SPEAR_NAMES:MOTIONS[w.family].names)];names[3]=w.finisher.name;return names;}
  const cadence=id=>[0,1,2,3].reduce((n,c)=>n+duration(START,c),0)/[0,1,2,3].reduce((n,c)=>n+duration(id,c),0);
- const attackStep=(id,combo=0)=>{const f=get(id).family,pairs={dagger:[2,4],sword:[3,6],sabre:[4,7],axe:[3,6],mace:[2,4],staff:[4,7],spear:[4,9],glaive:[4,8]};return pairs[f][combo===3?1:0];};
+ const attackStep=(id,combo=0)=>{const f=get(id).family,pairs={dagger:[2,4],sword:[3,6],sabre:[4,7],axe:[3,6],mace:[2,4],staff:[4,7],spear:[4,9],glaive:[4,8]};return pairs[f][combo===3?1:0]*(combo===3?.72:.8);};
  const hitPause=(id,combo=0)=>Math.min(.065,.025+get(id).weightKg*.006+(combo===3?.012:0));
  const holster=id=>get(id).family==='spear'?{delay:3.7,stow:.33,draw:.21}:{delay:3.7,stow:Math.min(.46,Math.max(.22,.21+get(id).weightKg*.06)),draw:Math.min(.31,Math.max(.16,.15+get(id).weightKg*.045))};
  function preview(id,seconds,mode='attack',idleFrame=0){

@@ -1,8 +1,8 @@
 'use strict';
 const {test,before}=require('node:test'),assert=require('node:assert/strict');
-const {loadGame,canvas}=require('./game-harness.cjs'),W=require('../scripts/kaldor-weapons.js'),P=require('../scripts/world-projection.js');
+const {loadGame,combatGame,canvas}=require('./game-harness.cjs'),W=require('../scripts/kaldor-weapons.js'),P=require('../scripts/world-projection.js');
 let api;before(async()=>{api=await loadGame();});
-function arena(){const g=new api.Game();g.npcs=[];g.enemies=[];for(const key of ['populateAtlas','populateRoadTraffic','populateCivilians','advanceAtlas','checkQuests','checkSteles'])g[key]=()=>{};g.lineClear=()=>true;g.solid=()=>false;g.player.spawnFX=0;g.player.inv=100;return g;}
+function arena(){const g=combatGame(api);g.npcs=[];g.enemies=[];for(const key of ['populateAtlas','populateRoadTraffic','populateCivilians','advanceAtlas','checkQuests','checkSteles'])g[key]=()=>{};g.lineClear=()=>true;g.solid=()=>false;g.player.spawnFX=0;g.player.inv=100;return g;}
 function aim(g,x,y,automatic=false){const v=P.input(x,y);g.aimAttack(v.x,v.y,automatic);}
 function foe(g,id,dx,dy){const v=P.inverse(dx,dy),e=api.enemy('snake',g.player.x+v.x,g.player.y+v.y,id);e.hp=e.maxHp=50;e.stun=100;g.enemies.push(e);return e;}
 
@@ -39,7 +39,7 @@ test('the delivery shown by the impact smear reaches its first post pose exactly
  }
 });
 test('civilian combos bypass NPC invulnerability while monster repeats still respect it',()=>{
- const g=new api.Game(),n=g.npcs.find(n=>n.id==='courier-0'),p=g.player;Object.assign(p,{x:n.x-14,y:n.y,spawnFX:0});
+ const g=combatGame(api),n=g.npcs.find(n=>n.id==='courier-0'),p=g.player;Object.assign(p,{x:n.x-14,y:n.y,spawnFX:0});
  assert.equal(g.damageCivilian(n,1,p),true);const hp=n.civilian.hp;assert.ok(n.civilian.inv>0);
  assert.equal(g.damageCivilian(n,1,p),true);assert.equal(n.civilian.hp,hp-1);
  assert.equal(g.damageCivilian(n,1,{x:p.x,y:p.y,level:0}),false);
@@ -72,8 +72,10 @@ test('changing aim invalidates native attack drawings and never leaks into NPC e
 
 
 test('live isometric contacts align projected weapons with logical targets in all native views',()=>{
+ const g=arena(),origin={x:g.player.x,y:g.player.y};
  for(const weapon of ['exile','lance-boisclair','aiguille-corail'])for(let dir=0;dir<4;dir++){
-  const g=arena(),p=g.player,[fx,fy]=[[0,-1],[1,0],[0,1],[-1,0]][dir];Object.assign(p,{weapon,dir});
+  const p=g.player,[fx,fy]=[[0,-1],[1,0],[0,1],[-1,0]][dir];g.enemies=[];g.targetId=null;g.hits.clear();
+  Object.assign(p,{...origin,weapon,dir,attack:0,attackCD:0,attackBuffer:0,attackHeld:false,hitPause:0,comboWindow:0,combo:0,hurt:0,dash:0});
   const n=foe(g,'projected-contact',fx*16-fy*10,fy*16+fx*10);aim(g,fx,fy);assert.equal(g.targetId,n.id);assert.equal(p.dir,dir);g.swingSword();
   const hp=n.hp;let impact=false;for(let tick=0;tick<80&&!impact;tick++){g.update(1/60,{});impact=p.impactTick;}
   assert.ok(impact,weapon+':'+dir+' impact reached');assert.ok(n.hp<hp,weapon+':'+dir+' projected diagonal contact damages logical target');

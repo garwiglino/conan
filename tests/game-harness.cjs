@@ -21,4 +21,13 @@ async function loadGame(Image = canvas.Image, {timers = false} = {}) {
   await context.api.BITMAPS.promise;
   return context.api;
 }
-module.exports = {loadGame, canvas, root, html};
+// Combat arenas discard village NPCs; workstation path searches do not belong
+// in their setup. The normal world constructor remains unchanged elsewhere.
+function combatGame(api) {
+  const proto = api.Game.prototype, setup = proto.ensureHumanWorkstations;
+  try {
+    proto.ensureHumanWorkstations = function() {};
+    return new api.Game();
+  } finally { proto.ensureHumanWorkstations = setup; }
+}
+module.exports = {loadGame, combatGame, canvas, root, html};
