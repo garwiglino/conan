@@ -80,8 +80,16 @@ html=html.replaceAll("if(frame===2&&!p.attackStep)","if((frame===2||frame===3)&&
 replaceOnce('this.swing++;p.attackStep=false;', 'this.swing++;p.attackStep=false;p.impactDone=false;p.impactTick=false;p.comboRecoilShown=false;');
 replaceOnce("p[k]=Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));",
  "p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));");
+html=html.replaceAll('link=(buffered||input.attack)&&p.combo<3','link=buffered&&p.combo<3');
 replaceOnce('const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.attackCD<.065&&p.attack<.065;',
- 'const buffered=p.attackBuffer>0,link=(buffered||input.attack)&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0;');
+ 'const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);');
+// An input can be buffered early, but cannot erase the follow-through.
+replaceOnce('(p.attackCD<=0||link)&&p.dash<=0', '((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0');
+// Fresh presses only. Keep at most the next stroke; holding never repeats.
+replaceOnce('if(attackEdge&&p.attackCD>0&&p.attack<.23){p.attackBuffer=.26;p.bufferX=dx;p.bufferY=dy;}',
+ 'if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,dx,dy);');
+replaceOnce('if((input.attack||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)',
+ 'if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)');
 const impactAnchor='if(p.attack>0){const frame=attackFrame(p.attack,p.combo,p.weapon);';
 const impactEvent="p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;";
 replaceOnce(impactAnchor,impactEvent+impactAnchor);

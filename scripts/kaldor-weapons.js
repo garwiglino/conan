@@ -20,14 +20,16 @@
  // Cut dead time, especially the floating follow-through and return. Tempo and
  // inertia remain relative to each individual weapon.
  const BEAT=freeze([1,.70,.35,.66,.46,.48]);
- // Keep the visible contact window reachable even at the engine's 40ms tick.
- const contactWindow=row=>{row[3]=Math.max(row[3],.045-row[2]);return row;};
+ // Contact must survive a 40ms tick. Recoil gets its own readable budget:
+ // light weapons settle briskly; heavy weapons and finishers take more weight.
+ const postHold=(id,combo=0)=>Math.min(.115,.058+get(id).weightKg*.012+(combo===3?.014:0));
+ const contactWindow=(row,id,combo)=>{row[3]=Math.max(row[3],.045-row[2]);row[4]=Math.max(row[4],postHold(id,combo));return row;};
  function times(id,combo=0){
   const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
-  if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)));
+  if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)),id,combo);
   const row=MOTIONS[w.family].times[combo],reference={sword:1.8,sabre:1.25,dagger:.6,axe:1.9,mace:2.1,staff:1.6,glaive:2.7}[w.family];
   const inertia=Math.max(.84,Math.min(1.22,1+(w.weightKg/reference-1)*.16));
-  return contactWindow(row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1)));
+  return contactWindow(row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1)),id,combo);
  }
  const duration=(id,combo=0)=>times(id,combo).reduce((a,b)=>a+b,0);
  function frame(remaining,id,combo=0){
@@ -38,6 +40,7 @@
  // Continuous authored geometry below remains for swept collision and smears.
  const DRAWINGS=freeze([1,1,2,2,3.5,5]);
  function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
+ const canChain=(remaining,id,combo=0)=>combo<3&&remaining<=times(id,combo)[5]+1e-7;
  // Even a long engine tick must expose the recoil before a buffered link.
  function advance(remaining,dt,id,combo=0){
   const next=Math.max(0,remaining-dt),row=times(id,combo);
@@ -235,9 +238,16 @@
 
  function pose(id,dir,f,combo=0){
   if(combo===3)return finisherPose(id,dir,Math.max(0,Math.min(5,f)));
-  // The turnaround after contact is the next stroke's loaded pose. Reuse the
-  // whole drawing (body, legs, hands and depth), so a link never resets to idle.
-  if(f===3.5)return pose(id,dir,1,combo+1);
+  // A real follow-through: retain the transferred weight and the authored
+  // overshoot, rather than disguising the next wind-up as recoil.
+  if(f===3.5){
+   const p=keyPose(id,dir,3,combo);
+   if(STYLES[get(id).family].strokes[combo]==='thrust'){
+    const hit=contactPose(id,dir,combo,p.body),v=forward(dir);
+    p.h=confineGrip(get(id),hit.h.map((n,k)=>n-v[k]*5),v);p.u=v;
+   }
+   return p;
+  }
   f=Math.max(0,Math.min(5,f));const i=Math.floor(f),fraction=f-i,w=get(id),spear=w.family==='spear';
   // Slow load, fast delivery, then an overshoot and a weighted recovery.
   const weight=Math.max(2,Math.min(3.2,2+w.weightKg*.25));
@@ -461,5 +471,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });
