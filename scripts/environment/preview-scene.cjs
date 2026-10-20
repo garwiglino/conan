@@ -51,8 +51,10 @@ function compose(M,file,{scale=1,heroes=[],crops=[],data=require('../../sprites/
   if(t===4)place(list[Math.floor(hash(i,j,5)*list.length)],i*16+8,j*16+9);
   else if(t===0&&hash(i,j,41)<.035)place(small[Math.floor(hash(i,j,42)*small.length)],i*16+8,j*16+9);}
  for(const [k,u,v]of extra)place(k,u,v);
+ // Bâtiment (i, j) : coin nord de son emprise dans toutes les vues ; l'ancre du dessin est son origine tournée.
  for(const [id,i,j,dir]of M.houses){
-  const im=A.raster(id,{dir}),s=createCanvas(im.width,im.height),x=s.getContext('2d'),d=x.createImageData(im.width,im.height);d.data.set(im.data);x.putImageData(d,0,0);const e=A.entry(id),p=P(i*16,j*16),q=P(i*16+e.width,j*16+e.depth);draw.push({y:q.y-8,fn:()=>c.drawImage(s,Math.round(p.x+ox-im.anchor[0]),Math.round(p.y+oy-im.anchor[1]))});}
+  const im=A.raster(id,{dir}),s=createCanvas(im.width,im.height),x=s.getContext('2d'),d=x.createImageData(im.width,im.height);d.data.set(im.data);x.putImageData(d,0,0);
+  const uv=im.footprint.map(([x,y])=>[y+x/2,y-x/2]),u0=Math.min(...uv.map(a=>a[0])),v0=Math.min(...uv.map(a=>a[1])),u1=Math.max(...uv.map(a=>a[0])),v1=Math.max(...uv.map(a=>a[1])),p=P(i*16-u0,j*16-v0),q=P(i*16+u1-u0,j*16+v1-v0);draw.push({y:q.y-8,fn:()=>c.drawImage(s,Math.round(p.x+ox-im.anchor[0]),Math.round(p.y+oy-im.anchor[1]))});}
  const hero=sprite(HERO.pixels,HERO.width,HERO.height);
  for(const [u,v]of heroes){const p=P(u,v);draw.push({y:p.y,fn:()=>c.drawImage(hero,Math.round(p.x+ox-HERO.anchor[0]),Math.round(p.y+oy-HERO.anchor[1]))});}
  for(const f of out.features)draw.push({y:f.depth+oy-16+16,fn:()=>{const s=createCanvas(f.width,f.height),x=s.getContext('2d'),d=x.createImageData(f.width,f.height);d.data.set(f.data);x.putImageData(d,0,0);c.drawImage(s,f.x+ox,f.y+oy);}});

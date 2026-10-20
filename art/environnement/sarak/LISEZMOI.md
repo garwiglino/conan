@@ -2,12 +2,14 @@
 
 Ces fichiers `.piskel` sont la source des graphismes du désert : les biomes désertiques de l'atlas et la zone de départ (Campement des Exilés). Même direction artistique que Teremor (même grille, même lumière venant du haut à gauche, mêmes ombres portées), avec la palette chaude du désert.
 
+Les mêmes éléments, exportés en PNG un par un, sont dans `png/` (catalogue dans `png/catalogue.json`). Le guide d'assemblage est dans `../LISEZMOI.md`.
+
 ## Retoucher un fichier
 
 1. Ouvrir piskelapp.com, puis **Import > Browse .piskel files** et choisir le fichier.
 2. Importer la palette `palette-sarak.gpl` (**Palettes > Import**) et peindre uniquement avec ces couleurs. Une couleur hors palette est ramenée à la plus proche au moment de la construction.
 3. Garder la taille du cadre et le nom des calques (`couleur`, `hauteur`, `ombre`, `forme`).
-4. Enregistrer le `.piskel` à la place de l'original dans `art/environnement/sarak/`, puis lancer `npm run build:environment` et `node scripts/embed-world-isometric.cjs` pour la version iOS.
+4. Enregistrer le `.piskel` à la place de l'original dans `art/environnement/sarak/`, puis lancer `npm run build:environment` et `npm run kit:environment`.
 
 ## Contenu
 

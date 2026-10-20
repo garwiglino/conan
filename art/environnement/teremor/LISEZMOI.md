@@ -2,12 +2,14 @@
 
 Ces fichiers `.piskel` sont la source des graphismes d'environnement du jeu. Copie de `art/environnement/teremor/` dans le dépôt (branche `claude/project-thread-4ve2og`).
 
+Les mêmes éléments, exportés en PNG un par un, sont dans `png/` (catalogue dans `png/catalogue.json`). Le guide d'assemblage est dans `../LISEZMOI.md`.
+
 ## Retoucher un fichier
 
 1. Ouvrir piskelapp.com, puis **Import > Browse .piskel files** et choisir le fichier.
 2. Importer la palette `palette-teremor.gpl` (**Palettes > Import**) et peindre uniquement avec ces couleurs. Une couleur hors palette est ramenée à la plus proche au moment de la construction.
 3. Garder la taille du cadre et le nom des calques (`couleur`, `hauteur`, `ombre`, `forme`).
-4. Enregistrer le `.piskel` à la place de l'original dans `art/environnement/teremor/`, puis lancer `npm run build:environment` et `node scripts/embed-world-isometric.cjs` pour la version iOS.
+4. Enregistrer le `.piskel` à la place de l'original dans `art/environnement/teremor/`, puis lancer `npm run build:environment` et `npm run kit:environment`.
 
 ## Contenu
 

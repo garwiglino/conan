@@ -1,0 +1,3037 @@
+{
+ "biome": "Désert de Sarak",
+ "palette": "../palette-sarak.gpl",
+ "grille": {
+  "case": "1 m = losange 32 × 16 px",
+  "piece": "2 m = losange 64 × 32 px",
+  "projection": "x = u − v, y = (u + v) / 2 − z ; 16 unités par mètre"
+ },
+ "masques": {
+  "N": 1,
+  "E": 2,
+  "S": 4,
+  "O": 8,
+  "regle": "masque = somme des côtés reliés ; N = case j − 1 (haut-droite), E = i + 1 (bas-droite), S = j + 1 (bas-gauche), O = i − 1 (haut-gauche)"
+ },
+ "jeux": {
+  "chemin": {
+   "forme": "chemin",
+   "matiere": "dirt"
+  },
+  "pave": {
+   "forme": "pave",
+   "matiere": "cobble"
+  },
+  "rangs": {
+   "forme": "pave",
+   "matiere": "setts"
+  },
+  "dalles": {
+   "forme": "pave",
+   "matiere": "flags"
+  },
+  "tomettes": {
+   "forme": "pave",
+   "matiere": "hex"
+  },
+  "cabochons": {
+   "forme": "pave",
+   "matiere": "cabochon"
+  },
+  "oued": {
+   "forme": "ruisseau",
+   "matiere": "water"
+  }
+ },
+ "elements": [
+  {
+   "png": "sols/sable.png",
+   "source": "sols/sable.piskel",
+   "role": "sol",
+   "id": "grass",
+   "taille": [
+    256,
+    128
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/sable-hauteur.png",
+   "source": "sols/sable.piskel",
+   "role": "hauteur",
+   "id": "grass",
+   "taille": [
+    256,
+    128
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "sols/piste.png",
+   "source": "sols/piste.piskel",
+   "role": "sol",
+   "id": "dirt",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/piste-hauteur.png",
+   "source": "sols/piste.piskel",
+   "role": "hauteur",
+   "id": "dirt",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "sols/paves-gres.png",
+   "source": "sols/paves-gres.piskel",
+   "role": "sol",
+   "id": "cobble",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/paves-gres-hauteur.png",
+   "source": "sols/paves-gres.piskel",
+   "role": "hauteur",
+   "id": "cobble",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "sols/oasis.png",
+   "source": "sols/oasis.piskel",
+   "role": "sol",
+   "id": "water",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/eboulis.png",
+   "source": "sols/eboulis.piskel",
+   "role": "sol",
+   "id": "litter",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/eboulis-hauteur.png",
+   "source": "sols/eboulis.piskel",
+   "role": "hauteur",
+   "id": "litter",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "sols/berge.png",
+   "source": "sols/berge.piskel",
+   "role": "sol",
+   "id": "bank",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/berge-hauteur.png",
+   "source": "sols/berge.piskel",
+   "role": "hauteur",
+   "id": "bank",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "sols/planches.png",
+   "source": "sols/planches.piskel",
+   "role": "sol",
+   "id": "plank",
+   "taille": [
+    32,
+    32
+   ],
+   "usage": "texture raccordable en coordonnées écran"
+  },
+  {
+   "png": "sols/planches-hauteur.png",
+   "source": "sols/planches.piskel",
+   "role": "hauteur",
+   "id": "plank",
+   "taille": [
+    32,
+    32
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/paves-rangs-rues-est-ouest.png",
+   "source": "pavages/paves-rangs.piskel",
+   "role": "pavage",
+   "id": "setts",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "rues est-ouest (axe i) et places"
+  },
+  {
+   "png": "pavages/paves-rangs-rues-est-ouest-hauteur.png",
+   "source": "pavages/paves-rangs.piskel",
+   "role": "hauteur",
+   "id": "setts",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/paves-rangs-rues-nord-sud.png",
+   "source": "pavages/paves-rangs.piskel",
+   "role": "pavage",
+   "id": "setts_v",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "rues nord-sud (axe j)"
+  },
+  {
+   "png": "pavages/paves-rangs-rues-nord-sud-hauteur.png",
+   "source": "pavages/paves-rangs.piskel",
+   "role": "hauteur",
+   "id": "setts_v",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/dalles-rues-est-ouest.png",
+   "source": "pavages/dalles.piskel",
+   "role": "pavage",
+   "id": "flags",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "rues est-ouest (axe i) et places"
+  },
+  {
+   "png": "pavages/dalles-rues-est-ouest-hauteur.png",
+   "source": "pavages/dalles.piskel",
+   "role": "hauteur",
+   "id": "flags",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/dalles-rues-nord-sud.png",
+   "source": "pavages/dalles.piskel",
+   "role": "pavage",
+   "id": "flags_v",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "rues nord-sud (axe j)"
+  },
+  {
+   "png": "pavages/dalles-rues-nord-sud-hauteur.png",
+   "source": "pavages/dalles.piskel",
+   "role": "hauteur",
+   "id": "flags_v",
+   "taille": [
+    128,
+    64
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/tomettes-rues-est-ouest.png",
+   "source": "pavages/tomettes.piskel",
+   "role": "pavage",
+   "id": "hex",
+   "taille": [
+    160,
+    80
+   ],
+   "usage": "rues est-ouest (axe i) et places"
+  },
+  {
+   "png": "pavages/tomettes-rues-est-ouest-hauteur.png",
+   "source": "pavages/tomettes.piskel",
+   "role": "hauteur",
+   "id": "hex",
+   "taille": [
+    160,
+    80
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/tomettes-rues-nord-sud.png",
+   "source": "pavages/tomettes.piskel",
+   "role": "pavage",
+   "id": "hex_v",
+   "taille": [
+    160,
+    80
+   ],
+   "usage": "rues nord-sud (axe j)"
+  },
+  {
+   "png": "pavages/tomettes-rues-nord-sud-hauteur.png",
+   "source": "pavages/tomettes.piskel",
+   "role": "hauteur",
+   "id": "hex_v",
+   "taille": [
+    160,
+    80
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/cabochons-rues-est-ouest.png",
+   "source": "pavages/cabochons.piskel",
+   "role": "pavage",
+   "id": "cabochon",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "rues est-ouest (axe i) et places"
+  },
+  {
+   "png": "pavages/cabochons-rues-est-ouest-hauteur.png",
+   "source": "pavages/cabochons.piskel",
+   "role": "hauteur",
+   "id": "cabochon",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "pavages/cabochons-rues-nord-sud.png",
+   "source": "pavages/cabochons.piskel",
+   "role": "pavage",
+   "id": "cabochon_v",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "rues nord-sud (axe j)"
+  },
+  {
+   "png": "pavages/cabochons-rues-nord-sud-hauteur.png",
+   "source": "pavages/cabochons.piskel",
+   "role": "hauteur",
+   "id": "cabochon_v",
+   "taille": [
+    192,
+    96
+   ],
+   "usage": "relief de mélange : le pixel le plus haut l’emporte entre deux matières"
+  },
+  {
+   "png": "falaises/paroi-face-sud.png",
+   "source": "falaises/paroi.piskel",
+   "role": "falaise",
+   "id": "cliffS",
+   "taille": [
+    64,
+    40
+   ],
+   "usage": "paroi tournée vers le sud (bas-gauche), éclairée"
+  },
+  {
+   "png": "falaises/paroi-face-est.png",
+   "source": "falaises/paroi.piskel",
+   "role": "falaise",
+   "id": "cliffE",
+   "taille": [
+    64,
+    40
+   ],
+   "usage": "paroi tournée vers l’est (bas-droite), à l’ombre"
+  },
+  {
+   "png": "chemins/formes/chemin/05-droite-NS.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/10-droite-EO.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/03-virage-NE.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/06-virage-ES.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/12-virage-SO.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/09-virage-ON.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/07-T-sans-O.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/11-T-sans-S.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/13-T-sans-E.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/14-T-sans-N.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/15-croisement.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/01-impasse-N.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/02-impasse-E.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/04-impasse-S.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/08-impasse-O.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/chemin/00-placette.png",
+   "source": "chemins/chemin.piskel",
+   "role": "forme de pièce",
+   "jeu": "chemin",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/05-droite-NS.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/10-droite-EO.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/03-virage-NE.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/06-virage-ES.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/12-virage-SO.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/09-virage-ON.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/07-T-sans-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/11-T-sans-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/13-T-sans-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/14-T-sans-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/15-croisement.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/01-impasse-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/02-impasse-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/04-impasse-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/08-impasse-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/pave/00-placette.png",
+   "source": "chemins/pave.piskel",
+   "role": "forme de pièce",
+   "jeu": "pave",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/05-droite-NS.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/10-droite-EO.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/03-virage-NE.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/06-virage-ES.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/12-virage-SO.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/09-virage-ON.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/07-T-sans-O.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/11-T-sans-S.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/13-T-sans-E.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/14-T-sans-N.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/15-croisement.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/01-impasse-N.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/02-impasse-E.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/04-impasse-S.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/08-impasse-O.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "chemins/formes/ruisseau/00-placette.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "forme de pièce",
+   "jeu": "ruisseau",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "niveaux de la pièce (bord, intérieur, cœur) ; la matière du jeu la remplit"
+  },
+  {
+   "png": "decors/decor-01.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    3,
+    3
+   ],
+   "ancre": [
+    1,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-02.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    4,
+    3
+   ],
+   "ancre": [
+    1,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-03.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    5,
+    3
+   ],
+   "ancre": [
+    2,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-04.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    4,
+    3
+   ],
+   "ancre": [
+    1,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-05.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    8,
+    3
+   ],
+   "ancre": [
+    3,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-06.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    4,
+    3
+   ],
+   "ancre": [
+    2,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-07.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    3,
+    3
+   ],
+   "ancre": [
+    1,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 6 % des cases de sol nu"
+  },
+  {
+   "png": "flore/palmier_a.png",
+   "source": "flore/palmier.piskel",
+   "role": "flore",
+   "taille": [
+    38,
+    63
+   ],
+   "ancre": [
+    12,
+    59
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/palmier_a-ombre.png",
+   "source": "flore/palmier.piskel",
+   "role": "ombre",
+   "taille": [
+    38,
+    63
+   ],
+   "ancre": [
+    12,
+    59
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/palmier_b.png",
+   "source": "flore/palmier.piskel",
+   "role": "flore",
+   "taille": [
+    39,
+    64
+   ],
+   "ancre": [
+    25,
+    60
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/palmier_b-ombre.png",
+   "source": "flore/palmier.piskel",
+   "role": "ombre",
+   "taille": [
+    39,
+    64
+   ],
+   "ancre": [
+    25,
+    60
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/arbre_mort_a.png",
+   "source": "flore/arbre_mort.piskel",
+   "role": "flore",
+   "taille": [
+    32,
+    48
+   ],
+   "ancre": [
+    14,
+    44
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/arbre_mort_a-ombre.png",
+   "source": "flore/arbre_mort.piskel",
+   "role": "ombre",
+   "taille": [
+    32,
+    48
+   ],
+   "ancre": [
+    14,
+    44
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/arbre_mort_b.png",
+   "source": "flore/arbre_mort.piskel",
+   "role": "flore",
+   "taille": [
+    32,
+    44
+   ],
+   "ancre": [
+    16,
+    40
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/arbre_mort_b-ombre.png",
+   "source": "flore/arbre_mort.piskel",
+   "role": "ombre",
+   "taille": [
+    32,
+    44
+   ],
+   "ancre": [
+    16,
+    40
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/buisson_a.png",
+   "source": "flore/buisson.piskel",
+   "role": "flore",
+   "taille": [
+    28,
+    17
+   ],
+   "ancre": [
+    13,
+    13
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/buisson_a-ombre.png",
+   "source": "flore/buisson.piskel",
+   "role": "ombre",
+   "taille": [
+    28,
+    17
+   ],
+   "ancre": [
+    13,
+    13
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/buisson_b.png",
+   "source": "flore/buisson.piskel",
+   "role": "flore",
+   "taille": [
+    29,
+    18
+   ],
+   "ancre": [
+    13,
+    14
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/buisson_b-ombre.png",
+   "source": "flore/buisson.piskel",
+   "role": "ombre",
+   "taille": [
+    29,
+    18
+   ],
+   "ancre": [
+    13,
+    14
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/touffe_a.png",
+   "source": "flore/touffe.piskel",
+   "role": "flore",
+   "taille": [
+    16,
+    12
+   ],
+   "ancre": [
+    7,
+    9
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/touffe_a-ombre.png",
+   "source": "flore/touffe.piskel",
+   "role": "ombre",
+   "taille": [
+    16,
+    12
+   ],
+   "ancre": [
+    7,
+    9
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/touffe_b.png",
+   "source": "flore/touffe.piskel",
+   "role": "flore",
+   "taille": [
+    18,
+    12
+   ],
+   "ancre": [
+    8,
+    9
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/touffe_b-ombre.png",
+   "source": "flore/touffe.piskel",
+   "role": "ombre",
+   "taille": [
+    18,
+    12
+   ],
+   "ancre": [
+    8,
+    9
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/rocher_a.png",
+   "source": "flore/rocher.piskel",
+   "role": "flore",
+   "taille": [
+    33,
+    18
+   ],
+   "ancre": [
+    14,
+    14
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/rocher_a-ombre.png",
+   "source": "flore/rocher.piskel",
+   "role": "ombre",
+   "taille": [
+    33,
+    18
+   ],
+   "ancre": [
+    14,
+    14
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/rocher_b.png",
+   "source": "flore/rocher.piskel",
+   "role": "flore",
+   "taille": [
+    28,
+    26
+   ],
+   "ancre": [
+    12,
+    22
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/rocher_b-ombre.png",
+   "source": "flore/rocher.piskel",
+   "role": "ombre",
+   "taille": [
+    28,
+    26
+   ],
+   "ancre": [
+    12,
+    22
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/rocher_rond.png",
+   "source": "flore/rocher.piskel",
+   "role": "flore",
+   "taille": [
+    25,
+    21
+   ],
+   "ancre": [
+    10,
+    17
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/rocher_rond-ombre.png",
+   "source": "flore/rocher.piskel",
+   "role": "ombre",
+   "taille": [
+    25,
+    21
+   ],
+   "ancre": [
+    10,
+    17
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/cheminee.png",
+   "source": "flore/cheminee.piskel",
+   "role": "flore",
+   "taille": [
+    23,
+    40
+   ],
+   "ancre": [
+    9,
+    36
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/cheminee-ombre.png",
+   "source": "flore/cheminee.piskel",
+   "role": "ombre",
+   "taille": [
+    23,
+    40
+   ],
+   "ancre": [
+    9,
+    36
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/eboulis.png",
+   "source": "flore/eboulis.piskel",
+   "role": "flore",
+   "taille": [
+    29,
+    13
+   ],
+   "ancre": [
+    12,
+    9
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/eboulis-ombre.png",
+   "source": "flore/eboulis.piskel",
+   "role": "ombre",
+   "taille": [
+    29,
+    13
+   ],
+   "ancre": [
+    12,
+    9
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "flore/cailloux.png",
+   "source": "flore/cailloux.piskel",
+   "role": "flore",
+   "taille": [
+    13,
+    7
+   ],
+   "ancre": [
+    5,
+    4
+   ],
+   "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
+  },
+  {
+   "png": "flore/cailloux-ombre.png",
+   "source": "flore/cailloux.piskel",
+   "role": "ombre",
+   "taille": [
+    13,
+    7
+   ],
+   "ancre": [
+    5,
+    4
+   ],
+   "opacite": 0.5,
+   "usage": "dessinée avant le sprite, à l’opacité indiquée"
+  },
+  {
+   "png": "chemins/chemin/05-droite-NS.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/10-droite-EO.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/03-virage-NE.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/06-virage-ES.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/12-virage-SO.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/09-virage-ON.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/07-T-sans-O.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/11-T-sans-S.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/13-T-sans-E.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/14-T-sans-N.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/15-croisement.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/01-impasse-N.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/02-impasse-E.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/04-impasse-S.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/08-impasse-O.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/chemin/00-placette.png",
+   "source": "chemins/chemin.piskel",
+   "role": "pièce rendue",
+   "jeu": "chemin",
+   "forme": "chemin",
+   "matiere": "dirt",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/05-droite-NS.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/10-droite-EO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/03-virage-NE.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/06-virage-ES.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/12-virage-SO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/09-virage-ON.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/07-T-sans-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/11-T-sans-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/13-T-sans-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/14-T-sans-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/15-croisement.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/01-impasse-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/02-impasse-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/04-impasse-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/08-impasse-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/pave/00-placette.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "pave",
+   "forme": "pave",
+   "matiere": "cobble",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/05-droite-NS.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/10-droite-EO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/03-virage-NE.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/06-virage-ES.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/12-virage-SO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/09-virage-ON.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/07-T-sans-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/11-T-sans-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/13-T-sans-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/14-T-sans-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/15-croisement.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/01-impasse-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/02-impasse-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/04-impasse-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/08-impasse-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/rangs/00-placette.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "rangs",
+   "forme": "pave",
+   "matiere": "setts",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/05-droite-NS.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/10-droite-EO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/03-virage-NE.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/06-virage-ES.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/12-virage-SO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/09-virage-ON.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/07-T-sans-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/11-T-sans-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/13-T-sans-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/14-T-sans-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/15-croisement.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/01-impasse-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/02-impasse-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/04-impasse-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/08-impasse-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/dalles/00-placette.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "dalles",
+   "forme": "pave",
+   "matiere": "flags",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/05-droite-NS.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/10-droite-EO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/03-virage-NE.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/06-virage-ES.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/12-virage-SO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/09-virage-ON.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/07-T-sans-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/11-T-sans-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/13-T-sans-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/14-T-sans-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/15-croisement.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/01-impasse-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/02-impasse-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/04-impasse-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/08-impasse-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/tomettes/00-placette.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "tomettes",
+   "forme": "pave",
+   "matiere": "hex",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/05-droite-NS.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/10-droite-EO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/03-virage-NE.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/06-virage-ES.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/12-virage-SO.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/09-virage-ON.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/07-T-sans-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/11-T-sans-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/13-T-sans-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/14-T-sans-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/15-croisement.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/01-impasse-N.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/02-impasse-E.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/04-impasse-S.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/08-impasse-O.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/cabochons/00-placette.png",
+   "source": "chemins/pave.piskel",
+   "role": "pièce rendue",
+   "jeu": "cabochons",
+   "forme": "pave",
+   "matiere": "cabochon",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/05-droite-NS.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 5,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/10-droite-EO.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 10,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/03-virage-NE.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 3,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/06-virage-ES.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 6,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/12-virage-SO.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 12,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/09-virage-ON.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 9,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/07-T-sans-O.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 7,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/11-T-sans-S.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 11,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/13-T-sans-E.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 13,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/14-T-sans-N.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 14,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/15-croisement.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 15,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/01-impasse-N.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 1,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/02-impasse-E.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 2,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/04-impasse-S.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 4,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/08-impasse-O.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 8,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  },
+  {
+   "png": "chemins/oued/00-placette.png",
+   "source": "chemins/ruisseau.piskel",
+   "role": "pièce rendue",
+   "jeu": "oued",
+   "forme": "ruisseau",
+   "matiere": "water",
+   "masque": 0,
+   "taille": [
+    64,
+    32
+   ],
+   "usage": "aperçu de la pièce posée sur le sol de base (case de 2 m)"
+  }
+ ]
+}
