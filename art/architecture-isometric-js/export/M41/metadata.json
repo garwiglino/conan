@@ -1,0 +1,97 @@
+{
+  "id": "M41",
+  "label": "Toiture terrasse",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 32,
+  "height": 16,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "roof-flat",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 85,
+      "height": 51,
+      "anchor": [
+        34,
+        18
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          16,
+          40
+        ],
+        [
+          -32,
+          16
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 32,
+        "height": 16
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 85,
+      "height": 51,
+      "anchor": [
+        82,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -80,
+          8
+        ],
+        [
+          -32,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 32,
+        "height": 16
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

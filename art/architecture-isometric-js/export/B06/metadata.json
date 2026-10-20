@@ -1,0 +1,356 @@
+{
+  "id": "B06",
+  "label": "Grenier collectif",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 64,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "granary",
+    "wall": "plaster",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 12,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 163,
+      "height": 145,
+      "anchor": [
+        65,
+        66
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          32,
+          80
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 27,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 61.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 34.5,
+            "y": 62,
+            "z": 0,
+            "width": 16,
+            "run": 8,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 54,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "granary",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 166,
+      "height": 145,
+      "anchor": [
+        164,
+        98
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -160,
+          16
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 27,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 61.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 34.5,
+            "y": 62,
+            "z": 0,
+            "width": 16,
+            "run": 8,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 54,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "granary",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 163,
+      "height": 144,
+      "anchor": [
+        97,
+        146
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -32,
+          -80
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 22,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 61.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 34.5,
+            "y": 62,
+            "z": 0,
+            "width": 16,
+            "run": 8,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 54,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "granary",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 166,
+      "height": 145,
+      "anchor": [
+        1,
+        114
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          160,
+          -16
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 61.15,
+            "z": 12,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 34.5,
+            "y": 62,
+            "z": 0,
+            "width": 16,
+            "run": 8,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 62,
+            "eave": 54,
+            "peak": 80
+          }
+        ],
+        "recipe": {
+          "type": "granary",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

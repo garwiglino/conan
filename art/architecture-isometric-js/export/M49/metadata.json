@@ -1,0 +1,98 @@
+{
+  "id": "M49",
+  "label": "Mur haut droit",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 12,
+  "height": 40,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "curtain",
+  "high": true,
+  "walkHeight": 30,
+  "wallThickness": 12,
+  "parapetHeight": 10,
+  "material": "wood",
+  "frames": {
+    "ew": {
+      "width": 65,
+      "height": 75,
+      "anchor": [
+        14,
+        42
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          36,
+          30
+        ],
+        [
+          -12,
+          6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 40
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 65,
+      "height": 71,
+      "anchor": [
+        62,
+        44
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -60,
+          18
+        ],
+        [
+          -12,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 40
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

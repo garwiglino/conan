@@ -1,0 +1,276 @@
+{
+  "id": "T16",
+  "label": "Réserve fraîche",
+  "family": "sarak",
+  "kind": "building",
+  "season": "base",
+  "width": 80,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "coolstore",
+    "wall": "adobe",
+    "roof": "adobe",
+    "rise": 6,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 137,
+      "height": 134,
+      "anchor": [
+        60,
+        62
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          40
+        ],
+        [
+          16,
+          72
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "coolstore",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 137,
+      "height": 134,
+      "anchor": [
+        140,
+        94
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          40
+        ],
+        [
+          -144,
+          8
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "coolstore",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 137,
+      "height": 134,
+      "anchor": [
+        76,
+        134
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          -40
+        ],
+        [
+          -16,
+          -72
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "coolstore",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 137,
+      "height": 134,
+      "anchor": [
+        -4,
+        102
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          144,
+          -8
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "coolstore",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

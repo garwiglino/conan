@@ -72,11 +72,15 @@ html=html.replaceAll('attackLength(p.combo)','attackLength(p.combo,p.weapon)')
  .replaceAll("this.emit('sword',{combo:p.combo});","this.emit('sword',{combo:p.combo,weapon:p.weapon});");
 for(const target of ['damageEnemy(e,','damageCivilian(n,','damageHumanGuard(n,','damageBatracienGuard(n,'])
  html=html.replaceAll('this.'+target+'p.combo===3?2:1','this.'+target+'this.weaponDamage(p.combo===3?2:1)');
-replaceOnce("let state='idle',frame=0;if(kind==='guardian'", "if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');let state='idle',frame=0;if(kind==='guardian'");
+html=html.replaceAll("HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');","HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile',actor);");
+replaceOnce("let state='idle',frame=0;if(kind==='guardian'", "if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile',actor);let state='idle',frame=0;if(kind==='guardian'");
 html=html.replace("&&actor.weapon!=='exile'",'');
 html=html.replaceAll("if(frame===2&&!p.attackStep)","if((frame===2||frame===3)&&!p.attackStep)");
+// Every queued stroke acquires afresh; no-input attacks prioritize nearby foes.
+replaceOnce("else if(!this.target())this.aimAttack(...this.facing(p.dir));", "else this.aimAttack(...this.facing(p.dir),true);");
+replaceOnce("HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');", "HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile',actor);");
 // One damage event per swing, shared by monsters, people, guards and props.
-// The logical phases 2 and 3 both display the single held impact drawing.
+// Only logical phase 2 displays contact; phase 3 is visual follow-through.
 replaceOnce('this.swing++;p.attackStep=false;', 'this.swing++;p.attackStep=false;p.impactDone=false;p.impactTick=false;p.comboRecoilShown=false;');
 replaceOnce("p[k]=Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));",
  "p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));");

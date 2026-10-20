@@ -1,0 +1,97 @@
+{
+  "id": "M06",
+  "label": "Poteau de charpente",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 8,
+  "depth": 8,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "post",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 8,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 21,
+      "height": 45,
+      "anchor": [
+        10,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 21,
+      "height": 45,
+      "anchor": [
+        18,
+        38
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -8,
+          4
+        ],
+        [
+          -16,
+          0
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 8,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

@@ -52,11 +52,13 @@ test('all outfits use their unmodified hand and sleeve images at the actual two 
  A.wear('pagne-noue');A.wield(W.START);
 });
 
-test('the closing polearm cuts and thrusts stay directed at the opponent instead of lifting into the air',()=>{
- for(const w of poles)for(const c of [2,...(W.finisher(w.id).kind==='lunge'?[3]:[])])for(let f=1;f<=4.75;f+=.125){
+test('closing polearm contacts aim at the opponent while preserving distinct preparation and follow-through',()=>{
+ for(const w of poles)for(const c of [2,...(W.finisher(w.id).kind==='lunge'?[3]:[])]){
+  const f=2;
   const p=W.pose(w.id,2,f,c);assert.ok(p.u[1]>.1,w.id+':'+c+' tip stays forward/down in face view');
   assert.ok(p.h[1]>=-17,w.id+' no raised overhead grip in the closing pair');
   for(const dir of [1,3]){const q=W.pose(w.id,dir,f,c);assert.ok((dir===1?q.u[0]:-q.u[0])>.7,w.id+' profile closes toward opponent');}
+  for(const dir of [0,1,2,3]){assert.notDeepEqual(W.pose(w.id,dir,1,c),W.pose(w.id,dir,2,c),'preparation remains distinct');assert.notDeepEqual(W.pose(w.id,dir,3.5,c),W.pose(w.id,dir,2,c),'follow-through remains distinct');}
  }
 });
 

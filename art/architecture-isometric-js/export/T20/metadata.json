@@ -1,0 +1,356 @@
+{
+  "id": "T20",
+  "label": "Dépôt surélevé",
+  "family": "varan",
+  "kind": "building",
+  "season": "base",
+  "width": 112,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "warehouse",
+    "wall": "wood",
+    "roof": "straw",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 12,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": true
+  },
+  "frames": {
+    "face": {
+      "width": 193,
+      "height": 157,
+      "anchor": [
+        80,
+        67
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          56
+        ],
+        [
+          32,
+          96
+        ],
+        [
+          -80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 25,
+      "geometry": {
+        "openings": [
+          {
+            "x": 43,
+            "y": 67.15,
+            "z": 12,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 40.099999999999994,
+            "y": 68,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 68,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "warehouse",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    },
+    "droite": {
+      "width": 193,
+      "height": 157,
+      "anchor": [
+        192,
+        102
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          56
+        ],
+        [
+          -192,
+          16
+        ],
+        [
+          -80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [
+          {
+            "x": 43,
+            "y": 67.15,
+            "z": 12,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 40.099999999999994,
+            "y": 68,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 68,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "warehouse",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    },
+    "dos": {
+      "width": 193,
+      "height": 156,
+      "anchor": [
+        112,
+        158
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          -56
+        ],
+        [
+          -32,
+          -96
+        ],
+        [
+          80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 16,
+      "geometry": {
+        "openings": [
+          {
+            "x": 43,
+            "y": 67.15,
+            "z": 12,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 40.099999999999994,
+            "y": 68,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 68,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "warehouse",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    },
+    "gauche": {
+      "width": 193,
+      "height": 157,
+      "anchor": [
+        0,
+        123
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          -56
+        ],
+        [
+          192,
+          -16
+        ],
+        [
+          80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 43,
+            "y": 67.15,
+            "z": 12,
+            "width": 26,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 40.099999999999994,
+            "y": 68,
+            "z": 0,
+            "width": 16,
+            "run": 10,
+            "rise": 12,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 110,
+            "depth": 68,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "warehouse",
+          "wall": "wood",
+          "roof": "straw",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 12,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": true
+        }
+      }
+    }
+  }
+}

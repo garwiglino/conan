@@ -56,7 +56,7 @@ function biomeAtmosphere(mix){
 }
 const atmosphereWeather=Renderer.prototype.weatherFX;
 Renderer.prototype.weatherFX=function(c,W,VH){
- const p=Atlas.toWorld(this.g.player.x,this.g.player.y),color=biomeAtmosphere(Atlas.environment(p.x,p.y).mix);
+ const player=(this.logicalGame||this.g).player,p=Atlas.toWorld(player.x,player.y),color=biomeAtmosphere(Atlas.environment(p.x,p.y).mix);
  if(color){c.save();const k=this.k||1;c.setTransform(k,0,0,k,0,0);c.fillStyle=color;c.fillRect(0,this.top,W,VH);c.restore();}
  return atmosphereWeather.call(this,c,W,VH);
 };

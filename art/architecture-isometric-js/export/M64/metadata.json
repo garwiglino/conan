@@ -1,0 +1,98 @@
+{
+  "id": "M64",
+  "label": "Parapet haut raccordable",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 12,
+  "height": 48,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "parapet",
+  "high": true,
+  "walkHeight": 38,
+  "wallThickness": 12,
+  "parapetHeight": 10,
+  "material": "stone",
+  "frames": {
+    "ew": {
+      "width": 65,
+      "height": 45,
+      "anchor": [
+        14,
+        50
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          36,
+          30
+        ],
+        [
+          -12,
+          6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 48
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 65,
+      "height": 45,
+      "anchor": [
+        62,
+        56
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -60,
+          18
+        ],
+        [
+          -12,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 48
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

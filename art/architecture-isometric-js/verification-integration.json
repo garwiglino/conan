@@ -1,0 +1,36 @@
+{
+  "status": "Intégration isométrique validée ; publication autorisée sur main",
+  "models": 234,
+  "views": 696,
+  "towns": 83,
+  "placedBuildings": 1947,
+  "checks": {
+    "nativePixels": "696 vues comparées pixel pour pixel aux sources",
+    "architectureAndCollisions": "validés",
+    "roadsAndAllDoorwayRoutes": "validés",
+    "workplacesAndSaves": "validés",
+    "mobileChromium": [
+      "568x320",
+      "844x390",
+      "932x430"
+    ],
+    "webAndIOSPackage": "synchronisés et archive vérifiée",
+    "playerOcclusion": {
+      "opacity": 0.32,
+      "groundBase": "dessin atténué avec toute la maison ; collisions conservées",
+      "foundations": "collisions inchangées ; déplacement réel testé",
+      "unitTests": 4,
+      "mobileChromium": "validé aux trois formats",
+      "easing": "identique à la plateforme initiale : 1 - 0.004 ** dt"
+    },
+    "worldProjection": "active, shared with terrain and actors",
+    "currentDistrictBuildings": 1947,
+    "priorWeaponAssertions": "updated to match current contact and recovery phases; affected files pass"
+  },
+  "generalSuite": {
+    "casesExecuted": 741,
+    "allInitialFailuresFixedAndRechecked": true,
+    "outstandingFailures": 0
+  },
+  "publicationRequested": true
+}

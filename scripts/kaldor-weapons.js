@@ -23,7 +23,17 @@
  // Contact must survive a 40ms tick. Recoil gets its own readable budget:
  // light weapons settle briskly; heavy weapons and finishers take more weight.
  const postHold=(id,combo=0)=>Math.min(.115,.058+get(id).weightKg*.012+(combo===3?.014:0));
- const contactWindow=(row,id,combo)=>{row[3]=Math.max(row[3],.045-row[2]);row[4]=Math.max(row[4],postHold(id,combo));return row;};
+ const contactWindow=(row,id,combo)=>{
+  // Split anticipation instead of adding another long wind-up. The load still
+  // gets its original extreme; one brief lead-in shows the body winding into it.
+  const lead=Math.min(.060,Math.max(.045,row[1]*.32));
+  row[0]=lead;row[1]=Math.max(.041,row[1]-lead);
+  // The only damaging drawing occupies slot 2. Slot 3 is now a non-damaging
+  // continuation along the same arc, before the held extreme and braking.
+  row[2]=Math.max(.045,row[2]);
+  row[3]=Math.max(.041,Math.min(.055,.038+get(id).weightKg*.003));
+  row[4]=Math.max(row[4],postHold(id,combo));return row;
+ };
  function times(id,combo=0){
   const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
   if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)),id,combo);
@@ -36,10 +46,10 @@
   const row=times(id,combo);let t=duration(id,combo)-Math.max(0,remaining);
   for(let i=0;i<6;i++){if(t<row[i]-1e-7)return i;t-=row[i];}return 5;
  }
- // Four held drawings only: anticipation, contact, recoil and ready.
+ // Six held drawings: lead-in, load, contact, moving follow-through, extreme, ready.
  // Continuous authored geometry below remains for swept collision and smears.
- const DRAWINGS=freeze([1,1,2,2,3.5,5]);
- function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
+ const DRAWINGS=freeze([.75,1,2,2.25,3.5,5]);
+ function sample(remaining,id,combo=0){const beat=frame(remaining,id,combo);return beat===3&&combo===3?3.0625:DRAWINGS[beat];}
  const canChain=(remaining,id,combo=0)=>combo<3&&remaining<=times(id,combo)[5]+1e-7;
  // Even a long engine tick must expose the recoil before a buffered link.
  function advance(remaining,dt,id,combo=0){
@@ -327,22 +337,43 @@
   if(f<=3.5)return deliveryArc(id,dir,f,load,hit,post);
   return recoverPose(id,dir,f,post,ready);
  }
+ // The contact smear and collision share the same short delivery interval.
+ // Braking and the terminal hold never open a second damage window.
+ const deliveryEnd=combo=>combo===3?3.0625:2.25;
+ function aimForTarget(id,dir,dx,dy,combo=0){
+  const [fx,fy]=forward(dir),limit=25*Math.PI/180;
+  const angle=get(id).finisher.kind==='whirl'&&combo===3?0:Math.max(-limit,Math.min(limit,Math.atan2(fx*dy-fy*dx,fx*dx+fy*dy)));
+  const cs=Math.cos(angle),sn=Math.sin(angle),u=[fx*cs-fy*sn,fx*sn+fy*cs],side=[-u[1],u[0]],hit=pose(id,dir,2,combo);
+  const h=[hit.h[0]*cs-(hit.h[1]+9)*sn,hit.h[0]*sn+(hit.h[1]+9)*cs-9];
+  const lateral=Math.max(-4,Math.min(4,(dx-h[0])*side[0]+(dy-9-h[1])*side[1]));
+  return {dir,angle,shift:side.map(v=>v*lateral)};
+ }
+ function combatPose(actor,f){
+  const p=pose(actor.weapon,actor.dir,f,actor.combo||0),aim=actor.attackAim;
+  if(!aim||aim.dir!==actor.dir||!Number.isFinite(aim.angle))return p;
+  const gain=f<1?smooth(f):f>3.5?1-smooth((f-3.5)/1.5):1;
+  const angle=Math.max(-25*Math.PI/180,Math.min(25*Math.PI/180,aim.angle))*gain,cs=Math.cos(angle),sn=Math.sin(angle);
+  const shift=(aim.shift||[0,0]).map(v=>Math.max(-4,Math.min(4,Number(v)||0))*gain);
+  const u=[p.u[0]*cs-p.u[1]*sn,p.u[0]*sn+p.u[1]*cs];
+  const h=confineGrip(get(actor.weapon),[p.h[0]*cs-(p.h[1]+9)*sn+shift[0],p.h[0]*sn+(p.h[1]+9)*cs-9+shift[1]],u);
+  return {...p,h,u};
+ }
  function vector(id,dir,f,combo){const p=pose(id,dir,f,combo);return [...p.h,p.u[0]*p.reach,p.u[1]*p.reach];}
  function segmentDistance(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/l)):0;return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
  function hits(actor,target,f){
   if(actor.impactTick===false||(f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
-  let from=f-1,to=f;
+  let from=f-1,to=f===2?deliveryEnd(actor.combo||0):f;
   // A live strike jumps straight from its held load to its impact drawing.
-  // Sweep that visible jump once; held contact never casts a future recovery.
+  // Its short delivery arc is visible in the impact smear; recovery stays inert.
   const finisher=(actor.combo||0)===3;
   if(Number.isFinite(actor.attack)&&actor.attack>0){
-   to=2;if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
+   to=deliveryEnd(actor.combo||0);if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
    from=actor.impactTick===true||f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
   }
   const density=finisher?(from>=2?1:get(actor.weapon).finisher.kind==='whirl'?128:40):20;
   const steps=Math.max(1,Math.ceil(density*(to-from)));
   for(let i=0;i<=steps;i++){
-   const p=pose(actor.weapon,actor.dir,from+(to-from)*i/steps,actor.combo||0),[x,y]=p.h;
+   const p=combatPose(actor,from+(to-from)*i/steps),[x,y]=p.h;
    if(segmentDistance(target.x-actor.x,target.y-actor.y-9,x-(['staff','spear','glaive'].includes(get(actor.weapon).family)?p.u[0]*7:0),y-(['staff','spear','glaive'].includes(get(actor.weapon).family)?p.u[1]*7:0),x+p.u[0]*p.reach,y+p.u[1]*p.reach)<(target.r||6)+(['axe','mace','sabre'].includes(get(actor.weapon).family)?3:1.5))return true;
   }return false;
  }
@@ -384,22 +415,36 @@
    for(const r of [3,7,L-4])line(r,-1,r,0,p[3],4);
   }
  }
- function trail(b,id,dir,f,combo,rear=b){
+ function trail(b,id,dir,f,combo,rear=b,actor=null){
+  const drawPose=t=>actor?combatPose(actor,t):pose(id,dir,t,combo);
   const w=get(id),profile=w.family==='spear'?{trailWidth:3,ghosts:0}:MOTIONS[w.family];
-  if(f!==2)return;
+  const after=f===(combo===3?3.0625:2.25);if(f!==2&&!after)return;
   const p=PALETTES[w.material],previous=1;
   const sink=(q,x,y)=>combo===3&&w.finisher.kind==='whirl'&&(q.z===0||dir===2&&x>-5&&x<5&&y< -9)?rear:b;
+  if(after){
+   // A narrow, dark, broken tip arc carries the impact into its first
+   // follow-through drawing. No full weapon ghost or fresh bright impact.
+   const start=combo===3?3:2,width=Math.max(1,profile.trailWidth*.4);
+   for(let i=0;i<=24;i++){
+    const t=.25+.75*i/24,q=drawPose(start+(f-start)*t);
+    for(let k=0;k<width;k+=.65){
+     const x=q.h[0]+q.u[0]*(q.reach-k),y=q.h[1]+q.u[1]*(q.reach-k);
+     if(i===24&&k===0||((Math.round(x)+Math.round(y))&1)===0)sink(q,x,y).set(x,y,t>.7?p[1]:p[0],0);
+    }
+   }
+   return;
+  }
   const width=profile.trailWidth*(.85+Math.min(.35,w.weightKg*.1));
   // Dithered silhouettes record earlier WEAPON positions, without touching
  // or regenerating any character layer. Heavy heads carry a longer shadow.
   for(let n=profile.ghosts;n>0;n--){
-   const q=pose(id,dir,Math.max(1,f-n*.24),combo);
+   const q=drawPose(Math.max(1,f-n*.24));
    const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)sink(q,x,y).set(x,y,p[0],-5+n);},
     line(x,y,X,Y,color,z){const count=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=count;i++)this.set(x+(X-x)*i/count,y+(Y-y)*i/count,color,z);}};
    paint(ghost,id,...q.h,...q.u);
   }
   for(let i=0;i<=36;i++){
-   const t=i/36,q=pose(id,dir,previous+(f-previous)*t,combo),r=q.reach;
+   const t=i/36,q=drawPose(previous+(deliveryEnd(combo)-previous)*t),r=q.reach;
    for(let k=0;k<width;k+=.65){
     const x=q.h[0]+q.u[0]*(r-k),y=q.h[1]+q.u[1]*(r-k);
     if(t<.4&&((Math.round(x)+Math.round(y))&1))continue;
@@ -415,9 +460,10 @@
   frost:['#537a9a','#8dccdd','#e3fbf4'],ember:['#a34432','#ee8d43','#fff0a0'],
   tide:['#467e91','#74bfc4','#d4f3e3'],jade:['#3d765b','#8fc87c','#e3edac'],
   sand:['#886044','#d4a766','#f8db9e'],star:['#71709b','#b4b0df','#f5edce']});
- function finisherEffects(buffer,id,dir,f,rear=buffer){
+ function finisherEffects(buffer,id,dir,f,rear=buffer,actor=null){
+  const drawPose=t=>actor?combatPose(actor,t):pose(id,dir,t,3);
   if(f<1.1||f>4.25)return;
-  const w=get(id),v=w.finisher,p=pose(id,dir,f,3),colors=FINISH_COLORS[v.effect],magic=v.magic;
+  const w=get(id),v=w.finisher,p=drawPose(f),colors=FINISH_COLORS[v.effect],magic=v.magic;
   const set=(x,y,c,z=2,target=buffer)=>{if(x>=-34&&x<=34&&y>=-44&&y<=23)target.set(x,y,c,z);};
   const line=(x,y,X,Y,c,z=2)=>{const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)set(x+(X-x)*i/n,y+(Y-y)*i/n,c,z);};
   const tip=[p.h[0]+p.u[0]*p.reach,p.h[1]+p.u[1]*p.reach];
@@ -452,7 +498,7 @@
   if(v.kind==='whirl'||v.kind==='sweep'||v.kind==='seal'){
    // Residue follows the same weapon sweep that can actually connect.
    for(let i=0;i<=28;i++){
-    const q=pose(id,dir,1+i/28,3),r=q.reach*(magic?.85:.95);
+    const q=drawPose(1+i/28),r=q.reach*(magic?.85:.95);
     if(age>.7&&i%3)continue;
     set(q.h[0]+q.u[0]*r,q.h[1]+q.u[1]*r,colors[age<.7?1:0],0,v.kind==='whirl'&&q.z===0?rear:buffer);
    }
@@ -491,7 +537,7 @@
   if(mode==='finisher'){
    const len=duration(id,3),at=t%(len+1),strike=at-.2;
    if(strike<0||strike>=len)return {state:'idle',frame:idleFrame,combo:3,label:comboNames(id)[3]+' · Garde'};
-   const phase=frame(len-strike,id,3),drawing=sample(len-strike,id,3);return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo:3,label:comboNames(id)[3]+' · '+['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]};
+   const phase=frame(len-strike,id,3),drawing=sample(len-strike,id,3);return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo:3,label:comboNames(id)[3]+' · '+['Mise en tension','Préparation','Impact','Prolongement','Après-impact','Garde'][phase]};
   }
   if(mode==='walk')return {state:'walk',frame:gait,combo:0,label:'Marche armée'};
   if(mode==='holster'){
@@ -505,7 +551,7 @@
   const lengths=[0,1,2,3].map(c=>duration(id,c)+(c===3?.25:-times(id,c)[5]));let at=t%lengths.reduce((a,b)=>a+b,0);
   for(let combo=0;combo<4;combo++){
    if(at<lengths[combo]){const len=duration(id,combo),remaining=len-at,phase=frame(remaining,id,combo);
-    const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]:'Garde')};
+    const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Mise en tension','Préparation','Impact','Prolongement','Après-impact','Garde'][phase]:'Garde')};
    }at-=lengths[combo];
   }
  }
@@ -535,5 +581,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });

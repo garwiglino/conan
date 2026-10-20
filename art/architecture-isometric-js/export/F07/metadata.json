@@ -1,0 +1,358 @@
+{
+  "id": "F07",
+  "label": "Porte de palissade",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 112,
+  "depth": 48,
+  "height": 96,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 32,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "gate",
+    "wall": "wood",
+    "roof": "slate",
+    "rise": 22,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false,
+    "battlements": false,
+    "openTower": false
+  },
+  "frames": {
+    "face": {
+      "width": 175,
+      "height": 171,
+      "anchor": [
+        55,
+        88
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          56
+        ],
+        [
+          64,
+          80
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 96
+      },
+      "colors": 18,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 39.36,
+            "z": 0,
+            "width": 62,
+            "clearance": 50,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          }
+        ],
+        "recipe": {
+          "type": "gate",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    },
+    "droite": {
+      "width": 175,
+      "height": 171,
+      "anchor": [
+        167,
+        112
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          56
+        ],
+        [
+          -160,
+          32
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 96
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 39.36,
+            "z": 0,
+            "width": 62,
+            "clearance": 50,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          }
+        ],
+        "recipe": {
+          "type": "gate",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    },
+    "dos": {
+      "width": 175,
+      "height": 171,
+      "anchor": [
+        119,
+        168
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          -56
+        ],
+        [
+          -64,
+          -80
+        ],
+        [
+          48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 96
+      },
+      "colors": 14,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 39.36,
+            "z": 0,
+            "width": 62,
+            "clearance": 50,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          }
+        ],
+        "recipe": {
+          "type": "gate",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 175,
+      "height": 171,
+      "anchor": [
+        7,
+        144
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          112,
+          -56
+        ],
+        [
+          160,
+          -32
+        ],
+        [
+          48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 112,
+        "depth": 48,
+        "height": 96
+      },
+      "colors": 18,
+      "geometry": {
+        "openings": [
+          {
+            "x": 25,
+            "y": 39.36,
+            "z": 0,
+            "width": 62,
+            "clearance": 50,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          },
+          {
+            "type": "roof",
+            "x": 85,
+            "y": -2,
+            "width": 29,
+            "depth": 52,
+            "eave": 74,
+            "peak": 96
+          }
+        ],
+        "recipe": {
+          "type": "gate",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": false
+        }
+      }
+    }
+  }
+}

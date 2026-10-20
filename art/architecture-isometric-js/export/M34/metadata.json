@@ -1,0 +1,97 @@
+{
+  "id": "M34",
+  "label": "Gouttière et descente",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 16,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "gutter",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 56,
+      "height": 54,
+      "anchor": [
+        5,
+        25
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          -16,
+          8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 56,
+      "height": 54,
+      "anchor": [
+        53,
+        27
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -64,
+          16
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

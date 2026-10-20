@@ -1,0 +1,119 @@
+{
+  "mode": "worker",
+  "results": [
+    {
+      "id": "camp",
+      "logical": [
+        376,
+        888
+      ],
+      "projected": [
+        -512,
+        632
+      ],
+      "cache": 4,
+      "pending": 5,
+      "occluders": 21,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 1947,
+        "workstations": 27,
+        "actorFrames": 0,
+        "fixtureFrames": 0,
+        "architecture": {
+          "models": 0,
+          "pixelArea": 0,
+          "maxModels": 96
+        }
+      }
+    },
+    {
+      "id": "town-1",
+      "logical": [
+        -494521,
+        -82406.85
+      ],
+      "projected": [
+        -412114.15,
+        -288463.925
+      ],
+      "cache": 8,
+      "pending": 5,
+      "occluders": 0,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 1947,
+        "workstations": 27,
+        "actorFrames": 2,
+        "fixtureFrames": 1,
+        "architecture": {
+          "models": 15,
+          "pixelArea": 778889,
+          "maxModels": 96
+        }
+      }
+    },
+    {
+      "id": "town-69",
+      "logical": [
+        -248740,
+        -114589.85
+      ],
+      "projected": [
+        -134150.15,
+        -181664.925
+      ],
+      "cache": 12,
+      "pending": 5,
+      "occluders": 0,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 1947,
+        "workstations": 27,
+        "actorFrames": 2,
+        "fixtureFrames": 1,
+        "architecture": {
+          "models": 27,
+          "pixelArea": 1454642,
+          "maxModels": 96
+        }
+      }
+    },
+    {
+      "id": "town-50",
+      "logical": [
+        -426481,
+        244732.15
+      ],
+      "projected": [
+        -671213.15,
+        -90874.425
+      ],
+      "cache": 16,
+      "pending": 5,
+      "occluders": 0,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 1947,
+        "workstations": 27,
+        "actorFrames": 2,
+        "fixtureFrames": 2,
+        "architecture": {
+          "models": 37,
+          "pixelArea": 1959282,
+          "maxModels": 96
+        }
+      }
+    }
+  ],
+  "occlusion": {
+    "alpha": 0.32017202790471316,
+    "free": true,
+    "foundationSolid": true
+  },
+  "browserErrors": []
+}

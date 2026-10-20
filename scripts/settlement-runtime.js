@@ -1,7 +1,7 @@
 /* Permanent native districts. Geometry is indexed once; the camera only culls art.
  * Existing people, economy, transport services and canonical geography stay authoritative. */
 (()=>{
- const A=HearthreaverArchitecture,H=HearthreaverHumanActivities,P=HearthreaverHumanStations;
+ const A=HearthreaverArchitectureGame,H=HearthreaverHumanActivities,P=HearthreaverHumanStations;
  const NATURAL_PROP=/^(?:world_(?:oak|pine|cypress|jungle|boulder|fern|reeds|log|flowers|mushrooms|gravel)|palm)/;
  const bucket=256,contains=(r,x,y,p=0)=>x>=r.x-p&&x<=r.x+r.w+p&&y>=r.y-p&&y<=r.y+r.h+p;
  class Spatial{
@@ -15,7 +15,7 @@
   if(districts)return districts;if(SETTLEMENT_DATA.layout!==Atlas.layout.id)throw Error('Les implantations doivent être reconstruites pour cet atlas');
   const collision=new Spatial(),art=new Spatial(),clear=new Spatial(),lanes=new Spatial(),sites=new Map(),buildings=[];
   for(const s of SETTLEMENT_DATA.sites){const node=Atlas.byId[s.id],p=Atlas.toGame(node.x,node.y),placed=[];
-   for(const b of s.buildings){const o={...b,x:Math.round(p.x+b.x),y:Math.round(p.y+b.y),site:s.id},g=A.geometry(o.id,o),f=A.entry(o.id).frames[o.dir];o.geometry=g;o.bounds={x:o.x-f.anchor[0],y:o.y-f.anchor[1]-(f.lift||0),w:f.size[0],h:f.size[1]};
+   for(const b of s.buildings){const o={...b,x:Math.round(p.x+b.x),y:Math.round(p.y+b.y),site:s.id},g=A.geometry(o.id,o);o.geometry=g;o.bounds=A.worldBounds(o);
     buildings.push(o);placed.push(o);collision.put(o,g.foot);art.put(o,o.bounds);const r={x:g.foot.x-16,y:g.foot.y-16,w:g.foot.w+32,h:g.foot.h+48};clear.put(r,r);
    }
    for(const lane of s.lanes){const r={...lane,x:p.x+lane.x,y:p.y+lane.y};clear.put(r,r);r.paved=node.regionalCentre;lanes.put(r,r);}
@@ -63,7 +63,7 @@
  Game.prototype.tile=function(x,y){const t=tile.call(this,x,y);return t===4&&cleared(this.settlements,x,y)?0:t;};
  const solid=Game.prototype.solid;
  Game.prototype.solid=function(x,y,r=5,level=0){
-  const d=this.settlements;if(d&&!level){for(const o of d.collision.near(x,y,r))for(const b of o.geometry.solids)if(b.zMin<19&&b.zMax>0&&x+r>b.x&&x-r<b.x+b.w&&y+r>b.y&&y-r<b.y+b.h)return true;
+  const d=this.settlements;if(d&&!level){for(const o of d.collision.near(x,y,r))for(const b of o.geometry.solids)if(b.zMin<19&&b.zMax>0&&A.contains(b,x,y,r))return true;
    for(const o of this.humanFixtureIndex?.near(x,y,r)||[]){if(o.id==='crop_patch')continue;const s=o.feet,q=o.foot;if(Math.hypot(x-s[0],y-s[1])<7||Math.hypot(x-o.approach[0],y-o.approach[1])<7)continue;if(x+r>q.x&&x-r<q.x+q.w&&y+r>q.y&&y-r<q.y+q.h)return true;}
   }return solid.call(this,x,y,r,level);
  };
@@ -99,7 +99,7 @@
    const models=spec.fixture==='workbench'?['B09','B12','B05']:['B05'],candidates=[];
    for(const b of district.buildings){
     if(crop&&b.role==='housing'){const r=b.geometry.foot;for(const side of [-1,1])candidates.push({x:r.x+(side<0?-32:r.w+32),y:r.y+r.h/2,sheltered:false});}
-    else if(!crop&&models.includes(b.id)&&A.entry(b.id).openHall){for(const side of [-1,1])candidates.push({x:b.x+side*20,y:b.dir==='face'?b.y-12:b.y-b.geometry.foot.h+12,sheltered:true,building:b.uid});}
+    else if(!crop&&models.includes(b.id)&&A.entry(b.id).openHall){for(const spot of b.geometry.workspots)candidates.push({...spot,sheltered:true,building:b.uid});}
    }
    const centre=Atlas.toGame(Atlas.byId[n.site].x,Atlas.byId[n.site].y),angle=(civilianHash(n.id)%24)/24*Math.PI*2,origin={x:centre.x+Math.round(Math.cos(angle)*40),y:centre.y+Math.round(Math.sin(angle)*40)};
    candidates.sort((p,q)=>Math.hypot(p.x-origin.x,p.y-origin.y)-Math.hypot(q.x-origin.x,q.y-origin.y));
@@ -111,6 +111,12 @@
     if(!target.restored&&(this.solid(...feet,4,0)||this.solid(...approach,4,0)))continue;
     if(!target.restored&&crop&&[...this.settlements.lanes.near(x,y,32)].some(r=>foot.x<r.x+r.w&&foot.x+foot.w>r.x&&foot.y<r.y+r.h&&foot.y+foot.h>r.y))continue;
     let blocked=false;for(let dy=-g.depth;!target.restored&&dy<=0;dy+=4)for(let dx=-g.width/2;dx<=g.width/2;dx+=4)if(this.solid(x+dx,y+dy,2,0))blocked=true;if(blocked)continue;
+    if(!target.restored){
+     const fixtureBlocks=(px,py)=>Math.hypot(px-feet[0],py-feet[1])>=7&&Math.hypot(px-approach[0],py-approach[1])>=7&&px+4>foot.x&&px-4<foot.x+foot.w&&py+4>foot.y&&py-4<foot.y+foot.h;
+     const free=(px,py)=>!this.solid(px,py,4,0)&&!fixtureBlocks(px,py);
+     if(![[16,0],[-16,0],[0,24],[0,-24]].some(([dx,dy])=>free(feet[0]+dx,feet[1]+dy)))continue;
+     if(!Atlas.localPath(centre,{x:feet[0],y:feet[1]},free).length)continue;
+    }
     const w={...spec,id:spec.fixture,uid:n.id+'-workstation',actor:n.id,x,y,foot,feet,approach,socket:local,sheltered:target.sheltered,building:target.building};
     this.humanWorkstations.set(n.id,w);this.humanFixtureIndex.put(w,foot);n.post={x:feet[0],y:feet[1]};n.path=[];
     const record=this.worldState.simulation?.state.sites[n.labourSite||n.site]?.workerRecords[n.id];if(record)record.home={...n.post};break;
@@ -138,33 +144,26 @@
  function nativeAtlas(renderer){return P.createAtlasAdapter({getPropPixels(key){const cv=renderer.propCache[key];if(!cv)throw Error('Prop natif manquant : '+key);const c=cv.getContext('2d'),v=c.getImageData(0,0,cv.width,cv.height).data,out=[];for(let y=0;y<cv.height;y++)for(let x=0;x<cv.width;x++){let i=(y*cv.width+x)*4;if(v[i+3])out.push([x-32,y-56,((v[i]<<16)|(v[i+1]<<8)|v[i+2]).toString(16).padStart(6,'0')]);}return out;},getTerrainPixel(material,x,y){renderer.humanTerrainPixels ||= new Map();let data=renderer.humanTerrainPixels.get(material);if(!data){const type=material==='water'?3:1;let at;outer:for(let ty=1;ty<MH-1;ty++)for(let tx=1;tx<MW-1;tx++)if(renderer.g.world.tiles[ty][tx]===type){at=[tx*16,ty*16];break outer;}if(!at)throw Error('Matière native manquante : '+material);data=renderer.bg.getContext('2d').getImageData(...at,16,16).data;renderer.humanTerrainPixels.set(material,data);}const i=(((Math.round(y)%16+16)%16)*16+(Math.round(x)%16+16)%16)*4;return ((data[i]<<16)|(data[i+1]<<8)|data[i+2]).toString(16).padStart(6,'0');}});}
  function fixtureImage(w,snow,renderer){const key=w.id+'|'+snow+'|'+!!w.sheltered;let v=fixtureCache.get(key);if(!v){const decor=P.render({id:w.id,season:snow&&!w.sheltered?'igea_winter':null,atlas:nativeAtlas(renderer)});v={decor,back:pixelCanvas(128,128,decor.layers.back),front:pixelCanvas(128,128,decor.layers.front)};fixtureCache.set(key,v);}return v;}
  function isSnow(g,o){const minute=Math.floor(g.clock);if(g.settlementSnowClock!==minute){g.settlementSnowClock=minute;g.settlementSnow=new Map();}const p=Atlas.toWorld(o.x,o.y),c=Atlas.cellAt(p.x,p.y),key=c?.id??'none';if(!g.settlementSnow.has(key))g.settlementSnow.set(key,Atlas.visualSnowCover(c?.biome,c?.height,minute,c?.region)>.5);return g.settlementSnow.get(key);}
- function drawBuilding(c,o,snow){
-  A.drawStructure(c,{...o,season:snow?'winter':undefined});if(!snow||A.catalogue[o.id+'-hiver'])return;
-  const key=o.id+'/'+o.dir;let cap=roofSnowCache.get(key);
-  if(!cap){const p=A.pixels(o.id,{dir:o.dir,layer:'roof'}),points=[];for(let x=0;x<p.width;x++){let y=0;while(y<p.height&&!p.indices[y*p.width+x])y++;if(y===p.height)continue;for(let dy=0;dy<2&&y+dy<p.height;dy++)if(p.indices[(y+dy)*p.width+x])points.push([x,y+dy,WorldTerrainArt.colors.snow[dy?4:6]]);}
-   cap={cv:pixelCanvas(p.width,p.height,points),anchor:p.anchor};roofSnowCache.set(key,cap);if(roofSnowCache.size>96)roofSnowCache.delete(roofSnowCache.keys().next().value);
-  }c.drawImage(cap.cv,o.x-cap.anchor[0],o.y-cap.anchor[1]);
- }
  const architecture=Renderer.prototype.architectureDrawObjects;
  Renderer.prototype.architectureDrawObjects=function(){const out=architecture?architecture.call(this):[],g=this.g,d=g.settlements;if(!d)return out;
   const view={x:this.cam.x-16,y:this.cam.y-16,w:this.W+32,h:this.H+32};
   for(const o of d.art.rect(view)){const b=o.bounds;if(b.x+b.w<view.x||b.x>view.x+view.w||b.y+b.h<view.y||b.y>view.y+view.h)continue;
-   out.push({always:true,level:0,y:o.y,fn:()=>drawBuilding(this.c,o,isSnow(g,o))});
+   out.push(...HearthreaverArchitectureRender.objects(this,o,isSnow(g,o)));
   }
   for(const w of g.humanWorkstations?.values()||[]){if(w.id==='crop_patch'&&isSnow(g,w))continue;if(Math.abs(w.x-(view.x+view.w/2))>view.w/2+70||Math.abs(w.y-(view.y+view.h/2))>view.h/2+100)continue;const im=fixtureImage(w,isSnow(g,w),this);
-   out.push({always:true,y:Math.min(w.y,w.feet[1])-.1,fn:()=>this.c.drawImage(im.back,w.x-64,w.y-96)},{always:true,y:Math.max(w.y,w.feet[1])+.1,fn:()=>this.c.drawImage(im.front,w.x-64,w.y-96)});
+   const p=this.projectionActive?WorldProjection.point(w.x,w.y):w,feet=this.projectionActive?WorldProjection.point(...w.feet):{y:w.feet[1]};out.push({always:true,y:Math.min(p.y,feet.y)-.1,fn:()=>this.c.drawImage(im.back,p.x-64,p.y-96)},{always:true,y:Math.max(p.y,feet.y)+.1,fn:()=>this.c.drawImage(im.front,p.x-64,p.y-96)});
   }return out;
  };
  const draw=Renderer.prototype.npcDraw;
  Renderer.prototype.npcDraw=function(n){const c=n.civilian,w=this.g.humanWorkstations?.get(n.id);if(!c||n.batracien||!n.resident||!this.g.settlements.sites.has(n.site))return draw.call(this,n);
-  const working=w&&c.action===c.job&&this.g.humanWorkSpec(n)&&Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2,action=working?w.action:H.activitiesFor('civilian').includes(c.action)?c.action:'idle',role=working?w.role:'civilian',a=c.appearance;
+  const physical=n._logical||n,working=w&&c.action===c.job&&this.g.humanWorkSpec(n)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2,action=working?w.action:H.activitiesFor('civilian').includes(c.action)?c.action:'idle',role=working?w.role:'civilian',a=c.appearance;
   const dir=['dos','droite','face','gauche'][n.dir??2],climate=({teremor:'tempere',sylverive:'tempere',igea:'neige',sarak:'aride',varan:'marais',tagon:'jungle'})[this.g.settlements.sites.get(n.site)?.family]||'tempere';
-  const frame=H.frameAt(action,c.elapsed||0,H.CLIPS[action].stride?c.distance:undefined),interaction=(working||w?.socket.support&&['sit_down','seated','stand_up'].includes(c.action)&&Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2)?P.interaction(fixtureImage(w,isSnow(this.g,w),this).decor):undefined;
+  const frame=H.frameAt(action,c.elapsed||0,H.CLIPS[action].stride?c.distance:undefined),interaction=(working||w?.socket.support&&['sit_down','seated','stand_up'].includes(c.action)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2)?P.interaction(fixtureImage(w,isSnow(this.g,w),this).decor):undefined;
   const outfit=H.Sources.outfits[a.outfit]?a.outfit:Object.keys(H.Sources.outfits).find(id=>H.Sources.outfits[id].source===a.outfit);
   const options={...a,outfit,role,action,dir,climate,frame,interaction},key=JSON.stringify([a,role,action,dir,frame,climate,working?w.id:null]);let im=frameCache.get(key);
   if(!im){const p=H.renderLayers(options);im=pixelCanvas(80,80,p.order.flatMap(k=>p.layers[k]));frameCache.set(key,im);if(frameCache.size>256)frameCache.delete(frameCache.keys().next().value);}
   if((n.alpha??1)<=0)return;this.c.save();this.c.globalAlpha=n.alpha??1;this.shadow(n.x,n.y,c.dead?17:12);this.c.drawImage(im,Math.round(n.x)-40,Math.round(n.y)-52);n._img=im;
   if(!c.dead){this.npcNameplate(n);const m=this.g.npcPresent(n)&&this.g.npcMark(n);if(m)this.questMark(n.x,n.y-38-Math.max(0,(textSettings.scale-1)*8),m);}this.c.restore();
  };
- Game.prototype.settlementDiagnostics=function(){return {sites:this.settlements?.sites.size||0,buildings:this.settlements?.buildings.length||0,workstations:this.humanWorkstations?.size||0,actorFrames:frameCache.size,fixtureFrames:fixtureCache.size};};
+ Game.prototype.settlementDiagnostics=function(){return {sites:this.settlements?.sites.size||0,buildings:this.settlements?.buildings.length||0,workstations:this.humanWorkstations?.size||0,actorFrames:frameCache.size,fixtureFrames:fixtureCache.size,architecture:HearthreaverArchitectureRender.diagnostics()};};
 })();

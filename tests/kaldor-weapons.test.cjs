@@ -53,7 +53,7 @@ test('weapon damage, individual timings and all hero collision channels use the 
  }
  for(const w of W.all.filter(w=>w.id!==W.START))for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++)for(const f of [2,3]){
   const p={x:100,y:100,dir,combo,weapon:w.id},q=W.pose(w.id,dir,f,combo);
-  const e={x:p.x+q.h[0]+q.u[0]*q.reach,y:p.y+q.h[1]+q.u[1]*q.reach+9,r:1};
+  const delta=require('../scripts/world-projection').inverse(q.h[0]+q.u[0]*q.reach,q.h[1]+q.u[1]*q.reach+9),e={x:p.x+delta.x,y:p.y+delta.y,r:1};
   assert.ok(bladeHits(p,e,f),w.id+' matches the drawn tip');
   assert.equal(bladeHits(p,{...e,level:1},f),false,'different floor');
   assert.equal(bladeHits(p,{x:600,y:600,r:6},f),false);assert.equal(bladeHits(p,e,1),false);

@@ -31,9 +31,9 @@
  });
  const START_OUTFIT='pagne-noue';
  const weapons=()=>typeof HearthreaverWeapons!=='undefined'?HearthreaverWeapons:null;
- let wielded='exile';
+ let wielded='exile',wielder=null;
  const customWeapon=()=>weapons()&&weapons().has(wielded);
- function wield(id){if(!weapons()?.has(id))return false;wielded=id;return true;}
+ function wield(id,actor=null){if(!weapons()?.has(id))return false;wielded=id;wielder=actor?.weapon===id&&actor.attack>0?actor:null;return true;}
  // previous: what he wore before the last change ({outfit, helmet}), shown
  // until the swap frame of the dress or helm clip.
  const worn={outfit:START_OUTFIT,helmet:null,previous:null};
@@ -323,7 +323,7 @@
  const GUARD={2:{h:[-6,-6],u:[-.5,-.87]},1:{h:[3,-6],u:[.71,-.71]},0:{h:[6,-6],u:[.6,-.8]},3:{h:[-4,-6],u:[-.71,-.71]}};
  const SHOULDERS={2:[[-4,-8],[3,-8]],0:[[-4,-8],[3,-8]],1:[[0,-8]],3:[[-1,-8]]};
  function attackSpec(dir,frame,combo){
-  if(customWeapon())return weapons().pose(wielded,dir,frame,combo);
+  if(customWeapon())return wielder?weapons().combatPose(wielder,frame):weapons().pose(wielded,dir,frame,combo);
   const view=dir===3?1:dir,row=ATTACK[view][Math.max(0,Math.min(3,combo))];
   let s=row[Math.max(1,Math.min(5,frame))];
   if(!s){const g=GUARD[dir];return {h:g.h,z:dir===0?0:1,head:[0,0],hair:[0,0],lunge:false,u:g.u,rest:true};}
@@ -332,7 +332,7 @@
   return s;
  }
  function bladeDir(dir,frame,combo,swordPose){
-  if(customWeapon())return weapons().pose(wielded,dir,frame,combo).u;
+  if(customWeapon())return (wielder?weapons().combatPose(wielder,frame):weapons().pose(wielded,dir,frame,combo)).u;
   const s=attackSpec(dir,frame,combo);if(s.u)return unit(s.u[0],s.u[1]);
   const f=Math.max(1,Math.min(4,frame));
   const p=typeof swordPose==='function'?swordPose(dir,f,combo):[0,0,GUARD[dir].u[0],GUARD[dir].u[1]];
@@ -529,10 +529,10 @@
    fist(s.z===0?sword:hands,s.h[0],s.h[1]);fist(s.z===0?sword:hands,s.h[0]-u[0]*2,s.h[1]-u[1]*2);
    sword.outline();hands.outline();
   }
-  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,facing,frame,combo,behind);}
+  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,facing,frame,combo,behind,wielder);}
   else if(frame===2||frame===3)smear(trail,dir,frame,combo,swordPose,frame===2?4.5:3,behind);
   else if(frame===4)smear(trail,dir,frame,combo,swordPose,1.5,behind);
-  if(customWeapon()&&combo===3)weapons().finisherEffects(trail,wielded,facing,frame,behind);
+  if(customWeapon()&&combo===3)weapons().finisherEffects(trail,wielded,facing,frame,behind,wielder);
   else if(combo===3&&frame===3){const reach=3+BLADE;impact(trail,s.h[0]+u[0]*reach,s.h[1]+u[1]*reach);}
   paintAt(c,behind);
   if(s.z!==1){paintAt(c,trail);paintAt(c,sword);}
@@ -579,7 +579,8 @@
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
-  const key=[headId,hairId,wielded,worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
+  const aimKey=state==='attack'&&wielder?.attackAim?JSON.stringify(wielder.attackAim):'';
+  const key=[aimKey,headId,hairId,wielded,worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
   if(cache.has(key)){
    const value=cache.get(key);cache.delete(key);cache.set(key,value);return value;
   }
@@ -696,13 +697,13 @@
  // modular head and hair. Scoped selection never changes Kaldor's equipment.
  function npcFrame(actor,state,frame,weapon,swordPose){
   if(!weapons()?.has(weapon)||!ready())return null;
-  const saved={...worn},oldWeapon=wielded,oldHead=headId,oldHair=hairId;
+  const saved={...worn},oldWeapon=wielded,oldWielder=wielder,oldHead=headId,oldHair=hairId;
   let seed=0;for(const c of String(actor.id||''))seed=(Math.imul(seed,31)+c.charCodeAt(0))>>>0;
   try{
    headId='masculin-'+['adulte','mur','age'][seed%3];hairId='masculin-hair-'+['01','02','05','09'][(seed>>>3)%4];
-   worn.outfit=actor.kind==='bandit'?'cuir-traqueur':actor.convoyGuard?'brigandine-mercenaire':'cotte-mailles';worn.helmet=null;worn.previous=null;wielded=weapon;
+   worn.outfit=actor.kind==='bandit'?'cuir-traqueur':actor.convoyGuard?'brigandine-mercenaire':'cotte-mailles';worn.helmet=null;worn.previous=null;wielded=weapon;wielder=null;
    return nativeFrame(actor.dir??2,state,frame,actor.combo||0,swordPose);
-  }finally{Object.assign(worn,saved);wielded=oldWeapon;headId=oldHead;hairId=oldHair;}
+  }finally{Object.assign(worn,saved);wielded=oldWeapon;wielder=oldWielder;headId=oldHead;hairId=oldHair;}
  }
  function clear(){cache.clear();layerCache.clear();shiftCache.clear();}
  // Grip and blade direction actually drawn, exposed for regression tests.

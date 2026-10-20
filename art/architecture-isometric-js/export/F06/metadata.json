@@ -1,0 +1,286 @@
+{
+  "id": "F06",
+  "label": "Tour de rempart pierre",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 80,
+  "depth": 80,
+  "height": 128,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "tower",
+    "wall": "stone",
+    "roof": "slate",
+    "rise": 10,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false,
+    "battlements": true,
+    "openTower": false
+  },
+  "frames": {
+    "face": {
+      "width": 165,
+      "height": 213,
+      "anchor": [
+        82,
+        130
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          40
+        ],
+        [
+          0,
+          80
+        ],
+        [
+          -80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 80.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "tower",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 10,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": true,
+          "openTower": false
+        }
+      }
+    },
+    "droite": {
+      "width": 165,
+      "height": 213,
+      "anchor": [
+        162,
+        170
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          40
+        ],
+        [
+          -160,
+          0
+        ],
+        [
+          -80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 80.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "tower",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 10,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": true,
+          "openTower": false
+        }
+      }
+    },
+    "dos": {
+      "width": 165,
+      "height": 213,
+      "anchor": [
+        82,
+        210
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          -40
+        ],
+        [
+          0,
+          -80
+        ],
+        [
+          80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 80.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "tower",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 10,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": true,
+          "openTower": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 165,
+      "height": 213,
+      "anchor": [
+        2,
+        170
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          160,
+          0
+        ],
+        [
+          80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 80,
+        "height": 128
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 80.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "tower",
+          "wall": "stone",
+          "roof": "slate",
+          "rise": 10,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": true,
+          "openTower": false
+        }
+      }
+    }
+  }
+}

@@ -7,8 +7,8 @@ test('each of the 48 arms has four named, distinct combos and real mass/balance'
   for(let d=0;d<4;d++){
    const paths=[0,1,2,3].map(c=>JSON.stringify([1,2,3,4].map(f=>W.pose(w.id,d,f,c))));assert.equal(new Set(paths).size,4,w.id+':'+d);
    for(let c=0;c<4;c++){
-    const times=W.times(w.id,c);assert.equal(times.length,6);assert.ok(times[1]>times[2]);assert.ok(times[5]>times[2]);
-    assert.equal(W.sample(W.duration(w.id,c),w.id,c),1);
+    const times=W.times(w.id,c);assert.equal(times.length,6);assert.ok(times[0]+times[1]>times[2]);assert.ok(times[5]>0);
+    assert.equal(W.sample(W.duration(w.id,c),w.id,c),.75);
     const before=W.pose(w.id,d,0,c),after=W.pose(w.id,d,5,c),ready=W.guard(w.id,d);assert.deepEqual(before.h,after.h);assert.deepEqual(after.h,ready.h);
     if(d===1||d===3){assert.ok(W.pose(w.id,d,1,c).body.some(n=>n!==0));assert.ok(W.pose(w.id,d,3,c).body.some(n=>n!==0));}
     for(let f=0;f<=5;f+=.125){const p=W.pose(w.id,d,f,c),x=40+p.h[0]+p.u[0]*p.reach,y=52+p.h[1]+p.u[1]*p.reach;assert.ok(x>1&&x<78&&y>1&&y<78,w.id+' tip '+d+':'+c+':'+f);}
@@ -78,19 +78,20 @@ test('the reverse spear strike lands its visible leading end ahead of the player
  }
 });
 
-test('every combo holds exactly preparation, impact, recoil and ready with no in-between drawings',()=>{
+test('every combo holds six deliberate drawings with one damaging contact',()=>{
  for(const w of W.all)for(let combo=0;combo<4;combo++){
   const frames=new Set(),len=W.duration(w.id,combo);
   for(let t=0;t<=len;t+=.0005)frames.add(W.sample(len-t,w.id,combo));
-  assert.deepEqual([...frames],[1,2,3.5,5],w.id+':'+combo);
-  const t=W.times(w.id,combo);assert.ok(t[2]+t[3]>=.045-1e-9,'contact cannot be skipped at 25 fps');const load=len-t[0]-t[1]/2,contact=len-t[0]-t[1]-t[2]/2;
+  assert.deepEqual([...frames],[.75,1,2,combo===3?3.0625:2.25,3.5,5],w.id+':'+combo);
+  const t=W.times(w.id,combo);assert.ok(t[2]>=.045-1e-9,'contact cannot be skipped at 25 fps');const load=len-t[0]-t[1]/2,contact=len-t[0]-t[1]-t[2]/2;
   const q=W.pose(w.id,2,2,combo),a={x:0,y:0,dir:2,combo,weapon:w.id,attack:load};
   const victim={x:q.h[0]+q.u[0]*(q.reach-1),y:q.h[1]+q.u[1]*(q.reach-1)+9,r:.1};
   assert.equal(W.hits(a,victim,2),false,w.id+' preparation never hits');a.attack=contact;
   assert.equal(W.hits(a,victim,2),true,w.id+' displayed contact hits');
   let count=0;const b={set(){count++;}};
-  for(const f of [1,3.5,5])W.trail(b,w.id,2,f,combo);assert.equal(count,0);
+  for(const f of [.75,1,3.5,5])W.trail(b,w.id,2,f,combo);assert.equal(count,0);
   W.trail(b,w.id,2,2,combo);assert.ok(count>0,w.id+' impact smear retained');
+  count=0;W.trail(b,w.id,2,combo===3?3.0625:2.25,combo);assert.ok(count>0,w.id+' faint follow-through smear retained');
   if(combo===3&&w.finisher.magic){count=0;W.finisherEffects(b,w.id,2,2);assert.ok(count>0,w.id+' magic retained');}
  }
 });
@@ -102,6 +103,30 @@ test('the shipped hero renderer returns to the original breathing idle during th
  for(const w of W.all)for(let combo=0;combo<4;combo++){
   const len=W.duration(w.id,combo),t=W.times(w.id,combo),actor={x:40,y:52,dir:2,weapon:w.id,combo,attack:t[5]/2,attackHeld:true};
   for(const time of [.1,.55,.8,1.1]){atlas.draw(cv.getContext('2d'),'hero',actor,time);const look=calls.at(-1);assert.equal(look.state,'idle');assert.equal(look.frame,A.frameAt('idle',time));}
-  let elapsed=t[0];for(const [phase,drawing] of [[1,1],[2,2],[3,2],[4,3.5]]){actor.attack=len-elapsed-t[phase]/2;atlas.draw(cv.getContext('2d'),'hero',actor,2);assert.deepEqual(calls.at(-1),{state:'attack',frame:drawing});elapsed+=t[phase];}
+  let elapsed=0;for(const [phase,drawing] of [[0,.75],[1,1],[2,2],[3,combo===3?3.0625:2.25],[4,3.5]]){actor.attack=len-elapsed-t[phase]/2;atlas.draw(cv.getContext('2d'),'hero',actor,2);assert.deepEqual(calls.at(-1),{state:'attack',frame:drawing});elapsed+=t[phase];}
+ }
+});
+
+
+test('both additional poses remain visible at mobile frame rates without extending damage into follow-through',()=>{
+ for(const w of W.all)for(let combo=0;combo<4;combo++)for(const dt of [.04,1/60,1/120]){
+  const len=W.duration(w.id,combo),seen=new Set();let remaining=len;
+  while(remaining>0){seen.add(W.sample(remaining,w.id,combo));remaining=W.advance(remaining,dt,w.id,combo);}
+  for(const f of [.75,1,2,combo===3?3.0625:2.25,3.5])assert.ok(seen.has(f),w.id+':'+combo+':'+dt+' visible '+f);
+  const row=W.times(w.id,combo),after=len-row[0]-row[1]-row[2]-row[3]/2;
+  const p=W.pose(w.id,2,2,combo),actor={x:0,y:0,weapon:w.id,dir:2,combo,attack:after};
+  assert.equal(W.hits(actor,{x:p.h[0]+p.u[0]*p.reach,y:p.h[1]+p.u[1]*p.reach+9,r:2},3),false);
+ }
+});
+
+
+test('the immediate follow-through has a sparse dim trail in every view, then disappears',()=>{
+ for(const w of W.all)for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
+  const capture=f=>{const pixels=new Map(),sink={set(x,y,c){pixels.set(Math.round(x)+','+Math.round(y),c);}};W.trail(sink,w.id,dir,f,combo,sink);return pixels;};
+  const contact=capture(2),after=capture(combo===3?3.0625:2.25),palette=W.palettes[w.material];
+  assert.ok(after.size>0,w.id+' readable residual tip');
+  assert.ok(after.size<contact.size,w.id+':'+dir+':'+combo+' residual narrower than impact');
+  for(const color of after.values())assert.ok(color===palette[0]||color===palette[1],w.id+' subdued colours');
+  assert.equal(capture(3.5).size,0,w.id+' no smear on terminal hold');
  }
 });

@@ -1,0 +1,49 @@
+{
+  "sources": [
+    "scripts/world-model.js",
+    "scripts/world-terrain-art.js",
+    "scripts/world-art-stream.js",
+    "scripts/world-render.js",
+    "scripts/world-props-art.js",
+    "data/world/atlas.json"
+  ],
+  "originalProjection": "orthographic ground, decorative south cliff band",
+  "targetProjection": "x = u - v ; y = (u + v) / 2 - z",
+  "worldUnit": 16,
+  "humanHeight": 19,
+  "families": [
+    "desert",
+    "steppe",
+    "grass",
+    "forest",
+    "jungle",
+    "wetforest",
+    "marsh",
+    "taiga",
+    "tundra",
+    "snow",
+    "cursed"
+  ],
+  "sourceTerrainCodes": {
+    "0": "sol du biome",
+    "1": "route",
+    "2": "place / pavage",
+    "3": "eau",
+    "4": "sol avec décor",
+    "5": "pont",
+    "8": "roche / relief / hors corridor"
+  },
+  "world": {
+    "cells": 5417,
+    "roads": 141,
+    "crossings": 57
+  },
+  "requirements": [
+    "axes, lighting and scale shared with architecture",
+    "native pixel geometry without rotated PNG",
+    "continuous world-coordinate texture sampling",
+    "road connections, bank corners, cliff heights and stairs",
+    "preserve logical geography; runtime coordinate migration is a separate step"
+  ],
+  "remoteWrites": false
+}

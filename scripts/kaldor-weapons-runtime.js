@@ -59,6 +59,44 @@ const KaldorArsenal=(()=>{
  bladeHits=function(p,e,f){return !p.weapon?legacyHits(p,e,f):W.hits(p,e,f);};
  attackFrame=function(remaining,combo=-1,weapon){return !weapon||combo<0?legacyFrame(remaining,combo):W.frame(remaining,weapon,combo);};
  attackLength=function(combo,weapon){return !weapon?legacyLength(combo):W.duration(weapon,combo);};
+ // Select a reachable opponent before an aligned but distant one. Re-evaluate
+ // every fresh/queued stroke; explicit steering retains its directional cone.
+ // Weapon poses use screen pixels; saves, navigation and line tests stay logical.
+ const screenDelta=(x,y)=>typeof WorldProjection==='undefined'?{x,y}:WorldProjection.point(x,y);
+ const screenActor=n=>({...n,...screenDelta(n.x,n.y)});
+ const oldTarget=Game.prototype.target;
+ Game.prototype.target=function(){const n=oldTarget.call(this);if(n){const d=screenDelta(n.x-this.player.x,n.y-this.player.y);if((n.alpha??1)<.5||Math.hypot(d.x,d.y)>112||!this.lineClear(this.player,n)){this.targetId=null;return null;}}return n;};
+ Game.prototype.aimAttack=function(dx,dy,automatic=false){
+  const p=this.player,input=screenDelta(dx,dy),length=Math.hypot(input.x,input.y);if(length<.1)return;
+  const combo=p.comboWindow>0?(p.combo+1)%4:0;let best=null,score=-Infinity;
+  for(const n of this.combatTargets()){
+   if(n.dead||!this.sameLevel(n,p)||(n.alpha??1)<.5||(n.kind==='boss'&&!this.bossActive)||!this.lineClear(p,n))continue;
+   const x=n.x-p.x,y=n.y-p.y,screen=screenDelta(x,y),range=Math.hypot(screen.x,screen.y);if(range<1||range>112)continue;
+   const dot=(screen.x*input.x+screen.y*input.y)/(range*length),near=range<=W.get(p.weapon).length+18;
+   if(dot<.65&&!(automatic&&near))continue;
+   const dir=this.direction(x,y),[fx,fy]=this.facing(dir),step=W.attackStep(p.weapon,combo);
+   const actor={...p,dir,combo,x:p.x+fx*step,y:p.y+fy*step,attack:NaN,impactTick:true};
+   const projected=screenActor(actor),target=screenActor(n);
+   projected.attackAim=W.aimForTarget(p.weapon,dir,target.x-projected.x,target.y-projected.y,combo);
+   const reachable=W.hits(projected,target,2),rank=(reachable?1000:near?500:0)-range*2+dot*.5+(n.id===this.targetId?.1:0);
+   if(rank>score){score=rank;best=n;}
+  }
+  this.targetId=best?.id??null;
+  if(best)p.dir=this.direction(best.x-p.x,best.y-p.y);
+ };
+ const swing=Game.prototype.swingSword;
+ Game.prototype.swingSword=function(){const serial=this.swing,result=swing.call(this);if(this.swing!==serial){const p=this.player,n=this.target(),d=n?screenDelta(n.x-p.x,n.y-p.y):null;p.attackAim=n?{...W.aimForTarget(p.weapon,p.dir,d.x,d.y,p.combo),targetId:n.id}:null;}return result;};
+ const face=Game.prototype.faceTarget;
+ Game.prototype.faceTarget=function(){
+  const p=this.player;if(p.attack<=0)return face.call(this);
+  // Keep the native view fixed; only the weapon and original hand layers get
+  // a bounded adjustment. Once contact is displayed, the arc stays frozen.
+  const n=this.target();if(!p.impactDone&&W.sample(p.attack,p.weapon,p.combo)<2&&n&&n.id===p.attackAim?.targetId){
+   const [fx,fy]=[[0,-1],[1,0],[0,1],[-1,0]][p.dir],d=screenDelta(n.x-p.x,n.y-p.y);
+   if(d.x*fx+d.y*fy>0)p.attackAim={...W.aimForTarget(p.weapon,p.dir,d.x,d.y,p.combo),targetId:n.id};
+  }
+  return n;
+ };
  // A single pending press survives the current stroke, including a heavy
  // wind-up. Further presses cannot stack attacks or change that queued aim.
  function queueAttack(p,x=0,y=0){

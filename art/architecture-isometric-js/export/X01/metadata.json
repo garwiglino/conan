@@ -1,0 +1,272 @@
+{
+  "id": "X01",
+  "label": "Portail de mine",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 64,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "mine",
+    "wall": "wood",
+    "roof": "slate",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 165,
+      "height": 139,
+      "anchor": [
+        66,
+        56
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          32,
+          80
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 16,
+      "geometry": {
+        "openings": [
+          {
+            "x": 24,
+            "y": 28.8,
+            "z": 0,
+            "width": 48,
+            "clearance": 38.88,
+            "kind": "mine"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "mine",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 165,
+      "height": 139,
+      "anchor": [
+        162,
+        88
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -160,
+          16
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [
+          {
+            "x": 24,
+            "y": 28.8,
+            "z": 0,
+            "width": 48,
+            "clearance": 38.88,
+            "kind": "mine"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "mine",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 165,
+      "height": 139,
+      "anchor": [
+        98,
+        136
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -32,
+          -80
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 13,
+      "geometry": {
+        "openings": [
+          {
+            "x": 24,
+            "y": 28.8,
+            "z": 0,
+            "width": 48,
+            "clearance": 38.88,
+            "kind": "mine"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "mine",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 165,
+      "height": 139,
+      "anchor": [
+        2,
+        104
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          160,
+          -16
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 64,
+        "height": 72
+      },
+      "colors": 16,
+      "geometry": {
+        "openings": [
+          {
+            "x": 24,
+            "y": 28.8,
+            "z": 0,
+            "width": 48,
+            "clearance": 38.88,
+            "kind": "mine"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "mine",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

@@ -47,7 +47,7 @@ test('spell damage follows the visible ring and each staggered pillar, and cance
  h.hit=false;p.x=e.x;p.y=e.y+20;api.stepBossHazard(g,h);assert.equal(hits,1,'outside the narrow ground ellipse');
  for(let dir=0;dir<4;dir++){
   e.dir=dir;g.hazards=[];api.bossPlay(e,'eruption');tick(g,e,.65);assert.equal(g.hazards.length,3);const [vx,vy]=g.facing(dir);
-  g.hazards.forEach((haz,i)=>{assert.equal(haz.x,e.x+vx*(24+i*14)-vy*[-5,5,0][i]);assert.equal(haz.y,e.y+vy*(24+i*14)*.85+vx*[-5,5,0][i]*.65);api.stepBossHazard(g,haz);assert.equal(haz.active,i===0);});
+  g.hazards.forEach((haz,i)=>{assert.ok(Math.abs(haz.x-(e.x+vx*(24+i*14)-vy*[-5,5,0][i]))<1e-9);assert.ok(Math.abs(haz.y-(e.y+vy*(24+i*14)*.85+vx*[-5,5,0][i]*.65))<1e-9);api.stepBossHazard(g,haz);assert.equal(haz.active,i===0);});
   tick(g,e,.05);g.hazards.forEach(h=>api.stepBossHazard(g,h));assert.equal(g.hazards[1].active,true);assert.equal(g.hazards[2].active,false);
   tick(g,e,.06);g.hazards.forEach(h=>api.stepBossHazard(g,h));assert.equal(g.hazards[2].active,true);
   e.stun=1;g.hazards.forEach(h=>api.stepBossHazard(g,h));assert.ok(g.hazards.every(h=>h.life===0));e.stun=0;

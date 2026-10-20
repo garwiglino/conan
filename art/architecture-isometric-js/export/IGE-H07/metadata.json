@@ -1,0 +1,118 @@
+{
+  "id": "IGE-H07",
+  "label": "Escalier frontal et palier",
+  "family": "igea",
+  "kind": "module",
+  "season": "base",
+  "width": 24,
+  "depth": 64,
+  "height": 64,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "shape": "stairs",
+  "high": true,
+  "walkHeight": 52,
+  "wallThickness": 16,
+  "parapetHeight": 12,
+  "material": "stone",
+  "frames": {
+    "face": {
+      "width": 93,
+      "height": 113,
+      "anchor": [
+        66,
+        66
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -40,
+          44
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 64,
+            "rise": 52,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "palier": {
+      "width": 109,
+      "height": 113,
+      "anchor": [
+        66,
+        66
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -40,
+          44
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 64,
+            "rise": 52,
+            "landing": 16
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

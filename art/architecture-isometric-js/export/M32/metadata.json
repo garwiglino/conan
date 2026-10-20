@@ -1,0 +1,97 @@
+{
+  "id": "M32",
+  "label": "Rampe de chargement",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 32,
+  "depth": 32,
+  "height": 12,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "ramp",
+  "high": false,
+  "walkHeight": 12,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 69,
+      "height": 37,
+      "anchor": [
+        34,
+        2
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          32,
+          16
+        ],
+        [
+          0,
+          32
+        ],
+        [
+          -32,
+          16
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 32,
+        "height": 12
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 69,
+      "height": 49,
+      "anchor": [
+        66,
+        30
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -32,
+          16
+        ],
+        [
+          -64,
+          0
+        ],
+        [
+          -32,
+          -16
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 32,
+        "height": 12
+      },
+      "colors": 9,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

@@ -143,7 +143,7 @@ L’export natif ne modifie pas les sources des tenues. `build:kaldor` embarque 
 
 [Aperçu demandé : Lance de Boisclair, trois tenues et quatre vues](../art/boisclair-combo-v2.gif). L’aperçu est ralenti pour lire les déplacements ; il montre les quatre attaques, la marche, le rangement et la reprise. [Atelier complet](../art/weapons-preview.html).
 
-[Coups en quatre poses, face et profil à vitesse réelle](../art/armory-strikes.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).
+[Coups en six poses, face et profil à vitesse réelle](../art/armory-strikes.gif) · [Rangement centré, vue de dos](../art/armory-centered-back.png).
 
 ## Révision des frappes
 
@@ -161,11 +161,11 @@ La taille croisée basse est conservée en troisième position. La fin de combo 
 
 Chaque entrée de `catalogue.json` possède `finisher` : nom, geste, poussée, inclinaison, palette et manifestation magique éventuelle. Le mouvement se compose d’une charge (0–1), d’une seule délivrance (1–2), d’un contact tenu (2–3) puis d’un dépassement inertiel (3–3,5) et d’une reprise (3,5–5). La position de la main et la direction de la lame restent identiques pendant le contact : il n’y a pas de deuxième coup caché dans la pose d’impact. Les durées conservent le tempo et le poids de l’arme.
 
-La trajectoire des tourbillons est construite à partir des quatre vues natives du joueur, sans rotation ni étirement de ses pixels ; la lecture conserve seulement les quatre poses franches. La hampe balaie une ellipse horizontale à hauteur de taille : le raccourcissement en profondeur concerne uniquement l’arme, et la moitié arrière du geste passe derrière le corps. La reprise de face ramène d’abord les mains à l’extérieur de la hanche, puis relève la lame hors du visage. Corps, cheveux, tête, casque et prises conservent les calques natifs. La même trajectoire complète pilote le rendu, les traînées et le balayage de collision ; le tour circulaire utilise un échantillonnage plus dense pour ne pas laisser de trous. Sur une attaque en cours, la collision balaie le saut visible de la préparation à l’impact puis reste au point de contact : les dégâts et la pause d’impact ne peuvent plus précéder visuellement l’arrivée de la lame. Le joueur ne touche une même cible qu’une fois par attaque, grâce au registre de coups existant. Les étages et la ligne de vue restent vérifiés.
+La trajectoire des tourbillons est construite à partir des quatre vues natives du joueur, sans rotation ni étirement de ses pixels ; la lecture conserve six poses franches. La hampe balaie une ellipse horizontale à hauteur de taille : le raccourcissement en profondeur concerne uniquement l’arme, et la moitié arrière du geste passe derrière le corps. La reprise de face ramène d’abord les mains à l’extérieur de la hanche, puis relève la lame hors du visage. Corps, cheveux, tête, casque et prises conservent les calques natifs. La même trajectoire complète pilote le rendu, les traînées et le balayage de collision ; le tour circulaire utilise un échantillonnage plus dense pour ne pas laisser de trous. Sur une attaque en cours, la collision balaie le saut visible de la préparation à l’impact puis reste au point de contact : les dégâts et la pause d’impact ne peuvent plus précéder visuellement l’arrivée de la lame. Le joueur ne touche une même cible qu’une fois par attaque, grâce au registre de coups existant. Les étages et la ligne de vue restent vérifiés.
 
 Les onze pièces indiquées comme magiques projettent des éclats de givre, braises, signes de jade, embruns, grains de sable, lumière d’étoile ou sillages de vent. Ces effets restent attachés au geste et s’effacent avant l’attaque suivante. Ils ne créent ni projectile autonome ni nouvelle altération d’état : les dégâts du quatrième coup restent ceux de la mêlée, doublés comme auparavant. Les armes courantes conservent des frappes physiques et des traces de mouvement ou d’impact.
 
-L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/preview-kaldor-finishers.cjs` produit [l’aperçu animé](../art/weapon-finishers.gif) et [la planche des 48 armes](../art/weapon-finishers.png). Cet aperçu, celui des huit familles et l’atelier reflètent la lecture en quatre poses.
+L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/preview-kaldor-finishers.cjs` produit [l’aperçu animé](../art/weapon-finishers.gif) et [la planche des 48 armes](../art/weapon-finishers.png). Cet aperçu, celui des huit familles et l’atelier reflètent la lecture en six poses.
 
 | Arme | Quatrième coup | Mouvement | Manifestation magique |
 |---|---|---|---|
@@ -222,11 +222,11 @@ L’inventaire et l’atelier proposent le mode **4e coup**. `node scripts/previ
 
 **Flamme de Clairfoyer** est une pièce légendaire à deux mains, disponible sur un râtelier à droite du point d’apparition réel du joueur au campement des dunes (environ 29 pixels). Son origine reste Clairfoyer, en Teremor ; elle a été confiée aux voyageurs du camp. Elle conserve sa force ×2,05 et son finisher **Brasier de Clairfoyer**. Le joueur la ramasse normalement et choisit de l’équiper ; le râtelier reste vide après l’acquisition, y compris sur une sauvegarde qui la possédait déjà à son ancien emplacement.
 
-### Lecture en quatre poses
+### Lecture en six poses
 
-Chaque coup passe directement de la préparation à l’impact, puis à une pose d’après-impact, avant de retrouver le vrai idle armé et sa respiration. Aucun dessin intermédiaire n’est joué. La préparation et la récupération restent adaptées au poids et à la cadence de chaque arme ; les durées ont été raccourcies pour un rythme plus sec. Le contact reste lisible et détectable à 25 images/s.
+Chaque coup montre une mise en tension, la préparation extrême, l’impact, un bref prolongement et la fin du geste, avant de retrouver le vrai idle armé et sa respiration. La préparation et la récupération restent adaptées au poids et à la cadence de chaque arme ; les durées ont été raccourcies pour un rythme plus sec. Le contact reste lisible et détectable à 25 images/s.
 
-Le smear apparaît uniquement sur le dessin d’impact et représente le trajet complet de l’arme. Les effets propres aux quatrièmes coups sont conservés, avec leurs couleurs, leurs résidus et leur profondeur derrière le corps. Les trajectoires continues servent au balayage des collisions et aux effets, sans ajouter de poses au joueur. Les calques des mains, des bras et des tenues restent entiers.
+Le smear principal apparaît sur le dessin d’impact et représente le trajet complet de l’arme. La pose immédiatement suivante conserve une courte traînée atténuée de la pointe. Les effets propres aux quatrièmes coups sont conservés, avec leurs couleurs, leurs résidus et leur profondeur derrière le corps. Les trajectoires continues servent au balayage des collisions, aux effets et aux deux poses supplémentaires. Les calques des mains, des bras et des tenues restent entiers.
 
 ### Tenue normale des lances et bâtons
 
@@ -242,7 +242,7 @@ La pose affichée à l’impact doit être le contact lisible avec la cible. Une
 
 Les préparations conservent leur contraste et le poids de l’arme ; les tailles dépassent l’axe dans l’après-impact, les estocs finissent leur extension dans leur axe avant le retrait. Le revers de lance frappe désormais avec l’extrémité dirigée vers la cible. Les tourbillons gardent leur ellipse, leur volume de collision et les résidus arrière masqués par le corps, mais terminent devant le joueur. Le contact reste tenu une seule fois. Smears et effets magiques sont calculés sur la même géométrie que les coups.
 
-Références consultées : [Animation Mentor — Anticipation](https://www.animationmentor.com/blog/anticipation-the-12-basic-principles-of-animation/) pour la relation entre préparation, énergie et vitesse ; [AnimSchool — Pushing Poses Through Iteration](https://blog.animschool.edu/2018/08/06/pushing-poses-through-iteration/) pour l’intention, la ligne d’action, la silhouette et le contraste. Le centrage de l’impact est notre application de ces principes à la lecture en quatre poses de ce jeu, pas une règle universelle imposée à toute animation de combat.
+Références consultées : [Animation Mentor — Anticipation](https://www.animationmentor.com/blog/anticipation-the-12-basic-principles-of-animation/) pour la relation entre préparation, énergie et vitesse ; [AnimSchool — Pushing Poses Through Iteration](https://blog.animschool.edu/2018/08/06/pushing-poses-through-iteration/) pour l’intention, la ligne d’action, la silhouette et le contraste. Le centrage de l’impact est notre application de ces principes à la lecture en six poses de ce jeu, pas une règle universelle imposée à toute animation de combat.
 
 [Comparaison avant/après dans le compositeur natif](../art/weapon-impact-before-after.png) · `node scripts/preview-kaldor-impact-alignment.cjs`. Les tests `kaldor-impact-alignment.test.cjs` couvrent les 768 contacts, la collision pendant le contact tenu et le rendu des trois poses d’attaque dans les quatre vues.
 
@@ -254,7 +254,7 @@ Le dessin d’après-impact conserve maintenant un vrai dépassement après les 
 
 Le hit stop de contact dure 25 à 65 ms selon la masse et le coup final. Il suspend la simulation de combat, la victime et les effets avec le joueur, conserve les entrées du combo, puis consomme seulement le temps restant du tick à la reprise. Une frappe dans le vide ne provoque pas de pause. Les dégâts ne se réémettent pas pendant cet arrêt.
 
-Références consultées : [Eric Williams, Combat Canceled: God of War & Action Game Design](https://www.gamedeveloper.com/game-platforms/combat-canceled-i-god-of-war-i-action-game-design) pour les fenêtres d’enchaînement et les commandes mémorisées ; [Jiesang Song, Improving the Combat ‘Impact’ Of Action Games](https://www.gamedeveloper.com/audio/improving-the-combat-impact-of-action-games) pour la pause sur une pose de contact lisible et le lien visuel assuré par les traînées. Les quatre dessins et les calques existants de Kaldor restent la contrainte de cette adaptation.
+Références consultées : [Eric Williams, Combat Canceled: God of War & Action Game Design](https://www.gamedeveloper.com/game-platforms/combat-canceled-i-god-of-war-i-action-game-design) pour les fenêtres d’enchaînement et les commandes mémorisées ; [Jiesang Song, Improving the Combat ‘Impact’ Of Action Games](https://www.gamedeveloper.com/audio/improving-the-combat-impact-of-action-games) pour la pause sur une pose de contact lisible et le lien visuel assuré par les traînées. Les calques existants de Kaldor restent intacts ; la lecture actuelle ajoute deux dessins brefs.
 
 Une secousse de caméra de 65 à 90 ms accompagne le contact confirmé : un pixel de jeu au maximum, légèrement pondéré par la masse et le dernier coup. Elle ne se cumule pas entre les victimes d’une même frappe, décroît aussi pendant le hit stop, respecte la préférence de mouvement réduit et ne renforce pas les secousses plus fortes déjà utilisées quand le joueur est blessé.
 
@@ -276,7 +276,7 @@ La trajectoire suivie est celle de l’extrémité active, `h + u × reach`. Le 
 
 La livraison et le dépassement ordinaires utilisent deux courbes d’Hermite avec une tangente commune au contact, aussi bien pour la prise que pour l’orientation. Le suivi de pointe ne présente donc pas de cassure à l’impact. Les grands manches gardent une petite marge dans leur cellule de face pour que la limite du dessin n’arrête pas leur trajectoire sur le contact. Les estocs restent rectilignes et finissent leur extension avant le retrait. Les tourbillons poursuivent une ellipse aplatie à hauteur de taille ; ils ne deviennent pas des roues verticales devant le visage.
 
-La reprise conserve le passage extérieur à l’épaule avant le retour à la garde. La main du troisième coup de profil recharge à proximité de la fin du revers, pour éviter de sauter jusqu’à l’autre hanche. Aucun dessin de transition n’est ajouté : préparation, contact, après-impact extrême et garde restent les quatre poses jouées. Le timing, l’appui distinct par attaque, la mémoire d’un seul coup, le verrou d’après-impact, les dégâts uniques au contact, le hit stop et la petite secousse restent en vigueur.
+La reprise conserve le passage extérieur à l’épaule avant le retour à la garde. La main du troisième coup de profil recharge à proximité de la fin du revers, pour éviter de sauter jusqu’à l’autre hanche. Deux dessins brefs sont désormais ajoutés sur ces mêmes courbes : mise en tension avant la préparation et prolongement entre le contact et l’après-impact extrême. Le timing, l’appui distinct par attaque, la mémoire d’un seul coup, le verrou d’après-impact, les dégâts uniques au contact, le hit stop et la petite secousse restent en vigueur.
 
 Référence principale : [Anthony Wong, Arc: The 12 Basic Principles of Animation](https://www.animationmentor.com/blog/arc-the-12-basic-principles-of-animation/), notamment le suivi de pointe et la signature des arcs selon la masse. La tangente commune et les amplitudes ci-dessus sont nos choix d’adaptation à ce jeu, pas des valeurs prescrites par cet article.
 
@@ -289,3 +289,27 @@ L’amplitude est portée par les dessins eux-mêmes : préparation reculée de 
 Les fentes gardent une lame stable dans leur axe et chargent plus loin en arrière. La préparation de la fente finale de profil place les mains légèrement plus haut, pour qu’elle se distingue du petit estoc. Les tourbillons partent d’une charge supplémentaire sur leur ellipse et poursuivent plus loin leur fin circulaire. Les retours qui restent déjà hors de l’épaule prennent le chemin court vers la garde ; une récupération ne rajoute pas de tour devant le visage.
 
 [Poses réelles : préparation / impact / fin du geste dans les quatre vues](../art/weapon-followthrough.png). La planche ne remplace pas l’amplitude par un tracé : ce sont les mêmes poses natives qui sont jouées dans le jeu. Les 192 couples arme/vue gardent leurs quatre coups distincts.
+
+
+### Deux poses brèves pour l’anticipation et le prolongement
+
+La lecture joue désormais six poses : mise en tension (`0,75`), préparation extrême (`1`), contact (`2`), prolongement (`2,25` ou `3,0625` pour le quatrième coup), fin du geste (`3,5`) et repos natif (`5`). Les coordonnées désignent la trajectoire, pas des secondes. La première pose partage le budget de préparation existant ; elle dure 45–60 ms, puis la charge reste visible au moins 41 ms. Le contact dispose seul de sa fenêtre d’au moins 45 ms. Le prolongement dure 41–55 ms selon la masse, puis la fin extrême conserve son temps de freinage propre. Il n’ajoute aucun dégât et n’efface pas l’après-impact en cas de spam. Le smear principal reste au contact ; la pose suivante porte une traînée plus étroite, sombre et tramée, sans silhouette fantôme entière. Elle suit le même arc et disparaît sur la fin du geste. Les effets finaux conservent leur enveloppe.
+
+Les poses supplémentaires sont prises sur les trajectoires signées existantes : le prolongement se situe après le contact, avant le dépassement extrême, sans inversion. Les estocs restent dans leur axe et les tourbillons gardent leur ellipse à hauteur de taille. Les bras, vêtements et mains restent des images natives déplacées sans déformation.
+
+Références consultées : [Animation Mentor — Anticipation](https://www.animationmentor.com/blog/anticipation-the-12-basic-principles-of-animation/) pour la mise en tension adaptée à l’énergie du coup ; [Animation Mentor — Follow-through and Overlapping Action](https://www.animationmentor.com/blog/follow-through-and-overlapping-action-the-12-basic-principles-of-animation/) pour la poursuite du mouvement et le freinage selon la masse. Les six dessins et leurs durées sont notre adaptation au jeu mobile.
+
+
+### Précision du combat et aide à la visée mobile
+
+Chaque nouvel appui ou coup mémorisé réévalue les ennemis visibles : un adversaire atteignable passe avant une cible lointaine simplement mieux alignée. Avec le stick, le cône de direction reste prioritaire ; sans direction, les ennemis proches peuvent être repris autour du joueur. Un obstacle, un étage différent ou la disparition de la cible invalident le verrou. Les civils neutres ne sont pas sélectionnés automatiquement.
+
+La vue native du personnage reste fixe pendant le coup. Pendant la préparation, une correction de direction de l’arme, limitée à 25 degrés et à quatre pixels de déplacement des prises, accompagne la cible sélectionnée. Elle se fige à l’impact, conserve la courbe du prolongement et disparaît dans le retour à la garde. Aucun bras, vêtement ou corps n’est étiré ni tourné : seuls l’arme et les positions des images intactes des mains changent. Les tourbillons conservent leur ellipse horizontale. Le cache des dessins distingue les visées et les PNJ gardent leur propre contexte graphique.
+
+`combatPose` fournit la même pose au dessin des armes, aux prises, aux effets et aux collisions. Le smear principal représente le balayage jusqu’au premier dessin de prolongement ; ce même intervalle est résolu lors de l’unique événement d’impact. Le smear résiduel reprend ensuite cette fin de trajectoire, sans rouvrir de dégâts. Les cibles arrivées plus tard restent intactes ; les parades, les obstacles et les étages conservent leurs règles.
+
+Les civils gardent leur protection contre les dégâts répétés des autres PNJ, mais cette invulnérabilité ne masque plus les coups distincts du joueur. Le registre commun des victimes d’un coup continue d’interdire les doubles dégâts. Les tests `kaldor-combat-precision.test.cjs` couvrent le choix proche/lointain, le changement de cible, les murs, les diagonales, le suivi puis le verrouillage, le balayage visible, les civils et le compositeur natif.
+
+[Comparaison native du contact en diagonale](../art/combat-precision.png) · `node scripts/preview-kaldor-precision.cjs`.
+
+La carte isométrique conserve les positions logiques : les vecteurs du stick, les distances de visée et les candidats sont projetés une seule fois pour les comparer aux poses natives en pixels écran. Les déplacements, les sauvegardes et les tests de visibilité utilisent toujours les coordonnées logiques. Un test de combat réel vérifie les contacts diagonaux dans les quatre vues avec cette projection.

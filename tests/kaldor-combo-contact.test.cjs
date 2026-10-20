@@ -1,5 +1,5 @@
 'use strict';
-const {test,before}=require('node:test'),assert=require('node:assert/strict');
+const {test,before}=require('node:test'),assert=require('node:assert/strict'),Projection=require('../scripts/world-projection');
 const W=require('../scripts/kaldor-weapons.js'),{loadGame}=require('./game-harness.cjs');
 let api;before(async()=>{api=await loadGame();});
 function arena(){
@@ -7,7 +7,7 @@ function arena(){
  g.populateAtlas=()=>{};g.checkQuests=()=>{};g.checkSteles=()=>{};g.stepNpcs=()=>{};
  g.player.spawnFX=0;g.player.level=0;return g;
 }
-function target(p,dir,combo,id){const q=W.pose(p.weapon,dir,2,combo);return {id,kind:'snake',x:p.x+q.h[0]+q.u[0]*q.reach,y:p.y+q.h[1]+q.u[1]*q.reach+9,r:1,level:0};}
+function target(p,dir,combo,id){const q=W.pose(p.weapon,dir,2,combo);const delta=Projection.inverse(q.h[0]+q.u[0]*q.reach,q.h[1]+q.u[1]*q.reach+9);return {id,kind:'snake',x:p.x+delta.x,y:p.y+delta.y,r:1,level:0};}
 
 test('all 576 links retain a distinct follow-through before the next preparation in all four views',()=>{
  for(const w of W.all)for(let d=0;d<4;d++)for(let c=0;c<3;c++){
@@ -43,7 +43,7 @@ test('a spammed combo shows its full recoil, links without idle, and keeps each 
    g.update(.04,{attack:true,attackPressed:true});const drawing=p.attack>0?W.sample(p.attack,id,p.combo):5;
    assert.equal(p.dir,dir);
    if(previous&&p.combo!==previous.combo){
-    assert.equal(previous.drawing,3.5,id+' shows recoil before link');assert.equal(drawing,1);
+    assert.equal(previous.drawing,3.5,id+' shows recoil before link');assert.equal(drawing,.75);
     assert.ok(postTicks*.04>=W.times(id,previous.combo)[4]-.04-1e-6,id+' actual engine preserves the recovery budget');postTicks=0;
     assert.notDeepEqual(W.pose(id,dir,previous.drawing,previous.combo),W.pose(id,dir,drawing,p.combo));
     linked++;
@@ -63,7 +63,7 @@ test('contact hit stop freezes attacker, victim and effects, buffers input, and 
  p.hitPause=W.hitPause(p.weapon,0);const before={time:g.time,attack:p.attack,comboWindow:p.comboWindow,x:p.x,y:p.y};
  let simulated=0;g.stepNpcs=()=>simulated++;g.update(.01,{attackPressed:true,x:0,y:1});
  assert.equal(simulated,0);assert.deepEqual({time:g.time,attack:p.attack,comboWindow:p.comboWindow,x:p.x,y:p.y},before);
- assert.ok(p.attackBuffer>0);assert.equal(p.bufferY,1);assert.equal(p.impactTick,false);
+ assert.ok(p.attackBuffer>0);assert.ok(Math.abs(p.bufferY-Math.SQRT1_2)<1e-10);assert.equal(p.impactTick,false);
  const remaining=p.hitPause;g.update(remaining+.005,{});assert.ok(Math.abs(g.time-before.time-.005)<1e-8);assert.equal(p.hitPause,0);assert.ok(simulated>0);
  assert.ok(W.hitPause('aiguille-corail')>=.025);assert.ok(W.hitPause('brise-givre',3)<=.065);
  // A miss never requests a stop.

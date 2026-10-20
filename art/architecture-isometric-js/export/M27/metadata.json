@@ -1,0 +1,97 @@
+{
+  "id": "M27",
+  "label": "Culée de pont",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 32,
+  "depth": 24,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "abutment",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 61,
+      "height": 57,
+      "anchor": [
+        26,
+        26
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          32,
+          16
+        ],
+        [
+          8,
+          28
+        ],
+        [
+          -24,
+          12
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 24,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 61,
+      "height": 57,
+      "anchor": [
+        58,
+        38
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -32,
+          16
+        ],
+        [
+          -56,
+          4
+        ],
+        [
+          -24,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 24,
+        "height": 24
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "id": "H15",
+  "label": "Logis à étage et terrasse",
+  "family": "sarak",
+  "kind": "building",
+  "season": "base",
+  "width": 72,
+  "depth": 64,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "terrace",
+    "wall": "adobe",
+    "roof": "adobe",
+    "rise": 6,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 129,
+      "height": 146,
+      "anchor": [
+        60,
+        78
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          72,
+          36
+        ],
+        [
+          8,
+          68
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 29,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 53,
+            "y": 11.7,
+            "z": 0,
+            "width": 16,
+            "run": 43.5,
+            "rise": 74,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": {
+          "type": "terrace",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 129,
+      "height": 146,
+      "anchor": [
+        132,
+        110
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -72,
+          36
+        ],
+        [
+          -136,
+          4
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 15,
+      "geometry": {
+        "openings": [
+          {
+            "x": 29,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 53,
+            "y": 11.7,
+            "z": 0,
+            "width": 16,
+            "run": 43.5,
+            "rise": 74,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": {
+          "type": "terrace",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 129,
+      "height": 146,
+      "anchor": [
+        68,
+        146
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -72,
+          -36
+        ],
+        [
+          -8,
+          -68
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [
+          {
+            "x": 29,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 53,
+            "y": 11.7,
+            "z": 0,
+            "width": 16,
+            "run": 43.5,
+            "rise": 74,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": {
+          "type": "terrace",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 129,
+      "height": 146,
+      "anchor": [
+        -4,
+        114
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          72,
+          -36
+        ],
+        [
+          136,
+          -4
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 72,
+        "depth": 64,
+        "height": 80
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 29,
+            "y": 61.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "x": 53,
+            "y": 11.7,
+            "z": 0,
+            "width": 16,
+            "run": 43.5,
+            "rise": 74,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": {
+          "type": "terrace",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

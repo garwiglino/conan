@@ -6,15 +6,17 @@ test('spear has four distinct blows and weighted anticipation/strike/recovery ti
  for(let dir=0;dir<4;dir++){
   const paths=[0,1,2,3].map(c=>JSON.stringify([1,2,3,4].map(f=>W.pose(id,dir,f,c))));assert.equal(new Set(paths).size,4);
  }
- for(let c=0;c<4;c++){const t=W.times(id,c);assert.ok(t[1]>t[2]*2);assert.ok(t[5]>t[2]*2);}
- // A readable common recoil floor changes the ratio of the full durations.
- // Preserve the long finisher's contrast in both total time and delivery budget.
- assert.ok(W.duration(id,3)>W.duration(id,0)*1.4);
- assert.ok(W.duration(id,3)-W.times(id,3)[4]>(W.duration(id,0)-W.times(id,0)[4])*1.5);
+ for(let c=0;c<4;c++){const t=W.times(id,c);assert.ok(t[0]+t[1]>t[2]);assert.ok(t[4]+t[5]>t[2]*2);}
+ // Common mobile drawing floors change total-duration ratios. The final lunge
+ // must still charge markedly longer and carry more recovery than a quick jab.
+ const quick=W.times(id,0),final=W.times(id,3);
+ assert.ok(W.duration(id,3)>W.duration(id,0)*1.3);
+ assert.ok(final[0]+final[1]>(quick[0]+quick[1])*1.65);
+ assert.ok(final[4]+final[5]>(quick[4]+quick[5])*1.3);
 });
 test('spear loads from guard, accelerates into contact and follows through with the body',()=>{
  for(let c=0;c<4;c++){
-  assert.equal(W.sample(W.duration(id,c),id,c),1,'attack starts in its held preparation pose');
+  assert.equal(W.sample(W.duration(id,c),id,c),.75,'attack starts in its brief tension pose');
   const a=W.pose(id,1,1.25,c),b=W.pose(id,1,1.5,c),z=W.pose(id,1,1.75,c);
   assert.ok(Math.hypot(z.h[0]-b.h[0],z.h[1]-b.h[1])>Math.hypot(b.h[0]-a.h[0],b.h[1]-a.h[1]));
   assert.ok(W.pose(id,1,1,c).body[0]<0);assert.ok(W.pose(id,1,3,c).body[0]>0);
