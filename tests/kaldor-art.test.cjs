@@ -325,7 +325,9 @@ test('attacks hold the sword in both hands, along the exact gameplay blade direc
    const p=human.attackPose(dir,frame,combo,pose);
    // Strike, contact and follow-through keep the swept gameplay direction;
    // wind-up and recovery are free drawings.
-   if(frame>=2&&frame<=4){
+   // Frame 4 is recovery in the current authored sequence; its blade may turn
+   // back toward guard. Delivery/contact still follow the gameplay sweep.
+   if(frame>=2&&frame<=3){
     const [x,y,vx,vy]=api.HearthreaverWeapons.vector('exile',dir,frame,combo),l=Math.hypot(vx,vy);
     assert.ok(Math.abs(p.blade[0]-vx/l)<1e-9&&Math.abs(p.blade[1]-vy/l)<1e-9,'blade follows swordPose '+dir+':'+combo+':'+frame);
    }

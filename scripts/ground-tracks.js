@@ -9,7 +9,7 @@ function trackSurface(game,n){
 }
 function trackColor(renderer,x,y,material){
  const w=Atlas.toWorld(x,y),cx=Math.floor(w.x/32),cy=Math.floor(w.y/32),colors=renderer.atlasGround?.get(cx+','+cy)?.trackColors;let rgb;
- if(colors&&!atlasCore(x/16,y/16)){const ix=clamp(Math.floor((w.x*16-cx*512)/4),0,colors.w-1),iy=clamp(Math.floor((w.y*16-cy*512)/4),0,colors.h-1),j=(iy*colors.w+ix)*3;rgb=[colors.rgb[j],colors.rgb[j+1],colors.rgb[j+2]];}
+ if(colors&&!atlasCore(x/16,y/16)){const px=w.x*16-cx*512,py=w.y*16-cy*512,p=renderer.projectedTerrain?WorldProjection.point(px,py):{x:px,y:py},ix=clamp(Math.floor((p.x+(renderer.projectedTerrain?512:0))/4),0,colors.w-1),iy=clamp(Math.floor((p.y+(renderer.projectedTerrain?32:0))/4),0,colors.h-1),j=(iy*colors.w+ix)*3;rgb=[colors.rgb[j],colors.rgb[j+1],colors.rgb[j+2]];}
  else {const palettes=WorldTerrainArt.colors,palette=palettes[material==='earth'?'humus':material==='gravel'?'stone':material]||palettes.sand;rgb=[1,3,5].map(i=>parseInt(palette[4].slice(i,i+2),16));}
  // Same hue as the underlying ground; only value changes, no black decal.
  return 'rgb('+rgb.map(v=>Math.round(v*.48)).join(',')+')';
@@ -30,8 +30,10 @@ class GroundTracks{
  draw(renderer,c){const g=this.game;c.save();for(const m of this.marks){
   if(m.material==='snow'&&m.check!==Math.floor(g.clock)){m.check=Math.floor(g.clock);if(footSurface(g,m)!=='snow')m.life=Math.min(m.life,g.time-m.born+1);}
   const age=(g.time-m.born)/m.life;if(age<0||age>=1)continue;c.fillStyle=m.color;c.globalAlpha=m.alpha*(1-skySmooth(.12,1,age));
-  for(const [across,along]of [[0,-1],[0,0],[0,1],[1,1]])c.fillRect(Math.round(m.x+m.ux*along-m.uy*across*m.side),Math.round(m.y+m.uy*along+m.ux*across*m.side),1,1);
+  for(const [across,along]of [[0,-1],[0,0],[0,1],[1,1]]){const x=m.x+m.ux*along-m.uy*across*m.side,y=m.y+m.uy*along+m.ux*across*m.side,p=renderer.projectionActive?WorldProjection.point(x,y):{x,y};c.fillRect(Math.round(p.x),Math.round(p.y),1,1);}
  }c.restore();}
 }
 const tracksRainGround=renderRainGround;
-renderRainGround=function(renderer,c,W,H){let tracks=renderer.groundTracks;if(!tracks||tracks.game!==renderer.g)tracks=renderer.groundTracks=new GroundTracks(renderer.g);tracks.step(renderer);tracks.draw(renderer,c);tracksRainGround(renderer,c,W,H);};
+renderRainGround=function(renderer,c,W,H){const game=renderer.logicalGame||renderer.g;let tracks=renderer.groundTracks;if(!tracks||tracks.game!==game)tracks=renderer.groundTracks=new GroundTracks(game);
+ if(renderer.projectionActive){const cam=renderer.cam,w=renderer.W,h=renderer.H,view=WorldProjection.rect({x:cam.x,y:cam.y,w,h});renderer.cam={x:view.x,y:view.y};renderer.W=view.w;renderer.H=view.h;try{tracks.step(renderer);}finally{renderer.cam=cam;renderer.W=w;renderer.H=h;}}else tracks.step(renderer);
+ tracks.draw(renderer,c);tracksRainGround(renderer,c,W,H);};

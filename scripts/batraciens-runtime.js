@@ -317,7 +317,7 @@ const Batraciens = (() => {
   }
  };
  Game.prototype.launchBatracienJavelin=function(n,t){
-  if((this.batracienMissiles||[]).length>=12)return;const b=n.batracien,[fx,fy]=this.facing(b.lockedDir??n.dir);
+  if((this.batracienMissiles||[]).length>=12)return;const b=n.batracien,aim=t&&Math.hypot(t.x-n.x,t.y-n.y),[fx,fy]=aim?[(t.x-n.x)/aim,(t.y-n.y)/aim]:this.facing(b.lockedDir??n.dir);
   (this.batracienMissiles??=[]).push({x:n.x+fx*8,y:n.y+fy*8,vx:fx*112,vy:fy*112,life:1.4,level:n.level||0,owner:n.id,friendly:this.npcs.includes(n)&&!this.isHostileBatracien?.(n),law:!!this.isHostileBatracien?.(n),damage:1,dir:b.lockedDir??n.dir});
  };
  function swept(s,t,dx,dy,r=7){const ll=dx*dx+dy*dy,u=ll?clampN(((t.x-s.x)*dx+(t.y-s.y)*dy)/ll,0,1):0;return Math.hypot(t.x-s.x-dx*u,t.y-s.y-dy*u)<r?u:null;}

@@ -6,20 +6,40 @@
     "pathAndRiverSeams": true,
     "cliffAndStairHeights": true,
     "realAtlasCodesAndAnalyticRoads": true,
-    "unitTestsPassed": 7,
-    "browserScenesPixelExact": 11,
-    "browserControls": [
-      "catalogue filter",
-      "real atlas comparison",
-      "projection grid",
-      "mobile 844x390"
+    "gameWorldProjectionEnabled": true,
+    "logicalSaveCoordinatesPreserved": true,
+    "towns": 83,
+    "buildings": 1947,
+    "workerAndFallbackChecked": true,
+    "mobileViewports": [
+      [
+        568,
+        320
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        932,
+        430
+      ]
     ],
-    "gameWorldProjectionEnabled": false,
-    "remoteWrites": false
+    "terrainCacheLimit": 16,
+    "pendingJobLimit": 8,
+    "fullRegressionCasesExecuted": 741,
+    "allInitialFailuresFixedAndRechecked": true,
+    "outstandingTestFailures": 0,
+    "weaponDrawingsChanged": false,
+    "physicalIPhoneTest": false,
+    "publicationRequested": true
   },
   "sourceSha256": {
-    "sprites/terrain/terrain-isometric.js": "325e8c8066d99427bbea3eac9322d7adb739cc6598ca306e31d36be827a1f583",
-    "sprites/terrain/terrain-isometric-scene.js": "0db4cf29fde7883a4cffb032d8e3c354ce02e7b64400bebabf070be6ed73b5f7",
-    "sprites/terrain/isometric-palettes.json": "848a4e055375175e96999dbc9f1b8f200edef4435d244c2906529c3848f3b0c9"
-  }
+    "sprites/terrain/terrain-isometric.js": "813bec5b413fbdacafa91caa6840b25d9f1a2a12149e3f7699e2c14787926169",
+    "scripts/world-projection.js": "45f65f8202009455ad8f34ea5ea27a516ab63a1c701212bc132c62bbb7cdf2e7",
+    "scripts/world-isometric-art.js": "2185368ab50e6a956cb2fbdd249514a1a1e80c54281ae3831ee2f29adc0a08a7",
+    "scripts/world-isometric-runtime.js": "292e123835d492abc92e7d5fb4b82ba4ceb135bb3deebc298f4a03afcdddeea9",
+    "sprites/architecture/architecture-game.js": "1bef19578c17ee88949bae21d043e5041fa8092afe80c65b4b497db8c7b0e59e"
+  },
+  "validationMethod": "Full 741-case regression run followed by passing reruns of every previously failing case/file; browser worker/fallback, mobile, journeys and framerate checks."
 }

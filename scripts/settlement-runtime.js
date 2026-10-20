@@ -15,7 +15,7 @@
   if(districts)return districts;if(SETTLEMENT_DATA.layout!==Atlas.layout.id)throw Error('Les implantations doivent être reconstruites pour cet atlas');
   const collision=new Spatial(),art=new Spatial(),clear=new Spatial(),lanes=new Spatial(),sites=new Map(),buildings=[];
   for(const s of SETTLEMENT_DATA.sites){const node=Atlas.byId[s.id],p=Atlas.toGame(node.x,node.y),placed=[];
-   for(const b of s.buildings){const o={...b,x:Math.round(p.x+b.x),y:Math.round(p.y+b.y),site:s.id},g=A.geometry(o.id,o),f=A.entry(o.id).frames[o.dir];o.geometry=g;o.bounds={x:o.x-f.anchor[0],y:o.y-f.anchor[1]-(f.lift||0),w:f.size[0],h:f.size[1]};
+   for(const b of s.buildings){const o={...b,x:Math.round(p.x+b.x),y:Math.round(p.y+b.y),site:s.id},g=A.geometry(o.id,o);o.geometry=g;o.bounds=A.worldBounds(o);
     buildings.push(o);placed.push(o);collision.put(o,g.foot);art.put(o,o.bounds);const r={x:g.foot.x-16,y:g.foot.y-16,w:g.foot.w+32,h:g.foot.h+48};clear.put(r,r);
    }
    for(const lane of s.lanes){const r={...lane,x:p.x+lane.x,y:p.y+lane.y};clear.put(r,r);r.paved=node.regionalCentre;lanes.put(r,r);}
@@ -151,14 +151,14 @@
    out.push(...HearthreaverArchitectureRender.objects(this,o,isSnow(g,o)));
   }
   for(const w of g.humanWorkstations?.values()||[]){if(w.id==='crop_patch'&&isSnow(g,w))continue;if(Math.abs(w.x-(view.x+view.w/2))>view.w/2+70||Math.abs(w.y-(view.y+view.h/2))>view.h/2+100)continue;const im=fixtureImage(w,isSnow(g,w),this);
-   out.push({always:true,y:Math.min(w.y,w.feet[1])-.1,fn:()=>this.c.drawImage(im.back,w.x-64,w.y-96)},{always:true,y:Math.max(w.y,w.feet[1])+.1,fn:()=>this.c.drawImage(im.front,w.x-64,w.y-96)});
+   const p=this.projectionActive?WorldProjection.point(w.x,w.y):w,feet=this.projectionActive?WorldProjection.point(...w.feet):{y:w.feet[1]};out.push({always:true,y:Math.min(p.y,feet.y)-.1,fn:()=>this.c.drawImage(im.back,p.x-64,p.y-96)},{always:true,y:Math.max(p.y,feet.y)+.1,fn:()=>this.c.drawImage(im.front,p.x-64,p.y-96)});
   }return out;
  };
  const draw=Renderer.prototype.npcDraw;
  Renderer.prototype.npcDraw=function(n){const c=n.civilian,w=this.g.humanWorkstations?.get(n.id);if(!c||n.batracien||!n.resident||!this.g.settlements.sites.has(n.site))return draw.call(this,n);
-  const working=w&&c.action===c.job&&this.g.humanWorkSpec(n)&&Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2,action=working?w.action:H.activitiesFor('civilian').includes(c.action)?c.action:'idle',role=working?w.role:'civilian',a=c.appearance;
+  const physical=n._logical||n,working=w&&c.action===c.job&&this.g.humanWorkSpec(n)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2,action=working?w.action:H.activitiesFor('civilian').includes(c.action)?c.action:'idle',role=working?w.role:'civilian',a=c.appearance;
   const dir=['dos','droite','face','gauche'][n.dir??2],climate=({teremor:'tempere',sylverive:'tempere',igea:'neige',sarak:'aride',varan:'marais',tagon:'jungle'})[this.g.settlements.sites.get(n.site)?.family]||'tempere';
-  const frame=H.frameAt(action,c.elapsed||0,H.CLIPS[action].stride?c.distance:undefined),interaction=(working||w?.socket.support&&['sit_down','seated','stand_up'].includes(c.action)&&Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2)?P.interaction(fixtureImage(w,isSnow(this.g,w),this).decor):undefined;
+  const frame=H.frameAt(action,c.elapsed||0,H.CLIPS[action].stride?c.distance:undefined),interaction=(working||w?.socket.support&&['sit_down','seated','stand_up'].includes(c.action)&&Math.hypot(physical.x-w.feet[0],physical.y-w.feet[1])<=2)?P.interaction(fixtureImage(w,isSnow(this.g,w),this).decor):undefined;
   const outfit=H.Sources.outfits[a.outfit]?a.outfit:Object.keys(H.Sources.outfits).find(id=>H.Sources.outfits[id].source===a.outfit);
   const options={...a,outfit,role,action,dir,climate,frame,interaction},key=JSON.stringify([a,role,action,dir,frame,climate,working?w.id:null]);let im=frameCache.get(key);
   if(!im){const p=H.renderLayers(options);im=pixelCanvas(80,80,p.order.flatMap(k=>p.layers[k]));frameCache.set(key,im);if(frameCache.size>256)frameCache.delete(frameCache.keys().next().value);}

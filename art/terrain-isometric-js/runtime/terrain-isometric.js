@@ -4,7 +4,7 @@
 (function(root,factory){
  if(typeof module==='object'&&module.exports)module.exports=factory(require('./isometric-palettes.json'));
  else root.HearthreaverIsometricTerrain=factory(root.HearthreaverTerrainPalettes);
-})(globalThis,function(P){
+})(globalThis,function createIsometricTerrain(P){
 'use strict';
 const SIZE=16,project=(u,v,z=0)=>[u-v,(u+v)/2-z],unproject=(x,y,z=0)=>[y+z+x/2,y+z-x/2];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mod=(a,b)=>(a%b+b)%b;
@@ -132,6 +132,7 @@ function top(d,lu,lv,wx=0,wy=0){
  }
 }
 function side(d,u,v,z,face){
+ if(d.kind==='wood')return colour('wood',face===2?2:4);
  const pr=P.profiles[d.family],along=face%2?v:u,n=noise(along,z,9,96),strata=mod(z+Math.floor(noise(along,0,12,94)*4),5);
  let tone=(face===2?2.7:3.6)+(n-.5)*.7;
  if(strata<1)tone-=1;if(strata>=4)tone+=.6;
@@ -222,5 +223,5 @@ function draw(ctx,input,x=0,y=0,options={}){
  for(let y0=0;y0<im.height;y0++)for(let x0=0;x0<im.width;){const i=im.indices[y0*im.width+x0];let end=x0+1;while(end<im.width&&im.indices[y0*im.width+end]===i)end++;if(i){ctx.fillStyle=palette[i];ctx.fillRect(x+(x0-im.anchor[0])*scale,y+(y0-im.anchor[1])*scale,(end-x0)*scale,scale);}x0=end;}
  return im;
 }
-return Object.freeze({SIZE,project,unproject,palette,families,labels,profiles:P.profiles,colors:P.colors,list,entry,definition,raster,draw,top,geometry,noise,hash,distance});
+return Object.freeze({create:createIsometricTerrain,SIZE,project,unproject,palette,families,labels,profiles:P.profiles,colors:P.colors,list,entry,definition,raster,draw,top,geometry,noise,hash,distance});
 });

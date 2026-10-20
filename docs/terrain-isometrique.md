@@ -65,15 +65,40 @@ npm run check:terrain-isometric
 npm run package:terrain-isometric
 ```
 
-## État de l’intégration
+## Intégration au jeu web et iOS
 
-Ce travail est un atlas complet et un atelier de prévisualisation local.
-La nouvelle projection du monde **n’est pas encore activée dans le jeu**.
-Changer seulement la texture de fond laisserait les joueurs, collisions,
-chemins de navigation, effets et positions des bâtiments dans l’ancien plan.
-La migration de cette caméra et de ses systèmes doit utiliser une conversion
-commune, avec sauvegardes compatibles. Les emplacements et collisions de la
-version jouable actuelle sont donc conservés. Aucun push n’a été effectué.
+La projection est active dans la version jouable. Les 83 localités conservent
+leurs centres et disposent de 1 947 bâtiments. Les positions de la simulation,
+les routes géographiques, les stocks, la justice, la navigation et les
+sauvegardes restent dans leur plan logique existant.
+
+`world-projection.js` fournit une vue d’affichage : terrain, acteurs, objets,
+effets, marqueurs et caméra passent dans le même repère 2:1. Les vues d’acteurs
+partagent leurs identités et leurs caches ; elles interdisent les déplacements
+écrits depuis le renderer. Les contrôles écran sont convertis vers le plan
+logique, les coups d’armes vers leur géométrie dessinée, et les javelots visent
+la position logique de leur cible. Les fondations utilisent l’inverse exact de
+la projection des dessins. Les maisons s’atténuent entièrement à 32 % lorsqu’elles
+masquent le joueur, avec la courbe de la plateforme initiale.
+
+`world-isometric-art.js` peint le terrain final dans un worker. Sans worker,
+le même générateur avance par petites tranches coopératives. Le rendu principal
+ne reconstruit pas de région complète. Les routes suivent leurs segments et
+largeurs ; les chemins du camp et des quartiers utilisent leurs tracés existants.
+Les anciennes cellules solides de roche et de mur deviennent des reliefs
+visuels à 32 et 24 unités ; elles restent bloquantes. Les escaliers, la plateforme,
+les portes et le monte-charge du camp conservent leurs règles de jeu.
+
+Le cache de terrain est borné à 16 régions, la file à huit demandes et un seul
+travail est lancé à la fois. Les faces de falaise visibles se trient avec les
+pieds des acteurs. Les parties de bâtiments hors écran sont retirées avant le
+dessin, sans supprimer leurs fondations ou leurs habitants. Les sources sont
+embarquées hors ligne dans le HTML web et iOS ; aucun PNG du nouvel atlas
+n’est demandé pendant la partie.
+
+Les captures et rapports réels sont dans `integration/`. La petite scène de
+conception emploie désormais le Kaldor courant du jeu, extrait sans changement
+de taille par `build-terrain-player-reference.cjs`, avec sa tenue et son arme.
 
 ## Vérifications
 
@@ -83,3 +108,9 @@ sans trou du sol projeté, la continuité des routes/rivières, les hauteurs et
 la conservation des codes de terrain des extraits réels. Chromium compare
 les pixels des onze scènes à ceux du renderer natif et vérifie les contrôles
 de l’atelier, les comparatifs et l’affichage mobile.
+
+Deux anciens contrôles d’armes supposant une lame dirigée vers l’ennemi pendant
+la préparation et la récupération ont été remis en accord avec les phases
+actuelles déjà présentes sur `origin/main` (`a71bbd7`). La direction reste
+strictement contrôlée au contact ; la préparation et l’après-impact restent
+également distincts. Les dessins et poses d’armes ne changent pas.

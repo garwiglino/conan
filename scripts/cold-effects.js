@@ -9,9 +9,10 @@ function coldBreathProfile(n){
 Renderer.prototype.coldBreath=function(n,bodyProfile=null){
  const g=this.g,cam=this.cam||{x:0,y:0};if(g.journey||n.hidden||(n.alpha??1)<=0||n.x<cam.x-12||n.x>cam.x+(this.W||320)+12||n.y<cam.y-12||n.y>cam.y+(this.H||180)+40)return;
  const profile=bodyProfile||coldBreathProfile(n);if(!profile)return;
- if(this.breathGame!==g){this.breathGame=g;this.breathActors=new WeakMap();}
- let s=this.breathActors.get(n);if(!s){let seed=17;for(const ch of String(n.id||n.kind||n.look))seed=(seed*31+ch.charCodeAt(0))>>>0;seed=(seed+(n.x*13+n.y*7|0))>>>0;s={seed,next:g.time+.15+(seed%80)/100,born:-100};this.breathActors.set(n,s);}
- if(s.sample!==Math.floor(g.clock)||Math.abs((s.x??Infinity)-n.x)>8||Math.abs((s.y??Infinity)-n.y)>8){const w=Atlas.toWorld(n.x,n.y);s.temperature=worldClimateAt(g.clock,w.x,w.y).temperature;s.sample=Math.floor(g.clock);s.x=n.x;s.y=n.y;}
+ const physicalGame=this.logicalGame||g,physicalActor=n._logical||n;
+ if(this.breathGame!==physicalGame){this.breathGame=physicalGame;this.breathActors=new WeakMap();}
+ let s=this.breathActors.get(physicalActor);if(!s){let seed=17;for(const ch of String(n.id||n.kind||n.look))seed=(seed*31+ch.charCodeAt(0))>>>0;seed=(seed+(n.x*13+n.y*7|0))>>>0;s={seed,next:g.time+.15+(seed%80)/100,born:-100};this.breathActors.set(physicalActor,s);}
+ if(s.sample!==Math.floor(g.clock)||Math.abs((s.x??Infinity)-n.x)>8||Math.abs((s.y??Infinity)-n.y)>8){const physical=n._logical||n,w=Atlas.toWorld(physical.x,physical.y);s.temperature=worldClimateAt(g.clock,w.x,w.y).temperature;s.sample=Math.floor(g.clock);s.x=n.x;s.y=n.y;}
  const cold=clamp((5-s.temperature)/13,0,1);if(!cold){s.born=-100;s.next=g.time+.2;return;}
  const dir=profile.dir??n.dir??2,period=2.6+(s.seed%80)/100;
  if(g.time<s.born||Math.hypot(n.x-(s.lastX??n.x),n.y-(s.lastY??n.y))>64){s.born=-100;s.next=g.time+.2;}s.lastX=n.x;s.lastY=n.y;

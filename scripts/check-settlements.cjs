@@ -13,9 +13,9 @@ const fs=require('node:fs'),http=require('node:http'),assert=require('node:asser
    assert.ok(result.buildings>=8);assert.ok(result.landing,id+' has no transport landing');await page.waitForTimeout(250);await page.screenshot({path:'/tmp/conan-district-'+id+'-'+width+'.png'});
   }
   const transparency=await page.evaluate(()=>{
-   const t=districtTest,g=t.game,r=t.renderer,A=t.HearthreaverArchitectureGame,Art=HearthreaverArchitectureRender;let chosen,point;
+   const t=districtTest,g=t.game,r=t.renderer,A=t.HearthreaverArchitectureGame,Art=HearthreaverArchitectureRender,project=o=>({...o,...WorldProjection.point(o.x,o.y)});let chosen,point;
    for(const b of g.settlements.sites.get('town-1').buildings){if(A.entry(b.id).openHall)continue;const f=Art.frame(b),foot=b.geometry.foot;
-    for(let y=foot.y-32;y<foot.y+6&&!point;y+=2)for(let x=foot.x;x<foot.x+foot.w;x+=2)if(!g.solid(x,y,5,0)&&Art.obscures(f,b,{x,y,level:0})){chosen=b;point={x,y};break;}if(point)break;
+    for(let y=foot.y-32;y<foot.y+foot.h&&!point;y+=2)for(let x=foot.x;x<foot.x+foot.w;x+=2)if(!g.solid(x,y,5,0)&&Art.obscures(f,project(b),project({x,y,level:0}))){chosen=b;point={x,y};break;}if(point)break;
    }
    if(!chosen)throw Error('No walkable point behind a building');g.placeSafely(point.x,point.y);g.player.spawnFX=0;g.player.z=0;delete g.player.elevation;
    for(let i=0;i<45;i++){g.time+=1/60;r.frame();}

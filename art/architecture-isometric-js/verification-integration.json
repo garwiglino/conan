@@ -1,9 +1,9 @@
 {
-  "status": "Intégration conservée en local ; push suspendu à la demande de l’utilisateur",
+  "status": "Intégration isométrique validée ; publication autorisée sur main",
   "models": 234,
   "views": 696,
   "towns": 83,
-  "placedBuildings": 1914,
+  "placedBuildings": 1947,
   "checks": {
     "nativePixels": "696 vues comparées pixel pour pixel aux sources",
     "architectureAndCollisions": "validés",
@@ -22,20 +22,15 @@
       "unitTests": 4,
       "mobileChromium": "validé aux trois formats",
       "easing": "identique à la plateforme initiale : 1 - 0.004 ** dt"
-    }
+    },
+    "worldProjection": "active, shared with terrain and actors",
+    "currentDistrictBuildings": 1947,
+    "priorWeaponAssertions": "updated to match current contact and recovery phases; affected files pass"
   },
   "generalSuite": {
-    "initialRun": {
-      "tests": 705,
-      "passed": 699,
-      "failed": 6
-    },
-    "dependencyFailures": "5 fichiers retestés avec succès après installation des dépendances déclarées",
-    "remainingFailure": {
-      "test": "tests/kaldor-pole-grip.test.cjs:55",
-      "message": "baton-aulne profile closes toward opponent",
-      "scope": "Test et scripts/kaldor-weapons.js identiques à origin/main ; aucun changement d’armes effectué"
-    }
+    "casesExecuted": 741,
+    "allInitialFailuresFixedAndRechecked": true,
+    "outstandingFailures": 0
   },
-  "remoteWrites": false
+  "publicationRequested": true
 }

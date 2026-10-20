@@ -7,9 +7,9 @@ test('all 696 embedded views are exactly the authored worn native pixels, includ
   const original=I.raster(d.id,{dir,open:0}),compiled=A.raster(d.id,{dir,open:0});assert.deepEqual(compiled.indices,original.indices,d.id+'/'+dir);assert.deepEqual(compiled.data,original.data,d.id+'/'+dir);assert.deepEqual(compiled.layers,original.layers);assert.equal(compiled.width,original.width);assert.equal(compiled.height,original.height);
  }
 });
-test('collision polygons match the same projected mesh, with free diamond corners and real open halls',()=>{
+test('collision polygons match the same projected mesh, with logical rectangular foundations and real open halls',()=>{
  const g=A.geometry('T01',{x:100,y:100}),wall=g.solids.find(r=>r.zMin===0&&r.zMax>22&&r.w>20);assert.ok(wall);
- const middle=wall.polygon.reduce((v,p)=>[v[0]+p[0]/4,v[1]+p[1]/4],[0,0]);assert.ok(A.contains(wall,...middle));assert.equal(A.contains(wall,wall.x+.1,wall.y+.1),false);
+ const middle=wall.polygon.reduce((v,p)=>[v[0]+p[0]/4,v[1]+p[1]/4],[0,0]);assert.ok(A.contains(wall,...middle));assert.equal(A.contains(wall,wall.x+.1,wall.y+.1),true);
  for(const id of ['B05','B09','B12']){const d=A.entry(id);assert.ok(d.openHall);const plan=A.geometry(id);assert.ok(plan.workspots.length);assert.ok(plan.workspots.some(p=>!A.collides([{id}],p.x,p.y,{radius:4})),id+' must have an accessible covered work area');}
  const base=A.geometry('T09'),winter=A.geometry('T09-hiver');assert.deepEqual(winter.solids,base.solids);assert.deepEqual(winter.portals,base.portals);
 });
@@ -27,7 +27,7 @@ test('compiled-frame results and their metadata cannot be corrupted through retu
 });
 test('regional wall modules attach on the projected grid with matching walk heights',()=>{
  for(const family of ['teremor','sylverive','igea','sarak','varan','tagon']){
-  const kit=A.kitFor(family),first={id:kit.wall,dir:'ew',x:0,y:0},next=A.attach(first,'east',{id:kit.wall,dir:'ew'},'west');assert.deepEqual([next.x,next.y],[48,24]);
+  const kit=A.kitFor(family),first={id:kit.wall,dir:'ew',x:0,y:0},next=A.attach(first,'east',{id:kit.wall,dir:'ew'},'west');assert.deepEqual([next.x,next.y],[48,0]);
   const a=A.geometry(first.id,first).sockets.find(p=>p.id==='east'),b=A.geometry(next.id,next).sockets.find(p=>p.id==='west');assert.deepEqual([a.x,a.y,a.z,a.width],[b.x,b.y,b.z,b.width]);
  }
  assert.throws(()=>A.attach({id:'M49',dir:'ew'},'east',{id:'M65',dir:'ew'},'west'),/Niveaux/);

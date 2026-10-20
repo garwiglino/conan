@@ -50,10 +50,12 @@
     "embed:architecture": "node scripts/embed-architecture.cjs",
     "test:architecture-game": "node --test tests/architecture-game.test.cjs tests/architecture-occlusion.test.cjs tests/settlements.test.cjs",
     "preview:architecture-occlusion": "node scripts/preview-architecture-occlusion.cjs",
-    "build:terrain-isometric": "node scripts/export-terrain-isometric.cjs",
+    "build:terrain-isometric": "node scripts/build-terrain-player-reference.cjs && node scripts/export-terrain-isometric.cjs",
     "test:terrain-isometric": "node --test tests/terrain-isometric.test.cjs",
     "check:terrain-isometric": "node scripts/check-terrain-isometric.cjs",
-    "package:terrain-isometric": "python3 scripts/package-terrain-isometric.py"
+    "package:terrain-isometric": "python3 scripts/package-terrain-isometric.py",
+    "test:world-isometric": "node --test tests/world-isometric.test.cjs",
+    "check:world-isometric": "node scripts/check-world-isometric.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

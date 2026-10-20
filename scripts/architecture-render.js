@@ -3,6 +3,7 @@
 (function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('../sprites/architecture/architecture-game.js'));else r.HearthreaverArchitectureRender=f(r.HearthreaverArchitectureGame);})(globalThis,function(A){
 'use strict';
 const frames=new Map(),STEP=8,MAX=96,BASE_HEIGHT=8,FADE_ALPHA=.32;let factory=null;
+const projectPoint=(x,y)=>typeof WorldProjection!=='undefined'?WorldProjection.point(x,y):require('./world-projection.js').point(x,y);
 function frame(o,snow){
  const id=snow&&A.catalogue[o.id+'-hiver']?o.id+'-hiver':o.id,dir=o.dir||A.entry(id).views[0],key=[id,dir,!!snow,(o.open===undefined&&/^F(07|08|09|10|11)$/.test(id))||o.open===1,o.weather!==false].join('/');
  if(frames.has(key)){const old=frames.get(key);frames.delete(key);frames.set(key,old);return old;}
@@ -40,7 +41,7 @@ function obscures(f,o,player){
  }return false;
 }
 function opacity(renderer,o,f){
- const player=renderer.g?.player;if(!player)return 1;
+ let player=renderer.g?.player;if(renderer.projectionActive&&renderer.logicalGame){const p=renderer.logicalGame.player;player={...p,...projectPoint(p.x,p.y)};}if(!player)return 1;
  const hidden=obscures(f,o,player),target=hidden?FADE_ALPHA:1,time=Number(renderer.g.time)||0,key=o.uid||[o.id,o.dir,o.x,o.y].join('/');
  const states=renderer.architectureOcclusion||(renderer.architectureOcclusion=new Map());let state=states.get(key);
  if(!state){state={alpha:target,time};states.set(key,state);if(states.size>256)states.delete(states.keys().next().value);}
@@ -50,8 +51,9 @@ function opacity(renderer,o,f){
  return state.alpha;
 }
 function objects(renderer,o,snow=false){
+ if(renderer.projectionActive){const p=projectPoint(o.x,o.y);o={...o,x:p.x,y:p.y};}
  const f=frame(o,snow),alpha=opacity(renderer,o,f);
- return f.chunks.map(chunk=>({always:true,level:0,y:o.y+chunk.depth,architecture:o.uid,architectureUpper:chunk.upper,architectureAlpha:alpha,fn:()=>{
+ return f.chunks.map(chunk=>({always:true,level:0,y:o.y+chunk.depth,bounds:{x:o.x+chunk.x,y:o.y+chunk.y,w:chunk.cv.width,h:chunk.cv.height},architecture:o.uid,architectureUpper:chunk.upper,architectureAlpha:alpha,fn:()=>{
   const c=renderer.c;c.save();c.imageSmoothingEnabled=false;c.globalAlpha*=alpha;c.drawImage(chunk.cv,Math.round(o.x+chunk.x),Math.round(o.y+chunk.y));c.restore();
  }}));
 }

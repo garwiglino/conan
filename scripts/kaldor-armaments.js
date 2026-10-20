@@ -123,7 +123,8 @@ const KaldorArmaments=(()=>{
   const {card,anchor}=active,cv=renderer.c.canvas;
   if(!anchor||!cv.getBoundingClientRect)return;
   const rect=cv.getBoundingClientRect(),sx=rect.width/renderer.W,sy=rect.height/renderer.H;
-  const px=rect.left+(anchor.x-renderer.cam.x)*sx,py=rect.top+(renderer.top+anchor.y-renderer.cam.y-(anchor.level?12:0))*sy;
+  const at=renderer.isometricTerrainGame&&typeof WorldProjection!=='undefined'?WorldProjection.point(anchor.x,anchor.y):anchor;
+  const px=rect.left+(at.x-renderer.cam.x)*sx,py=rect.top+(renderer.top+at.y-renderer.cam.y-(anchor.level?12:0))*sy;
   const visible=renderer.g.sameLevel(anchor,renderer.g.player)&&px>=rect.left&&px<=rect.right&&py>=rect.top&&py<=rect.bottom;
   card.style.visibility=visible?'visible':'hidden';if(!visible)return;
   const half=card.offsetWidth/2;

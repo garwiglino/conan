@@ -1,5 +1,5 @@
 /* Review scenes: native terrain plus the actual architecture pixels at 1:1. */
-(function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('./terrain-isometric'),require('../architecture/architecture-isometric'));else r.HearthreaverTerrainScene=f(r.HearthreaverIsometricTerrain,r.HearthreaverIsometric);})(globalThis,function(T,A){
+(function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('./terrain-isometric'),require('../architecture/architecture-isometric'),require('./player-reference'));else r.HearthreaverTerrainScene=f(r.HearthreaverIsometricTerrain,r.HearthreaverIsometric,r.HearthreaverTerrainPlayer);})(globalThis,function(T,A,Player){
 'use strict';
 const directions=[[0,-1,1],[1,0,2],[0,1,4],[-1,0,8]];
 const houseFor={desert:'T13',grass:'T01',steppe:'T09',forest:'T05',wetforest:'T17',jungle:'T21',marsh:'T17',taiga:'T09',tundra:'T10',snow:'T09',cursed:'T16'};
@@ -90,8 +90,8 @@ function render(ctx,map,options={}){
   const [x,y]=T.project(h.x,h.y,h.z);objects.push({depth:(h.x+h.y+d.width+d.depth)/2,draw:()=>A.draw(ctx,{id,x:Math.round(x+origin[0]),y:Math.round(y+origin[1]),dir:h.dir})});
  }
  // The reference human is 19 native pixels tall, matching the architecture pack.
- const [hx,hy]=T.project(18*16+8,13*16+7),human=['...111...','..12221..','..12221..','...222...','...333...','..34443..','.3344433.','.3344433.','..34443..','..34443..','...444...','...444...','...555...','..55555..','..55.55..','..55.55..','..55.55..','..66.66..','.666.666.'];
- if(!map.atlasRect)objects.push({depth:(18*16+8+13*16+7)/2,draw:()=>{const p=['','#514036','#d8b583','#302830','#647655','#3b4249','#23212b'];for(let y=0;y<human.length;y++)for(let x=0;x<9;x++){const n=+human[y][x];if(n){ctx.fillStyle=p[n];ctx.fillRect(Math.round(hx+origin[0])-4+x,Math.round(hy+origin[1])-19+y,1,1);}}}});
+ const [hx,hy]=T.project(18*16+8,13*16+7);
+ if(!map.atlasRect)objects.push({depth:(18*16+8+13*16+7)/2,draw:()=>{for(const [x,y,r,g,b,a]of Player.pixels){ctx.fillStyle=`rgba(${r},${g},${b},${a/255})`;ctx.fillRect(Math.round(hx+origin[0])-Player.anchor[0]+x,Math.round(hy+origin[1])-Player.anchor[1]+y,1,1);}}});
  objects.sort((a,b)=>a.depth-b.depth).forEach(o=>o.draw());ctx.restore();
  return {houses:map.houses.length,tiles:map.cells.length,projection:'dimetric-2:1',humanHeight:19};
 }

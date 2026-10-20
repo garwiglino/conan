@@ -113,8 +113,10 @@ nouveaux éléments structurels. Les PNG du dossier `avant/` et la planche
 
 ## Intégration au moteur
 
-`architecture-game.js` associe les dessins au repère XY existant du jeu sans
-projeter une deuxième fois le terrain ou les personnages. Il expose les volumes
+`architecture-game.js` conserve les positions de placement dans le repère logique
+XY existant. Ses fondations sont les volumes natifs tournés dans ce plan ;
+leurs pixels et les acteurs sont projetés une seule fois par la caméra commune.
+Il expose les volumes
 solides sous forme de polygones, les accès, les emprises et les positions de
 travail couvertes. Les villes utilisent ces mesures pour leurs implantations.
 Les 234 modèles restent disponibles via `placeArchitecture(id, options)` et
@@ -153,12 +155,10 @@ sauvegardes et les trois formats Chromium passent. Les sources web et iOS ainsi
 que le ZIP iOS ont été synchronisés et vérifiés. Le rapport se trouve dans
 `art/architecture-isometric-js/verification-integration.json`.
 
-La suite générale comporte un échec préexistant dans
-`tests/kaldor-pole-grip.test.cjs:55` : la pose du `baton-aulne` ne satisfait pas
-le seuil attendu en profil. Ce test et `scripts/kaldor-weapons.js` sont inchangés
-par rapport à `origin/main`. Les cinq autres fichiers initialement en échec
-manquaient de dépendances locales ; leur relance après installation passe.
-Aucune modification d’armes n’est incluse dans ce travail.
+Les contrôles de combat ont été adaptés au repère d’affichage commun. Deux
+anciens contrôles de poses ont aussi été recalés sur la phase actuelle de
+contact, sans modifier les dessins ni les mouvements d’armes. Les tests
+concernés passent après relance.
 
 ## Passage derrière le bâti
 

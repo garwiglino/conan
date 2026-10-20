@@ -37,7 +37,7 @@ function install(Game,Renderer){
  };
  Renderer.prototype.architectureDrawObjects=function(){
   const objects=[],cam=this.cam||{x:0,y:0},W=this.W||320,H=this.H||224;
-  for(const o of this.g.architectureProps||[]){const d=A.entry(o.id),f=d.frames[o.dir||d.views[0]],left=o.x-f.anchor[0],top=o.y-f.anchor[1]-(f.lift||0);if(left+f.size[0]<cam.x||left>cam.x+W||top+f.size[1]<cam.y||top>cam.y+H)continue;
+  for(const o of this.g.architectureProps||[]){const b=A.worldBounds(o);if(b.x+b.w<cam.x||b.x>cam.x+W||b.y+b.h<cam.y||b.y>cam.y+H)continue;
    objects.push(...Art.objects(this,o));
   }return objects;
  };

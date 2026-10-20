@@ -1,8 +1,8 @@
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),{loadGame,canvas}=require('./game-harness.cjs');let a;before(async()=>a=await loadGame());
 test('arrival and teleports snap camera before terrain collection, then track without easing',()=>{
  const g=new a.Game(),cv=canvas.createCanvas(640,400),r=new a.Renderer(cv,canvas.createCanvas(1,1),g);r.resize(320,200,{t:0,b:0,l:0,r:0},2);g.dialogue=null;
- r.focus={x:100,y:100};r.easeT=.45;g.journey={};r.frame();g.journey=null;Object.assign(g.player,a.Atlas.toGame(a.Atlas.byId['town-69'].x,a.Atlas.byId['town-69'].y));r.frame();assert.equal(r.focus.x,g.player.x);assert.equal(r.easeT,0);assert.ok(Math.abs(r.cam.x-(g.player.x-160))<=.25);
- for(let i=0;i<5;i++){g.time+=.016;g.player.x+=1.07;r.frame();assert.ok(Math.abs(r.cam.x-(g.player.x-160))<=.25);}
+ r.focus={x:100,y:100};r.easeT=.45;g.journey={};r.frame();g.journey=null;Object.assign(g.player,a.Atlas.toGame(a.Atlas.byId['town-69'].x,a.Atlas.byId['town-69'].y));r.frame();assert.equal(r.focus.x,g.player.x-g.player.y);assert.equal(r.easeT,0);assert.ok(Math.abs(r.cam.x-(g.player.x-g.player.y-160))<=.25);
+ for(let i=0;i<5;i++){g.time+=.016;g.player.x+=1.07;r.frame();assert.ok(Math.abs(r.cam.x-(g.player.x-g.player.y-160))<=.25);}
  assert.ok(r.atlasVisible.length<12);
 });
 test('large coordinate rasterization matches local sprite and tile pixels',()=>{

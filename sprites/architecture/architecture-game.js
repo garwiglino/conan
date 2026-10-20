@@ -1,5 +1,5 @@
-/* Runtime adapter: projected native geometry shares the game's world XY plane.
- * It rotates a complete local building, never the terrain or the actors. */
+/* Physical building geometry lives in the unchanged logical world plane.
+ * Pixel origins remain projected; the camera projects placement anchors once. */
 (function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('./architecture.js'),require('./architecture-isometric.js'),require('./isometric-pixels.js'));else r.HearthreaverArchitectureGame=f(r.HearthreaverArchitecture,r.HearthreaverIsometric,r.HearthreaverIsometricPixels);})(globalThis,function(Base,I,P){
 'use strict';
 const definitions=new Map(),plans=new Map(),decoded=new Map(),layers=['wall','roof','detail','mechanism','snow'];
@@ -7,7 +7,7 @@ function normalize(id,o={}){if(o.season==='winter'&&Base.catalogue[id+'-hiver'])
 function transform(d,dir){
  const q=d.kind==='building'?d.views.indexOf(dir):dir==='ns'?1:0,W=d.width,D=d.depth,ow=q%2?D:W,od=q%2?W:D,origin=[(ow-od)/2,(W+D)/2];
  const rotate=(x,y)=>q===0?[x,y]:q===1?[D-y,x]:q===2?[W-x,D-y]:[y,W-x];
- const point=(x,y)=>{const r=rotate(x,y),p=I.project(...r);return [p[0]-origin[0],p[1]-origin[1]];};
+ const point=(x,y)=>{const r=rotate(x,y),p=I.project(...r),sx=p[0]-origin[0],sy=p[1]-origin[1];return [sy+sx/2,sy-sx/2];};
  const normal=(x,y)=>{const a=point(0,0),b=point(x,y),dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);return [dx/len,dy/len];};
  return {point,normal,origin};
 }
@@ -18,6 +18,7 @@ function entry(id){
  }return definitions.get(id);
 }
 function bounds(points){const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),x=Math.min(...xs),y=Math.min(...ys);return {x,y,w:Math.max(...xs)-x,h:Math.max(...ys)-y};}
+function worldBounds(o){const f=entry(o.id).frames[o.dir||entry(o.id).views[0]],x=-f.anchor[0],y=-f.anchor[1],points=[[x,y],[x+f.size[0],y],[x+f.size[0],y+f.size[1]],[x,y+f.size[1]]].map(([a,b])=>[o.x+b+a/2,o.y+b-a/2]);return bounds(points);}
 function polygonRect(t,x,y,w,h,zMin=0,zMax=1){const polygon=[[x,y],[x+w,y],[x+w,y+h],[x,y+h]].map(v=>t.point(...v));return {...bounds(polygon),polygon,zMin,zMax};}
 function contains(r,x,y,radius=0){
  if(x+radius<r.x||x-radius>r.x+r.w||y+radius<r.y||y-radius>r.y+r.h)return false;
@@ -80,5 +81,5 @@ function pixels(id,options={}){
 }
 function drawStructure(ctx,options){const {d,o}=normalize(options.id,options),t=transform(d,o.dir),scale=options.scale||1;return I.draw(ctx,{...options,id:d.id,dir:o.dir,x:(o.x||0)-t.origin[0]*scale,y:(o.y||0)-t.origin[1]*scale});}
 function list(filters){return Base.list(filters).map(d=>entry(d.id));}
-return Object.freeze({version:1,projection:I.projection,scale:I.scale,palette:I.palette,catalogue:Base.catalogue,entry,list,geometry,contains,collides,standingHeight,attach,pixels,raster:pixels,draw:drawStructure,drawStructure,snapshot:Base.snapshot,kitFor:Base.kitFor,transform});
+return Object.freeze({version:2,projection:I.projection,scale:I.scale,palette:I.palette,catalogue:Base.catalogue,entry,list,geometry,worldBounds,contains,collides,standingHeight,attach,pixels,raster:pixels,draw:drawStructure,drawStructure,snapshot:Base.snapshot,kitFor:Base.kitFor,transform});
 });

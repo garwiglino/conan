@@ -7,7 +7,7 @@ les vêtements, coiffes et poses conservés dans `sprites/humains/`.
 
 ## Implantation isométrique
 
-Les 83 localités de l’atlas disposent de **1 914 bâtiments** natifs. Les centres
+Les 83 localités de l’atlas disposent de **1 947 bâtiments** natifs. Les centres
 régionaux reçoivent jusqu’à 48 constructions, les ports jusqu’à 30 et les autres
 localités jusqu’à 18, selon la place réellement praticable. Chaque localité
 conserve au moins quatre bâtiments d’habitation. Il s’agit d’un premier quartier
