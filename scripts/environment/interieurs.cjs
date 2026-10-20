@@ -22,7 +22,7 @@ function crop(s){const layers=[s.g,s.shadow,s.glow].filter(Boolean);let x0=s.w,y
  return {g:cut(s.g),shadow:cut(s.shadow),glow:cut(s.glow),glowKind:s.glowKind,w,h,ax:s.ax-x0,ay:s.ay-y0};}
 // Cadres alignés sur une ancre commune : un document Piskel par famille.
 function family(list,{fps=2}={}){const f=frame(list),layer=(name,key,opacity)=>({name,opacity,frames:list.map(s=>s[key]?rgba(s[key],f.w,f.h,...f.place(s)):new Uint8Array(f.w*f.h*4))});
- const layers=[];if(list.some(s=>s.glow))layers.push(layer('lueur','glow',list.find(s=>s.glow).glowKind==='lune'?.3:.35));if(list.some(s=>s.shadow&&s.shadow.px.some(Boolean)))layers.push(layer('ombre','shadow',.5));layers.push(layer('couleur','g',1));
+ const layers=[];if(list.some(s=>s.glow))layers.push(layer('lueur','glow',['lune','arcane'].includes(list.find(s=>s.glow).glowKind)?.3:.35));if(list.some(s=>s.shadow&&s.shadow.px.some(Boolean)))layers.push(layer('ombre','shadow',.5));layers.push(layer('couleur','g',1));
  return {width:f.w,height:f.h,fps,layers,ancre:[f.ax,f.ay]};}
 const DESCRIPTION={
  sol:'Sol raccordable (bords opposés jointifs), lu en coordonnées écran. Calque couleur : pixels du jeu. Calque hauteur (gris) : relief pour les mélanges entre sols.',
@@ -30,7 +30,7 @@ const DESCRIPTION={
  anime:'Animation (un cadre par image). Ancre commune ; calques ombre et lueur à l’opacité du jeu.',
  muret:'Murets arasés de 2 m des bords sud et est (6 unités de haut, 8 d’épaisseur côté vide). Ancre : sommet de départ du bord.',
  angle:'Pièces d’angle posées sur un sommet de case (ancre = le sommet, au sol). Voir le guide pour le choix.',
- escalier:'Trémie d’escalier descendant posée sur une case de salle (ancre = coin nord de la case). Le dessus du sol autour est transparent.',
+ escalier:'Trémie posée sur une case de salle : escalier descendant ou puits du monte-charge (ancre = coin nord de la case). Le dessus du sol autour est transparent.',
  objet:'Objet debout, ancre au pied (au sol). Calque ombre : ombre de contact ; calque lueur : lumière au sol. Une variante par cadre.',
  decors:'Petits décors peints à plat sur le sol. Ancre commune dans le cadre.',
  toile:'Toile d’araignée du coin nord d’une salle : ancre au sommet du coin, au sol ; dessinée après les deux grands murs.'
@@ -40,12 +40,12 @@ const INTERIEURS={
   const W=require('./forteresse-murs.cjs'),O=require('./forteresse-objets.cjs'),S=require('./forteresse-sols.cjs');
   return {
    nom:'Forteresse gobeline',W,O,S,
-   rampes:['cachot','lueur','torche','fer','rouille','chiffon','planche','paille','gobelin','bouleau','mousse','eau','fleur','ocre'],
+   rampes:['cachot','lueur','torche','fer','rouille','chiffon','planche','paille','gobelin','bouleau','mousse','eau','fleur','ocre','arcane'],
    sols:{dalles:S.dalles,paves:S.paves,terre:S.terre,planches:S.planches},
-   murs:['mur-a','mur-b','mur-c','mur-ruine','mur-breche','meurtriere','fenetre','baniere','chaines'],
-   portes:['arche','porte','porte-ouverte','porte-verrouillee','herse','herse-levee','escalier-montant'],
+   murs:['mur-a','mur-b','mur-c','mur-ruine','mur-breche','meurtriere','fenetre','baniere','chaines','levier-haut','levier-bas'],
+   portes:['arche','porte','porte-ouverte','porte-verrouillee','herse','herse-levee','escalier-montant','porte-cellule','porte-cellule-ouverte'],
    murets:['muret','muret-debut','muret-casse'],
-   objets:{piliers:['pilier-carre','pilier-rond','pilier-brise'],ruines:['eboulis','blocs'],mobilier:['caisse','caisses','tonneau','coffre','coffre-verrouille','coffre-ouvert','table','ratelier','paillasse'],gobelins:['totem','etendard','cage','marmite','tresor']}
+   objets:{piliers:['pilier-carre','pilier-rond','pilier-brise'],ruines:['eboulis','blocs'],mobilier:['caisse','caisses','tonneau','coffre','coffre-verrouille','coffre-ouvert','table','ratelier','paillasse'],gobelins:['totem','etendard','cage','marmite','tresor'],donjon:['trone','tas-os','cle','dalle-pression','dalle-pression-enfoncee'],mecanismes:['treuil','monte-charge']}
   };
  }
 };
@@ -60,12 +60,14 @@ function documents(id){
  for(const o of ['nord','ouest']){
   for(const [group,list]of [['murs',K.murs],['portes',K.portes]]){const f=family(list.map(n=>crop(W.wall(n,o))));add(group+'/'+o+'.piskel','mur',f,{orientation:o,ancre:f.ancre,cadres:list});}
   const f=family([0,1,2,3].map(k=>crop(W.wall('mur-torche',o,{image:k}))),{fps:8});add('murs/torche-'+o+'.piskel','mur',f,{orientation:o,ancre:f.ancre,anime:'mur-torche',fps:8});
+  const g=family([0,1,2,3].map(k=>crop(W.wall('porte-scellee',o,{image:k}))),{fps:6});add('portes/scellee-'+o+'.piskel','mur',g,{orientation:o,ancre:g.ancre,anime:'porte-scellee',fps:6});
  }
  for(const o of ['sud','est']){const f=family(K.murets.map(n=>crop(W.stub(n,o))));add('murets/'+o+'.piskel','muret',f,{orientation:o,ancre:f.ancre,cadres:K.murets});}
  {const list=Object.keys(W.CORNERS),f=family(list.map(n=>crop(W.corner(n))));add('angles/angles.piskel','angle',f,{ancre:f.ancre,cadres:list});}
  {const f=family(['nord','ouest'].map(o=>crop(W.stairsDown(o))));add('escaliers/descendant.piskel','escalier',f,{ancre:f.ancre,cadres:['escalier-descendant-nord','escalier-descendant-ouest']});}
+ {const f=family([crop(W.shaft())]);add('escaliers/puits.piskel','escalier',f,{ancre:f.ancre,cadres:['puits']});}
  for(const [group,list]of Object.entries(K.objets)){const f=family(list.map(n=>crop(O.object(n))));add('objets/'+group+'.piskel','objet',f,{ancre:f.ancre,cadres:list});}
- {const f=family([0,1,2,3].map(k=>crop(O.object('brasero',{image:k}))),{fps:8});add('objets/brasero.piskel','objet',f,{ancre:f.ancre,anime:'brasero',fps:8});}
+ for(const n of O.ANIMATED){const f=family([0,1,2,3].map(k=>crop(O.object(n,{image:k}))),{fps:8});add('objets/'+n+'.piskel','objet',f,{ancre:f.ancre,anime:n,fps:8});}
  {const list=Object.keys(O.DECALS),sprites=list.map(n=>{const g=O.decal(n);return {g,w:g.w,h:g.h,ax:g.anchor[0],ay:g.anchor[1]};}),f=family(sprites);add('decors/decors-sol.piskel','decors',f,{ancre:f.ancre,cadres:list});}
  {const g=O.cobweb(),f=family([{g,w:g.w,h:g.h,ax:g.anchor[0],ay:g.anchor[1]+O.WEB_Z}]);add('decors/toile.piskel','toile',f,{ancre:f.ancre,cadres:['toile']});}
  return {docs,manifest,name:K.nom};

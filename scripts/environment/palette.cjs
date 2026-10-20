@@ -42,7 +42,9 @@ const RAMPS={
  chiffon: ['#1e1212','#331a19','#4a2320','#632d27','#7d3b31','#965042'],
  planche: ['#1c1513','#2c201b','#3e2d24','#543c2e','#6c4e3a','#87644a','#a27e5d'],
  paille:  ['#2f271b','#4a3d26','#655631','#80703f','#9a8a52','#b4a46c'],
- gobelin: ['#141a12','#1f2a19','#2c3b21','#3d4f29','#526634','#6c8042']
+ gobelin: ['#141a12','#1f2a19','#2c3b21','#3d4f29','#526634','#6c8042'],
+ // Magie (sceau de la porte, fée) : violet profond vers blanc lilas.
+ arcane:  ['#120c22','#211640','#352063','#4e2f8a','#6f45b3','#9a6fd6','#c7a6ef','#efe0ff']
 };
 const list=[];for(const [ramp,colors]of Object.entries(RAMPS))colors.forEach((hex,i)=>list.push({name:ramp+i,ramp,tone:i,hex}));
 const index=new Map(list.map((c,i)=>[c.name,i+1]));

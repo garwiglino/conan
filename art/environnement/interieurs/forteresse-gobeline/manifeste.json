@@ -15,7 +15,8 @@
   "mousse",
   "eau",
   "fleur",
-  "ocre"
+  "ocre",
+  "arcane"
  ],
  "echelle": "1 px par unité ; 16 unités par mètre ; case de salle de 2 m = losange 64 × 32",
  "dimensions": {
@@ -62,7 +63,9 @@
     "meurtriere",
     "fenetre",
     "baniere",
-    "chaines"
+    "chaines",
+    "levier-haut",
+    "levier-bas"
    ]
   },
   {
@@ -80,7 +83,9 @@
     "porte-verrouillee",
     "herse",
     "herse-levee",
-    "escalier-montant"
+    "escalier-montant",
+    "porte-cellule",
+    "porte-cellule-ouverte"
    ]
   },
   {
@@ -93,6 +98,17 @@
    ],
    "anime": "mur-torche",
    "fps": 8
+  },
+  {
+   "fichier": "portes/scellee-nord.piskel",
+   "role": "mur",
+   "orientation": "nord",
+   "ancre": [
+    5,
+    52
+   ],
+   "anime": "porte-scellee",
+   "fps": 6
   },
   {
    "fichier": "murs/ouest.piskel",
@@ -111,7 +127,9 @@
     "meurtriere",
     "fenetre",
     "baniere",
-    "chaines"
+    "chaines",
+    "levier-haut",
+    "levier-bas"
    ]
   },
   {
@@ -129,7 +147,9 @@
     "porte-verrouillee",
     "herse",
     "herse-levee",
-    "escalier-montant"
+    "escalier-montant",
+    "porte-cellule",
+    "porte-cellule-ouverte"
    ]
   },
   {
@@ -142,6 +162,17 @@
    ],
    "anime": "mur-torche",
    "fps": 8
+  },
+  {
+   "fichier": "portes/scellee-ouest.piskel",
+   "role": "mur",
+   "orientation": "ouest",
+   "ancre": [
+    40,
+    52
+   ],
+   "anime": "porte-scellee",
+   "fps": 6
   },
   {
    "fichier": "murets/sud.piskel",
@@ -195,6 +226,17 @@
    "cadres": [
     "escalier-descendant-nord",
     "escalier-descendant-ouest"
+   ]
+  },
+  {
+   "fichier": "escaliers/puits.piskel",
+   "role": "escalier",
+   "ancre": [
+    30,
+    1
+   ],
+   "cadres": [
+    "puits"
    ]
   },
   {
@@ -257,6 +299,33 @@
    ]
   },
   {
+   "fichier": "objets/donjon.piskel",
+   "role": "objet",
+   "ancre": [
+    28,
+    51
+   ],
+   "cadres": [
+    "trone",
+    "tas-os",
+    "cle",
+    "dalle-pression",
+    "dalle-pression-enfoncee"
+   ]
+  },
+  {
+   "fichier": "objets/mecanismes.piskel",
+   "role": "objet",
+   "ancre": [
+    28,
+    64
+   ],
+   "cadres": [
+    "treuil",
+    "monte-charge"
+   ]
+  },
+  {
    "fichier": "objets/brasero.piskel",
    "role": "objet",
    "ancre": [
@@ -264,6 +333,16 @@
     25
    ],
    "anime": "brasero",
+   "fps": 8
+  },
+  {
+   "fichier": "objets/cage-fee.piskel",
+   "role": "objet",
+   "ancre": [
+    27,
+    52
+   ],
+   "anime": "cage-fee",
    "fps": 8
   },
   {

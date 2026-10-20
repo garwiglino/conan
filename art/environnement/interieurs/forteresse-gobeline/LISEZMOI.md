@@ -19,18 +19,25 @@ Les mêmes pièces, exportées en PNG une par une, sont dans `png/` (catalogue d
   - Murs abîmés : `mur-ruine`, `mur-breche`.
   - Ouvertures sur le dehors : `meurtriere`, `fenetre` (clair de lune au sol).
   - Décor accroché : `baniere`, `chaines`.
+  - Mécanisme : `levier-haut`, `levier-bas` (levier mural, levé ou abaissé).
 - `murs/torche-nord.piskel`, `murs/torche-ouest.piskel` : torche murale, 4 images à 8 images/s.
-- `portes/nord.piskel`, `portes/ouest.piskel` : `arche`, `porte`, `porte-ouverte`, `porte-verrouillee`, `herse`, `herse-levee`, `escalier-montant`.
+- `portes/nord.piskel`, `portes/ouest.piskel` : `arche`, `porte`, `porte-ouverte`, `porte-verrouillee`, `herse`, `herse-levee`, `escalier-montant`, `porte-cellule` (grille de cellule fermée), `porte-cellule-ouverte`.
+- `portes/scellee-nord.piskel`, `portes/scellee-ouest.piskel` : grande porte scellée par une rune violette qui pulse, 4 images à 6 images/s.
 - `murets/sud.piskel`, `murets/est.piskel` : murets arasés du devant de la salle (`muret`, `muret-debut`, `muret-casse`).
 - `angles/angles.piskel` : `angle-nord`, `bout-nord`, `bout-ouest`, `angle-sud`.
-- `escaliers/descendant.piskel` : trémie d'escalier qui descend vers le nord ou vers l'ouest.
+- `escaliers/descendant.piskel` : trémie d'escalier qui descend vers le nord ou vers l'ouest. `escaliers/puits.piskel` : puits du monte-charge (trou d'une case, chaînes dans le noir).
 - `objets/` :
   - `piliers` : carré, rond, brisé ;
   - `ruines` : éboulis, blocs ;
   - `mobilier` : caisses, tonneau, coffres (fermé, verrouillé, ouvert), table, râtelier, paillasse ;
   - `gobelins` : totem, étendard, cage, marmite, trésor ;
-  - `brasero` : animé, 4 images.
+  - `donjon` : trône du chef, tas d'os, clé (la même pour toutes les portes, seul le nom change), dalle de pression levée ou enfoncée ;
+  - `mecanismes` : treuil, plate-forme du monte-charge (posée sur le puits) ;
+  - `brasero` : animé, 4 images ;
+  - `cage-fee` : cage suspendue de la fée, animée, 4 images.
 - `decors/decors-sol.piskel` : fissure, flaque, os, crâne, paille, mousse, tache, gravats, grille, traces. `decors/toile.piskel` : toile d'araignée du coin nord.
 - `manifeste.json` : rôle, orientation, ancre et cadres de chaque fichier, dimensions de la grille.
 
-Les calques `ombre` et `lueur` ont l'opacité à utiliser en jeu (0,5 pour l'ombre ; 0,35 pour le feu, 0,3 pour la lune). Ils se peignent sur le sol seulement.
+Les calques `ombre` et `lueur` ont l'opacité à utiliser en jeu (0,5 pour l'ombre ; 0,35 pour le feu, 0,3 pour la lune et pour la lueur violette de la magie). Ils se peignent sur le sol seulement.
+
+Le premier donjon construit avec ce kit est la Forteresse de Grise-Gueule : voir `../../donjons/LISEZMOI.md`.

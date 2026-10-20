@@ -94,7 +94,8 @@ function surface(kit,w,h,OX,OY,{image=0}={}){
  * rayon (unités) et force. Hors de leur portée, la salle tombe à AMBIANT de
  * sa luminosité, par paliers de 1/8 tramés (Bayer 4 × 4). */
 const LUMIERES={'nord/mur-torche':{at:[16,5,37],rayon:118,force:1},'ouest/mur-torche':{at:[5,16,37],rayon:118,force:1},
- brasero:{at:[0,0,18],rayon:130,force:1.1},marmite:{at:[0,0,8],rayon:64,force:.55},'nord/fenetre':{at:[16,6,28],rayon:64,force:.5},'ouest/fenetre':{at:[6,16,28],rayon:64,force:.5}};
+ brasero:{at:[0,0,18],rayon:130,force:1.1},marmite:{at:[0,0,8],rayon:64,force:.55},'nord/fenetre':{at:[16,6,28],rayon:64,force:.5},'ouest/fenetre':{at:[6,16,28],rayon:64,force:.5},
+ 'nord/porte-scellee':{at:[16,3,15],rayon:84,force:.6},'ouest/porte-scellee':{at:[3,16,15],rayon:84,force:.6},'cage-fee':{at:[0,0,22],rayon:76,force:.55}};
 const AMBIANT=.3,BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
 function light(S,items){const src=[];for(const it of items){const L=LUMIERES[it.piece];if(L)src.push({p:S.proj(it.ref[0]+L.at[0],it.ref[1]+L.at[1],L.at[2]),...L});}
  for(let y=0;y<S.h;y++)for(let x=0;x<S.w;x++){let I=0;for(const l of src){const d=Math.hypot(x-l.p[0],(y-l.p[1])*1.15)/l.rayon;if(d<1)I+=(1-d)**1.4*l.force*1.6;}
@@ -108,7 +109,7 @@ function compose(kit,scene,{image=0,pad=24,lumiere=true}={}){
  S.paint(cell);
  // 2. Décors, trémies, ombres et lueurs sur le sol.
  for(const [nom,u,v]of scene.decors||[])blit('decor/'+nom,[u,v],{onlyFloor:true});
- for(const [i,j,o]of scene.escaliers||[])blit('escalier-descendant-'+o,[i*CELL,j*CELL]);
+ for(const [i,j,o]of scene.escaliers||[])blit(o==='puits'?'puits':'escalier-descendant-'+o,[i*CELL,j*CELL]);
  for(const layer of ['ombre','lueur'])for(const it of L.items){const P=kit.pieces.get(it.piece);if(P&&P.opacites[layer])blit(it.piece,it.ref,{layer,alpha:P.opacites[layer],onlyFloor:true});}
  // 3. Murs, angles, murets et objets dans l'ordre.
  for(const it of L.items)blit(it.piece,it.ref);

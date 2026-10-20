@@ -4,7 +4,8 @@
  * Même procédé que les murs : volumes en voxels teintés par face, puis
  * quelques détails peints à la main (crânes, os, flammes, toiles). L'ancre
  * de chaque objet est le centre de son pied, au sol. */
-const {rng,Grid,stamp}=require('./brushes.cjs'),{Model,render}=require('./voxel.cjs');
+const {rng,Grid,stamp}=require('./brushes.cjs'),{Model,render,tone}=require('./voxel.cjs');
+const mod=(a,n)=>((a%n)+n)%n;
 const W=require('./forteresse-murs.cjs'),{shader,bake,hash,pixel,rubble,glowRing,H}=W;
 // Ombre de contact : ellipse sur le sol autour du pied (calque ombre).
 function contact(s,M,rx,ry,{dx=1,dy=1}={}){
@@ -66,7 +67,37 @@ const OBJECTS={
  'marmite':(M,o)=>{rubble(M,97,{a0:-8,a1:8,b0:-8,b1:8,n:8,big:1.5});M.cylinder(0,0,3.5,0,2,'braise');
   M.shape((a,b,z)=>{const r=Math.sqrt(Math.max(0,49-(z-9)**2));return z>=3&&z<12&&a*a+b*b<=Math.min(r,6.5)**2?'fer':undefined;},[-8,-8,3,8,8,12]);
   M.cylinder(0,0,5.4,11,12,'gelee');o.light={src:[0,0,4],r:16,pool:14};o.shadow=[8,8];},
- 'tresor':(M,o)=>{M.shape((a,b,z)=>(a/8)**2+(b/6)**2+(z/4)**2<=1?'or':undefined,[-9,-7,0,9,7,5]);M.cylinder(3,-1,1.6,3,8,'or');o.shadow=[10,8];}
+ 'tresor':(M,o)=>{M.shape((a,b,z)=>(a/8)**2+(b/6)**2+(z/4)**2<=1?'or':undefined,[-9,-7,0,9,7,5]);M.cylinder(3,-1,1.6,3,8,'or');o.shadow=[10,8];},
+ // Trône du chef : estrade de pierre, siège de planches couvert d'une peau, dossier hérissé de cornes et de crânes.
+ 'trone':(M,o)=>{M.box(-15,-13,0,15,13,3,'pierre');M.box(-9,-7,3,9,7,11,'bois');M.box(-8,-6,11,8,6,12,'cuir');
+  M.box(-10,-9,3,10,-6,36,'bois');for(const a of [-11,9])M.box(a,-8,3,a+2,6,18,'bois');
+  for(const [a,h]of [[-9,46],[-4,42],[3,42],[8,46]])M.shape((x,b,z)=>Math.hypot(x+.5-a,b+.5+7.5)<=1.4*(1-(z-36)/(h-36))&&z>=36&&z<h?'os':undefined,[a-2,-10,36,a+2,-5,h]);
+  o.stamps=[[[0,-6,33],SKULL,SKULL_MAP],[[-6,-6,25],SKULL,SKULL_MAP],[[6,-6,25],SKULL,SKULL_MAP]];o.shadow=[17,15];o.capTop=true;},
+ // Cage de la fée : suspendue à une chaîne, barreaux ronds, la fée luit dedans (animée).
+ 'cage-fee':(M,o)=>{for(let z=38;z<52;z++)if(z%3!==1)M.set(0,0,z,'fer');else{M.set(-1,0,z,'fer');M.set(1,0,z,'fer');}
+  M.shape((a,b,z)=>{const r=Math.hypot(a+.5,b+.5),top=z>=32?Math.sqrt(Math.max(0,1-((z-31.5)/6)**2))*8.4:8.4;
+   if(z===10||z===11)return r<=8.4?'fer':undefined;if(z===21&&r<=8.4&&r>7.2)return 'fer';
+   const f=mod(Math.atan2(b+.5,a+.5)*7/Math.PI,1);return z>11&&z<38&&r<=top&&r>top-1.3&&(f<.24||(z>=32&&r<2))?'barreau':undefined;},[-9,-9,10,9,9,38]);
+  M.cylinder(0,0,2,37,39,'fer');o.fairy=[0,0,22];o.shadow=[9,8];o.glowArcane=20;o.rust=.1;},
+ // Clé : la même pour toutes les portes (seul le nom change), couchée au sol.
+ 'cle':(M,o)=>{M.shape((a,b,z)=>{const r=Math.hypot(a+.5+5,b+.5);return (r<=3.4&&r>=1.7)||(a>=-2&&a<7&&b>=0&&b<1)||(a>=4&&a<7&&b>=1&&b<4&&!(a===5&&b===2))?'or':undefined;},[-9,-4,0,7,4,2]);o.shadow=[7,4];o.glint=[-6,-2,2];},
+ // Treuil du monte-charge : bâti de bois, tambour, chaîne enroulée, manivelle.
+ 'treuil':(M,o)=>{for(const a of [-8,6])M.box(a,-4,0,a+2,4,14,'bois');M.box(-8,-5,0,8,5,2,'bois');
+  M.shape((a,b,z)=>Math.hypot(b+.5,z+.5-10)<=3.6&&a>=-6&&a<6?(mod(a,2)===0?'fer':'bois'):undefined,[-6,-5,5,6,5,15]);
+  M.box(8,-1,9,10,1,11,'fer');M.box(9,-1,9,10,7,11,'fer');M.box(9,6,4,10,7,11,'bois');o.shadow=[11,7];o.rust=.2;},
+ // Dalles de pression : levée (rune gravée) ou enfoncée.
+ 'dalle-pression':(M,o)=>{M.box(-7,-7,0,7,7,2,'pierre');o.rune=true;o.shadow=[9,9];o.capTop=true;},
+ 'dalle-pression-enfoncee':(M,o)=>{M.box(-7,-7,0,7,7,1,'pierre');o.rune=true;o.pressed=true;o.shadow=[8,8];},
+ // Tas d'os de la salle du chef.
+ 'tas-os':(M,o)=>{const R=rng(121);for(let i=0;i<22;i++){const ca=(R()-.5)*16,cb=(R()-.5)*12,ang=R()*Math.PI,l=2+R()*4,z=Math.floor(R()*Math.max(1,4-Math.hypot(ca/8,cb/6)*3));
+   for(let t=-l;t<=l;t+=.5)M.set(Math.round(ca+Math.cos(ang)*t),Math.round(cb+Math.sin(ang)*t),z,'os');}
+  o.stamps=[[[-2,1,5],SKULL,SKULL_MAP],[[5,-2,3],SKULL,SKULL_MAP]];o.shadow=[11,9];},
+ // Plate-forme du monte-charge, posée sur le puits : plancher, garde-corps, chaînes qui montent dans le noir.
+ 'monte-charge':(M,o)=>{M.box(-13,-13,0,13,13,2,'bois');M.box(-14,-14,0,14,14,1,'fer');
+  for(const [a,b]of [[-13,-13],[11,-13],[-13,11],[11,11]]){M.box(a,b,2,a+2,b+2,16,'bois');}
+  M.box(-13,-13,14,13,-11,16,'bois');M.box(-13,-13,14,-11,13,16,'bois');
+  for(const [a,b]of [[-12,-12],[12,-12],[-12,12],[12,12]])for(let z=16;z<52;z++)if(z%3!==1)M.set(a,b,z,'fer');
+  }
 };
 // Coffre : caisse cerclée, couvercle bombé (ou ouvert, dressé derrière, l'or dedans).
 function chest(M,o,{open=false}={}){
@@ -81,7 +112,6 @@ function crateShade(base,boxes){
   const edge=t===0||t===n-1||zz===0||zz===m-1,diag=side!=='z'&&Math.abs(t*(m-1)/(n-1)-zz)<.7;
   return W.col('planche',edge?(side==='z'?5:4):diag?4:(Math.floor(t/3)%2?2:3)+(side==='z'?1:0),hit.face);};
 }
-// Contour sombre d'un pixel autour de la silhouette : l'objet se détache du sol.
 /* Bords de silhouette assombris d'un ton côté droit et en bas (pas de trait
  * noir autour : l'objet se détache par sa valeur et son ombre de contact). */
 function outline(s){const src=s.g.clone(),P=require('./palette.cjs');for(let y=0;y<s.h;y++)for(let x=0;x<s.w;x++){if(!src.get(x,y))continue;if(src.get(x+1,y)&&src.get(x,y+1))continue;
@@ -96,9 +126,16 @@ function object(name,{image=0}={}){
  if(o.fire){const [x,y]=pixel(s,M,...o.fire);stamp(s.g,x-4,y-11,FIRE[image%4],FIRE_MAP);}
  for(const [at,art,map]of o.stamps||[])put(s,M,at,art,map);
  if(o.padlock){const [x,y]=pixel(s,M,...o.padlock);stamp(s.g,x-1,y-2,['.a.','a.a','bbb','bcb'],{a:'fer5',b:'fer4',c:'fer0','.':null});}
+ if(o.glint){const [x,y]=pixel(s,M,...o.glint);s.g.set(x,y,'fer6');}
+ // Rune gravée sur la dalle de pression (sombre, ou luisante une fois enfoncée).
+ if(o.rune){const [x,y]=pixel(s,M,0,0,o.pressed?1:2);stamp(s.g,x-3,y-2,['..a..','.a.a.','a.b.a','.a.a.','..a..'],o.pressed?{a:'arcane4',b:'arcane6','.':null}:{a:'cachot2',b:'cachot1','.':null});}
+ // Fée : petite silhouette claire aux ailes battantes, lueur violette au sol.
+ if(o.fairy){const [x,y]=pixel(s,M,...o.fairy),k=image%4,wings=[['b.....b','ab.c.ba','.abcba.','...c...','..c.c..'],['...c...','aabcbaa','.abcba.','...c...','..c.c..'],['b.....b','ab.c.ba','.abcba.','...c...','..c.c..'],['...c...','..bcb..','abbcbba','a..c..a','..c.c..']][k];
+  stamp(s.g,x-3,y-2,wings,{a:'arcane5',b:'arcane6',c:'arcane7','.':null});const [dx,dy]=[[-5,-4],[4,-3],[-4,3],[5,2]][k];s.g.set(x+dx,y+dy,'arcane6');}
+ if(o.glowArcane){if(!s.glow)s.glow=new Grid(s.w,s.h);for(let py=0;py<s.h;py++)for(let px=0;px<s.w;px++){const X=px-s.ax+.5,Y=py-s.ay+.5,d=Math.hypot(Y+X/2,Y-X/2)/o.glowArcane;if(d<1){const c=glowRing(d,px,py);if(c)s.glow.set(px,py,'arcane'+(+c.slice(-1)-1));}}s.glowKind='arcane';}
  return s;
 }
-const ANIMATED=['brasero'];
+const ANIMATED=['brasero','cage-fee'];
 /* Décors au sol : tampons peints à plat (ancre au milieu). */
 const DECALS={
  fissure:{art:['a.......','.ab.....','..aab...','....ab..','.....aab','.......a'],map:{a:'cachot1',b:'cachot6'}},

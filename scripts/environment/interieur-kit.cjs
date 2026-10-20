@@ -14,18 +14,22 @@ const same=(a,b)=>a&&b&&a.length===b.length&&a.every((x,i)=>x===b[i]);
 const NOTES={
  'mur-a':'mur plein','mur-b':'mur plein, mousse et pierre saillante','mur-c':'mur plein, fissure et pierre manquante','mur-ruine':'haut du mur écroulé',
  'mur-breche':'brèche en V jusqu’à 1 m, gravats dans la salle','meurtriere':'meurtrière, ciel de nuit dans la fente','fenetre':'fenêtre à barreaux, clair de lune au sol',
- 'baniere':'bannière gobeline au crâne','chaines':'chaînes et fers scellés','mur-torche':'torche murale animée, lueur chaude sur le mur et au sol',
+ 'baniere':'bannière gobeline au crâne','chaines':'chaînes et fers scellés','levier-haut':'levier mural levé','levier-bas':'levier mural abaissé','mur-torche':'torche murale animée, lueur chaude sur le mur et au sol',
  'arche':'arche ouverte (passage de 1,25 m)','porte':'porte de bois fermée','porte-ouverte':'porte ouverte, battant rabattu vers l’autre côté',
  'porte-verrouillee':'porte verrouillée : barres, cadenas','herse':'herse baissée','herse-levee':'herse levée (passage)',
  'escalier-montant':'escalier qui monte dans le mur ; la case devant reste libre',
+ 'porte-cellule':'grille de cellule fermée, serrure','porte-cellule-ouverte':'grille de cellule ouverte, battant rabattu dans la cellule',
+ 'porte-scellee':'grande porte scellée par une rune violette qui pulse (animée) ; s’ouvre avec la fée',
  'muret':'muret arasé','muret-debut':'muret rogné de 8 unités au départ (angle rentrant entre deux murets)','muret-casse':'muret cassé, gravats dans la salle',
  'angle-nord':'angle du fond entre deux grands murs (sol au sud-est du sommet)','bout-nord':'pilier d’about à droite, au bout d’un mur nord (sol au sud-ouest du sommet)',
  'bout-ouest':'pilier d’about à gauche, au bout d’un mur ouest (sol au nord-est du sommet)','angle-sud':'angle de devant entre deux murets (sol au nord-ouest du sommet)',
- 'escalier-descendant-nord':'trémie : marches qui descendent vers le nord','escalier-descendant-ouest':'trémie : marches qui descendent vers l’ouest',
+ 'escalier-descendant-nord':'trémie : marches qui descendent vers le nord','escalier-descendant-ouest':'trémie : marches qui descendent vers l’ouest','puits':'trémie : puits du monte-charge, chaînes dans le noir',
  'pilier-carre':'pilier carré','pilier-rond':'pilier rond','pilier-brise':'pilier brisé','eboulis':'éboulis','blocs':'blocs taillés tombés',
  'caisse':'caisse','caisses':'caisses empilées','tonneau':'tonneau','coffre':'coffre','coffre-verrouille':'coffre verrouillé','coffre-ouvert':'coffre ouvert, or',
  'table':'table et chope','ratelier':'râtelier d’armes','paillasse':'paillasse et couverture','totem':'totem à crânes','etendard':'étendard gobelin',
  'cage':'cage','marmite':'marmite verte sur le feu','tresor':'tas d’or','brasero':'brasero animé, lueur au sol',
+ 'trone':'trône du chef, crânes et cornes','tas-os':'tas d’os','cle':'clé (la même pour toutes les portes, seul le nom change)','dalle-pression':'dalle de pression levée, rune éteinte',
+ 'dalle-pression-enfoncee':'dalle de pression enfoncée, rune allumée','treuil':'treuil du monte-charge','monte-charge':'plate-forme du monte-charge (posée sur le puits)','cage-fee':'cage suspendue de la fée (animée)',
  fissure:'fissure',flaque:'flaque',os:'os',crane:'crâne',paille:'paille',mousse:'mousse',tache:'tache sombre',gravats:'gravats',grille:'grille d’égout',traces:'traces de griffes',
  toile:'toile d’araignée du coin nord'
 };
@@ -98,9 +102,9 @@ function piecesPlate(id,kit){
  const K=I.load(id),groups=[];
  groups.push(['Sols (texture raccordable, ici 2 × 2 répétitions)',Object.keys(kit.sols).map(n=>({sol:n,label:n}))]);
  for(const o of ['nord','ouest'])groups.push(['Murs '+o+' (bord '+o+' d’une case de salle)',[...K.murs,'mur-torche'].map(n=>({key:o+'/'+n,label:n}))]);
- for(const o of ['nord','ouest'])groups.push(['Ouvertures '+o,K.portes.map(n=>({key:o+'/'+n,label:n}))]);
- groups.push(['Murets sud et est, angles, escaliers descendants',[...['sud','est'].flatMap(o=>K.murets.map(n=>({key:o+'/'+n,label:n+' ('+o+')'}))),...Object.keys(K.W.CORNERS).map(n=>({key:n,label:n})),{key:'escalier-descendant-nord',label:'escalier (nord)'},{key:'escalier-descendant-ouest',label:'escalier (ouest)'}]]);
- groups.push(['Objets',[...Object.values(K.objets).flat(),'brasero'].map(n=>({key:n,label:n}))]);
+ for(const o of ['nord','ouest'])groups.push(['Ouvertures '+o,[...K.portes,'porte-scellee'].map(n=>({key:o+'/'+n,label:n}))]);
+ groups.push(['Murets sud et est, angles, escaliers descendants',[...['sud','est'].flatMap(o=>K.murets.map(n=>({key:o+'/'+n,label:n+' ('+o+')'}))),...Object.keys(K.W.CORNERS).map(n=>({key:n,label:n})),{key:'escalier-descendant-nord',label:'escalier (nord)'},{key:'escalier-descendant-ouest',label:'escalier (ouest)'},{key:'puits',label:'puits'}]]);
+ groups.push(['Objets',[...Object.values(K.objets).flat(),...K.O.ANIMATED].map(n=>({key:n,label:n}))]);
  groups.push(['Décors au sol et toile',[...Object.keys(K.O.DECALS).map(n=>({key:'decor/'+n,label:n})),{key:'toile',label:'toile'}]]);
  const S=2,pad=14,lab=22,W=1900,head=58;
  // Mise en page en lignes : chaque famille commence une ligne.
@@ -133,7 +137,7 @@ function sallePlate(id,kit,scene=Scene.SALLE){
  const FLOOR={dalles:'#6f6878',paves:'#8d867a',terre:'#7a5a40',planches:'#9a7146'};
  for(let j=0;j<L.NJ;j++)for(let i=0;i<L.NI;i++){const mat=L.cell(i,j);if(mat)poly(cellAt(i,j),FLOOR[mat],'rgba(0,0,0,.35)',1);}
  for(const [i,j]of scene.escaliers||[]){poly(cellAt(i,j),'#e8c66a','#7a5a10',2);const [a,b]=[at(i*CELL+16,j*CELL+26),at(i*CELL+16,j*CELL+6)];line(a,b,'#3b2f1c',3);text('▼',...at(i*CELL+16,j*CELL+16),{size:13,colour:'#3b2f1c'});}
- const OPEN=new Set(['arche','porte-ouverte','herse-levee']),SHUT=new Set(['porte','porte-verrouillee','herse']);
+ const OPEN=new Set(['arche','porte-ouverte','herse-levee','porte-cellule-ouverte']),SHUT=new Set(['porte','porte-verrouillee','herse','porte-cellule','porte-scellee']);
  for(const it of L.items){if(!it.edge)continue;const [i,j,s]=it.edge,nom=it.piece.split('/')[1],X=i*CELL,Y=j*CELL;
   const seg={N:[[X,Y],[X+CELL,Y]],O:[[X,Y],[X,Y+CELL]],S:[[X,Y+CELL],[X+CELL,Y+CELL]],E:[[X+CELL,Y],[X+CELL,Y+CELL]]}[s].map(p=>at(...p));
   if(s==='S'||s==='E'){line(...seg,'#a79fb3',4,nom==='muret-casse'?[6,5]:[]);continue;}

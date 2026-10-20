@@ -22,10 +22,10 @@ test('the PNG kit of every interior matches its Piskel sources and lists every i
 test('wall modules stand on the floor edge of their room cell and low walls run along it',async()=>{
  const {pieces}=await kitOf('forteresse-gobeline'),K=I.load('forteresse-gobeline');
  const opaque=(P,x,y)=>{const X=P.ancre[0]+x,Y=P.ancre[1]+y;return X>=0&&Y>=0&&X<P.w&&Y<P.h&&P.images[0].couleur[(Y*P.w+X)*4+3]>0;};
- for(const o of ['nord','ouest'])for(const nom of [...K.murs,...K.portes,'mur-torche']){const P=pieces.get(o+'/'+nom),s=o==='nord'?1:-1;
+ for(const o of ['nord','ouest'])for(const nom of [...K.murs,...K.portes,'mur-torche','porte-scellee']){const P=pieces.get(o+'/'+nom),s=o==='nord'?1:-1;
   // Le long du bord : x = ±a, y = a / 2. Le pied du mur est juste au-dessus de la ligne.
   for(const a of [2,30])assert.ok(opaque(P,s*a,a/2-1),o+'/'+nom+' : pied à '+a);
-  if(['mur-a','mur-b','mur-c','meurtriere','fenetre','baniere','chaines','mur-torche'].includes(nom))for(const a of [8,16,24])assert.ok(!opaque(P,s*a,a/2),o+'/'+nom+' : rien sur le sol à '+a);}
+  if(['mur-a','mur-b','mur-c','meurtriere','fenetre','baniere','chaines','levier-haut','levier-bas','mur-torche'].includes(nom))for(const a of [8,16,24])assert.ok(!opaque(P,s*a,a/2),o+'/'+nom+' : rien sur le sol à '+a);}
  for(const o of ['sud','est'])for(const nom of K.murets){const P=pieces.get(o+'/'+nom),s=o==='sud'?1:-1;
   for(const a of [10,16,30])assert.ok(opaque(P,s*a,a/2),o+'/'+nom+' : muret à '+a);
   assert.equal(opaque(P,s*2,-4),nom!=='muret-debut',o+'/'+nom+' : départ (dessus du muret)');}

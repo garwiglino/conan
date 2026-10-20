@@ -278,6 +278,50 @@
    "source": "murs/nord.piskel"
   },
   {
+   "nom": "levier-haut",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "levier mural levé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/levier-haut.png",
+   "ombre": {
+    "png": "murs/nord/levier-haut-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "levier-bas",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "levier mural abaissé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/levier-bas.png",
+   "ombre": {
+    "png": "murs/nord/levier-bas-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
    "nom": "arche",
    "role": "mur",
    "orientation": "nord",
@@ -432,6 +476,50 @@
    "source": "portes/nord.piskel"
   },
   {
+   "nom": "porte-cellule",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "grille de cellule fermée, serrure",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte-cellule.png",
+   "ombre": {
+    "png": "portes/nord/porte-cellule-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "porte-cellule-ouverte",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "grille de cellule ouverte, battant rabattu dans la cellule",
+   "taille": [
+    43,
+    70
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte-cellule-ouverte.png",
+   "ombre": {
+    "png": "portes/nord/porte-cellule-ouverte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
    "nom": "mur-torche",
    "role": "mur",
    "orientation": "nord",
@@ -472,6 +560,48 @@
     "force": 1
    },
    "source": "murs/torche-nord.piskel"
+  },
+  {
+   "nom": "porte-scellee",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "grande porte scellée par une rune violette qui pulse (animée) ; s’ouvre avec la fée",
+   "taille": [
+    45,
+    71
+   ],
+   "ancre": [
+    5,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "images": [
+    "portes/nord/porte-scellee-1.png",
+    "portes/nord/porte-scellee-2.png",
+    "portes/nord/porte-scellee-3.png",
+    "portes/nord/porte-scellee-4.png"
+   ],
+   "fps": 6,
+   "ombre": {
+    "png": "portes/nord/porte-scellee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "portes/nord/porte-scellee-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     16,
+     3,
+     15
+    ],
+    "rayon": 84,
+    "force": 0.6
+   },
+   "source": "portes/scellee-nord.piskel"
   },
   {
    "nom": "mur-a",
@@ -686,6 +816,50 @@
    "source": "murs/ouest.piskel"
   },
   {
+   "nom": "levier-haut",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "levier mural levé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/levier-haut.png",
+   "ombre": {
+    "png": "murs/ouest/levier-haut-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "levier-bas",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "levier mural abaissé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/levier-bas.png",
+   "ombre": {
+    "png": "murs/ouest/levier-bas-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
    "nom": "arche",
    "role": "mur",
    "orientation": "ouest",
@@ -840,6 +1014,50 @@
    "source": "portes/ouest.piskel"
   },
   {
+   "nom": "porte-cellule",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "grille de cellule fermée, serrure",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte-cellule.png",
+   "ombre": {
+    "png": "portes/ouest/porte-cellule-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "porte-cellule-ouverte",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "grille de cellule ouverte, battant rabattu dans la cellule",
+   "taille": [
+    43,
+    70
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte-cellule-ouverte.png",
+   "ombre": {
+    "png": "portes/ouest/porte-cellule-ouverte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
    "nom": "mur-torche",
    "role": "mur",
    "orientation": "ouest",
@@ -880,6 +1098,48 @@
     "force": 1
    },
    "source": "murs/torche-ouest.piskel"
+  },
+  {
+   "nom": "porte-scellee",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "grande porte scellée par une rune violette qui pulse (animée) ; s’ouvre avec la fée",
+   "taille": [
+    46,
+    71
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "images": [
+    "portes/ouest/porte-scellee-1.png",
+    "portes/ouest/porte-scellee-2.png",
+    "portes/ouest/porte-scellee-3.png",
+    "portes/ouest/porte-scellee-4.png"
+   ],
+   "fps": 6,
+   "ombre": {
+    "png": "portes/ouest/porte-scellee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "portes/ouest/porte-scellee-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     3,
+     16,
+     15
+    ],
+    "rayon": 84,
+    "force": 0.6
+   },
+   "source": "portes/scellee-ouest.piskel"
   },
   {
    "nom": "muret",
@@ -1078,6 +1338,22 @@
    "ancre_au_sol": "sommet nord de la case de l’escalier",
    "png": "escaliers/escalier-descendant-ouest.png",
    "source": "escaliers/descendant.piskel"
+  },
+  {
+   "nom": "puits",
+   "role": "escalier",
+   "description": "trémie : puits du monte-charge, chaînes dans le noir",
+   "taille": [
+    60,
+    32
+   ],
+   "ancre": [
+    30,
+    1
+   ],
+   "ancre_au_sol": "sommet nord de la case de l’escalier",
+   "png": "escaliers/puits.png",
+   "source": "escaliers/puits.piskel"
   },
   {
    "nom": "pilier-carre",
@@ -1493,6 +1769,148 @@
    "source": "objets/gobelins.piskel"
   },
   {
+   "nom": "trone",
+   "role": "objet",
+   "description": "trône du chef, crânes et cornes",
+   "taille": [
+    56,
+    65
+   ],
+   "ancre": [
+    28,
+    51
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/trone.png",
+   "ombre": {
+    "png": "objets/trone-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "tas-os",
+   "role": "objet",
+   "description": "tas d’os",
+   "taille": [
+    32,
+    17
+   ],
+   "ancre": [
+    18,
+    9
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/tas-os.png",
+   "ombre": {
+    "png": "objets/tas-os-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "cle",
+   "role": "objet",
+   "description": "clé (la même pour toutes les portes, seul le nom change)",
+   "taille": [
+    18,
+    12
+   ],
+   "ancre": [
+    10,
+    7
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/cle.png",
+   "ombre": {
+    "png": "objets/cle-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "dalle-pression",
+   "role": "objet",
+   "description": "dalle de pression levée, rune éteinte",
+   "taille": [
+    28,
+    16
+   ],
+   "ancre": [
+    14,
+    9
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/dalle-pression.png",
+   "ombre": {
+    "png": "objets/dalle-pression-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "dalle-pression-enfoncee",
+   "role": "objet",
+   "description": "dalle de pression enfoncée, rune allumée",
+   "taille": [
+    28,
+    15
+   ],
+   "ancre": [
+    14,
+    8
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/dalle-pression-enfoncee.png",
+   "ombre": {
+    "png": "objets/dalle-pression-enfoncee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "treuil",
+   "role": "objet",
+   "description": "treuil du monte-charge",
+   "taille": [
+    26,
+    28
+   ],
+   "ancre": [
+    13,
+    20
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/treuil.png",
+   "ombre": {
+    "png": "objets/treuil-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mecanismes.piskel"
+  },
+  {
+   "nom": "monte-charge",
+   "role": "objet",
+   "description": "plate-forme du monte-charge (posée sur le puits)",
+   "taille": [
+    56,
+    78
+   ],
+   "ancre": [
+    28,
+    64
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/monte-charge.png",
+   "source": "objets/mecanismes.piskel"
+  },
+  {
    "nom": "brasero",
    "role": "objet",
    "description": "brasero animé, lueur au sol",
@@ -1532,6 +1950,47 @@
     "force": 1.1
    },
    "source": "objets/brasero.piskel"
+  },
+  {
+   "nom": "cage-fee",
+   "role": "objet",
+   "description": "cage suspendue de la fée (animée)",
+   "taille": [
+    53,
+    64
+   ],
+   "ancre": [
+    27,
+    52
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "images": [
+    "objets/cage-fee-1.png",
+    "objets/cage-fee-2.png",
+    "objets/cage-fee-3.png",
+    "objets/cage-fee-4.png"
+   ],
+   "fps": 8,
+   "ombre": {
+    "png": "objets/cage-fee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "objets/cage-fee-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     0,
+     0,
+     22
+    ],
+    "rayon": 76,
+    "force": 0.55
+   },
+   "source": "objets/cage-fee.piskel"
   },
   {
    "nom": "fissure",

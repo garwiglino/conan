@@ -147,13 +147,14 @@ Un intérieur est un espace fermé entouré de noir, comme dans les jeux de ce g
   - au nord-ouest : `angle-sud` (devant, entre deux murets).
 
   L'ancre de l'angle est le sommet.
-- **Ouvertures.** Une porte remplace un module de grand mur : `arche`, `porte`, `porte-ouverte`, `porte-verrouillee`, `herse`, `herse-levee`, `escalier-montant`. Entre deux salles, la porte se pose sur le bord nord ou ouest de la case du sud ou de l'est, et son épaisseur empiète sur la case de l'autre salle. On ne met aucun objet sur la case devant une ouverture. L'escalier montant occupe la case devant lui.
-- **Escalier descendant.** `escalier-descendant-nord` (ou `-ouest`) se pose par-dessus le sol d'une case, ancre au coin nord de la case.
+- **Ouvertures.** Une porte remplace un module de grand mur : `arche`, `porte`, `porte-ouverte`, `porte-verrouillee`, `herse`, `herse-levee`, `escalier-montant`, `porte-cellule`, `porte-cellule-ouverte`, `porte-scellee` (animée). Entre deux salles, la porte se pose sur le bord nord ou ouest de la case du sud ou de l'est, et son épaisseur empiète sur la case de l'autre salle. On ne met aucun objet sur la case devant une ouverture. L'escalier montant occupe la case devant lui.
+- **Escalier descendant et puits.** `escalier-descendant-nord` (ou `-ouest`) se pose par-dessus le sol d'une case, ancre au coin nord de la case. Le `puits` du monte-charge se pose de la même façon ; la plate-forme `monte-charge` est un objet posé au centre de cette case quand elle est à l'étage.
 - **Objets et décors.** L'ancre d'un objet est son pied, en unités du monde. Les décors au sol se peignent juste après le sol. La `toile` va dans le coin nord d'une salle, ancre au coin nord de la case du coin.
 - **Ombres et lueurs.** Les calques `-ombre.png` (opacité 0,5) puis `-lueur.png` (0,35 pour le feu, 0,3 pour la lune) se peignent **seulement sur les pixels de sol**, avant toutes les pièces. Les torches et le brasero ont 4 images, à 8 images/s.
 - **Ordre.** On dessine d'abord le sol, les décors au sol, les trémies, les ombres et les lueurs. Viennent ensuite les pièces debout, triées par i + j de la case qui les porte, puis par u + v. Pour un mur ou un muret, c'est la case de vide qui porte son épaisseur. Un personnage se trie comme un objet.
-- **Lumière.** Pour finir, tout s'assombrit loin des sources de lumière, jusqu'à 30 % de la luminosité. Les sources sont les pièces qui ont un champ `lumiere` dans le catalogue : torches, brasero, marmite et fenêtres. On garde des paliers de 1/8, tramés (Bayer 4 × 4), pour rester en pixel art. Le personnage peut porter sa propre source.
+- **Lumière.** Pour finir, tout s'assombrit loin des sources de lumière, jusqu'à 30 % de la luminosité. Les sources sont les pièces qui ont un champ `lumiere` dans le catalogue : torches, brasero, marmite, fenêtres, porte scellée et cage de la fée. On garde des paliers de 1/8, tramés (Bayer 4 × 4), pour rester en pixel art. Le personnage peut porter sa propre source.
 - **Cloisons.** Un grand mur entre deux salles cache le sol sur environ 1,5 case derrière lui. Quand un personnage passe derrière, on dessine ce mur à 40 % d'opacité.
+- **Donjons.** Un donjon complet (plusieurs étages, clés, leviers, monte-charge) est décrit dans `data/donjons/<id>.json` et rendu par `npm run donjon:environment` dans `donjons/<id>/`. Voir `donjons/LISEZMOI.md`.
 
 ## 9. Brancher dans le jeu
 
@@ -169,4 +170,5 @@ Les intérieurs n'ont pas encore de rendu dans le jeu. Pour les brancher, on rep
 1. Retoucher le `.piskel` dans piskelapp.com (voir `<biome>/LISEZMOI.md` ou `interieurs/<id>/LISEZMOI.md`).
 2. `npm run build:environment` : données du jeu (biomes seulement).
 3. `npm run kit:environment` : PNG, catalogues et planches de ce dossier.
-4. `npm run test:environment` : vérifie que tout est à jour et raccordé.
+4. `npm run donjon:environment` : planches des donjons (`donjons/`), après une retouche du kit ou des données d'un donjon.
+5. `npm run test:environment` : vérifie que tout est à jour et raccordé.

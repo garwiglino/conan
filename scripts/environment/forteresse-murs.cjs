@@ -74,7 +74,7 @@ function archivolt(a,z,{a0,a1,spring,e=4}){const ca=(a0+a1)/2,r=(a1-a0)/2,d=Math
  return undefined;}
 // Décalages de lumière par face du monde : rampe cachot (9 tons) et rampes courtes.
 const OFF={z:1,v:0,u:-2},OFF2={z:1,v:0,u:-1};
-const MAX={cachot:8,lueur:7,torche:7,fer:6,rouille:3,chiffon:5,planche:6,paille:5,gobelin:5,bouleau:5,eau:7,mousse:4,fleur:6,ocre:7};
+const MAX={cachot:8,lueur:7,torche:7,fer:6,rouille:3,chiffon:5,planche:6,paille:5,gobelin:5,bouleau:5,eau:7,mousse:4,fleur:6,ocre:7,arcane:7};
 const col=(ramp,L,face)=>tone(ramp,L+(ramp==='cachot'?OFF:OFF2)[face],MAX[ramp]);
 /* Teinte de toutes les matières des murs. o : {seed, ornament(a, z),
  * moss, crack, dark(hit) -> tons d'obscurité, sigil(a, z)}. */
@@ -146,10 +146,10 @@ function footShadow(s,M,{a0=0,a1=CELL,depth=3,open=()=>false}={}){
 // Lueur tramée : de plus en plus clairsemée vers le bord (Bayer), sans anneau net.
 const glowRing=(d,px,py)=>{const t=1-d;if(t<=0||t*1.7<=(BAYER[mod(py,4)*4+mod(px,4)]+.5)/16)return null;return t>.62?'torche6':t>.34?'torche5':'torche4';};
 // Lueur au sol (calque lueur) : demi-ellipse devant la source, trois anneaux.
-function floorGlow(s,M,[ca,cb],r,{half=true}={}){
+function floorGlow(s,M,[ca,cb],r,{half=true,ramp='torche'}={}){
  if(!s.glow)s.glow=new Grid(s.w,s.h);
  for(let py=0;py<s.h;py++)for(let px=0;px<s.w;px++){const X=px-s.ax+.5,Y=py-s.ay+.5,u=Y+X/2,v=Y-X/2,[a,b]=M.turn?[v,u]:[u,v];if(half&&b<0)continue;
-  const d=Math.hypot(a-ca,(b-cb)*1.1)/r;if(d<1){const c=glowRing(d,px,py);if(c)s.glow.set(px,py,c);}}
+  const d=Math.hypot(a-ca,(b-cb)*1.1)/r;if(d<1){const c=glowRing(d,px,py);if(c)s.glow.set(px,py,c.replace('torche',ramp));}}
 }
 /* Flammes de torche, 4 images (r rouge, y orange, w jaune, c cœur, o braise). */
 const FLAMES=[
@@ -245,8 +245,30 @@ const MODULES={
   // Marches de 4 sur 4 : quatre dans la salle, deux dans l'épaisseur, puis dans le noir.
   for(let k=0;k<10;k++){const b1=16-4*k,b0=b1-4;M.box(STAIR.a0,b0,0,STAIR.a1,b1,4*(k+1),'marche');}
   M.box(STAIR.a1,0,0,STAIR.a1+1,16,1,'mur');
-  M.box(0,-T-26,36,CELL,-T,H+1,'masque');M.box(STAIR.a1,-T-26,0,CELL,-T,36,'masque');o.dark=h=>h.b<-T?Math.ceil((-T-h.b)/4):0;}
+  M.box(0,-T-26,36,CELL,-T,H+1,'masque');M.box(STAIR.a1,-T-26,0,CELL,-T,36,'masque');o.dark=h=>h.b<-T?Math.ceil((-T-h.b)/4):0;},
+ // Leviers muraux : platine de fer, pivot, manche levé ou baissé terminé par une poignée de bois.
+ 'levier-haut':(M,o)=>lever(M,o,1),
+ 'levier-bas':(M,o)=>lever(M,o,-1),
+ // Porte de cellule : grille de barreaux dans une baie ordinaire, serrure à droite.
+ 'porte-cellule':(M,o)=>{wallBox(M);o.seed=18;carve(M,OPEN);threshold(M,OPEN);o.ornament=(a,z)=>archivolt(a,z,{...OPEN,e:4});o.open=a=>a>=OPEN.a0&&a<OPEN.a1;o.rust=.25;
+  M.shape((a,b,z)=>{const fa=Math.floor(a),fz=Math.floor(z);return inArch(fa,fz,OPEN)&&(mod(fa-OPEN.a0,3)===1||fz===3||fz===14||fz===OPEN.spring)?(fz===3||fz===14||fz===OPEN.spring?'fer':'barreau'):undefined;},[0,-4,0,CELL,-3,H]);
+  M.box(19,-3,9,22,-2,13,'fer');},
+ // Porte de cellule ouverte : la grille pivote sur le tableau droit et entre dans la salle.
+ 'porte-cellule-ouverte':(M,o)=>{wallBox(M);o.seed=19;carve(M,OPEN);threshold(M,OPEN);o.ornament=(a,z)=>archivolt(a,z,{...OPEN,e:4});o.open=a=>a>=OPEN.a0&&a<OPEN.a1;o.rust=.25;
+  M.shape((a,b,z)=>{const fb=Math.floor(b),fz=Math.floor(z);return fb>=-3&&fb<13&&fz<OPEN.spring+1&&(mod(fb+3,3)===1||fz===3||fz===14||fz===OPEN.spring||fb===12)?(fz===3||fz===14||fz===OPEN.spring?'fer':'barreau'):undefined;},[OPEN.a1-1,-3,0,OPEN.a1,13,H]);},
+ // Porte de sortie scellée : double vantail sous une grande arche, sceau magique animé (voir wall).
+ 'porte-scellee':(M,o)=>{wallBox(M);o.seed=20;carve(M,WIDE);threshold(M,WIDE);o.ornament=(a,z)=>archivolt(a,z,{...WIDE,e:4});o.open=a=>a>=WIDE.a0&&a<WIDE.a1;
+  M.shape((a,b,z)=>inArch(a,z,WIDE)?'porte':undefined,[0,-5,0,CELL,-3,H]);o.door=WIDE.a0;
+  for(const z of [5,24])M.shape((a,b,zz)=>inArch(a,zz,WIDE)?'fer':undefined,[WIDE.a0,-3,z,WIDE.a1,-2,z+2]);
+  M.box(15,-3,0,17,-2,32,'fer');o.seal={a:16,z:15,r:7};o.rust=.1;}
 };
+function lever(M,o,dir){wallBox(M);o.seed=21+dir;o.moss=mossy(21);
+ // Platine sombre avec sa fente en arc, pivot en saillie, manche incliné dans le plan du mur.
+ M.box(12,0,12,21,1,30,'fer');M.box(15,1,19,18,3,23,'fer');
+ const P0=[16.5,2.5,21],P1=[22,5,21+dir*10],L2=(P1[0]-P0[0])**2+(P1[1]-P0[1])**2+(P1[2]-P0[2])**2;
+ M.shape((a,b,z)=>{const t=Math.max(0,Math.min(1,((a+.5-P0[0])*(P1[0]-P0[0])+(b+.5-P0[1])*(P1[1]-P0[1])+(z+.5-P0[2])*(P1[2]-P0[2]))/L2)),
+  d=Math.hypot(a+.5-P0[0]-t*(P1[0]-P0[0]),b+.5-P0[1]-t*(P1[1]-P0[1]),z+.5-P0[2]-t*(P1[2]-P0[2]));return d<(t>.68?1.35:.9)?(t>.68?'bois':'barreau'):undefined;},[14,1,6,26,8,36]);
+ o.ornament=undefined;o.slot=dir;}
 const NAMES=Object.keys(MODULES);
 /* Rend un module : orientation 'nord' ou 'ouest'. image (0-3) : flamme de
  * torche. Renvoie {g, shadow, glow?, w, h, ax, ay}, ancre = coin de départ du
@@ -261,6 +283,14 @@ function wall(name,orientation='nord',{image=0}={}){
  if(o.padlock){const [x,y]=pixel(s,M,...o.padlock);stamp(s.g,x-2,y-3,['.aa.','a..a','bbbb','bcbb','bbbb','.dd.'],{a:'fer5',b:'fer4',c:'fer0',d:'fer2'});}
  if(o.skull){const [x,y]=pixel(s,M,...o.skull);stamp(s.g,x-3,y-3,['.aaaa.','abbbba','bc.bcb','bbbbbb','.b.b..'],{a:'bouleau5',b:'bouleau4',c:'cachot0','.':null});}
  if(o.light)s.glowKind='torche';
+ // Sceau magique : cercle de runes sur les vantaux, claveaux luisants, lueur au sol ; pulsation sur 4 images.
+ if(o.seal){const pulse=[0,1,2,1][image%4],{a:ca,z:cz,r}=o.seal,RUNES=['x.x','.x.','xxx','x.x','.xx','xx.'];
+  for(let i=0;i<s.w*s.h;i++){const h=s.info[i];if(!h||h.side!=='b')continue;const px=i%s.w,py=Math.floor(i/s.w),d=Math.hypot(h.a+.5-ca,h.z+.5-cz);
+   if(h.mat==='porte'||h.mat==='fer'){if(Math.abs(d-r)<.75)s.g.set(px,py,tone('arcane',4+pulse,7));
+    else if(d<r-1.2){const ang=Math.atan2(h.z+.5-cz,h.a+.5-ca),k=mod(Math.floor((ang/Math.PI+1)*3),6),g=RUNES[k],ra=mod(h.a,3),rz=mod(h.z,2);
+     if(d>r-3.4&&g[ra]==='x'&&rz===0)s.g.set(px,py,tone('arcane',3+pulse,7));else if(d<2.2)s.g.set(px,py,tone('arcane',5+pulse,7));}}
+   else if(h.mat==='mur'&&h.z>=WIDE.spring&&Math.abs(Math.hypot(h.a+.5-16,h.z+.5-WIDE.spring)-(WIDE.a1-WIDE.a0)/2-2)<1.6&&mod(h.a+h.z,4)===0)s.g.set(px,py,tone('arcane',2+pulse,7));}
+  floorGlow(s,M,[16,3],15,{ramp:'arcane'});s.glowKind='arcane';}
  return s;
 }
 /* Angles et murets, dans le repère du monde (pas d'orientation) ; l'ancre
@@ -317,4 +347,15 @@ function stairsDown(orientation='nord'){
  // Ombre portée de la margelle dans la trémie.
  return s;
 }
-module.exports={CELL,H,T,STUB,COURSES,BLOCKS,MODULES,NAMES,CORNERS,STUBS,masonry,cap,core,shader,wall,corner,stub,stairsDown,bake,flame,FLAMES,hash,pixel,col,floorGlow,glowRing,rubble,dither,noise,grain};
+/* Puits du monte-charge : trou carré d'une case, margelle sur les quatre
+ * côtés, rails de fer et chaînes qui plongent dans le noir. La plate-forme
+ * (objet 'monte-charge') se pose par-dessus quand elle est à cet étage. */
+function shaft(){
+ const M=new Model(0,0,-30,CELL,CELL,3),A0=3,A1=29;
+ M.shape((a,b,z)=>a>=A0&&a<A1&&b>=A0&&b<A1?undefined:'roche',[0,0,-30,CELL,CELL,0]);
+ M.box(A0-2,A0-2,0,A1+2,A0,2,'margelle');M.box(A0-2,A0,0,A0,A1+2,2,'margelle');M.box(A1,A0,0,A1+2,A1+2,1,'margelle');M.box(A0,A1,0,A1,A1+2,1,'margelle');
+ for(const a of [8,23])M.box(a,A0,-30,a+2,A0+1,0,'fer');
+ for(const [a,b]of [[6,6],[25,6],[6,25],[25,25]])for(let z=-30;z<0;z++)if(mod(z,3)!==1)M.set(a,b,z,'fer');else{M.set(a-1,b,z,'fer');M.set(a+1,b,z,'fer');}
+ return render(M,shader({dark:h=>h.z<0?Math.floor(-h.z/5):0,edge:()=>false}));
+}
+module.exports={CELL,H,T,STUB,COURSES,BLOCKS,MODULES,NAMES,CORNERS,STUBS,masonry,cap,core,shader,wall,corner,stub,stairsDown,shaft,bake,flame,FLAMES,hash,pixel,col,floorGlow,glowRing,rubble,dither,noise,grain};
