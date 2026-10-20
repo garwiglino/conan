@@ -17,7 +17,12 @@ if(!frame.includes('this.drawTempleGate()')){
 html=html.slice(0,start)+frame+html.slice(end);
 for(const [a,b]of [[' magic(){',' glowFX('],[' lights(){',' weatherFX(']]){const s=html.indexOf(a),e=html.indexOf(b,s);if(s>=0&&e>s){let code=html.slice(s,e);if(!code.includes('this.projectedSeals'))code=code.replaceAll('SEALS','(this.projectedSeals||SEALS)');html=html.slice(0,s)+code+html.slice(e);}}
 const begin='// BEGIN ISOMETRIC WORLD',finish='// END ISOMETRIC WORLD';
-const block=begin+'\nconst HearthreaverTerrainPalettes=globalThis.HearthreaverTerrainPalettes='+read('sprites/terrain/isometric-palettes.json').trim()+';\n'+['sprites/terrain/terrain-isometric.js','scripts/world-projection.js','scripts/world-isometric-art.js','scripts/world-isometric-runtime.js'].map(read).join('\n')+'\n'+finish;
+// Biomes redessinés (art/environnement) : le jeu ne les charge que s'ils sont
+// listés dans art/environnement/jeu.json ; sinon il garde ses tuiles actuelles.
+const active=JSON.parse(read('art/environnement/jeu.json')).biomes_actifs||[];
+for(const b of active)if(!fs.existsSync(path.join(root,'sprites/environnement',b+'-data.js')))throw Error('jeu.json : biome '+b+' sans données (npm run build:environment)');
+const environment=active.length?[...active.map(b=>'sprites/environnement/'+b+'-data.js'),'sprites/environnement/environment-iso.js']:[];
+const block=begin+'\nconst HearthreaverTerrainPalettes=globalThis.HearthreaverTerrainPalettes='+read('sprites/terrain/isometric-palettes.json').trim()+';\n'+['sprites/terrain/terrain-isometric.js',...environment,'scripts/world-projection.js','scripts/world-isometric-art.js','scripts/world-isometric-runtime.js'].map(read).join('\n')+'\n'+finish;
 if(html.includes(begin)){const a=html.indexOf(begin),b=html.indexOf(finish,a);if(b<0)throw Error('World projection block corrupted');html=html.slice(0,a)+block+html.slice(b+finish.length);}else html=html.replace('// app.js',()=>block+'\n// app.js');
 fs.writeFileSync(path.join(root,'index.html'),html);fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
-console.log('Isometric terrain, camera and display projection embedded in web and offline iOS.');
+console.log('Isometric terrain, camera and display projection embedded in web and offline iOS'+(active.length?' (biomes redessinés : '+active.join(', ')+').':'.'));

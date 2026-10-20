@@ -1,0 +1,157 @@
+GIMP Palette
+Name: Teremor
+Columns: 8
+#
+ 29  42  42	herbe0
+ 38  57  47	herbe1
+ 49  74  51	herbe2
+ 63  93  55	herbe3
+ 79 112  59	herbe4
+ 99 133  64	herbe5
+125 154  72	herbe6
+162 180  94	herbe7
+ 42  33  40	terre0
+ 61  46  44	terre1
+ 84  64  51	terre2
+107  84  60	terre3
+131 106  71	terre4
+156 131  86	terre5
+184 158 107	terre6
+ 58  46  41	litiere0
+ 85  64  47	litiere1
+111  85  52	litiere2
+138 108  61	litiere3
+ 35  33  43	pierre0
+ 51  50  62	pierre1
+ 80  80  91	pierre2
+114 113 122	pierre3
+150 145 139	pierre4
+185 177 160	pierre5
+213 204 182	pierre6
+ 45  56  48	mousse0
+ 67  81  58	mousse1
+101 112  70	mousse2
+137 145  83	mousse3
+174 183 115	mousse4
+ 20  35  49	eau0
+ 27  52  67	eau1
+ 35  71  85	eau2
+ 44  91 102	eau3
+ 58 114 119	eau4
+ 87 142 137	eau5
+139 182 165	eau6
+205 226 204	eau7
+ 48  40  48	ecorce0
+ 81  64  54	ecorce1
+121  87  59	ecorce2
+163 119  72	ecorce3
+198 155  96	ecorce4
+ 36  40  44	tronc0
+ 59  62  59	tronc1
+ 93  93  75	tronc2
+131 128  99	tronc3
+164 160 123	tronc4
+ 42  38  41	bouleau0
+112 102  94	bouleau1
+155 145 121	bouleau2
+194 183 155	bouleau3
+222 213 182	bouleau4
+237 230 205	bouleau5
+ 21  33  32	feuille0
+ 28  48  45	feuille1
+ 38  66  51	feuille2
+ 51  86  57	feuille3
+ 67 108  61	feuille4
+ 88 131  63	feuille5
+115 154  69	feuille6
+151 178  85	feuille7
+ 34  54  45	tendre0
+ 51  80  47	tendre1
+ 71 107  51	tendre2
+ 97 135  58	tendre3
+128 161  70	tendre4
+165 187  93	tendre5
+199 208 126	tendre6
+237 230 205	fleur0
+239 211 106	fleur1
+215 154  60	fleur2
+184  87  74	fleur3
+138 111 166	fleur4
+ 95  76 134	fleur5
+127 156 207	fleur6
+ 90  42  44	champi0
+140  59  54	champi1
+184  90  72	champi2
+217 138 104	champi3
+ 73  45  56	brique0
+113  62  60	brique1
+164  91  71	brique2
+197 123  87	brique3
+227 163 119	brique4
+101  84  79	gres0
+148 118  95	gres1
+196 170 131	gres2
+222 201 157	gres3
+238 225 182	gres4
+ 47  35  49	sable0
+ 75  49  57	sable1
+111  74  69	sable2
+148 101  83	sable3
+184 130  95	sable4
+210 159 108	sable5
+226 185 127	sable6
+238 210 156	sable7
+247 231 192	sable8
+ 58  44  49	piste0
+ 91  70  67	piste1
+127 100  84	piste2
+162 131 106	piste3
+191 160 131	piste4
+215 188 157	piste5
+234 218 189	piste6
+ 42  28  38	ocre0
+ 71  39  44	ocre1
+107  58  53	ocre2
+145  81  63	ocre3
+181 109  74	ocre4
+209 141  93	ocre5
+229 174 120	ocre6
+242 207 152	ocre7
+ 40  48  46	sauge0
+ 63  74  61	sauge1
+ 92 106  76	sauge2
+125 138  93	sauge3
+159 168 114	sauge4
+194 196 141	sauge5
+ 22  35  42	palme0
+ 29  56  54	palme1
+ 41  80  63	palme2
+ 58 105  68	palme3
+ 82 131  74	palme4
+116 157  82	palme5
+162 184 100	palme6
+ 44  36  41	bois0
+ 74  59  55	bois1
+109  88  72	bois2
+145 120  96	bois3
+180 156 127	bois4
+210 191 159	bois5
+233 221 195	bois6
+ 17  36  47	oasis0
+ 20  56  67	oasis1
+ 24  80  85	oasis2
+ 31 106 103	oasis3
+ 43 133 121	oasis4
+ 69 161 138	oasis5
+118 190 160	oasis6
+185 223 194	oasis7
+102  80  66	pise0
+151 113  83	pise1
+187 148 102	pise2
+215 183 128	pise3
+237 207 152	pise4
+ 28  40  68	zellige0
+ 37  69 106	zellige1
+ 43 108 134	zellige2
+ 61 151 148	zellige3
+121 193 167	zellige4
