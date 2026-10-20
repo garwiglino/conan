@@ -1,0 +1,237 @@
+{
+ "biome": "Forêt tempérée de Teremor",
+ "palette": "palette-teremor.gpl",
+ "echelle": "1 px par unité ; une case de 1 m = losange 32 × 16 ; pièces de chemin sur 2 m",
+ "niveaux": {
+  "chemin": [
+   "herbe4",
+   "terre3",
+   "terre4",
+   "terre5"
+  ],
+  "pave": [
+   "herbe4",
+   "pierre2",
+   "pierre3",
+   "pierre4"
+  ],
+  "ruisseau": [
+   "herbe4",
+   "eau2",
+   "eau3",
+   "eau4"
+  ]
+ },
+ "fichiers": [
+  {
+   "fichier": "sols/herbe.piskel",
+   "role": "texture",
+   "id": "grass"
+  },
+  {
+   "fichier": "sols/terre.piskel",
+   "role": "texture",
+   "id": "dirt"
+  },
+  {
+   "fichier": "sols/paves.piskel",
+   "role": "texture",
+   "id": "cobble"
+  },
+  {
+   "fichier": "sols/eau.piskel",
+   "role": "texture",
+   "id": "water"
+  },
+  {
+   "fichier": "sols/litiere.piskel",
+   "role": "texture",
+   "id": "litter"
+  },
+  {
+   "fichier": "sols/berge.piskel",
+   "role": "texture",
+   "id": "bank"
+  },
+  {
+   "fichier": "sols/planches.piskel",
+   "role": "texture",
+   "id": "plank"
+  },
+  {
+   "fichier": "falaises/paroi.piskel",
+   "role": "falaise",
+   "cadres": [
+    "cliffS",
+    "cliffE"
+   ]
+  },
+  {
+   "fichier": "chemins/chemin.piskel",
+   "role": "pieces",
+   "jeu": "chemin",
+   "cadres": [
+    "droite-NS",
+    "droite-EO",
+    "virage-NE",
+    "virage-ES",
+    "virage-SO",
+    "virage-ON",
+    "T-sans-O",
+    "T-sans-S",
+    "T-sans-E",
+    "T-sans-N",
+    "croisement",
+    "impasse-N",
+    "impasse-E",
+    "impasse-S",
+    "impasse-O",
+    "placette"
+   ]
+  },
+  {
+   "fichier": "chemins/pave.piskel",
+   "role": "pieces",
+   "jeu": "pave",
+   "cadres": [
+    "droite-NS",
+    "droite-EO",
+    "virage-NE",
+    "virage-ES",
+    "virage-SO",
+    "virage-ON",
+    "T-sans-O",
+    "T-sans-S",
+    "T-sans-E",
+    "T-sans-N",
+    "croisement",
+    "impasse-N",
+    "impasse-E",
+    "impasse-S",
+    "impasse-O",
+    "placette"
+   ]
+  },
+  {
+   "fichier": "chemins/ruisseau.piskel",
+   "role": "pieces",
+   "jeu": "ruisseau",
+   "cadres": [
+    "droite-NS",
+    "droite-EO",
+    "virage-NE",
+    "virage-ES",
+    "virage-SO",
+    "virage-ON",
+    "T-sans-O",
+    "T-sans-S",
+    "T-sans-E",
+    "T-sans-N",
+    "croisement",
+    "impasse-N",
+    "impasse-E",
+    "impasse-S",
+    "impasse-O",
+    "placette"
+   ]
+  },
+  {
+   "fichier": "decors/decors-sol.piskel",
+   "role": "decors",
+   "ancre": [
+    2,
+    2
+   ],
+   "taux": 0.08
+  },
+  {
+   "fichier": "flore/chene.piskel",
+   "role": "flore",
+   "id": "chene",
+   "ancre": [
+    36,
+    79
+   ],
+   "cadres": [
+    "chene_a",
+    "chene_b",
+    "chene_c"
+   ]
+  },
+  {
+   "fichier": "flore/bouleau.piskel",
+   "role": "flore",
+   "id": "bouleau",
+   "ancre": [
+    24,
+    91
+   ],
+   "cadres": [
+    "bouleau_a",
+    "bouleau_b"
+   ]
+  },
+  {
+   "fichier": "flore/buisson.piskel",
+   "role": "flore",
+   "id": "buisson",
+   "ancre": [
+    17,
+    22
+   ],
+   "cadres": [
+    "buisson_a",
+    "buisson_b"
+   ]
+  },
+  {
+   "fichier": "flore/rocher.piskel",
+   "role": "flore",
+   "id": "rocher",
+   "ancre": [
+    17,
+    23
+   ],
+   "cadres": [
+    "rocher_a",
+    "rocher_b"
+   ]
+  },
+  {
+   "fichier": "flore/fougere.piskel",
+   "role": "flore",
+   "id": "fougere",
+   "ancre": [
+    17,
+    19
+   ],
+   "cadres": [
+    "fougere"
+   ]
+  },
+  {
+   "fichier": "flore/champignons.piskel",
+   "role": "flore",
+   "id": "champignons",
+   "ancre": [
+    8,
+    10
+   ],
+   "cadres": [
+    "champignons"
+   ]
+  },
+  {
+   "fichier": "flore/fleurs.piskel",
+   "role": "flore",
+   "id": "fleurs",
+   "ancre": [
+    9,
+    12
+   ],
+   "cadres": [
+    "fleurs"
+   ]
+  }
+ ]
+}

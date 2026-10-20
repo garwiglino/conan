@@ -32,7 +32,7 @@ function map(N=36){
  return {N,code,piece,houses};
 }
 function render(file,{scale=2}={}){
- const M=map(),N=M.N,E=Env(require('./teremor-assets.cjs').assets());
+ const M=map(),N=M.N,E=Env(require('../../sprites/environnement/teremor-data.js'));
  const sampler={tile:(i,j)=>i<0||j<0||i>=N||j>=N?{code:0}:{code:M.code[j*N+i]===9?0:M.code[j*N+i]},piece:(ci,cj)=>ci<0||cj<0||ci>=N/2||cj>=N/2?[]:M.piece(ci,cj)};
  const width=N*32+64,height=N*16+64,ox=width/2,oy=48;
  const out=E.render({sampler,base:[0,0],screen:[0,0],tiles:[N,N],width,height,ox,oy});
@@ -40,11 +40,10 @@ function render(file,{scale=2}={}){
  const tmp=createCanvas(width,height),ti=tmp.getContext('2d').createImageData(width,height);ti.data.set(out.data);tmp.getContext('2d').putImageData(ti,0,0);c.drawImage(tmp,0,0);
  const draw=[];
  const sprite=(pixels,w,h)=>{const s=createCanvas(w,h),x=s.getContext('2d'),im=x.createImageData(w,h);for(const p of pixels){const [px,py]=p,i=(py*w+px)*4;if(typeof p[2]==='string'){im.data.set([parseInt(p[2].slice(0,2),16),parseInt(p[2].slice(2,4),16),parseInt(p[2].slice(4,6),16),255],i);}else im.data.set(p.slice(2,6),i);}x.putImageData(im,0,0);return s;};
- // Nouvelle flore de Teremor : ombre portée à 45 %, puis le sprite.
- const {RGB}=require('./png.cjs'),FLORA=require('./teremor-flora.cjs').all();
- const toCanvas=g=>{const s=createCanvas(g.w,g.h),x=s.getContext('2d'),im=x.createImageData(g.w,g.h);for(let k=0;k<g.px.length;k++)if(g.px[k])im.data.set(RGB[g.px[k]],k*4);x.putImageData(im,0,0);return s;};
- const SPR={};for(const [k,v]of Object.entries(FLORA))SPR[k]={img:toCanvas(v.g),shadow:toCanvas(v.shadow),ax:v.ax,ay:v.ay};
- const place=(k,u,v)=>{const sp=SPR[k],p=P(u,v);c.save();c.globalAlpha=.45;c.drawImage(sp.shadow,Math.round(p.x+ox-sp.ax),Math.round(p.y+oy-sp.ay));c.restore();draw.push({y:p.y,fn:()=>c.drawImage(sp.img,Math.round(p.x+ox-sp.ax),Math.round(p.y+oy-sp.ay))});};
+ // Flore de Teremor (sources Piskel) : ombre portée à l'opacité de son calque, puis le sprite.
+ const toCanvas=(px,w,h)=>{const s=createCanvas(w,h),x=s.getContext('2d'),im=x.createImageData(w,h);for(let k=0;k<px.length;k++)if(px[k])im.data.set(E.rgb[px[k]],k*4);x.putImageData(im,0,0);return s;};
+ const SPR={};for(const v of Object.values(E.flora))for(const f of v.frames)SPR[f.name]={img:toCanvas(f.px,f.w,f.h),shadow:toCanvas(f.sh,f.w,f.h),alpha:v.shadow,ax:f.ax,ay:f.ay};
+ const place=(k,u,v)=>{const sp=SPR[k],p=P(u,v);c.save();c.globalAlpha=sp.alpha;c.drawImage(sp.shadow,Math.round(p.x+ox-sp.ax),Math.round(p.y+oy-sp.ay));c.restore();draw.push({y:p.y,fn:()=>c.drawImage(sp.img,Math.round(p.x+ox-sp.ax),Math.round(p.y+oy-sp.ay))});};
  const BIG=['chene_a','chene_b','chene_c','chene_a','chene_b','bouleau_a','bouleau_b','buisson_a','buisson_b','rocher_a'],SMALL=['fougere','fougere','champignons','fleurs','buisson_b','rocher_b'];
  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const t=M.code[j*N+i];
   if(t===4)place(BIG[Math.floor(hash(i,j,5)*BIG.length)],i*16+8,j*16+9);

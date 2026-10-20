@@ -13,7 +13,9 @@ const C=n=>{const i=NAME.get(n);if(!i)throw RangeError('couleur '+n);return i;};
 // Décalage dans une rampe (ombre / lumière) en restant dans la palette.
 const SHIFT=[];for(let i=1;i<PAL.length;i++){const [r,t]=ASSETS.toneOf[i-1],list=RAMP[r];SHIFT[i]=d=>C(r+Math.max(0,Math.min(list-1,t+d)));}
 const shift=(c,d)=>c&&d?SHIFT[c](d):c;
-function decode(t){if(t.px instanceof Uint8Array)return t;const b=s=>typeof atob==='function'?Uint8Array.from(atob(s),c=>c.charCodeAt(0)):Uint8Array.from(Buffer.from(s,'base64'));return {...t,px:b(t.px),ht:t.ht?b(t.ht):null};}
+// Base64, ou suites « r: » [longueur - 1, valeur] produites par le build.
+function bytes(s){if(s instanceof Uint8Array)return s;const raw=a=>typeof atob==='function'?Uint8Array.from(atob(a),c=>c.charCodeAt(0)):Uint8Array.from(Buffer.from(a,'base64'));if(!s.startsWith('r:'))return raw(s);const r=raw(s.slice(2));let n=0;for(let i=0;i<r.length;i+=2)n+=r[i]+1;const out=new Uint8Array(n);for(let i=0,o=0;i<r.length;i+=2){out.fill(r[i+1],o,o+r[i]+1);o+=r[i]+1;}return out;}
+function decode(t){return {...t,px:bytes(t.px),ht:t.ht?bytes(t.ht):null,...(t.sh?{sh:bytes(t.sh)}:{})};}
 const TEX={};for(const [k,v]of Object.entries(ASSETS.textures))TEX[k]=decode(v);
 const STAMPS=(ASSETS.decals||[]).map(decode);
 // Formes des pièces : 64 × 32, niveaux 0-3 codés par couleur de référence.
@@ -148,5 +150,7 @@ function render(o){
   const li=id%tiles[0],lj=Math.floor(id/tiles[0]);features.push({width:w,height:h,data:fd,x:B.x0-ox,y:B.y0-oy,depth:(li+lj)*8+16});}
  return {width,height,data,features,indices:out};
 }
-return {render,palette:PAL,shift,C};
+// Flore : variantes décodées {name, w, h, ax, ay, px, sh} ; ombre à l'opacité du calque Piskel.
+const FLORA={};for(const [k,v]of Object.entries(ASSETS.flora||{}))FLORA[k]={shadow:v.shadow,frames:v.frames.map(decode)};
+return {render,palette:PAL,rgb:RGB,shift,C,flora:FLORA};
 });

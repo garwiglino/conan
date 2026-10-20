@@ -55,9 +55,13 @@
     "check:terrain-isometric": "node scripts/check-terrain-isometric.cjs",
     "package:terrain-isometric": "python3 scripts/package-terrain-isometric.py",
     "test:world-isometric": "node --test tests/world-isometric.test.cjs",
-    "check:world-isometric": "node scripts/check-world-isometric.cjs"
+    "check:world-isometric": "node scripts/check-world-isometric.cjs",
+    "build:environment": "node scripts/environment/build-environment.cjs",
+    "draft:environment": "node scripts/environment/teremor-piskel-draft.cjs",
+    "preview:environment": "node scripts/environment/preview-scene.cjs art/environnement/teremor/apercus && node scripts/environment/preview-sheets.cjs art/environnement/teremor/apercus"
   },
   "devDependencies": {
+    "@code-dot-org/piskel": "0.13.0-cdo.14",
     "@napi-rs/canvas": "0.1.100",
     "jsdom": "30.1.2",
     "web-audio-engine": "0.13.4",
