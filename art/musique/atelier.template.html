@@ -64,15 +64,15 @@ button{font:inherit;color:inherit;cursor:pointer}
  <header>
   <div class="eyebrow">Hearthreaver · dark fantasy</div>
   <h1>Atelier <span>musical</span></h1>
-  <p class="lede">Les treize musiques du jeu, jouées par le même séquenceur que le jeu : cors, chœur grave, cordes, timbales, tambours de guerre et enclume, synthétisés avec les ondes 8 bits du jeu. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
+  <p class="lede">Les treize musiques du jeu, jouées par le même séquenceur que le jeu. Biomes et voyage sont des ambiances discrètes ; les thèmes sont réservés au combat, au boss et à la défaite. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
  </header>
 
  <section class="player" aria-label="Lecture">
   <div class="now">
-   <div style="min-width:0"><h2 id="nowTitle">Les chênes noirs</h2><p id="nowMood">Forêts : ré éolien, cor solitaire sur une lyre, chœur grave et tambour lointain.</p></div>
-   <div class="facts" id="nowFacts"><span>76 BPM</span><span>16 pas</span><span>28 mesures</span></div>
+   <div style="min-width:0"><h2 id="nowTitle">Sous les chênes noirs</h2><p id="nowMood">Forêts : ré éolien, chœur qui respire, gouttes de lyre et tambour lointain.</p></div>
+   <div class="facts" id="nowFacts"><span>52 BPM</span><span>16 pas</span><span>16 mesures</span></div>
   </div>
-  <div class="counter"><span id="barCount">Mesure — / 28</span><div class="beats" id="beats" aria-hidden="true"><i class="down"></i><i></i><i></i><i></i></div></div>
+  <div class="counter"><span id="barCount">Mesure — / 16</span><div class="beats" id="beats" aria-hidden="true"><i class="down"></i><i></i><i></i><i></i></div></div>
   <canvas class="roll" id="roll" width="960" height="330" aria-label="Grille de la mesure en cours : une colonne par pas, une ligne par instrument"></canvas>
   <div class="controls">
    <button class="btn primary" id="playBtn" type="button">▶ Écouter</button>
@@ -88,11 +88,12 @@ button{font:inherit;color:inherit;cursor:pointer}
  <section class="notes">
   <h3>Ce qui change dans le jeu</h3>
   <ul>
-   <li>Couleur dark fantasy : modes mineurs et phrygiens, quintes à vide, cors à l'unisson, chœur grave, cordes qui martèlent, tambours de guerre, enclume et gong.</li>
-   <li>Les voix sont celles du thème titre (cuivres, chœur, timbales, cloches), construites sur les ondes 8 bits du jeu. Chaque biome a sa propre composition : mode, tempo, rythme.</li>
+   <li>Biomes et voyage : ambiances sans mélodie, propres à chaque région. Bourdon, chœur qui respire, quelques gouttes de harpe, de marimba ou de cloche, un tambour lointain, parfois un appel de deux notes.</li>
+   <li>Combat, boss et défaite gardent leurs thèmes dark fantasy : cors, chœur scandé, cordes qui martèlent, timbales, tambours de guerre, enclume et gong.</li>
+   <li>Les voix sont celles du thème titre (cuivres, chœur, timbales, cloches), construites sur les ondes 8 bits du jeu.</li>
    <li>Les mesures sont vérifiées à la construction : une mesure qui ne remplit pas exactement ses 16 pas (ou 12 en balancé) bloque le build.</li>
    <li>Le séquenceur programme les notes 0,8 s à l'avance : une image lente, pendant un chargement du monde, ne fait plus sauter de notes.</li>
-   <li>Combat, boss, défaite et voyage sont recomposés dans le même esprit et calibrés au même niveau que les anciens.</li>
+   <li>Les ambiances jouent plus bas que le thème titre pour rester en fond ; combat et boss passent devant.</li>
   </ul>
  </section>
 </div>

@@ -177,194 +177,153 @@ const BASE_TIMBRES = {
   drums: {g: .24, pan: .06}
 };
 const HARP = {w: 'p50', g: .07, pan: -.3, a: .002, tau: .25, sus: .15, rel: .3, filter: 1400};
+// Ambiance : chœur qui enfle et retombe sur chaque mesure, basse en bourdon, cors lointains et feutrés.
+const AMBIENT = {
+  lead: {kind: 'brass', g: .2, a: .3, rel: .8, filter: 1200},
+  harm: {kind: 'brass', g: .12, a: .8, rel: 1.2, filter: 800},
+  saw: {kind: 'choir', g: .4, a: 1.6, rel: 1.8},
+  bass: {w: 'tri', g: .075, a: .6, flat: true, rel: 1},
+  timpani: {kind: 'timpani', g: .2},
+  drums: {g: .16}
+};
+const ambient = over => Object.fromEntries([...new Set([...Object.keys(AMBIENT), ...Object.keys(over)])].map(k => [k, {...AMBIENT[k], ...over[k]}]));
 
-// gain : niveau calibré par rendu hors ligne (médiane sur 400 ms) : exploration et thème titre vers -48,5 dB,
-// voyage -47,5 dB, combat et boss -43,3 dB, défaite -41 dB, au volume musique par défaut de 45 %.
+// gain : niveau calibré par rendu hors ligne (médiane sur 400 ms), au volume musique par défaut de 45 % :
+// ambiances d'exploration vers -55 dB et voyage -54 dB, sous le thème titre (-48,8 dB) ;
+// combat et boss -43,3 dB, défaite -41 dB.
 const SONGS = [
- {name: 'biome_forest', title: 'Les chênes noirs', mood: 'Forêts : ré éolien, cor solitaire sur une lyre, chœur grave et tambour lointain.', bpm: 76, gain: .53,
-  bass: 'R:16', bassLow: 38, pad: true, padMode: 'fifth', padLow: 50, harmMode: 'octave', harmMin: 1, arpLow: 50, echo: 1.5, echoGain: .16,
-  timbres: {arp: HARP}, programs: {arp: 46},
+ // Exploration et voyage : des ambiances, pas des thèmes. Bourdon de basse, chœur qui respire d'une mesure
+ // à l'autre, quelques gouttes de harpe ou de cloche, un tambour lointain, parfois un appel de deux notes.
+ // Les thèmes mélodiques sont réservés au combat, au boss et à la défaite.
+ {name: 'biome_forest', title: 'Sous les chênes noirs', mood: 'Forêts : ré éolien, chœur qui respire, gouttes de lyre et tambour lointain.', bpm: 52, gain: .45,
+  bass: 'R:16', bassLow: 38, pad: true, padMode: 'fifth', padLow: 50, arpLow: 57, echo: 1, echoGain: .2,
+  timbres: ambient({arp: HARP}), programs: {arp: 46},
   sections: {
-   I: {chords: ['Dm', 'Bb', 'Dm', 'A'], arp: '0:2 1:2 2:2 3:2 2:2 1:2 0:2 1:2', drums: {L: 'x...............'}},
-   A: {chords: ['Dm', 'Bb', 'C', 'Dm', 'Dm', 'Bb', 'Gm', 'A'],
-    lead: ['D4:3 D4:1 A4:8 G4:2 F4:2', 'F4:4 D4:4 Bb3:6 C4:2', 'C4:3 C4:1 G4:8 F4:2 E4:2', 'D4:12 -:4',
-     'A4:3 A4:1 D5:8 C5:2 Bb4:2', 'Bb4:4 F4:4 D5:6 C5:2', 'Bb4:4 A4:2 G4:2 D4:4 G4:4', 'A4:8 E4:4 C#4:4'],
-    arp: '0:4 2:4 1:4 2:4',
-    drums: {L: 'x...............'},
-    fill: {L: 'x.......x...x.x.'}},
-   B: {chords: ['Bb', 'F', 'C', 'Dm', 'Bb', 'F', 'Gm', 'A'], bass: 'R:12 5:4', timp: 'R:8 -:8',
-    lead: ['D5:6 C5:2 Bb4:4 F4:4', 'C5:6 A4:2 F4:8', 'E4:3 G4:1 C5:8 D5:2 E5:2', 'F5:8 E5:4 D5:4',
-     'D5:3 D5:1 F5:8 D5:4', 'C5:3 C5:1 A4:8 F4:4', 'G4:4 Bb4:4 D5:4 C5:2 Bb4:2', 'A4:12 -:4'],
-    arp: '0:2 1:2 2:2 3:2 2:2 1:2 0:2 1:2',
-    drums: {L: 'x.......x.......', M: '..............x.'},
-    fill: {L: 'x.......x.......', M: '........x...x...', T: '............x.xx'}}
-  },
-  order: ['I', 'A', 'B', 'A+harm']},
-
- {name: 'biome_coast', title: 'La mer des pillards', mood: 'Côtes : do mineur balancé en trois, coups de rame, chœur de marins et cors.', bpm: 56, gain: .5, steps: 12,
-  bass: 'R:6 5:6', bassLow: 36, pad: true, padMode: 'fifth', padLow: 48, harmMode: 'fifth', arpLow: 48, echo: 1, echoGain: .16,
-  sections: {
-   A: {chords: ['Cm', 'Bb', 'Ab', 'Gm', 'Cm', 'Bb', 'Ab', 'G'],
-    lead: ['C4:2 Eb4:1 G4:6 F4:2 Eb4:1', 'F4:2 D4:1 Bb3:6 C4:2 D4:1', 'Eb4:2 C4:1 Ab4:6 G4:2 F4:1', 'G4:9 -:3',
-     'C5:2 Bb4:1 G4:6 C5:2 Eb5:1', 'D5:2 C5:1 Bb4:6 F4:3', 'Ab4:2 G4:1 Eb4:3 C4:3 Eb4:3', 'D4:9 -:3'],
-    drums: {B: 'x.....x.....'},
-    fill: {B: 'x.....x.....', T: '.........x.x'}},
-   B: {chords: ['Ab', 'Eb', 'Bb', 'Cm', 'Ab', 'Eb', 'Fm', 'G'], harm: 'auto', padRhythm: 'x:6 x:6', arp: '0:3 1:3 2:3 1:3',
-    lead: ['C5:3 Eb5:6 C5:2 Bb4:1', 'Bb4:3 G4:6 Eb4:3', 'F4:2 Bb4:1 D5:6 C5:2 Bb4:1', 'C5:9 G4:3',
-     'Ab4:2 C5:1 Eb5:6 F5:2 Eb5:1', 'G5:3 F5:3 Eb5:3 Bb4:3', 'Ab4:3 C5:3 F5:3 Eb5:2 D5:1', 'D5:6 B4:3 G4:3'],
-    drums: {B: 'x.....x.....', L: '...x.....x..'},
-    fill: {B: 'x.....x.....', L: '...x.....x..', G: 'x...........'}}
-  },
-  order: ['A', 'A+harm', 'B']},
-
- {name: 'biome_desert', title: 'Sables de Sarak', mood: 'Déserts : mi phrygien majeur, anche sur bourdon, chœur en quintes et darbouka.', bpm: 84, gain: .51,
-  bass: 'R:2 -:4 R:2 5:4 R:2 -:2', bassLow: 40, leadShift: -12, harmMode: 'fifth', echo: .75, echoGain: .2,
-  timbres: {lead: {w: 'p25', g: .2, a: .01, tau: .4, sus: .7, rel: .08, vib: 22, filter: 2400}, arp: {...HARP, g: .06, tau: .12, sus: .1, rel: .1, filter: 1500}},
-  programs: {lead: 111, arp: 105}, mix: {arp: 3},
-  pad: true, padLow: 52, padMode: 'fifth', arpLow: 52,
-  sections: {
-   A: {chords: ['E', 'E', 'F', 'E', 'Am', 'Dm', 'F', 'E'],
-    lead: ['E5:4 F5:2 G#5:2 A5:4 G#5:2 F5:2', 'E5:6 F5:1 E5:1 D5:4 E5:4', 'A5:4 G#5:2 F5:2 A5:4 C6:4', 'B5:6 A5:2 G#5:4 E5:4',
-     'A5:4 C6:2 B5:2 A5:4 E5:4', 'F5:4 A5:2 G#5:2 F5:4 D5:4', 'C6:4 B5:2 A5:2 G#5:4 F5:4', 'E5:12 -:4'],
-    drums: {B: 'x.......x.......', L: 'x.....x.x.......', T: '..x.......x.x...'},
-    fill: {B: 'x.......x.......', L: 'x.....x.x.......', T: '..x.......x.xxxx'}},
-   B: {chords: ['Am', 'Am', 'Dm', 'E', 'F', 'E', 'F', 'E'], timp: 'R:8 -:8',
-    lead: ['A4:2 C5:2 E5:4 D5:2 C5:2 B4:2 A4:2', 'C5:2 B4:2 A4:2 G#4:2 A4:8', 'D5:2 F5:2 A5:4 G#5:2 F5:2 E5:2 D5:2', 'E5:2 F5:2 E5:2 D5:2 E5:8',
-     'A5:2 C6:2 B5:2 A5:2 G#5:4 A5:4', 'B5:2 A5:2 G#5:2 F5:2 E5:8', 'F5:2 E5:2 F5:2 G#5:2 A5:4 C6:4', 'B5:4 G#5:4 E5:8'],
-    arp: '0:2 2:2 1:2 2:2 0:2 2:2 1:2 2:2',
-    drums: {B: 'x.......x.......', L: 'x.....x.x.......', T: '..x.......x.x...'},
-    fill: {B: 'x.......x.......', L: 'x.....x.x.......', T: '..x.......xxxxxx', G: 'x...............'}}
-  },
-  order: ['A', 'B', 'A+harm', 'B+harm']},
-
- {name: 'biome_steppe', title: 'Les cavaliers des steppes', mood: 'Steppes : la mineur au galop en trois, cordes graves, cors en quintes.', bpm: 92, gain: .47, steps: 12,
-  bass: 'R:2 R:1 R:2 R:1 5:2 5:1 5:2 5:1', bassLow: 40, pad: true, padMode: 'fifth', padLow: 50, harmMode: 'fifth', arpLow: 45, echo: 1, echoGain: .14,
-  sections: {
-   A: {chords: ['Am', 'F', 'G', 'Am', 'Am', 'F', 'Dm', 'E'],
-    lead: ['E4:2 A4:1 A4:6 C5:2 B4:1', 'A4:3 F4:3 C4:6', 'D4:2 G4:1 B4:6 A4:2 G4:1', 'A4:6 E4:6',
-     'E5:2 E5:1 E5:3 D5:2 C5:1 B4:3', 'C5:3 A4:3 F4:3 A4:3', 'D5:2 C5:1 A4:3 F4:2 A4:1 D5:3', 'E5:6 G#4:3 B4:3'],
-    arp: '0:1 0:1 1:1 0:1 0:1 2:1 0:1 0:1 1:1 0:1 0:1 2:1',
-    drums: {K: 'x.xx.xx.xx.x'},
-    fill: {K: 'x.xx.xx.....', T: '......x.x...', M: '.........x..', L: '..........xx'}},
-   B: {chords: ['F', 'G', 'Am', 'Am', 'F', 'G', 'E', 'E'], timp: 'R:3 -:3 5:3 -:3',
-    lead: ['C5:6 A4:3 C5:3', 'D5:6 B4:3 G4:3', 'E5:9 D5:2 C5:1', 'A4:9 -:3',
-     'F5:3 C5:3 A4:3 C5:3', 'D5:3 B4:3 G4:3 D5:3', 'E5:3 D5:2 B4:1 G#4:3 B4:3', 'E4:9 -:3'],
-    arp: '0:1 0:1 1:1 0:1 0:1 2:1 0:1 0:1 1:1 0:1 0:1 2:1',
-    drums: {K: 'x.xx.xx.xx.x', S: '...x.....x..'},
-    fill: {K: 'x.xx.xx.xx.x', S: '...x.....xxx', C: 'x...........'}}
-  },
-  order: ['A', 'B', 'A+harm', 'B+harm']},
-
- {name: 'biome_tropical', title: 'Les jungles de Kush', mood: 'Jungles : fa dièse phrygien, tambours en 3-3-2, chœur qui scande et marimba sombre.', bpm: 100, gain: .43,
-  bass: 'R:3 R:3 5:2 R:3 R:3 5:2', bassLow: 42, pad: true, padMode: 'fifth', padLow: 49, harmMode: 'fifth', arpLow: 54, echo: .75, echoGain: .16,
-  timbres: {arp: {...HARP, g: .07, tau: .07, sus: .05, rel: .06, filter: 1800}}, programs: {arp: 12},
-  sections: {
-   A: {chords: ['F#m', 'G', 'F#m', 'E', 'F#m', 'G', 'D', 'G'],
-    lead: ['-:4 F#4:3 F#4:1 C#5:8', 'B4:4 A4:2 G4:2 D4:8', '-:4 F#4:3 A4:1 C#5:6 E5:2', 'D5:4 B4:4 G#4:8',
-     'F#5:3 E5:1 C#5:4 A4:4 F#4:4', 'G4:3 A4:1 B4:4 D5:4 B4:4', 'A4:4 F#4:4 D4:4 E4:4', 'B4:4 A4:4 G4:8'],
-    arp: '0:2 2:2 1:2 0:2 2:2 1:2 0:2 1:2',
-    drums: {B: 'x.......x.......', T: '...x..x....x..x.', h: 'g.gg.gg.g.gg.gg.'},
-    fill: {B: 'x.......x.......', T: '...x..x.....x.xx', M: '..........x.x...'}},
-   B: {chords: ['Bm', 'G', 'F#m', 'F#m', 'Bm', 'G', 'E', 'G'], harm: 'auto', padRhythm: 'x:3 x:3 x:2 -:8',
-    lead: ['B4:3 B4:1 D5:4 F#5:8', 'G5:4 F#5:2 E5:2 D5:8', 'C#5:3 C#5:1 E5:4 F#5:8', 'F#5:4 E5:4 C#5:8',
-     'D5:4 F#5:4 B4:8', 'B4:4 A4:2 G4:2 D5:8', 'E5:4 D5:2 B4:2 G#4:8', 'A4:4 B4:4 G4:8'],
-    arp: '0:2 2:2 1:2 0:2 2:2 1:2 0:2 1:2',
-    drums: {B: 'x.......x.......', T: '...x..x....x..x.', L: 'x.....x...x.....', h: 'g.gg.gg.g.gg.gg.'},
-    fill: {B: 'x.......x.......', T: '...x..x.....xxxx', L: 'x.....x.........'}}
-  },
-  order: ['A', 'B', 'A+harm', 'B']},
-
- {name: 'biome_wetland', title: 'Les eaux mortes', mood: 'Marais : sol mineur, complainte aux cordes, chœur qui bourdonne et gouttes de harpe.', bpm: 66, gain: .53,
-  bass: 'R:12 -5:4', bassLow: 43, pad: true, padMode: 'fifth', padLow: 50, harmMode: 'fifth', arpLow: 67, echo: 1.5, echoGain: .24,
-  timbres: {lead: {w: 'saw', g: .16, pan: -.04, a: .12, tau: .8, sus: .85, rel: .25, vib: 10, filter: 1900}, arp: {w: 'p125', g: .05, pan: -.3, a: .002, tau: .1, sus: .1, rel: .2, filter: 3000}},
-  programs: {lead: 48, arp: 46}, mix: {lead: 3, arp: 4},
-  sections: {
-   A: {chords: ['Gm', 'F', 'Eb', 'D', 'Gm', 'Bb', 'Cm', 'D'],
-    lead: ['D4:8 G4:4 Bb4:4', 'A4:6 G4:2 F4:8', 'G4:8 F4:4 Eb4:4', 'D4:12 -:4',
-     'Bb4:8 A4:4 G4:4', 'F4:6 D4:2 Bb4:8', 'C5:6 Bb4:2 G4:4 Eb4:4', 'F#4:8 D4:8'],
-    arp: '-:4 2:2 -:6 1:2 -:2',
-    drums: {L: 'x...............'}},
-   B: {chords: ['Eb', 'Bb', 'Cm', 'Gm', 'Eb', 'Bb', 'Ab', 'D'],
-    lead: ['Bb4:6 C5:2 Eb5:8', 'D5:6 C5:2 Bb4:8', 'C5:4 Eb5:4 G5:6 F5:2', 'D5:12 -:4',
-     'Eb5:6 D5:2 C5:4 Bb4:4', 'D5:6 C5:2 Bb4:4 F4:4', 'Eb5:6 C5:2 Ab4:8', 'A4:8 F#4:4 D4:4'],
-    arp: '-:4 2:2 -:6 1:2 -:2',
-    drums: {L: 'x.........x.....', o: '........g.......'},
-    fill: {L: 'x.........x.....', M: '............x.x.'}}
-  },
-  order: ['A', 'B', 'A+harm', 'B+harm']},
-
- {name: 'biome_boreal', title: 'Les terres du Nord', mood: 'Taïga et toundra : si mineur, appels de cor en quintes dans le froid, timbales et tambours.', bpm: 80, gain: .47,
-  bass: 'R:8 R:4 5:4', bassLow: 40, pad: true, padMode: 'fifth', padLow: 47, harmMode: 'fifth', arpLow: 47, timp: 'R:16', echo: 1.5, echoGain: .2,
-  sections: {
-   A: {chords: ['Bm', 'G', 'A', 'Bm', 'Bm', 'G', 'Em', 'F#'],
-    lead: ['B3:8 F#4:8', 'G4:6 F#4:2 D4:8', 'E4:8 A4:6 G4:2', 'F#4:16',
-     'B4:8 D5:6 C#5:2', 'B4:6 A4:2 G4:8', 'E4:4 F#4:4 G4:4 B4:4', 'C#5:8 A#4:8'],
-    arp: '0:4 1:4 2:4 1:4',
-    drums: {B: 'x.......x.......'},
-    fill: {B: 'x.......x.......', L: '............x.x.', M: '.............x.x'}},
-   B: {chords: ['G', 'D', 'A', 'Bm', 'G', 'D', 'Em', 'F#'], timp: 'R:8 5:8',
-    lead: ['D5:6 B4:2 G4:4 B4:4', 'A4:6 F#4:2 D4:8', 'C#5:4 E5:4 A4:8', 'B4:6 C#5:2 D5:8',
-     'G5:8 D5:4 B4:4', 'F#5:6 E5:2 D5:8', 'E5:4 D5:2 B4:2 G4:4 B4:4', 'A#4:8 F#4:8'],
-    arp: '0:4 1:4 2:4 1:4',
-    drums: {B: 'x.......x.......', L: '....x.......x...'},
-    fill: {B: 'x.......x.......', L: '....x.......x...', S: '............xxxx', C: 'x...............'}}
-  },
-  order: ['A', 'B', 'A+harm', 'B+harm']},
-
- {name: 'biome_polar', title: 'Glace éternelle', mood: 'Glaces : do dièse mineur, cloches de glace, cors graves et chœur comme un vent.', bpm: 60, gain: .67,
-  bass: 'R:16', bassLow: 37, pad: true, padMode: 'fifth', padLow: 49, arpLow: 73, echo: 1.5, echoGain: .26,
-  timbres: {lead: {kind: 'bell', g: .15, pan: .06}, harm: {g: .14, filter: 1100}, arp: {w: 'p125', g: .035, pan: -.3, a: .002, tau: .08, sus: .1, rel: .2}},
-  programs: {lead: 14, arp: 9}, mix: {lead: 8, arp: 4},
-  sections: {
-   A: {chords: ['C#m', 'A', 'F#m', 'G#', 'C#m', 'A', 'F#m', 'G#'],
-    lead: ['G#5:8 E5:4 C#5:4', 'C#5:8 E5:4 A5:4', 'F#5:8 A5:4 C#6:4', 'D#5:8 G#5:8',
-     'E5:6 D#5:2 C#5:8', 'A5:6 G#5:2 E5:8', 'F#5:4 A5:4 C#6:6 B5:2', 'C6:8 G#5:8'],
-    arp: '-:2 0:2 -:2 2:2 -:2 1:2 -:2 3:2'},
-   B: {chords: ['C#m', 'B', 'A', 'G#', 'C#m', 'B', 'A', 'G#'],
-    lead: ['-:8 E5:4 G#5:4', '-:8 D#5:4 F#5:4', '-:8 C#5:4 E5:4', '-:8 C6:8',
-     '-:8 G#5:4 C#6:4', '-:8 F#5:4 B5:4', '-:8 E5:4 A5:4', '-:8 D#5:4 C6:4'],
-    harm: ['C#4:8 G#3:8', 'B3:8 F#3:8', 'A3:8 E3:8', 'G#3:8 C4:8', 'C#4:8 E4:8', 'D#4:8 B3:8', 'C#4:8 A3:8', 'C4:16'],
-    fill: {G: 'x...............'}}
+   A: {chords: ['Dm', 'Dm', 'Bb', 'Bb', 'Dm', 'Dm', 'C', 'C'], arp: '-:6 2:2 -:4 1:4',
+    lead: ['-:16', '-:16', '-:16', '-:16', '-:8 A3:4 D4:4', '-:16', '-:16', '-:16'],
+    drums: {L: 'g...............'}},
+   B: {chords: ['Gm', 'Gm', 'Dm', 'Dm', 'Bb', 'Bb', 'A', 'A'], arp: '-:4 0:2 -:6 2:4',
+    harm: ['G2:16', '-:16', 'D3:16', '-:16', 'Bb2:16', '-:16', 'A2:16', '-:16'],
+    drums: {L: 'g...............'},
+    fill: {L: 'g.......g.......'}}
   },
   order: ['A', 'B']},
 
- {name: 'biome_cursed', title: 'Terres maudites', mood: 'Terres maudites : do mineur, cœur qui bat, glas lointain et plainte qui tremble.', bpm: 60, gain: .49,
-  bass: 'R:16', bassLow: 36, pad: true, padMode: 'fifth', padLow: 48, harmMode: 'fifth', arpLow: 48, echo: 1.5, echoGain: .28,
-  timbres: {lead: {w: 'p125', g: .16, pan: -.04, a: .05, tau: .6, sus: .7, rel: .2, vib: 24, filter: 2600}, arp: {kind: 'bell', g: .12, pan: -.2}},
-  programs: {lead: 82, arp: 14}, mix: {lead: 3, arp: 6},
+ {name: 'biome_coast', title: 'Brumes de la côte', mood: 'Côtes : do mineur, houle du chœur, harpe qui roule et ressac sourd.', bpm: 46, gain: .45,
+  bass: 'R:16', bassLow: 36, pad: true, padMode: 'fifth', padLow: 48, arpLow: 55, echo: 1, echoGain: .2,
+  timbres: ambient({arp: HARP}), programs: {arp: 46},
   sections: {
-   A: {chords: ['Cm', 'Cm', 'Db', 'Cm', 'Ab', 'Fm', 'Bdim7', 'G'],
-    lead: ['G4:8 Ab4:4 G4:4', 'Eb4:6 D4:2 C4:8', 'F4:6 Ab4:2 Db5:8', 'C5:6 B4:2 G4:8',
-     'Eb5:8 C5:4 Ab4:4', 'Ab4:6 G4:2 F4:8', 'Ab4:4 F4:4 D4:4 B3:4', 'G4:12 -:4'],
-    arp: '0:16',
-    drums: {K: 'X.x.............'},
-    fill: {K: 'X.x.............', L: '........x...x.x.'}},
-   B: {chords: ['Ab', 'G', 'Fm', 'G', 'Ab', 'Db', 'Bdim7', 'G'], bass: 'R:8 5:8',
-    lead: ['C5:8 Eb5:8', 'D5:8 B4:8', 'Ab4:8 C5:8', 'B4:12 -:4',
-     'Eb5:6 D5:2 C5:8', 'Db5:6 C5:2 Ab4:8', 'B4:4 D5:4 F5:4 Ab5:4', 'G5:8 D5:4 B4:4'],
-    arp: '0:16',
-    drums: {K: 'X.x.....X.x.....'},
-    fill: {K: 'X.x.....X.x.....', G: 'x...............'}}
+   A: {chords: ['Cm', 'Cm', 'Ab', 'Ab', 'Bb', 'Bb', 'Cm', 'Cm'], arp: '-:8 0:2 1:2 2:4',
+    drums: {B: 'g...............'}},
+   B: {chords: ['Fm', 'Fm', 'Cm', 'Cm', 'Ab', 'Ab', 'G', 'G'], arp: '-:8 0:2 1:2 2:4',
+    harm: ['C3:16', '-:16', 'C3:16', '-:16', 'Ab2:16', '-:16', 'G2:16', '-:16'],
+    drums: {B: 'g...............'},
+    fill: {B: 'g.......g.......'}}
   },
-  order: ['A', 'B', 'A+harm', 'B']},
+  order: ['A', 'B']},
 
- {name: 'biome_travel', title: 'La route des guerriers', mood: 'Voyages : ré mineur, marche de guerriers, cordes qui martèlent, cors à l\'unisson et enclume.', bpm: 92, gain: .53,
-  bass: 'R:4 5:4 R:4 5:4', bassLow: 38, pad: true, padMode: 'fifth', padLow: 50, harmMode: 'octave', harmMin: 1, arpLow: 50, echo: .75, echoGain: .16,
+ {name: 'biome_desert', title: 'Sables de Sarak', mood: 'Déserts : bourdon de mi phrygien majeur, chœur en quintes, anche lointaine et darbouka feutrée.', bpm: 50, gain: .46,
+  bass: 'R:16', bassLow: 40, pad: true, padMode: 'fifth', padLow: 52, arpLow: 64, echo: 1, echoGain: .22,
+  timbres: ambient({lead: {w: 'p25', g: .1, pan: -.04, a: .05, tau: .5, sus: .7, rel: .3, vib: 22, filter: 2000}, arp: {...HARP, filter: 1500}}),
+  programs: {lead: 111, arp: 105},
   sections: {
-   A: {chords: ['Dm', 'C', 'Bb', 'C', 'Dm', 'C', 'Bb', 'A'],
-    lead: ['D4:3 E4:1 F4:4 A4:6 G4:2', 'G4:4 E4:4 C4:6 D4:2', 'F4:4 D4:4 Bb3:6 C4:2', 'C4:3 D4:1 E4:4 G4:8',
-     'A4:3 A4:1 D5:6 C5:2 A4:4', 'G4:3 G4:1 C5:6 Bb4:2 G4:4', 'F4:4 Bb4:4 D5:4 C5:2 Bb4:2', 'A4:8 E4:4 C#4:4'],
-    arp: '0:2 0:2 1:2 0:2 2:2 0:2 1:2 0:2',
-    drums: {K: 'x.......x.......', S: '....x.......x..g', A: '............x...'},
-    fill: {K: 'x.......x.......', S: '....x...x.x.xxxx'}},
-   B: {chords: ['F', 'C', 'Dm', 'Am', 'Bb', 'F', 'Gm', 'A'], timp: 'R:4 -:4 5:4 -:4',
-    lead: ['F4:4 A4:4 C5:6 D5:2', 'E5:4 C5:4 G4:8', 'D5:3 D5:1 F5:6 E5:2 D5:4', 'C5:4 A4:4 E4:8',
-     'D5:4 F5:4 Bb4:6 C5:2', 'A4:4 C5:4 F4:8', 'G4:4 Bb4:4 D5:4 F5:2 E5:2', 'E5:8 C#5:4 A4:4'],
-    arp: '0:2 0:2 1:2 0:2 2:2 0:2 1:2 0:2',
-    drums: {K: 'x.......x.x.....', S: '....x.......x...', A: '....x.......x...'},
-    fill: {K: 'x.......x.......', S: '....x.......xxxx', L: '........x.x.....', C: 'x...............'}}
+   A: {chords: ['E', 'E', 'F', 'E', 'E', 'E', 'Dm', 'E'], arp: '-:8 0:2 -:6',
+    lead: ['-:16', '-:16', '-:16', '-:8 F4:2 E4:6', '-:16', '-:16', '-:16', '-:16'],
+    drums: {T: 'g.........g.....'}},
+   B: {chords: ['Am', 'Am', 'E', 'E', 'F', 'F', 'E', 'E'], arp: '-:4 0:2 -:10',
+    lead: ['-:16', '-:16', '-:16', '-:16', '-:16', '-:16', '-:8 G#4:2 A4:2 G#4:4', '-:16'],
+    drums: {T: 'g.........g.....', L: 'g...............'}}
   },
-  order: ['A', 'B', 'A+harm', 'B+harm']},
+  order: ['A', 'B']},
+
+ {name: 'biome_steppe', title: 'Le vent des steppes', mood: 'Steppes : la éolien, chœur en quintes ouvertes comme un vent, cordes graves et appel de cor.', bpm: 54, gain: .37,
+  bass: 'R:16', bassLow: 40, pad: true, padMode: 'open', padLow: 50, arpLow: 45, echo: 1, echoGain: .2,
+  timbres: ambient({arp: {w: 'saw', g: .05, pan: -.3, a: .8, tau: 2, sus: .9, rel: 1.2, filter: 900}}),
+  sections: {
+   A: {chords: ['Am', 'Am', 'Am', 'Am', 'F', 'F', 'G', 'G'], arp: '0:16',
+    lead: ['-:16', '-:16', '-:16', '-:8 E4:4 A4:4', '-:16', '-:16', '-:16', '-:16'],
+    drums: {B: 'g...............'}},
+   B: {chords: ['Dm', 'Dm', 'Am', 'Am', 'F', 'F', 'E', 'E'], arp: '0:16',
+    lead: ['-:16', '-:16', '-:16', '-:16', '-:16', '-:16', '-:16', '-:8 B3:4 E4:4'],
+    drums: {B: 'g...............'},
+    fill: {B: 'g.......g.......'}}
+  },
+  order: ['A', 'B']},
+
+ {name: 'biome_tropical', title: 'Les jungles de Kush', mood: 'Jungles : bourdon de fa dièse phrygien, tambours feutrés en 3-3-2 et gouttes de marimba.', bpm: 60, gain: .48,
+  bass: 'R:16', bassLow: 42, pad: true, padMode: 'fifth', padLow: 49, arpLow: 61, echo: 1, echoGain: .18,
+  timbres: ambient({arp: {...HARP, tau: .07, sus: .05, rel: .08, filter: 1600}}), programs: {arp: 12},
+  sections: {
+   A: {chords: ['F#m', 'F#m', 'G', 'F#m', 'F#m', 'F#m', 'E', 'F#m'], arp: '-:6 0:2 -:2 2:2 -:4',
+    drums: {T: 'g..g..g.........', B: 'g...............'}},
+   B: {chords: ['Bm', 'Bm', 'F#m', 'F#m', 'G', 'G', 'F#m', 'F#m'], arp: '-:2 1:2 -:8 0:2 -:2',
+    drums: {T: 'g..g..g.........', L: '........g.....g.'}}
+  },
+  order: ['A', 'B']},
+
+ {name: 'biome_wetland', title: 'Les eaux mortes', mood: 'Marais : sol mineur, chœur trouble, basse qui descend et gouttes d\'eau.', bpm: 44, gain: .5,
+  bass: 'R:16', bassLow: 43, pad: true, padMode: 'fifth', padLow: 50, arpLow: 67, echo: 1, echoGain: .26,
+  timbres: ambient({arp: {w: 'p125', g: .04, pan: -.3, a: .002, tau: .1, sus: .1, rel: .25, filter: 3000}}), programs: {arp: 46},
+  sections: {
+   A: {chords: ['Gm', 'Gm', 'Eb', 'Eb', 'Cm', 'Cm', 'D', 'D'], arp: '-:10 2:2 -:4',
+    fill: {L: 'g...............'}},
+   B: {chords: ['Gm', 'Gm', 'F', 'F', 'Eb', 'Eb', 'D', 'D'], arp: '-:4 1:2 -:10',
+    fill: {L: 'g.......g.......'}}
+  },
+  order: ['A', 'B']},
+
+ {name: 'biome_boreal', title: 'Les terres du Nord', mood: 'Taïga et toundra : si mineur, quintes ouvertes, cors lointains et timbale comme un orage.', bpm: 50, gain: .39,
+  bass: 'R:16', bassLow: 40, pad: true, padMode: 'open', padLow: 47, timpVel: 64, echo: 1, echoGain: .2,
+  timbres: ambient({}),
+  sections: {
+   A: {chords: ['Bm', 'Bm', 'G', 'G', 'Bm', 'Bm', 'A', 'A'],
+    lead: ['-:16', '-:16', '-:16', '-:8 F#3:4 B3:4', '-:16', '-:16', '-:16', '-:16'],
+    harm: ['-:16', '-:16', '-:16', '-:16', 'B2:16', '-:16', 'A2:16', '-:16']},
+   B: {chords: ['Em', 'Em', 'Bm', 'Bm', 'G', 'G', 'F#', 'F#'], timp: 'R:16',
+    lead: ['-:16', '-:16', '-:16', '-:16', '-:16', '-:16', '-:16', '-:8 C#4:4 F#3:4'],
+    fill: {B: 'g...............'}}
+  },
+  order: ['A', 'B']},
+
+ {name: 'biome_polar', title: 'Glace éternelle', mood: 'Glaces : do dièse mineur, chœur comme un vent, une cloche de glace de loin en loin.', bpm: 44, gain: .44,
+  bass: 'R:16', bassLow: 37, pad: true, padMode: 'fifth', padLow: 56, arpLow: 73, echo: 1, echoGain: .3,
+  timbres: ambient({lead: {kind: 'bell', g: .2, pan: .1}, arp: {w: 'p125', g: .025, pan: -.3, a: .002, tau: .08, sus: .1, rel: .3}}),
+  programs: {lead: 14, arp: 9},
+  sections: {
+   A: {chords: ['C#m', 'C#m', 'A', 'A', 'F#m', 'F#m', 'G#', 'G#'], arp: '-:12 2:4',
+    lead: ['G#5:16', '-:16', 'E5:16', '-:16', 'C#5:16', '-:16', 'D#5:16', '-:16']},
+   B: {chords: ['C#m', 'C#m', 'B', 'B', 'A', 'A', 'G#', 'G#'], arp: '-:4 1:4 -:8',
+    lead: ['-:16', 'E5:16', '-:16', 'D#5:16', '-:16', 'C#5:16', '-:16', 'C6:16']}
+  },
+  order: ['A', 'B']},
+
+ {name: 'biome_cursed', title: 'Terres maudites', mood: 'Terres maudites : do mineur, cœur qui bat, glas lointain et soupir qui tremble.', bpm: 48, gain: .48,
+  bass: 'R:16', bassLow: 36, pad: true, padMode: 'fifth', padLow: 48, echo: 1, echoGain: .26,
+  timbres: ambient({lead: {w: 'p125', g: .1, pan: -.04, a: .3, tau: .8, sus: .8, rel: .6, vib: 24, filter: 2200}, arp: {kind: 'bell', g: .1, pan: -.2}}),
+  programs: {lead: 82, arp: 14},
+  sections: {
+   A: {chords: ['Cm', 'Cm', 'Db', 'Cm', 'Cm', 'Cm', 'Bdim7', 'G'],
+    arp: ['C3:16', '-:16', 'C3:16', '-:16', 'C3:16', '-:16', 'B2:16', '-:16'],
+    lead: ['-:16', '-:16', '-:16', '-:4 G4:6 Ab4:6', '-:16', '-:16', '-:16', '-:16'],
+    drums: {K: 'g.g.............'}},
+   B: {chords: ['Ab', 'Ab', 'Fm', 'Fm', 'Db', 'Db', 'G', 'G'],
+    arp: ['C3:16', '-:16', 'C3:16', '-:16', 'Db3:16', '-:16', 'B2:16', '-:16'],
+    lead: ['-:16', '-:16', '-:16', '-:16', '-:16', '-:16', '-:4 D4:6 Eb4:6', '-:16'],
+    drums: {K: 'g.g.............'}}
+  },
+  order: ['A', 'B']},
+
+ {name: 'biome_travel', title: 'Sur la route', mood: 'Voyages : ré dorien, pas régulier de la basse, tambour sourd, chœur et cordes en fond.', bpm: 60, gain: .42,
+  bass: 'R:4 R:4 R:4 R:4', bassLow: 38, bassArtic: .6, pad: true, padMode: 'open', padLow: 50, arpLow: 50, echo: 1, echoGain: .18,
+  timbres: ambient({bass: {a: .08, rel: .3}, arp: {w: 'saw', g: .04, pan: -.3, a: .3, tau: 1.2, sus: .8, rel: .6, filter: 1000}}),
+  sections: {
+   A: {chords: ['Dm', 'Dm', 'C', 'C', 'Bb', 'Bb', 'C', 'C'], arp: '0:8 1:8',
+    drums: {B: 'g.......g.......'}},
+   B: {chords: ['Dm', 'Dm', 'G', 'G', 'Bb', 'Bb', 'A', 'A'], arp: '0:8 2:8',
+    drums: {B: 'g.......g.......'},
+    fill: {B: 'g.......g...g...'}}
+  },
+  order: ['A', 'B']},
 
  {name: 'combat', title: 'Le choc des colosses', mood: 'Combat contre les colosses : mi phrygien, ostinato de cordes, cuivres, chœur scandé et tambours de guerre.', bpm: 138, gain: .73,
   bass: 'R:2 8:2 R:2 8:2 R:2 8:2 R:2 8:2', bassLow: 40, pad: true, padMode: 'fifth', padLow: 52, harmMode: 'fifth', arpLow: 45, echo: .75, echoGain: .12,

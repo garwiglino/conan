@@ -31,7 +31,7 @@ Le jeu se joue en **paysage**. Le menu garde ses quatre boutons dans une colonne
 
 Le colosse gardien utilise 32 animations Aseprite : huit actions dans quatre directions, avec un repos animé, une saisie synchronisée avec Kaldor et une mort en pierres sans sang. Sa chute accélère sous la gravité, avec des rebonds amortis et un peu de poussière. Les sprites sont inclus dans le jeu pour rester disponibles hors ligne.
 
-**Musiques.** Chaque famille de biome a sa propre musique, plus une pour les voyages, le combat contre les colosses, le Prêtre du Serpent et la défaite : treize morceaux dark fantasy (modes mineurs, cors, chœur grave, tambours de guerre, enclume) écrits sur une grille de mesure stricte et joués par le séquenceur 8 bits du jeu avec les voix du thème titre. [Atelier musical : écoute et grille en direct](art/musique/atelier.html) · [Partitions et fonctionnement](audio/LISEZMOI.md).
+**Musiques.** Chaque famille de biome a sa propre ambiance, discrète et sans mélodie, comme le voyage ; le combat contre les colosses, le Prêtre du Serpent et la défaite ont des thèmes dark fantasy (cors, chœur grave, tambours de guerre, enclume). Treize morceaux écrits sur une grille de mesure stricte et joués par le séquenceur 8 bits du jeu avec les voix du thème titre. [Atelier musical : écoute et grille en direct](art/musique/atelier.html) · [Partitions et fonctionnement](audio/LISEZMOI.md).
 
 Le morceau de combat accompagne les affrontements avec les colosses. Il entre par un fondu croisé de 650 ms ; après quatre secondes sans affrontement, l'exploration revient sur 1,8 s. Le boss conserve sa musique. Le bruit de mort est composé en [MIDI multipiste](audio/guardian-death.mid) et joué par le séquenceur du jeu, indépendamment du réglage de musique.
 
