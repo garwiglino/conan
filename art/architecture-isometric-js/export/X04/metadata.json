@@ -1,0 +1,276 @@
+{
+  "id": "X04",
+  "label": "Chantier naval couvert",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 144,
+  "depth": 96,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": true,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "shipyard",
+    "wall": "wood",
+    "roof": "slate",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 218,
+      "height": 181,
+      "anchor": [
+        72,
+        73
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          144,
+          72
+        ],
+        [
+          48,
+          120
+        ],
+        [
+          -96,
+          48
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 96,
+        "height": 88
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 142,
+            "depth": 69,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "shipyard",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 218,
+      "height": 180,
+      "anchor": [
+        216,
+        108
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -144,
+          72
+        ],
+        [
+          -240,
+          24
+        ],
+        [
+          -96,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 96,
+        "height": 88
+      },
+      "colors": 16,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 142,
+            "depth": 69,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "shipyard",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 218,
+      "height": 180,
+      "anchor": [
+        145,
+        180
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -144,
+          -72
+        ],
+        [
+          -48,
+          -120
+        ],
+        [
+          96,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 96,
+        "height": 88
+      },
+      "colors": 11,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 142,
+            "depth": 69,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "shipyard",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 218,
+      "height": 181,
+      "anchor": [
+        1,
+        145
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          144,
+          -72
+        ],
+        [
+          240,
+          -24
+        ],
+        [
+          96,
+          48
+        ]
+      ],
+      "nativePlan": {
+        "width": 144,
+        "depth": 96,
+        "height": 88
+      },
+      "colors": 16,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 142,
+            "depth": 69,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "shipyard",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "id": "T02",
+  "label": "Longère de ferme",
+  "family": "teremor",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 56,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "house",
+    "wall": "plaster",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": true,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 155,
+      "height": 121,
+      "anchor": [
+        57,
+        44
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          40,
+          76
+        ],
+        [
+          -56,
+          28
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 26,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 54,
+            "eave": 32,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 155,
+      "height": 121,
+      "anchor": [
+        153,
+        72
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -152,
+          20
+        ],
+        [
+          -56,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 54,
+            "eave": 32,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 155,
+      "height": 120,
+      "anchor": [
+        97,
+        120
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -40,
+          -76
+        ],
+        [
+          56,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 23,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 54,
+            "eave": 32,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 155,
+      "height": 128,
+      "anchor": [
+        1,
+        99
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          152,
+          -20
+        ],
+        [
+          56,
+          28
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 56,
+        "height": 64
+      },
+      "colors": 26,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 53.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 54,
+            "eave": 32,
+            "peak": 56
+          }
+        ],
+        "recipe": {
+          "type": "house",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

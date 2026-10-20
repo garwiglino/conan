@@ -1,0 +1,98 @@
+{
+  "id": "TER-H05",
+  "label": "Jonction en T",
+  "family": "teremor",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 48,
+  "height": 64,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "junction-t",
+  "high": true,
+  "walkHeight": 52,
+  "wallThickness": 16,
+  "parapetHeight": 12,
+  "material": "stone",
+  "frames": {
+    "ew": {
+      "width": 85,
+      "height": 109,
+      "anchor": [
+        34,
+        66
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          0,
+          48
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 85,
+      "height": 103,
+      "anchor": [
+        82,
+        76
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -96,
+          0
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 64
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

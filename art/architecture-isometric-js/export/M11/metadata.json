@@ -1,0 +1,97 @@
+{
+  "id": "M11",
+  "label": "Terminaison",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 32,
+  "depth": 12,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "end",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 49,
+      "height": 59,
+      "anchor": [
+        14,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          32,
+          16
+        ],
+        [
+          20,
+          22
+        ],
+        [
+          -12,
+          6
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 12,
+        "height": 32
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 49,
+      "height": 59,
+      "anchor": [
+        46,
+        40
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -32,
+          16
+        ],
+        [
+          -44,
+          10
+        ],
+        [
+          -12,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 12,
+        "height": 32
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

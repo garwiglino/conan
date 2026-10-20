@@ -1,0 +1,276 @@
+{
+  "id": "B09",
+  "label": "Forge couverte",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 72,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": true,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "forge",
+    "wall": "plaster",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": true,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 152,
+      "height": 134,
+      "anchor": [
+        54,
+        59
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          24,
+          84
+        ],
+        [
+          -72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 72
+      },
+      "colors": 29,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 51,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "forge",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 152,
+      "height": 128,
+      "anchor": [
+        150,
+        80
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -168,
+          12
+        ],
+        [
+          -72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 72
+      },
+      "colors": 22,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 51,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "forge",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 152,
+      "height": 128,
+      "anchor": [
+        97,
+        128
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -24,
+          -84
+        ],
+        [
+          72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 72
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 51,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "forge",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 152,
+      "height": 135,
+      "anchor": [
+        1,
+        108
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          168,
+          -12
+        ],
+        [
+          72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 72
+      },
+      "colors": 26,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 51,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "forge",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

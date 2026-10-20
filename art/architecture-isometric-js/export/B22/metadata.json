@@ -1,0 +1,352 @@
+{
+  "id": "B22",
+  "label": "Maison de soins",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 72,
+  "height": 80,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "healer",
+    "wall": "plaster",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": true,
+    "storeys": 2,
+    "raised": 0,
+    "annex": true,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 150,
+      "height": 140,
+      "anchor": [
+        73,
+        56
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          24,
+          84
+        ],
+        [
+          -72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 27,
+      "geometry": {
+        "openings": [
+          {
+            "x": 30.5,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 73,
+            "depth": 70,
+            "eave": 46,
+            "peak": 72
+          },
+          {
+            "type": "roof",
+            "x": 72,
+            "y": 22.800000000000004,
+            "width": 22,
+            "depth": 46.199999999999996,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "healer",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 168,
+      "height": 131,
+      "anchor": [
+        166,
+        92
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -168,
+          12
+        ],
+        [
+          -72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 30.5,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 73,
+            "depth": 70,
+            "eave": 46,
+            "peak": 72
+          },
+          {
+            "type": "roof",
+            "x": 72,
+            "y": 22.800000000000004,
+            "width": 22,
+            "depth": 46.199999999999996,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "healer",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 150,
+      "height": 130,
+      "anchor": [
+        76,
+        130
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -24,
+          -84
+        ],
+        [
+          72,
+          -36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 24,
+      "geometry": {
+        "openings": [
+          {
+            "x": 30.5,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 73,
+            "depth": 70,
+            "eave": 46,
+            "peak": 72
+          },
+          {
+            "type": "roof",
+            "x": 72,
+            "y": 22.800000000000004,
+            "width": 22,
+            "depth": 46.199999999999996,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "healer",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 168,
+      "height": 145,
+      "anchor": [
+        1,
+        106
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          168,
+          -12
+        ],
+        [
+          72,
+          36
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 72,
+        "height": 80
+      },
+      "colors": 27,
+      "geometry": {
+        "openings": [
+          {
+            "x": 30.5,
+            "y": 69.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 73,
+            "depth": 70,
+            "eave": 46,
+            "peak": 72
+          },
+          {
+            "type": "roof",
+            "x": 72,
+            "y": 22.800000000000004,
+            "width": 22,
+            "depth": 46.199999999999996,
+            "eave": 34,
+            "peak": 47
+          }
+        ],
+        "recipe": {
+          "type": "healer",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": true,
+          "storeys": 2,
+          "raised": 0,
+          "annex": true,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

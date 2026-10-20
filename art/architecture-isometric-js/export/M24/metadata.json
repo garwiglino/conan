@@ -1,0 +1,97 @@
+{
+  "id": "M24",
+  "label": "Auvent",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 24,
+  "height": 20,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "awning",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 77,
+      "height": 51,
+      "anchor": [
+        26,
+        22
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          24,
+          36
+        ],
+        [
+          -24,
+          12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 20
+      },
+      "colors": 4,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 77,
+      "height": 31,
+      "anchor": [
+        74,
+        24
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -72,
+          12
+        ],
+        [
+          -24,
+          -12
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 24,
+        "height": 20
+      },
+      "colors": 4,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

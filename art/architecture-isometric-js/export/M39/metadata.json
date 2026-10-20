@@ -1,0 +1,97 @@
+{
+  "id": "M39",
+  "label": "Cheminée",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 16,
+  "depth": 16,
+  "height": 24,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "chimney",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 37,
+      "height": 43,
+      "anchor": [
+        18,
+        25
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          16,
+          8
+        ],
+        [
+          0,
+          16
+        ],
+        [
+          -16,
+          8
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 16,
+        "height": 24
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 37,
+      "height": 43,
+      "anchor": [
+        34,
+        33
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -16,
+          8
+        ],
+        [
+          -32,
+          0
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 16,
+        "depth": 16,
+        "height": 24
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

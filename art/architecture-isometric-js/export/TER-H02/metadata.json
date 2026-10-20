@@ -1,0 +1,98 @@
+{
+  "id": "TER-H02",
+  "label": "Terminaison",
+  "family": "teremor",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 16,
+  "height": 64,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "end",
+  "high": true,
+  "walkHeight": 52,
+  "wallThickness": 16,
+  "parapetHeight": 12,
+  "material": "stone",
+  "frames": {
+    "ew": {
+      "width": 69,
+      "height": 101,
+      "anchor": [
+        18,
+        66
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          -16,
+          8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 64
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 69,
+      "height": 95,
+      "anchor": [
+        66,
+        68
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -64,
+          16
+        ],
+        [
+          -16,
+          -8
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 16,
+        "height": 64
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

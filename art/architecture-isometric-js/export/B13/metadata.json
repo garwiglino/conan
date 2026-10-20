@@ -1,0 +1,316 @@
+{
+  "id": "B13",
+  "label": "Moulin à vent",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 80,
+  "depth": 64,
+  "height": 112,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "windmill",
+    "wall": "stone",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 130,
+      "height": 153,
+      "anchor": [
+        68,
+        91
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          40
+        ],
+        [
+          16,
+          72
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 112
+      },
+      "colors": 22,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 56.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 16,
+            "y": 6,
+            "width": 48,
+            "depth": 52,
+            "eave": 82,
+            "peak": 112
+          }
+        ],
+        "recipe": {
+          "type": "windmill",
+          "wall": "stone",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 130,
+      "height": 160,
+      "anchor": [
+        148,
+        130
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          40
+        ],
+        [
+          -144,
+          8
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 112
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 56.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 16,
+            "y": 6,
+            "width": 48,
+            "depth": 52,
+            "eave": 82,
+            "peak": 112
+          }
+        ],
+        "recipe": {
+          "type": "windmill",
+          "wall": "stone",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 130,
+      "height": 163,
+      "anchor": [
+        61,
+        173
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          -40
+        ],
+        [
+          -16,
+          -72
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 112
+      },
+      "colors": 19,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 56.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 16,
+            "y": 6,
+            "width": 48,
+            "depth": 52,
+            "eave": 82,
+            "peak": 112
+          }
+        ],
+        "recipe": {
+          "type": "windmill",
+          "wall": "stone",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 130,
+      "height": 153,
+      "anchor": [
+        -19,
+        131
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          144,
+          -8
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 112
+      },
+      "colors": 22,
+      "geometry": {
+        "openings": [
+          {
+            "x": 33,
+            "y": 56.1,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 16,
+            "y": 6,
+            "width": 48,
+            "depth": 52,
+            "eave": 82,
+            "peak": 112
+          }
+        ],
+        "recipe": {
+          "type": "windmill",
+          "wall": "stone",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

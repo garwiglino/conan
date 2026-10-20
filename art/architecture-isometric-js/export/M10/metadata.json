@@ -1,0 +1,97 @@
+{
+  "id": "M10",
+  "label": "Courtine droite",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 12,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "curtain",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 65,
+      "height": 67,
+      "anchor": [
+        14,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          36,
+          30
+        ],
+        [
+          -12,
+          6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 32
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 65,
+      "height": 67,
+      "anchor": [
+        62,
+        40
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -60,
+          18
+        ],
+        [
+          -12,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 12,
+        "height": 32
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

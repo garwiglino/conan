@@ -1,0 +1,326 @@
+{
+  "id": "F05",
+  "label": "Tour de guet bois",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 64,
+  "depth": 64,
+  "height": 128,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "tower",
+    "wall": "wood",
+    "roof": "slate",
+    "rise": 22,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false,
+    "battlements": false,
+    "openTower": true
+  },
+  "frames": {
+    "face": {
+      "width": 143,
+      "height": 180,
+      "anchor": [
+        71,
+        116
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          64,
+          32
+        ],
+        [
+          0,
+          64
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 3,
+            "y": 7.68,
+            "z": 0,
+            "width": 16,
+            "run": 41.6,
+            "rise": 76,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 68,
+            "depth": 68,
+            "eave": 100,
+            "peak": 128
+          }
+        ],
+        "recipe": {
+          "type": "tower",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": true
+        }
+      }
+    },
+    "droite": {
+      "width": 143,
+      "height": 180,
+      "anchor": [
+        135,
+        148
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -64,
+          32
+        ],
+        [
+          -128,
+          0
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 3,
+            "y": 7.68,
+            "z": 0,
+            "width": 16,
+            "run": 41.6,
+            "rise": 76,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 68,
+            "depth": 68,
+            "eave": 100,
+            "peak": 128
+          }
+        ],
+        "recipe": {
+          "type": "tower",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": true
+        }
+      }
+    },
+    "dos": {
+      "width": 143,
+      "height": 180,
+      "anchor": [
+        71,
+        180
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -64,
+          -32
+        ],
+        [
+          0,
+          -64
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 3,
+            "y": 7.68,
+            "z": 0,
+            "width": 16,
+            "run": 41.6,
+            "rise": 76,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 68,
+            "depth": 68,
+            "eave": 100,
+            "peak": 128
+          }
+        ],
+        "recipe": {
+          "type": "tower",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": true
+        }
+      }
+    },
+    "gauche": {
+      "width": 143,
+      "height": 180,
+      "anchor": [
+        7,
+        148
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          64,
+          -32
+        ],
+        [
+          128,
+          0
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 64,
+        "depth": 64,
+        "height": 128
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 3,
+            "y": 7.68,
+            "z": 0,
+            "width": 16,
+            "run": 41.6,
+            "rise": 76,
+            "landing": 0
+          }
+        ],
+        "parts": [
+          {
+            "type": "roof",
+            "x": -2,
+            "y": -2,
+            "width": 68,
+            "depth": 68,
+            "eave": 100,
+            "peak": 128
+          }
+        ],
+        "recipe": {
+          "type": "tower",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 22,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false,
+          "battlements": false,
+          "openTower": true
+        }
+      }
+    }
+  }
+}

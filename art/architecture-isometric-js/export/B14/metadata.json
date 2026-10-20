@@ -1,0 +1,316 @@
+{
+  "id": "B14",
+  "label": "Moulin à eau",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 96,
+  "depth": 80,
+  "height": 88,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "watermill",
+    "wall": "plaster",
+    "roof": "slate",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 2,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 179,
+      "height": 159,
+      "anchor": [
+        81,
+        70
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          48
+        ],
+        [
+          16,
+          88
+        ],
+        [
+          -80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 77.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 78,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "watermill",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 179,
+      "height": 159,
+      "anchor": [
+        177,
+        110
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          48
+        ],
+        [
+          -176,
+          8
+        ],
+        [
+          -80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 77.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 78,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "watermill",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 179,
+      "height": 158,
+      "anchor": [
+        97,
+        158
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -96,
+          -48
+        ],
+        [
+          -16,
+          -88
+        ],
+        [
+          80,
+          -40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 22,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 77.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 78,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "watermill",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 179,
+      "height": 159,
+      "anchor": [
+        1,
+        118
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          96,
+          -48
+        ],
+        [
+          176,
+          -8
+        ],
+        [
+          80,
+          40
+        ]
+      ],
+      "nativePlan": {
+        "width": 96,
+        "depth": 80,
+        "height": 88
+      },
+      "colors": 28,
+      "geometry": {
+        "openings": [
+          {
+            "x": 41,
+            "y": 77.15,
+            "z": 0,
+            "width": 14,
+            "clearance": 22,
+            "side": false,
+            "kind": "door"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 94,
+            "depth": 78,
+            "eave": 62,
+            "peak": 88
+          }
+        ],
+        "recipe": {
+          "type": "watermill",
+          "wall": "plaster",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 2,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

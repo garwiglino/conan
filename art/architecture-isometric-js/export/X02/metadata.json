@@ -1,0 +1,276 @@
+{
+  "id": "X02",
+  "label": "Loge de carrière",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 80,
+  "depth": 64,
+  "height": 64,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "quarry",
+    "wall": "wood",
+    "roof": "slate",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 130,
+      "height": 119,
+      "anchor": [
+        48,
+        55
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          40
+        ],
+        [
+          16,
+          72
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 16,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 78,
+            "depth": 45,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "quarry",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 130,
+      "height": 118,
+      "anchor": [
+        128,
+        78
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          40
+        ],
+        [
+          -144,
+          8
+        ],
+        [
+          -64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 78,
+            "depth": 45,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "quarry",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 130,
+      "height": 118,
+      "anchor": [
+        81,
+        118
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          -40
+        ],
+        [
+          -16,
+          -72
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 78,
+            "depth": 45,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "quarry",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 130,
+      "height": 119,
+      "anchor": [
+        1,
+        95
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          144,
+          -8
+        ],
+        [
+          64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 64,
+        "height": 64
+      },
+      "colors": 17,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 1,
+            "y": 1,
+            "width": 78,
+            "depth": 45,
+            "eave": 40,
+            "peak": 64
+          }
+        ],
+        "recipe": {
+          "type": "quarry",
+          "wall": "wood",
+          "roof": "slate",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

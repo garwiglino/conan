@@ -311,3 +311,5 @@ La vue native du personnage reste fixe pendant le coup. Pendant la préparation,
 Les civils gardent leur protection contre les dégâts répétés des autres PNJ, mais cette invulnérabilité ne masque plus les coups distincts du joueur. Le registre commun des victimes d’un coup continue d’interdire les doubles dégâts. Les tests `kaldor-combat-precision.test.cjs` couvrent le choix proche/lointain, le changement de cible, les murs, les diagonales, le suivi puis le verrouillage, le balayage visible, les civils et le compositeur natif.
 
 [Comparaison native du contact en diagonale](../art/combat-precision.png) · `node scripts/preview-kaldor-precision.cjs`.
+
+La carte isométrique conserve les positions logiques : les vecteurs du stick, les distances de visée et les candidats sont projetés une seule fois pour les comparer aux poses natives en pixels écran. Les déplacements, les sauvegardes et les tests de visibilité utilisent toujours les coordonnées logiques. Un test de combat réel vérifie les contacts diagonaux dans les quatre vues avec cette projection.

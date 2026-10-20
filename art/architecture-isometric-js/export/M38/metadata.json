@@ -1,0 +1,97 @@
+{
+  "id": "M38",
+  "label": "Grille d’évacuation",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 24,
+  "depth": 12,
+  "height": 20,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "drain",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 41,
+      "height": 43,
+      "anchor": [
+        14,
+        22
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          12,
+          18
+        ],
+        [
+          -12,
+          6
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 12,
+        "height": 20
+      },
+      "colors": 9,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 41,
+      "height": 43,
+      "anchor": [
+        38,
+        28
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -24,
+          12
+        ],
+        [
+          -36,
+          6
+        ],
+        [
+          -12,
+          -6
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 12,
+        "height": 20
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "id": "M60",
+  "label": "Angle intérieur haut",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 48,
+  "height": 48,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "corner-inner",
+  "high": true,
+  "walkHeight": 38,
+  "wallThickness": 12,
+  "parapetHeight": 10,
+  "material": "stone",
+  "frames": {
+    "ew": {
+      "width": 65,
+      "height": 97,
+      "anchor": [
+        50,
+        46
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          0,
+          48
+        ],
+        [
+          -48,
+          24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 101,
+      "height": 79,
+      "anchor": [
+        98,
+        70
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -96,
+          0
+        ],
+        [
+          -48,
+          -24
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 48,
+        "height": 48
+      },
+      "colors": 8,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

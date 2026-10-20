@@ -1,0 +1,97 @@
+{
+  "id": "M05",
+  "label": "Poutre de liaison",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 48,
+  "depth": 8,
+  "height": 8,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "beam",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 8,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 61,
+      "height": 41,
+      "anchor": [
+        10,
+        10
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          48,
+          24
+        ],
+        [
+          40,
+          28
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 8
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 61,
+      "height": 41,
+      "anchor": [
+        58,
+        14
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -48,
+          24
+        ],
+        [
+          -56,
+          20
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 48,
+        "depth": 8,
+        "height": 8
+      },
+      "colors": 6,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

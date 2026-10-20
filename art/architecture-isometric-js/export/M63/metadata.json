@@ -1,0 +1,118 @@
+{
+  "id": "M63",
+  "label": "Escalier frontal de ronde",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 24,
+  "depth": 64,
+  "height": 48,
+  "views": [
+    "face",
+    "palier"
+  ],
+  "shape": "stairs",
+  "high": true,
+  "walkHeight": 38,
+  "wallThickness": 12,
+  "parapetHeight": 10,
+  "material": "stone",
+  "frames": {
+    "face": {
+      "width": 93,
+      "height": 97,
+      "anchor": [
+        66,
+        50
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -40,
+          44
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 48
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 64,
+            "rise": 38,
+            "landing": 0
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "palier": {
+      "width": 109,
+      "height": 97,
+      "anchor": [
+        66,
+        50
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          -40,
+          44
+        ],
+        [
+          -64,
+          32
+        ]
+      ],
+      "nativePlan": {
+        "width": 24,
+        "depth": 64,
+        "height": 48
+      },
+      "colors": 12,
+      "geometry": {
+        "openings": [],
+        "stairs": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "width": 24,
+            "run": 64,
+            "rise": 38,
+            "landing": 16
+          }
+        ],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

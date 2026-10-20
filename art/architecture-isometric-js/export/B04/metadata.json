@@ -1,0 +1,312 @@
+{
+  "id": "B04",
+  "label": "Abri pastoral démontable",
+  "family": "shared",
+  "kind": "building",
+  "season": "base",
+  "width": 80,
+  "depth": 56,
+  "height": 56,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": true,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "tent",
+    "wall": "plaster",
+    "roof": "tile",
+    "rise": 24,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 132,
+      "height": 110,
+      "anchor": [
+        54,
+        40
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          40
+        ],
+        [
+          24,
+          68
+        ],
+        [
+          -56,
+          28
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 56,
+        "height": 56
+      },
+      "colors": 20,
+      "geometry": {
+        "openings": [
+          {
+            "x": 28.9,
+            "y": 53,
+            "z": 0,
+            "width": 18,
+            "clearance": 24,
+            "kind": "tent"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 3,
+            "y": 3,
+            "width": 74,
+            "depth": 50,
+            "eave": 8,
+            "peak": 53
+          }
+        ],
+        "recipe": {
+          "type": "tent",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 133,
+      "height": 108,
+      "anchor": [
+        135,
+        68
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          40
+        ],
+        [
+          -136,
+          12
+        ],
+        [
+          -56,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 56,
+        "height": 56
+      },
+      "colors": 21,
+      "geometry": {
+        "openings": [
+          {
+            "x": 28.9,
+            "y": 53,
+            "z": 0,
+            "width": 18,
+            "clearance": 24,
+            "kind": "tent"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 3,
+            "y": 3,
+            "width": 74,
+            "depth": 50,
+            "eave": 8,
+            "peak": 53
+          }
+        ],
+        "recipe": {
+          "type": "tent",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 132,
+      "height": 108,
+      "anchor": [
+        77,
+        108
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -80,
+          -40
+        ],
+        [
+          -24,
+          -68
+        ],
+        [
+          56,
+          -28
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 56,
+        "height": 56
+      },
+      "colors": 21,
+      "geometry": {
+        "openings": [
+          {
+            "x": 28.9,
+            "y": 53,
+            "z": 0,
+            "width": 18,
+            "clearance": 24,
+            "kind": "tent"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 3,
+            "y": 3,
+            "width": 74,
+            "depth": 50,
+            "eave": 8,
+            "peak": 53
+          }
+        ],
+        "recipe": {
+          "type": "tent",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 133,
+      "height": 109,
+      "anchor": [
+        -3,
+        80
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          -40
+        ],
+        [
+          136,
+          -12
+        ],
+        [
+          56,
+          28
+        ]
+      ],
+      "nativePlan": {
+        "width": 80,
+        "depth": 56,
+        "height": 56
+      },
+      "colors": 21,
+      "geometry": {
+        "openings": [
+          {
+            "x": 28.9,
+            "y": 53,
+            "z": 0,
+            "width": 18,
+            "clearance": 24,
+            "kind": "tent"
+          }
+        ],
+        "stairs": [],
+        "parts": [
+          {
+            "type": "roof",
+            "x": 3,
+            "y": 3,
+            "width": 74,
+            "depth": 50,
+            "eave": 8,
+            "peak": 53
+          }
+        ],
+        "recipe": {
+          "type": "tent",
+          "wall": "plaster",
+          "roof": "tile",
+          "rise": 24,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

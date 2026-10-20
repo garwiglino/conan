@@ -1,0 +1,97 @@
+{
+  "id": "M37",
+  "label": "Cloison de latrines",
+  "family": "shared",
+  "kind": "module",
+  "season": "base",
+  "width": 32,
+  "depth": 8,
+  "height": 32,
+  "views": [
+    "ew",
+    "ns"
+  ],
+  "shape": "latrine",
+  "high": false,
+  "walkHeight": 0,
+  "wallThickness": 12,
+  "parapetHeight": 12,
+  "frames": {
+    "ew": {
+      "width": 45,
+      "height": 57,
+      "anchor": [
+        10,
+        34
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          32,
+          16
+        ],
+        [
+          24,
+          20
+        ],
+        [
+          -8,
+          4
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    },
+    "ns": {
+      "width": 45,
+      "height": 57,
+      "anchor": [
+        42,
+        38
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -32,
+          16
+        ],
+        [
+          -40,
+          12
+        ],
+        [
+          -8,
+          -4
+        ]
+      ],
+      "nativePlan": {
+        "width": 32,
+        "depth": 8,
+        "height": 32
+      },
+      "colors": 5,
+      "geometry": {
+        "openings": [],
+        "stairs": [],
+        "parts": [],
+        "recipe": null
+      }
+    }
+  }
+}

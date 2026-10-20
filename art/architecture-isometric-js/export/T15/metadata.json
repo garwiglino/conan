@@ -1,0 +1,272 @@
+{
+  "id": "T15",
+  "label": "Relais de caravane",
+  "family": "sarak",
+  "kind": "building",
+  "season": "base",
+  "width": 128,
+  "depth": 96,
+  "height": 72,
+  "entrances": [
+    0.5
+  ],
+  "doorClearance": 22,
+  "openHall": false,
+  "views": [
+    "face",
+    "droite",
+    "dos",
+    "gauche"
+  ],
+  "recipe": {
+    "type": "courtyard",
+    "wall": "adobe",
+    "roof": "adobe",
+    "rise": 6,
+    "chimney": false,
+    "storeys": 1,
+    "raised": 0,
+    "annex": false,
+    "balcony": false,
+    "twin": false,
+    "porch": false
+  },
+  "frames": {
+    "face": {
+      "width": 217,
+      "height": 182,
+      "anchor": [
+        92,
+        70
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          128,
+          64
+        ],
+        [
+          32,
+          112
+        ],
+        [
+          -96,
+          48
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 96,
+        "height": 72
+      },
+      "colors": 15,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49.36,
+            "y": 93,
+            "z": 0,
+            "width": 29.279999999999998,
+            "clearance": 24,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "courtyard",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "droite": {
+      "width": 217,
+      "height": 182,
+      "anchor": [
+        220,
+        118
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -128,
+          64
+        ],
+        [
+          -224,
+          16
+        ],
+        [
+          -96,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 96,
+        "height": 72
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49.36,
+            "y": 93,
+            "z": 0,
+            "width": 29.279999999999998,
+            "clearance": 24,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "courtyard",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "dos": {
+      "width": 217,
+      "height": 182,
+      "anchor": [
+        124,
+        182
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          -128,
+          -64
+        ],
+        [
+          -32,
+          -112
+        ],
+        [
+          96,
+          -48
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 96,
+        "height": 72
+      },
+      "colors": 7,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49.36,
+            "y": 93,
+            "z": 0,
+            "width": 29.279999999999998,
+            "clearance": 24,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "courtyard",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    },
+    "gauche": {
+      "width": 217,
+      "height": 182,
+      "anchor": [
+        -4,
+        134
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          128,
+          -64
+        ],
+        [
+          224,
+          -16
+        ],
+        [
+          96,
+          48
+        ]
+      ],
+      "nativePlan": {
+        "width": 128,
+        "depth": 96,
+        "height": 72
+      },
+      "colors": 14,
+      "geometry": {
+        "openings": [
+          {
+            "x": 49.36,
+            "y": 93,
+            "z": 0,
+            "width": 29.279999999999998,
+            "clearance": 24,
+            "kind": "gate"
+          }
+        ],
+        "stairs": [],
+        "parts": [],
+        "recipe": {
+          "type": "courtyard",
+          "wall": "adobe",
+          "roof": "adobe",
+          "rise": 6,
+          "chimney": false,
+          "storeys": 1,
+          "raised": 0,
+          "annex": false,
+          "balcony": false,
+          "twin": false,
+          "porch": false
+        }
+      }
+    }
+  }
+}

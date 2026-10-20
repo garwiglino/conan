@@ -1,8 +1,8 @@
 /* Native architecture bridge. Availability does not spawn buildings into towns. */
 (function(root,factory){
- if(typeof module==='object'&&module.exports)module.exports=factory(require('../sprites/architecture/architecture.js'),require('../sprites/architecture/localities.js'));
- else root.HearthreaverArchitectureWorld=factory(root.HearthreaverArchitecture,root.HearthreaverArchitectureLocalities);
-})(globalThis,function(A,localities){
+ if(typeof module==='object'&&module.exports)module.exports=factory(require('../sprites/architecture/architecture-game.js'),require('../sprites/architecture/localities.js'),require('./architecture-render.js'));
+ else root.HearthreaverArchitectureWorld=factory(root.HearthreaverArchitectureGame,root.HearthreaverArchitectureLocalities,root.HearthreaverArchitectureRender);
+})(globalThis,function(A,localities,Art){
 'use strict';
 function locality(name){return localities.find(l=>l.name===name)||null;}
 function available(name){const l=locality(name);if(!l)throw new RangeError('Localité inconnue : '+name);return {locality:l,buildings:l.models.map(A.entry),optionalModules:l.optionalFortificationKit.map(A.entry)};}
@@ -24,6 +24,10 @@ function install(Game,Renderer){
   const clean=A.snapshot({...options,id}),uid=options.uid||'architecture-'+next;if(this.architectureProps.some(o=>o.uid===uid))throw new Error('Identifiant déjà placé');
   const placed={...clean,uid,...(site?{site:site.name}:{})};this.architectureProps.push(placed);return placed;
  };
+ Game.prototype.attachArchitecture=function(uid,port,id,otherPort,options={}){
+  const parent=(this.architectureProps||[]).find(o=>o.uid===uid);if(!parent)throw new RangeError('Construction parente inconnue');
+  return this.placeArchitecture(id,{...A.attach(parent,port,{...options,id},otherPort),site:options.site||parent.site});
+ };
  Game.prototype.removeArchitecture=function(uid){const i=(this.architectureProps||[]).findIndex(o=>o.uid===uid);if(i<0)return false;this.architectureProps.splice(i,1);return true;};
  Game.prototype.architectureSolid=function(x,y,r=4,z=0,height=19){return A.collides(this.architectureProps||[],x,y,{radius:r,z,height});};
  Game.prototype.architectureHeight=function(x,y){return A.standingHeight(this.architectureProps||[],x,y);};
@@ -33,8 +37,8 @@ function install(Game,Renderer){
  };
  Renderer.prototype.architectureDrawObjects=function(){
   const objects=[],cam=this.cam||{x:0,y:0},W=this.W||320,H=this.H||224;
-  for(const o of this.g.architectureProps||[]){const d=A.entry(o.id),f=d.frames[o.dir||d.views[0]],left=o.x-f.anchor[0],top=o.y-f.anchor[1]-(f.lift||0);if(left+f.size[0]<cam.x||left>cam.x+W||top+f.size[1]<cam.y||top>cam.y+H)continue;
-   objects.push({always:true,level:0,y:o.y,fn:()=>A.drawStructure(this.c,o)});
+  for(const o of this.g.architectureProps||[]){const b=A.worldBounds(o);if(b.x+b.w<cam.x||b.x>cam.x+W||b.y+b.h<cam.y||b.y>cam.y+H)continue;
+   objects.push(...Art.objects(this,o));
   }return objects;
  };
 }

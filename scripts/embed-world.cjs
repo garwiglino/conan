@@ -27,7 +27,7 @@ html=html.replace('s.clock:CLOCK_START+this.elapsed*1440/DAY_LEN','s.clock:CLOCK
 html=html.replace('clock:Math.round(this.clock),won:', 'clock:this.clock,won:');
 html=html.includes('// BEGIN WORLD ATLAS')?html.replace(/\/\/ BEGIN WORLD ATLAS[\s\S]*?\/\/ END WORLD ATLAS/,()=>runtimeCode):html.replace('// app.js',()=>runtimeCode+'\n// app.js');
 for(const [start,end,body,before]of [['/* BEGIN WORLD CSS */','/* END WORLD CSS */',read('scripts/world-ui.css'),'</style>'],['<!-- BEGIN WORLD UI -->','<!-- END WORLD UI -->',read('scripts/world-ui.html'),'<script>']]){const a=html.indexOf(start),b=html.indexOf(end),block=start+'\n'+body+'\n'+end;if(a>=0)html=html.slice(0,a)+block+html.slice(b+end.length);else html=html.replace(before,()=>block+'\n'+before);}
-function once(from,to){if(html.includes(to))return;if(!html.includes(from))throw Error('Missing integration anchor: '+from.slice(0,100));html=html.replace(from,()=>to);}
+function once(from,to){if(html.includes(to))return;if(html.includes('// BEGIN ISOMETRIC WORLD')&&(to.startsWith('const bounds=g.atlas?')||to.includes('this.drawAtlasGround();c.drawImage(this.bg')))return;if(!html.includes(from))throw Error('Missing integration anchor: '+from.slice(0,100));html=html.replace(from,()=>to);}
 once('  if(saved)this.restore(saved);','  this.initAtlas(saved);if(saved)this.restore(saved);this.finishAtlasRestore(saved);');
 once('this.cam.x=snap(Math.max(0,Math.min(MW*16-W,F.x-W/2)));this.cam.y=snap(Math.max(0,Math.min(MH*16-VH,F.y-VH/2-14)));','const bounds=g.atlas?{left:-Atlas.origin.x*16,top:-Atlas.origin.y*16,right:(Atlas.raw.width-Atlas.origin.x)*16,bottom:(Atlas.raw.height-Atlas.origin.y)*16}:{left:0,top:0,right:MW*16,bottom:MH*16};this.cam.x=snap(clamp(F.x-W/2,bounds.left,bounds.right-W));this.cam.y=snap(clamp(F.y-VH/2-14,bounds.top,bounds.bottom-VH));');
 once('c.translate(-this.cam.x+shake,T-this.cam.y);c.drawImage(this.bg,0,0);','c.translate(-this.cam.x+shake,T-this.cam.y);this.drawAtlasGround();c.drawImage(this.bg,0,0);');
@@ -71,3 +71,4 @@ console.log('Embedded world atlas, simulation, streaming terrain, map and travel
 const districtPlans=JSON.stringify(require('./build-settlements.cjs').build())+'\n';
 if(read('data/architecture/settlements.json')!==districtPlans)fs.writeFileSync(path.join(root,'data/architecture/settlements.json'),districtPlans);
 require('./embed-architecture.cjs');
+require('./embed-world-isometric.cjs');
