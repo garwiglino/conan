@@ -82,7 +82,7 @@ npm run package:terrain-isometric
 ## Intégration au jeu web et iOS
 
 La projection est active dans la version jouable. Les 83 localités conservent
-leurs centres et disposent de 1 947 bâtiments. Les positions de la simulation,
+leurs centres et disposent de 4 514 bâtiments, dont 2 613 à Clairfoyer. Les positions de la simulation,
 les routes géographiques, les stocks, la justice, la navigation et les
 sauvegardes restent dans leur plan logique existant.
 
@@ -113,6 +113,26 @@ n’est demandé pendant la partie.
 Les captures et rapports réels sont dans `integration/`. La petite scène de
 conception emploie désormais le Kaldor courant du jeu, extrait sans changement
 de taille par `build-terrain-player-reference.cjs`, avec sa tenue et son arme.
+
+### Contrôle de la version distribuée — 20 octobre 2026
+
+`node scripts/check-world-isometric.cjs` compare les sources du dépôt avec les
+sources réellement embarquées dans les HTML web et iOS, puis contrôle les
+arrivées des 83 localités et capture sept scènes couvrant les cinq territoires.
+Clairfoyer est photographié aux Halles, pas au relais d’arrivée situé à 885 m.
+`PERF_NO_WORKER=1 node scripts/check-world-isometric.cjs` répète le contrôle
+avec le rendu coopératif. Les positions et sauvegardes doivent rester stables,
+les caches bornés et les fondations solides lorsque les maisons s’atténuent.
+[Galerie et rapports](../art/terrain-isometric-js/integration/index.html).
+
+Les textures Piskel actuelles sont actives dans la forêt tempérée (biome 6),
+le désert (biomes 1 et 2) et le sol de départ. Les autres climats emploient le
+catalogue isométrique à onze familles ; ils ne sont pas remplacés par les
+textures de forêt ou de désert. La neige saisonnière peut recouvrir les sols.
+Les 82 localités autres que Clairfoyer conservent leur implantation régionale :
+leurs bâtiments utilisent le rendu isométrique courant, mais leurs plans
+détaillés et programmes de quartiers restent à concevoir. Les captures sont
+réalisées sous Chromium au format mobile et ne constituent pas un essai sur iPhone.
 
 ## Vérifications
 
