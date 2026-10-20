@@ -43,7 +43,7 @@ test('a spammed combo shows its full recoil, links without idle, and keeps each 
    g.update(.04,{attack:true,attackPressed:true});const drawing=p.attack>0?W.sample(p.attack,id,p.combo):5;
    assert.equal(p.dir,dir);
    if(previous&&p.combo!==previous.combo){
-    assert.equal(previous.drawing,3.5,id+' shows recoil before link');assert.equal(drawing,1);
+    assert.equal(previous.drawing,3.5,id+' shows recoil before link');assert.equal(drawing,.75);
     assert.ok(postTicks*.04>=W.times(id,previous.combo)[4]-.04-1e-6,id+' actual engine preserves the recovery budget');postTicks=0;
     assert.notDeepEqual(W.pose(id,dir,previous.drawing,previous.combo),W.pose(id,dir,drawing,p.combo));
     linked++;

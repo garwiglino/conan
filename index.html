@@ -1523,7 +1523,7 @@ class Game{
   if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,dx,dy);
   this.faceTarget();if(input.dodge)this.dodge(dx,dy);
   const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);
-  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const ax=buffered?p.bufferX:dx,ay=buffered?p.bufferY:dy;if(ax||ay)this.aimAttack(ax,ay);else if(!this.target())this.aimAttack(...this.facing(p.dir));this.faceTarget();if((ax||ay)&&!this.target())p.dir=this.direction(ax,ay);this.swingSword();}if(input.interact)this.interact();
+  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const ax=buffered?p.bufferX:dx,ay=buffered?p.bufferY:dy;if(ax||ay)this.aimAttack(ax,ay);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((ax||ay)&&!this.target())p.dir=this.direction(ax,ay);this.swingSword();}if(input.interact)this.interact();
   if(p.dash>0){this.movePlayer(p,p.dashX*dt*120,p.dashY*dt*120);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}
   else if(l&&(p.attack<=0||this.target())){if(p.attack<=0)p.dir=this.turnTo(p.dir,dx,dy);const ox=p.x,oy=p.y,speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,dx*dt*speed,dy*dt*speed);const moved=Math.hypot(p.x-ox,p.y-oy);p.moving=moved>.001;if(p.moving)p.anim+=moved/5.5;else p.anim=0;}
   else{p.anim=0;p.moving=false;}
@@ -2275,7 +2275,7 @@ let SUBPX=1; // finesse du rendu : 1/SUBPX pixel de jeu
 class CharacterAtlas{
  constructor(){this.cache=new Map();}
  get(kind,dir,state,frame,flash=false,combo=0){if(kind==='hero'){const h=HearthreaverKaldorCivilianArt.nativeFrame(dir,state,frame,combo,swordPose,greatsword,flash);if(h)return h;}const image=BITMAPS.get(kind,dir,state,frame,flash,combo);if(image)return image;let key=[kind,dir,state,frame,flash,combo].join(':');if(this.cache.has(key))return this.cache.get(key);const out=document.createElement('canvas');out.width=80;out.height=80;const c=out.getContext('2d');c.imageSmoothingEnabled=false;c.translate(40,52);if(kind==='hero')HearthreaverKaldorArt.draw(c,dir,state,frame,combo,swordPose);else if(kind==='cultist')ocCultistH(c,dir,state,frame);else if(kind==='skeleton')ocSkeletonH(c,dir,state,frame);else if(kind==='snake')ocSnakeH(c,dir,state,frame);else if(kind==='guardian')ocColossus(c,dir,state,frame);else if(state==='hurt')hurtSprite(c,kind,dir,frame);else if(kind==='skeleton')skeleton(c,dir,state,frame);else if(kind==='guardian')guardian(c,dir,state,frame);else if(kind==='snake')serpent(c,dir,state,frame);else if(kind==='boss')bossSprite(c,dir,state,frame,combo===1);else mage(c,dir,state,frame,kind==='boss');if(kind==='nomade')recolor(out,NOMADE_SWAP);if(flash){c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-atop';c.fillStyle='#fff0bf';c.fillRect(0,0,80,80);}this.cache.set(key,out);return out;}
- draw(c,kind,actor,time){if(kind==='boss'){const v=bossVisual(actor,time),im=this.get(kind,v.dir,v.state,v.frame,actor.flash>0,v.phase);actor._img=im;c.drawImage(im,Math.round(actor.x*SUBPX)/SUBPX-40,Math.round(actor.y*SUBPX)/SUBPX-52);return;}if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');let state='idle',frame=0;if(kind==='guardian'&&actor.move){state=actor.move==='punch'?'attack':actor.move;frame=actor.mframe|0;}else if(actor.hurt>0){state='hurt';frame=Math.min(3,Math.floor((1-actor.hurt/actor.hurtDuration)*4));}else if(actor.melee>0){state='melee';const pr=1-actor.melee/(actor.meleeDur||.55);frame=pr<.28?0:pr<.5?1:pr<.6?2:pr<.72?3:pr<.86?4:5;}else if(actor.useTime>0){state='use';frame=Math.min(5,Math.floor((1-actor.useTime/.4)*6));}else if(actor.attack>0){state='attack';frame=attackFrame(actor.attack,kind==='hero'?actor.combo:-1,kind==='hero'?actor.weapon:undefined);}else if(actor.guard||actor.guardTime>0){state='guard';frame=actor.moving?Math.floor(actor.anim)%6:2;}else if(actor.wind>0){state='attack';frame=actor.wind>actor.windup*.45?0:1;}else if(actor.dash>0){state='dash';frame=0;}else if(actor.anim>0){state='walk';frame=Math.floor(actor.anim)%6;}if(kind==='guardian'&&state==='idle')frame=guardianFrame(actor.dir,'idle',time);if(kind==='hero'&&state==='idle')frame=HearthreaverKaldorArt.idleFrame(time);if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;if(HearthreaverKaldorCivilianArt.ready()){const npcWalk=HearthreaverKaldorCivilianArt.gaitFrame(actor);frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}if(kind==='hero'){const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time);if(dressed){state=dressed.state;frame=dressed.frame;}}if(kind==='hero'&&state==='attack'&&actor.weapon){frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);if(frame===5){state='idle';frame=HearthreaverKaldorCivilianArt.frameAt('idle',time);}}const im=this.get(kind,actor.dir,state,frame,actor.flash>0,kind==='boss'?(actor.rage?1:0):actor.combo||0);actor._img=im;c.drawImage(im,Math.round(actor.x*SUBPX)/SUBPX-40,Math.round(actor.y*SUBPX)/SUBPX-52);}
+ draw(c,kind,actor,time){if(kind==='boss'){const v=bossVisual(actor,time),im=this.get(kind,v.dir,v.state,v.frame,actor.flash>0,v.phase);actor._img=im;c.drawImage(im,Math.round(actor.x*SUBPX)/SUBPX-40,Math.round(actor.y*SUBPX)/SUBPX-52);return;}if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile',actor);let state='idle',frame=0;if(kind==='guardian'&&actor.move){state=actor.move==='punch'?'attack':actor.move;frame=actor.mframe|0;}else if(actor.hurt>0){state='hurt';frame=Math.min(3,Math.floor((1-actor.hurt/actor.hurtDuration)*4));}else if(actor.melee>0){state='melee';const pr=1-actor.melee/(actor.meleeDur||.55);frame=pr<.28?0:pr<.5?1:pr<.6?2:pr<.72?3:pr<.86?4:5;}else if(actor.useTime>0){state='use';frame=Math.min(5,Math.floor((1-actor.useTime/.4)*6));}else if(actor.attack>0){state='attack';frame=attackFrame(actor.attack,kind==='hero'?actor.combo:-1,kind==='hero'?actor.weapon:undefined);}else if(actor.guard||actor.guardTime>0){state='guard';frame=actor.moving?Math.floor(actor.anim)%6:2;}else if(actor.wind>0){state='attack';frame=actor.wind>actor.windup*.45?0:1;}else if(actor.dash>0){state='dash';frame=0;}else if(actor.anim>0){state='walk';frame=Math.floor(actor.anim)%6;}if(kind==='guardian'&&state==='idle')frame=guardianFrame(actor.dir,'idle',time);if(kind==='hero'&&state==='idle')frame=HearthreaverKaldorArt.idleFrame(time);if(kind==='hero'){const look=HearthreaverKaldorArt.weaponVisual(actor,time,state,frame);state=look.state;frame=look.frame;if(HearthreaverKaldorCivilianArt.ready()){const npcWalk=HearthreaverKaldorCivilianArt.gaitFrame(actor);frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}if(kind==='hero'){const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time);if(dressed){state=dressed.state;frame=dressed.frame;}}if(kind==='hero'&&state==='attack'&&actor.weapon){frame=HearthreaverWeapons.sample(actor.attack,actor.weapon,actor.combo||0);if(frame===5){state='idle';frame=HearthreaverKaldorCivilianArt.frameAt('idle',time);}}const im=this.get(kind,actor.dir,state,frame,actor.flash>0,kind==='boss'?(actor.rage?1:0):actor.combo||0);actor._img=im;c.drawImage(im,Math.round(actor.x*SUBPX)/SUBPX-40,Math.round(actor.y*SUBPX)/SUBPX-52);}
 }
 
 // BEGIN KALDOR JAVASCRIPT PIXEL ART
@@ -5686,7 +5686,17 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  // Contact must survive a 40ms tick. Recoil gets its own readable budget:
  // light weapons settle briskly; heavy weapons and finishers take more weight.
  const postHold=(id,combo=0)=>Math.min(.115,.058+get(id).weightKg*.012+(combo===3?.014:0));
- const contactWindow=(row,id,combo)=>{row[3]=Math.max(row[3],.045-row[2]);row[4]=Math.max(row[4],postHold(id,combo));return row;};
+ const contactWindow=(row,id,combo)=>{
+  // Split anticipation instead of adding another long wind-up. The load still
+  // gets its original extreme; one brief lead-in shows the body winding into it.
+  const lead=Math.min(.060,Math.max(.045,row[1]*.32));
+  row[0]=lead;row[1]=Math.max(.041,row[1]-lead);
+  // The only damaging drawing occupies slot 2. Slot 3 is now a non-damaging
+  // continuation along the same arc, before the held extreme and braking.
+  row[2]=Math.max(.045,row[2]);
+  row[3]=Math.max(.041,Math.min(.055,.038+get(id).weightKg*.003));
+  row[4]=Math.max(row[4],postHold(id,combo));return row;
+ };
  function times(id,combo=0){
   const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
   if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)),id,combo);
@@ -5699,10 +5709,10 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   const row=times(id,combo);let t=duration(id,combo)-Math.max(0,remaining);
   for(let i=0;i<6;i++){if(t<row[i]-1e-7)return i;t-=row[i];}return 5;
  }
- // Four held drawings only: anticipation, contact, recoil and ready.
+ // Six held drawings: lead-in, load, contact, moving follow-through, extreme, ready.
  // Continuous authored geometry below remains for swept collision and smears.
- const DRAWINGS=freeze([1,1,2,2,3.5,5]);
- function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
+ const DRAWINGS=freeze([.75,1,2,2.25,3.5,5]);
+ function sample(remaining,id,combo=0){const beat=frame(remaining,id,combo);return beat===3&&combo===3?3.0625:DRAWINGS[beat];}
  const canChain=(remaining,id,combo=0)=>combo<3&&remaining<=times(id,combo)[5]+1e-7;
  // Even a long engine tick must expose the recoil before a buffered link.
  function advance(remaining,dt,id,combo=0){
@@ -5990,22 +6000,43 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   if(f<=3.5)return deliveryArc(id,dir,f,load,hit,post);
   return recoverPose(id,dir,f,post,ready);
  }
+ // The contact smear and collision share the same short delivery interval.
+ // Braking and the terminal hold never open a second damage window.
+ const deliveryEnd=combo=>combo===3?3.0625:2.25;
+ function aimForTarget(id,dir,dx,dy,combo=0){
+  const [fx,fy]=forward(dir),limit=25*Math.PI/180;
+  const angle=get(id).finisher.kind==='whirl'&&combo===3?0:Math.max(-limit,Math.min(limit,Math.atan2(fx*dy-fy*dx,fx*dx+fy*dy)));
+  const cs=Math.cos(angle),sn=Math.sin(angle),u=[fx*cs-fy*sn,fx*sn+fy*cs],side=[-u[1],u[0]],hit=pose(id,dir,2,combo);
+  const h=[hit.h[0]*cs-(hit.h[1]+9)*sn,hit.h[0]*sn+(hit.h[1]+9)*cs-9];
+  const lateral=Math.max(-4,Math.min(4,(dx-h[0])*side[0]+(dy-9-h[1])*side[1]));
+  return {dir,angle,shift:side.map(v=>v*lateral)};
+ }
+ function combatPose(actor,f){
+  const p=pose(actor.weapon,actor.dir,f,actor.combo||0),aim=actor.attackAim;
+  if(!aim||aim.dir!==actor.dir||!Number.isFinite(aim.angle))return p;
+  const gain=f<1?smooth(f):f>3.5?1-smooth((f-3.5)/1.5):1;
+  const angle=Math.max(-25*Math.PI/180,Math.min(25*Math.PI/180,aim.angle))*gain,cs=Math.cos(angle),sn=Math.sin(angle);
+  const shift=(aim.shift||[0,0]).map(v=>Math.max(-4,Math.min(4,Number(v)||0))*gain);
+  const u=[p.u[0]*cs-p.u[1]*sn,p.u[0]*sn+p.u[1]*cs];
+  const h=confineGrip(get(actor.weapon),[p.h[0]*cs-(p.h[1]+9)*sn+shift[0],p.h[0]*sn+(p.h[1]+9)*cs-9+shift[1]],u);
+  return {...p,h,u};
+ }
  function vector(id,dir,f,combo){const p=pose(id,dir,f,combo);return [...p.h,p.u[0]*p.reach,p.u[1]*p.reach];}
  function segmentDistance(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/l)):0;return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
  function hits(actor,target,f){
   if(actor.impactTick===false||(f!==2&&f!==3)||(actor.level||0)!==(target.level||0))return false;
-  let from=f-1,to=f;
+  let from=f-1,to=f===2?deliveryEnd(actor.combo||0):f;
   // A live strike jumps straight from its held load to its impact drawing.
-  // Sweep that visible jump once; held contact never casts a future recovery.
+  // Its short delivery arc is visible in the impact smear; recovery stays inert.
   const finisher=(actor.combo||0)===3;
   if(Number.isFinite(actor.attack)&&actor.attack>0){
-   to=2;if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
+   to=deliveryEnd(actor.combo||0);if(sample(actor.attack,actor.weapon,actor.combo||0)!==2)return false;
    from=actor.impactTick===true||f===2||sample(actor.attack+.04,actor.weapon,actor.combo||0)<2?1:2;
   }
   const density=finisher?(from>=2?1:get(actor.weapon).finisher.kind==='whirl'?128:40):20;
   const steps=Math.max(1,Math.ceil(density*(to-from)));
   for(let i=0;i<=steps;i++){
-   const p=pose(actor.weapon,actor.dir,from+(to-from)*i/steps,actor.combo||0),[x,y]=p.h;
+   const p=combatPose(actor,from+(to-from)*i/steps),[x,y]=p.h;
    if(segmentDistance(target.x-actor.x,target.y-actor.y-9,x-(['staff','spear','glaive'].includes(get(actor.weapon).family)?p.u[0]*7:0),y-(['staff','spear','glaive'].includes(get(actor.weapon).family)?p.u[1]*7:0),x+p.u[0]*p.reach,y+p.u[1]*p.reach)<(target.r||6)+(['axe','mace','sabre'].includes(get(actor.weapon).family)?3:1.5))return true;
   }return false;
  }
@@ -6047,22 +6078,36 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
    for(const r of [3,7,L-4])line(r,-1,r,0,p[3],4);
   }
  }
- function trail(b,id,dir,f,combo,rear=b){
+ function trail(b,id,dir,f,combo,rear=b,actor=null){
+  const drawPose=t=>actor?combatPose(actor,t):pose(id,dir,t,combo);
   const w=get(id),profile=w.family==='spear'?{trailWidth:3,ghosts:0}:MOTIONS[w.family];
-  if(f!==2)return;
+  const after=f===(combo===3?3.0625:2.25);if(f!==2&&!after)return;
   const p=PALETTES[w.material],previous=1;
   const sink=(q,x,y)=>combo===3&&w.finisher.kind==='whirl'&&(q.z===0||dir===2&&x>-5&&x<5&&y< -9)?rear:b;
+  if(after){
+   // A narrow, dark, broken tip arc carries the impact into its first
+   // follow-through drawing. No full weapon ghost or fresh bright impact.
+   const start=combo===3?3:2,width=Math.max(1,profile.trailWidth*.4);
+   for(let i=0;i<=24;i++){
+    const t=.25+.75*i/24,q=drawPose(start+(f-start)*t);
+    for(let k=0;k<width;k+=.65){
+     const x=q.h[0]+q.u[0]*(q.reach-k),y=q.h[1]+q.u[1]*(q.reach-k);
+     if(i===24&&k===0||((Math.round(x)+Math.round(y))&1)===0)sink(q,x,y).set(x,y,t>.7?p[1]:p[0],0);
+    }
+   }
+   return;
+  }
   const width=profile.trailWidth*(.85+Math.min(.35,w.weightKg*.1));
   // Dithered silhouettes record earlier WEAPON positions, without touching
  // or regenerating any character layer. Heavy heads carry a longer shadow.
   for(let n=profile.ghosts;n>0;n--){
-   const q=pose(id,dir,Math.max(1,f-n*.24),combo);
+   const q=drawPose(Math.max(1,f-n*.24));
    const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)sink(q,x,y).set(x,y,p[0],-5+n);},
     line(x,y,X,Y,color,z){const count=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=count;i++)this.set(x+(X-x)*i/count,y+(Y-y)*i/count,color,z);}};
    paint(ghost,id,...q.h,...q.u);
   }
   for(let i=0;i<=36;i++){
-   const t=i/36,q=pose(id,dir,previous+(f-previous)*t,combo),r=q.reach;
+   const t=i/36,q=drawPose(previous+(deliveryEnd(combo)-previous)*t),r=q.reach;
    for(let k=0;k<width;k+=.65){
     const x=q.h[0]+q.u[0]*(r-k),y=q.h[1]+q.u[1]*(r-k);
     if(t<.4&&((Math.round(x)+Math.round(y))&1))continue;
@@ -6078,9 +6123,10 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   frost:['#537a9a','#8dccdd','#e3fbf4'],ember:['#a34432','#ee8d43','#fff0a0'],
   tide:['#467e91','#74bfc4','#d4f3e3'],jade:['#3d765b','#8fc87c','#e3edac'],
   sand:['#886044','#d4a766','#f8db9e'],star:['#71709b','#b4b0df','#f5edce']});
- function finisherEffects(buffer,id,dir,f,rear=buffer){
+ function finisherEffects(buffer,id,dir,f,rear=buffer,actor=null){
+  const drawPose=t=>actor?combatPose(actor,t):pose(id,dir,t,3);
   if(f<1.1||f>4.25)return;
-  const w=get(id),v=w.finisher,p=pose(id,dir,f,3),colors=FINISH_COLORS[v.effect],magic=v.magic;
+  const w=get(id),v=w.finisher,p=drawPose(f),colors=FINISH_COLORS[v.effect],magic=v.magic;
   const set=(x,y,c,z=2,target=buffer)=>{if(x>=-34&&x<=34&&y>=-44&&y<=23)target.set(x,y,c,z);};
   const line=(x,y,X,Y,c,z=2)=>{const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)set(x+(X-x)*i/n,y+(Y-y)*i/n,c,z);};
   const tip=[p.h[0]+p.u[0]*p.reach,p.h[1]+p.u[1]*p.reach];
@@ -6115,7 +6161,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   if(v.kind==='whirl'||v.kind==='sweep'||v.kind==='seal'){
    // Residue follows the same weapon sweep that can actually connect.
    for(let i=0;i<=28;i++){
-    const q=pose(id,dir,1+i/28,3),r=q.reach*(magic?.85:.95);
+    const q=drawPose(1+i/28),r=q.reach*(magic?.85:.95);
     if(age>.7&&i%3)continue;
     set(q.h[0]+q.u[0]*r,q.h[1]+q.u[1]*r,colors[age<.7?1:0],0,v.kind==='whirl'&&q.z===0?rear:buffer);
    }
@@ -6154,7 +6200,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   if(mode==='finisher'){
    const len=duration(id,3),at=t%(len+1),strike=at-.2;
    if(strike<0||strike>=len)return {state:'idle',frame:idleFrame,combo:3,label:comboNames(id)[3]+' · Garde'};
-   const phase=frame(len-strike,id,3),drawing=sample(len-strike,id,3);return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo:3,label:comboNames(id)[3]+' · '+['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]};
+   const phase=frame(len-strike,id,3),drawing=sample(len-strike,id,3);return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo:3,label:comboNames(id)[3]+' · '+['Mise en tension','Préparation','Impact','Prolongement','Après-impact','Garde'][phase]};
   }
   if(mode==='walk')return {state:'walk',frame:gait,combo:0,label:'Marche armée'};
   if(mode==='holster'){
@@ -6168,7 +6214,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   const lengths=[0,1,2,3].map(c=>duration(id,c)+(c===3?.25:-times(id,c)[5]));let at=t%lengths.reduce((a,b)=>a+b,0);
   for(let combo=0;combo<4;combo++){
    if(at<lengths[combo]){const len=duration(id,combo),remaining=len-at,phase=frame(remaining,id,combo);
-    const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Préparation','Préparation','Impact','Impact','Après-impact','Garde'][phase]:'Garde')};
+    const drawing=at<len?sample(remaining,id,combo):5;return {state:drawing===5?'idle':'attack',frame:drawing===5?idleFrame:drawing,combo,label:(combo+1)+' · '+comboNames(id)[combo]+' · '+(at<len?['Mise en tension','Préparation','Impact','Prolongement','Après-impact','Garde'][phase]:'Garde')};
    }at-=lengths[combo];
   }
  }
@@ -6198,7 +6244,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });
 
 /* Hearthreaver — Kaldor, long-haired barbarian hero, authored pixel art v3.
@@ -6736,9 +6782,9 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  });
  const START_OUTFIT='pagne-noue';
  const weapons=()=>typeof HearthreaverWeapons!=='undefined'?HearthreaverWeapons:null;
- let wielded='exile';
+ let wielded='exile',wielder=null;
  const customWeapon=()=>weapons()&&weapons().has(wielded);
- function wield(id){if(!weapons()?.has(id))return false;wielded=id;return true;}
+ function wield(id,actor=null){if(!weapons()?.has(id))return false;wielded=id;wielder=actor?.weapon===id&&actor.attack>0?actor:null;return true;}
  // previous: what he wore before the last change ({outfit, helmet}), shown
  // until the swap frame of the dress or helm clip.
  const worn={outfit:START_OUTFIT,helmet:null,previous:null};
@@ -7028,7 +7074,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  const GUARD={2:{h:[-6,-6],u:[-.5,-.87]},1:{h:[3,-6],u:[.71,-.71]},0:{h:[6,-6],u:[.6,-.8]},3:{h:[-4,-6],u:[-.71,-.71]}};
  const SHOULDERS={2:[[-4,-8],[3,-8]],0:[[-4,-8],[3,-8]],1:[[0,-8]],3:[[-1,-8]]};
  function attackSpec(dir,frame,combo){
-  if(customWeapon())return weapons().pose(wielded,dir,frame,combo);
+  if(customWeapon())return wielder?weapons().combatPose(wielder,frame):weapons().pose(wielded,dir,frame,combo);
   const view=dir===3?1:dir,row=ATTACK[view][Math.max(0,Math.min(3,combo))];
   let s=row[Math.max(1,Math.min(5,frame))];
   if(!s){const g=GUARD[dir];return {h:g.h,z:dir===0?0:1,head:[0,0],hair:[0,0],lunge:false,u:g.u,rest:true};}
@@ -7037,7 +7083,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   return s;
  }
  function bladeDir(dir,frame,combo,swordPose){
-  if(customWeapon())return weapons().pose(wielded,dir,frame,combo).u;
+  if(customWeapon())return (wielder?weapons().combatPose(wielder,frame):weapons().pose(wielded,dir,frame,combo)).u;
   const s=attackSpec(dir,frame,combo);if(s.u)return unit(s.u[0],s.u[1]);
   const f=Math.max(1,Math.min(4,frame));
   const p=typeof swordPose==='function'?swordPose(dir,f,combo):[0,0,GUARD[dir].u[0],GUARD[dir].u[1]];
@@ -7234,10 +7280,10 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
    fist(s.z===0?sword:hands,s.h[0],s.h[1]);fist(s.z===0?sword:hands,s.h[0]-u[0]*2,s.h[1]-u[1]*2);
    sword.outline();hands.outline();
   }
-  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,facing,frame,combo,behind);}
+  if(customWeapon()){if(frame>=1.25&&frame<4.75)weapons().trail(trail,wielded,facing,frame,combo,behind,wielder);}
   else if(frame===2||frame===3)smear(trail,dir,frame,combo,swordPose,frame===2?4.5:3,behind);
   else if(frame===4)smear(trail,dir,frame,combo,swordPose,1.5,behind);
-  if(customWeapon()&&combo===3)weapons().finisherEffects(trail,wielded,facing,frame,behind);
+  if(customWeapon()&&combo===3)weapons().finisherEffects(trail,wielded,facing,frame,behind,wielder);
   else if(combo===3&&frame===3){const reach=3+BLADE;impact(trail,s.h[0]+u[0]*reach,s.h[1]+u[1]*reach);}
   paintAt(c,behind);
   if(s.z!==1){paintAt(c,trail);paintAt(c,sword);}
@@ -7284,7 +7330,8 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
-  const key=[headId,hairId,wielded,worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
+  const aimKey=state==='attack'&&wielder?.attackAim?JSON.stringify(wielder.attackAim):'';
+  const key=[aimKey,headId,hairId,wielded,worn.outfit,worn.helmet,worn.previous?.outfit,worn.previous?.helmet,dir,state,frame,combo,!!flash].join(':');
   if(cache.has(key)){
    const value=cache.get(key);cache.delete(key);cache.set(key,value);return value;
   }
@@ -7401,13 +7448,13 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  // modular head and hair. Scoped selection never changes Kaldor's equipment.
  function npcFrame(actor,state,frame,weapon,swordPose){
   if(!weapons()?.has(weapon)||!ready())return null;
-  const saved={...worn},oldWeapon=wielded,oldHead=headId,oldHair=hairId;
+  const saved={...worn},oldWeapon=wielded,oldWielder=wielder,oldHead=headId,oldHair=hairId;
   let seed=0;for(const c of String(actor.id||''))seed=(Math.imul(seed,31)+c.charCodeAt(0))>>>0;
   try{
    headId='masculin-'+['adulte','mur','age'][seed%3];hairId='masculin-hair-'+['01','02','05','09'][(seed>>>3)%4];
-   worn.outfit=actor.kind==='bandit'?'cuir-traqueur':actor.convoyGuard?'brigandine-mercenaire':'cotte-mailles';worn.helmet=null;worn.previous=null;wielded=weapon;
+   worn.outfit=actor.kind==='bandit'?'cuir-traqueur':actor.convoyGuard?'brigandine-mercenaire':'cotte-mailles';worn.helmet=null;worn.previous=null;wielded=weapon;wielder=null;
    return nativeFrame(actor.dir??2,state,frame,actor.combo||0,swordPose);
-  }finally{Object.assign(worn,saved);wielded=oldWeapon;headId=oldHead;hairId=oldHair;}
+  }finally{Object.assign(worn,saved);wielded=oldWeapon;wielder=oldWielder;headId=oldHead;hairId=oldHair;}
  }
  function clear(){cache.clear();layerCache.clear();shiftCache.clear();}
  // Grip and blade direction actually drawn, exposed for regression tests.
@@ -10327,7 +10374,7 @@ Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filte
   if(dist(n,target)>2)this.walkNpc(n,target,dt);else if(c.restClock<26)n.dir=this.direction(horse.x-n.x,horse.y-n.y);
  }this.stepCivilianAnimations(dt);};
 Game.prototype.damageCivilian=function(n,amount,source){
- const c=this.ensureCivilian(n);if(!c||c.dead||c.inv>0||!Number.isFinite(amount)||amount<=0||(n.alpha??1)<.5||source&&!this.sameLevel(n,source))return false;
+ const c=this.ensureCivilian(n);if(!c||c.dead||(c.inv>0&&source!==this.player)||!Number.isFinite(amount)||amount<=0||(n.alpha??1)<.5||source&&!this.sameLevel(n,source))return false;
  const member=this.party?.find(v=>v.id===n.id);if(member?.down)return false;c.inv=.9;
  if(member){member.hp=Math.max(0,member.hp-amount);member.down=member.hp===0;member.hitAt=this.time+2.5;c.hp=member.hp/Math.max(1,member.maxHp||6)*6;}
  else{
@@ -16906,6 +16953,40 @@ const KaldorArsenal=(()=>{
  bladeHits=function(p,e,f){return !p.weapon?legacyHits(p,e,f):W.hits(p,e,f);};
  attackFrame=function(remaining,combo=-1,weapon){return !weapon||combo<0?legacyFrame(remaining,combo):W.frame(remaining,weapon,combo);};
  attackLength=function(combo,weapon){return !weapon?legacyLength(combo):W.duration(weapon,combo);};
+ // Select a reachable opponent before an aligned but distant one. Re-evaluate
+ // every fresh/queued stroke; explicit steering retains its directional cone.
+ const oldTarget=Game.prototype.target;
+ Game.prototype.target=function(){const n=oldTarget.call(this);if(n&&((n.alpha??1)<.5||!this.lineClear(this.player,n))){this.targetId=null;return null;}return n;};
+ Game.prototype.aimAttack=function(dx,dy,automatic=false){
+  const p=this.player,length=Math.hypot(dx,dy);if(length<.1)return;
+  const combo=p.comboWindow>0?(p.combo+1)%4:0;let best=null,score=-Infinity;
+  for(const n of this.combatTargets()){
+   if(n.dead||!this.sameLevel(n,p)||(n.alpha??1)<.5||(n.kind==='boss'&&!this.bossActive)||!this.lineClear(p,n))continue;
+   const x=n.x-p.x,y=n.y-p.y,range=Math.hypot(x,y);if(range<1||range>112)continue;
+   const dot=(x*dx+y*dy)/(range*length),near=range<=W.get(p.weapon).length+18;
+   if(dot<.65&&!(automatic&&near))continue;
+   const dir=this.direction(x,y),[fx,fy]=this.facing(dir),step=W.attackStep(p.weapon,combo);
+   const actor={...p,dir,combo,x:p.x+fx*step,y:p.y+fy*step,attack:NaN,impactTick:true};
+   actor.attackAim=W.aimForTarget(p.weapon,dir,n.x-actor.x,n.y-actor.y,combo);
+   const reachable=W.hits(actor,n,2),rank=(reachable?1000:near?500:0)-range*2+dot*.5+(n.id===this.targetId?.1:0);
+   if(rank>score){score=rank;best=n;}
+  }
+  this.targetId=best?.id??null;
+  if(best)p.dir=this.direction(best.x-p.x,best.y-p.y);
+ };
+ const swing=Game.prototype.swingSword;
+ Game.prototype.swingSword=function(){const serial=this.swing,result=swing.call(this);if(this.swing!==serial){const p=this.player,n=this.target();p.attackAim=n?{...W.aimForTarget(p.weapon,p.dir,n.x-p.x,n.y-p.y,p.combo),targetId:n.id}:null;}return result;};
+ const face=Game.prototype.faceTarget;
+ Game.prototype.faceTarget=function(){
+  const p=this.player;if(p.attack<=0)return face.call(this);
+  // Keep the native view fixed; only the weapon and original hand layers get
+  // a bounded adjustment. Once contact is displayed, the arc stays frozen.
+  const n=this.target();if(!p.impactDone&&W.sample(p.attack,p.weapon,p.combo)<2&&n&&n.id===p.attackAim?.targetId){
+   const [fx,fy]=this.facing(p.dir),x=n.x-p.x,y=n.y-p.y;
+   if(x*fx+y*fy>0)p.attackAim={...W.aimForTarget(p.weapon,p.dir,x,y,p.combo),targetId:n.id};
+  }
+  return n;
+ };
  // A single pending press survives the current stroke, including a heavy
  // wind-up. Further presses cannot stack attacks or change that queued aim.
  function queueAttack(p,x=0,y=0){

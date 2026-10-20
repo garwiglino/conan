@@ -56,8 +56,8 @@ test('the actual fourth-combo combat loop hits a victim once across delivery and
  const q=W.pose(g.player.weapon,2,2,3),victim={id:'one-finisher-victim',kind:'snake',hp:100,r:6,level:g.player.level||0,x:g.player.x+q.h[0]+q.u[0]*(q.reach-2),y:g.player.y+q.h[1]+q.u[1]*(q.reach-2)+9};
  g.combatTargets=()=>[victim];g.lineClear=()=>true;let blows=0;g.damageEnemy=()=>blows++;
  const times=W.times(g.player.weapon,3),len=W.duration(g.player.weapon,3);g.player.attackStep=true;
- g.player.attack=len-times[1]-times[2]*.5;for(let n=0;n<3;n++)g.update(0,{});
- g.player.attack=len-times[1]-times[2]-.001;for(let n=0;n<3;n++)g.update(0,{});
+ g.player.attack=len-times[0]-times[1]-times[2]*.5;for(let n=0;n<3;n++)g.update(0,{});
+ g.player.attack=len-times[0]-times[1]-times[2]-.001;for(let n=0;n<3;n++)g.update(0,{});
  assert.equal(blows,1);assert.equal(g.player.dir,2);assert.equal(g.player.weapon,'sarisse-horizon');
 });
 test('the dedicated fourth-strike preview has an explicit pause between each single blow',()=>{
@@ -70,15 +70,15 @@ test('the dedicated fourth-strike preview has an explicit pause between each sin
 test('live finisher contact begins on the discrete impact drawing, never in anticipation',()=>{
  for(const w of W.all){
   const q=W.pose(w.id,2,2,3),target={x:q.h[0]+q.u[0]*(q.reach-1),y:q.h[1]+q.u[1]*(q.reach-1)+9,r:.1};
-  const times=W.times(w.id,3),len=W.duration(w.id,3),actor={x:0,y:0,weapon:w.id,dir:2,combo:3,attack:len-times[1]-.001};
-  actor.attack=len-times[1]*.5;assert.equal(W.hits(actor,target,2),false,w.id+' no contact in preparation');
-  actor.attack=len-times[1]-.001;assert.equal(W.frame(actor.attack,w.id,3),2);assert.equal(W.hits(actor,target,2),true,w.id+' contact connects on the displayed impact drawing');
-  actor.attack=len-times[1]-times[2]-.001;assert.equal(W.frame(actor.attack,w.id,3),3);assert.equal(W.hits(actor,target,3),true,w.id+' actual held contact');
+  const times=W.times(w.id,3),len=W.duration(w.id,3),actor={x:0,y:0,weapon:w.id,dir:2,combo:3,attack:len-times[0]-times[1]-.001};
+  actor.attack=len-times[0]-times[1]*.5;assert.equal(W.hits(actor,target,2),false,w.id+' no contact in preparation');
+  actor.attack=len-times[0]-times[1]-.001;assert.equal(W.frame(actor.attack,w.id,3),2);assert.equal(W.hits(actor,target,2),true,w.id+' contact connects on the displayed impact drawing');
+  actor.attack=len-times[0]-times[1]-times[2]-.001;assert.equal(W.frame(actor.attack,w.id,3),3);assert.equal(W.hits(actor,target,3),false,w.id+' follow-through is never another contact');
  }
 });
 test('a slower frame crossing into impact still sweeps the last part of a spinning delivery',()=>{
  for(const w of W.all.filter(w=>w.finisher.kind==='whirl')){
-  const times=W.times(w.id,3),actor={x:0,y:0,weapon:w.id,dir:2,combo:3,attack:W.duration(w.id,3)-times[1]-times[2]-.001};
+  const times=W.times(w.id,3),actor={x:0,y:0,weapon:w.id,dir:2,combo:3,attack:W.duration(w.id,3)-times[0]-times[1]-.001};
   const previous=Math.max(1,W.sample(actor.attack+.04,w.id,3)),q=W.pose(w.id,2,(previous+2)/2,3);
   assert.ok(previous<=2);assert.ok(W.hits(actor,{x:q.h[0]+q.u[0]*(q.reach-2),y:q.h[1]+q.u[1]*(q.reach-2)+9,r:.1},3),w.id+' does not drop the final arc at low frame rate');
  }

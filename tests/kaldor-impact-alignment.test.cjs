@@ -10,8 +10,8 @@ test('all 768 impact poses aim straight ahead and put the leading end on the pla
   assert.ok(tip[0]*fx+tip[1]*fy>8,w.id+' active end ahead of torso');
   assert.ok(Math.abs(tip[0]*-fy+tip[1]*fx)<1e-8,w.id+' contact is not a lateral overshoot');
   const t=W.times(w.id,combo),len=W.duration(w.id,combo);
-  for(const remaining of [len-t[0]-t[1]-t[2]/2,len-t[0]-t[1]-t[2]-t[3]/2]){
-   assert.equal(W.sample(remaining,w.id,combo),2,'delivery and held contact display the same drawing');
+  for(const remaining of [len-t[0]-t[1]-t[2]*.1,len-t[0]-t[1]-t[2]*.9]){
+   assert.equal(W.sample(remaining,w.id,combo),2,'the entire contact window displays the aligned impact');
    const actor={x:100,y:100,dir,combo,weapon:w.id,attack:remaining},target={x:100+tip[0],y:100+tip[1],r:1};
    assert.ok(W.hits(actor,target,W.frame(remaining,w.id,combo)),w.id+' rendered point hits');
    assert.equal(W.hits(actor,{...target,level:1},2),false,'floors stay isolated');
@@ -41,7 +41,7 @@ test('the actual native compositor uses the same aligned grip and blade in every
  for(const w of W.all){A.wield(w.id);for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
   const expected=W.pose(w.id,dir,2,combo),drawn=A.attackPose(dir,2,combo,api.swordPose);
   assert.deepEqual(JSON.parse(JSON.stringify(drawn.hand)),expected.h);assert.deepEqual(JSON.parse(JSON.stringify(drawn.blade)),expected.u);
-  for(const frame of [1,2,3.5]){const im=A.nativeFrame(dir,'attack',frame,combo,api.swordPose);assert.equal(im.width,80);assert.equal(im.height,80);const rgba=im.getContext('2d').getImageData(0,0,80,80).data;for(let k=0;k<80;k++)for(const edge of [k,79*80+k,k*80,k*80+79])assert.equal(rgba[edge*4+3],0,w.id+':'+dir+':'+combo+':'+frame+' native drawing fits cell');}
+  for(const frame of [.75,1,2,combo===3?3.0625:2.25,3.5]){const im=A.nativeFrame(dir,'attack',frame,combo,api.swordPose);assert.equal(im.width,80);assert.equal(im.height,80);const rgba=im.getContext('2d').getImageData(0,0,80,80).data;for(let k=0;k<80;k++)for(const edge of [k,79*80+k,k*80,k*80+79])assert.equal(rgba[edge*4+3],0,w.id+':'+dir+':'+combo+':'+frame+' native drawing fits cell');}
  }A.clear();}
  A.wield(W.START);
 });

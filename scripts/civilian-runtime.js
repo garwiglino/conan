@@ -73,7 +73,7 @@ Game.prototype.stepNpcs=function(dt){const all=this.npcs;try{this.npcs=all.filte
   if(dist(n,target)>2)this.walkNpc(n,target,dt);else if(c.restClock<26)n.dir=this.direction(horse.x-n.x,horse.y-n.y);
  }this.stepCivilianAnimations(dt);};
 Game.prototype.damageCivilian=function(n,amount,source){
- const c=this.ensureCivilian(n);if(!c||c.dead||c.inv>0||!Number.isFinite(amount)||amount<=0||(n.alpha??1)<.5||source&&!this.sameLevel(n,source))return false;
+ const c=this.ensureCivilian(n);if(!c||c.dead||(c.inv>0&&source!==this.player)||!Number.isFinite(amount)||amount<=0||(n.alpha??1)<.5||source&&!this.sameLevel(n,source))return false;
  const member=this.party?.find(v=>v.id===n.id);if(member?.down)return false;c.inv=.9;
  if(member){member.hp=Math.max(0,member.hp-amount);member.down=member.hp===0;member.hitAt=this.time+2.5;c.hp=member.hp/Math.max(1,member.maxHp||6)*6;}
  else{
