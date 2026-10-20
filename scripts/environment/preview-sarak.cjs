@@ -25,7 +25,7 @@ function desert(){
  // Palmiers autour de l'oasis, rochers et arbres morts épars ailleurs.
  const nearWater=(i,j)=>{for(let b=-2;b<=2;b++)for(let a=-2;a<=2;a++)if(code[(j+b)*N+i+a]===3)return true;return false;};
  for(let j=1;j<N-1;j++)for(let i=1;i<N-1;i++){if(code[j*N+i])continue;const free=[[-1,0],[1,0],[0,-1],[0,1]].every(([a,b])=>!code[(j+b)*N+i+a]||code[(j+b)*N+i+a]===3||code[(j+b)*N+i+a]===4);if(!free)continue;
-  if(nearWater(i,j)?hash(i,j,4)<.45:hash(i,j,4)<.035)code[j*N+i]=4;}
+  if(nearWater(i,j)?hash(i,j,4)<.3:hash(i,j,4)<.035)code[j*N+i]=4;}
  return {N,code,piece:pieces(N,streets),houses,paving:(i,j)=>plaza.get(i+','+j),nearWater};
 }
 function render(dir){
