@@ -11,7 +11,7 @@ const {loadGame,canvas,root}=require('../tests/game-harness.cjs'),W=require('./k
  if(!contactOnly)for(let n=0;n<144;n++){
   const t=n/24,cv=canvas.createCanvas(columns*320,640),c=cv.getContext('2d');c.imageSmoothingEnabled=false;
   c.fillStyle='#141d1c';c.fillRect(0,0,cv.width,640);c.fillStyle='#efd7a4';c.font='bold 21px sans-serif';c.fillText(focus?'Prises de face · lances, harpons et hampes':'Coups retravaillés · face et profil · vitesse réelle',18,28);
-  c.fillStyle='#afc0b4';c.font='14px sans-serif';c.fillText(focus?'Préparations alternées · impacts dans l’axe · mains sur la hampe · vitesse réelle':'Après-impact lisible · poids conservé · enchaînement après récupération · calques intacts',18,51);
+  c.fillStyle='#afc0b4';c.font='14px sans-serif';c.fillText(focus?'Préparations alternées · impacts dans l’axe · mains sur la hampe · vitesse réelle':'Préparation plus loin · fin du geste plus loin · appuis engagés · quatre poses',18,51);
   for(let i=0;i<ids.length;i++){
    const id=ids[i],w=W.get(id),look=focus&&t<.8?{state:'idle',frame:0,combo:0,label:'Garde · prises en diagonale'}:W.preview(id,focus?t-.8:t,'attack',A.frameAt('idle',t)),x=i%columns*320,y=66+Math.floor(i/columns)*280;
    A.wield(id);A.wear('brigandine-mercenaire');c.fillStyle='#25332e';c.fillRect(x+5,y,310,268);

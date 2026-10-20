@@ -9,13 +9,13 @@ test('all 48 weapons have a distinct named and choreographed fourth strike',()=>
  assert.equal(names.size,48);assert.equal(paths.size,48);
  assert.ok(W.all.some(w=>w.finisher.magic));assert.ok(W.all.filter(w=>w.rarity==='Commune').every(w=>!w.finisher.magic));
 });
-test('fourth strike makes one delivery, holds one contact and only retracts after that',()=>{
+test('fourth strike holds one contact, completes its overshoot and then only retracts',()=>{
  for(const w of W.all)for(let d=0;d<4;d++){
   const contact=W.pose(w.id,d,2,3),held=W.pose(w.id,d,3,3),ready=W.guard(w.id,d);
   assert.deepEqual(contact.h,held.h,w.id+' no second advance');assert.deepEqual(contact.u,held.u,w.id+' no second cut');
   for(const f of [2.25,2.5,2.75]){assert.deepEqual(W.pose(w.id,d,f,3).h,contact.h);}
   let previous=Infinity;
-  for(let f=3;f<=5;f+=.125){const p=W.pose(w.id,d,f,3),dist=Math.hypot(p.h[0]-ready.h[0],p.h[1]-ready.h[1]);assert.ok(dist<=previous+1e-8,w.id+' retreat does not wind up another hit');previous=dist;}
+  for(let f=3.5;f<=5;f+=.125){const p=W.pose(w.id,d,f,3),dist=Math.hypot(p.h[0]-ready.h[0],p.h[1]-ready.h[1]);assert.ok(dist<=previous+1e-8,w.id+' retreat does not wind up another hit');previous=dist;}
  }
 });
 test('spinning finishers turn the existing character through all four native views and share their real swept collision',()=>{
@@ -91,10 +91,11 @@ test('body turns sweep at waist height and hide the rear arc instead of wheeling
   else{assert.equal(p.z,1);assert.ok(p.h[1]-p.body[1]>=-9.001,w.id+' forward grip stays below face');}
  }
 });
-test('front blade recovery raises the edge on the outside of the left shoulder',()=>{
+test('front finishing arcs keep the rising edge outside either shoulder',()=>{
  for(const w of W.all.filter(w=>!['spear','staff','glaive'].includes(w.family)))for(let f=3;f<5;f+=.025){
   const p=W.pose(w.id,2,f,3);
-  if(p.u[1]<0)assert.ok(p.h[0]<-4.5,w.id+' grip has cleared torso before tip rises');
+  if(p.u[1]<0)assert.ok(Math.abs(p.h[0])>4.5&&p.h[0]*p.u[0]>0,w.id+' rising edge points away from the cleared shoulder');
+  for(let r=2;r<p.reach;r+=.5){const x=p.h[0]+p.u[0]*r-p.body[0],y=p.h[1]+p.u[1]*r-p.body[1];assert.ok(!(x>-5&&x<5&&y<-9&&y>-23),w.id+' no return through the face');}
  }
 });
 
