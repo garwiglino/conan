@@ -13,7 +13,7 @@ const TUFTS={
 const herb=(b,n)=>tone('herbe',b,n,7);
 function grass({seed=11,base=4,w=256,h=128}={}){
  const R=rng(seed),g=new Grid(w,h,{wrap:true,fill:herb(base,0),height:.5}),F=field(w,h,20,R,2),G=field(w,h,8,R,1);
- const zone=(x,y)=>{const f=F.at(x,y)+G.at(x,y)*.18;return f<-.3?-1:f>.34?1:0;};
+ const zone=(x,y)=>{const f=F.at(x,y)+G.at(x,y)*.18;return f<-.42?-1:f>.5?1:0;};
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const z=zone(x,y);if(z)g.set(x,y,herb(base,z),z<0?.62:.42);}
  // Herbes hautes : pointes de brins sur le bord supérieur, ombre brisée dessous.
  for(let x=0;x<w;x++)for(let y=0;y<h;y++){

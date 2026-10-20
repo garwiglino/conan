@@ -59,6 +59,38 @@
    "id": "plank"
   },
   {
+   "fichier": "pavages/paves-rangs.piskel",
+   "role": "texture",
+   "cadres": [
+    "setts",
+    "setts_v"
+   ]
+  },
+  {
+   "fichier": "pavages/dallage.piskel",
+   "role": "texture",
+   "cadres": [
+    "flags",
+    "flags_v"
+   ]
+  },
+  {
+   "fichier": "pavages/briques.piskel",
+   "role": "texture",
+   "cadres": [
+    "bricks",
+    "bricks_v"
+   ]
+  },
+  {
+   "fichier": "pavages/eventail.piskel",
+   "role": "texture",
+   "cadres": [
+    "fan",
+    "fan_v"
+   ]
+  },
+  {
    "fichier": "falaises/paroi.piskel",
    "role": "falaise",
    "cadres": [
@@ -233,5 +265,35 @@
     "fleurs"
    ]
   }
- ]
+ ],
+ "jeux": {
+  "chemin": {
+   "forme": "chemin",
+   "matiere": "dirt"
+  },
+  "pave": {
+   "forme": "pave",
+   "matiere": "cobble"
+  },
+  "rangs": {
+   "forme": "pave",
+   "matiere": "setts"
+  },
+  "dalles": {
+   "forme": "pave",
+   "matiere": "flags"
+  },
+  "briques": {
+   "forme": "pave",
+   "matiere": "bricks"
+  },
+  "eventail": {
+   "forme": "pave",
+   "matiere": "fan"
+  },
+  "ruisseau": {
+   "forme": "ruisseau",
+   "matiere": "water"
+  }
+ }
 }

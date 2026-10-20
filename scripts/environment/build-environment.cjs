@@ -25,8 +25,8 @@ async function build(){
   const file=path.join(SRC,entry.fichier),doc=await piskel.read(file),idx=indexer(entry.fichier,report),{width:w,height:h}=doc;hash.update(entry.fichier).update(fs.readFileSync(file));
   if(entry.role==='texture'){
    if(w%32||h%16)throw Error(entry.fichier+' : '+w+'×'+h+' ; une texture raccordable mesure un multiple de 32 × 16');
-   const ht=doc.layers.find(l=>l.name.trim().toLowerCase()==='hauteur');
-   data.textures[entry.id]={w,h,px:encode(indexed(layer(doc,'couleur',entry.fichier).frames[0],idx)),ht:ht?encode(Uint8Array.from({length:w*h},(_,i)=>ht.frames[0][i*4])):null};
+   const ht=doc.layers.find(l=>l.name.trim().toLowerCase()==='hauteur'),colour=layer(doc,'couleur',entry.fichier);
+   (entry.cadres||[entry.id]).forEach((id,k)=>{if(!colour.frames[k])throw Error(entry.fichier+' : cadre '+(k+1)+' ('+id+') manquant');data.textures[id]={w,h,px:encode(indexed(colour.frames[k],idx)),ht:ht?encode(Uint8Array.from({length:w*h},(_,i)=>ht.frames[k][i*4])):null};});
   }else if(entry.role==='falaise'){const l=layer(doc,'couleur',entry.fichier);entry.cadres.forEach((id,k)=>{data.textures[id]={w,h,px:encode(indexed(l.frames[k],idx)),ht:null};});}
   else if(entry.role==='pieces'){
    if(w!==64||h!==32)throw Error(entry.fichier+' : les pièces mesurent 64 × 32');
@@ -39,6 +39,7 @@ async function build(){
   }else throw Error(entry.fichier+' : rôle inconnu '+entry.role);
  }
  for(const need of ['grass','dirt','cobble','water','litter','bank','plank','cliffS','cliffE'])if(!data.textures[need])throw Error('texture '+need+' absente du manifeste');
+ data.sets=manifest.jeux||{};for(const [name,set]of Object.entries(data.sets)){if(!data.pieces[set.forme])throw Error('jeu '+name+' : forme '+set.forme+' absente');if(!data.textures[set.matiere])throw Error('jeu '+name+' : matière '+set.matiere+' absente');}
  data.source=hash.digest('hex').slice(0,16);
  return {text:'/* Généré par scripts/environment/build-environment.cjs depuis art/environnement/teremor (.piskel). Ne pas modifier à la main. */\n(function(root,data){if(typeof module===\'object\'&&module.exports)module.exports=data;else root.HearthreaverTeremor=data;})(globalThis,'+JSON.stringify(data)+');\n',report};
 }
