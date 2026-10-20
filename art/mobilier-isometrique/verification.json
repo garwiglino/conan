@@ -1,0 +1,34 @@
+{
+  "revision": "9aa71748fff94056",
+  "status": "integrated_technical_checks_passed",
+  "stations": 49,
+  "redrawnFurniture": 44,
+  "retainedWorldReferences": 4,
+  "logicalSnowAccess": 1,
+  "exportedNativeSpritesChecked": 49,
+  "browserPixelHashesChecked": 49,
+  "interactiveStationsChecked": 49,
+  "interactiveActivitiesChecked": 98,
+  "interactiveKeyFramesChecked": 196,
+  "compositionFramesCoveredByUnitTests": 5836,
+  "districtPalettesChecked": 11,
+  "actorDirections": 4,
+  "projection": "dimetric-2:1",
+  "footAnchor": [
+    64,
+    96
+  ],
+  "desktop": [
+    1440,
+    1000
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "errors": [],
+  "missing": [],
+  "userValidated": true,
+  "runtimeActivated": true,
+  "publicationTrackedBy": "git"
+}

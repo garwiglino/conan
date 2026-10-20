@@ -1,0 +1,9 @@
+'use strict';
+// Native pixels for the 36 district designs. Geometry stays authored JavaScript;
+// phones decode only visible views instead of rasterising meshes on arrival.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),D=require('../sprites/architecture/clairfoyer-districts'),root=path.resolve(__dirname,'..');
+const sourceFiles=['sprites/architecture/architecture-isometric.js','sprites/architecture/clairfoyer-district-catalogue.js','sprites/architecture/clairfoyer-districts.js'],sourceHash=crypto.createHash('sha256').update(sourceFiles.map(f=>fs.readFileSync(path.join(root,f))).join('\n')).digest('hex'),target=path.join(root,'sprites/architecture/city-pixels.js');
+if(fs.existsSync(target)&&fs.readFileSync(target,'utf8').includes('"sourceHash":"'+sourceHash+'"')){console.log('City pixels are current.');process.exit(0);}
+function encode(a){let s='';for(let i=0;i<a.length;){let j=i+1;while(j<a.length&&a[j]===a[i]&&j-i<4095)j++;let n=(j-i)*128+a[i];if(n>=0xd800)n+=0x800;s+=String.fromCodePoint(n);i=j;}return s;}
+const frames={},palettes={};for(const d of D.list()){palettes[d.district]=D.paletteFor(d.id);for(const dir of d.views){const p=D.gameAdapter.pixels(d.id,{dir});frames[d.id+'/'+dir]={width:p.width,height:p.height,anchor:p.anchor,origin:p.origin,palette:d.district,indices:encode(p.indices),layers:encode(p.layers),depths:encode(Uint8Array.from(p.groundDepth,(v,i)=>p.indices[i]?Math.floor(v/2)+1:0))};}}
+const data={sourceHash,palettes,frames};fs.writeFileSync(target,'/* Compiled native city views; rebuild with scripts/compile-city-runtime.cjs. */\n(function(r,d){if(typeof module==="object"&&module.exports)module.exports=d;else r.HearthreaverCityPixels=d;})(globalThis,'+JSON.stringify(data)+');\n');console.log('Compiled '+Object.keys(frames).length+' city views.');

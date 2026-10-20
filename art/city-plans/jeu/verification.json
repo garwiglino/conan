@@ -1,0 +1,214 @@
+{
+  "mode": "worker",
+  "results": [
+    {
+      "target": "CF01",
+      "mobile": false,
+      "at": {
+        "x": -510115.88,
+        "y": -88656.8,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 6.199999999254942,
+        "p95FrameMs": 26.5,
+        "terrainCache": 4,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 2,
+        "architecture": {
+          "models": 5,
+          "pixelArea": 190239,
+          "maxModels": 96
+        }
+      },
+      "file": "CF01.png"
+    },
+    {
+      "target": "CF07",
+      "mobile": false,
+      "at": {
+        "x": -508061,
+        "y": -84523,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 9.199999999254942,
+        "p95FrameMs": 55,
+        "terrainCache": 9,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 5,
+        "architecture": {
+          "models": 11,
+          "pixelArea": 549809,
+          "maxModels": 96
+        }
+      },
+      "file": "CF07.png"
+    },
+    {
+      "target": "care_bed",
+      "mobile": false,
+      "at": {
+        "x": -505524.8,
+        "y": -84545.20000000001,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 5.5,
+        "p95FrameMs": 25.199999999254942,
+        "terrainCache": 14,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 7,
+        "architecture": {
+          "models": 16,
+          "pixelArea": 746318,
+          "maxModels": 96
+        }
+      },
+      "file": "care_bed.png"
+    },
+    {
+      "target": "sitting_bench",
+      "mobile": false,
+      "at": {
+        "x": -510188.3,
+        "y": -88787.70000000001,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 6.199999999254942,
+        "p95FrameMs": 22.199999999254942,
+        "terrainCache": 16,
+        "pending": 3,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 7,
+        "architecture": {
+          "models": 18,
+          "pixelArea": 814136,
+          "maxModels": 96
+        }
+      },
+      "file": "sitting_bench.png"
+    },
+    {
+      "target": "CF01",
+      "mobile": true,
+      "at": {
+        "x": -510115.88,
+        "y": -88656.8,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 6.200000002980232,
+        "p95FrameMs": 26.599999997764826,
+        "terrainCache": 4,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 1,
+        "architecture": {
+          "models": 4,
+          "pixelArea": 188578,
+          "maxModels": 96
+        }
+      },
+      "file": "CF01-mobile.png"
+    },
+    {
+      "target": "CF07",
+      "mobile": true,
+      "at": {
+        "x": -508061,
+        "y": -84523,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 7.5,
+        "p95FrameMs": 30.099999997764826,
+        "terrainCache": 9,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 4,
+        "architecture": {
+          "models": 9,
+          "pixelArea": 530476,
+          "maxModels": 96
+        }
+      },
+      "file": "CF07-mobile.png"
+    },
+    {
+      "target": "care_bed",
+      "mobile": true,
+      "at": {
+        "x": -505524.8,
+        "y": -84545.20000000001,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 5,
+        "p95FrameMs": 10,
+        "terrainCache": 14,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 6,
+        "architecture": {
+          "models": 13,
+          "pixelArea": 701987,
+          "maxModels": 96
+        }
+      },
+      "file": "care_bed-mobile.png"
+    },
+    {
+      "target": "sitting_bench",
+      "mobile": true,
+      "at": {
+        "x": -510188.3,
+        "y": -88787.70000000001,
+        "site": "town-1"
+      },
+      "metrics": {
+        "medianFrameMs": 5.100000001490116,
+        "p95FrameMs": 10.300000000745058,
+        "terrainCache": 16,
+        "pending": 3,
+        "sites": 83,
+        "buildings": 4530,
+        "workstations": 50,
+        "actorFrames": 0,
+        "fixtureFrames": 6,
+        "architecture": {
+          "models": 15,
+          "pixelArea": 769805,
+          "maxModels": 96
+        }
+      },
+      "file": "sitting_bench-mobile.png"
+    }
+  ],
+  "browserErrors": []
+}

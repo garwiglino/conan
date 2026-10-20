@@ -55,7 +55,10 @@
     "check:terrain-isometric": "node scripts/check-terrain-isometric.cjs",
     "package:terrain-isometric": "python3 scripts/package-terrain-isometric.py",
     "test:world-isometric": "node --test tests/world-isometric.test.cjs",
-    "check:world-isometric": "node scripts/check-world-isometric.cjs"
+    "check:world-isometric": "node scripts/check-world-isometric.cjs",
+    "build:city": "node scripts/design-clairfoyer-grid.cjs && node scripts/design-clairfoyer-districts.cjs --active && node scripts/embed-world.cjs",
+    "test:city": "node --test tests/city-integration.test.cjs tests/isometric-furniture.test.cjs tests/clairfoyer-district-architecture.test.cjs",
+    "check:city": "node scripts/check-city-game.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

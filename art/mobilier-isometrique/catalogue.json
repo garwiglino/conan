@@ -1,0 +1,5252 @@
+{
+  "status": "integrated_in_game",
+  "projection": "dimetric-2:1",
+  "nativeScale": {
+    "human": 19,
+    "tile": 16,
+    "door": 22
+  },
+  "cell": [
+    128,
+    128
+  ],
+  "anchor": [
+    64,
+    96
+  ],
+  "models": 44,
+  "stations": 49,
+  "districtPalettes": [
+    "clos",
+    "metiers",
+    "rive",
+    "halles",
+    "conseil",
+    "etapes",
+    "bois",
+    "greniers",
+    "sud",
+    "ancien-relais",
+    "resine"
+  ],
+  "assets": [
+    {
+      "id": "workbench",
+      "number": 1,
+      "label": "Établi commun",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/workbench.png",
+      "pixelHash": "90f3b996c8b55b95ad39ea7970ec87923913fd972aba2bd9694adc6e876e8d18",
+      "geometry": {
+        "width": 42,
+        "height": 33,
+        "depth": 19,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 26,
+          "depth": 12,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -13,
+            -6
+          ],
+          [
+            13,
+            -6
+          ],
+          [
+            13,
+            6
+          ],
+          [
+            -13,
+            6
+          ]
+        ],
+        "details": [
+          "plateau",
+          "quatre pieds",
+          "entretoise",
+          "mors fixe"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "workbench@64,96:operator",
+          "reservationKey": "workbench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            90
+          ],
+          "contact": [
+            49,
+            81
+          ],
+          "facing": "droite",
+          "approach": [
+            33,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -17,
+            5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "skin",
+        "net",
+        "sort",
+        "craft",
+        "prepare_clay",
+        "stitch",
+        "weave",
+        "joinery"
+      ],
+      "preview": {
+        "role": "smith",
+        "action": "craft"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 607,
+      "colors": 10,
+      "parts": [
+        "plateau",
+        "quatre pieds",
+        "entretoise",
+        "mors fixe"
+      ]
+    },
+    {
+      "id": "chopping_block",
+      "number": 2,
+      "label": "Billot",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/chopping_block.png",
+      "pixelHash": "503f29aec8a8c483269032268ea9c1d95f8e73f4ff64f8e6bf47202e7d2c47c5",
+      "geometry": {
+        "width": 24,
+        "height": 22,
+        "depth": 10,
+        "contactHeight": 7,
+        "nativePlan": {
+          "width": 10,
+          "depth": 10,
+          "height": 8
+        },
+        "groundFootprint": [
+          [
+            -5,
+            -5
+          ],
+          [
+            5,
+            -5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            -5,
+            5
+          ]
+        ],
+        "details": [
+          "souche",
+          "écorce",
+          "cerne et entailles"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "chopping_block@64,96:operator",
+          "reservationKey": "chopping_block@64,96:operator",
+          "role": "operator",
+          "feet": [
+            51,
+            94
+          ],
+          "contact": [
+            58,
+            87
+          ],
+          "facing": "droite",
+          "approach": [
+            42,
+            94
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -8.5,
+            4.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "hew"
+      ],
+      "preview": {
+        "role": "forester",
+        "action": "hew"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 212,
+      "colors": 11,
+      "parts": [
+        "souche",
+        "écorce",
+        "cerne et entailles"
+      ]
+    },
+    {
+      "id": "sawhorse",
+      "number": 3,
+      "label": "Chevalet de sciage",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/sawhorse.png",
+      "pixelHash": "0b02f7f3a8dedef3bfefef6f5f39f24e1a1c53f71bc3dba045de1c46f9675201",
+      "geometry": {
+        "width": 46,
+        "height": 35,
+        "depth": 21,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 30,
+          "depth": 12,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -15,
+            -6
+          ],
+          [
+            15,
+            -6
+          ],
+          [
+            15,
+            6
+          ],
+          [
+            -15,
+            6
+          ]
+        ],
+        "details": [
+          "deux tréteaux",
+          "traverses et berceau de sciage"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "sawhorse@64,96:operator",
+          "reservationKey": "sawhorse@64,96:operator",
+          "role": "operator",
+          "feet": [
+            40,
+            89
+          ],
+          "contact": [
+            47,
+            81
+          ],
+          "facing": "droite",
+          "approach": [
+            31,
+            89
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -19,
+            5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "saw"
+      ],
+      "preview": {
+        "role": "forester",
+        "action": "saw"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 516,
+      "colors": 6,
+      "parts": [
+        "deux tréteaux",
+        "traverses et berceau de sciage"
+      ]
+    },
+    {
+      "id": "anvil",
+      "number": 4,
+      "label": "Enclume sur souche",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 1,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/anvil.png",
+      "pixelHash": "d4eebece4cac3317986ff30b46aeaa6f58ce1eb150630583b6069616c75d3264",
+      "geometry": {
+        "width": 26,
+        "height": 27,
+        "depth": 11,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 12,
+          "depth": 10,
+          "height": 12
+        },
+        "groundFootprint": [
+          [
+            -6,
+            -5
+          ],
+          [
+            6,
+            -5
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            -6,
+            5
+          ]
+        ],
+        "details": [
+          "souche",
+          "pied",
+          "bigorne",
+          "table et trou carré"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "anvil@64,96:operator",
+          "reservationKey": "anvil@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            94
+          ],
+          "contact": [
+            57,
+            84
+          ],
+          "facing": "droite",
+          "approach": [
+            41,
+            94
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -9,
+            5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "forge"
+      ],
+      "preview": {
+        "role": "smith",
+        "action": "forge"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 275,
+      "colors": 9,
+      "parts": [
+        "souche",
+        "pied",
+        "bigorne",
+        "table et trou carré"
+      ]
+    },
+    {
+      "id": "forge",
+      "number": 5,
+      "label": "Forge et soufflet fixe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/forge.png",
+      "pixelHash": "a65273d3fb98a946908898e728d30d9b472012a1d8d60c995c4cf81ceff209a5",
+      "geometry": {
+        "width": 48,
+        "height": 52,
+        "depth": 22,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 26,
+          "depth": 18,
+          "height": 26
+        },
+        "groundFootprint": [
+          [
+            -13,
+            -9
+          ],
+          [
+            13,
+            -9
+          ],
+          [
+            13,
+            9
+          ],
+          [
+            -13,
+            9
+          ]
+        ],
+        "details": [
+          "foyer",
+          "hotte",
+          "cheminée",
+          "soufflet et levier fixe"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "forge@64,96:operator",
+          "reservationKey": "forge@64,96:operator",
+          "role": "operator",
+          "feet": [
+            55,
+            105
+          ],
+          "contact": [
+            55,
+            92
+          ],
+          "facing": "dos",
+          "approach": [
+            55,
+            114
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4.5,
+            13.5
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "bellows"
+      ],
+      "preview": {
+        "role": "smith",
+        "action": "bellows"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1088,
+      "colors": 18,
+      "parts": [
+        "foyer",
+        "hotte",
+        "cheminée",
+        "soufflet et levier fixe"
+      ]
+    },
+    {
+      "id": "smelter",
+      "number": 6,
+      "label": "Four de fusion",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/smelter.png",
+      "pixelHash": "3f9e35c27b7ff444588527e007e94319c5dc669491373fd22fab63cdc69eaa80",
+      "geometry": {
+        "width": 40,
+        "height": 49,
+        "depth": 18,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 18,
+          "depth": 18,
+          "height": 27
+        },
+        "groundFootprint": [
+          [
+            -9,
+            -9
+          ],
+          [
+            9,
+            -9
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            -9,
+            9
+          ]
+        ],
+        "details": [
+          "cuve maçonnée",
+          "bouche",
+          "tuyère et coulée"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "smelter@64,96:operator",
+          "reservationKey": "smelter@64,96:operator",
+          "role": "operator",
+          "feet": [
+            55,
+            105
+          ],
+          "contact": [
+            55,
+            93
+          ],
+          "facing": "dos",
+          "approach": [
+            55,
+            114
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4.5,
+            13.5
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "smelt"
+      ],
+      "preview": {
+        "role": "smith",
+        "action": "smelt"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1161,
+      "colors": 12,
+      "parts": [
+        "cuve maçonnée",
+        "bouche",
+        "tuyère et coulée"
+      ]
+    },
+    {
+      "id": "quench_trough",
+      "number": 7,
+      "label": "Auge de trempe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/quench_trough.png",
+      "pixelHash": "22059a470fa87f675d4085c4a435f3b2633778e24dcffdc5ab4de5d5f32269f1",
+      "geometry": {
+        "width": 36,
+        "height": 27,
+        "depth": 16,
+        "contactHeight": 5,
+        "nativePlan": {
+          "width": 22,
+          "depth": 10,
+          "height": 7
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -5
+          ],
+          [
+            11,
+            -5
+          ],
+          [
+            11,
+            5
+          ],
+          [
+            -11,
+            5
+          ]
+        ],
+        "details": [
+          "auge creuse",
+          "cerclages et eau de trempe"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "quench_trough@64,96:operator",
+          "reservationKey": "quench_trough@64,96:operator",
+          "role": "operator",
+          "feet": [
+            45,
+            91
+          ],
+          "contact": [
+            52,
+            86
+          ],
+          "facing": "droite",
+          "approach": [
+            36,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -14.5,
+            4.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "quench",
+        "pour"
+      ],
+      "preview": {
+        "role": "smith",
+        "action": "quench"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 485,
+      "colors": 12,
+      "parts": [
+        "auge creuse",
+        "cerclages et eau de trempe"
+      ]
+    },
+    {
+      "id": "potters_wheel",
+      "number": 8,
+      "label": "Tour de potier",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 2,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/potters_wheel.png",
+      "pixelHash": "76fcedc29a0b323e969c5628c55cf12cc078d8f23ca4fb473319b88328cec2e0",
+      "geometry": {
+        "width": 32,
+        "height": 27,
+        "depth": 14,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 14,
+          "depth": 14,
+          "height": 9
+        },
+        "groundFootprint": [
+          [
+            -7,
+            -7
+          ],
+          [
+            7,
+            -7
+          ],
+          [
+            7,
+            7
+          ],
+          [
+            -7,
+            7
+          ]
+        ],
+        "details": [
+          "plateau tournant",
+          "arbre",
+          "volant",
+          "pédale et siège"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "potters_wheel@64,96:operator",
+          "reservationKey": "potters_wheel@64,96:operator",
+          "role": "operator",
+          "feet": [
+            52,
+            91
+          ],
+          "contact": [
+            58,
+            85
+          ],
+          "facing": "droite",
+          "approach": [
+            43,
+            91
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              52,
+              86
+            ],
+            "height": 5
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -11,
+            1
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "pottery"
+      ],
+      "preview": {
+        "role": "potter",
+        "action": "pottery"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 392,
+      "colors": 6,
+      "parts": [
+        "plateau tournant",
+        "arbre",
+        "volant",
+        "pédale et siège"
+      ]
+    },
+    {
+      "id": "pottery_kiln",
+      "number": 9,
+      "label": "Four de potier",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/pottery_kiln.png",
+      "pixelHash": "4ba9fe30738b294a39281e83462229493c95c4962ecaa33fa07c44798985b596",
+      "geometry": {
+        "width": 42,
+        "height": 47,
+        "depth": 19,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 20,
+          "depth": 18,
+          "height": 24
+        },
+        "groundFootprint": [
+          [
+            -10,
+            -9
+          ],
+          [
+            10,
+            -9
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            -10,
+            9
+          ]
+        ],
+        "details": [
+          "chambre",
+          "sole",
+          "bouche",
+          "évent et rebord"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "pottery_kiln@64,96:operator",
+          "reservationKey": "pottery_kiln@64,96:operator",
+          "role": "operator",
+          "feet": [
+            55,
+            105
+          ],
+          "contact": [
+            55,
+            93
+          ],
+          "facing": "dos",
+          "approach": [
+            55,
+            114
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4.5,
+            13.5
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "kiln_load"
+      ],
+      "preview": {
+        "role": "potter",
+        "action": "kiln_load"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1142,
+      "colors": 16,
+      "parts": [
+        "chambre",
+        "sole",
+        "bouche",
+        "évent et rebord"
+      ]
+    },
+    {
+      "id": "glass_bench",
+      "number": 10,
+      "label": "Banc de verrier",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/glass_bench.png",
+      "pixelHash": "cb31637d374c2224eaf26a3a82be72142f58d82a2e9f2d37619cbeff43013bb9",
+      "geometry": {
+        "width": 44,
+        "height": 34,
+        "depth": 20,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 28,
+          "depth": 12,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -14,
+            -6
+          ],
+          [
+            14,
+            -6
+          ],
+          [
+            14,
+            6
+          ],
+          [
+            -14,
+            6
+          ]
+        ],
+        "details": [
+          "banc",
+          "appuis de canne et siège de verrier"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "glass_bench@64,96:operator",
+          "reservationKey": "glass_bench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            45,
+            87
+          ],
+          "contact": [
+            62,
+            87
+          ],
+          "facing": "droite",
+          "approach": [
+            36,
+            87
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              45,
+              82
+            ],
+            "height": 5
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -18.5,
+            0.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "glass_roll"
+      ],
+      "preview": {
+        "role": "glassworker",
+        "action": "glass_roll"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 681,
+      "colors": 10,
+      "parts": [
+        "banc",
+        "appuis de canne et siège de verrier"
+      ]
+    },
+    {
+      "id": "glass_furnace",
+      "number": 11,
+      "label": "Four de verrier",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/glass_furnace.png",
+      "pixelHash": "38de162e66b3d7a2669d62691078adddbb66575ffcb1b8e66a31e6fc969f6fe8",
+      "geometry": {
+        "width": 42,
+        "height": 48,
+        "depth": 19,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 20,
+          "depth": 18,
+          "height": 25
+        },
+        "groundFootprint": [
+          [
+            -10,
+            -9
+          ],
+          [
+            10,
+            -9
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            -10,
+            9
+          ]
+        ],
+        "details": [
+          "bouche de travail",
+          "sole",
+          "cheminée et parement"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "glass_furnace@64,96:operator",
+          "reservationKey": "glass_furnace@64,96:operator",
+          "role": "operator",
+          "feet": [
+            37,
+            101
+          ],
+          "contact": [
+            55,
+            91
+          ],
+          "facing": "droite",
+          "approach": [
+            28,
+            101
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -8.5,
+            18.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "glass_blow"
+      ],
+      "preview": {
+        "role": "glassworker",
+        "action": "glass_blow"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1179,
+      "colors": 12,
+      "parts": [
+        "bouche de travail",
+        "sole",
+        "cheminée et parement"
+      ]
+    },
+    {
+      "id": "loom",
+      "number": 12,
+      "label": "Métier à tisser",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 3,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/loom.png",
+      "pixelHash": "56c9fbdeee9ab30d39796fe9e17b8a9ceb3b538a24a89658efd67fb9563f71ba",
+      "geometry": {
+        "width": 38,
+        "height": 45,
+        "depth": 17,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 24,
+          "depth": 10,
+          "height": 24
+        },
+        "groundFootprint": [
+          [
+            -12,
+            -5
+          ],
+          [
+            12,
+            -5
+          ],
+          [
+            12,
+            5
+          ],
+          [
+            -12,
+            5
+          ]
+        ],
+        "details": [
+          "montants",
+          "ensouples",
+          "fils",
+          "peigne et pédales"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "loom@64,96:operator",
+          "reservationKey": "loom@64,96:operator",
+          "role": "operator",
+          "feet": [
+            59,
+            103
+          ],
+          "contact": [
+            59,
+            89
+          ],
+          "facing": "dos",
+          "approach": [
+            59,
+            112
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4.5,
+            9.5
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "loom"
+      ],
+      "preview": {
+        "role": "weaver",
+        "action": "loom"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 842,
+      "colors": 13,
+      "parts": [
+        "montants",
+        "ensouples",
+        "fils",
+        "peigne et pédales"
+      ]
+    },
+    {
+      "id": "fiber_rack",
+      "number": 13,
+      "label": "Râtelier à fibres",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/fiber_rack.png",
+      "pixelHash": "758d83d91fd963ff5c7354829609d746737293b83cf11ed83f52eb647efa7503",
+      "geometry": {
+        "width": 34,
+        "height": 38,
+        "depth": 15,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 20,
+          "depth": 10,
+          "height": 19
+        },
+        "groundFootprint": [
+          [
+            -10,
+            -5
+          ],
+          [
+            10,
+            -5
+          ],
+          [
+            10,
+            5
+          ],
+          [
+            -10,
+            5
+          ]
+        ],
+        "details": [
+          "montants",
+          "fuseaux fixes et traverses"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "fiber_rack@64,96:operator",
+          "reservationKey": "fiber_rack@64,96:operator",
+          "role": "operator",
+          "feet": [
+            46,
+            92
+          ],
+          "contact": [
+            53,
+            82
+          ],
+          "facing": "droite",
+          "approach": [
+            37,
+            92
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -13,
+            5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "spin"
+      ],
+      "preview": {
+        "role": "spinner",
+        "action": "spin"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 792,
+      "colors": 10,
+      "parts": [
+        "montants",
+        "fuseaux fixes et traverses"
+      ]
+    },
+    {
+      "id": "hide_frame",
+      "number": 14,
+      "label": "Cadre à peaux",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/hide_frame.png",
+      "pixelHash": "212e6d80d7bfd8407c7aaea99115b2935d7ab26fed30914c457c9734596ed670",
+      "geometry": {
+        "width": 34,
+        "height": 42,
+        "depth": 15,
+        "contactHeight": 12,
+        "nativePlan": {
+          "width": 22,
+          "depth": 8,
+          "height": 23
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -4
+          ],
+          [
+            11,
+            -4
+          ],
+          [
+            11,
+            4
+          ],
+          [
+            -11,
+            4
+          ]
+        ],
+        "details": [
+          "cadre",
+          "liens périphériques et surface tendue"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "hide_frame@64,96:operator",
+          "reservationKey": "hide_frame@64,96:operator",
+          "role": "operator",
+          "feet": [
+            45,
+            91
+          ],
+          "contact": [
+            52,
+            79
+          ],
+          "facing": "droite",
+          "approach": [
+            36,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -14.5,
+            4.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "tan",
+        "stretch_hide"
+      ],
+      "preview": {
+        "role": "tanner",
+        "action": "tan"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 727,
+      "colors": 12,
+      "parts": [
+        "cadre",
+        "liens périphériques et surface tendue"
+      ]
+    },
+    {
+      "id": "dye_vat",
+      "number": 15,
+      "label": "Cuve de teinture",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/dye_vat.png",
+      "pixelHash": "6acff6dadba8d2334fd82c83c61d57873a684a502074bd21cdaa33bf23579d95",
+      "geometry": {
+        "width": 32,
+        "height": 29,
+        "depth": 14,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 14,
+          "depth": 14,
+          "height": 11
+        },
+        "groundFootprint": [
+          [
+            -7,
+            -7
+          ],
+          [
+            7,
+            -7
+          ],
+          [
+            7,
+            7
+          ],
+          [
+            -7,
+            7
+          ]
+        ],
+        "details": [
+          "cuve ouverte",
+          "douves",
+          "cerclages et bain"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "dye_vat@64,96:operator",
+          "reservationKey": "dye_vat@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            94
+          ],
+          "contact": [
+            55,
+            85
+          ],
+          "facing": "droite",
+          "approach": [
+            39,
+            94
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -10,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "stir",
+        "dye_dip",
+        "wring"
+      ],
+      "preview": {
+        "role": "dyer",
+        "action": "stir"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 581,
+      "colors": 13,
+      "parts": [
+        "cuve ouverte",
+        "douves",
+        "cerclages et bain"
+      ]
+    },
+    {
+      "id": "rope_bench",
+      "number": 16,
+      "label": "Banc de corderie",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/01-ateliers.png",
+        "row": 4,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/rope_bench.png",
+      "pixelHash": "4617e2f62794ad9ee9359aca646df5c017eadd731e0bb64b52beba7ca8368a77",
+      "geometry": {
+        "width": 46,
+        "height": 36,
+        "depth": 21,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 32,
+          "depth": 10,
+          "height": 11
+        },
+        "groundFootprint": [
+          [
+            -16,
+            -5
+          ],
+          [
+            16,
+            -5
+          ],
+          [
+            16,
+            5
+          ],
+          [
+            -16,
+            5
+          ]
+        ],
+        "details": [
+          "banc long",
+          "peignes",
+          "crochets et axe de torsion"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "rope_bench@64,96:operator",
+          "reservationKey": "rope_bench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            40,
+            89
+          ],
+          "contact": [
+            47,
+            80
+          ],
+          "facing": "droite",
+          "approach": [
+            31,
+            89
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -19,
+            5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "twist_rope"
+      ],
+      "preview": {
+        "role": "ropemaker",
+        "action": "twist_rope"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 647,
+      "colors": 12,
+      "parts": [
+        "banc long",
+        "peignes",
+        "crochets et axe de torsion"
+      ]
+    },
+    {
+      "id": "well",
+      "number": 17,
+      "label": "Puits à treuil",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/well.png",
+      "pixelHash": "e3f65b015aa6d45623448b953dd4af8df28f2afe21163564b4678a579d6e8c65",
+      "geometry": {
+        "width": 40,
+        "height": 52,
+        "depth": 18,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 18,
+          "depth": 18,
+          "height": 30
+        },
+        "groundFootprint": [
+          [
+            -9,
+            -9
+          ],
+          [
+            9,
+            -9
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            -9,
+            9
+          ]
+        ],
+        "details": [
+          "margelle ouverte",
+          "treuil",
+          "corde",
+          "manivelle et couverture"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "well@64,96:operator",
+          "reservationKey": "well@64,96:operator",
+          "role": "operator",
+          "feet": [
+            45,
+            93
+          ],
+          "contact": [
+            52,
+            83
+          ],
+          "facing": "droite",
+          "approach": [
+            36,
+            93
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -12.5,
+            6.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "draw_water"
+      ],
+      "preview": {
+        "role": "water_carrier",
+        "action": "draw_water"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1376,
+      "colors": 17,
+      "parts": [
+        "margelle ouverte",
+        "treuil",
+        "corde",
+        "manivelle et couverture"
+      ]
+    },
+    {
+      "id": "grain_mill",
+      "number": 18,
+      "label": "Meule et trémie",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/grain_mill.png",
+      "pixelHash": "ac36a8758c6511214a9e4718e68994eee308247847b6340104d012a2d0d3ff0a",
+      "geometry": {
+        "width": 38,
+        "height": 40,
+        "depth": 17,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 18,
+          "depth": 16,
+          "height": 19
+        },
+        "groundFootprint": [
+          [
+            -9,
+            -8
+          ],
+          [
+            9,
+            -8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            -9,
+            8
+          ]
+        ],
+        "details": [
+          "meules",
+          "axe",
+          "trémie et bec de sortie"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "grain_mill@64,96:operator",
+          "reservationKey": "grain_mill@64,96:operator",
+          "role": "operator",
+          "feet": [
+            46,
+            93
+          ],
+          "contact": [
+            53,
+            83
+          ],
+          "facing": "droite",
+          "approach": [
+            37,
+            93
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -12,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "mill_feed",
+        "mill_collect"
+      ],
+      "preview": {
+        "role": "miller",
+        "action": "mill_feed"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 633,
+      "colors": 17,
+      "parts": [
+        "meules",
+        "axe",
+        "trémie et bec de sortie"
+      ]
+    },
+    {
+      "id": "oil_press",
+      "number": 19,
+      "label": "Presse à huile",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/oil_press.png",
+      "pixelHash": "d7ac1434da455c8e0b66b51bec0e2b87c8676cf9c096ee9c20c46986efe715f5",
+      "geometry": {
+        "width": 38,
+        "height": 46,
+        "depth": 17,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 18,
+          "depth": 16,
+          "height": 25
+        },
+        "groundFootprint": [
+          [
+            -9,
+            -8
+          ],
+          [
+            9,
+            -8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            -9,
+            8
+          ]
+        ],
+        "details": [
+          "bâti",
+          "vis",
+          "presse",
+          "bac et évacuation"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "oil_press@64,96:operator",
+          "reservationKey": "oil_press@64,96:operator",
+          "role": "operator",
+          "feet": [
+            56,
+            104
+          ],
+          "contact": [
+            56,
+            91
+          ],
+          "facing": "dos",
+          "approach": [
+            56,
+            113
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4,
+            12
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "press_oil"
+      ],
+      "preview": {
+        "role": "miller",
+        "action": "press_oil"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 879,
+      "colors": 15,
+      "parts": [
+        "bâti",
+        "vis",
+        "presse",
+        "bac et évacuation"
+      ]
+    },
+    {
+      "id": "kitchen_table",
+      "number": 20,
+      "label": "Table de cuisine",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 1,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/kitchen_table.png",
+      "pixelHash": "734f0f4cc83436f44db34f6722ea6fbacbf789513b67bf6ecaecd8331b06aac9",
+      "geometry": {
+        "width": 42,
+        "height": 33,
+        "depth": 19,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 26,
+          "depth": 12,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -13,
+            -6
+          ],
+          [
+            13,
+            -6
+          ],
+          [
+            13,
+            6
+          ],
+          [
+            -13,
+            6
+          ]
+        ],
+        "details": [
+          "plateau de travail",
+          "planche fixe et barre basse"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "kitchen_table@64,96:operator",
+          "reservationKey": "kitchen_table@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            90
+          ],
+          "contact": [
+            49,
+            82
+          ],
+          "facing": "droite",
+          "approach": [
+            33,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -17,
+            5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "chop_food",
+        "salt_food",
+        "pack_food"
+      ],
+      "preview": {
+        "role": "cook",
+        "action": "chop_food"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 570,
+      "colors": 10,
+      "parts": [
+        "plateau de travail",
+        "planche fixe et barre basse"
+      ]
+    },
+    {
+      "id": "cooking_hearth",
+      "number": 21,
+      "label": "Foyer et marmite fixe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/cooking_hearth.png",
+      "pixelHash": "8c96b53312325c76bae24ae161b41ecabd21547211eafa5f05c01514ebfe64e7",
+      "geometry": {
+        "width": 38,
+        "height": 38,
+        "depth": 17,
+        "contactHeight": 7,
+        "nativePlan": {
+          "width": 18,
+          "depth": 16,
+          "height": 17
+        },
+        "groundFootprint": [
+          [
+            -9,
+            -8
+          ],
+          [
+            9,
+            -8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            -9,
+            8
+          ]
+        ],
+        "details": [
+          "pierres",
+          "braises",
+          "trépied et marmite fixe"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "cooking_hearth@64,96:operator",
+          "reservationKey": "cooking_hearth@64,96:operator",
+          "role": "operator",
+          "feet": [
+            46,
+            93
+          ],
+          "contact": [
+            53,
+            86
+          ],
+          "facing": "droite",
+          "approach": [
+            37,
+            93
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -12,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "stoke_fire",
+        "warm_hands",
+        "pitch",
+        "cook",
+        "wax"
+      ],
+      "preview": {
+        "role": "cook",
+        "action": "cook"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 552,
+      "colors": 19,
+      "parts": [
+        "pierres",
+        "braises",
+        "trépied et marmite fixe"
+      ]
+    },
+    {
+      "id": "bread_oven",
+      "number": 22,
+      "label": "Four de cuisson",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/bread_oven.png",
+      "pixelHash": "5fb84d0d370330410c2a6bffd090bd3694ef6adddb161be16db10b00aae293d5",
+      "geometry": {
+        "width": 46,
+        "height": 49,
+        "depth": 21,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 22,
+          "depth": 20,
+          "height": 24
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -10
+          ],
+          [
+            11,
+            -10
+          ],
+          [
+            11,
+            10
+          ],
+          [
+            -11,
+            10
+          ]
+        ],
+        "details": [
+          "socle",
+          "voûte",
+          "bouche et conduit"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "bread_oven@64,96:operator",
+          "reservationKey": "bread_oven@64,96:operator",
+          "role": "operator",
+          "feet": [
+            54,
+            105
+          ],
+          "contact": [
+            54,
+            93
+          ],
+          "facing": "dos",
+          "approach": [
+            54,
+            114
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4,
+            14
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [],
+      "preview": {
+        "role": "civilian",
+        "action": "idle"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1306,
+      "colors": 13,
+      "parts": [
+        "socle",
+        "voûte",
+        "bouche et conduit"
+      ]
+    },
+    {
+      "id": "apothecary_table",
+      "number": 23,
+      "label": "Table de remèdes",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/apothecary_table.png",
+      "pixelHash": "1e4ab7b04416921e111fe517ddfa3f681f8d1a8dd0dccff19bdcfff68150b3d1",
+      "geometry": {
+        "width": 40,
+        "height": 33,
+        "depth": 18,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 24,
+          "depth": 12,
+          "height": 11
+        },
+        "groundFootprint": [
+          [
+            -12,
+            -6
+          ],
+          [
+            12,
+            -6
+          ],
+          [
+            12,
+            6
+          ],
+          [
+            -12,
+            6
+          ]
+        ],
+        "details": [
+          "table",
+          "mortier fixe",
+          "tablette et rangement vide"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "apothecary_table@64,96:operator",
+          "reservationKey": "apothecary_table@64,96:operator",
+          "role": "operator",
+          "feet": [
+            43,
+            91
+          ],
+          "contact": [
+            50,
+            83
+          ],
+          "facing": "droite",
+          "approach": [
+            34,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -15.5,
+            5.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "medicinal",
+        "mortar"
+      ],
+      "preview": {
+        "role": "herbalist",
+        "action": "medicinal"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 565,
+      "colors": 13,
+      "parts": [
+        "table",
+        "mortier fixe",
+        "tablette et rangement vide"
+      ]
+    },
+    {
+      "id": "care_bed",
+      "number": 24,
+      "label": "Lit de soins vide",
+      "posture": "couche",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 2,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/care_bed.png",
+      "pixelHash": "77d99e52d8212d4c42050fbbb160fbc27c010270281e8883ccc90d5331ca87d4",
+      "geometry": {
+        "width": 50,
+        "height": 37,
+        "depth": 23,
+        "contactHeight": 4,
+        "nativePlan": {
+          "width": 32,
+          "depth": 14,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -16,
+            -7
+          ],
+          [
+            16,
+            -7
+          ],
+          [
+            16,
+            7
+          ],
+          [
+            -16,
+            7
+          ]
+        ],
+        "details": [
+          "cadre",
+          "quatre pieds",
+          "matelas",
+          "oreiller et chevet"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "care_bed@64,96:operator",
+          "reservationKey": "care_bed@64,96:operator",
+          "role": "operator",
+          "feet": [
+            39,
+            89
+          ],
+          "contact": [
+            46,
+            85
+          ],
+          "facing": "droite",
+          "approach": [
+            30,
+            89
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -19.5,
+            5.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        },
+        "patient": {
+          "id": "care_bed@64,96:patient",
+          "reservationKey": "care_bed@64,96:patient",
+          "role": "patient",
+          "feet": [
+            64,
+            96
+          ],
+          "contact": [
+            64,
+            90
+          ],
+          "facing": "droite",
+          "approach": [
+            37,
+            96
+          ],
+          "support": {
+            "kind": "bed",
+            "surface": [
+              64,
+              96
+            ],
+            "height": 6,
+            "axis": [
+              1,
+              0.5
+            ],
+            "angle": 63.43494882292201
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            0,
+            0
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "bandage"
+      ],
+      "preview": {
+        "role": "healer",
+        "action": "bandage"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 823,
+      "colors": 13,
+      "parts": [
+        "cadre",
+        "quatre pieds",
+        "matelas",
+        "oreiller et chevet"
+      ]
+    },
+    {
+      "id": "sleeping_mat",
+      "number": 25,
+      "label": "Couchage vide",
+      "posture": "couche",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/sleeping_mat.png",
+      "pixelHash": "e6a9a813452bf39fe76428ce5de752b043761b4a4ddc36fbaeb3cdcdfe0d01ae",
+      "geometry": {
+        "width": 44,
+        "height": 27,
+        "depth": 20,
+        "contactHeight": 2,
+        "nativePlan": {
+          "width": 28,
+          "depth": 12,
+          "height": 3
+        },
+        "groundFootprint": [
+          [
+            -14,
+            -6
+          ],
+          [
+            14,
+            -6
+          ],
+          [
+            14,
+            6
+          ],
+          [
+            -14,
+            6
+          ]
+        ],
+        "details": [
+          "natte",
+          "bord cousu",
+          "couverture et oreiller"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "sleeping_mat@64,96:operator",
+          "reservationKey": "sleeping_mat@64,96:operator",
+          "role": "operator",
+          "feet": [
+            64,
+            96
+          ],
+          "contact": [
+            64,
+            94
+          ],
+          "facing": "droite",
+          "approach": [
+            37,
+            96
+          ],
+          "support": {
+            "kind": "bed",
+            "surface": [
+              64,
+              100
+            ],
+            "height": 2,
+            "axis": [
+              1,
+              0.5
+            ],
+            "angle": 63.43494882292201
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            0,
+            0
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "lie_down",
+        "sleep",
+        "wake"
+      ],
+      "preview": {
+        "role": "civilian",
+        "action": "sleep"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 381,
+      "colors": 14,
+      "parts": [
+        "natte",
+        "bord cousu",
+        "couverture et oreiller"
+      ]
+    },
+    {
+      "id": "sitting_bench",
+      "number": 26,
+      "label": "Banc d’assise",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "gauche",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/sitting_bench.png",
+      "pixelHash": "bab8af00efb22530930621a008c4a03f24bdaedfc4ed09d17d49ea338c650cf5",
+      "geometry": {
+        "width": 35,
+        "height": 25.5,
+        "depth": 15.5,
+        "contactHeight": 5,
+        "nativePlan": {
+          "width": 24,
+          "depth": 7,
+          "height": 6
+        },
+        "groundFootprint": [
+          [
+            -12,
+            -3.5
+          ],
+          [
+            12,
+            -3.5
+          ],
+          [
+            12,
+            3.5
+          ],
+          [
+            -12,
+            3.5
+          ]
+        ],
+        "details": [
+          "assise",
+          "pieds",
+          "entretoise et dosseret bas"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "sitting_bench@64,96:operator",
+          "reservationKey": "sitting_bench@64,96:operator",
+          "role": "operator",
+          "feet": [
+            63,
+            96
+          ],
+          "contact": [
+            63,
+            91
+          ],
+          "facing": "gauche",
+          "approach": [
+            81,
+            96
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              63,
+              91
+            ],
+            "height": 5
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -0.5,
+            0.5
+          ],
+          "logicalFacing": [
+            -1,
+            1
+          ]
+        }
+      },
+      "activities": [
+        "sit_down",
+        "seated",
+        "stand_up"
+      ],
+      "preview": {
+        "role": "civilian",
+        "action": "seated"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 381,
+      "colors": 5,
+      "parts": [
+        "assise",
+        "pieds",
+        "entretoise et dosseret bas"
+      ]
+    },
+    {
+      "id": "meal_table",
+      "number": 27,
+      "label": "Table et tabourets",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/meal_table.png",
+      "pixelHash": "57b2d79cb17cba18c2a77db308b4030c39025cf4e7575960aded55447a328a7b",
+      "geometry": {
+        "width": 40,
+        "height": 32,
+        "depth": 18,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 22,
+          "depth": 14,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -7
+          ],
+          [
+            11,
+            -7
+          ],
+          [
+            11,
+            7
+          ],
+          [
+            -11,
+            7
+          ]
+        ],
+        "details": [
+          "table",
+          "entretoises et deux tabourets"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "meal_table@64,96:operator",
+          "reservationKey": "meal_table@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            89
+          ],
+          "contact": [
+            54,
+            83
+          ],
+          "facing": "droite",
+          "approach": [
+            39,
+            89
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              48,
+              84
+            ],
+            "height": 5
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -15,
+            1
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "eat",
+        "drink"
+      ],
+      "preview": {
+        "role": "civilian",
+        "action": "eat"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 741,
+      "colors": 6,
+      "parts": [
+        "table",
+        "entretoises et deux tabourets"
+      ]
+    },
+    {
+      "id": "market_stall",
+      "number": 28,
+      "label": "Étal vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 3,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/market_stall.png",
+      "pixelHash": "5c8810abd2debc150e91f717305f06752f58cee3088934dcdeb124e63fa5a16c",
+      "geometry": {
+        "width": 50,
+        "height": 56,
+        "depth": 23,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 28,
+          "depth": 18,
+          "height": 29
+        },
+        "groundFootprint": [
+          [
+            -14,
+            -9
+          ],
+          [
+            14,
+            -9
+          ],
+          [
+            14,
+            9
+          ],
+          [
+            -14,
+            9
+          ]
+        ],
+        "details": [
+          "quatre poteaux",
+          "auvent",
+          "comptoir et tablette vide"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "market_stall@64,96:operator",
+          "reservationKey": "market_stall@64,96:operator",
+          "role": "operator",
+          "feet": [
+            40,
+            90
+          ],
+          "contact": [
+            47,
+            81
+          ],
+          "facing": "droite",
+          "approach": [
+            31,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -18,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "ledger",
+        "weigh",
+        "count",
+        "handover",
+        "message"
+      ],
+      "preview": {
+        "role": "harbourmaster",
+        "action": "ledger"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1775,
+      "colors": 13,
+      "parts": [
+        "quatre poteaux",
+        "auvent",
+        "comptoir et tablette vide"
+      ]
+    },
+    {
+      "id": "clerks_desk",
+      "number": 29,
+      "label": "Pupitre et tabouret",
+      "posture": "assis",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/clerks_desk.png",
+      "pixelHash": "7043f726cdd5f35c11418cc75734030784edd60d2b249d34d42f01480210ad20",
+      "geometry": {
+        "width": 38,
+        "height": 34,
+        "depth": 17,
+        "contactHeight": 11,
+        "nativePlan": {
+          "width": 22,
+          "depth": 12,
+          "height": 13
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -6
+          ],
+          [
+            11,
+            -6
+          ],
+          [
+            11,
+            6
+          ],
+          [
+            -11,
+            6
+          ]
+        ],
+        "details": [
+          "pupitre incliné",
+          "rebord",
+          "tablette et tabouret"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "clerks_desk@64,96:operator",
+          "reservationKey": "clerks_desk@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            89
+          ],
+          "contact": [
+            54,
+            80
+          ],
+          "facing": "droite",
+          "approach": [
+            39,
+            89
+          ],
+          "support": {
+            "kind": "seat",
+            "surface": [
+              48,
+              84
+            ],
+            "height": 5
+          },
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -15,
+            1
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [],
+      "preview": {
+        "role": "harbourmaster",
+        "action": "ledger"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 715,
+      "colors": 6,
+      "parts": [
+        "pupitre incliné",
+        "rebord",
+        "tablette et tabouret"
+      ]
+    },
+    {
+      "id": "beehive",
+      "number": 30,
+      "label": "Ruche",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/beehive.png",
+      "pixelHash": "ee7deb9b29c5117ba8df0f871183d0bb2e74c1690f19e332e97f461ab46002a7",
+      "geometry": {
+        "width": 28,
+        "height": 33,
+        "depth": 12,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 12,
+          "depth": 12,
+          "height": 17
+        },
+        "groundFootprint": [
+          [
+            -6,
+            -6
+          ],
+          [
+            6,
+            -6
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            -6,
+            6
+          ]
+        ],
+        "details": [
+          "corps tressé",
+          "couverture",
+          "planche et entrée"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "beehive@64,96:operator",
+          "reservationKey": "beehive@64,96:operator",
+          "role": "operator",
+          "feet": [
+            49,
+            94
+          ],
+          "contact": [
+            56,
+            86
+          ],
+          "facing": "droite",
+          "approach": [
+            40,
+            94
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -9.5,
+            5.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "smoke_hive",
+        "honey"
+      ],
+      "preview": {
+        "role": "beekeeper",
+        "action": "smoke_hive"
+      },
+      "winter": {
+        "setting": "dormant",
+        "reason": "Ruche laissée fermée pendant l’hivernage."
+      },
+      "pixelCount": 467,
+      "colors": 10,
+      "parts": [
+        "corps tressé",
+        "couverture",
+        "planche et entrée"
+      ]
+    },
+    {
+      "id": "stable_stall",
+      "number": 31,
+      "label": "Module d’étable vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/stable_stall.png",
+      "pixelHash": "7003056c610c86c953cf205db1e7a37ab5729f2d705f670e5327d61d2fabf7e2",
+      "geometry": {
+        "width": 62,
+        "height": 58,
+        "depth": 29,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 32,
+          "depth": 26,
+          "height": 25
+        },
+        "groundFootprint": [
+          [
+            -16,
+            -13
+          ],
+          [
+            16,
+            -13
+          ],
+          [
+            16,
+            13
+          ],
+          [
+            -16,
+            13
+          ]
+        ],
+        "details": [
+          "poteaux",
+          "cloison",
+          "râtelier vide et passage ouvert"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "stable_stall@64,96:operator",
+          "reservationKey": "stable_stall@64,96:operator",
+          "role": "operator",
+          "feet": [
+            37,
+            90
+          ],
+          "contact": [
+            44,
+            82
+          ],
+          "facing": "droite",
+          "approach": [
+            28,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -19.5,
+            7.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "groom"
+      ],
+      "preview": {
+        "role": "groom",
+        "action": "groom"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1731,
+      "colors": 8,
+      "parts": [
+        "poteaux",
+        "cloison",
+        "râtelier vide et passage ouvert"
+      ]
+    },
+    {
+      "id": "feeding_trough",
+      "number": 32,
+      "label": "Mangeoire et abreuvoir",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/02-vie-ferme.png",
+        "row": 4,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/feeding_trough.png",
+      "pixelHash": "6cf22e5a24a00cf05e8fe8908f8d82cb90ae4dcbe8c26f9a2c043e4eecddfc27",
+      "geometry": {
+        "width": 40,
+        "height": 29,
+        "depth": 18,
+        "contactHeight": 5,
+        "nativePlan": {
+          "width": 24,
+          "depth": 12,
+          "height": 7
+        },
+        "groundFootprint": [
+          [
+            -12,
+            -6
+          ],
+          [
+            12,
+            -6
+          ],
+          [
+            12,
+            6
+          ],
+          [
+            -12,
+            6
+          ]
+        ],
+        "details": [
+          "deux compartiments",
+          "séparateur et abreuvoir"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "feeding_trough@64,96:operator",
+          "reservationKey": "feeding_trough@64,96:operator",
+          "role": "operator",
+          "feet": [
+            43,
+            91
+          ],
+          "contact": [
+            50,
+            86
+          ],
+          "facing": "droite",
+          "approach": [
+            34,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -15.5,
+            5.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        },
+        "water": {
+          "id": "feeding_trough@64,96:water",
+          "reservationKey": "feeding_trough@64,96:operator",
+          "role": "water",
+          "feet": [
+            45,
+            96
+          ],
+          "contact": [
+            52,
+            91
+          ],
+          "facing": "droite",
+          "approach": [
+            36,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -9.5,
+            9.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "deice_trough",
+        "feed"
+      ],
+      "preview": {
+        "role": "shepherd",
+        "action": "feed"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 583,
+      "colors": 10,
+      "parts": [
+        "deux compartiments",
+        "séparateur et abreuvoir"
+      ]
+    },
+    {
+      "id": "care_stall",
+      "number": 33,
+      "label": "Stalle de traite et tonte vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/care_stall.png",
+      "pixelHash": "6841ee11b76aa5c4d9a0cf9355b20b233e98490a3f0e9dfa194ec4a151004f5e",
+      "geometry": {
+        "width": 58,
+        "height": 51,
+        "depth": 27,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 30,
+          "depth": 24,
+          "height": 20
+        },
+        "groundFootprint": [
+          [
+            -15,
+            -12
+          ],
+          [
+            15,
+            -12
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            -15,
+            12
+          ]
+        ],
+        "details": [
+          "barres de maintien",
+          "portillon et ouverture latérale"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "care_stall@64,96:operator",
+          "reservationKey": "care_stall@64,96:operator",
+          "role": "operator",
+          "feet": [
+            38,
+            90
+          ],
+          "contact": [
+            45,
+            82
+          ],
+          "facing": "droite",
+          "approach": [
+            29,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -19,
+            7
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "herd",
+        "milk",
+        "shear"
+      ],
+      "preview": {
+        "role": "shepherd",
+        "action": "milk"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1406,
+      "colors": 6,
+      "parts": [
+        "barres de maintien",
+        "portillon et ouverture latérale"
+      ]
+    },
+    {
+      "id": "enclosure_gate",
+      "number": 34,
+      "label": "Enclos et portillon",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/enclosure_gate.png",
+      "pixelHash": "fbc5d3682b4472fedb1f21555dd2b6c85f21f4d17d21a3287c5663ef1a941d50",
+      "geometry": {
+        "width": 44,
+        "height": 44,
+        "depth": 20,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 32,
+          "depth": 8,
+          "height": 20
+        },
+        "groundFootprint": [
+          [
+            -16,
+            -4
+          ],
+          [
+            16,
+            -4
+          ],
+          [
+            16,
+            4
+          ],
+          [
+            -16,
+            4
+          ]
+        ],
+        "details": [
+          "poteaux",
+          "lisses",
+          "portillon",
+          "gond et verrou"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "enclosure_gate@64,96:operator",
+          "reservationKey": "enclosure_gate@64,96:operator",
+          "role": "operator",
+          "feet": [
+            60,
+            102
+          ],
+          "contact": [
+            60,
+            89
+          ],
+          "facing": "dos",
+          "approach": [
+            60,
+            111
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4,
+            8
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "lead"
+      ],
+      "preview": {
+        "role": "groom",
+        "action": "lead"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 743,
+      "colors": 8,
+      "parts": [
+        "poteaux",
+        "lisses",
+        "portillon",
+        "gond et verrou"
+      ]
+    },
+    {
+      "id": "clothesline",
+      "number": 35,
+      "label": "Étendage vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/clothesline.png",
+      "pixelHash": "111258b4eb72410fb3accbb1532ca344a977a4486c85033240b517dc7ca3f3dc",
+      "geometry": {
+        "width": 48,
+        "height": 49,
+        "depth": 22,
+        "contactHeight": 12,
+        "nativePlan": {
+          "width": 30,
+          "depth": 14,
+          "height": 23
+        },
+        "groundFootprint": [
+          [
+            -15,
+            -7
+          ],
+          [
+            15,
+            -7
+          ],
+          [
+            15,
+            7
+          ],
+          [
+            -15,
+            7
+          ]
+        ],
+        "details": [
+          "deux portiques",
+          "corde et tendeurs",
+          "sans linge"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "clothesline@64,96:operator",
+          "reservationKey": "clothesline@64,96:operator",
+          "role": "operator",
+          "feet": [
+            40,
+            90
+          ],
+          "contact": [
+            47,
+            78
+          ],
+          "facing": "droite",
+          "approach": [
+            31,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -18,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "hang"
+      ],
+      "preview": {
+        "role": "dyer",
+        "action": "hang"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 631,
+      "colors": 8,
+      "parts": [
+        "deux portiques",
+        "corde et tendeurs",
+        "sans linge"
+      ]
+    },
+    {
+      "id": "drying_rack",
+      "number": 36,
+      "label": "Séchoir vide",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 1,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/drying_rack.png",
+      "pixelHash": "c5eb79247ded11d9be441815579b04b48029c25947092c057193c04bbdf45162",
+      "geometry": {
+        "width": 44,
+        "height": 42,
+        "depth": 20,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 26,
+          "depth": 14,
+          "height": 18
+        },
+        "groundFootprint": [
+          [
+            -13,
+            -7
+          ],
+          [
+            13,
+            -7
+          ],
+          [
+            13,
+            7
+          ],
+          [
+            -13,
+            7
+          ]
+        ],
+        "details": [
+          "chevalets",
+          "trois niveaux et claire-voie vide"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "drying_rack@64,96:operator",
+          "reservationKey": "drying_rack@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            91
+          ],
+          "contact": [
+            49,
+            81
+          ],
+          "facing": "droite",
+          "approach": [
+            33,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -16,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [],
+      "preview": {
+        "role": "dyer",
+        "action": "hang"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1066,
+      "colors": 6,
+      "parts": [
+        "chevalets",
+        "trois niveaux et claire-voie vide"
+      ]
+    },
+    {
+      "id": "sluice",
+      "number": 37,
+      "label": "Vanne d’irrigation",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "water_edge",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/sluice.png",
+      "pixelHash": "90dd3eb7a8be472a571bac9e306dd6707f9e41f8dc3bb4a6b316cde1b5acf26a",
+      "geometry": {
+        "width": 42,
+        "height": 45,
+        "depth": 19,
+        "contactHeight": 8,
+        "nativePlan": {
+          "width": 22,
+          "depth": 16,
+          "height": 22
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -8
+          ],
+          [
+            11,
+            -8
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            -11,
+            8
+          ]
+        ],
+        "details": [
+          "montants",
+          "vanne",
+          "vis et manivelle",
+          "sans rivière"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "sluice@64,96:operator",
+          "reservationKey": "sluice@64,96:operator",
+          "role": "operator",
+          "feet": [
+            44,
+            92
+          ],
+          "contact": [
+            51,
+            84
+          ],
+          "facing": "droite",
+          "approach": [
+            35,
+            92
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -14,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "irrigate"
+      ],
+      "preview": {
+        "role": "farmer",
+        "action": "irrigate"
+      },
+      "winter": {
+        "setting": "dormant",
+        "reason": "Canal d’irrigation arrêté pendant le gel."
+      },
+      "pixelCount": 871,
+      "colors": 17,
+      "parts": [
+        "montants",
+        "vanne",
+        "vis et manivelle",
+        "sans rivière"
+      ]
+    },
+    {
+      "id": "crop_patch",
+      "number": 38,
+      "label": "Parcelle cultivable",
+      "posture": "accroupi",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 2
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "scrub",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "cultivated_ground",
+      "conceptGrid": false,
+      "isometricRedrawn": false,
+      "file": "postes/crop_patch.png",
+      "pixelHash": "92e4875ee675b9e9ab0ea459c43e30aa7577032ccb876d0e8f15feed6c1a228e",
+      "geometry": {
+        "width": 40,
+        "height": 16,
+        "depth": 5,
+        "contactHeight": 0
+      },
+      "sockets": {
+        "operator": {
+          "id": "crop_patch@64,96:operator",
+          "reservationKey": "crop_patch@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            47,
+            96
+          ],
+          "approach": [
+            34,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      },
+      "activities": [
+        "hoe",
+        "sow",
+        "harvest",
+        "uproot",
+        "bundle",
+        "cut_fiber"
+      ],
+      "preview": {
+        "role": "farmer",
+        "action": "hoe"
+      },
+      "winter": {
+        "setting": "dormant",
+        "reason": "Pas de semis ni de récolte sur un sol enneigé."
+      },
+      "pixelCount": 450,
+      "colors": 7,
+      "parts": []
+    },
+    {
+      "id": "orchard_tree",
+      "number": 39,
+      "label": "Arbre de verger",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 3
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "world_oak_0",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false,
+      "isometricRedrawn": false,
+      "file": "postes/orchard_tree.png",
+      "pixelHash": "61a0315d25a2a1a3783ffbb0398b864cdeeacd69f6be82ee70f93fd0b42ad7e8",
+      "geometry": {
+        "width": 24,
+        "height": 56,
+        "depth": 5,
+        "contactHeight": 7
+      },
+      "sockets": {
+        "operator": {
+          "id": "orchard_tree@64,96:operator",
+          "reservationKey": "orchard_tree@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            89
+          ],
+          "approach": [
+            42,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      },
+      "activities": [
+        "harvest_fruit",
+        "prune"
+      ],
+      "preview": {
+        "role": "gardener",
+        "action": "harvest_fruit"
+      },
+      "winter": {
+        "setting": "dormant",
+        "reason": "Verger en repos ; pas de cueillette sous la neige."
+      },
+      "pixelCount": 1674,
+      "colors": 10,
+      "parts": []
+    },
+    {
+      "id": "resin_tree",
+      "number": 40,
+      "label": "Arbre résinier",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 2,
+        "column": 4
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "world_pine_0",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false,
+      "isometricRedrawn": false,
+      "file": "postes/resin_tree.png",
+      "pixelHash": "0cfcf9eb62d592837c0f4e60383d0c10ad43ac6d45e538e7c95a1b006320e38d",
+      "geometry": {
+        "width": 24,
+        "height": 56,
+        "depth": 5,
+        "contactHeight": 7
+      },
+      "sockets": {
+        "operator": {
+          "id": "resin_tree@64,96:operator",
+          "reservationKey": "resin_tree@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            89
+          ],
+          "approach": [
+            42,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      },
+      "activities": [
+        "fell",
+        "resin"
+      ],
+      "preview": {
+        "role": "forester",
+        "action": "fell"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 770,
+      "colors": 8,
+      "parts": []
+    },
+    {
+      "id": "charcoal_clamp",
+      "number": 41,
+      "label": "Meule de charbon",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/charcoal_clamp.png",
+      "pixelHash": "e2daccedd0fea731196bea62d7e272c06269724346c4fdfe8342c105f1796c7f",
+      "geometry": {
+        "width": 54,
+        "height": 44,
+        "depth": 25,
+        "contactHeight": 7,
+        "nativePlan": {
+          "width": 26,
+          "depth": 24,
+          "height": 15
+        },
+        "groundFootprint": [
+          [
+            -13,
+            -12
+          ],
+          [
+            13,
+            -12
+          ],
+          [
+            13,
+            12
+          ],
+          [
+            -13,
+            12
+          ]
+        ],
+        "details": [
+          "meule couverte",
+          "évents et ouverture de chargement"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "charcoal_clamp@64,96:operator",
+          "reservationKey": "charcoal_clamp@64,96:operator",
+          "role": "operator",
+          "feet": [
+            40,
+            91
+          ],
+          "contact": [
+            47,
+            84
+          ],
+          "facing": "droite",
+          "approach": [
+            31,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -17,
+            7
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "charcoal_load",
+        "charcoal_rake"
+      ],
+      "preview": {
+        "role": "charcoal_burner",
+        "action": "charcoal_load"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1004,
+      "colors": 11,
+      "parts": [
+        "meule couverte",
+        "évents et ouverture de chargement"
+      ]
+    },
+    {
+      "id": "ore_node",
+      "number": 42,
+      "label": "Filon de minerai",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 2
+      },
+      "kind": "atlas_reference",
+      "atlasKey": "world_boulder_0",
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false,
+      "isometricRedrawn": false,
+      "file": "postes/ore_node.png",
+      "pixelHash": "ef22ff28301901f74744bce841921e11882b0cf8095aedf86bdb78699ac62666",
+      "geometry": {
+        "width": 24,
+        "height": 56,
+        "depth": 5,
+        "contactHeight": 7
+      },
+      "sockets": {
+        "operator": {
+          "id": "ore_node@64,96:operator",
+          "reservationKey": "ore_node@64,96:operator",
+          "role": "operator",
+          "feet": [
+            50,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            55,
+            89
+          ],
+          "approach": [
+            42,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      },
+      "activities": [
+        "mine"
+      ],
+      "preview": {
+        "role": "miner",
+        "action": "mine"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 345,
+      "colors": 6,
+      "parts": []
+    },
+    {
+      "id": "quarry_block",
+      "number": 43,
+      "label": "Bloc de carrière",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/quarry_block.png",
+      "pixelHash": "c3687ccf6b1b0843ac4526418391b984dc01c44af36acf09b9674d1812052bff",
+      "geometry": {
+        "width": 46,
+        "height": 39,
+        "depth": 21,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 24,
+          "depth": 18,
+          "height": 14
+        },
+        "groundFootprint": [
+          [
+            -12,
+            -9
+          ],
+          [
+            12,
+            -9
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            -12,
+            9
+          ]
+        ],
+        "details": [
+          "bloc",
+          "lignes de taille",
+          "coins et cales"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "quarry_block@64,96:operator",
+          "reservationKey": "quarry_block@64,96:operator",
+          "role": "operator",
+          "feet": [
+            42,
+            91
+          ],
+          "contact": [
+            49,
+            81
+          ],
+          "facing": "droite",
+          "approach": [
+            33,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -16,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "quarry",
+        "stonecut"
+      ],
+      "preview": {
+        "role": "quarrier",
+        "action": "quarry"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1047,
+      "colors": 14,
+      "parts": [
+        "bloc",
+        "lignes de taille",
+        "coins et cales"
+      ]
+    },
+    {
+      "id": "fixed_screen",
+      "number": 44,
+      "label": "Crible fixe",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 3,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/fixed_screen.png",
+      "pixelHash": "bded6958a22909dd09adcde031ec30b2cefaaa6762c8228af8b49917f5f1aaaf",
+      "geometry": {
+        "width": 40,
+        "height": 40,
+        "depth": 18,
+        "contactHeight": 10,
+        "nativePlan": {
+          "width": 22,
+          "depth": 14,
+          "height": 18
+        },
+        "groundFootprint": [
+          [
+            -11,
+            -7
+          ],
+          [
+            11,
+            -7
+          ],
+          [
+            11,
+            7
+          ],
+          [
+            -11,
+            7
+          ]
+        ],
+        "details": [
+          "bâti",
+          "tamis incliné",
+          "maillage et sortie"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "fixed_screen@64,96:operator",
+          "reservationKey": "fixed_screen@64,96:operator",
+          "role": "operator",
+          "feet": [
+            44,
+            92
+          ],
+          "contact": [
+            51,
+            82
+          ],
+          "facing": "droite",
+          "approach": [
+            35,
+            92
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -14,
+            6
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "shovel",
+        "sieve"
+      ],
+      "preview": {
+        "role": "charcoal_burner",
+        "action": "shovel"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 755,
+      "colors": 8,
+      "parts": [
+        "bâti",
+        "tamis incliné",
+        "maillage et sortie"
+      ]
+    },
+    {
+      "id": "salt_basin",
+      "number": 45,
+      "label": "Bassin salin",
+      "posture": "accroupi",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 1
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/salt_basin.png",
+      "pixelHash": "1a5040e089bd2306235bcd024bf1bc1ddf9eed7d45422071d9c30059ff6574a3",
+      "geometry": {
+        "width": 56,
+        "height": 34,
+        "depth": 26,
+        "contactHeight": 2,
+        "nativePlan": {
+          "width": 30,
+          "depth": 22,
+          "height": 4
+        },
+        "groundFootprint": [
+          [
+            -15,
+            -11
+          ],
+          [
+            15,
+            -11
+          ],
+          [
+            15,
+            11
+          ],
+          [
+            -15,
+            11
+          ]
+        ],
+        "details": [
+          "bassin",
+          "levées basses",
+          "chenal et rives"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "salt_basin@64,96:operator",
+          "reservationKey": "salt_basin@64,96:operator",
+          "role": "operator",
+          "feet": [
+            39,
+            90
+          ],
+          "contact": [
+            46,
+            88
+          ],
+          "facing": "droite",
+          "approach": [
+            30,
+            90
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -18.5,
+            6.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "rake_salt"
+      ],
+      "preview": {
+        "role": "salt_worker",
+        "action": "rake_salt"
+      },
+      "winter": {
+        "setting": "dormant",
+        "reason": "Évaporation solaire interrompue."
+      },
+      "pixelCount": 960,
+      "colors": 14,
+      "parts": [
+        "bassin",
+        "levées basses",
+        "chenal et rives"
+      ]
+    },
+    {
+      "id": "wall_scaffold",
+      "number": 46,
+      "label": "Mur et échafaudage bas",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 2
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "dos",
+      "terrain": "world_ground",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/wall_scaffold.png",
+      "pixelHash": "6860cbc1e2b969029af4ce7266c18cfec8978a2a4727ce2a7df9a717c7a3b7e9",
+      "geometry": {
+        "width": 46,
+        "height": 50,
+        "depth": 21,
+        "contactHeight": 9,
+        "nativePlan": {
+          "width": 28,
+          "depth": 14,
+          "height": 25
+        },
+        "groundFootprint": [
+          [
+            -14,
+            -7
+          ],
+          [
+            14,
+            -7
+          ],
+          [
+            14,
+            7
+          ],
+          [
+            -14,
+            7
+          ]
+        ],
+        "details": [
+          "maçonnerie",
+          "échafaudage bas",
+          "planches et échelle"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "wall_scaffold@64,96:operator",
+          "reservationKey": "wall_scaffold@64,96:operator",
+          "role": "operator",
+          "feet": [
+            57,
+            104
+          ],
+          "contact": [
+            57,
+            91
+          ],
+          "facing": "dos",
+          "approach": [
+            57,
+            113
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            4.5,
+            11.5
+          ],
+          "logicalFacing": [
+            -1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "masonry"
+      ],
+      "preview": {
+        "role": "builder",
+        "action": "masonry"
+      },
+      "winter": {
+        "setting": "sheltered",
+        "reason": "Poste utilisé dans un local ou sous un abri ; surface de travail dégagée."
+      },
+      "pixelCount": 1272,
+      "colors": 12,
+      "parts": [
+        "maçonnerie",
+        "échafaudage bas",
+        "planches et échelle"
+      ]
+    },
+    {
+      "id": "dock_bollard",
+      "number": 47,
+      "label": "Quai et borne d’amarrage",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 3
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "water_edge",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/dock_bollard.png",
+      "pixelHash": "baca55336895273a17212dee63b50619e42366def347c056762a064156a0812f",
+      "geometry": {
+        "width": 52,
+        "height": 38,
+        "depth": 24,
+        "contactHeight": 5,
+        "nativePlan": {
+          "width": 28,
+          "depth": 20,
+          "height": 10
+        },
+        "groundFootprint": [
+          [
+            -14,
+            -10
+          ],
+          [
+            14,
+            -10
+          ],
+          [
+            14,
+            10
+          ],
+          [
+            -14,
+            10
+          ]
+        ],
+        "details": [
+          "platelage",
+          "pilotis",
+          "borne et anneau fixe"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "dock_bollard@64,96:operator",
+          "reservationKey": "dock_bollard@64,96:operator",
+          "role": "operator",
+          "feet": [
+            40,
+            91
+          ],
+          "contact": [
+            47,
+            86
+          ],
+          "facing": "droite",
+          "approach": [
+            31,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -17,
+            7
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "rope"
+      ],
+      "preview": {
+        "role": "fisher",
+        "action": "rope"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 751,
+      "colors": 8,
+      "parts": [
+        "platelage",
+        "pilotis",
+        "borne et anneau fixe"
+      ]
+    },
+    {
+      "id": "bank_platform",
+      "number": 48,
+      "label": "Accès de quai et rive",
+      "posture": "debout",
+      "concept": {
+        "file": "art/humains/activites/concepts/postes/03-sites.png",
+        "row": 4,
+        "column": 4
+      },
+      "kind": "fixture",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "water_edge",
+      "conceptGrid": true,
+      "isometricRedrawn": true,
+      "file": "postes/bank_platform.png",
+      "pixelHash": "ea4a1278def4166332fa15f5446fd7d731bf62c4a868597b1949a9e77ae14fe4",
+      "geometry": {
+        "width": 56,
+        "height": 36,
+        "depth": 26,
+        "contactHeight": 3,
+        "nativePlan": {
+          "width": 28,
+          "depth": 24,
+          "height": 6
+        },
+        "groundFootprint": [
+          [
+            -14,
+            -12
+          ],
+          [
+            14,
+            -12
+          ],
+          [
+            14,
+            12
+          ],
+          [
+            -14,
+            12
+          ]
+        ],
+        "details": [
+          "platelage",
+          "marche et rive ouverte sans eau intégrée"
+        ]
+      },
+      "sockets": {
+        "operator": {
+          "id": "bank_platform@64,96:operator",
+          "reservationKey": "bank_platform@64,96:operator",
+          "role": "operator",
+          "feet": [
+            39,
+            91
+          ],
+          "contact": [
+            46,
+            88
+          ],
+          "facing": "droite",
+          "approach": [
+            30,
+            91
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "humanoid",
+          "occlusion": "isometric_ground_depth",
+          "logicalFeet": [
+            -17.5,
+            7.5
+          ],
+          "logicalFacing": [
+            1,
+            -1
+          ]
+        }
+      },
+      "activities": [
+        "cast_net",
+        "haul_net",
+        "pan_gold",
+        "board",
+        "disembark"
+      ],
+      "preview": {
+        "role": "fisher",
+        "action": "cast_net"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 1021,
+      "colors": 6,
+      "parts": [
+        "platelage",
+        "marche et rive ouverte sans eau intégrée"
+      ]
+    },
+    {
+      "id": "snow_access",
+      "number": 49,
+      "label": "Accès à déneiger",
+      "posture": "debout",
+      "concept": null,
+      "kind": "atlas_reference",
+      "atlasKey": null,
+      "orientation": "fixed_world",
+      "views": [
+        "fixed"
+      ],
+      "operatorFacing": "droite",
+      "terrain": "world_ground",
+      "conceptGrid": false,
+      "isometricRedrawn": false,
+      "file": "postes/snow_access.png",
+      "pixelHash": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "geometry": {
+        "width": 28,
+        "height": 10,
+        "depth": 4,
+        "contactHeight": 0
+      },
+      "sockets": {
+        "operator": {
+          "id": "snow_access@64,96:operator",
+          "reservationKey": "snow_access@64,96:operator",
+          "role": "operator",
+          "feet": [
+            48,
+            96
+          ],
+          "facing": "droite",
+          "contact": [
+            56,
+            97
+          ],
+          "approach": [
+            40,
+            96
+          ],
+          "support": null,
+          "occupancy": "exclusive",
+          "actorKind": "any",
+          "occlusion": "fixed_fixture_layout"
+        }
+      },
+      "activities": [
+        "clear_snow"
+      ],
+      "preview": {
+        "role": "farmer",
+        "action": "clear_snow"
+      },
+      "winter": {
+        "setting": "exposed",
+        "reason": "Accès et zone de travail entretenus ; neige limitée aux parties inutilisées."
+      },
+      "pixelCount": 0,
+      "colors": 0,
+      "parts": []
+    }
+  ],
+  "sourceHashes": {
+    "sprites/humains/sources-natives.js": "1490f728c7ba5138909e44a96d9d87e9cdda79906bd6dff90788927ff1b02b1d",
+    "sprites/humains/catalogue.js": "cfd44862f87318e402561da073863d1cdcc6aac367a3a06d87ca69b96496fbf4",
+    "sprites/humains/rig.js": "41003521a48c8fccda99a99292125ba088ca1eb85dfce4767b51cca17484f0de",
+    "sprites/humains/cheval.js": "30047217bd9f4852d339a7279bbcd49f04c56d320cf400830f0ce5d4a00f51f7",
+    "sprites/humains/accessoires.js": "1b5e66d0d758723ebc4bdf030b998e4b3dc8ce1726f906a4fec4f75c4f650873",
+    "sprites/humains/modularite.js": "85d7b93750492294f2e19b8bc1aec36b64d3bd29a657810898d56c6db07532bc",
+    "sprites/humains/activites.js": "97e9736124925fc8789e53b836340efdcc80f5efc9b2db9149f0d8222bff4c60",
+    "sprites/decors/humains-grilles.js": "86428e134f2f02a3cdf38ccea920e35b64d422d0f6436d67306daa3d5668ab28",
+    "sprites/decors/atlas-nature.js": "4aaa86a4a058e7bbc67baa2efd4b96a85d3ac3d7cfc24366f583c4b471a874ff",
+    "sprites/decors/igea-hiver.js": "a5d1560cb9fb14be522b4a3670cf32fea9ffab53be6f924eff079d51ed544ce1",
+    "sprites/decors/postes-humains.js": "2e2d087a79608f5debe320add2b19dbd2f9929428175f09439a38dd90b715e13",
+    "sprites/architecture/isometric-catalogue.js": "73314c3fbcff9bbe4ec5ece100930cb0a9aedc62cacb855b7f0c6ba7acca517a",
+    "sprites/architecture/architecture-isometric.js": "b736bebce49c87a1d6472c686bf51561f86b3d6130d1b70c74c6e7ab82f53d29",
+    "sprites/architecture/clairfoyer-district-catalogue.js": "97aaf757a60dcec25245d69837ec87d38e2af7f46a497f3ffc5a00eeee3a5ee3",
+    "sprites/decors/mobilier-isometrique.js": "f6e0e46ca1f652a3dfcb0e58505be2d2620cf4aa437b51fde8c9291e0ffef15e",
+    "sprites/decors/postes-isometriques.js": "7b320b00407e29bebc69dbc755508d51ddb8821cbb62261323c2f80628f7cd1c",
+    "sprites/humains/scene.js": "c1fe23f9edaa4484b5f8ad2b0f228a44b7ad36953b5c4d591fe7716c43ca2999"
+  },
+  "runtimeActivated": true,
+  "publicationTrackedBy": "git",
+  "revision": "9aa71748fff94056"
+}

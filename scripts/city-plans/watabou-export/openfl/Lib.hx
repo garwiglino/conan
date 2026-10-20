@@ -1,0 +1,2 @@
+package openfl;
+class Lib {}

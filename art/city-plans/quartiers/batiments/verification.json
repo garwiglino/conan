@@ -1,0 +1,37 @@
+{
+  "revision": "142e46edfa396d21",
+  "districtStudyRevision": "1b460189a9bc132f",
+  "status": "integrated_technical_checks_passed",
+  "models": 36,
+  "buildings": 22,
+  "infrastructures": 14,
+  "districtPalettes": 11,
+  "nativeViewsChecked": 144,
+  "interactiveViewsChecked": 144,
+  "viewsPerModel": 4,
+  "nativeUnitsPerMetre": 16,
+  "doorsNativeClearance": 22,
+  "paletteColors": 81,
+  "playerReference": "current Kaldor; same integer zoom as assets",
+  "geometryPixelAlignment": "covered across all 144 views by the unit tests",
+  "wholeBuildingFade": "shared renderer, target .32, physical solids unchanged",
+  "originalRuntimeViews": 696,
+  "existingRuntimePixelsUnchanged": true,
+  "existingRuntimeFramesHash": "c392007d907e543a6a7d3a3dc1c0267baf8bd70e14bd396daa430c170f8ee9ca",
+  "desktop": [
+    1440,
+    1000
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "localLinksChecked": 12,
+  "errors": [],
+  "missing": [],
+  "waterSupplyCreated": false,
+  "inventoryCreated": false,
+  "userValidated": true,
+  "runtimeActivated": true,
+  "publicationTrackedBy": "git"
+}

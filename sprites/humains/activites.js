@@ -233,7 +233,7 @@ function renderLayers(options={}){
  }
  // Rotate the actor and held equipment together. Scene furniture stays put.
  let actorOffset=[0,0];
- if(s.angle){const a=s.angle*Math.PI/180,ca=Math.cos(a),sa=Math.sin(a),sign=sleepAction?-1:dir==='gauche'?-1:1;for(const key of ACTOR){const old=layers[key],next=new Pixels();
+ if(s.angle){const progressAngle=s.angle*Math.PI/180,a=progressAngle*(sleepAction&&o.interaction?.bedAngle?o.interaction.bedAngle/90:1),ca=Math.cos(a),sa=Math.sin(a),sign=sleepAction?-1:dir==='gauche'?-1:1;for(const key of ACTOR){const old=layers[key],next=new Pixels();
    // Rotate the full native extent, including tall helmet crests. A fixed
    // crop silently removed their outer pixels in sleeping/left fall views.
    const points=old.values();if(points.length){
@@ -244,7 +244,7 @@ function renderLayers(options={}){
    }
    layers[key]=next;
   }
-  const anatomy=['body','head','headEarly','hairBack','hairMid','hairFront','frontArms','rearArms'].flatMap(k=>layers[k].values()),xs=anatomy.map(p=>p[0]),ys=anatomy.map(p=>p[1]),bottom=Math.max(...ys),blend=Math.sin(a),bed=o.interaction?.bed?[o.interaction.bed[0],o.interaction.bed[1]+2]:Props.stationLayout('bedroll',dir).origin;
+  const anatomy=['body','head','headEarly','hairBack','hairMid','hairFront','frontArms','rearArms'].flatMap(k=>layers[k].values()),xs=anatomy.map(p=>p[0]),ys=anatomy.map(p=>p[1]),bottom=Math.max(...ys),blend=Math.sin(progressAngle),bed=o.interaction?.bed?[o.interaction.bed[0],o.interaction.bed[1]+2]:Props.stationLayout('bedroll',dir).origin;
   actorOffset=[sleepAction?round((bed[0]-(Math.min(...xs)+Math.max(...xs))/2)*blend):0,(sleepAction?round(51+(bed[1]-2-51)*blend):51)-bottom];
   for(const key of ACTOR){const old=layers[key];layers[key]=new Pixels();layers[key].stamp(old.values(),(x,y)=>[x+actorOffset[0],y+actorOffset[1]]);}
   for(const name of ['right','left']){for(const points of [hands,elbows])if(points[name]){const [x,y]=points[name],dx=x-40,dy=y-51;points[name]=[round(40+dx*ca-dy*sa*sign)+actorOffset[0],round(51+dx*sa*sign+dy*ca)+actorOffset[1]];}}
