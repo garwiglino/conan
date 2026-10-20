@@ -7,7 +7,10 @@ test('spear has four distinct blows and weighted anticipation/strike/recovery ti
   const paths=[0,1,2,3].map(c=>JSON.stringify([1,2,3,4].map(f=>W.pose(id,dir,f,c))));assert.equal(new Set(paths).size,4);
  }
  for(let c=0;c<4;c++){const t=W.times(id,c);assert.ok(t[1]>t[2]*2);assert.ok(t[5]>t[2]*2);}
- assert.ok(W.duration(id,3)>W.duration(id,0)*1.5);
+ // A readable common recoil floor changes the ratio of the full durations.
+ // Preserve the long finisher's contrast in both total time and delivery budget.
+ assert.ok(W.duration(id,3)>W.duration(id,0)*1.4);
+ assert.ok(W.duration(id,3)-W.times(id,3)[4]>(W.duration(id,0)-W.times(id,0)[4])*1.5);
 });
 test('spear loads from guard, accelerates into contact and follows through with the body',()=>{
  for(let c=0;c<4;c++){

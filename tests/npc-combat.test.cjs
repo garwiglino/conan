@@ -3,7 +3,7 @@ const {loadGame}=require('./game-harness.cjs');let a;before(async()=>a=await loa
 function fixture(){const g=new a.Game();g.clock=480;g.worldState=new a.Atlas.WorldState({clock:g.clock});g.enemies=[];g.populateAtlas=()=>{};g.lineClear=()=>true;g.solid=()=>false;return g;}
 function run(g,seconds,input={},each){for(let t=0;t<seconds;t+=.04){g.update(.04,input);if(each?.()===true)break;}}
 // Kaldor stays at blade reach and keeps swinging until the target is down.
-function chase(g,n,dead,seconds=20){const p=g.player;let t=0;for(;t<seconds&&!dead();t+=.04){const k=Math.atan2(n.y-p.y,n.x-p.x);if(Math.hypot(n.x-p.x,n.y-p.y)>14)Object.assign(p,{x:n.x-Math.cos(k)*14,y:n.y-Math.sin(k)*14});p.dir=g.direction(n.x-p.x,n.y-p.y);p.hp=p.maxHp||10;g.targetId=null;g.update(.04,{attack:true});}return t;}
+function chase(g,n,dead,seconds=20){const p=g.player;let t=0;for(;t<seconds&&!dead();t+=.04){const k=Math.atan2(n.y-p.y,n.x-p.x);if(Math.hypot(n.x-p.x,n.y-p.y)>14)Object.assign(p,{x:n.x-Math.cos(k)*14,y:n.y-Math.sin(k)*14});p.dir=g.direction(n.x-p.x,n.y-p.y);p.hp=p.maxHp||10;g.targetId=null;g.update(.04,{attack:true,attackPressed:true});}return t;}
 function patrol(){const g=fixture(),ev=g.worldState.add('patrol','camp',g.clock,600),c=a.Atlas.toGame(ev.x,ev.y);Object.assign(g.player,{x:c.x+420,y:c.y,spawnFX:0,inv:0});g.stepEventGroups(0);
  const guards=g.npcs.filter(n=>g.isHumanGuard(n));assert.equal(guards.length,2);for(const n of guards)g.ensureHumanGuard(n);return {g,guards};}
 

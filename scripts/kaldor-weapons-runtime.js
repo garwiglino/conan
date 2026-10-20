@@ -59,6 +59,12 @@ const KaldorArsenal=(()=>{
  bladeHits=function(p,e,f){return !p.weapon?legacyHits(p,e,f):W.hits(p,e,f);};
  attackFrame=function(remaining,combo=-1,weapon){return !weapon||combo<0?legacyFrame(remaining,combo):W.frame(remaining,weapon,combo);};
  attackLength=function(combo,weapon){return !weapon?legacyLength(combo):W.duration(weapon,combo);};
+ // A single pending press survives the current stroke, including a heavy
+ // wind-up. Further presses cannot stack attacks or change that queued aim.
+ function queueAttack(p,x=0,y=0){
+  if(p.attackBuffer>0)return;
+  p.attackBuffer=Math.max(.26,p.attack+.12,p.attackCD+.08);p.bufferX=x;p.bufferY=y;
+ }
  // One pixel at most, once per confirmed impact, shared by every target type.
  function contactShake(g){
   const p=g.player;if(!p.impactTick||p.attack<=0||g.weaponShake?.swing===g.swing)return;
@@ -89,7 +95,7 @@ const KaldorArsenal=(()=>{
   // Decay in real update time, including hit stop, so the camera settles quickly.
   if(this.weaponShake)this.weaponShake.remaining=Math.max(0,this.weaponShake.remaining-dt);
   if(p.hitPause>0&&!this.dialogue&&!this.sleeping&&!this.dying&&!this.dead&&!this.won&&!this.journey){
-   if(input.attackPressed||(input.attack&&!p.attackHeld)){p.attackBuffer=.26;p.bufferX=input.x||0;p.bufferY=input.y||0;}
+   if(input.attackPressed||(input.attack&&!p.attackHeld))queueAttack(p,input.x||0,input.y||0);
    p.attackHeld=!!input.attack;
    const stop=Math.min(dt,p.hitPause);p.hitPause=Math.max(0,p.hitPause-stop);dt-=stop;
    // Do not leave the previous tick's damage event live during the freeze.
@@ -165,5 +171,5 @@ const KaldorArsenal=(()=>{
  const row=KaldorWardrobe.inventoryHTML,bind=KaldorWardrobe.bindInventory;
  KaldorWardrobe.inventoryHTML=function(g){return row.call(this,g)+inventoryHTML(g);};
  KaldorWardrobe.bindInventory=function(body,g,refresh){bind.call(this,body,g,refresh);bindInventory(body,g,refresh);};
- return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake};
+ return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,queueAttack};
 })();

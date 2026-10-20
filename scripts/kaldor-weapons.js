@@ -20,14 +20,16 @@
  // Cut dead time, especially the floating follow-through and return. Tempo and
  // inertia remain relative to each individual weapon.
  const BEAT=freeze([1,.70,.35,.66,.46,.48]);
- // Keep the visible contact window reachable even at the engine's 40ms tick.
- const contactWindow=row=>{row[3]=Math.max(row[3],.045-row[2]);return row;};
+ // Contact must survive a 40ms tick. Recoil gets its own readable budget:
+ // light weapons settle briskly; heavy weapons and finishers take more weight.
+ const postHold=(id,combo=0)=>Math.min(.115,.058+get(id).weightKg*.012+(combo===3?.014:0));
+ const contactWindow=(row,id,combo)=>{row[3]=Math.max(row[3],.045-row[2]);row[4]=Math.max(row[4],postHold(id,combo));return row;};
  function times(id,combo=0){
   const w=get(id),delivery=combo===3?(w.finisher.kind==='whirl'?2.6:1.35):1;
-  if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)));
+  if(w.family==='spear')return contactWindow(SPEAR_TIMES[combo].map((t,i)=>t*w.tempo*BEAT[i]*(i===2?delivery:i===3&&combo===3?.72:1)),id,combo);
   const row=MOTIONS[w.family].times[combo],reference={sword:1.8,sabre:1.25,dagger:.6,axe:1.9,mace:2.1,staff:1.6,glaive:2.7}[w.family];
   const inertia=Math.max(.84,Math.min(1.22,1+(w.weightKg/reference-1)*.16));
-  return contactWindow(row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1)));
+  return contactWindow(row.map((t,i)=>t*w.tempo*BEAT[i]*(i===1||i===4||i===5?inertia:1)*(i===2?delivery:i===3&&combo===3?.72:1)),id,combo);
  }
  const duration=(id,combo=0)=>times(id,combo).reduce((a,b)=>a+b,0);
  function frame(remaining,id,combo=0){
@@ -38,6 +40,7 @@
  // Continuous authored geometry below remains for swept collision and smears.
  const DRAWINGS=freeze([1,1,2,2,3.5,5]);
  function sample(remaining,id,combo=0){return DRAWINGS[frame(remaining,id,combo)];}
+ const canChain=(remaining,id,combo=0)=>combo<3&&remaining<=times(id,combo)[5]+1e-7;
  // Even a long engine tick must expose the recoil before a buffered link.
  function advance(remaining,dt,id,combo=0){
   const next=Math.max(0,remaining-dt),row=times(id,combo);
@@ -132,7 +135,7 @@
   const w=get(id),profile=dir===1||dir===3,[fx,fy]=forward(dir);
   const drive={dagger:7,sword:6,sabre:6,axe:5,mace:4,spear:5,staff:5,glaive:5}[w.family];
   const reach=w.length+2;
-  const h=profile?[fx*Math.min(32-reach,drive+Math.abs(body[0])+(combo===2?1:0)),-9]:[0,dir===0?-14:-6];
+  const h=profile?[fx*Math.min(32-reach,drive+Math.abs(body[0])+(combo===2?1:0)),-9]:[0,dir===0?-14:Math.min(-6,20-reach)];
   return {h:confineGrip(w,h,[fx,fy]),u:[fx,fy]};
  }
  function keyPose(id,dir,f,combo){
@@ -176,11 +179,90 @@
    head:[body[0]+(profile?fx*(f===1?-1:1):Math.round(x*.12)),body[1]+(f===3?1:0)],
    hair:[-fx*(f===2||f===3?2:-1),f===1?1:0],lunge:f>=2&&f<=4,z:dir===0?0:1};
  }
+ // Trace the active end through contact instead of independently guessing a
+ // recovery angle. The signed swing continues beyond impact; heavier heads
+ // make a deeper overshoot. Hands travel with it, with the torso catching up.
+ const turn=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
+ const angleOf=p=>Math.atan2(p.u[1],p.u[0]);
+ function windUp(id,dir,load,hit,stroke,finish=false){
+  const w=get(id),[fx,fy]=forward(dir),a=angleOf(hit),delta=turn(angleOf(load),a),thrust=stroke==='thrust';
+  const angle=thrust?a:a-Math.sign(delta)*Math.min(175*Math.PI/180,Math.abs(delta)+(22+w.weightKg*2)*Math.PI/180);
+  const u=[Math.cos(angle),Math.sin(angle)],away=thrust?[-fx,-fy]:load.h.map((v,k)=>v-hit.h[k]),len=Math.hypot(...away)||1,pull=5+Math.min(2,w.weightKg*.6)+(finish?2:0);
+  const raw=load.h.map((v,k)=>v+away[k]/len*pull);if(thrust&&finish&&(dir===1||dir===3))raw[1]-=2;raw[1]=Math.max(-24,Math.min(thrust&&dir===0?(finish?-3:-5):-3,raw[1]));
+  const body=[load.body[0]-fx*2,load.body[1]-fy];
+  return {...load,h:confineGrip(w,raw,u),u,body,head:[body[0]-fx,body[1]],hair:[fx*2,-1],leg:load.leg??0,
+   z:(dir===1||dir===3)&&u[0]*fx<-.1?0:dir===0?0:1};
+ }
+ function followThrough(id,dir,combo,load,hit,stroke){
+  const w=get(id),[fx,fy]=forward(dir),side=dir===1||dir===3,a=angleOf(hit),incoming=turn(angleOf(load),a);
+  const sign=Math.sign(incoming)|| (dir===3?-1:1),thrust=stroke==='thrust';
+  const degrees=stroke==='reverse'&&side?Math.min(176,164+w.weightKg*2):stroke==='rise'&&!side?Math.min(174,155+w.weightKg*3):Math.min(126,104+w.weightKg*4);
+  const angle=a+(thrust?0:sign*degrees*Math.PI/180),u=[Math.cos(angle),Math.sin(angle)];
+  const tangent=[-hit.u[1]*sign,hit.u[0]*sign],travel=11+Math.min(3,w.weightKg*.8);
+  const carry=side?(stroke==='reverse'?-2:stroke==='rise'?1:-4):3;
+  let h=thrust?hit.h.map((v,k)=>v+forward(dir)[k]*(combo===3?8:6)):hit.h.map((v,k)=>v+tangent[k]*travel+forward(dir)[k]*carry);
+  if(!side&&!thrust){h[1]+=stroke==='rise'?-11:stroke==='reverse'?0:1;}
+  if(!thrust)h[1]=Math.max(-25,Math.min(-3,h[1]));
+  h=confineGrip(w,h,u);
+  const body=[Math.round(fx*(4+Math.min(3,w.weightKg*.7))),Math.round(fy*2.5+(side?(stroke==='rise'?-1:2):(stroke==='rise'?0:1)))];
+  return {...hit,h,u,body,head:[body[0]-fx,body[1]+(stroke==='rise'?-1:1)],hair:[-fx*3,1],leg:4,lunge:true,
+   z:side&&u[0]*fx<-.1?0:dir===0?0:1};
+ }
+ const hermite=(a,b,m,n,t)=>(2*t*t*t-3*t*t+1)*a+(t*t*t-2*t*t+t)*m+(-2*t*t*t+3*t*t)*b+(t*t*t-t*t)*n;
+ function curvePose(a,b,t,ta,tb,aa,ab,ma,mb){
+  const angle=hermite(aa,ab,ma,mb,t),h=a.h.map((v,k)=>hermite(v,b.h[k],ta[k],tb[k],t));
+  const blend=key=>a[key].map((v,k)=>Math.round(v+(b[key][k]-v)*t));
+  return {...a,h,u:[Math.cos(angle),Math.sin(angle)],body:blend('body'),head:blend('head'),hair:blend('hair'),leg:t<.5?a.leg:b.leg,lunge:a.lunge||b.lunge,z:t<.5?a.z:b.z};
+ }
+ function deliveryArc(id,dir,f,load,hit,post){
+  const a=angleOf(load),b=a+turn(a,angleOf(hit)),c=b+turn(angleOf(hit),angleOf(post));
+  const incoming=hit.h.map((v,k)=>v-load.h[k]),outgoing=post.h.map((v,k)=>v-hit.h[k]);
+  const chord=post.h.map((v,k)=>v-load.h[k]),len=Math.hypot(...chord)||1;
+  const speed=Math.min(Math.hypot(...incoming),Math.hypot(...outgoing))*.85;
+  const tangent=chord.map(v=>v/len*speed),spin=Math.sign(b-a)*Math.min(Math.abs(b-a),Math.abs(c-b));
+  // Both segments have the same contact tangent and the same phase derivative
+  // (2). No cusp at the hit; the second segment eases into the extreme pose.
+  const before=f<=2,t=before?(f-1)**2:1-(1-(f-2)/1.5)**3;
+  const p=before?curvePose(load,hit,t,incoming,tangent,a,b,b-a,spin):curvePose(hit,post,t,tangent,[0,0],b,c,spin,0);
+  p.h=confineGrip(get(id),p.h,p.u);
+  if(dir===1||dir===3)p.z=p.u[0]*(dir===1?1:-1)<-.1?0:1;
+  return p;
+ }
+ function recoverPose(id,dir,f,post,ready){
+  const t=smooth(Math.max(0,Math.min(1,(f-3.5)/1.5))),a=angleOf(post);let delta=turn(a,angleOf(ready));
+  if(dir===2&&ready.u[1]<0&&delta<0&&!(post.h[0]<=-6&&post.u[0]<0&&post.u[1]<0))delta+=Math.PI*2;
+  const handTime=dir===2?Math.min(1,t*1.3):t,angle=a+delta*t;
+  const scale=Math.hypot(...post.u)+(Math.hypot(...ready.u)-Math.hypot(...post.u))*t;
+  const p={...post,h:post.h.map((v,k)=>v+(ready.h[k]-v)*handTime),u:[Math.cos(angle)*scale,Math.sin(angle)*scale]};
+  for(const key of ['body','head','hair'])p[key]=post[key].map(v=>Math.round(v*(1-t)));
+  p.h=confineGrip(get(id),p.h,p.u);p.leg=t<.5?post.leg:0;p.lunge=t<1;p.z=dir===0||(dir===1||dir===3)&&p.u[0]*(dir===1?1:-1)<.1?0:1;
+  return p;
+ }
  // The finisher has ONE delivery: frame 1 -> 2. Frames 2 -> 3 hold
- // that same contact, then 3 -> 5 only withdraw. No second thrust on settling.
+ // that contact; its inertial finish precedes a single return to ready.
  function finisherPose(id,dir,f){
   const w=get(id),v=w.finisher,g=guard(id,dir),[fx,fy]=forward(dir),profile=dir===1||dir===3;
   if(f===0||f===5)return {...g,body:[0,0],head:[0,0],hair:[0,0],leg:0,lunge:false,z:dir===0?0:1,view:dir};
+  if(f>3){
+   const load=finisherPose(id,dir,1),hit=finisherPose(id,dir,2);
+   let post=followThrough(id,dir,3,load,hit,v.kind==='lunge'?'thrust':'cut');
+   if(v.kind==='whirl'){
+    const angle=Math.atan2(fy,fx)+1.55,orbit=Math.max(4,Math.min(8,31-w.length-2));
+    post={...post,u:[Math.cos(angle),Math.sin(angle)*.35],h:[Math.cos(angle)*orbit+post.body[0],-9+Math.sin(angle)*2+post.body[1]],view:dir};
+    post.h=confineGrip(w,post.h,post.u);post.z=post.u[1]<0?0:1;
+   }
+   if(f<3.5){
+    const t=1-(1-(f-3)*2)**3,a=angleOf(hit),b=a+turn(a,angleOf(post));
+    const p=curvePose(hit,post,t,post.h.map((x,k)=>x-hit.h[k]),[0,0],a,b,b-a,0);
+    if(v.kind==='whirl'){
+     const angle=Math.atan2(fy,fx)+1.55*t,orbit=Math.max(4,Math.min(8,31-w.length-2));
+     p.u=[Math.cos(angle),Math.sin(angle)*.35];p.h=[Math.cos(angle)*orbit+p.body[0],-9+Math.sin(angle)*2+p.body[1]];p.z=p.u[1]<0?0:1;
+    }
+    p.h=confineGrip(w,p.h,p.u);return p;
+   }
+   if(f===3.5)return post;
+   return recoverPose(id,dir,f,post,finisherPose(id,dir,5));
+  }
   const kind=v.kind,whirl=kind==='whirl',thrust=kind==='lunge',smash=kind==='smash'||kind==='cleave';
   const mirror=dir===3?-1:1;
   const {h:contact,u:edge}=contactPose(id,dir,3);
@@ -196,8 +278,10 @@
   // A body turn sweeps a horizontal waist-height ellipse in perspective,
   // never a vertical wheel pasted over the face. Only weapon projection changes.
   const orbit=Math.max(4,Math.min(8,31-w.length-2));
-  const wind=profile?[-fx*(4+v.tilt*2),0]:[dir===0?-6-v.tilt*2:6+v.tilt*2,0];
-  if(whirl){loadAngle=a;load=[Math.cos(a)*orbit+Math.round(fx*1.5)+wind[0],-9+Math.sin(a)*2+Math.round(fy*.5)+wind[1]];}
+  const wind=profile?[-fx*(7+v.tilt*2),0]:[dir===0?-9-v.tilt*2:9+v.tilt*2,0];
+  if(whirl){loadAngle=a-.65;load=[Math.cos(loadAngle)*orbit+Math.round(fx*1.5)+wind[0],-9+Math.sin(loadAngle)*2+Math.round(fy*.5)+wind[1]];}
+  const prepared=windUp(id,dir,{h:load,u:[Math.cos(loadAngle),Math.sin(loadAngle)],body:[-fx,smash?1:0],head:[0,0],hair:[0,0]}, {h:contact,u:edge},thrust?'thrust':'cut',true);
+  if(!whirl){load=prepared.h;loadAngle=angleOf(prepared);}
   const homeAngle=Math.atan2(g.u[1],g.u[0]);
   const short=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
   const lerp=(a,b,t)=>a+(b-a)*t;
@@ -205,28 +289,20 @@
   if(f<1){
    const t=smooth(f);h=g.h.map((x,k)=>lerp(x,load[k],t));angle=homeAngle+short(homeAngle,loadAngle)*t;
    if(whirl)depth=lerp(1,.35,t);
-   body=whirl?[Math.round(fx*1.5*t),Math.round(fy*.5*t)]:[Math.round(-fx*t),Math.round((smash?1:0)*t)];
+   body=whirl?[Math.round(fx*1.5*t),Math.round(fy*.5*t)]:prepared.body.map(v=>Math.round(v*t));
   }else if(f<2){
    const t=Math.pow(f-1,whirl?1:2.15);leg=t<.5?0:4;
    if(whirl){
-    angle=a-Math.PI*2+Math.PI*2*t;view=(dir+Math.floor(t*4+.0001))%4;
+    angle=a-Math.PI*2-.65+(Math.PI*2+.65)*t;view=(dir+Math.floor(t*4+.0001))%4;
     const turn=forward(view);body=[Math.round(turn[0]*1.5*(1-t)+landed[0]*t),Math.round(turn[1]*.5*(1-t)+landed[1]*t)];
     depth=.35;h=[Math.cos(angle)*orbit+body[0]+wind[0]*(1-t),-9+Math.sin(angle)*2+body[1]+wind[1]*(1-t)];
    }else{
     angle=loadAngle+short(loadAngle,a)*t;h=load.map((x,k)=>lerp(x,contact[k],t));
-    body=[Math.round(lerp(-fx,landed[0],t)),Math.round(lerp(smash?1:0,landed[1],t))];
+    body=prepared.body.map((v,k)=>Math.round(lerp(v,landed[k],t)));
    }
   }else{
-   const retreat=f<=3?0:f<4?.35*smooth(f-3):.35+.65*smooth(f-4);
-   const end=whirl?[Math.cos(a)*orbit+landed[0],-9+Math.sin(a)*2+landed[1]]:contact;
-   const handRetreat=dir===2&&g.u[1]<0?Math.min(1,retreat*1.3):retreat;
-   h=end.map((x,k)=>lerp(x,g.h[k],handRetreat));
-   // Front recovery drops out to the hip before raising the edge outside the
-   // shoulder. The shortest angle used to flick slash blades through the face.
-   let recovery=short(a,homeAngle);
-   if(dir===2&&g.u[1]<0&&recovery<0)recovery+=Math.PI*2;
-   angle=a+recovery*retreat;if(whirl)depth=lerp(.35,1,retreat);
-   body=landed.map(x=>Math.round(x*(1-retreat)));leg=retreat<.5?4:5;
+   h=whirl?[Math.cos(a)*orbit+landed[0],-9+Math.sin(a)*2+landed[1]]:contact;
+   angle=a;body=landed;leg=4;if(whirl)depth=.35;
   }
   const u=[Math.cos(angle),Math.sin(angle)*depth];h=confineGrip(w,h,u);
   return {h,u,reach:w.length+2,body,view,leg,head:[body[0],body[1]+(f>=2&&f<=3?1:0)],
@@ -234,24 +310,22 @@
  }
 
  function pose(id,dir,f,combo=0){
-  if(combo===3)return finisherPose(id,dir,Math.max(0,Math.min(5,f)));
-  // The turnaround after contact is the next stroke's loaded pose. Reuse the
-  // whole drawing (body, legs, hands and depth), so a link never resets to idle.
-  if(f===3.5)return pose(id,dir,1,combo+1);
-  f=Math.max(0,Math.min(5,f));const i=Math.floor(f),fraction=f-i,w=get(id),spear=w.family==='spear';
-  // Slow load, fast delivery, then an overshoot and a weighted recovery.
-  const weight=Math.max(2,Math.min(3.2,2+w.weightKg*.25));
-  const t=i===1?Math.pow(fraction,spear?2:weight):i===2?1-Math.pow(1-fraction,spear?3:weight+1):i===3?Math.min(1,fraction*2):i===4?smooth(fraction):smooth(fraction);
-  const a=keyPose(id,dir,i,combo),b=keyPose(id,dir,Math.min(5,i+1),combo);
-  let angle=Math.atan2(a.u[1],a.u[0]),delta=Math.atan2(b.u[1],b.u[0])-angle;
-  while(delta>Math.PI)delta-=Math.PI*2;while(delta<-Math.PI)delta+=Math.PI*2;
-  const outerRecovery=dir===2&&i===4&&b.u[1]<0&&delta<0;
-  if(outerRecovery)delta+=Math.PI*2;
-  angle+=delta*t;
-  const lerp=(x,y)=>x+(y-x)*t,handTime=outerRecovery?Math.min(1,t*1.3):t;
-  const u=[Math.cos(angle),Math.sin(angle)],raw=a.h.map((v,k)=>v+(b.h[k]-v)*handTime),h=confineGrip(w,raw,u);
-  return {h,u,reach:a.reach,body:a.body?a.body.map((v,k)=>Math.round(lerp(v,b.body[k]))):[0,0],leg:fraction<.5?a.leg:b.leg,
-   head:a.head.map((v,k)=>Math.round(lerp(v,b.head[k]))),hair:a.hair.map((v,k)=>Math.round(lerp(v,b.hair[k]))),lunge:a.lunge||b.lunge,z:a.z};
+  f=Math.max(0,Math.min(5,f));
+  if(combo===3)return finisherPose(id,dir,f);
+  const ready=keyPose(id,dir,5,combo);
+  if(f===0||f===5)return ready;
+  let load=keyPose(id,dir,1,combo);const hit=keyPose(id,dir,2,combo),stroke=STYLES[get(id).family].strokes[combo];
+  // Returning from the high reverse, coil the rising blade down outside the
+  // profile silhouette without teleporting its hand back to the other hip.
+  if(combo===2&&(dir===1||dir===3)&&stroke==='rise')load.h=[dir===1?3:-3,-8];
+  load=windUp(id,dir,load,hit,stroke);
+  if(f<1){
+   const a=angleOf(ready),b=a+turn(a,angleOf(load)),t=smooth(f);
+   const p=curvePose(ready,load,t,[0,0],[0,0],a,b,0,0);p.h=confineGrip(get(id),p.h,p.u);return p;
+  }
+  const post=followThrough(id,dir,combo,load,hit,stroke);
+  if(f<=3.5)return deliveryArc(id,dir,f,load,hit,post);
+  return recoverPose(id,dir,f,post,ready);
  }
  function vector(id,dir,f,combo){const p=pose(id,dir,f,combo);return [...p.h,p.u[0]*p.reach,p.u[1]*p.reach];}
  function segmentDistance(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/l)):0;return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
@@ -461,5 +535,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });
