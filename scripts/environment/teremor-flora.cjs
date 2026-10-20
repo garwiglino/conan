@@ -26,7 +26,7 @@ function clump(s,cx,cy,rx,ry,ramp,{R,bias=0,leaf=2.6,max=7,gaps=0,smooth=false,g
 }
 // Contour sélectif : sombre en bas et à droite, fondu en haut à gauche.
 function outline(s,ramp){const g=s.g,src=g.clone();for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++){if(src.get(x,y))continue;const r=src.get(x-1,y),u=src.get(x,y-1),l=src.get(x+1,y),d=src.get(x,y+1);if(r||u)g.set(x,y,ramp+'0');else if(d&&(src.get(x-1,y+1)||src.get(x+1,y+1)))continue;}}
-function ellipseShadow(s,cx,cy,rx,ry){for(let y=Math.floor(cy-ry);y<=cy+ry;y++)for(let x=Math.floor(cx-rx);x<=cx+rx;x++)if(((x-cx)/rx)**2+((y-cy)/ry)**2<=1)s.shadow.set(x,y,'herbe0');}
+function ellipseShadow(s,cx,cy,rx,ry,c='herbe0'){for(let y=Math.floor(cy-ry);y<=cy+ry;y++)for(let x=Math.floor(cx-rx);x<=cx+rx;x++)if(((x-cx)/rx)**2+((y-cy)/ry)**2<=1)s.shadow.set(x,y,c);}
 function trunk(s,x,y0,y1,w,{R,ramp='ecorce',roots=true}){
  const g=s.g;for(let y=y1;y<=y0;y++){const t=(y-y1)/(y0-y1),hw=w/2*(1+(roots&&t>.8?(t-.8)*3:0))+(t>.9&&roots?1:0);
   const a=Math.round(x-hw),b=Math.round(x+hw)-1;for(let xx=a;xx<=b;xx++){const f=(xx-a)/Math.max(1,b-a);let c=f<.25?4:f<.55?3:f<.8?2:1;if(ramp==='tronc')c=f<.3?3:f<.6?2:1;if(ramp==='bouleau'){c=f<.3?5:f<.7?4:f<.9?3:1;}g.set(xx,y,ramp+c);}
@@ -93,7 +93,7 @@ function flowers(seed){
 function all(){return {
  chene_a:oak(101),chene_b:oak(202),chene_c:oak(303,{w:64,h:84}),bouleau_a:birch(404),bouleau_b:birch(505,{h:88}),
  buisson_a:bush(606),buisson_b:bush(707),rocher_a:boulder(808),rocher_b:boulder(909,{w:28,h:24}),fougere:fern(111),champignons:mushrooms(121),fleurs:flowers(131)};}
-module.exports={all,oak,birch,bush,boulder,fern,mushrooms,flowers};
+module.exports={all,oak,birch,bush,boulder,fern,mushrooms,flowers,Sprite,clump,outline,ellipseShadow,trunk,L};
 if(require.main===module){
  const {save}=require('./png.cjs'),F=all(),list=Object.values(F),W=Math.max(...list.map(s=>s.w)),H=Math.max(...list.map(s=>s.h));
  const tiles=list.map(s=>{const g=new Grid(W,H,{fill:'herbe4'});for(let y=0;y<s.h;y++)for(let x=0;x<s.w;x++){const sh=s.shadow.get(x,y);const ty=y+H-s.h,tx=x+((W-s.w)>>1);if(sh)g.set(tx,ty,'herbe2');const v=s.g.get(x,y);if(v)g.px[ty*W+tx]=v;}return g;});

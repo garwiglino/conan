@@ -19,7 +19,18 @@ const RAMPS={
  champi:  ['#5a2a2c','#8c3b36','#b85a48','#d98a68'],
  // Pavages de ville : tuiles et grès clair des bâtiments (mêmes couleurs).
  brique:  ['#492d38','#713e3c','#a45b47','#c57b57','#e3a377'],
- gres:    ['#65544f','#94765f','#c4aa83','#dec99d','#eee1b6']
+ gres:    ['#65544f','#94765f','#c4aa83','#dec99d','#eee1b6'],
+ // Sarak, désert : lumière de midi, ombres violettes, sable doré, grès rouge
+ // en strates, oasis turquoise. Le pisé reprend la rampe des bâtiments.
+ sable:   ['#2f2331','#4b3139','#6f4a45','#946553','#b8825f','#d29f6c','#e2b97f','#eed29c','#f7e7c0'],
+ piste:   ['#3a2c31','#5b4643','#7f6454','#a2836a','#bfa083','#d7bc9d','#eadabd'],
+ ocre:    ['#2a1c26','#47272c','#6b3a35','#91513f','#b56d4a','#d18d5d','#e5ae78','#f2cf98'],
+ sauge:   ['#28302e','#3f4a3d','#5c6a4c','#7d8a5d','#9fa872','#c2c48d'],
+ palme:   ['#16232a','#1d3836','#29503f','#3a6944','#52834a','#749d52','#a2b864'],
+ bois:    ['#2c2429','#4a3b37','#6d5848','#917860','#b49c7f','#d2bf9f','#e9ddc3'],
+ oasis:   ['#11242f','#143843','#185055','#1f6a67','#2b8579','#45a18a','#76bea0','#b9dfc2'],
+ pise:    ['#665042','#977153','#bb9466','#d7b780','#edcf98'],
+ zellige: ['#1c2844','#25456a','#2b6c86','#3d9794','#79c1a7']
 };
 const list=[];for(const [ramp,colors]of Object.entries(RAMPS))colors.forEach((hex,i)=>list.push({name:ramp+i,ramp,tone:i,hex}));
 const index=new Map(list.map((c,i)=>[c.name,i+1]));

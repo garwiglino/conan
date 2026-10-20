@@ -31,11 +31,12 @@ function map(N=36){
  }
  return {N,code,piece,houses};
 }
+const BIG=['chene_a','chene_b','chene_c','chene_a','chene_b','bouleau_a','bouleau_b','buisson_a','buisson_b','rocher_a'],SMALL=['fougere','fougere','champignons','fleurs','buisson_b','rocher_b'];
 /* Compose une carte {N, code, piece, houses, paving?} : sol, flore, bâtiments et
  * Kaldor triés par profondeur. heroes : positions au sol ; crops : [nom, u, v]. */
-function compose(M,file,{scale=1,heroes=[],crops=[]}={}){
- const N=M.N,E=Env(require('../../sprites/environnement/teremor-data.js'));
- const sampler={tile:(i,j)=>i<0||j<0||i>=N||j>=N?{code:0}:{code:M.code[j*N+i]===9?0:M.code[j*N+i],paving:M.paving?.(i,j)},piece:(ci,cj)=>ci<0||cj<0||ci>=N/2||cj>=N/2?[]:M.piece(ci,cj)};
+function compose(M,file,{scale=1,heroes=[],crops=[],data=require('../../sprites/environnement/teremor-data.js'),big=BIG,small=SMALL,place:extra=[]}={}){
+ const N=M.N,E=Env(data);
+ const sampler={tile:(i,j)=>i<0||j<0||i>=N||j>=N?{code:0}:{code:M.code[j*N+i]===9?0:M.code[j*N+i],paving:M.paving?.(i,j)},roads:M.roads,piece:(ci,cj)=>ci<0||cj<0||ci>=N/2||cj>=N/2?[]:M.piece(ci,cj)};
  const width=N*32+64,height=N*16+64,ox=width/2,oy=48;
  const out=E.render({sampler,base:[0,0],screen:[0,0],tiles:[N,N],width,height,ox,oy});
  const cv=createCanvas(width,height),c=cv.getContext('2d');c.fillStyle='#141b1c';c.fillRect(0,0,width,height);
@@ -46,18 +47,18 @@ function compose(M,file,{scale=1,heroes=[],crops=[]}={}){
  const toCanvas=(px,w,h)=>{const s=createCanvas(w,h),x=s.getContext('2d'),im=x.createImageData(w,h);for(let k=0;k<px.length;k++)if(px[k])im.data.set(E.rgb[px[k]],k*4);x.putImageData(im,0,0);return s;};
  const SPR={};for(const v of Object.values(E.flora))for(const f of v.frames)SPR[f.name]={img:toCanvas(f.px,f.w,f.h),shadow:toCanvas(f.sh,f.w,f.h),alpha:v.shadow,ax:f.ax,ay:f.ay};
  const place=(k,u,v)=>{const sp=SPR[k],p=P(u,v);c.save();c.globalAlpha=sp.alpha;c.drawImage(sp.shadow,Math.round(p.x+ox-sp.ax),Math.round(p.y+oy-sp.ay));c.restore();draw.push({y:p.y,fn:()=>c.drawImage(sp.img,Math.round(p.x+ox-sp.ax),Math.round(p.y+oy-sp.ay))});};
- const BIG=['chene_a','chene_b','chene_c','chene_a','chene_b','bouleau_a','bouleau_b','buisson_a','buisson_b','rocher_a'],SMALL=['fougere','fougere','champignons','fleurs','buisson_b','rocher_b'];
- for(let j=0;j<N;j++)for(let i=0;i<N;i++){const t=M.code[j*N+i];
-  if(t===4)place(BIG[Math.floor(hash(i,j,5)*BIG.length)],i*16+8,j*16+9);
-  else if(t===0&&hash(i,j,41)<.035)place(SMALL[Math.floor(hash(i,j,42)*SMALL.length)],i*16+8,j*16+9);}
+ for(let j=0;j<N;j++)for(let i=0;i<N;i++){const t=M.code[j*N+i],list=typeof big==='function'?big(i,j):big;
+  if(t===4)place(list[Math.floor(hash(i,j,5)*list.length)],i*16+8,j*16+9);
+  else if(t===0&&hash(i,j,41)<.035)place(small[Math.floor(hash(i,j,42)*small.length)],i*16+8,j*16+9);}
+ for(const [k,u,v]of extra)place(k,u,v);
  for(const [id,i,j,dir]of M.houses){
   const im=A.raster(id,{dir}),s=createCanvas(im.width,im.height),x=s.getContext('2d'),d=x.createImageData(im.width,im.height);d.data.set(im.data);x.putImageData(d,0,0);const e=A.entry(id),p=P(i*16,j*16),q=P(i*16+e.width,j*16+e.depth);draw.push({y:q.y-8,fn:()=>c.drawImage(s,Math.round(p.x+ox-im.anchor[0]),Math.round(p.y+oy-im.anchor[1]))});}
  const hero=sprite(HERO.pixels,HERO.width,HERO.height);
  for(const [u,v]of heroes){const p=P(u,v);draw.push({y:p.y,fn:()=>c.drawImage(hero,Math.round(p.x+ox-HERO.anchor[0]),Math.round(p.y+oy-HERO.anchor[1]))});}
  for(const f of out.features)draw.push({y:f.depth+oy-16+16,fn:()=>{const s=createCanvas(f.width,f.height),x=s.getContext('2d'),d=x.createImageData(f.width,f.height);d.data.set(f.data);x.putImageData(d,0,0);c.drawImage(s,f.x+ox,f.y+oy);}});
  draw.sort((a,b)=>a.y-b.y).forEach(d=>d.fn());
- const big=createCanvas(width*scale,height*scale),b=big.getContext('2d');b.imageSmoothingEnabled=false;b.drawImage(cv,0,0,width*scale,height*scale);
- fs.writeFileSync(file,big.toBuffer('image/png'));
+ const large=createCanvas(width*scale,height*scale),b=large.getContext("2d");b.imageSmoothingEnabled=false;b.drawImage(cv,0,0,width*scale,height*scale);
+ fs.writeFileSync(file,large.toBuffer("image/png"));
  // Recadrage plein écran à l'échelle du jeu (×2) autour du village et du pont.
  for(const [name,u,v]of crops){const cx=P(u,v);
   const W=422,H=195,crop=createCanvas(W*2,H*2),k=crop.getContext('2d');k.imageSmoothingEnabled=false;k.drawImage(cv,Math.round(cx.x+ox-W/2),Math.round(cx.y+oy-H/2),W,H,0,0,W*2,H*2);fs.writeFileSync(file.replace('.png','-'+name+'.png'),crop.toBuffer('image/png'));

@@ -1,8 +1,9 @@
 /* Serializable worker/fallback renderer. No DOM, PNG or synchronous full-world pass.
- * `env` (createEnvironmentArt) paints the redrawn biomes; other families keep T. */
+ * `env` paints the redrawn biomes: one createEnvironmentArt (forest) or a map
+ * {family: createEnvironmentArt}. Other families keep T. */
 function createProjectedWorldArt(atlas,T,config={},env=null){
  const core=config.core||[],familyOf=c=>atlas.curseCells.has(c?.id)?'cursed':c?.biome===11?'snow':c?.biome===10?'tundra':c?.biome===9?'taiga':c?.biome===12?'marsh':c?.biome===8?'wetforest':[5,7].includes(c?.biome)?'jungle':c?.biome===6?'forest':[1,2].includes(c?.biome)?'desert':c?.biome===3?'steppe':'grass';
- const ENV_FAMILIES=new Set(env?['forest']:[]);
+ const ENVS=!env?{}:typeof env.renderSteps==='function'?{forest:env}:env,ENV_FAMILIES=new Set(Object.keys(ENVS));
  const laneIndex=new Map();for(const l of config.lanes||[])for(let y=Math.floor(l.y/512);y<=Math.floor((l.y+l.h)/512);y++)for(let x=Math.floor(l.x/512);x<=Math.floor((l.x+l.w)/512);x++){const k=x+','+y;if(!laneIndex.has(k))laneIndex.set(k,[]);laneIndex.get(k).push(l);}
  const trails=[];for(const trail of config.trails||[])for(let i=1;i<trail.pts.length;i++){const a=trail.pts[i-1],b=trail.pts[i];trails.push({a:[(a[0]+atlas.origin.x)*16,(a[1]+atlas.origin.y)*16],b:[(b[0]+atlas.origin.x)*16,(b[1]+atlas.origin.y)*16],width:trail.w*8});}
  const isLocal=(wx,wy)=>wx+.5>=atlas.origin.x&&wy+.5>=atlas.origin.y&&wy+.5<atlas.origin.y+core.length&&wx+.5<atlas.origin.x+(core[0]?.length||0);
@@ -19,7 +20,7 @@ function createProjectedWorldArt(atlas,T,config={},env=null){
   const routes=local?trails.filter(r=>wx*16+16>=Math.min(r.a[0],r.b[0])-r.width&&wx*16<=Math.max(r.a[0],r.b[0])+r.width&&wy*16+16>=Math.min(r.a[1],r.b[1])-r.width&&wy*16<=Math.max(r.a[1],r.b[1])+r.width):atlas.roadIndex.near(wx+.5,wy+.5).filter(s=>s.r.type!=='searoutes'&&atlas.project(wx+.5,wy+.5,s.a,s.b).d<s.r.width/2+2).map(s=>({a:s.a.map(n=>n*16),b:s.b.map(n=>n*16),width:s.r.width*8}));
   // Authored district lanes are ground geometry too; their centre/width is kept.
   if(routes)for(const l of lanes)if(gx+16>=l.x&&gx<=l.x+l.w&&gy+16>=l.y&&gy<=l.y+l.h){const horizontal=l.w>=l.h,a=horizontal?[l.x,l.y+l.h/2]:[l.x+l.w/2,l.y],b=horizontal?[l.x+l.w,l.y+l.h/2]:[l.x+l.w/2,l.y+l.h];routes.push({a:[a[0]+atlas.origin.x*16,a[1]+atlas.origin.y*16],b:[b[0]+atlas.origin.x*16,b[1]+atlas.origin.y*16],width:(horizontal?l.h:l.w)/2});}
-  return {family:familyAt(wx,wy,clock),kind,mask:kind==='shore'?shore:kind==='cliff'?cliff:mask,height:kind==='cliff'?(type===6?24:32):0,dir:seg&&Math.abs(seg.b[0]-seg.a[0])>Math.abs(seg.b[1]-seg.a[1])?1:0,routes,sourceCode:type,offsetX:local?(atlas.origin.x-Math.round(atlas.origin.x))*16:0,offsetY:local?(atlas.origin.y-Math.round(atlas.origin.y))*16:0};
+  return {family:familyAt(wx,wy,clock),local,kind,mask:kind==='shore'?shore:kind==='cliff'?cliff:mask,height:kind==='cliff'?(type===6?24:32):0,dir:seg&&Math.abs(seg.b[0]-seg.a[0])>Math.abs(seg.b[1]-seg.a[1])?1:0,routes,sourceCode:type,offsetX:local?(atlas.origin.x-Math.round(atlas.origin.x))*16:0,offsetY:local?(atlas.origin.y-Math.round(atlas.origin.y))*16:0};
  }
  // Chemins des biomes redessinés : routes et ruelles posées sur des cases de
  // 2 m (deux cases du monde) ; chaque case prend la pièce standard que
@@ -46,15 +47,35 @@ function createProjectedWorldArt(atlas,T,config={},env=null){
   for(const l of lanes){const horizontal=l.w>=l.h,a=horizontal?[l.x+4,l.y+l.h/2]:[l.x+l.w/2,l.y+4],b=horizontal?[l.x+l.w-4,l.y+l.h/2]:[l.x+l.w/2,l.y+l.h-4],t=p=>[(p[0]/16+atlas.origin.x)/2,(p[1]/16+atlas.origin.y)/2];add(cellLine(...t(a),...t(b)),l.paved?'rangs':'chemin');}
   return occ;
  }
- // Localités des biomes redessinés : herbe entre les ruelles, place pavée au centre.
- // Le pavage de la place dépend de la localité (stable d'une partie à l'autre).
- const PLAZAS={town:['flags','fan','bricks','setts'],port:['flags','setts'],relay:['cobble','setts'],ruin:['cobble'],refuge:['cobble'],camp:['cobble'],dock:['cobble']};
- const plazaOf=site=>{const list=PLAZAS[site.kind]||['cobble'];let h=0;for(const ch of String(site.id))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return list[(h>>>3)%list.length];};
+ // Localités des biomes redessinés : sol nu entre les ruelles, place pavée au centre.
+ // Le pavage de la place dépend du biome et de la localité (stable d'une partie à
+ // l'autre) ; les campements du désert n'ont pas de place.
+ const PLAZAS={
+  forest:{town:['flags','fan','bricks','setts'],port:['flags','setts'],relay:['cobble','setts'],ruin:['cobble'],refuge:['cobble'],camp:['cobble'],dock:['cobble']},
+  desert:{town:['cabochon','hex','flags','setts'],port:['flags','hex'],relay:['cobble','flags'],ruin:['cobble'],refuge:['cobble'],camp:[],dock:['flags']}
+ };
+ const plazaOf=(site,family)=>{const list=(PLAZAS[family]||PLAZAS.forest)[site.kind]||['cobble'];if(!list.length)return null;let h=0;for(const ch of String(site.id))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return list[(h>>>3)%list.length];};
  // Les routes (code 1) deviennent des pièces de chemin, sauf sur la place qu'elles traversent.
- function placeTile(i,j){const c=code(i,j);if(c!==1&&c!==2&&c!==7)return {code:c};const site=atlas.siteAt(i+.5,j+.5);if(!site)return {code:0};const d=Math.hypot(i+.5-site.x,j+.5-site.y),r=site.kind==='town'?7:site.kind==='port'?5:3.5;return d<=r?{code:2,paving:plazaOf(site)}:{code:0};}
+ function placeTile(i,j,family='forest'){const c=code(i,j);if(c!==1&&c!==2&&c!==7)return {code:c};const site=atlas.siteAt(i+.5,j+.5);if(!site)return {code:0};const d=Math.hypot(i+.5-site.x,j+.5-site.y),r=site.kind==='town'?7:site.kind==='port'?5:3.5,paving=d<=r&&plazaOf(site,family);return paving?{code:2,paving}:{code:0};}
+ /* Zone de départ (carte locale) : ses cases sont décalées d'une fraction de case
+  * par rapport à l'atlas. Elle est peinte dans un réseau « local » décalé de
+  * (dU, dV) unités ; les pixels restent ceux du secteur, seuls les numéros de
+  * case changent. Pistes analytiques, dallages du temple et des cours, pont. */
+ const OX=Math.floor(atlas.origin.x),OY=Math.floor(atlas.origin.y),dU=(atlas.origin.x-OX)*16,dV=(atlas.origin.y-OY)*16;
+ const coreAt=(I,J)=>{const lx=I-OX,ly=J-OY;return ly>=0&&lx>=0&&ly<core.length&&lx<(core[0]?.length||0)?core[ly][lx]:-1;};
+ const trailSegs=[];for(const trail of config.trails||[])for(let i=1;i<trail.pts.length;i++){const a=trail.pts[i-1],b=trail.pts[i];trailSegs.push({a:[(a[0]+OX)*16,(a[1]+OY)*16],b:[(b[0]+OX)*16,(b[1]+OY)*16],width:trail.w*8,paved:false});}
+ function localTile(I,J){
+  const c=coreAt(I,J);if(c<0)return placeTile(Math.floor(I+(8+dU)/16),Math.floor(J+(8+dV)/16),'desert');
+  if(c===1)return {code:0};if(c===2||c===7)return {code:2,paving:'flags'};
+  // Tablier : planches en travers de la piste (1 piste est-ouest, 2 nord-sud).
+  if(c===5){const land=n=>n!==3&&n!==5&&n>=0;return {code:5,deck:land(coreAt(I-1,J))||land(coreAt(I+1,J))?1:2};}
+  return {code:c};
+ }
+ const localRoads=(I,J)=>trailSegs.filter(r=>{const x0=I*16-r.width-16,x1=I*16+16+r.width+16,y0=J*16-r.width-16,y1=J*16+16+r.width+16;return Math.max(r.a[0],r.b[0])>=x0&&Math.min(r.a[0],r.b[0])<=x1&&Math.max(r.a[1],r.b[1])>=y0&&Math.min(r.a[1],r.b[1])<=y1;});
  function* renderSteps(x0,y0,width=512,height=512,clock=480){
   const data=new Uint8ClampedArray(1024*544*4),features=[],tiles=[],wx0=x0/16,wy0=y0/16;let redrawn=0;
-  for(let y=0;y<32;y++)for(let x=0;x<32;x++){const d=metadata(wx0+x,wy0+y,clock);d.env=ENV_FAMILIES.has(d.family);if(d.env)redrawn++;tiles.push({x,y,d});if(x%4===3)yield;}
+  // Les murs de la zone de départ (code 6) sont des ouvrages : ils gardent leur dessin.
+  for(let y=0;y<32;y++)for(let x=0;x<32;x++){const d=metadata(wx0+x,wy0+y,clock);d.env=ENV_FAMILIES.has(d.family)&&!(d.local&&d.sourceCode===6);if(d.env)redrawn++;tiles.push({x,y,d});if(x%4===3)yield;}
   tiles.sort((a,b)=>a.x+a.y-b.x-b.y||a.x-b.x);
   for(let k=0;k<tiles.length;k++){
    const {x,y,d}=tiles[k];if(d.env)continue;
@@ -70,15 +91,12 @@ function createProjectedWorldArt(atlas,T,config={},env=null){
    // gardent les cases des autres familles et l'emportent sur les pixels incertains.
    const families=new Map(tiles.map(({x,y,d})=>[(wx0+x)+','+(wy0+y),d.family])),occ=pathCells(wx0,wy0,32);yield;
    const familyOfTile=(i,j)=>{const k=i+','+j;let f=families.get(k);if(f===undefined){f=familyAt(i,j,clock);families.set(k,f);}return f;};
-   const has=(ci,cj)=>occ.has(ci+','+cj);
-   const sampler={
-    tile:placeTile,
-    use:(i,j)=>ENV_FAMILIES.has(familyOfTile(i,j)),
-    piece:(ci,cj)=>{const set=occ.get(ci+','+cj);return set?[{set,mask:(has(ci,cj-1)?1:0)|(has(ci+1,cj)?2:0)|(has(ci,cj+1)?4:0)|(has(ci-1,cj)?8:0)}]:null;}
-   };
-   const im=yield* env.renderSteps({sampler,base:[x0,y0],screen:[x0-y0,(x0+y0)/2]});
-   for(let k=0;k<im.priority.length;k++){const p=im.priority[k];if(p===2||p===1&&!data[k*4+3])data.set(im.data.subarray(k*4,k*4+4),k*4);}
-   for(const f of im.features)features.push(f);
+   const has=(ci,cj)=>occ.has(ci+','+cj),piece=(ci,cj)=>{const set=occ.get(ci+','+cj);return set?[{set,mask:(has(ci,cj-1)?1:0)|(has(ci+1,cj)?2:0)|(has(ci,cj+1)?4:0)|(has(ci-1,cj)?8:0)}]:null;};
+   const merge=im=>{for(let k=0;k<im.priority.length;k++){const p=im.priority[k];if(p===2||p===1&&!data[k*4+3])data.set(im.data.subarray(k*4,k*4+4),k*4);}for(const f of im.features)features.push(f);};
+   const screen=[x0-y0,(x0+y0)/2],world=new Set(),local=new Set();for(const {d}of tiles)if(d.env)(d.local?local:world).add(d.family);
+   // Une passe par biome dans le réseau de l'atlas, puis la zone de départ dans son réseau.
+   for(const family of world){const sampler={tile:(i,j)=>placeTile(i,j,family),use:(i,j)=>familyOfTile(i,j)===family&&!isLocal(i,j),piece};merge(yield* ENVS[family].renderSteps({sampler,base:[x0,y0],screen}));}
+   for(const family of local){const sampler={tile:localTile,use:(I,J)=>{const c=coreAt(I,J);return c>=0&&c!==6;},roads:localRoads};merge(yield* ENVS[family].renderSteps({sampler,base:[x0-dU,y0-dV],screen}));}
   }
   return {width:1024,height:544,data,features};
  }

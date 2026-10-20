@@ -93,3 +93,65 @@ Columns: 8
 196 170 131	gres2
 222 201 157	gres3
 238 225 182	gres4
+ 47  35  49	sable0
+ 75  49  57	sable1
+111  74  69	sable2
+148 101  83	sable3
+184 130  95	sable4
+210 159 108	sable5
+226 185 127	sable6
+238 210 156	sable7
+247 231 192	sable8
+ 58  44  49	piste0
+ 91  70  67	piste1
+127 100  84	piste2
+162 131 106	piste3
+191 160 131	piste4
+215 188 157	piste5
+234 218 189	piste6
+ 42  28  38	ocre0
+ 71  39  44	ocre1
+107  58  53	ocre2
+145  81  63	ocre3
+181 109  74	ocre4
+209 141  93	ocre5
+229 174 120	ocre6
+242 207 152	ocre7
+ 40  48  46	sauge0
+ 63  74  61	sauge1
+ 92 106  76	sauge2
+125 138  93	sauge3
+159 168 114	sauge4
+194 196 141	sauge5
+ 22  35  42	palme0
+ 29  56  54	palme1
+ 41  80  63	palme2
+ 58 105  68	palme3
+ 82 131  74	palme4
+116 157  82	palme5
+162 184 100	palme6
+ 44  36  41	bois0
+ 74  59  55	bois1
+109  88  72	bois2
+145 120  96	bois3
+180 156 127	bois4
+210 191 159	bois5
+233 221 195	bois6
+ 17  36  47	oasis0
+ 20  56  67	oasis1
+ 24  80  85	oasis2
+ 31 106 103	oasis3
+ 43 133 121	oasis4
+ 69 161 138	oasis5
+118 190 160	oasis6
+185 223 194	oasis7
+102  80  66	pise0
+151 113  83	pise1
+187 148 102	pise2
+215 183 128	pise3
+237 207 152	pise4
+ 28  40  68	zellige0
+ 37  69 106	zellige1
+ 43 108 134	zellige2
+ 61 151 148	zellige3
+121 193 167	zellige4

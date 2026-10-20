@@ -1,5 +1,6 @@
 {
  "biome": "Forêt tempérée de Teremor",
+ "global": "HearthreaverTeremor",
  "palette": "palette-teremor.gpl",
  "echelle": "1 px par unité ; une case de 1 m = losange 32 × 16 ; pièces de chemin sur 2 m",
  "niveaux": {

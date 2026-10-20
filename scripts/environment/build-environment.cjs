@@ -1,10 +1,14 @@
 'use strict';
-/* Sources Piskel du biome -> données du jeu (palette indexée, sans navigateur).
- *   node scripts/environment/build-environment.cjs [--verifier]
- * --verifier : échoue si sprites/environnement/teremor-data.js n'est pas à jour. */
+/* Sources Piskel des biomes -> données du jeu (palette indexée, sans navigateur).
+ *   node scripts/environment/build-environment.cjs [biome…] [--verifier]
+ * Sans biome : chaque dossier art/environnement/<biome> qui a un manifeste.
+ * Sortie : sprites/environnement/<biome>-data.js, global du manifeste.
+ * --verifier : échoue si un fichier de données n'est pas à jour. */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const P=require('./palette.cjs'),piskel=require('./piskel.cjs'),{NAMES}=require('./teremor-pieces.cjs');
-const SRC=path.join(__dirname,'../../art/environnement/teremor'),OUT=path.join(__dirname,'../../sprites/environnement/teremor-data.js');
+const ART=path.join(__dirname,'../../art/environnement'),SPRITES=path.join(__dirname,'../../sprites/environnement');
+const outOf=biome=>path.join(SPRITES,biome+'-data.js');
+const biomes=()=>fs.readdirSync(ART).filter(d=>fs.existsSync(path.join(ART,d,'manifeste.json'))).sort();
 const RGB=P.hexes.map(h=>h.length===9?null:[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)));
 const EXACT=new Map(RGB.map((c,i)=>c&&[c.join(','),i]).filter(Boolean));
 const MASK=Object.fromEntries(Object.entries(NAMES).map(([m,n])=>[n,+m]));
@@ -17,9 +21,11 @@ const layer=(doc,name,file)=>{const l=doc.layers.find(l=>l.name.trim().toLowerCa
 // Recadre un sprite sur ses pixels visibles (couleur et ombre) et déplace l'ancre.
 function trim(w,h,ax,ay,...grids){let x0=w,y0=h,x1=-1,y1=-1;for(const g of grids)for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(g[y*w+x]){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);}
  if(x1<0)return null;const W=x1-x0+1,H=y1-y0+1;return {w:W,h:H,ax:ax-x0,ay:ay-y0,grids:grids.map(g=>{const o=new Uint8Array(W*H);for(let y=0;y<H;y++)o.set(g.subarray((y+y0)*w+x0,(y+y0)*w+x0+W),y*W);return o;})};}
-async function build(){
- const manifest=JSON.parse(fs.readFileSync(path.join(SRC,'manifeste.json'),'utf8')),report=new Map(),hash=crypto.createHash('sha256');
+async function build(biome='teremor'){
+ const SRC=path.join(ART,biome),manifest=JSON.parse(fs.readFileSync(path.join(SRC,'manifeste.json'),'utf8')),report=new Map(),hash=crypto.createHash('sha256');
  const data={biome:manifest.biome,palette:P.hexes,names:P.list.map(c=>c.name),toneOf:P.list.map(c=>[c.ramp,c.tone]),ramps:Object.fromEntries(Object.entries(P.RAMPS).map(([k,v])=>[k,v.length])),textures:{},decals:[],decalRate:.08,pieces:{},levelOf:{},flora:{}};
+ // Couleurs d'accent du compositeur et grandes plages du sol, propres au biome.
+ for(const n of Object.values(manifest.accents||{}))P.id(n);if(manifest.accents)data.accents=manifest.accents;if(manifest.macro)data.macro=manifest.macro;
  for(const cols of Object.values(manifest.niveaux))cols.forEach((n,i)=>{if(i)data.levelOf[P.id(n)]=i/(cols.length-1);});
  for(const entry of manifest.fichiers){
   const file=path.join(SRC,entry.fichier),doc=await piskel.read(file),idx=indexer(entry.fichier,report),{width:w,height:h}=doc;hash.update(entry.fichier).update(fs.readFileSync(file));
@@ -41,11 +47,14 @@ async function build(){
  for(const need of ['grass','dirt','cobble','water','litter','bank','plank','cliffS','cliffE'])if(!data.textures[need])throw Error('texture '+need+' absente du manifeste');
  data.sets=manifest.jeux||{};for(const [name,set]of Object.entries(data.sets)){if(!data.pieces[set.forme])throw Error('jeu '+name+' : forme '+set.forme+' absente');if(!data.textures[set.matiere])throw Error('jeu '+name+' : matière '+set.matiere+' absente');}
  data.source=hash.digest('hex').slice(0,16);
- return {text:'/* Généré par scripts/environment/build-environment.cjs depuis art/environnement/teremor (.piskel). Ne pas modifier à la main. */\n(function(root,data){if(typeof module===\'object\'&&module.exports)module.exports=data;else root.HearthreaverTeremor=data;})(globalThis,'+JSON.stringify(data)+');\n',report};
+ const global=manifest.global||'Hearthreaver'+biome[0].toUpperCase()+biome.slice(1);
+ return {text:'/* Généré par scripts/environment/build-environment.cjs depuis art/environnement/'+biome+' (.piskel). Ne pas modifier à la main. */\n(function(root,data){if(typeof module===\'object\'&&module.exports)module.exports=data;else root.'+global+'=data;})(globalThis,'+JSON.stringify(data)+');\n',report,out:outOf(biome)};
 }
-if(require.main===module)build().then(({text,report})=>{
- for(const [k,n]of report)console.warn('couleur hors palette '+k+' : '+n+' px ramenés à la plus proche');
- if(process.argv.includes('--verifier')){const now=fs.existsSync(OUT)&&fs.readFileSync(OUT,'utf8');if(now!==text){console.error('teremor-data.js n’est pas à jour : npm run build:environment');process.exit(1);}console.log('teremor-data.js à jour');return;}
- fs.writeFileSync(OUT,text);console.log(path.relative(process.cwd(),OUT)+' : '+(text.length/1024).toFixed(0)+' Kio');
-}).catch(e=>{console.error(e.message||e);process.exit(1);});
-module.exports={build,encode};
+if(require.main===module)(async()=>{
+ const wanted=process.argv.slice(2).filter(a=>!a.startsWith('--'));
+ for(const biome of wanted.length?wanted:biomes()){const {text,report,out}=await build(biome);
+  for(const [k,n]of report)console.warn(biome+' : couleur hors palette '+k+' : '+n+' px ramenés à la plus proche');
+  if(process.argv.includes('--verifier')){const now=fs.existsSync(out)&&fs.readFileSync(out,'utf8');if(now!==text){console.error(path.basename(out)+' n’est pas à jour : npm run build:environment');process.exitCode=1;}else console.log(path.basename(out)+' à jour');continue;}
+  fs.writeFileSync(out,text);console.log(path.relative(process.cwd(),out)+' : '+(text.length/1024).toFixed(0)+' Kio');}
+})().catch(e=>{console.error(e.message||e);process.exit(1);});
+module.exports={build,encode,biomes,outOf};

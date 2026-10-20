@@ -28,6 +28,12 @@ const SHAPES={};for(const [set,list]of Object.entries(ASSETS.pieces||{}))SHAPES[
 const SETS=ASSETS.sets||{chemin:{forme:'chemin',matiere:'dirt'},pave:{forme:'pave',matiere:'cobble'},ruisseau:{forme:'ruisseau',matiere:'water'}};
 const KIND={};for(const [name,set]of Object.entries(SETS))KIND[name]=set.matiere==='water'?'water':set.matiere==='dirt'?'dirt':'paving';
 const LEVEL=new Float32Array(PAL.length);for(const [i,v]of Object.entries(ASSETS.levelOf||{}))LEVEL[i]=v;
+// Couleurs posées par les règles de lumière : propres à chaque biome (rebord des
+// falaises, berge vue au-dessus de l'eau, écume, tablier) ; celles de Teremor par défaut.
+const ACC={plank:'ecorce3',deckShade:'ecorce2',deckShade2:'ecorce1',deckLip:'ecorce4',waterDeep:'eau0',foam:'eau5',bankFace:'terre3',bankFace2:'terre2',lipLit:'herbe6',lipShade:'herbe5',drape:'herbe3',drape2:'herbe2',...(ASSETS.accents||{})};
+const A=Object.fromEntries(Object.entries(ACC).map(([k,n])=>[k,C(n)]));
+// Grandes plages claires et sombres du sol de base (échelles en unités).
+const MACRO={scale:[150,56],hi:.48,lo:-.5,dither:.7,...(ASSETS.macro||{})};
 const tex=(t,x,y)=>t.px[((y%t.h+t.h)%t.h)*t.w+((x%t.w+t.w)%t.w)];
 const hgt=(t,x,y)=>t.ht?t.ht[((y%t.h+t.h)%t.h)*t.w+((x%t.w+t.w)%t.w)]/255:.5;
 // Bruit doux du monde : grandes plages claires et sombres de l'herbe, sans répétition.
@@ -40,14 +46,17 @@ const GROUND=[1,2,3,4,1,4,1,3,1];
 const K=.55,M_GRASS=1,M_DIRT=2,M_COBBLE=3,M_WATER=4,M_BANK=5,M_LITTER=6,M_PLANK=7;
 const landish=m=>m&&m!==M_WATER&&m!==M_PLANK;
 const NONE=[];
-/* sampler.tile(i,j) -> {code, paving?} en cases du monde (atlas), 16 unités par
- *   case ; paving : matière des places (codes 2 et 7), pavés irréguliers sinon
+/* sampler.tile(i,j) -> {code, paving?, deck?} en cases du monde (atlas), 16 unités par
+ *   case ; paving : matière des places (codes 2 et 7), pavés irréguliers sinon ;
+ *   deck : tablier de pont posé sur la case (1 piste est-ouest, 2 nord-sud)
  * sampler.use(i,j) -> la case est dessinée ici (biomes mêlés) ; toutes par défaut
  * sampler.piece(ci,cj) -> [{set, mask}] sur les cases de 2 m (32 unités)
  * sampler.roads(i,j) -> segments {a:[U,V],b:[U,V],width,paved} en unités
  * sampler.lanes(i,j) -> rectangles {x,y,w,h,paved} en unités
  * base : coin du secteur en unités. screen : origine écran entière de ce coin
- * (continuité des textures d'un secteur à l'autre).
+ * (continuité des textures d'un secteur à l'autre). Un réseau de cases décalé
+ * (zone de départ) se peint avec base = coin - décalage et le même screen : les
+ * pixels restent ceux du secteur, seuls les numéros de case suivent le réseau.
  * Résultat : RGBA, indices de palette et priorité par pixel (2 dessiné ici,
  * 1 à n'utiliser que si rien d'autre n'est dessiné, 0 vide), et les morceaux
  * de falaise qui passent devant les acteurs. */
@@ -55,8 +64,11 @@ function* renderSteps(o){
  const {sampler,base,screen,tiles=[32,32],width=1024,height=544,ox=512,oy=32}=o,[U0,V0]=base,[S0,T0]=screen;
  const ti0=Math.floor(U0/16),tj0=Math.floor(V0/16);
  // Cases du secteur et de ses abords : codes, usage, falaises proches.
- const PAD=4,GW=tiles[0]+PAD*2,GH=tiles[1]+PAD*2,gi0=ti0-PAD,gj0=tj0-PAD,codes=new Uint8Array(GW*GH),used=new Uint8Array(GW*GH),plazas=new Array(GW*GH),extra=new Map();
- for(let j=0;j<GH;j++)for(let i=0;i<GW;i++){const k=j*GW+i,t=sampler.tile(gi0+i,gj0+j)||{code:0};codes[k]=t.code;plazas[k]=TEX[t.paving]||TEX.cobble;used[k]=!sampler.use||sampler.use(gi0+i,gj0+j)?1:0;}
+ const PAD=4,GW=tiles[0]+PAD*2,GH=tiles[1]+PAD*2,gi0=ti0-PAD,gj0=tj0-PAD,codes=new Uint8Array(GW*GH),used=new Uint8Array(GW*GH),decks=new Uint8Array(GW*GH),plazas=new Array(GW*GH),extra=new Map();
+ for(let j=0;j<GH;j++)for(let i=0;i<GW;i++){const k=j*GW+i,t=sampler.tile(gi0+i,gj0+j)||{code:0};codes[k]=t.code;plazas[k]=TEX[t.paving]||TEX.cobble;decks[k]=t.deck||0;used[k]=!sampler.use||sampler.use(gi0+i,gj0+j)?1:0;}
+ const deckAt=(i,j)=>{const a=i-gi0,b=j-gj0;return a>=0&&b>=0&&a<GW&&b<GH?decks[b*GW+a]:0;};
+ // Décalage du réseau par rapport au coin du secteur (zone de départ), en unités.
+ const lagU=ti0*16-U0,lagV=tj0*16-V0;
  const plazaAt=(i,j)=>{const a=i-gi0,b=j-gj0;return a>=0&&b>=0&&a<GW&&b<GH?plazas[b*GW+a]:TEX[(sampler.tile(i,j)||{}).paving]||TEX.cobble;};
  const code=(i,j)=>{const a=i-gi0,b=j-gj0;if(a>=0&&b>=0&&a<GW&&b<GH)return codes[b*GW+a];const k=i+','+j;let c=extra.get(k);if(c===undefined){c=(sampler.tile(i,j)||{code:0}).code;extra.set(k,c);}return c;};
  const useAt=(i,j)=>{const a=i-gi0,b=j-gj0;return a>=0&&b>=0&&a<GW&&b<GH?used[b*GW+a]:!sampler.use||sampler.use(i,j)?1:0;};
@@ -84,7 +96,7 @@ function* renderSteps(o){
   let wp=0;const ci=Math.floor(U/32),cj=Math.floor(V/32),list=piecesAt(ci,cj);
   if(list.length){const lu=U-ci*32,lv=V-cj*32,mx=Math.floor(lu-lv+32),my=Math.floor((lu+lv)/2);
    for(const pc of list){const q=pc.m.px[my*64+mx]||0,w=LEVEL[q];if(!w)continue;if(pc.kind==='water')ww=Math.max(ww,w);else if(pc.kind==='paving'){if(w>=wc)gp=pc.tex;wc=Math.max(wc,w);wp=Math.max(wp,w);}else{wd=Math.max(wd,w);wp=Math.max(wp,w);}}}
-  if(ww>.5&&wp>.6){gm=M_PLANK;gw=0;return;}
+  if(ww>.5&&wp>.6||deckAt(i,j)){gm=M_PLANK;gw=0;return;}
   // Une place pavée garde son pavage : le chemin de terre s'arrête à son bord.
   if(pz>.5)wd=0;
   if(wd+wc>0){const land=Math.max(0,1-ww-wd-wc);wg=Math.min(wg,land);}
@@ -98,10 +110,10 @@ function* renderSteps(o){
   gm=wl>0&&wl*1.4+K*(hgt(TEX.litter,sx,sy)-.5)>.62?M_LITTER:M_GRASS;
  }
  // Tablier du pont : planches perpendiculaires au chemin (texture en plan, 32 × 32).
- function plank(U,V){const P=TEX.plank;if(!P)return C('ecorce3');const pc=piecesAt(Math.floor(U/32),Math.floor(V/32)).find(p=>p.kind!=='water'),ns=pc&&(pc.mask&5)&&!(pc.mask&10);return tex(P,Math.floor(ns?U:V),Math.floor(ns?V:U));}
+ function plank(U,V){const P=TEX.plank;if(!P)return A.plank;const pc=piecesAt(Math.floor(U/32),Math.floor(V/32)).find(p=>p.kind!=='water'),dk=deckAt(Math.floor(U/16),Math.floor(V/16)),ns=dk?dk===2:pc&&(pc.mask&5)&&!(pc.mask&10);return tex(P,Math.floor(ns?U:V),Math.floor(ns?V:U));}
  // Herbe : plages claires et sombres à l'échelle de la dizaine de mètres ; leur
  // bord suit les touffes dessinées (hauteur de la texture), jamais un contour lisse.
- function grassColour(sx,sy,U,V){const c=tex(TEX.grass,sx,sy),n=vnoise(U/150,V/150,71)*.7+vnoise(U/56,V/56,72)*.3+(hgt(TEX.grass,sx,sy)-.5)*.7;return n>.48?shift(c,1):n<-.5?shift(c,-1):c;}
+ function grassColour(sx,sy,U,V){const c=tex(TEX.grass,sx,sy),n=vnoise(U/MACRO.scale[0],V/MACRO.scale[0],71)*.7+vnoise(U/MACRO.scale[1],V/MACRO.scale[1],72)*.3+(hgt(TEX.grass,sx,sy)-.5)*MACRO.dither;return n>MACRO.hi?shift(c,1):n<MACRO.lo?shift(c,-1):c;}
  function colourOf(m,w,sx,sy,U,V,p){
   switch(m){case M_PLANK:return plank(U,V);case M_GRASS:return grassColour(sx,sy,U,V);case M_DIRT:return tex(TEX.dirt,sx,sy);case M_COBBLE:return tex(p||TEX.cobble,sx,sy);case M_BANK:return tex(TEX.bank,sx,sy);case M_LITTER:return tex(TEX.litter,sx,sy);
    case M_WATER:{const c=tex(TEX.water,sx,sy);return w<.62?shift(c,1):w>.9?shift(c,-1):c;}}return 0;
@@ -113,7 +125,7 @@ function* renderSteps(o){
    const X=px-ox+.5,Y=py-oy+.5,u=Y+X/2,v=Y-X/2,U=U0+u,V=V0+v,k=(py+MARGIN)*width+px;
    const li=Math.floor(u/16),lj=Math.floor(v/16);own[k]=li>=0&&lj>=0&&li<tiles[0]&&lj<tiles[1]?1:0;
    if(!own[k]&&py>=0)continue;
-   if(py>=0)prio[py*width+px]=useAt(li+ti0,lj+tj0)?2:1;
+   if(py>=0)prio[py*width+px]=useAt(Math.floor(U/16),Math.floor(V/16))?2:1;
    const sx=S0+px-ox,sy=T0+py-oy;ground(U,V,sx,sy);mat[k]=gm;col[k]=colourOf(gm,gw,sx,sy,U,V,gp);
   }
   if((py&3)===3)yield;
@@ -121,7 +133,7 @@ function* renderSteps(o){
  const at=(px,py)=>(py+MARGIN)*width+px;
  // 2. Lumière : ombre sous l'herbe, berge visible au loin, écume au bord proche.
  let upPx=0,upPy=0,upM=0;const up=n=>upPy-n>=-MARGIN?mat[at(upPx,upPy-n)]:upM;
- const out=new Uint8Array(width*height),cE0=C('ecorce0'),cE1=C('ecorce1'),cE2=C('ecorce2'),cE4=C('ecorce4'),cEau0=C('eau0'),cEau5=C('eau5'),cT2=C('terre2'),cT3=C('terre3');
+ const out=new Uint8Array(width*height),cE1=A.deckShade2,cE2=A.deckShade,cE4=A.deckLip,cEau0=A.waterDeep,cEau5=A.foam,cT2=A.bankFace2,cT3=A.bankFace;
  for(let py=0;py<height;py++){
   for(let px=0;px<width;px++){
    const k=at(px,py);if(!own[k])continue;let c=col[k];const m=mat[k],sx=S0+px-ox,sy=T0+py-oy;
@@ -150,7 +162,7 @@ function* renderSteps(o){
  // créneaux. Chaque pixel lance un rayon vertical : le premier point plein
  // rencontré donne le dessus herbeux ou la paroi, éclairée selon sa normale.
  const kind=new Uint8Array(width*height),blockOf=new Int32Array(width*height).fill(-1);
- const FS=TEX.cliffS,FE=TEX.cliffE,G=TEX.grass,cH6=C('herbe6'),cH5=C('herbe5'),cH3=C('herbe3'),cH2=C('herbe2');
+ const FS=TEX.cliffS,FE=TEX.cliffE,G=TEX.grass,cH6=A.lipLit,cH5=A.lipShade,cH3=A.drape,cH2=A.drape2;
  const near=new Uint8Array(GW*GH);let anyCliff=false;
  for(let j=0;j<GH;j++)for(let i=0;i<GW;i++){let a=0;for(let dj=-1;dj<=3&&!a;dj++)for(let di=-1;di<=3&&!a;di++)a=cliffAt(gi0+i+di,gj0+j+dj)?1:0;near[j*GW+i]=a;if(a)anyCliff=true;}
  const nearAt=(i,j)=>{const a=i-gi0,b=j-gj0;return a>=0&&b>=0&&a<GW&&b<GH&&near[b*GW+a];};
@@ -166,7 +178,7 @@ function* renderSteps(o){
  const hits=[];
  if(anyCliff)for(let py=0;py<height;py++){
   for(let px=0;px<width;px++){
-   const X=px-ox+.5,Y=py-oy+.5,gi=Math.floor((Y+X/2)/16)+ti0,gj=Math.floor((Y-X/2)/16)+tj0;
+   const X=px-ox+.5,Y=py-oy+.5,gi=Math.floor((U0+Y+X/2)/16),gj=Math.floor((V0+Y-X/2)/16);
    if(!nearAt(gi,gj))continue;
    for(let z=32;z>=0;z--){
     const u=Y+z+X/2,v=Y+z-X/2,U=U0+u,V=V0+v,H=solid(U,V);if(!H||z>H)continue;
@@ -201,7 +213,7 @@ function* renderSteps(o){
  const features=[];
  for(const [id,B]of blocks){if(!B.faces)continue;const w=B.x1-B.x0+1,h=B.y1-B.y0+1,fd=new Uint8ClampedArray(w*h*4);
   for(const k of B.list){const px=k%width,py=(k-px)/width;fd.set(RGB[out[k]],((py-B.y0)*w+px-B.x0)*4);}
-  const li=id%tiles[0],lj=Math.floor(id/tiles[0]);features.push({width:w,height:h,data:fd,x:B.x0-ox,y:B.y0-oy,depth:(li+lj)*8+16,tile:[li+ti0,lj+tj0]});}
+  const li=id%tiles[0],lj=Math.floor(id/tiles[0]);features.push({width:w,height:h,data:fd,x:B.x0-ox,y:B.y0-oy,depth:(li+lj)*8+16+(lagU+lagV)/2,tile:[li+ti0,lj+tj0]});}
  return {width,height,data,features,indices:out,priority:prio};
 }
 function render(o){const steps=renderSteps(o);let next;do{next=steps.next();}while(!next.done);return next.value;}
