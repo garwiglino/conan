@@ -47,9 +47,9 @@ Les tempêtes maritimes répondent aussi aux vents forts et aux blizzards, sans 
 
 ## Audio
 
-10 compositions originales de 32 mesures : 9 familles de biomes et une musique de voyage. Six pistes musicales plus conducteur MIDI, panoramiques, phrases aérées, basses centrées, instruments doux et fondus entre morceaux. 18 partitions de faune jour/nuit : quatre pistes disponibles plus conducteur ; les pistes non pertinentes sont volontairement silencieuses (notamment pas d'insectes dans les glaces).
+La musique d'exploration est composée par famille de biome (9 morceaux) plus une musique de voyage, en 8 bits : pulses 12,5/25/50 %, triangle 4 bits, dents de scie en paliers et bruit LFSR. Chaque morceau a son mode, son tempo et sa rythmique (voir `audio/LISEZMOI.md` et `scripts/chiptune-songs.cjs`). Les 18 partitions de faune jour/nuit restent séparées : quatre pistes disponibles plus conducteur ; les pistes non pertinentes sont volontairement silencieuses (notamment pas d'insectes dans les glaces).
 
-Les fichiers MIDI type 1 et les notes JSON jouées sont générés ensemble par `scripts/build-biome-audio.cjs`. Les programmes General MIDI servent de repères à l'édition ; le jeu utilise ses propres timbres, notamment pour les cris d'animaux, qui ne seront donc pas identiques dans un lecteur MIDI généraliste. Les cris sont stylisés et synthétiques, pas des enregistrements zoologiques. Le vent continu reste synthétisé en stéréo.
+Les fichiers MIDI type 1 et les notes JSON jouées sont générés ensemble : `scripts/build-music.cjs` pour les musiques, `scripts/build-biome-audio.cjs` pour la faune. Les programmes General MIDI servent de repères à l'édition ; le jeu utilise ses propres timbres, notamment pour les cris d'animaux, qui ne seront donc pas identiques dans un lecteur MIDI généraliste. Les cris sont stylisés et synthétiques, pas des enregistrements zoologiques. Le vent continu reste synthétisé en stéréo.
 
 `node scripts/analyze-biome-audio.cjs` rend le synthétiseur réel, compare les anciens thèmes et les nouveaux, mesure crêtes/RMS/corrélation stéréo et énergie FFT par bandes. Les rendus couvrent une boucle entière et sa reprise. Les statistiques RMS incluent les silences intentionnels. L'analyse ne remplace pas une écoute sur téléphone. Aucun rendu analysé ne doit saturer ni produire de valeur audio non finie.
 

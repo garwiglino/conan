@@ -1,5 +1,6 @@
 // Fixed headroom and source calibration; user music/SFX settings remain independent.
-for(const [name,trim]of Object.entries({title:.45,ambient:.4,night:.4,combat:.22,boss:.24,gameover:.5}))MUSIC_DATA[name].gain*=trim;
+// Les musiques 8 bits de MUSIC_SCORES arrivent déjà calibrées (scripts/chiptune-songs.cjs).
+for(const [name,trim]of Object.entries({title:.45,ambient:.4,night:.4}))MUSIC_DATA[name].gain*=trim;
 Sound.prototype.sampleTrim=function(buffer){
  this.sampleLevels??=new WeakMap();if(this.sampleLevels.has(buffer))return this.sampleLevels.get(buffer);
  let peak=0,energy=0,maxRms=0;const size=Math.max(1,Math.floor(buffer.sampleRate*.05));

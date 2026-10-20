@@ -35,8 +35,11 @@ for(const [tag,file]of [['WEATHER MODEL','weather.js'],['WEATHER RENDER','weathe
  const code='// BEGIN '+tag+'\n'+fs.readFileSync(path.join(root,'scripts',file),'utf8')+'\n// END '+tag,re=new RegExp('// BEGIN '+tag+'[\\s\\S]*?// END '+tag);
  html=re.test(html)?html.replace(re,()=>code):html.replace('// app.js',()=>code+'\n// app.js');
 }
-const biomeScores='// BEGIN BIOME MIDI\nconst BIOME_SCORES='+JSON.stringify(json(path.join(root,'audio/biome-scores.json')))+';\nObject.assign(MUSIC_DATA,BIOME_SCORES.music);\n// END BIOME MIDI';
+const biomeScores='// BEGIN BIOME MIDI\nconst BIOME_SCORES='+JSON.stringify(json(path.join(root,'audio/biome-scores.json')))+';\n// END BIOME MIDI';
 html=html.includes('// BEGIN BIOME MIDI')?html.replace(/\/\/ BEGIN BIOME MIDI[\s\S]*?\/\/ END BIOME MIDI/,()=>biomeScores):html.replace('// app.js',()=>biomeScores+'\n// app.js');
+// Musiques 8 bits (biomes, voyage, combat, boss, défaite) : scripts/chiptune-songs.cjs → audio/music-scores.json.
+const musicScores='// BEGIN CHIPTUNE MUSIC\nconst MUSIC_SCORES='+JSON.stringify(json(path.join(root,'audio/music-scores.json')))+';\nObject.assign(MUSIC_DATA,MUSIC_SCORES);\n// END CHIPTUNE MUSIC';
+html=html.includes('// BEGIN CHIPTUNE MUSIC')?html.replace(/\/\/ BEGIN CHIPTUNE MUSIC[\s\S]*?\/\/ END CHIPTUNE MUSIC/,()=>musicScores):html.replace('// END BIOME MIDI',()=>'// END BIOME MIDI\n'+musicScores);
 const weatherScores='// BEGIN WEATHER MIDI\nconst WEATHER_SCORES='+JSON.stringify(json(path.join(root,'audio/weather-scores.json')))+';\n// END WEATHER MIDI';
 html=html.includes('// BEGIN WEATHER MIDI')?html.replace(/\/\/ BEGIN WEATHER MIDI[\s\S]*?\/\/ END WEATHER MIDI/,()=>weatherScores):html.replace('// app.js',()=>weatherScores+'\n// app.js');
 const textCode='// BEGIN TEXT LAYOUT\n'+fs.readFileSync(path.join(root,'scripts/text-layout.js'),'utf8')+'\n// END TEXT LAYOUT';

@@ -1,0 +1,169 @@
+<title>Atelier musical Hearthreaver</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=VT323&display=swap">
+<style>
+/* Mise en page : un écran « test sonore » de console, la lecture en haut, les 13 morceaux en liste dessous. */
+:root{
+ color-scheme:dark;
+ --ground:#15100e; --panel:#211814; --panel-hi:#2d211b; --line:#3e2e25;
+ --ink:#f3e7d6; --muted:#ad9a88; --ember:#ff7a3c; --gold:#e9b85c; --ash:#6d5a4c;
+ --lane-lead:#ff7a3c; --lane-harm:#e9b85c; --lane-arp:#7fc4b8; --lane-saw:#9b8bd6; --lane-bass:#d96a8a; --lane-drums:#cfc3b2;
+ --display:"Silkscreen","Courier New",monospace; --body:"Atkinson Hyperlegible",system-ui,sans-serif; --data:"VT323","Courier New",monospace;
+}
+body{background:var(--ground);color:var(--ink);font:16px/1.5 var(--body);}
+.wrap{max-width:980px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+header{display:grid;gap:6px}
+.eyebrow{font:400 12px/1 var(--display);letter-spacing:.14em;color:var(--gold);text-transform:uppercase}
+h1{font:700 clamp(28px,6vw,44px)/1.05 var(--display);margin:0;color:var(--ink);text-wrap:balance}
+h1 span{color:var(--ember)}
+.lede{margin:0;max-width:62ch;color:var(--muted)}
+.player{background:var(--panel);border:2px solid var(--line);box-shadow:0 0 0 2px var(--ground),0 0 0 4px var(--line);padding:16px;display:grid;gap:14px}
+.now{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;justify-content:space-between}
+.now h2{font:700 20px/1.2 var(--display);margin:0;color:var(--ember);min-width:0}
+.now p{margin:0;color:var(--muted);min-width:0}
+.facts{font:22px/1 var(--data);color:var(--gold);display:flex;flex-wrap:wrap;gap:4px 16px;font-variant-numeric:tabular-nums}
+.counter{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font:24px/1 var(--data);font-variant-numeric:tabular-nums}
+.beats{display:flex;gap:6px}
+.beats i{width:14px;height:14px;background:var(--panel-hi);border:2px solid var(--line);display:block}
+.beats i.on{background:var(--ember);border-color:var(--gold)}
+.beats i.down.on{background:var(--gold)}
+.roll{width:100%;max-width:100%;height:auto;display:block;image-rendering:pixelated;background:var(--ground);border:2px solid var(--line)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{font:700 13px/1 var(--display);letter-spacing:.06em;background:var(--panel-hi);border:2px solid var(--line);padding:10px 14px;color:var(--ink)}
+.btn:hover{border-color:var(--gold)}
+.btn:focus-visible,.track:focus-visible,.chip:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn.primary{background:var(--ember);border-color:var(--gold);color:var(--ground)}
+.volume{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+.volume input{width:140px;accent-color:var(--ember)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:400 12px/1 var(--display);padding:7px 10px;border:2px solid var(--line);background:transparent;color:var(--ink);display:flex;align-items:center;gap:8px}
+.chip b{width:10px;height:10px;display:block;background:var(--c)}
+.chip[aria-pressed="false"]{color:var(--ash);text-decoration:line-through}
+.chip[aria-pressed="false"] b{background:var(--ash)}
+.groups{display:grid;gap:18px}
+.group h3{font:400 13px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.track{text-align:left;background:var(--panel);border:2px solid var(--line);padding:12px;display:grid;gap:4px;min-width:0}
+.track:hover{border-color:var(--ash)}
+.track[aria-pressed="true"]{border-color:var(--ember);background:var(--panel-hi)}
+.track strong{font:700 15px/1.2 var(--display);color:var(--ink)}
+.track[aria-pressed="true"] strong{color:var(--ember)}
+.track span{color:var(--muted);font-size:14px}
+.track em{font:20px/1 var(--data);font-style:normal;color:var(--gold);font-variant-numeric:tabular-nums}
+.notes{background:var(--panel);border:2px solid var(--line);padding:14px 16px;color:var(--muted);font-size:15px}
+.notes h3{font:400 13px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}
+.notes ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.hint{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){.volume input{width:110px}.facts{font-size:20px}.list{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.track{padding:10px}.track strong{font-size:13px}.track span{font-size:13px}.track em{font-size:18px}}
+</style>
+
+<div class="wrap">
+ <header>
+  <div class="eyebrow">Hearthreaver · son 8 bits</div>
+  <h1>Atelier <span>musical</span></h1>
+  <p class="lede">Les treize musiques du jeu, jouées par le même séquenceur que le jeu : pulses, triangle et bruit façon NES. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
+ </header>
+
+ <section class="player" aria-label="Lecture">
+  <div class="now">
+   <div style="min-width:0"><h2 id="nowTitle">Sous les chênes</h2><p id="nowMood">Forêts tempérées : ré dorien, marche tranquille.</p></div>
+   <div class="facts" id="nowFacts"><span>100 BPM</span><span>16 pas</span><span>32 mesures</span></div>
+  </div>
+  <div class="counter"><span id="barCount">Mesure — / 32</span><div class="beats" id="beats" aria-hidden="true"><i class="down"></i><i></i><i></i><i></i></div></div>
+  <canvas class="roll" id="roll" width="960" height="300" aria-label="Grille de la mesure en cours : une colonne par pas, une ligne par instrument"></canvas>
+  <div class="controls">
+   <button class="btn primary" id="playBtn" type="button">▶ Écouter</button>
+   <button class="btn" id="stopBtn" type="button">■ Arrêter</button>
+   <label class="volume" for="vol">Volume <input id="vol" type="range" min="0" max="100" value="70"></label>
+  </div>
+  <div class="chips" id="chips" aria-label="Pistes"></div>
+  <p class="hint">Passer d'un morceau à l'autre reprend les fondus du jeu : 1,8 s vers l'exploration, 0,65 s vers le combat et le boss.</p>
+ </section>
+
+ <section class="groups" id="groups" aria-label="Morceaux"></section>
+
+ <section class="notes">
+  <h3>Ce qui change dans le jeu</h3>
+  <ul>
+   <li>Chaque biome a sa propre composition (mode, tempo, rythme) au lieu d'un même squelette transposé.</li>
+   <li>Les mesures sont vérifiées à la construction : une mesure qui ne remplit pas exactement ses 16 pas (ou 12 en balancé) bloque le build.</li>
+   <li>Le séquenceur programme les notes 0,8 s à l'avance : une image lente, pendant un chargement du monde, ne fait plus sauter de notes.</li>
+   <li>Combat, boss, défaite et voyage sont recomposés dans le même esprit et calibrés au même niveau que les anciens.</li>
+  </ul>
+ </section>
+</div>
+
+<script>
+const MUSIC_DATA=/*__MUSIC_SCORES__*/{};
+const CUE_VOLUME=1.15,WEATHER_TIMBRES={},TITLE_TIMBRES={},CUE_DATA={},WEATHER_SCORES={};
+const SILENT_WAV=/*__SILENT_WAV__*/'';
+/*__MUSIC_ENGINE__*/
+(()=>{
+ const $=id=>document.getElementById(id);
+ const GROUPS=[['Exploration',['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed']],['Voyage',['biome_travel']],['Combat',['combat','boss']],['Défaite',['gameover']]];
+ const LANES=[['lead','Mélodie','--lane-lead'],['harm','Contrechant','--lane-harm'],['arp','Arpège','--lane-arp'],['saw','Nappe','--lane-saw'],['bass','Basse','--lane-bass'],['drums','Batterie','--lane-drums']];
+ const css=name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+ let ctx=null,music=null,selected='biome_forest',playing=null,volume=.7,silent=null;const muted=new Set();
+ const fmt=s=>{const m=Math.floor(s/60),r=Math.round(s%60);return m+' min '+String(r).padStart(2,'0');};
+ const region=d=>d.mood.split(' : ')[0];
+ // Une piste coupée passe par un gain à zéro : la note reste programmée, elle se tait seulement.
+ const baseStart=Music.prototype.start;
+ Music.prototype.start=function(...args){const song=baseStart.apply(this,args);for(const [k,tr]of Object.entries(song.tracks)){const g=this.ctx.createGain();g.gain.value=muted.has(k)?0:1;g.connect(tr.node);tr.node=g;tr.mute=g;}return song;};
+ function songs(){return music?[music.current,music.intro,...music.retiring].filter(Boolean):[];}
+ function applyMutes(){if(!ctx)return;for(const s of songs())for(const [k,tr]of Object.entries(s.tracks))tr.mute?.gain.setTargetAtTime(muted.has(k)?0:1,ctx.currentTime,.015);}
+ function unmuteIOS(){try{if(navigator.audioSession){navigator.audioSession.type='playback';return;}if(!silent){silent=new Audio(SILENT_WAV);silent.loop=true;silent.setAttribute('playsinline','');}silent.play()?.catch(()=>{});}catch{}}
+ function ensure(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();music=new Music(ctx,ctx.destination);}ctx.resume?.();unmuteIOS();music.out.gain.setTargetAtTime(MUSIC_VOLUME*volume*1.6,ctx.currentTime,.03);}
+ function play(name){selected=name;ensure();playing=name;music.update(name);render();}
+ // Sur téléphone, la liste est sous la grille : on remonte vers la lecture après un choix.
+ function reveal(){const r=document.querySelector('.player').getBoundingClientRect();if(r.bottom<80||r.top>innerHeight*.6)document.querySelector('.player').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}
+ function stop(){playing=null;music?.update(null);render();}
+ function describe(){const d=MUSIC_DATA[selected];$('nowTitle').textContent=d.title;$('nowMood').textContent=d.mood;
+  const grid=d.grid===12?'12 pas balancés':'16 pas';$('nowFacts').innerHTML='<span>'+d.bpm+' BPM</span><span>'+grid+'</span><span>'+d.bars+' mesures</span><span>'+fmt(d.dur)+'</span>';}
+ function render(){describe();for(const b of document.querySelectorAll('.track'))b.setAttribute('aria-pressed',String(b.dataset.name===playing));$('playBtn').textContent=playing===selected?'↺ Reprendre':'▶ Écouter';}
+ // Liste des morceaux.
+ for(const [label,names]of GROUPS){const g=document.createElement('div');g.className='group';g.innerHTML='<h3>'+label+'</h3>';const list=document.createElement('div');list.className='list';
+  for(const name of names){const d=MUSIC_DATA[name],b=document.createElement('button');b.type='button';b.className='track';b.dataset.name=name;b.id='track-'+name;b.setAttribute('aria-pressed','false');
+   b.innerHTML='<strong>'+d.title+'</strong><span>'+region(d)+'</span><em>'+d.bpm+' BPM · '+fmt(d.dur)+'</em>';b.addEventListener('click',()=>{play(name);reveal();});list.append(b);}
+  g.append(list);$('groups').append(g);}
+ for(const [k,label,color]of LANES){const c=document.createElement('button');c.type='button';c.className='chip';c.id='lane-'+k;c.style.setProperty('--c','var('+color+')');c.setAttribute('aria-pressed','true');c.innerHTML='<b></b>'+label;
+  c.addEventListener('click',()=>{muted.has(k)?muted.delete(k):muted.add(k);c.setAttribute('aria-pressed',String(!muted.has(k)));applyMutes();});$('chips').append(c);}
+ $('playBtn').addEventListener('click',()=>{if(playing===selected){stop();setTimeout(()=>play(selected),550);}else play(selected);});
+ $('stopBtn').addEventListener('click',stop);
+ $('vol').addEventListener('input',e=>{volume=+e.target.value/100;if(ctx)music.out.gain.setTargetAtTime(MUSIC_VOLUME*volume*1.6,ctx.currentTime,.03);});
+ // Grille : une colonne par pas, une ligne par instrument, la hauteur de la note dans sa ligne.
+ const cv=$('roll'),g2=cv.getContext('2d');
+ // Sur un écran étroit, la grille garde des lignes assez hautes pour être lues.
+ const fit=()=>{const h=innerWidth<520?560:300;if(cv.height!==h)cv.height=h;};fit();addEventListener('resize',fit);
+ function position(){
+  if(!music||!playing)return null;const now=ctx.currentTime-(ctx.outputLatency||ctx.baseLatency||0),intro=music.intro&&now<music.intro.end?music.intro:null,song=intro||music.current;
+  if(!song||now<song.t0)return null;const d=intro?MUSIC_DATA[playing].intro:MUSIC_DATA[playing],beat=60/d.bpm,barDur=beat*4,pos=(now-song.t0)%(d.bars*barDur);
+  return {d,bar:Math.floor(pos/barDur),inBar:(pos%barDur)/barDur,intro:!!intro};
+ }
+ function draw(){
+  const p=position(),d=p?p.d:MUSIC_DATA[selected],grid=d.grid||16,W=cv.width,H=cv.height,laneH=H/LANES.length,colW=W/grid;
+  g2.fillStyle=css('--ground');g2.fillRect(0,0,W,H);
+  for(let s=0;s<grid;s++){g2.fillStyle=s%(grid/4)===0?css('--panel-hi'):css('--panel');g2.fillRect(s*colW+1,0,colW-2,H);}
+  const bar=p?p.bar:0,step=p?p.inBar*grid:-1;
+  if(p){g2.fillStyle=css('--ember');g2.globalAlpha=.18;g2.fillRect(Math.floor(step)*colW,0,colW,H);g2.globalAlpha=1;}
+  LANES.forEach(([k,,color],row)=>{
+   const ev=d.tracks[k]||[],y0=row*laneH,tick=d.tpb*4,start=bar*tick,end=start+tick;let lo=127,hi=0;
+   for(let i=0;i<ev.length;i+=4){lo=Math.min(lo,ev[i+2]);hi=Math.max(hi,ev[i+2]);}
+   g2.fillStyle=css('--line');g2.fillRect(0,y0+laneH-1,W,1);
+   const col=muted.has(k)?css('--ash'):css(color),bh=Math.max(6,Math.floor(laneH*.22));
+   for(let i=0;i<ev.length;i+=4){const t=ev[i],du=ev[i+1],n=ev[i+2];if(t+du<=start||t>=end)continue;
+    const a=Math.max(t,start)-start,b=Math.min(t+du,end)-start,x0=a/tick*W,x1=b/tick*W,frac=hi>lo?(n-lo)/(hi-lo):.5,y=y0+laneH-bh-4-frac*(laneH-bh-10);
+    const lit=p&&step>=a/tick*grid&&step<b/tick*grid;g2.fillStyle=col;g2.globalAlpha=lit?1:.55;g2.fillRect(Math.round(x0)+2,Math.round(y),Math.max(4,Math.round(x1-x0)-4),bh);
+    if(t>=start){g2.globalAlpha=1;g2.fillRect(Math.round(x0)+2,Math.round(y)-2,4,bh+4);}g2.globalAlpha=1;}
+  });
+  $('barCount').textContent=p?(p.intro?'Introduction · mesure '+(p.bar+1)+' / '+d.bars:'Mesure '+(p.bar+1)+' / '+d.bars):'Mesure — / '+MUSIC_DATA[selected].bars;
+  const beat=p?Math.floor(p.inBar*4):-1;[...$('beats').children].forEach((el,i)=>el.classList.toggle('on',i===beat));
+ }
+ function frame(){if(music&&ctx.state==='running')music.update(playing);draw();requestAnimationFrame(frame);}
+ setInterval(()=>{if(music&&ctx.state==='running')music.update(playing);},100);
+ const startName=location.hash.slice(1);if(MUSIC_DATA[startName])selected=startName;
+ render();requestAnimationFrame(frame);
+})();
+</script>

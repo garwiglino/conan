@@ -16,6 +16,7 @@
     "embed:world": "node scripts/embed-world.cjs",
     "package:ios": "python3 scripts/package-ios.py",
     "build:biomes": "node scripts/build-biome-audio.cjs && node scripts/embed-title.cjs",
+    "build:music": "node scripts/build-music.cjs && node scripts/embed-title.cjs && node scripts/build-music-atelier.cjs",
     "analyze:biomes": "node scripts/analyze-biome-audio.cjs",
     "analyze:mix": "node scripts/analyze-audio-mix.cjs",
     "build:kaldor": "node scripts/embed-kaldor.cjs",
