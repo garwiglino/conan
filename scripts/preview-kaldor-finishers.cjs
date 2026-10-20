@@ -26,7 +26,7 @@ const {loadGame,canvas,root}=require('../tests/game-harness.cjs'),W=require('./k
  c.fillStyle='#efd7a4';c.font='20px sans-serif';c.fillText('48 armes · 48 quatrièmes coups',16,30);
  for(let i=0;i<W.all.length;i++){
   const w=W.all[i],x=i%6*220,y=52+Math.floor(i/6)*210;A.wield(w.id);
-  c.fillStyle='#25332e';c.fillRect(x+4,y,212,204);c.drawImage(A.nativeFrame(2,'attack',2.25,3,api.swordPose),0,0,80,80,x+30,y-2,160,160);
+  c.fillStyle='#25332e';c.fillRect(x+4,y,212,204);c.drawImage(A.nativeFrame(2,'attack',2,3,api.swordPose),0,0,80,80,x+30,y-2,160,160);
   c.fillStyle='#efd7a4';c.font='12px sans-serif';c.fillText(w.label,x+10,y+167,200);c.fillStyle='#afc0b4';c.font='11px sans-serif';c.fillText(w.finisher.name,x+10,y+184,200);c.fillText(w.finisher.magic?'Effets magiques':W.families[w.family]+' · physique',x+10,y+198,200);
  }
  fs.writeFileSync(path.join(root,'art/weapon-finishers.png'),cv.toBuffer('image/png'));

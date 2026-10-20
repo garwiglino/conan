@@ -11,7 +11,7 @@ const {loadGame,canvas,root}=require('../tests/game-harness.cjs'),W=require('./k
  if(!contactOnly)for(let n=0;n<144;n++){
   const t=n/24,cv=canvas.createCanvas(columns*320,640),c=cv.getContext('2d');c.imageSmoothingEnabled=false;
   c.fillStyle='#141d1c';c.fillRect(0,0,cv.width,640);c.fillStyle='#efd7a4';c.font='bold 21px sans-serif';c.fillText(focus?'Prises de face · lances, harpons et hampes':'Coups retravaillés · face et profil · vitesse réelle',18,28);
-  c.fillStyle='#afc0b4';c.font='14px sans-serif';c.fillText(focus?'Gauche → droite → gauche → droite · mains sur la hampe · vitesse réelle':'Quatre coups par arme · anticipation courte, frappe sèche, reprise de garde · calques des bras intacts',18,51);
+  c.fillStyle='#afc0b4';c.font='14px sans-serif';c.fillText(focus?'Préparations alternées · impacts dans l’axe · mains sur la hampe · vitesse réelle':'Quatre coups par arme · anticipation courte, frappe sèche, reprise de garde · calques des bras intacts',18,51);
   for(let i=0;i<ids.length;i++){
    const id=ids[i],w=W.get(id),look=focus&&t<.8?{state:'idle',frame:0,combo:0,label:'Garde · prises en diagonale'}:W.preview(id,focus?t-.8:t,'attack',A.frameAt('idle',t)),x=i%columns*320,y=66+Math.floor(i/columns)*280;
    A.wield(id);A.wear('brigandine-mercenaire');c.fillStyle='#25332e';c.fillRect(x+5,y,310,268);
@@ -26,7 +26,7 @@ const {loadGame,canvas,root}=require('../tests/game-harness.cjs'),W=require('./k
  }
  // A contact sheet makes the grip travel and the separate combo shapes reviewable.
  const cv=canvas.createCanvas(1120,ids.length*(focus?200:160)+55),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.fillStyle='#141d1c';c.fillRect(0,0,cv.width,cv.height);
- c.fillStyle='#efd7a4';c.font='18px sans-serif';c.fillText(focus?'Face · impacts : 1 gauche / 2 droite / 3 gauche / 4 droite':'Face · préparation / impact / après-impact / garde',16,30);
+ c.fillStyle='#efd7a4';c.font='18px sans-serif';c.fillText(focus?'Face · les quatre impacts convergent dans l’axe du joueur':'Face · préparation / impact / après-impact / garde',16,30);
  for(let i=0;i<ids.length;i++){
   const id=ids[i],w=W.get(id),y=55+i*(focus?200:160);A.wield(id);c.fillStyle='#afc0b4';c.font='14px sans-serif';c.fillText(w.label,12,y+30,170);
   for(let k=0;k<4;k++){const f=focus?2:[1,2,3.5,0][k];c.drawImage(A.nativeFrame(2,!focus&&k===3?'idle':'attack',f,focus?k:0,swordPose),0,0,80,80,180+k*230,y,focus?200:154,focus?200:154);}

@@ -14,25 +14,22 @@ test('face-on polearms keep both separated hands on the shaft through guard and 
   }
  }
 });
-test('front spear thrust moves down its diagonal shaft while retaining its individual tempo',()=>{
+test('front spear thrust translates toward the target along the centred shaft',()=>{
  for(const w of poles.filter(w=>w.family==='spear'))for(const c of [0,...(W.finisher(w.id).kind==='lunge'?[3]:[])]){
-  const a=W.pose(w.id,2,1,c),b=W.pose(w.id,2,3,c),dx=b.h[0]-a.h[0],dy=b.h[1]-a.h[1];
-  assert.ok((c===0?dx< -5:dx>5)&&dy>7,w.id+' extends along its alternating front diagonal');
-  assert.ok(a.u[0]*b.u[0]+a.u[1]*b.u[1]>.999);
-  assert.ok((dx*b.u[0]+dy*b.u[1])/Math.hypot(dx,dy)>.98);
+  const a=W.pose(w.id,2,1,c),b=W.pose(w.id,2,2,c),dx=b.h[0]-a.h[0],dy=b.h[1]-a.h[1];
+  assert.ok(Math.abs(dx)<1e-9&&dy>5,w.id+' moves forward on the centre line');
+  assert.ok(a.u[0]*b.u[0]+a.u[1]*b.u[1]>.999);assert.ok((dx*b.u[0]+dy*b.u[1])/Math.hypot(dx,dy)>.99);
  }
 });
-test('all face-on polearm combos deliver left, right, left, right and collision follows each visible tip',()=>{
+test('face-on polearm wind-ups alternate while every impact converges ahead of the player',()=>{
  for(const w of poles){
   for(let c=0;c<4;c++){
-   const p=W.pose(w.id,2,3,c),x=p.h[0]+p.u[0]*p.reach,y=p.h[1]+p.u[1]*p.reach;
-   assert.ok(c%2?x>8:x< -8,w.id+':'+c+' genuinely changes delivery side');
-   assert.ok(W.hits({x:0,y:0,dir:2,weapon:w.id,combo:c},{x,y:y+9,r:.1},3));
+   const p=W.pose(w.id,2,2,c),x=p.h[0]+p.u[0]*p.reach,y=p.h[1]+p.u[1]*p.reach;
+   assert.ok(Math.abs(x)<1e-9,w.id+':'+c+' contact stays centred');assert.ok(y+9>8);
+   assert.ok(W.hits({x:0,y:0,dir:2,weapon:w.id,combo:c},{x:0,y:y+9,r:.1},2));
   }
-  if(w.family!=='spear')for(const c of [0,1]){
-   const a=W.pose(w.id,2,1,c),b=W.pose(w.id,2,3,c);
-   const ax=a.h[0]+a.u[0]*a.reach,bx=b.h[0]+b.u[0]*b.reach;
-   assert.ok(c===0?ax>8&&bx< -8:ax< -8&&bx>8,w.id+' cut and reverse cross in opposite directions');
+  if(w.family!=='spear'){
+   const a=W.pose(w.id,2,1,0),b=W.pose(w.id,2,1,1);assert.ok(a.h[0]+a.u[0]*a.reach>8&&b.h[0]+b.u[0]*b.reach< -8,w.id+' cuts load from opposite sides');
   }
  }
 });

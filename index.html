@@ -5764,7 +5764,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   butt:{face:[[7,-8,.9,-.44],[1,-6,.94,.34],[-7,-4,.8,.6],[-8,-3,.65,.76]],
         side:[[-5,-5,-.94,-.34],[4,-6,-1,0],[10,-6,-.99,.14],[8,-5,-.94,.34]]}
  });
- // Face-on strokes alternate delivery sides. Both hands stay on the shaft;
+ // Face-on wind-ups and overshoots alternate sides. Contact converges ahead;
  // their screen order is allowed to change as a real cut crosses the body.
  const POLE_FACE=freeze({
   thrust:[[0,-11,-.65,.76],[-4,-7,-.65,.76],[-7,-3,-.65,.76],[-6,-4,-.65,.76]],
@@ -5779,10 +5779,20 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   dagger:{strokes:['cut','reverse','thrust','thrust'],span:.73,drive:.9},
   axe:{strokes:['cut','reverse','rise','overhead'],span:1.03,drive:1.12},
   mace:{strokes:['cut','reverse','rise','overhead'],span:.92,drive:1.2},
-  spear:{strokes:['thrust','butt','cross','thrust'],span:1,drive:1.15},
+  spear:{strokes:['thrust','reverse','cross','thrust'],span:1,drive:1.15},
   staff:{strokes:['cut','reverse','cross','thrust'],span:1.08,drive:1},
   glaive:{strokes:['cut','reverse','cross','thrust'],span:1.1,drive:1.12}
  });
+ // Contact is a deliberate key pose, not the middle of an arc. Its leading
+ // point is straight ahead; wind-up and overshoot carry the combo's contrast.
+ // All coordinates feed both native layer placement and swept melee geometry.
+ function contactPose(id,dir,combo,body=[0,0]){
+  const w=get(id),profile=dir===1||dir===3,[fx,fy]=forward(dir);
+  const drive={dagger:7,sword:6,sabre:6,axe:5,mace:4,spear:5,staff:5,glaive:5}[w.family];
+  const reach=w.length+2;
+  const h=profile?[fx*Math.min(32-reach,drive+Math.abs(body[0])+(combo===2?1:0)),-9]:[0,dir===0?-14:-6];
+  return {h:confineGrip(w,h,[fx,fy]),u:[fx,fy]};
+ }
  function keyPose(id,dir,f,combo){
   const w=get(id),ready=guard(id,dir);
   if(f===0||f===5)return {...ready,body:[0,0],leg:0,head:[0,0],hair:[0,0],lunge:false,z:dir===0?0:1};
@@ -5810,8 +5820,16 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   // Side grips are carried forward by the weight transfer. Face grips traverse
   // shoulder -> centre -> opposite hip. Small family offsets retain identity.
   if(profile)x+=fx*(two?1:0);else x+=(w.variant-1.5)*.25*mirror;
-  const len=Math.hypot(ux,uy),u=[ux/len,uy/len];
-  const h=confineGrip(w,[x+body[0],y+body[1]],u);
+  const len=Math.hypot(ux,uy);let u=[ux/len,uy/len],h=confineGrip(w,[x+body[0],y+body[1]],u);
+  if(f===2)({h,u}=contactPose(id,dir,combo,body));
+  // A thrust retracts along the same axis as contact. The reverse and cuts
+  // keep alternating wind-ups and overshoots instead of four identical stabs.
+  if(f===1&&stroke==='thrust'){
+   u=forward(dir);h=confineGrip(w,profile?[-fx*4,-9]:[0,dir===0?-8:-12],u);
+  }
+  if(f===3&&stroke==='thrust'){
+   const contact=contactPose(id,dir,combo,body);u=contact.u;h=confineGrip(w,[contact.h[0]+fx,contact.h[1]+fy],u);
+  }
   return {h,u,reach:w.length+2,body,leg:f===1?combo===1?3:0:f===2||f===3?combo===2?7:4:5,
    head:[body[0]+(profile?fx*(f===1?-1:1):Math.round(x*.12)),body[1]+(f===3?1:0)],
    hair:[-fx*(f===2||f===3?2:-1),f===1?1:0],lunge:f>=2&&f<=4,z:dir===0?0:1};
@@ -5823,22 +5841,21 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   if(f===0||f===5)return {...g,body:[0,0],head:[0,0],hair:[0,0],leg:0,lunge:false,z:dir===0?0:1,view:dir};
   const kind=v.kind,whirl=kind==='whirl',thrust=kind==='lunge',smash=kind==='smash'||kind==='cleave';
   const mirror=dir===3?-1:1;
-  let contact=profile?[Math.min(10,31-(w.length+2)*.98),-5]:dir===0?[-3,-14]:[5,-3];
-  let edge=profile?[mirror*.98,.2]:dir===0?[-.65,-.76]:[.65,.76];
-  if(profile)contact[0]*=mirror;
-  if(kind==='sweep'||kind==='slash'||kind==='hook')edge=profile?[mirror*.97,.24]:dir===0?[-.8,-.6]:[.8,.6];
-  const tilt=v.tilt*.25*(dir===3?-1:1),a=Math.atan2(edge[1],edge[0])+tilt;
-  edge=[Math.cos(a),Math.sin(a)];
+  const {h:contact,u:edge}=contactPose(id,dir,3);
+  const a=Math.atan2(edge[1],edge[0]);
   let load=contact.map((x,k)=>x-edge[k]*v.drive),loadAngle=a;
+  if(thrust&&!profile)load=[0,dir===0?-8+v.drive*.06+v.tilt*.25:-12-v.drive*.10-Math.abs(v.tilt)*.7];
   if(!thrust){
-   load=profile?[-5*mirror,smash?-18:-9]:dir===0?[6,smash?-18:-8]:[-6,smash?-18:-8];
-   loadAngle=profile?(dir===3?Math.PI:0)+(smash?-2.0:-1.25)*mirror:dir===0?(smash?-.5:1.0):(smash?-1.7:2.5);
+   load=profile?[-5*mirror,smash?-20:-9]:dir===0?[6,smash?-20:-8]:[-6,smash?-20:-8];
+   load[0]+=v.tilt*(profile?mirror:1)*3;load[1]-=Math.abs(v.tilt)*2;
+   loadAngle=(profile?(dir===3?Math.PI:0)+(smash?-2.0:-1.25)*mirror:dir===0?(smash?-.5:1.0):(smash?-1.7:2.5))+v.tilt*.65*mirror;
   }
   const landed=[Math.round(fx*(2+v.drive*.08)),Math.round(fy*.7+(smash?1:0))];
   // A body turn sweeps a horizontal waist-height ellipse in perspective,
   // never a vertical wheel pasted over the face. Only weapon projection changes.
   const orbit=Math.max(4,Math.min(8,31-w.length-2));
-  if(whirl){loadAngle=a;load=[Math.cos(a)*orbit+Math.round(fx*1.5),-5+Math.sin(a)*2+Math.round(fy*.5)];}
+  const wind=profile?[-fx*(4+v.tilt*2),0]:[dir===0?-6-v.tilt*2:6+v.tilt*2,0];
+  if(whirl){loadAngle=a;load=[Math.cos(a)*orbit+Math.round(fx*1.5)+wind[0],-9+Math.sin(a)*2+Math.round(fy*.5)+wind[1]];}
   const homeAngle=Math.atan2(g.u[1],g.u[0]);
   const short=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
   const lerp=(a,b,t)=>a+(b-a)*t;
@@ -5852,14 +5869,14 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
    if(whirl){
     angle=a-Math.PI*2+Math.PI*2*t;view=(dir+Math.floor(t*4+.0001))%4;
     const turn=forward(view);body=[Math.round(turn[0]*1.5*(1-t)+landed[0]*t),Math.round(turn[1]*.5*(1-t)+landed[1]*t)];
-    depth=.35;h=[Math.cos(angle)*orbit+body[0],-5+Math.sin(angle)*2+body[1]];
+    depth=.35;h=[Math.cos(angle)*orbit+body[0]+wind[0]*(1-t),-9+Math.sin(angle)*2+body[1]+wind[1]*(1-t)];
    }else{
     angle=loadAngle+short(loadAngle,a)*t;h=load.map((x,k)=>lerp(x,contact[k],t));
     body=[Math.round(lerp(-fx,landed[0],t)),Math.round(lerp(smash?1:0,landed[1],t))];
    }
   }else{
    const retreat=f<=3?0:f<4?.35*smooth(f-3):.35+.65*smooth(f-4);
-   const end=whirl?[Math.cos(a)*orbit+landed[0],-5+Math.sin(a)*2+landed[1]]:contact;
+   const end=whirl?[Math.cos(a)*orbit+landed[0],-9+Math.sin(a)*2+landed[1]]:contact;
    const handRetreat=dir===2&&g.u[1]<0?Math.min(1,retreat*1.3):retreat;
    h=end.map((x,k)=>lerp(x,g.h[k],handRetreat));
    // Front recovery drops out to the hip before raising the edge outside the
@@ -5952,13 +5969,13 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   const w=get(id),profile=w.family==='spear'?{trailWidth:3,ghosts:0}:MOTIONS[w.family];
   if(f!==2)return;
   const p=PALETTES[w.material],previous=1;
-  const sink=q=>combo===3&&w.finisher.kind==='whirl'&&q.z===0?rear:b;
+  const sink=(q,x,y)=>combo===3&&w.finisher.kind==='whirl'&&(q.z===0||dir===2&&x>-5&&x<5&&y< -9)?rear:b;
   const width=profile.trailWidth*(.85+Math.min(.35,w.weightKg*.1));
   // Dithered silhouettes record earlier WEAPON positions, without touching
  // or regenerating any character layer. Heavy heads carry a longer shadow.
   for(let n=profile.ghosts;n>0;n--){
    const q=pose(id,dir,Math.max(1,f-n*.24),combo);
-   const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)sink(q).set(x,y,p[0],-5+n);},
+   const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)sink(q,x,y).set(x,y,p[0],-5+n);},
     line(x,y,X,Y,color,z){const count=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=count;i++)this.set(x+(X-x)*i/count,y+(Y-y)*i/count,color,z);}};
    paint(ghost,id,...q.h,...q.u);
   }
@@ -5967,9 +5984,9 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
    for(let k=0;k<width;k+=.65){
     const x=q.h[0]+q.u[0]*(r-k),y=q.h[1]+q.u[1]*(r-k);
     if(t<.4&&((Math.round(x)+Math.round(y))&1))continue;
-    sink(q).set(x,y,k<.8?p[2]:t>.5?p[3]:p[1],1);
+    sink(q,x,y).set(x,y,k<.8?p[2]:t>.5?p[3]:p[1],1);
    }
-   if(w.family==='staff'||w.family==='spear'&&combo===1)sink(q).set(q.h[0]-q.u[0]*7,q.h[1]-q.u[1]*7,p[3],0);
+   if(w.family==='staff'){const x=q.h[0]-q.u[0]*7,y=q.h[1]-q.u[1]*7;sink(q,x,y).set(x,y,p[3],0);}
   }
  }
  // Pixel effects are bounded to the same native cell and the one delivery.

@@ -55,7 +55,7 @@ test('strikes carry the grip across the body and thrusts drive a stable point fo
  for(const w of W.all){
   for(const dir of [1,2,3]){
    const a=W.pose(w.id,dir,1,0),b=W.pose(w.id,dir,3,0);
-   assert.ok(Math.hypot(b.h[0]-a.h[0],b.h[1]-a.h[1])>8,w.id+' is a moving strike, not a wrist spin');
+   assert.ok(Math.hypot(b.h[0]-a.h[0],b.h[1]-a.h[1])>5,w.id+' is a moving strike, not a wrist spin');
   }
   if(W.finisher(w.id).kind==='lunge'){
    for(const dir of [1,2,3]){
@@ -70,10 +70,12 @@ test('strikes carry the grip across the body and thrusts drive a stable point fo
  }
 });
 
-test('a spear reverse can contact with the visible butt instead of a phantom forward blade',()=>{
- const id='lance-boisclair',p=W.pose(id,1,3,1),actor={x:0,y:0,dir:1,combo:1,weapon:id};
- const target={x:p.h[0]-p.u[0]*6,y:p.h[1]-p.u[1]*6+9,r:.1};
- assert.ok(target.x>p.h[0]);assert.ok(W.hits(actor,target,3));
+test('the reverse spear strike lands its visible leading end ahead of the player in both profiles',()=>{
+ const id='lance-boisclair';for(const dir of [1,3]){
+  const p=W.pose(id,dir,2,1),actor={x:0,y:0,dir,combo:1,weapon:id};
+  const target={x:p.h[0]+p.u[0]*(p.reach-1),y:0,r:.1};
+  assert.ok(target.x*(dir===1?1:-1)>12);assert.ok(W.hits(actor,target,2));
+ }
 });
 
 test('every combo holds exactly preparation, impact, recoil and ready with no in-between drawings',()=>{

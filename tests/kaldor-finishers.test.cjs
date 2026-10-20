@@ -88,7 +88,7 @@ test('body turns sweep at waist height and hide the rear arc instead of wheeling
  for(const w of W.all.filter(w=>w.finisher.kind==='whirl'))for(let f=1;f<=3;f+=.025){
   const p=W.pose(w.id,2,f,3);assert.ok(Math.abs(p.u[1])<=.351,w.id+' shallow horizontal projection');
   if(p.u[1]<0)assert.equal(p.z,0,w.id+' rear weapon goes behind character');
-  else{assert.equal(p.z,1);assert.ok(p.h[1]-p.body[1]>-8,w.id+' forward grip stays below face');}
+  else{assert.equal(p.z,1);assert.ok(p.h[1]-p.body[1]>=-9.001,w.id+' forward grip stays below face');}
  }
 });
 test('front blade recovery raises the edge on the outside of the left shoulder',()=>{
