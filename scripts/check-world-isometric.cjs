@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),http=require('node:http'),assert=require('node:assert/strict'),path=require('node:path'),{chromium}=require('playwright');
 (async()=>{
- const html=fs.readFileSync('index.html','utf8').replace(/\}\)\(\);\s*<\/script>/,'globalThis.isoTest={Game,Renderer,Atlas,WorldProjection,HearthreaverArchitectureRender,HearthreaverArchitectureGame,renderer,BITMAPS,begin,studioIntro,get game(){return game}};})();</script>');
+ const html=fs.readFileSync('index.html','utf8').replace(/\}\)\(\);\s*<\/script>/,'globalThis.isoTest={Game,Renderer,Atlas,WorldProjection,HearthreaverArchitectureRender:HearthreaverArchitectureRender.createRenderer(HearthreaverSettlementArchitecture),HearthreaverArchitectureGame:HearthreaverSettlementArchitecture,renderer,BITMAPS,begin,studioIntro,get game(){return game}};})();</script>');
  const server=http.createServer((q,r)=>{r.setHeader('Content-Type','text/html');r.end(html);}).listen(0,'127.0.0.1');await new Promise(r=>server.on('listening',r));
  const browser=await chromium.launch({executablePath:process.env.UI_BROWSER_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']}),errors=[],results=[];
  const output=path.resolve('art/terrain-isometric-js/integration');fs.mkdirSync(output,{recursive:true});
@@ -25,7 +25,7 @@ const fs=require('node:fs'),http=require('node:http'),assert=require('node:asser
    for(const b of g.settlements.sites.get('town-1').buildings){if(A.entry(b.id).openHall)continue;const f=Art.frame(b),foot=b.geometry.foot,bp={...b,...P.point(b.x,b.y)};
     for(let y=foot.y-40;y<foot.y+foot.h&&!point;y+=2)for(let x=foot.x-40;x<foot.x+foot.w+40;x+=2)if(!g.solid(x,y,5,0)&&Art.obscures(f,bp,{...P.point(x,y),level:0})){chosen=b;point={x,y};break;}if(point)break;
    }if(!chosen)throw Error('No free space behind a house');g.placeSafely(point.x,point.y);g.player.z=0;delete g.player.elevation;for(let i=0;i<90;i++){g.time+=1/60;t.frame();}
-   const alpha=r.architectureOcclusion.get(chosen.uid)?.alpha,body=chosen.geometry.solids.find(s=>s.zMin===0&&s.zMax>22&&s.w>25),inside=body.polygon.reduce((v,p)=>[v[0]+p[0]/4,v[1]+p[1]/4],[0,0]);
+   const alpha=r.architectureOcclusion.get(chosen.uid)?.alpha,body=chosen.geometry.solids.find(s=>s.zMin<=1&&s.zMax>22&&s.w>25),inside=body.polygon.reduce((v,p)=>[v[0]+p[0]/4,v[1]+p[1]/4],[0,0]);
    return {alpha,free:!g.solid(g.player.x,g.player.y,5,0),foundationSolid:g.solid(...inside,5,0)};
   });assert.ok(occlusion.alpha>=.32&&occlusion.alpha<.33);assert.ok(occlusion.free&&occlusion.foundationSolid);
   await page.screenshot({path:path.join(output,'passage-derriere-maison'+(process.env.PERF_NO_WORKER?'-fallback':'')+'.png')});

@@ -1,5 +1,7 @@
 # Hearthreaver — Le retour de Kaldor
 
+**Clairfoyer intégré :** trame à angles droits, blocs inégaux, cours carrées et rectangulaires, rues décalées, onze palettes de quartier, nouveaux bâtiments et postes isométriques. [Captures du jeu](art/city-plans/jeu/index.html) · [Plan des quartiers](art/city-plans/quartiers/clairfoyer-quartiers.png) · [Conception et limites](docs/conception-villes.md). Les personnages conservent quatre directions ; les 82 autres localités gardent leur implantation existante.
+
 [Atelier des humains : tenues, métiers, armées et animations](art/humains/activites/atelier.html)
 · [Sources et utilisation de la bibliothèque JavaScript](docs/humains-activites.md).
 Ce catalogue visuel est consultable séparément du jeu.

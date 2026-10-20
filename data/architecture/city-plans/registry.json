@@ -1,0 +1,838 @@
+{
+  "schema": 1,
+  "pushAllowed": true,
+  "rule": "User authorized integration and push of Clairfoyer, its varied rectangular grid, buildings and workstations on 2026-10-20. Other cities keep their existing layouts until separately designed.",
+  "sites": [
+    {
+      "id": "town-63",
+      "name": "Havre-du-Givre",
+      "region": "Pâlerive",
+      "territory": "Igea",
+      "population": 3600,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-67",
+      "name": "Pâleval",
+      "region": "Pâlerive",
+      "territory": "Igea",
+      "population": 3600,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-68",
+      "name": "Fort-Écho",
+      "region": "Pâlerive",
+      "territory": "Igea",
+      "population": 3600,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-72",
+      "name": "Col-des-Loups",
+      "region": "Pâlerive",
+      "territory": "Igea",
+      "population": 3600,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-69",
+      "name": "Val-des-Neiges",
+      "region": "Haut-Givre",
+      "territory": "Igea",
+      "population": 8400,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-70",
+      "name": "Roche-Blanche",
+      "region": "Givreval",
+      "territory": "Igea",
+      "population": 6650,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-71",
+      "name": "Veille-Boréale",
+      "region": "Givreval",
+      "territory": "Igea",
+      "population": 6650,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-1",
+      "name": "Clairfoyer",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10629,
+      "role": "administrative_center",
+      "status": "integrated_varied_rectangular_grid",
+      "userValidated": true,
+      "plan": "data/architecture/city-plans/clairfoyer-grid.json"
+    },
+    {
+      "id": "town-19",
+      "name": "Fort-des-Ronces",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10629,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-25",
+      "name": "Val-des-Mousses",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10629,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-32",
+      "name": "Col-des-Cèdres",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10629,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-37",
+      "name": "Lac-des-Aulnes",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10628,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-46",
+      "name": "Ormerive",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10628,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-56",
+      "name": "Ruisselet",
+      "region": "Boisclair",
+      "territory": "Teremor",
+      "population": 10628,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-12",
+      "name": "Rive-du-Cerf",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-16",
+      "name": "Chêne-Creux",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-28",
+      "name": "Bourg-du-Pont",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-30",
+      "name": "Source-Claire",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-39",
+      "name": "Vigie-Verte",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-44",
+      "name": "Hautes-Fougères",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-48",
+      "name": "Pont-des-Fougères",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-59",
+      "name": "Moulin-Vert",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-78",
+      "name": "Val-des-Pins",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-79",
+      "name": "Marchebrune",
+      "region": "Valdorne",
+      "territory": "Teremor",
+      "population": 12600,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-11",
+      "name": "Pont-des-Ormes",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-13",
+      "name": "Bois-des-Fées",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-15",
+      "name": "Port-des-Aulnes",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-18",
+      "name": "Rive-des-Saules",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-21",
+      "name": "Val-Fleuri",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-24",
+      "name": "Auberge-du-Lac",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-29",
+      "name": "Gué-des-Pierres",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-31",
+      "name": "Bosquet-du-Merle",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-33",
+      "name": "Rive-du-Moulin",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-36",
+      "name": "Pré-des-Roches",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-4",
+      "name": "Sylvehaute",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-41",
+      "name": "Ronceraie",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-42",
+      "name": "Branchebasse",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "ocean_port",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-43",
+      "name": "Vallombre",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-45",
+      "name": "Clairpré",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-47",
+      "name": "Vieux-Chêne",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-49",
+      "name": "Roche-du-Cerf",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-53",
+      "name": "Val-Serein",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-57",
+      "name": "Basse-Sylve",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-8",
+      "name": "Clairval",
+      "region": "Sylverive",
+      "territory": "Teremor",
+      "population": 6380,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-14",
+      "name": "Gué-Clair",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13372,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-17",
+      "name": "Mont-Vert",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13372,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-2",
+      "name": "Aulneport",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13372,
+      "role": "ocean_port",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-26",
+      "name": "Lisière-Rousse",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13371,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-38",
+      "name": "Bois-de-Lune",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13371,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-64",
+      "name": "Lisière-des-Pins",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13371,
+      "role": "pastoral_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-80",
+      "name": "Hautes-Lisières",
+      "region": "Aulneval",
+      "territory": "Teremor",
+      "population": 13371,
+      "role": "pastoral_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-35",
+      "name": "Pas-du-Sel",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-60",
+      "name": "Relais-des-Trois-Pierres",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "metal_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-65",
+      "name": "Col-de-Verre",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "metal_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-66",
+      "name": "Bourg-des-Acacias",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "pastoral_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-7",
+      "name": "Oasis-du-Safran",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "metal_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-81",
+      "name": "Griseborne",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "pastoral_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-82",
+      "name": "Rive-Fauve",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "metal_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-83",
+      "name": "Col-des-Cendres",
+      "region": "Roche-Sèche",
+      "territory": "Sarak",
+      "population": 3375,
+      "role": "pastoral_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-20",
+      "name": "Relais-des-Dunes",
+      "region": "Sables-Rouges",
+      "territory": "Sarak",
+      "population": 3960,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-22",
+      "name": "Tour-des-Braises",
+      "region": "Sables-Rouges",
+      "territory": "Sarak",
+      "population": 3960,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-23",
+      "name": "Puits-Rouge",
+      "region": "Sables-Rouges",
+      "territory": "Sarak",
+      "population": 3960,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-52",
+      "name": "Oasis-des-Palmes",
+      "region": "Sables-Rouges",
+      "territory": "Sarak",
+      "population": 3960,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-6",
+      "name": "Citadelle-de-Sarak",
+      "region": "Sables-Rouges",
+      "territory": "Sarak",
+      "population": 3960,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-34",
+      "name": "Roche-du-Serpent",
+      "region": "Safrane",
+      "territory": "Sarak",
+      "population": 16100,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-5",
+      "name": "Port-Sarak",
+      "region": "Safrane",
+      "territory": "Sarak",
+      "population": 16100,
+      "role": "ocean_port",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-58",
+      "name": "Havre-du-Cuivre",
+      "region": "Safrane",
+      "territory": "Sarak",
+      "population": 16100,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-9",
+      "name": "Puits-des-Caravanes",
+      "region": "Safrane",
+      "territory": "Sarak",
+      "population": 16100,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-73",
+      "name": "Bac-des-Roseaux",
+      "region": "Brumeraie",
+      "territory": "Varan",
+      "population": 9200,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-74",
+      "name": "Tourbeclaire",
+      "region": "Brumeraie",
+      "territory": "Varan",
+      "population": 9200,
+      "role": "food_market",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-76",
+      "name": "Pont-des-Joncs",
+      "region": "Brumeraie",
+      "territory": "Varan",
+      "population": 9200,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-10",
+      "name": "Port-des-Veilleurs",
+      "region": "Rosebrume",
+      "territory": "Varan",
+      "population": 10634,
+      "role": "ocean_port",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-75",
+      "name": "Brume-aux-Saules",
+      "region": "Rosebrume",
+      "territory": "Varan",
+      "population": 10633,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-77",
+      "name": "Refuge-des-Aulnes",
+      "region": "Rosebrume",
+      "territory": "Varan",
+      "population": 10633,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-50",
+      "name": "Bourg-des-Coquilles",
+      "region": "Coralune",
+      "territory": "Tagon",
+      "population": 25600,
+      "role": "ocean_port",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-51",
+      "name": "Havre-des-Épices",
+      "region": "Coralune",
+      "territory": "Tagon",
+      "population": 25600,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-27",
+      "name": "Anse-des-Palmes",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5015,
+      "role": "ocean_port",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-3",
+      "name": "Coralbourg",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5015,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-40",
+      "name": "Santalune",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5014,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-54",
+      "name": "Plage-Dorée",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5014,
+      "role": "forest_depot",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-55",
+      "name": "Relais-des-Lianes",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5014,
+      "role": "administrative_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-61",
+      "name": "Rive-de-Corail",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5014,
+      "role": "textile_center",
+      "status": "not_started",
+      "userValidated": false
+    },
+    {
+      "id": "town-62",
+      "name": "Palmehaute",
+      "region": "Palmeraie",
+      "territory": "Tagon",
+      "population": 5014,
+      "role": "exchange_relay",
+      "status": "not_started",
+      "userValidated": false
+    }
+  ]
+}

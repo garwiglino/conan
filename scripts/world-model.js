@@ -129,7 +129,10 @@ const createWorldAtlas = (raw) => {
  for(const r of raw.rivers)for(let i=1;i<r.points.length;i++){const a=r.points[i-1],b=r.points[i],s={r,a,b};riverIndex.put(s,Math.min(a[0],b[0])-r.width,Math.min(a[1],b[1])-r.width,Math.max(a[0],b[0])+r.width,Math.max(a[1],b[1])+r.width);}
  for(const n of nodes){const v=vertices.get(n.vertex);if(v){n.x=v[0];n.y=v[1];}}
  const siteIndex=new Index(2048);for(const n of nodes)siteIndex.put(n,n.x-150,n.y-150,n.x+150,n.y+150);
- function siteAt(x,y,margin=0){return siteIndex.near(x,y).filter(n=>Math.hypot(n.x-x,n.y-y)<=n.radius+margin).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y))[0]||null;}
+ const settlementAreas=new Map();
+ function registerSettlementAreas(id,areas){if(!byId[id]||!Array.isArray(areas))throw Error('Unknown authored settlement area');settlementAreas.set(id,areas.map(r=>({...r})));}
+ function siteAt(x,y,margin=0){for(const [id,areas]of settlementAreas)if(areas.some(r=>x>=r.x-margin&&x<=r.x+r.w+margin&&y>=r.y-margin&&y<=r.y+r.h+margin))return byId[id];return radialSiteAt(x,y,margin);}
+ function radialSiteAt(x,y,margin=0){return siteIndex.near(x,y).filter(n=>Math.hypot(n.x-x,n.y-y)<=n.radius+margin).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y))[0]||null;}
  function nearestSite(x,y){return nodes.reduce((a,n)=>!a||Math.hypot(n.x-x,n.y-y)<Math.hypot(a.x-x,a.y-y)?n:a,null);}
  function closestRoad(x,y,land=true){let best=null;for(const s of roadIndex.near(x,y)){if(land&&s.r.type==='searoutes')continue;const p=project(x,y,s.a,s.b);if(!best||p.d<best.d-0.01||Math.abs(p.d-best.d)<.01&&s.r.id<best.road.id)best={...p,road:s.r,segment:s,along:s.start+p.t*s.length};}return best;}
  function atDistance(r,d){d=clamp(d,0,r.length);let i=1;while(i<r.cumulative.length-1&&r.cumulative[i]<d)i++;const a=r.pts[i-1],b=r.pts[i],t=(d-r.cumulative[i-1])/(r.cumulative[i]-r.cumulative[i-1]||1);return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}
@@ -147,7 +150,7 @@ const createWorldAtlas = (raw) => {
   if(!on&&!passable(x+.5,y+.5))return 8;
   if(riverAt(x+.5,y+.5))return on?5:3;
   if(on)return 1;
-  const site=siteAt(x+.5,y+.5);if(site)return site.kind==='town'||site.kind==='ruin'?2:0;
+  const site=radialSiteAt(x+.5,y+.5);if(site)return site.kind==='town'||site.kind==='ruin'?2:0;
   const noise=Math.sin(x/94)*Math.cos(y/113)+Math.sin((x+y)/39)*.2;
   if((c.height>58&&noise>1.1)||([1,2].includes(c.terrainBiome)&&c.height>30&&noise>1.08))return 8;
   // Woodland clumps with clearings. The cleared road corridor takes priority.
@@ -325,6 +328,6 @@ const createWorldAtlas = (raw) => {
    for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=n.x+dx,y=n.y+dy;if(Math.abs(x-sx)>36||Math.abs(y-sy)>36)continue;const k2=key(x,y),g=n.g+1;if(g>=(best.get(k2)??Infinity))continue;if(!walkable.has(k2))walkable.set(k2,!!free(x*16+8,y*16+8));if(!walkable.get(k2))continue;if(edgeFree&&!edgeFree(from,{x:x*16+8,y:y*16+8}))continue;best.set(k2,g);prev.set(k2,n);q.push({x,y,g,cost:g+Math.abs(tx-x)+Math.abs(ty-y)});}}
   return [];
  }
- return {layout,scale,passable,roadCells,vertexOf,marineWeatherHazard,climateBiome,climateProfile,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
+ return {layout,scale,passable,roadCells,vertexOf,marineWeatherHazard,climateBiome,climateProfile,airTemperature,visualSnowCover,chunkSnowKey,climateProfiles,climateTemperature,snowCover,VERSION,CHUNK,PIXELS,raw,origin,toWorld,toGame,core,cells,cellById,cellAt,regions,nodes,byId,home,refuge,prison,roads,roadById,segments,roadIndex,vertices,adj,edgeById,edgeRisk,crossings,curseCells,riverAt,coastDistance,environment,closestRoad,siteAt,registerSettlementAreas,nearestSite,atDistance,terrain,propAt,modes,findPath,routePlan,WorldState,EVENT_TYPES,LocationTracker,ChunkStore,localPath,project,random,distance,Heap};
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=createWorldAtlas;

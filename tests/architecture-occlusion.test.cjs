@@ -36,7 +36,7 @@ test('the entire house fades to the deck opacity while its solid foundations sta
 });
 test('the actual game allows movement behind a faded house and still rejects walking through its foundation',async()=>{
  const {loadGame}=require('./game-harness.cjs'),api=await loadGame(),g=new api.Game();let o,p;
- for(const b of g.settlements.buildings){if(A.entry(b.id).openHall)continue;try{const f=Art.frame(b);p=behind(b,f,(x,y)=>!g.solid(x,y,5,0));o=b;break;}catch{}}
+ for(const b of g.settlements.buildings){if(!A.catalogue[b.id])continue;if(A.entry(b.id).openHall)continue;try{const f=Art.frame(b);p=behind(b,f,(x,y)=>!g.solid(x,y,5,0));o=b;break;}catch{}}
  assert.ok(o);Object.assign(g.player,p);const r=renderer(g,createCanvas(1,1).getContext('2d'));assert.ok(settle(r,o).some(c=>c.architectureAlpha<.33));
  const old={x:g.player.x,y:g.player.y};let moved=false;for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){if(g.solid(old.x+dx*3,old.y+dy*3,5,0))continue;g.move(g.player,dx*2,dy*2);moved=Math.hypot(g.player.x-old.x,g.player.y-old.y)>.1;if(moved)break;}assert.ok(moved,'walkable area behind the building');
  const body=o.geometry.solids.find(s=>s.zMin===0&&s.zMax>22&&s.w>30),target=body.polygon.reduce((v,a)=>[v[0]+a[0]/4,v[1]+a[1]/4],[0,0]);assert.equal(g.solid(...target,5,0),true);

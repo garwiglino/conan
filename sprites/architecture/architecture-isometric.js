@@ -2,7 +2,7 @@
  * No PNG, DOM, image resampling, previous elevation pixels or external renderer.
  * World unit = one native pixel of height; human 19, tile 16, door clearance 22.
  */
-(function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('./isometric-catalogue.js'));else r.HearthreaverIsometric=f(r.HearthreaverIsometricCatalogue);})(globalThis,function(C){
+(function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('./isometric-catalogue.js'));else r.HearthreaverIsometric=f(r.HearthreaverIsometricCatalogue);})(globalThis,function createLibrary(C,buildMesh){
 'use strict';
 const RAMPS={
  ink:['#171820','#23212b','#302b33','#453942','#5b4850'],
@@ -22,6 +22,12 @@ const RAMPS={
  water:['#24373f','#36565c','#51777a','#7a9a93','#b2bfa4'],
  moss:['#2d3830','#43513a','#657046','#899153','#aeb773']
 };
+// Authoring libraries may supply five-tone material ramps without changing
+// the native catalogue, palette indices, geometry or cached game drawings.
+for(const [material,ramp]of Object.entries(C.ramps||{})){
+ if(!RAMPS[material]||ramp.length!==5||ramp.some(c=>!/^#[0-9a-f]{6}$/i.test(c)))throw new RangeError('Palette de matériau invalide : '+material);
+ RAMPS[material]=ramp.slice();
+}
 const palette=['#00000000',...Object.values(RAMPS).flat()],start={},names=Object.keys(RAMPS);names.forEach((n,i)=>start[n]=1+i*5);
 const rgb=palette.map(c=>c.length===9?[0,0,0,0]:[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16),255]);
 const defs=new Map(C.assets.map(d=>[d.id,d])),cache=new Map(),dirs=['face','droite','dos','gauche'];
@@ -34,6 +40,7 @@ const hash=(x,y,s=0)=>(Math.imul((x|0)+s+17,374761393)^Math.imul((y|0)+39,668265
 function recipe(d){
  const id=d.id.replace('-hiver',''),n=+(id.match(/\d+$/)||[0])[0],label=d.label.toLocaleLowerCase('fr');
  const r={type:'house',wall:'plaster',roof:'tile',rise:24,chimney:false,storeys:d.height>=80?2:1,raised:0,annex:false,balcony:false,twin:false,porch:false};
+ if(d.recipe)return {...r,...d.recipe};
  if(d.family==='teremor'){r.roof=/chaum|modeste|familiale/.test(label)?'straw':'tile';r.chimney=true;r.porch=/chaum/.test(label);}
  if(d.family==='sylverive'){r.roof='slate';r.chimney=true;r.balcony=/galerie/.test(label);}
  if(d.family==='igea'){r.wall=/pierre/.test(label)?'stone':'log';r.roof='wood';r.rise=28;r.chimney=!/grenier/.test(label);}
@@ -351,7 +358,8 @@ function mesh(d,options={}){
   if(s==='sluice-frame'){beam(0,0,0,4,D,H);beam(W-4,0,0,4,D,H);beam(0,0,H-4,W,D,4);panelY(4,D/2,0,W-8,H*.6,'wood','plank');beam(W/2-1,D/2,0,2,2,H,'iron');return;}
   throw new Error('Module non dessiné : '+d.id+' '+s);
  }
- if(d.kind==='building')building();else moduleArt();
+ const authored=buildMesh&&buildMesh(d,{face,box,beam,wall,panelY,panelX,window,door,roof,chimney,stairs,terrace,railing,barrel,stack,basin,truss,meta},options);
+ if(!authored){if(d.kind==='building')building();else moduleArt();}
  return {polys,volumes,meta,seed,winter,recipe:d.kind==='building'?recipe(d):null};
 }
 function render(d,options){
@@ -491,5 +499,5 @@ function draw(ctx,options){const {id,x=0,y=0,scale=1}=options;if(!Number.isInteg
  for(let yy=0;yy<p.height;yy++){for(let xx=0;xx<p.width;){const i=yy*p.width+xx,c=p.indices[i],visible=!li||p.layers[i]===li;let end=xx+1;while(end<p.width&&p.indices[yy*p.width+end]===c&&(!li||p.layers[yy*p.width+end]===p.layers[i]))end++;if(c&&visible){ctx.fillStyle=palette[c];ctx.fillRect(Math.round(x+(xx-p.anchor[0])*scale),Math.round(y+(yy-p.anchor[1])*scale),(end-xx)*scale,scale);}xx=end;}}
  return p;
 }
-return Object.freeze({version:1,scale:Object.freeze({...C.scale}),palette:Object.freeze(palette),projection:Object.freeze({name:'pixel isometric 2:1',x:[1,-1,0],y:[.5,.5,-1]}),project,entry,list,blueprint:(id,options={})=>mesh(entry(id),options),recipe:id=>recipe(entry(id)),pixels,raster,draw,clearCache:()=>cache.clear()});
+return Object.freeze({version:1,scale:Object.freeze({...C.scale}),palette:Object.freeze(palette),projection:Object.freeze({name:'pixel isometric 2:1',x:[1,-1,0],y:[.5,.5,-1]}),project,entry,list,blueprint:(id,options={})=>mesh(entry(id),options),recipe:id=>recipe(entry(id)),pixels,raster,draw,createLibrary,clearCache:()=>cache.clear()});
 });
