@@ -1,0 +1,20 @@
+{
+  "cadre": {"taille": 48, "ancre": [24, 36], "vues": ["face", "droite", "dos", "gauche"], "moteur": "+16 sur x et y : cadre 80 × 80, ancre 40, 52"},
+  "peau_reference": ["a3ae8c", "7f8c6c", "5c6852", "404a3c"],
+  "teintes": {
+    "gris-vert": {"nom": "Gris-vert", "couleurs": ["a3ae8c", "7f8c6c", "5c6852", "404a3c"], "ou": "la plus répandue"},
+    "mousse": {"nom": "Mousse", "couleurs": ["9fb062", "7a8c48", "586a35", "3d4a26"], "ou": "villages forestiers de Boisclair"},
+    "ocre": {"nom": "Ocre", "couleurs": ["b9a26c", "937d4e", "6c5a37", "4a3d27"], "ou": "clan Kesh, oasis de Sarak"},
+    "cendre": {"nom": "Cendre", "couleurs": ["b3b2a7", "8c8b82", "66655f", "474641"], "ou": "carriers de Griseborne"}
+  },
+  "personnages": [
+    {"id": "guerrier-kesh", "nom": "Guerrier de Kesh", "corps": "masculin", "tenue": "guerrier", "coiffe": "casque-a-pointes", "arme": "cimeterre-dentele", "teinte": "gris-vert"},
+    {"id": "guerriere-kesh", "nom": "Guerrière de Kesh", "corps": "feminin", "tenue": "guerrier", "coiffe": "casque-a-pointes", "arme": "cimeterre-dentele", "teinte": "ocre"},
+    {"id": "villageois", "nom": "Villageois", "corps": "masculin", "tenue": "villageois", "coiffe": "capuche", "teinte": "mousse"},
+    {"id": "villageoise", "nom": "Villageoise", "corps": "feminin", "tenue": "villageois", "teinte": "gris-vert"},
+    {"id": "gobelin-nu", "nom": "Gobelin, pagne", "corps": "masculin", "tenue": "pagne", "teinte": "gris-vert"},
+    {"id": "gobeline-nue", "nom": "Gobeline, pagne", "corps": "feminin", "tenue": "pagne-bandeau", "teinte": "cendre"},
+    {"id": "milicien", "nom": "Milicien de village", "corps": "masculin", "tenue": "villageois", "pieces": {"tunic": "guerrier", "gloves": "guerrier", "collar": "guerrier"}, "coiffe": "casque-a-pointes", "teinte": "mousse"},
+    {"id": "pillard", "nom": "Pillard encapuchonné", "corps": "masculin", "tenue": "guerrier", "pieces": {"feet": "villageois", "collar": null}, "coiffe": "capuche", "arme": "cimeterre-dentele", "teinte": "ocre"}
+  ]
+}

@@ -45,7 +45,7 @@ C'est le premier niveau du jeu. Kaldor, capturé par les gobelins, se réveille 
 5. **Salle du trône.** Derrière la **Porte croc**, l'escalier du chef mène à l'antichambre. Le chef **Grise-Gueule** est un grand gobelin tout maigre, l'air nigaud, armé d'une massue. Une fois le chef battu, le levier fait descendre la cage et la fée est libérée.
 6. **Sortie.** Kaldor redescend par le monte-charge et la caserne avec la fée, qui brise le sceau de la grande porte.
 
-Les trois clés sont le même objet (`cle`), seul leur nom change. Les gobelins prévus sont marqués en rouge sur les planches ; ils ne sont pas encore dessinés.
+Les trois clés sont le même objet (`cle`), seul leur nom change. Les gobelins prévus sont marqués en rouge sur les planches. Leur design de base est proposé dans `art/gobelins/` ; ils ne sont pas encore placés dans le donjon.
 
 ## Modifier un donjon
 
