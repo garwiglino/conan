@@ -1,0 +1,80 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "width": 844,
+      "mobile": true,
+      "poses": {
+        "distinctDrawings": 65,
+        "contacts": 16,
+        "pose": {
+          "state": "attack",
+          "dir": 1,
+          "frame": 2,
+          "combo": 0
+        },
+        "ringChecks": 98,
+        "feedback": {
+          "blood": 1,
+          "hitStop": 0.0361,
+          "shake": 0.774,
+          "heavyEvent": true
+        }
+      },
+      "chief": {
+        "state": {
+          "state": "attack",
+          "dir": 2,
+          "frame": 2,
+          "combo": 3
+        },
+        "bodySize": 80
+      },
+      "discovery": {
+        "width": 184.5625,
+        "aboveWeapon": true,
+        "owned": true,
+        "lines": 2
+      },
+      "touchAttack": true
+    },
+    {
+      "width": 568,
+      "mobile": true,
+      "poses": {
+        "distinctDrawings": 64,
+        "contacts": 16,
+        "pose": {
+          "state": "attack",
+          "dir": 1,
+          "frame": 2,
+          "combo": 0
+        },
+        "ringChecks": 98,
+        "feedback": {
+          "blood": 1,
+          "hitStop": 0.0361,
+          "shake": 0.774,
+          "heavyEvent": true
+        }
+      },
+      "chief": {
+        "state": {
+          "state": "attack",
+          "dir": 2,
+          "frame": 2,
+          "combo": 3
+        },
+        "bodySize": 80
+      },
+      "discovery": {
+        "width": 184.5625,
+        "aboveWeapon": true,
+        "owned": true,
+        "lines": 2
+      },
+      "touchAttack": true
+    }
+  ],
+  "browserErrors": []
+}

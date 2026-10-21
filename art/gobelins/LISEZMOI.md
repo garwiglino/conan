@@ -72,9 +72,31 @@ Les noms suivent ceux des humains (`sprites/humains/sources-natives.js`), pour q
 
 Le premier jet vient de `scripts/gobelins/dessins.cjs`, des dessins en caractères : le corps nu, découpé en calques par zones, puis le gobelin habillé de chaque tenue, coiffe ou chevelure, dont les pixels qui diffèrent du corps nu forment les calques. `npm run draft:gobelins` n'écrit que les fichiers absents : les `.piskel` sont la source, et `--ecraser` effacerait les retouches.
 
-## Ce qui reste à faire après validation
+## Animations et intégration
 
-- **Animations.** Il n'y en a pas encore : ce sont des poses de repos.
-- **Intégration au jeu.** Les gobelins ne sont pas encore dans le jeu, ni dans la forteresse de Grise-Gueule.
-- **Armes.** En jeu, les armes viennent du catalogue (`data/weapons/catalogue.json`) : Coutelas de Boisclair, Dague de Kesh, Marteau de Griseborne, etc. Le cimeterre dentelé est une proposition de style pour ces armes.
-- **Grise-Gueule.** Le chef reste à dessiner : un grand gobelin maigre armé d'une massue.
+Le rig `sprites/gobelins/gobelin.js` anime les dix variantes natives et Grise-Gueule dans les quatre vues. Il propose repos, marche, course, alerte, garde, parade, quatre attaques, réaction au coup, déséquilibre, mort, interaction, parole, portage, travail, assise, sommeil, protection et joie. Les activités sont disponibles dans l’atelier ; le donjon utilise les états de déplacement et de combat selon son comportement existant.
+
+[Atelier animé](animations/index.html) · [Aperçu à vitesse réelle](animations/gobelins-animations.gif) · [Poses](animations/poses.png).
+
+Le compilateur lit les Piskel sans les modifier. Il conserve intégralement les pixels et les formes connectées de chaque calque. Les formes déjà disjointes des membres peuvent se déplacer séparément, sans découper une forme connectée, sans ajouter de membre, sans étirement et sans rotation des membres. Les manches et brassards suivent le bras correspondant, les bottes suivent les pieds ; tête, visage, oreilles, cheveux et coiffes restent groupés. Les masques de coiffes et teintes sont ceux de l’assemblage original. Les quatre vues gardent le cadre natif 80 × 80 et l’ancre 40,52.
+
+Les attaques tiennent six poses : mise en tension, charge, impact, prolongement, fin extrême, reprise. L’impact dure 45 ms ; le chef charge et freine plus lentement. Les tailles alternent leur sens, puis viennent un estoc et une frappe lourde. Le smear clair suit la livraison du coup et un résidu atténué apparaît juste après ; la fin de geste reste nette. Seules les armes du catalogue tournent. La marche avance avec la distance parcourue et revient au repos dès l’arrêt.
+
+Dans Grise-Gueule, le même chronomètre pilote pose et unique événement de dégâts. L’orientation est fixée au départ dans la vue isométrique ; les dégâts vérifient le segment de lame et le mur à l’impact. Une blessure annule une frappe encore en préparation. Les gobelins s’approchent jusqu’à la portée visible de leur arme. La mort se joue en cinq poses puis reste au sol ; les cadavres des anciennes sauvegardes sont déjà stabilisés.
+
+Grise-Gueule emploie provisoirement les calques de guerrier en teinte cendre, à leur taille native, avec le Marteau de Griseborne. Cela remplace l’ancien étirement vertical du gobelin de base. Sa silhouette spécifique de grand chef maigre reste à dessiner comme source Piskel dédiée.
+
+```sh
+npm run build:goblin-animations
+npm run preview:goblin-animations
+npm run test:goblin-animations
+node --test tests/goblin-combat.test.cjs tests/dungeon-presentation.test.cjs
+```
+
+Après une retouche Piskel, reconstruire les calques puis l’atelier. `build:dungeon` reconstruit aussi le rig avant d’embarquer le donjon ; `embed-dungeon` installe les sources dans les HTML du jeu et d’iOS. Les gobelins civils ne sont pas ajoutés au monde par ce changement : les états d’activité sont prêts à être appelés par leurs futurs comportements.
+
+## Combat partagé dans le donjon
+
+Le donjon utilise le traitement commun des dégâts (puissance, riposte, sons de frappe lourde, sang, recul, hit stop, shake et butin). Son adaptateur conserve uniquement la réaction du rig gobelin et les conséquences de quête de Grise-Gueule. L’anneau de cible appelle `Renderer.targetRing`, avec une seule projection aux pieds ; les anciens grands cercles de préparation sont retirés. Le déplacement pendant un coup ciblé reprend la vitesse de combat commune. Les prises en main et les six poses de Kaldor restent celles des armes natives.
+
+Les armes lâchées restent sur leur étage et survivent à la sauvegarde. La première collecte utilise l’encart commun à deux lignes, positionné au-dessus de l’arme ; une arme déjà possédée n’ajoute aucun encart. La vérification téléphone contrôle aussi cet ancrage et les effets de contact.

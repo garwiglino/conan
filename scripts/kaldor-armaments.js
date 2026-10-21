@@ -84,16 +84,16 @@ const KaldorArmaments=(()=>{
    for(let i=0;i<data.length;i+=4)if(data[i+3])layer.data.set(data.subarray(i,i+4),i);
   }};
  }
- const debris=Renderer.prototype.groundDebris;
- Renderer.prototype.groundDebris=function(air){
-  debris.call(this,air);if(air)return;
-  const g=this.g,c=this.c;
+ function drawDrops(renderer){
+  const g=renderer.g,c=renderer.c;
   for(const d of g.weaponDrops||[]){
-   if(owned(g,d.weapon)||!g.sameLevel(d,g.player)||this.cam&&(d.x<this.cam.x-40||d.y<this.cam.y-40||d.x>this.cam.x+this.W+40||d.y>this.cam.y+this.H+40))continue;
-   const y=d.y-(d.level?12:0);this.shadow(d.x,y,8);KaldorArsenal.drawWeapon(c,d.weapon,Math.round(d.x)-5,Math.round(y)-2,.88,-.475);
+   if(owned(g,d.weapon)||!g.sameLevel(d,g.player)||renderer.cam&&(d.x<renderer.cam.x-40||d.y<renderer.cam.y-40||d.x>renderer.cam.x+renderer.W+40||d.y>renderer.cam.y+renderer.H+40))continue;
+   const y=d.y-(d.level?12:0);renderer.shadow(d.x,y,8);KaldorArsenal.drawWeapon(c,d.weapon,Math.round(d.x)-5,Math.round(y)-2,.88,-.475);
    if(Math.floor(g.time*3)%3===0){c.fillStyle='#ffe5a0';c.fillRect(Math.round(d.x)+8,Math.round(y)-8,1,3);c.fillRect(Math.round(d.x)+7,Math.round(y)-7,3,1);}
   }
- };
+ }
+ const debris=Renderer.prototype.groundDebris;
+ Renderer.prototype.groundDebris=function(air){debris.call(this,air);if(!air)drawDrops(this);};
  // Non-modal discovery card: no freeze, forced equip or duplicate notification.
  let timer=0,queue=[],active=null,view=null;
  function clearDiscovery(){if(timer)clearTimeout(timer);timer=0;queue=[];active=null;document.getElementById('weaponDiscovery')?.remove();}
@@ -123,7 +123,7 @@ const KaldorArmaments=(()=>{
   const {card,anchor}=active,cv=renderer.c.canvas;
   if(!anchor||!cv.getBoundingClientRect)return;
   const rect=cv.getBoundingClientRect(),sx=rect.width/renderer.W,sy=rect.height/renderer.H;
-  const at=renderer.isometricTerrainGame&&typeof WorldProjection!=='undefined'?WorldProjection.point(anchor.x,anchor.y):anchor;
+  const at=(renderer.isometricTerrainGame||renderer.g.dungeon?.active)&&typeof WorldProjection!=='undefined'?WorldProjection.point(anchor.x,anchor.y):anchor;
   const px=rect.left+(at.x-renderer.cam.x)*sx,py=rect.top+(renderer.top+at.y-renderer.cam.y-(anchor.level?12:0))*sy;
   const visible=renderer.g.sameLevel(anchor,renderer.g.player)&&px>=rect.left&&px<=rect.right&&py>=rect.top&&py<=rect.bottom;
   card.style.visibility=visible?'visible':'hidden';if(!visible)return;
@@ -132,7 +132,8 @@ const KaldorArmaments=(()=>{
   card.style.top=Math.max(rect.top+card.offsetHeight+4,py-18*sy-6)+'px';
  }
  const renderFrame=Renderer.prototype.frame;
- Renderer.prototype.frame=function(){const result=renderFrame.call(this);view=this;positionDiscovery(this);return result;};
- return {equip,restoreDrops,details,acquire,batracienOptions,showDiscovery,clearDiscovery};
+ function renderDiscovery(renderer){view=renderer;positionDiscovery(renderer);}
+ Renderer.prototype.frame=function(){const result=renderFrame.call(this);renderDiscovery(this);return result;};
+ return {equip,restoreDrops,details,acquire,batracienOptions,showDiscovery,clearDiscovery,drawDrops,renderDiscovery};
 })();
 globalThis.KaldorArmaments=KaldorArmaments;

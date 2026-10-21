@@ -71,7 +71,11 @@
     "test:dungeon": "node --test tests/dungeon-runtime.test.cjs tests/dungeon-presentation.test.cjs tests/environment-donjons.test.cjs tests/environment-interieurs.test.cjs tests/gobelins.test.cjs",
     "check:dungeon": "node scripts/check-dungeon.cjs",
     "donjon:environment": "node scripts/environment/donjon.cjs",
-    "gobelins": "node scripts/gobelins/gobelins.cjs"
+    "gobelins": "node scripts/gobelins/gobelins.cjs",
+    "build:goblin-animations": "node scripts/gobelins/compile-animation.cjs && node scripts/embed-dungeon.cjs",
+    "preview:goblin-animations": "node scripts/gobelins/preview-animation.cjs",
+    "test:goblin-animations": "node --test --test-concurrency=2 tests/gobelins.test.cjs tests/goblin-animation.test.cjs tests/goblin-combat.test.cjs",
+    "check:goblin-animations": "node scripts/gobelins/check-animation-mobile.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",

@@ -28,13 +28,16 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
  const view=this.projectionView;this.logicalGame=g;this.projectionActive=true;this.g=view.game;
  try{
   for(const b of view.game.blood)drawBloodStain(c,b);
+  KaldorArmaments.drawDrops(this);
+  for(const d of view.game.drops){const z=d.z||0,bob=d.air||d.magnet?0:Math.sin(g.time*5+d.x*.1)*2;if(d.kind==='heart'||d.kind==='flask')this.flask(d.x,d.y-z+bob);else this.coinDrop(d.x,d.y-8-z+bob);}
   items.push({key:Math.floor(p.x/32)+Math.floor(p.y/32),sub:p.x+p.y,draw:()=>this.hero(view.wrap(p))});
   for(const n of g.enemies){if(!visible(Math.floor(n.x/32),Math.floor(n.y/32)))continue;items.push({key:Math.floor(n.x/32)+Math.floor(n.y/32),sub:n.x+n.y,draw:()=>{
-   const q=P(n.x,n.y),v=[2,1,0,3][n.dir]??0,im=art.goblins[n.skin][v],bob=n.anim&&!n.dead?Math.round(Math.sin(n.anim*2)):0;c.save();
-   if(n.wind>0){c.strokeStyle=n.chief?'#eb8357':'#d4ae6f';c.lineWidth=1;c.beginPath();c.ellipse(q.x,q.y, n.chief?32:22,n.chief?16:11,0,0,7);c.stroke();}
-   if(n.dead){c.globalAlpha=.45;c.translate(q.x,q.y);c.rotate(Math.PI/2);c.drawImage(im,-24,-36,48,48);}else{if(n.flash>0)c.globalAlpha=.55;const h=n.chief?68:48;c.drawImage(im,Math.round(q.x-24),Math.round(q.y-(n.chief?51:36)+bob),48,h);
-    if(n.chief){const reach=n.attack>0?23:13;c.fillStyle='#504030';c.fillRect(q.x+9,q.y-26,3,25);c.fillStyle='#9a8460';c.fillRect(q.x+6,q.y-26-reach/2,10,12);}
-    if(n.hp<n.maxHp){c.fillStyle='#271b24';c.fillRect(q.x-11,q.y-(n.chief?44:26),22,3);c.fillStyle='#c0644b';c.fillRect(q.x-11,q.y-(n.chief?44:26),22*n.hp/n.maxHp,2);}}
+   const q=P(n.x,n.y);c.save();
+   this.shadow(q.x,q.y,n.chief?18:14);
+   if(!n.dead&&g.targetId===n.id)this.targetRing(q.x,q.y,n.chief?15:12);
+   HearthreaverGoblins.draw(c,{...n,x:q.x,y:q.y,armed:n.armamentDropped?false:n.armed},g.time);
+   if(!n.dead&&g.targetId===n.id)pixels(c,['0...0','00.00','.000.','..0..'],Math.round(q.x)-2,Math.round(q.y)-35,{'0':'#f5d680'});
+   if(!n.dead&&n.hp<n.maxHp){c.fillStyle='#271b24';c.fillRect(q.x-11,q.y-31,22,3);c.fillStyle='#c0644b';c.fillRect(q.x-11,q.y-31,22*n.hp/n.maxHp,2);}
    c.restore();}});}
   items.sort((a,b)=>a.key-b.key||a.sub-b.sub);for(const it of items)it.draw();
   for(const fx of view.game.bloodFX)drawBloodFX(c,fx);
@@ -43,7 +46,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   if(g.dungeon.fairy)this.npcDraw(view.wrap({...g.fairyActor,x:p.x-16,y:p.y-16,alpha:1}));
   c.restore();this.bubble();
  }finally{this.g=g;this.projectionActive=false;this.logicalGame=null;}
- this.hud();c.save();
+ this.hud();KaldorArmaments.renderDiscovery(this);c.save();
  const boss=g.enemies.find(n=>n.chief);if(g.dungeon.bossFight&&boss&&!boss.dead&&!g.dialogue){const y=T+36;this.uiBox(W/2-78,y,156,24);text(c,'GRISE-GUEULE',W/2-35,y+4,'#e5bf67');c.fillStyle='#38242a';c.fillRect(W/2-70,y+16,140,3);c.fillStyle='#bf4a3a';c.fillRect(W/2-70,y+16,140*boss.hp/boss.maxHp,3);}
  c.restore();
 };
