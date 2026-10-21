@@ -54,7 +54,7 @@ const OBJECTS={
  'caisse':(M,o)=>{M.box(-6,-6,0,6,6,10,'bois');o.crate=[[-6,-6,0,6,6,10]];o.shadow=[8,8];},
  'caisses':(M,o)=>{M.box(-9,-6,0,3,6,10,'bois');M.box(3,-4,0,11,4,8,'bois');M.box(-7,-4,10,1,4,17,'bois');o.crate=[[-9,-6,0,3,6,10],[3,-4,0,11,4,8],[-7,-4,10,1,4,17]];o.shadow=[13,9];},
  'tonneau':(M,o)=>{M.shape((a,b,z)=>{const r=5.2+Math.sin(Math.PI*z/14)*1.1;return a*a+b*b<=r*r?(z===2||z===3||z===10||z===11?'fer':'bois'):undefined;},[-7,-7,0,7,7,14]);o.barrel=true;o.shadow=[8,8];},
- 'coffre':(M,o)=>{chest(M,o);o.shadow=[10,7];},
+ 'coffre':(M,o,options)=>{chest(M,o,options);o.shadow=[10,7];},
  'coffre-verrouille':(M,o)=>{chest(M,o);o.padlock=[0,5,7];o.shadow=[10,7];},
  'coffre-ouvert':(M,o)=>{chest(M,o,{open:true});o.shadow=[10,7];},
  'paillasse':(M,o)=>{M.shape((a,b,z)=>(a/11)**2+(b/6)**2+(z/3.4)**2<=1?'paille':undefined,[-12,-7,0,12,7,4]);
@@ -100,10 +100,14 @@ const OBJECTS={
   }
 };
 // Coffre : caisse cerclée, couvercle bombé (ou ouvert, dressé derrière, l'or dedans).
-function chest(M,o,{open=false}={}){
+function chest(M,o,{open=false,progress=open?1:0}={}){
  M.box(-8,-5,0,8,5,6,'bois');for(const a of [-7,5])M.box(a,-5,0,a+2,6,7,'fer');
- if(open){M.box(-8,-6,6,8,-4,15,'bois');M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1?'or':undefined,[-7,-4,5,7,4,7]);}
- else{M.shape((a,b,z)=>b*b+(z-6)**2<=5*5&&z>=6?((a>=-7&&a<-5)||(a>=5&&a<7)?'fer':'bois'):undefined,[-8,-5,6,8,5,12]);M.box(-1,5,3,1,6,7,'fer');}
+ if(progress>=1){M.box(-8,-6,6,8,-4,15,'bois');M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1?'or':undefined,[-7,-4,5,7,4,7]);}
+ else if(progress>0){
+  const angle=progress*Math.PI/2,co=Math.cos(angle),si=Math.sin(angle);
+  M.shape((a,b,z)=>{const db=b+5,dz=z-6,v=db*co+dz*si,w=-db*si+dz*co,q=v-5;return v>=0&&v<10&&w>=0&&q*q+w*w<=25?((a>=-7&&a<-5)||(a>=5&&a<7)?'fer':'bois'):undefined;},[-8,-12,6,8,6,18]);
+  M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1?'or':undefined,[-7,-4,5,7,4,7]);
+ }else{M.shape((a,b,z)=>b*b+(z-6)**2<=5*5&&z>=6?((a>=-7&&a<-5)||(a>=5&&a<7)?'fer':'bois'):undefined,[-8,-5,6,8,5,12]);M.box(-1,5,3,1,6,7,'fer');}
 }
 // Planches de caisse : bords sombres, planches de 3, traverse en diagonale.
 function crateShade(base,boxes){
@@ -116,8 +120,8 @@ function crateShade(base,boxes){
  * noir autour : l'objet se détache par sa valeur et son ombre de contact). */
 function outline(s){const src=s.g.clone(),P=require('./palette.cjs');for(let y=0;y<s.h;y++)for(let x=0;x<s.w;x++){if(!src.get(x,y))continue;if(src.get(x+1,y)&&src.get(x,y+1))continue;
  const c=s.g.name(x,y),ramp=c.replace(/\d+$/,''),t=+c.match(/\d+$/)[0];if(ramp==='torche')continue;s.g.set(x,y,ramp+Math.max(0,t-1));}}
-function object(name,{image=0}={}){
- const M=new Model(-16,-16,0,18,18,52),o={};OBJECTS[name](M,o);
+function object(name,{image=0,progress}={}){
+ const M=new Model(-16,-16,0,18,18,52),o={};OBJECTS[name](M,o,progress===undefined?undefined:{progress});
  let sh=shader(o);if(o.crate)sh=crateShade(sh,o.crate);
  const s=render(M,sh);
  outline(s);

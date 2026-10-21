@@ -18,7 +18,7 @@ const KaldorArmaments=(()=>{
  const serialize=Game.prototype.serialize;
  Game.prototype.serialize=function(){const s=serialize.call(this);if(s.arsenal)s.arsenal.drops=(this.weaponDrops||[]).filter(d=>!this.arsenal.owned.includes(d.weapon)).map(({weapon,x,y,level,source})=>({weapon,x,y,level,source}));return s;};
  function owned(g,id){return !!g.arsenal?.owned.includes(id);}
- function details(g,id){const w=W.get(id);return {weapon:id,damage:w.damage*g.power(),title:w.label,text:W.families[w.family]+' · '+w.hands+' main'+(w.hands===2?'s':'')+' · '+w.culture+' · '+w.territory+' · '+w.rarity,stats:'Dégâts '+(w.damage*g.power()).toFixed(2)+' · Cadence '+Math.round(W.cadence(id)*100)+' % · '+w.weightKg+' kg',description:w.description};}
+ function details(g,id){const w=W.get(id);return {weapon:id,damage:w.damage*g.power(),title:w.label,text:W.category(w.id)+' · '+w.hands+' main'+(w.hands===2?'s':'')+' · '+w.culture+' · '+w.territory+' · '+w.rarity,stats:'Dégâts '+(w.damage*g.power()).toFixed(2)+' · Cadence '+Math.round(W.cadence(id)*100)+' % · '+w.weightKg+' kg',description:w.description};}
  function acquire(g,id,origin){
   if(!W.has(id)||!g.arsenal||owned(g,id))return false;
   const at=origin||g.weaponDrops?.find(d=>d.weapon===id)||g.atlasProps.find(o=>o.kind==='kaldor_weapon'&&o.weapon===id)||g.player;
@@ -94,7 +94,7 @@ const KaldorArmaments=(()=>{
   if(dead(n))return {weaponId:id,equipment:false};
   return {weaponId:id,weaponPainter:(layer,p)=>{
    const cv=document.createElement('canvas');cv.width=cv.height=80;const c=cv.getContext('2d'),dx=p.tip[0]-p.hand[0],dy=p.tip[1]-p.hand[1],len=Math.max(1,Math.hypot(dx,dy));
-   KaldorArsenal.drawWeapon(c,id,...p.hand,dx/len,dy/len);
+   KaldorArsenal.drawWeapon(c,id,...p.hand,dx/len,dy/len,n.dir);
    const data=c.getImageData(0,0,80,80).data;
    for(let i=0;i<data.length;i+=4)if(data[i+3])layer.data.set(data.subarray(i,i+4),i);
   }};
@@ -124,7 +124,7 @@ const KaldorArmaments=(()=>{
   const icon=document.createElement('canvas');icon.width=icon.height=40;icon.style.cssText='width:20px;height:20px;flex:none;image-rendering:pixelated';icon.setAttribute('aria-hidden','true');card.append(icon);
   KaldorArsenal.drawWeapon(icon.getContext('2d'),ev.weapon,13,34,.35,-.937);
   const lines=document.createElement('div');lines.style.cssText='display:flex;flex-direction:column;gap:2px;min-width:0';card.append(lines);
-  const name=document.createElement('strong');name.textContent=ev.title;name.style.cssText='overflow:hidden;text-overflow:ellipsis;min-width:0;font-weight:600';name.title=ev.title;lines.append(name);
+  const name=document.createElement('strong');name.textContent=W.get(ev.weapon).label;name.style.cssText='overflow:hidden;text-overflow:ellipsis;min-width:0;font-weight:600';name.title=W.get(ev.weapon).label+' · '+W.category(ev.weapon);lines.append(name);
   const w=W.get(ev.weapon),info=document.createElement('span'),damage=Number.isFinite(ev.damage)?ev.damage:w.damage;
   info.textContent=w.hands+' main'+(w.hands===2?'s':'')+' · Dégâts '+damage.toFixed(2).replace('.',',');info.style.cssText='color:#cabd9e';lines.append(info);
   const close=document.createElement('button');close.type='button';close.textContent=ev.pickup?'Prendre':'×';close.setAttribute('aria-label',ev.pickup?'Prendre '+ev.title:'Fermer les informations de l’arme');close.style.cssText='flex:none;align-self:flex-start;width:18px;height:20px;padding:0;color:#cabd9e;background:transparent;border:0;font-size:17px;line-height:20px;pointer-events:auto';if(ev.pickup)close.style.cssText='flex:none;padding:6px 3px;min-height:32px;color:#f0d18d;background:transparent;border:0;font:600 11px system-ui;pointer-events:auto;touch-action:manipulation';close.onclick=()=>{if(ev.pickup){const g=view?.logicalGame||view?.g;if(!g?.takeNearbyWeapon(ev.weapon))return;}clearTimeout(timer);card.remove();active=null;timer=0;nextDiscovery();};card.append(close);document.body.append(card);

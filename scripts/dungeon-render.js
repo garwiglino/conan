@@ -27,12 +27,19 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   if(it.edge){const border=it.edge.join(','),orient=name.split('/')[0];if(s.open.includes(border))name=orient+'/'+({'porte-verrouillee':'porte-ouverte','porte-cellule':'porte-cellule-ouverte','herse':'herse-levee'}[e.murs[border]]||'porte-ouverte');if(s.levers.includes(border)||border===D.fee.levier&&g.dungeon.fairy)name=orient+'/levier-bas';if(name===orient+'/porte'&&g.dungeon.floor==='trone'&&!g.dungeon.bossFight)name=orient+'/porte-ouverte';}
   if(name==='cle'&&D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&Math.hypot(k.pos[0]*32-ref[0],k.pos[1]*32-ref[1])<3))continue;
   if(name==='caisse'){const i=e.objets.findIndex(([n,x,y])=>n==='caisse'&&x*32===ref[0]&&y*32===ref[1]),b=s.crates.find(b=>b.id===i);if(b)ref=[b.x,b.y];}
-  if(name==='coffre'&&(s.chests.some(i=>e.objets[i][1]*32===ref[0]&&e.objets[i][2]*32===ref[1])||D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&Math.hypot(k.pos[0]*32-ref[0],k.pos[1]*32-ref[1])<3)))name='coffre-ouvert';
+  if(name==='coffre'){
+   const i=e.objets.findIndex(([n,x,y])=>n==='coffre'&&x*32===ref[0]&&y*32===ref[1]),oldKey=D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&F.keyChest(g,k)===i),phase=LootPresentation.chestFrame(oldKey?{open:true}:F.chestState(g,i));
+   name=phase===4?'coffre-ouvert':phase?'coffre-ouverture-'+phase:'coffre';
+  }
+  if(name==='tresor'&&s.chests.some(i=>e.objets[i][1]*32===ref[0]&&e.objets[i][2]*32===ref[1]))continue;
   if(name==='cage-fee'&&g.dungeon.fairy)name='cage';
   if(name==='monte-charge')continue;
   if(name==='dalle-pression'&&s.crates.some(b=>Math.hypot(b.x-ref[0],b.y-ref[1])<10))name='dalle-pression-enfoncee';
   if(!light&&!it.edge)continue;
-  items.push({key:it.key,sub:it.sub,draw:()=>{const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...it,ref},z,im,p):1;blit(name,...ref,alpha);}});
+  items.push({key:it.key,sub:it.sub,draw:()=>{if(name==='cle'){const q=P(...ref);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,ref[0]);return;}const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...it,ref},z,im,p):1;blit(name,...ref,alpha);}});
+ }
+ for(const k of D.cles)if(k.etage===e.id&&!g.dungeon.keys.includes(k.id)&&F.keyChest(g,k)>=0&&F.keyReady(g,k)){
+  const x=k.pos[0]*32,y=k.pos[1]*32;items.push({key:Math.floor(x/32)+Math.floor(y/32),sub:x+y+1,draw:()=>{const q=P(x,y);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,x,12);}});
  }
  if(D.monte_charge.arrets.includes(e.id)&&(g.dungeon.lift||e.id==='geoles')){const [i,j]=D.monte_charge.case;items.push({key:i+j,sub:(i+j+1)*32,draw:()=>blit('monte-charge',(i+.5)*32,(j+.5)*32)});}
  if(this.projectionViewGame!==g){this.projectionViewGame=g;this.projectionView=WorldProjection.display(g);}
