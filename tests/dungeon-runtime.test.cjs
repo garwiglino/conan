@@ -36,9 +36,9 @@ test('the complete authored escape is physically reachable, including pressure c
  use(g,'dungeon-lever','leviers-armurerie');assert.equal(g.dungeon.floors.galeries.open.includes('10,5,N'),false);
  // Target the other lever by its authored edge.
  walk(g,()=>{const c=g.context();return c?.kind==='dungeon-lever'&&c.bord==='2,6,O';});g.interact();assert.ok(g.dungeon.floors.galeries.open.includes('10,5,N'));
- use(g,'dungeon-key','crane');use(g,'dungeon-door','porte-crane');use(g,'dungeon-winch');assert.equal(g.dungeon.lift,true);
+ use(g,'dungeon-chest','crane');for(let i=0;i<20;i++)g.update(.02,{});use(g,'dungeon-key','crane');use(g,'dungeon-door','porte-crane');use(g,'dungeon-winch');assert.equal(g.dungeon.lift,true);
  use(g,'dungeon-lift');assert.ok(g.dialogue);const option=g.dialogue.menu.options.find(o=>o.label==='La grande salle');assert.ok(option);option.act();g.dialogue=null;quiet(g);
- use(g,'dungeon-key','croc');use(g,'dungeon-lever','levier-caserne');assert.ok(g.dungeon.floors['grande-salle'].open.includes('7,8,O'));
+ use(g,'dungeon-chest','croc');for(let i=0;i<20;i++)g.update(.02,{});use(g,'dungeon-key','croc');use(g,'dungeon-lever','levier-caserne');assert.ok(g.dungeon.floors['grande-salle'].open.includes('7,8,O'));
  use(g,'dungeon-lift');g.dialogue.menu.options.find(o=>o.label==='Les galeries').act();g.dialogue=null;quiet(g);
  use(g,'dungeon-door','porte-croc');use(g,'dungeon-stairs','trone');quiet(g);
  use(g,'dungeon-lever','levier-cage');assert.equal(g.dungeon.fairy,false,'chief must be defeated');

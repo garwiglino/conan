@@ -1,0 +1,65 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "mobile": true,
+  "results": [
+    {
+      "width": 844,
+      "chest": {
+        "phase": 4,
+        "coins": 15,
+        "flasks": 2,
+        "drops": 0,
+        "reopen": false
+      },
+      "combat": {
+        "impacts": 23,
+        "starts": 23,
+        "movingSwing": 219,
+        "maxAttacks": 2,
+        "angles": [
+          -3.1411309186983556,
+          -2.020359758778012,
+          -0.004002183840189082,
+          1.7188744408419816
+        ],
+        "maxGap": 2.016357574937823,
+        "hpLost": 1
+      },
+      "kill": {
+        "coinGain": 3,
+        "drops": 0
+      },
+      "categories": true
+    },
+    {
+      "width": 568,
+      "chest": {
+        "phase": 4,
+        "coins": 15,
+        "flasks": 2,
+        "drops": 0,
+        "reopen": false
+      },
+      "combat": {
+        "impacts": 23,
+        "starts": 23,
+        "movingSwing": 219,
+        "maxAttacks": 2,
+        "angles": [
+          -3.1411309186983556,
+          -2.020359758778012,
+          -0.004002183840189082,
+          1.7188744408419816
+        ],
+        "maxGap": 2.016357574937823,
+        "hpLost": 1
+      },
+      "kill": {
+        "coinGain": 3,
+        "drops": 0
+      },
+      "categories": true
+    }
+  ],
+  "browserErrors": []
+}

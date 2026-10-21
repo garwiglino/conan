@@ -21,6 +21,12 @@ function current(g){return byId[g.dungeon.floor];}
 function state(g){return g.dungeon.floors[g.dungeon.floor];}
 function open(g,k){return state(g).open.includes(k);}
 function openEdge(g,k){const s=state(g);if(!s.open.includes(k))s.open.push(k);}
+function keyChest(g,k){return current(g).objets.findIndex(([n,x,y])=>n==='coffre'&&Math.hypot(x*CELL-k.pos[0]*CELL,y*CELL-k.pos[1]*CELL)<4);}
+function chestState(g,i){return state(g).chestStates?.[i]||{open:state(g).chests.includes(i)};}
+function keyReady(g,k){const i=keyChest(g,k);return i<0||state(g).chests.includes(i)&&LootPresentation.chestFrame(chestState(g,i))>=2;}
+Game.prototype.openDungeonChest=function(i){const e=current(this),s=state(this),o=e.objets[i];if(!o||s.chests.includes(i))return false;
+ s.chestStates??={};const ch=s.chestStates[i]={x:o[1]*CELL,y:o[2]*CELL,level:0,open:false};s.chests.push(i);return this.openLootChest(ch);
+};
 function checkpoint(g){g.dungeon.checkpoint={floor:g.dungeon.floor,x:g.player.x,y:g.player.y};}
 Game.prototype.startFirstDungeon=function(saved=null){
  if(this.dungeon?.active)return false;
@@ -94,12 +100,12 @@ Game.prototype.revealDungeon=function(){const s=state(this),e=current(this),seen
 };
 Game.prototype.dungeonContext=function(){if(this.dungeonGrip)return {kind:'dungeon-crate',id:this.dungeonGrip.id,text:'E  LÂCHER LA CAISSE · AVANCER / RECULER'};const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
  for(const b of s.crates){const d=Math.max(1,dist(p,b)),probe={x:b.x+(p.x-b.x)/d*12,y:b.y+(p.y-b.y)/d*12};if(near(p,b,28)&&this.lineClear(p,probe))options.push({kind:'dungeon-crate',id:b.id,text:'E  SAISIR LA CAISSE · POUSSER / TIRER',d});}
- for(const k of D.cles)if(k.etage===e.id&&!this.dungeon.keys.includes(k.id))add({kind:'dungeon-key',id:k.id},k.pos,'E  PRENDRE : '+k.nom);
+ for(const k of D.cles)if(k.etage===e.id&&!this.dungeon.keys.includes(k.id)&&keyReady(this,k))add({kind:'dungeon-key',id:k.id},k.pos,'E  PRENDRE : '+k.nom);
  for(const m of e.mecanismes||[]){for(const k of m.bords|| (m.bord?[m.bord]:[]))wall({kind:'dungeon-lever',id:m.id,bord:k},k,'E  ACTIONNER LE LEVIER');if(m.id==='treuil')add({kind:'dungeon-winch'},m.pos,'E  REMONTER LE MONTE-CHARGE');}
  for(const d of e.portes||[])if(d.condition==='fee')wall({kind:'dungeon-exit'},d.bord,this.dungeon.fairy?'E  BRISER LE SCEAU ET SORTIR':'LE SCEAU RESTE VERROUILLÉ');else if(d.cle&&!open(this,d.bord))wall({kind:'dungeon-door',door:d},d.bord,'E  OUVRIR : '+d.nom);
  for(const l of e.liens||[]){if(l.bord)wall({kind:'dungeon-stairs',link:l},l.bord,'E  MONTER');else add({kind:'dungeon-stairs',link:l},l['trémie'].map(v=>v+.5),'E  DESCENDRE');}
  if(D.monte_charge.arrets.includes(e.id))add({kind:'dungeon-lift'},D.monte_charge.case.map(v=>v+.5),this.dungeon.lift?'E  MONTE-CHARGE : CHOISIR UN ÉTAGE':'LE TREUIL EST AUX GALERIES');
- e.objets.forEach(([n,x,y],i)=>{if(/^(coffre|tresor)$/.test(n)&&!s.chests.includes(i)&&!D.cles.some(k=>k.etage===e.id&&near(at(k.pos),at([x,y]),4)))add({kind:'dungeon-chest',i},[x,y],'E  FOUILLER LE COFFRE');});
+ e.objets.forEach(([n,x,y],i)=>{if(/^(coffre|tresor)$/.test(n)&&!s.chests.includes(i)){const k=D.cles.find(k=>k.etage===e.id&&keyChest(this,k)===i);add({kind:'dungeon-chest',i,id:k?.id||String(i)},[x,y],'E  OUVRIR LE COFFRE');}});
  options.sort((a,b)=>a.d-b.d);return options[0]||null;
 };
 const context=Game.prototype.context;Game.prototype.context=function(){return this.dungeon?.active?this.dungeonContext():context.call(this);};
@@ -117,7 +123,7 @@ Game.prototype.interact=function(){if(!this.dungeon?.active)return interact.call
  if(c.kind==='dungeon-winch'){d.lift=true;this.emit('notice',{title:'Monte-charge activé',text:'Le puits dessert les galeries, la caserne et les geôles.'});}
  if(c.kind==='dungeon-lift'){if(!d.lift){this.emit('message',{text:'Actionne d’abord le treuil des galeries.'});return;}const stops=D.monte_charge.arrets;this.talk('MONTE-CHARGE',['Choisis un étage.'],null,20,null,{prompt:'Quel étage ?',options:[...stops.filter(id=>id!==e.id).map(id=>({label:byId[id].nom,lines:[''],end:true,act:()=>this.enterDungeonFloor(id,at([4.5,10.5]))})),{label:'Rester ici',lines:[''],end:true}]});}
  if(c.kind==='dungeon-stairs'){const l=c.link,t=byId[l.vers];let pos;if(l.arrivee)pos=l.arrivee.map(v=>v+.5);else{const back=t.liens.find(q=>q.vers===e.id&&q.bord),p=edge(back.bord);pos=[(p.x+(p.o==='O'?12:0))/CELL,(p.y+(p.o==='N'?12:0))/CELL];}this.enterDungeonFloor(t.id,at(pos));}
- if(c.kind==='dungeon-chest'){s.chests.push(c.i);this.player.coins+=5;this.player.flasks=Math.min(FLASK_MAX,(this.player.flasks||0)+1);this.emit('chest');}
+ if(c.kind==='dungeon-chest')this.openDungeonChest(c.i);
  if(c.kind==='dungeon-exit'){if(!d.fairy){this.emit('message',{text:'Une rune violette ferme la porte. Son secret se trouve plus haut.'});return;}this.leaveFirstDungeon();return;}
  this.revealDungeon();this.emit('save');
 };
@@ -173,21 +179,23 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
  if(this.dungeon.floor==='trone'&&p.y<9*CELL&&!this.dungeon.bossDead)this.dungeon.bossFight=true;
+ this.stepLoot(dt);
  const tactics=GoblinTactics.plan(this,dt);
  // The native enemy drawing and its single damaging event share one clock.
  for(const e of this.enemies){
-  e.moving=false;const impact=HearthreaverGoblins.advance(e,dt);if(e.dead)continue;
+  e.moving=false;const wasSwing=Number.isFinite(e.swingElapsed),impact=HearthreaverGoblins.advance(e,dt);if(e.dead)continue;
   for(const k of ['cooldown','stun','flash'])e[k]=Math.max(0,(e[k]||0)-dt);
+  if(wasSwing&&!Number.isFinite(e.swingElapsed))e.cooldown=Math.max(e.cooldown,.06);
   if(e.stun>0)continue;const d=dist(e,p);if(e.chief&&!this.dungeon.bossFight||e.bossGuard&&!this.dungeon.bossFight&&!this.dungeon.bossDead)continue;
-  if(impact){if(HearthreaverGoblins.hits(e,p)&&this.lineClear(e,p))this.damagePlayer(e.chief?2:1,e);e.cooldown=e.chief?1.25:.72;}
-  if(Number.isFinite(e.swingElapsed))continue;
+  if(impact){if(HearthreaverGoblins.hits(e,p)&&this.lineClear(e,p))this.damagePlayer(e.chief?2:1,e);e.cooldown=e.chief?1.25:.32;}
+  if(Number.isFinite(e.swingElapsed)){GoblinTactics.combatMove(this,e,tactics,dt);continue;}
   const dir=this.direction(p.x-e.x,p.y-e.y),reachable=d<=(e.chief?32:21)&&HearthreaverGoblins.hits({...e,swingDir:dir,goblinCombo:e.nextCombo||0},p);
-  if(reachable&&e.cooldown<=0&&this.lineClear(e,p)&&GoblinTactics.canStrike(this,e,tactics)){e.dir=dir;HearthreaverGoblins.start(e);GoblinTactics.reserve(tactics);this.emit('foe',{kind:'skeleton',act:'strike',vol:.4});}
+  if(reachable&&e.cooldown<=0&&this.lineClear(e,p)&&GoblinTactics.canStrike(this,e,tactics)){e.dir=dir;HearthreaverGoblins.start(e);GoblinTactics.reserve(tactics,e);this.emit('foe',{kind:'skeleton',act:'strike',vol:.4});}
   else if(!reachable||tactics.group.length>1)GoblinTactics.move(this,e,GoblinTactics.goal(this,e,tactics),tactics,dt);
  }
  this.dungeonRevealTimer=(this.dungeonRevealTimer||0)-dt;if(this.dungeonRevealTimer<=0){this.revealDungeon();this.dungeonRevealTimer=.15;}
  this.saveTimer+=dt;if(this.saveTimer>=5){this.saveTimer=0;this.emit('save');}
 }
 function inventoryHTML(g){if(!g.dungeon)return '';return '<div class="m-sec">Clés de la forteresse</div>'+D.cles.map(k=>'<div class="inv-row"><div class="grow">'+k.nom+'<small>'+ (g.dungeon.keys.includes(k.id)?'Obtenue · '+k.ouvre:'À trouver dans la forteresse')+'</small></div></div>').join('');}
-return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML};
+return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML,keyChest,keyReady,chestState};
 })();

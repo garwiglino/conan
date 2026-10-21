@@ -18,7 +18,7 @@
  const character=id=>DATA.characters[id]||DATA.characters.gobelin;
  function times(state,chief=false,combo=0){
   const row=(CLIPS[state]||CLIPS.idle).times.slice();
-  if(state==='attack'){row[1]=chief?.765:.465;const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
+  if(state==='attack'){row[1]=chief?.765:.365;const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
   return row;
  }
  const duration=(state,chief=false,combo=0)=>times(state,chief,combo).reduce((a,b)=>a+b,0);
@@ -87,7 +87,7 @@
   const set=(x,y,c)=>{x=Math.round(x)+40;y=Math.round(y)+52;if(x<0||x>=SIZE||y<0||y>=SIZE)return;let color=rgb.get(c);if(!color){color=[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)).concat(255);rgb.set(c,color);}data.set(color,(y*SIZE+x)*4);};
   const line=(x,y,X,Y,c)=>{const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)set(x+(X-x)*i/n,y+(Y-y)*i/n,c);};
   const b={set,line},weapon=options.weapon||ch.weapon,armed=options.armed??ch.armed,v=weaponPose(dir,p),rear=dir===0||p.angle< -Math.PI*.85||p.angle>Math.PI*.85;
-  function blade(){if(!armed)return;W.paint(b,weapon,...v.h,...v.u,id==='grise-gueule'?1:.85);}
+  function blade(){if(!armed)return;W.paint(b,weapon,...v.h,...v.u,id==='grise-gueule'?1:.85,W.handedness(dir));}
   function trail(){if(!armed||!p.smear)return;const len=W.get(weapon).length*(id==='grise-gueule'?1:.85),sgn=p.turn,count=p.smear===1?22:9,col=p.smear===1?'#d9c3a0':'#6e6554';
    if(combo===2){for(let k=2;k<=8;k+=2)set(v.h[0]+v.u[0]*(len-k),v.h[1]+v.u[1]*(len-k),col);return;}
    for(let n=0;n<count;n++){const a=p.angle-sgn*(.80*(1-n/count)),r=len-(n%3===0?2:0);if(p.smear<1&&n%2)continue;set(v.h[0]+Math.cos(a)*r,v.h[1]+Math.sin(a)*r,col);if(p.smear===1&&n%3===0)set(v.h[0]+Math.cos(a)*(r-1),v.h[1]+Math.sin(a)*(r-1),col);}}
