@@ -5,7 +5,7 @@ const GoblinTactics=(()=>{
  function state(g){let s=games.get(g);if(!s||s.floor!==g.dungeon.floor||s.enemies!==g.enemies){s={floor:g.dungeon.floor,enemies:g.enemies,actors:new Map(),nextStrike:0,nextBark:0,lines:[]};games.set(g,s);}return s;}
  function reset(g){games.delete(g);}
  function plan(g,dt){
-  const s=state(g),p=g.player,now=g.time,live=g.enemies.filter(e=>!e.dead&&(!e.chief||g.dungeon.bossFight));
+  const s=state(g),p=g.player,now=g.time,live=g.enemies.filter(e=>!e.dead&&(!e.chief||g.dungeon.bossFight)&&(!e.bossGuard||g.dungeon.bossFight||g.dungeon.bossDead));
   const visible=live.filter(e=>length(e,p)<150&&g.lineClear(e,p));
   for(const e of live){let m=s.actors.get(e);if(!m){m={until:0,slot:null,route:[],repath:0};s.actors.set(e,m);}
    // Alerts need an unoccluded nearby witness; nobody sees through a closed door.

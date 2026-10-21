@@ -76,7 +76,7 @@
         ["os", 15.0, 9.0], ["crane", 17.8, 10.8], ["os", 18.6, 9.0], ["flaque", 14.6, 11.2], ["mousse", 13.4, 8.6], ["os", 20.8, 11.0], ["crane", 15.6, 10.6], ["tache", 19.0, 11.4], ["gravats", 13.8, 9.2],
         ["flaque", 3.5, 8.6], ["mousse", 1.4, 12.4], ["os", 4.4, 11.6], ["grille", 2.5, 12.2]
       ],
-      "gobelins": [[20.6, 2.6], [21.6, 5.0], [17.6, 10.6]],
+      "gobelins": [[20.6, 2.6], [21.6, 5.0], [17.6, 10.6], [20.3, 5.6], [21.8, 4.0], [19.2, 9.3]],
       "liens": [{ "bord": "3,1,N", "vers": "grande-salle", "arrivee": [3, 1], "note": "escalier qui monte au rez-de-chaussée" }],
       "mecanismes": [{ "id": "levier-cellules", "bord": "20,1,N", "ouvre": ["7,3,N", "9,3,N", "13,3,N", "15,3,N"], "effet": "ouvre les quatre grilles de cellule (porte-cellule devient porte-cellule-ouverte)" }],
       "portes": [{ "id": "porte-serpent", "nom": "Porte serpent", "bord": "5,1,O", "cle": "serpent" }],
@@ -143,7 +143,7 @@
         ["os", 11.2, 14.6], ["flaque", 9.4, 14.8], ["tache", 12.6, 12.6], ["crane", 14.2, 14.2],
         ["traces", 19.5, 3.0], ["gravats", 18.0, 2.5]
       ],
-      "gobelins": [[11.5, 5.0], [9.5, 9.5], [13.6, 7.0], [11.0, 14.4], [13.2, 13.6], [2.6, 9.4], [4.0, 11.0], [19.0, 4.0]],
+      "gobelins": [[11.5, 5.0], [9.5, 9.5], [13.6, 7.0], [11.0, 14.4], [13.2, 13.6], [2.6, 9.4], [4.0, 11.0], [19.0, 4.0], [8.1, 4.4], [14.9, 4.3], [10.1, 8.0], [9.0, 14.8]],
       "liens": [
         { "trémie": [3, 1], "vers": "geoles", "note": "escalier qui descend aux geôles" },
         { "bord": "19,1,N", "vers": "galeries", "arrivee": [19, 1], "note": "escalier qui monte aux galeries" }
@@ -211,7 +211,7 @@
         ["traces", 3.6, 12.2], ["tache", 1.6, 9.6], ["gravats", 4.6, 11.0],
         ["os", 11.5, 11.5], ["crane", 13.4, 12.4], ["traces", 10.8, 9.6]
       ],
-      "gobelins": [[10.5, 2.4], [12.2, 3.6], [8.0, 6.8], [14.5, 7.2], [19.8, 6.0], [21.0, 3.6], [12.5, 11.6]],
+      "gobelins": [[10.5, 2.4], [12.2, 3.6], [8.0, 6.8], [14.5, 7.2], [19.8, 6.0], [21.0, 3.6], [12.5, 11.6], [9.0, 3.6], [5.6, 6.6], [19.3, 2.4], [2.6, 11.4]],
       "liens": [
         { "trémie": [19, 1], "vers": "grande-salle", "note": "escalier qui descend au rez-de-chaussée" },
         { "bord": "10,10,O", "vers": "trone", "arrivee": [9, 11], "note": "escalier du chef, qui monte à la salle du trône" }
@@ -273,7 +273,7 @@
         ["os", 10.5, 4.5], ["crane", 12.6, 4.2], ["traces", 11.5, 6.8], ["tache", 9.4, 7.6], ["os", 14.6, 6.6], ["flaque", 6.4, 8.4], ["crane", 16.8, 8.4], ["fissure", 12.8, 7.8], ["gravats", 6.2, 2.6], ["os", 11.4, 8.6],
         ["traces", 11.5, 11.6], ["os", 12.6, 12.2], ["tache", 10.4, 12.8]
       ],
-      "gobelins": [[10.6, 12.4], [12.6, 11.4]],
+      "gobelins": [[10.6, 12.4], [12.6, 11.4], [8.7, 6.9], [14.2, 6.9]],
       "liens": [{ "trémie": [9, 11], "vers": "galeries", "note": "escalier qui redescend aux galeries" }],
       "mecanismes": [{ "id": "levier-cage", "bord": "15,1,N", "effet": "fait descendre la cage de la fée (après le combat)" }],
       "portes": [{ "id": "porte-chef", "nom": "Porte du chef", "bord": "11,10,N", "note": "se referme derrière Kaldor pendant le combat" }],
