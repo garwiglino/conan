@@ -53,7 +53,7 @@ Les fichiers MIDI type 1 et les notes JSON jouées sont générés ensemble : `s
 
 `node scripts/analyze-biome-audio.cjs` rend le synthétiseur réel, compare les anciens thèmes et les nouveaux, mesure crêtes/RMS/corrélation stéréo et énergie FFT par bandes. Les rendus couvrent une boucle entière et sa reprise. Les statistiques RMS incluent les silences intentionnels. L'analyse ne remplace pas une écoute sur téléphone. Aucun rendu analysé ne doit saturer ni produire de valeur audio non finie.
 
-Les appels de faune sont atténués par pluie, neige et combat. Musique, bruitages d’action et environnement conservent leurs réglages séparés. Pendant un voyage : thème dédié, bus météo/faune coupés, même pour un tonnerre déjà lancé ; reprise de l'ambiance locale à l'arrivée. Aucun changement de sauvegarde requis.
+Les appels de faune sont atténués par pluie, neige et combat. Musique, bruitages d’action et environnement conservent leurs réglages séparés. Pendant un voyage : thème dédié, bus météo/faune coupés, même pour un tonnerre déjà lancé ; reprise de l'ambiance locale à l'arrivée. Dans un donjon : ni météo, ni vent, ni faune ; une ambiance de cave (gouttes, fuites, air humide, réverbération de pierre) les remplace sur le bus environnement (`scripts/dungeon-audio.js`). Aucun changement de sauvegarde requis.
 
 ## Références de conception
 

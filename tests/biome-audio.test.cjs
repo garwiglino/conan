@@ -1,7 +1,7 @@
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),path=require('path'),{RenderingAudioContext}=require('web-audio-engine'),{loadGame,root}=require('./game-harness.cjs');let a;before(async()=>{a=await loadGame();});
-test('all 32 type-1 MIDI files reproduce the exact in-game note events and loop lengths',()=>{
+test('all 34 type-1 MIDI files reproduce the exact in-game note events and loop lengths',()=>{
  const intros=Object.entries(a.MUSIC_SCORES).filter(([,v])=>v.intro).map(([k,v])=>[k+'-intro',v.intro]);
- assert.equal(Object.keys(a.MUSIC_SCORES).length+intros.length+Object.keys(a.BIOME_SCORES.fauna).length,32);
+ assert.equal(Object.keys(a.MUSIC_SCORES).length+intros.length+Object.keys(a.BIOME_SCORES.fauna).length,34);
  for(const [name,score]of [...Object.entries(a.MUSIC_SCORES),...intros,...Object.entries(a.BIOME_SCORES.fauna).map(([k,v])=>['fauna_'+k,v])]){
  const b=fs.readFileSync(path.join(root,'audio',name+'.mid'));assert.equal(b.toString('ascii',0,4),'MThd');assert.equal(b.readUInt16BE(8),1);assert.equal(b.readUInt16BE(10),Object.keys(score.tracks).length+1);let offset=14;
  for(let track=0;track<b.readUInt16BE(10);track++){const end=offset+8+b.readUInt32BE(offset+4);let p=offset+8,t=0,label='',events=[],active=new Map();const vlq=()=>{let n=0,c;do{c=b[p++];n=n*128+(c&127);}while(c&128);return n;};

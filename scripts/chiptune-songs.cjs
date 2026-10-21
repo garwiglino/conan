@@ -60,7 +60,7 @@ function build(song) {
     const [name, ...flags] = entry.split('+'), sec = song.sections[name];
     if (!sec) throw new Error(song.name + ' : section inconnue ' + name);
     const opts = new Set(flags), count = sec.chords.length;
-    for (const key of ['lead', 'harm', 'arp']) if (Array.isArray(sec[key]) && sec[key].length !== count) throw new Error(song.name + '/' + name + ' : ' + key + ' ne compte pas ' + count + ' mesures');
+    for (const key of ['lead', 'harm', 'arp', 'padRhythm', 'drums']) if (Array.isArray(sec[key]) && sec[key].length !== count) throw new Error(song.name + '/' + name + ' : ' + key + ' ne compte pas ' + count + ' mesures');
     for (let i = 0; i < count; i++, bar++) {
       const t0 = bar * BAR, parts = sec.chords[i].split('|').map(chord), span = steps / parts.length;
       if (!Number.isInteger(span)) throw new Error(song.name + ' : accords mal répartis mesure ' + (bar + 1));
@@ -114,10 +114,11 @@ function build(song) {
         }
         if (s !== steps) throw new Error(where + ' : arpège de ' + s + ' pas');
       }
-      // Chœur : tierce et quinte, quinte à vide, ou quinte et octave, tenues ou scandées (« x:4 -:4 »).
+      // Chœur : tierce et quinte, quinte à vide, ou quinte et octave, tenues ou scandées (« x:4 -:4 »),
+      // avec un rythme commun ou un rythme par mesure (« -:16 » pour une mesure sans chœur).
       if ((sec.pad ?? song.pad) && !opts.has('nopad')) {
         const voices = c => { const fifth = c.steps.includes(7) ? 7 : c.steps[2]; return song.padMode === 'open' ? [0, fifth, 12] : song.padMode === 'fifth' || c.steps.length < 3 ? [0, fifth] : [c.steps[1], fifth]; };
-        const rhythm = sec.padRhythm ?? song.padRhythm;
+        const spec = sec.padRhythm ?? song.padRhythm, rhythm = Array.isArray(spec) ? spec[i] : spec;
         if (rhythm) {
           s = 0;
           for (const token of rhythm.trim().split(/\s+/)) {
@@ -130,9 +131,10 @@ function build(song) {
           for (const x of voices(c)) add('saw', t0 + k * span * step, span * step, above(song.padLow ?? 55, c.root) + x, song.padVel || 56, .97);
         });
       }
-      // Batterie : couloirs de 16 (ou 12) cases, « x » normal, « X » accent, « g » note fantôme.
+      // Batterie : couloirs de 16 (ou 12) cases, « x » normal, « X » accent, « g » note fantôme ;
+      // une seule grille pour la section, ou une grille par mesure (null pour une mesure muette).
       // K grosse caisse, S caisse claire, h/o charleston, C cymbale, T/M/L toms, B tambour de guerre, A enclume, G gong.
-      const kit = (last && sec.fill) || sec.drums;
+      const kit = (last && sec.fill) || (Array.isArray(sec.drums) ? sec.drums[i] : sec.drums);
       if (kit && !opts.has('nodrums')) {
         for (const [lane, row] of Object.entries(kit)) {
           const cells = row.replace(/\s/g, '');
@@ -189,8 +191,8 @@ const AMBIENT = {
 const ambient = over => Object.fromEntries([...new Set([...Object.keys(AMBIENT), ...Object.keys(over)])].map(k => [k, {...AMBIENT[k], ...over[k]}]));
 
 // gain : niveau calibré par rendu hors ligne (médiane sur 400 ms), au volume musique par défaut de 45 % :
-// ambiances d'exploration vers -55 dB et voyage -54 dB, sous le thème titre (-48,8 dB) ;
-// combat et boss -43,3 dB, défaite -41 dB.
+// ambiances d'exploration et donjon vers -55 dB, voyage -54 dB, alerte du donjon -50 dB, sous le thème titre
+// (-48,8 dB) ; combat et boss -43,3 dB, défaite -41 dB.
 const SONGS = [
  // Exploration et voyage : des ambiances, pas des thèmes. Bourdon de basse, chœur qui respire d'une mesure
  // à l'autre, quelques gouttes de harpe ou de cloche, un tambour lointain, parfois un appel de deux notes.
@@ -324,6 +326,43 @@ const SONGS = [
     fill: {B: 'g.......g...g...'}}
   },
   order: ['A', 'B']},
+
+ // Donjons : une seule ambiance pour tous, minimaliste, menaçante et intrigante. Bourdon de ré qui glisse d'un
+ // demi-ton, chœur qui ne vient que par moments, cors graves en grappe, une cloche fêlée qui pose une question
+ // (un triton) sans y répondre, tambour lointain et gong. La variante d'alerte garde la même tonalité et le
+ // même bourdon : le jeu passe de l'une à l'autre quand les gobelins voient le héros, sans changer de morceau.
+ {name: 'dungeon', title: 'Sous la pierre', mood: 'Donjons : ré locrien, bourdon qui glisse d’un demi-ton, cors en grappe, cloche fêlée lointaine et gong.', bpm: 40, gain: .5,
+  bass: 'R:16', bassLow: 37, pad: true, padMode: 'fifth', padLow: 49, echo: .9, echoGain: .34,
+  timbres: ambient({lead: {kind: 'bell', g: .18, pan: .2}, harm: {g: .1, a: 1.8, rel: 2.2, filter: 620}, saw: {a: 2.6, rel: 2.6}}),
+  programs: {lead: 14},
+  sections: {
+   A: {chords: ['D5', 'D5', 'D5', 'Eb5', 'D5', 'D5', 'Ddim', 'D5'],
+    padRhythm: ['-:16', '-:4 x:12', 'x:16', 'x:16', 'x:12 -:4', '-:16', 'x:16', 'x:8 -:8'],
+    lead: ['-:16', '-:16', '-:8 A5:4 Eb6:4', '-:16', '-:16', '-:16', '-:16', '-:4 D6:4 C#6:8'],
+    harm: ['-:16', '-:16', '-:16', 'D3:16', '-:16', '-:4 Ab2:12', '-:16', '-:16'],
+    drums: [{B: 'g...............', G: 'g...............'}, null, null, null, {B: 'g...............'}, null, null, null]},
+   B: {chords: ['D5', 'D5', 'Eb5', 'Eb5', 'D5', 'C#dim', 'C#dim', 'D5'],
+    padRhythm: ['-:16', '-:8 x:8', 'x:16', 'x:16', 'x:12 -:4', 'x:16', '-:16', 'x:8 -:8'],
+    lead: ['-:16', '-:16', '-:16', '-:6 Bb5:4 E6:6', '-:16', '-:16', '-:16', '-:16'],
+    harm: ['-:16', '-:16', 'D3:16', '-:16', '-:16', '-:16', '-:4 G2:12', '-:16'],
+    drums: [{B: 'g.......g.......'}, null, null, null, {B: 'g...............'}, null, null, null]}
+  },
+  order: ['A', 'B']},
+
+ {name: 'dungeon_alert', title: 'Ils t’ont vu', mood: 'Donjons, gobelins en alerte : même ré, basse qui bat, cordes graves qui grattent, tambours de guerre et cor qui gronde.', bpm: 80, gain: .74,
+  bass: 'R:2 R:2 R:2 -:2 R:2 R:2 R:2 -:2', bassLow: 37, bassArtic: .55, pad: true, padMode: 'fifth', padLow: 49, echo: .75, echoGain: .16,
+  timbres: ambient({bass: {g: .1, a: .01, rel: .08}, lead: {g: .16, a: .25, rel: .6, filter: 900}, harm: {g: .1, a: 1, rel: 1.2, filter: 700},
+   arp: {w: 'saw', g: .08, pan: -.3, a: .01, tau: .12, sus: .5, rel: .08, filter: 900}, saw: {a: 1.2, rel: 1.4}}),
+  sections: {
+   A: {chords: ['D5', 'D5', 'Eb5', 'D5', 'D5', 'D5', 'C#dim', 'D5'],
+    arp: ['D3:2 D3:2 D3:2 Eb3:2 D3:2 D3:2 D3:2 Eb3:2', 'D3:2 D3:2 D3:2 Eb3:2 D3:2 D3:2 F3:2 Eb3:2', 'Eb3:2 Eb3:2 Eb3:2 E3:2 Eb3:2 Eb3:2 Eb3:2 E3:2', 'D3:2 D3:2 D3:2 Eb3:2 D3:2 D3:2 D3:2 Eb3:2',
+     'D3:2 D3:2 D3:2 Eb3:2 D3:2 D3:2 D3:2 Eb3:2', 'D3:2 D3:2 D3:2 Eb3:2 D3:2 D3:2 F3:2 Eb3:2', 'C#3:2 C#3:2 C#3:2 D3:2 C#3:2 C#3:2 C#3:2 D3:2', 'D3:2 D3:2 D3:2 Eb3:2 D3:2 -:6'],
+    lead: ['-:16', '-:16', '-:16', 'D4:6 Eb4:10', '-:16', '-:16', '-:16', 'Eb4:6 D4:10'],
+    harm: ['-:16', '-:16', 'D3:16', '-:16', '-:16', '-:16', 'G2:16', '-:16'],
+    drums: {B: 'x.......x...g...', K: 'g...g...g...g...'},
+    fill: {B: 'x.......x.x.x...', K: 'g...g...g...g...', A: '............g...'}}
+  },
+  order: ['A']},
 
  {name: 'combat', title: 'Le choc des colosses', mood: 'Combat contre les colosses : mi phrygien, ostinato de cordes, cuivres, chœur scandé et tambours de guerre.', bpm: 138, gain: .73,
   bass: 'R:2 8:2 R:2 8:2 R:2 8:2 R:2 8:2', bassLow: 40, pad: true, padMode: 'fifth', padLow: 52, harmMode: 'fifth', arpLow: 45, echo: .75, echoGain: .12,

@@ -15,9 +15,9 @@ class AudioContext {
  createDelay(){return this.node('delay');}createOscillator(){return this.node('osc');}createBufferSource(){return this.node('buffer');}
  createPeriodicWave(){return {};}createBuffer(ch,len){return {getChannelData:()=>new Float32Array(len)};}
 }
-const SLOTS=['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed','biome_travel','combat','boss','gameover'];
+const SLOTS=['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed','biome_travel','dungeon','dungeon_alert','combat','boss','gameover'];
 
-test('every biome, travel, combat, boss and defeat slot plays a composed score on the game synthesizer',()=>{
+test('every biome, travel, dungeon, combat, boss and defeat slot plays a composed score on the game synthesizer',()=>{
  assert.deepEqual(Object.keys(api.MUSIC_SCORES).sort(),[...SLOTS].sort());
  for(const name of SLOTS){const s=api.MUSIC_DATA[name];assert.equal(s,api.MUSIC_SCORES[name],name);assert.equal(s.style,'chip');assert.ok(Array.isArray(s.tracks.lead),name);
   for(const [part,t]of Object.entries(s.timbres)){if(part==='drums')continue;
@@ -26,8 +26,8 @@ test('every biome, travel, combat, boss and defeat slot plays a composed score o
  for(const family of ['forest','coast','desert','steppe','tropical','wetland','boreal','polar','cursed'])assert.ok(api.MUSIC_DATA['biome_'+family]);
 });
 
-test('exploration and travel are ambiences with at most a short call now and then; themes stay with combat, boss and defeat',()=>{
- for(const name of SLOTS.filter(n=>n.startsWith('biome_'))){const s=api.MUSIC_SCORES[name],lead=s.tracks.lead,bar=s.tpb*4,perBar=new Map();
+test('exploration, travel and dungeons are ambiences with at most a short call now and then; themes stay with combat, boss and defeat',()=>{
+ for(const name of SLOTS.filter(n=>n.startsWith('biome_')||n.startsWith('dungeon'))){const s=api.MUSIC_SCORES[name],lead=s.tracks.lead,bar=s.tpb*4,perBar=new Map();
   for(let i=0;i<lead.length;i+=4){const b=Math.floor(lead[i]/bar);perBar.set(b,(perBar.get(b)||0)+1);}
   assert.ok([...perBar.values()].every(n=>n<=3),name);assert.ok(perBar.size<=s.bars/2,name);}
  for(const name of ['combat','boss','gameover'])assert.ok(api.MUSIC_SCORES[name].tracks.lead.length/4>=api.MUSIC_SCORES[name].bars,name);

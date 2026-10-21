@@ -38,6 +38,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .btn.primary{background:var(--ember);border-color:var(--gold);color:var(--ground)}
 .volume{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
 .volume input{width:140px;accent-color:var(--ember)}
+.cave{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-top:2px solid var(--line);padding-top:12px}
+.cave[hidden]{display:none}
+.cave .btn[aria-pressed="true"]{border-color:var(--lane-arp);color:var(--lane-arp)}
+.cave select{font:inherit;font-size:14px;background:var(--panel-hi);color:var(--ink);border:2px solid var(--line);padding:8px 10px}
+.cave select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{font:400 12px/1 var(--display);padding:7px 10px;border:2px solid var(--line);background:transparent;color:var(--ink);display:flex;align-items:center;gap:8px}
 .chip b{width:10px;height:10px;display:block;background:var(--c)}
@@ -64,7 +69,7 @@ button{font:inherit;color:inherit;cursor:pointer}
  <header>
   <div class="eyebrow">Hearthreaver · dark fantasy</div>
   <h1>Atelier <span>musical</span></h1>
-  <p class="lede">Les treize musiques du jeu, jouées par le même séquenceur que le jeu. Biomes et voyage sont des ambiances discrètes ; les thèmes sont réservés au combat, au boss et à la défaite. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
+  <p class="lede">Les quinze musiques du jeu, jouées par le même séquenceur que le jeu. Biomes, voyage et donjons sont des ambiances discrètes ; les thèmes sont réservés au combat, au boss et à la défaite. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct.</p>
  </header>
 
  <section class="player" aria-label="Lecture">
@@ -80,7 +85,11 @@ button{font:inherit;color:inherit;cursor:pointer}
    <label class="volume" for="vol">Volume <input id="vol" type="range" min="0" max="100" value="70"></label>
   </div>
   <div class="chips" id="chips" aria-label="Pistes"></div>
-  <p class="hint">Passer d'un morceau à l'autre reprend les fondus du jeu : 1,8 s vers l'exploration, 0,65 s vers le combat et le boss.</p>
+  <div class="cave" id="cave" hidden>
+   <button class="btn" id="caveBtn" type="button" aria-pressed="true">Gouttes et fuites</button>
+   <label class="volume" for="caveFloor">Étage <select id="caveFloor"></select></label>
+  </div>
+  <p class="hint">Passer d'un morceau à l'autre reprend les fondus du jeu : 1,8 s vers l'exploration et le donjon, 0,65 s vers l'alerte, le combat et le boss.</p>
  </section>
 
  <section class="groups" id="groups" aria-label="Morceaux"></section>
@@ -89,6 +98,8 @@ button{font:inherit;color:inherit;cursor:pointer}
   <h3>Ce qui change dans le jeu</h3>
   <ul>
    <li>Biomes et voyage : ambiances sans mélodie, propres à chaque région. Bourdon, chœur qui respire, quelques gouttes de harpe, de marimba ou de cloche, un tambour lointain, parfois un appel de deux notes.</li>
+   <li>Donjons : « Sous la pierre » joue dans tous les donjons. Dès qu'un gobelin voit le héros, « Ils t'ont vu » prend le relais (même tonalité, même bourdon) et reste cinq secondes après ; le chef déclenche le thème du boss.</li>
+   <li>Sous terre, le vent et la faune se taisent : gouttes dans les flaques, fuites régulières, filet d'eau, air humide, chaînes et pierres au loin, dans une réverbération de pierre où résonnent aussi les pas et les lames. Chaque étage a ses propres fuites.</li>
    <li>Combat, boss et défaite gardent leurs thèmes dark fantasy : cors, chœur scandé, cordes qui martèlent, timbales, tambours de guerre, enclume et gong.</li>
    <li>Les voix sont celles du thème titre (cuivres, chœur, timbales, cloches), construites sur les ondes 8 bits du jeu.</li>
    <li>Les mesures sont vérifiées à la construction : une mesure qui ne remplit pas exactement ses 16 pas (ou 12 en balancé) bloque le build.</li>
@@ -100,12 +111,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <script>
 const MUSIC_DATA=/*__MUSIC_SCORES__*/{};
+const CAVE_FLOORS=/*__CAVE_FLOORS__*/[];
 const CUE_VOLUME=1.15,WEATHER_TIMBRES={},TITLE_TIMBRES={},CUE_DATA={},WEATHER_SCORES={};
 const SILENT_WAV=/*__SILENT_WAV__*/'';
 /*__MUSIC_ENGINE__*/
 (()=>{
  const $=id=>document.getElementById(id);
- const GROUPS=[['Exploration',['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed']],['Voyage',['biome_travel']],['Combat',['combat','boss']],['Défaite',['gameover']]];
+ const GROUPS=[['Exploration',['biome_forest','biome_coast','biome_desert','biome_steppe','biome_tropical','biome_wetland','biome_boreal','biome_polar','biome_cursed']],['Voyage',['biome_travel']],['Donjons',['dungeon','dungeon_alert']],['Combat',['combat','boss']],['Défaite',['gameover']]];
  const LANES=[['lead','Mélodie','--lane-lead'],['harm','Contrechant','--lane-harm'],['arp','Cordes et harpe','--lane-arp'],['saw','Chœur','--lane-saw'],['bass','Basse','--lane-bass'],['timpani','Timbales','--lane-timpani'],['drums','Batterie','--lane-drums']];
  const css=name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
  let ctx=null,music=null,selected='biome_forest',playing=null,volume=.7,silent=null;const muted=new Set();
@@ -122,9 +134,13 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
  // Sur téléphone, la liste est sous la grille : on remonte vers la lecture après un choix.
  function reveal(){const r=document.querySelector('.player').getBoundingClientRect();if(r.bottom<80||r.top>innerHeight*.6)document.querySelector('.player').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}
  function stop(){playing=null;music?.update(null);render();}
+ // La cave du donjon joue sous les deux musiques de donjon, au même rapport de niveau que dans le jeu.
+ let cave=null,caveOn=true,caveFloor=CAVE_FLOORS[0]?.[0]||'geoles';
+ function caveTick(){if(!ctx||ctx.state!=='running')return;const on=caveOn&&!!playing?.startsWith('dungeon');if(on)cave??=DungeonCave.create(ctx,ctx.destination);
+  cave?.update(ctx.currentTime,{floor:on?caveFloor:null,level:AMB_VOLUME*SFX_VOLUME*volume*1.6/.45});}
  function describe(){const d=MUSIC_DATA[selected];$('nowTitle').textContent=d.title;$('nowMood').textContent=d.mood;
   const grid=d.grid===12?'12 pas balancés':'16 pas';$('nowFacts').innerHTML='<span>'+d.bpm+' BPM</span><span>'+grid+'</span><span>'+d.bars+' mesures</span><span>'+fmt(d.dur)+'</span>';}
- function render(){describe();for(const b of document.querySelectorAll('.track'))b.setAttribute('aria-pressed',String(b.dataset.name===playing));$('playBtn').textContent=playing===selected?'↺ Reprendre':'▶ Écouter';}
+ function render(){describe();$('cave').hidden=!selected.startsWith('dungeon');for(const b of document.querySelectorAll('.track'))b.setAttribute('aria-pressed',String(b.dataset.name===playing));$('playBtn').textContent=playing===selected?'↺ Reprendre':'▶ Écouter';}
  // Liste des morceaux.
  for(const [label,names]of GROUPS){const g=document.createElement('div');g.className='group';g.innerHTML='<h3>'+label+'</h3>';const list=document.createElement('div');list.className='list';
   for(const name of names){const d=MUSIC_DATA[name],b=document.createElement('button');b.type='button';b.className='track';b.dataset.name=name;b.id='track-'+name;b.setAttribute('aria-pressed','false');
@@ -134,6 +150,9 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
   c.addEventListener('click',()=>{muted.has(k)?muted.delete(k):muted.add(k);c.setAttribute('aria-pressed',String(!muted.has(k)));applyMutes();});$('chips').append(c);}
  $('playBtn').addEventListener('click',()=>{if(playing===selected){stop();setTimeout(()=>play(selected),550);}else play(selected);});
  $('stopBtn').addEventListener('click',stop);
+ for(const [id,name]of CAVE_FLOORS){const o=document.createElement('option');o.value=id;o.textContent=name;$('caveFloor').append(o);}
+ $('caveFloor').addEventListener('change',e=>{caveFloor=e.target.value;});
+ $('caveBtn').addEventListener('click',()=>{caveOn=!caveOn;$('caveBtn').setAttribute('aria-pressed',String(caveOn));});
  $('vol').addEventListener('input',e=>{volume=+e.target.value/100;if(ctx)music.out.gain.setTargetAtTime(MUSIC_VOLUME*volume*1.6,ctx.currentTime,.03);});
  // Grille : une colonne par pas, une ligne par instrument, la hauteur de la note dans sa ligne.
  const cv=$('roll'),g2=cv.getContext('2d');
@@ -163,8 +182,8 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
   $('barCount').textContent=p?(p.intro?'Introduction · mesure '+(p.bar+1)+' / '+d.bars:'Mesure '+(p.bar+1)+' / '+d.bars):'Mesure — / '+MUSIC_DATA[selected].bars;
   const beat=p?Math.floor(p.inBar*4):-1;[...$('beats').children].forEach((el,i)=>el.classList.toggle('on',i===beat));
  }
- function frame(){if(music&&ctx.state==='running')music.update(playing);draw();requestAnimationFrame(frame);}
- setInterval(()=>{if(music&&ctx.state==='running')music.update(playing);},100);
+ function frame(){if(music&&ctx.state==='running')music.update(playing);caveTick();draw();requestAnimationFrame(frame);}
+ setInterval(()=>{if(music&&ctx.state==='running')music.update(playing);caveTick();},100);
  const startName=location.hash.slice(1);if(MUSIC_DATA[startName])selected=startName;
  render();requestAnimationFrame(frame);
 })();
