@@ -284,7 +284,7 @@ Référence principale : [Anthony Wong, Arc: The 12 Basic Principles of Animatio
 
 ### Amplitude des poses de préparation et de fin
 
-L’amplitude est portée par les dessins eux-mêmes : préparation reculée de 5 à 7 pixels supplémentaires le long de son axe de charge (encore 2 pixels au dernier coup), rotation de charge renforcée dans le même sens sans dépasser 175°, puis prise qui traverse plus loin le corps dans la fin du geste. Les tailles de profil terminent vers l’autre hanche ; les remontées terminent plus haut et les revers enveloppent davantage l’épaule. Le torse charge plus en arrière puis accompagne davantage l’arrivée. Les mains, bras et manches restent leurs images originales simplement déplacées.
+L’amplitude de la lame conserve sa charge, sa traversée et son dépassement. La préparation ajoute un court recul de 2 à 3 pixels, puis les prises restent autour des épaules et du torse. Les tailles de profil terminent vers l’autre hanche ; les remontées et les revers se prolongent à l’extérieur de l’épaule. Le corps accompagne le geste avec un déplacement limité à trois pixels. Les mains, bras et manches restent leurs images originales simplement déplacées.
 
 Les fentes gardent une lame stable dans leur axe et chargent plus loin en arrière. La préparation de la fente finale de profil place les mains légèrement plus haut, pour qu’elle se distingue du petit estoc. Les tourbillons partent d’une charge supplémentaire sur leur ellipse et poursuivent plus loin leur fin circulaire. Les retours qui restent déjà hors de l’épaule prennent le chemin court vers la garde ; une récupération ne rajoute pas de tour devant le visage.
 
@@ -293,7 +293,7 @@ Les fentes gardent une lame stable dans leur axe et chargent plus loin en arriè
 
 ### Deux poses brèves pour l’anticipation et le prolongement
 
-La lecture joue désormais six poses : mise en tension (`0,75`), préparation extrême (`1`), contact (`2`), prolongement (`2,25` ou `3,0625` pour le quatrième coup), fin du geste (`3,5`) et repos natif (`5`). Les coordonnées désignent la trajectoire, pas des secondes. La première pose partage le budget de préparation existant ; elle dure 45–60 ms, puis la charge reste visible au moins 41 ms. Le contact dispose seul de sa fenêtre d’au moins 45 ms. Le prolongement dure 41–55 ms selon la masse, puis la fin extrême conserve son temps de freinage propre. Il n’ajoute aucun dégât et n’efface pas l’après-impact en cas de spam. Le smear principal reste au contact ; la pose suivante porte une traînée plus étroite, sombre et tramée, sans silhouette fantôme entière. Elle suit le même arc et disparaît sur la fin du geste. Les effets finaux conservent leur enveloppe.
+La lecture joue désormais six poses : mise en tension (`0,75`), préparation extrême (`1`), contact (`2`), prolongement (`2,25` ou `3,0625` pour le quatrième coup), fin du geste (`3,5`) et repos natif (`5`). Les coordonnées désignent la trajectoire, pas des secondes. La première pose dure 65–85 ms, puis la charge reste visible au moins 62,5 ms. Le contact dispose seul de sa fenêtre d’au moins 45 ms. Le prolongement dure 51,25–68,75 ms selon la masse, puis la fin extrême conserve son temps de freinage propre. Il n’ajoute aucun dégât et n’efface pas l’après-impact en cas de spam. Le smear principal reste au contact ; la pose suivante porte une traînée plus étroite, sombre et tramée, sans silhouette fantôme entière. Elle suit le même arc et disparaît sur la fin du geste. Les effets finaux conservent leur enveloppe.
 
 Les poses supplémentaires sont prises sur les trajectoires signées existantes : le prolongement se situe après le contact, avant le dépassement extrême, sans inversion. Les estocs restent dans leur axe et les tourbillons gardent leur ellipse à hauteur de taille. Les bras, vêtements et mains restent des images natives déplacées sans déformation.
 
@@ -313,3 +313,14 @@ Les civils gardent leur protection contre les dégâts répétés des autres PNJ
 [Comparaison native du contact en diagonale](../art/combat-precision.png) · `node scripts/preview-kaldor-precision.cjs`.
 
 La carte isométrique conserve les positions logiques : les vecteurs du stick, les distances de visée et les candidats sont projetés une seule fois pour les comparer aux poses natives en pixels écran. Les déplacements, les sauvegardes et les tests de visibilité utilisent toujours les coordonnées logiques. Un test de combat réel vérifie les contacts diagonaux dans les quatre vues avec cette projection.
+
+
+### Gestes plus compacts, appuis plus calmes
+
+La trajectoire angulaire et le sens des tailles sont conservés, avec une vitesse continue au passage du contact. Le centre des prises reste près des épaules et du torse ; les lames relevées passent à l’extérieur de la tête. Les mains peuvent traverser le corps, mais les manches natives ne sont plus transportées loin dans le vide. Les prises à deux mains restent sur le manche, sans découpe, étirement ni rotation des images de bras.
+
+Le corps se déplace de trois pixels au maximum, la tête reste à un pixel du déplacement du torse, et les cheveux n’ajoutent qu’un pixel d’inertie. L’après-impact conserve l’appui de pied du contact au lieu de passer brusquement à une autre image de marche. L’impulsion physique du joueur est réduite de 20 % sur les coups ordinaires et de 28 % sur le quatrième ; la préparation et le freinage disposent d’un peu plus de temps. La pose d’impact, ses dégâts uniques, son smear et la petite traînée suivante sont conservés. Le poids relatif des armes, les quatre vues et l’assistance de visée isométrique restent actifs.
+
+`kaldor-compact-motion.test.cjs` vérifie les prises proches du corps, la stabilité de la tête et du torse, ainsi que la conservation des appuis au passage en après-impact pour les 48 armes.
+
+Le ralentissement global multiplie par 1,25 les durées de préparation, de continuation et de récupération de toutes les armes et de leurs quatre coups. Les proportions entre armes sont conservées pour ces phases. La durée du dessin d’impact reste strictement identique, avec ses smears et sa fenêtre unique de dégâts : le poids vient de la préparation et du freinage, sans étirer le contact.

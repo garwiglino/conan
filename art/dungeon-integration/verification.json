@@ -1,0 +1,105 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "mobile": false,
+      "width": 1280,
+      "start": {
+        "active": true,
+        "floor": "geoles",
+        "zone": "Lieu inconnu · Les geôles",
+        "position": [
+          400,
+          115.2
+        ]
+      },
+      "reloadedFloor": "trone",
+      "mapHidden": true,
+      "presentation": {
+        "moving": {
+          "poses": 8,
+          "stableView": true,
+          "distance": 56.28000000000069
+        },
+        "hud": {
+          "rows": 1,
+          "width": 356,
+          "top": 22,
+          "pursuit": null
+        }
+      },
+      "exit": {
+        "escaped": true,
+        "mapVisible": true,
+        "fortressListed": true
+      }
+    },
+    {
+      "mobile": true,
+      "width": 844,
+      "start": {
+        "active": true,
+        "floor": "geoles",
+        "zone": "Lieu inconnu · Les geôles",
+        "position": [
+          400,
+          115.2
+        ]
+      },
+      "reloadedFloor": "trone",
+      "mapHidden": true,
+      "presentation": {
+        "moving": {
+          "poses": 8,
+          "stableView": true,
+          "distance": 56.28000000000069
+        },
+        "hud": {
+          "rows": 1,
+          "width": 279,
+          "top": 22,
+          "pursuit": null
+        }
+      },
+      "exit": {
+        "escaped": true,
+        "mapVisible": true,
+        "fortressListed": true
+      }
+    },
+    {
+      "mobile": true,
+      "width": 568,
+      "start": {
+        "active": true,
+        "floor": "geoles",
+        "zone": "Lieu inconnu · Les geôles",
+        "position": [
+          400,
+          115.2
+        ]
+      },
+      "reloadedFloor": "trone",
+      "mapHidden": true,
+      "presentation": {
+        "moving": {
+          "poses": 8,
+          "stableView": true,
+          "distance": 56.28000000000069
+        },
+        "hud": {
+          "rows": 1,
+          "width": 216,
+          "top": 22,
+          "pursuit": null
+        }
+      },
+      "exit": {
+        "escaped": true,
+        "mapVisible": true,
+        "fortressListed": true
+      }
+    }
+  ],
+  "browserErrors": []
+}

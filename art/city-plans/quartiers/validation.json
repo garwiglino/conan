@@ -1,0 +1,14 @@
+{
+  "revision": "f8de7e923f4b86e0",
+  "planRevision": "734272d030e614b8",
+  "status": "integrated_spatial_coverage_checked",
+  "districts": 11,
+  "assignedBuildings": 2613,
+  "assignmentsUnique": true,
+  "contoursMatchActualBlocks": true,
+  "squareCourts": 18,
+  "horizontalRectangles": 37,
+  "verticalRectangles": 33,
+  "designResidents": 10629,
+  "runtimeNavigationTests": "node --test tests/city-integration.test.cjs"
+}

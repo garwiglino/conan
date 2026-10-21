@@ -1,0 +1,263 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "mobile": true,
+  "results": [
+    {
+      "width": 844,
+      "floor": "geoles",
+      "sources": 9,
+      "lit": [
+        255,
+        246,
+        202,
+        255
+      ],
+      "unlit": [
+        113,
+        118,
+        138,
+        255
+      ],
+      "torch": {
+        "x": -11,
+        "y": 37.5
+      },
+      "mask": [
+        281,
+        180
+      ],
+      "viewport": [
+        279,
+        178
+      ]
+    },
+    {
+      "width": 844,
+      "floor": "grande-salle",
+      "sources": 10,
+      "lit": [
+        255,
+        253,
+        204,
+        255
+      ],
+      "unlit": [
+        111,
+        116,
+        136,
+        255
+      ],
+      "torch": {
+        "x": 43,
+        "y": 21.5
+      },
+      "mask": [
+        281,
+        180
+      ],
+      "viewport": [
+        279,
+        178
+      ]
+    },
+    {
+      "width": 844,
+      "floor": "galeries",
+      "sources": 6,
+      "lit": [
+        255,
+        243,
+        201,
+        255
+      ],
+      "unlit": [
+        113,
+        118,
+        138,
+        255
+      ],
+      "torch": {
+        "x": -171,
+        "y": 117.5
+      },
+      "mask": [
+        281,
+        180
+      ],
+      "viewport": [
+        279,
+        178
+      ]
+    },
+    {
+      "width": 844,
+      "floor": "trone",
+      "sources": 13,
+      "lit": [
+        255,
+        239,
+        199,
+        255
+      ],
+      "unlit": [
+        111,
+        116,
+        136,
+        255
+      ],
+      "torch": {
+        "x": 171,
+        "y": 85.5
+      },
+      "mask": [
+        281,
+        180
+      ],
+      "viewport": [
+        279,
+        178
+      ]
+    },
+    {
+      "width": 844,
+      "combat": {
+        "target": true,
+        "blood": 1,
+        "hitStop": 0.0361,
+        "mask": [
+          281,
+          180
+        ]
+      }
+    },
+    {
+      "width": 568,
+      "floor": "geoles",
+      "sources": 9,
+      "lit": [
+        255,
+        246,
+        202,
+        255
+      ],
+      "unlit": [
+        114,
+        118,
+        138,
+        255
+      ],
+      "torch": {
+        "x": -11,
+        "y": 37.5
+      },
+      "mask": [
+        218,
+        238
+      ],
+      "viewport": [
+        216,
+        236
+      ]
+    },
+    {
+      "width": 568,
+      "floor": "grande-salle",
+      "sources": 10,
+      "lit": [
+        255,
+        253,
+        204,
+        255
+      ],
+      "unlit": [
+        111,
+        116,
+        136,
+        255
+      ],
+      "torch": {
+        "x": 43,
+        "y": 21.5
+      },
+      "mask": [
+        218,
+        238
+      ],
+      "viewport": [
+        216,
+        236
+      ]
+    },
+    {
+      "width": 568,
+      "floor": "galeries",
+      "sources": 6,
+      "lit": [
+        255,
+        243,
+        201,
+        255
+      ],
+      "unlit": [
+        114,
+        118,
+        138,
+        255
+      ],
+      "torch": {
+        "x": -171,
+        "y": 117.5
+      },
+      "mask": [
+        218,
+        238
+      ],
+      "viewport": [
+        216,
+        236
+      ]
+    },
+    {
+      "width": 568,
+      "floor": "trone",
+      "sources": 13,
+      "lit": [
+        255,
+        240,
+        199,
+        255
+      ],
+      "unlit": [
+        111,
+        116,
+        136,
+        255
+      ],
+      "torch": {
+        "x": 171,
+        "y": 85.5
+      },
+      "mask": [
+        218,
+        238
+      ],
+      "viewport": [
+        216,
+        236
+      ]
+    },
+    {
+      "width": 568,
+      "combat": {
+        "target": true,
+        "blood": 1,
+        "hitStop": 0.0361,
+        "mask": [
+          218,
+          238
+        ]
+      }
+    }
+  ],
+  "browserErrors": []
+}

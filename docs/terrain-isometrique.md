@@ -1,5 +1,19 @@
 # Terrain isométrique de Hearthreaver
 
+## Sources Piskel et routes rectilignes intégrées
+
+Les sources originales de Sarak et Teremor sont dans `art/environnement/sarak/` et `art/environnement/teremor/` : sols, pavages, chemins, falaises et flore. Leurs fichiers `.piskel` restent les sources éditables ; le jeu embarque les données compilées de `sprites/environnement/`. Une case de 1 m garde un losange de 32 × 16 pixels ; les pièces de chemin mesurent 2 m, soit 64 × 32 pixels. Les coudes, jonctions en T et croisements utilisent les pièces standard et leurs bords adoucis. Les autres familles de terrain gardent leur renderer natif.
+
+Les **137 routes terrestres**, y compris les accès aux embarcadères, suivent maintenant des segments suivant X ou Y. Les quatre routes maritimes ne changent pas. Les sommets géographiques, localités, identifiants des 1 199 arêtes de navigation et 57 points de pont restent conservés. Chaque arête porte son chemin physique ; les itinéraires des voyageurs et les nouveaux parcours des convois et missions sont décomposés aux virages, avec les mêmes identifiants d’incidents et de passages. Les dangers locaux sont évalués sur le chemin réellement parcouru.
+
+Les longueurs terrestres passent de **250,184 km de référence à 316,724 km physiques (+26,6 %)**. Les durées et les coûts des nouveaux itinéraires suivent ces mètres physiques, sans accélération cachée. Les sauvegardes conservent leurs identités et les voyages déjà engagés conservent leur progression ; les nouveaux plans utilisent les tracés rectilignes. Les mers, les rivières et les positions des villes ne sont pas déplacées.
+
+`data/world/orthogonal-roads.json` et `atlas.json.rectilinearRoads` contiennent la géométrie active. `scripts/build-world-orthogonal.cjs` vérifie la terre et le dégagement latéral, réserve les traversées d’eau aux passages existants et conserve leurs ancrages. Le build du monde reconstruit ce lot ; `npm run build:world-roads` le reconstruit seul. `npm run test:world-roads` contrôle les chemins physiques et les trajets ; `npm run check:world-roads` capture le vrai jeu. Les vues et rapports sont dans `art/world-roads/`.
+
+La ville de Clairfoyer reste sur son plan approuvé à îlots mixtes. Les collisions, seuils et chemins des 2 613 bâtiments ont été testés dans le moteur ; les cultivateurs existants reçoivent leurs postes hors des îlots. L’intégration graphique des chemins ne crée aucun stock ; la vie de Clairfoyer utilise un programme distinct de représentants de son effectif existant, décrit dans `docs/conception-villes.md`.
+
+Les sections suivantes conservent la description de la première reconstruction du terrain.
+
 L’atlas de conception reconstruit les terrains du monde en géométrie native,
 avec la projection exacte des bâtiments : `x = u - v`, `y = (u + v) / 2 - z`.
 Les palettes proviennent de `WorldTerrainArt` et des rampes du jeu, sans couleurs
@@ -68,7 +82,7 @@ npm run package:terrain-isometric
 ## Intégration au jeu web et iOS
 
 La projection est active dans la version jouable. Les 83 localités conservent
-leurs centres et disposent de 1 947 bâtiments. Les positions de la simulation,
+leurs centres et disposent de 4 514 bâtiments, dont 2 613 à Clairfoyer. Les positions de la simulation,
 les routes géographiques, les stocks, la justice, la navigation et les
 sauvegardes restent dans leur plan logique existant.
 
@@ -99,6 +113,26 @@ n’est demandé pendant la partie.
 Les captures et rapports réels sont dans `integration/`. La petite scène de
 conception emploie désormais le Kaldor courant du jeu, extrait sans changement
 de taille par `build-terrain-player-reference.cjs`, avec sa tenue et son arme.
+
+### Contrôle de la version distribuée — 20 octobre 2026
+
+`node scripts/check-world-isometric.cjs` compare les sources du dépôt avec les
+sources réellement embarquées dans les HTML web et iOS, puis contrôle les
+arrivées des 83 localités et capture sept scènes couvrant les cinq territoires.
+Clairfoyer est photographié aux Halles, pas au relais d’arrivée situé à 885 m.
+`PERF_NO_WORKER=1 node scripts/check-world-isometric.cjs` répète le contrôle
+avec le rendu coopératif. Les positions et sauvegardes doivent rester stables,
+les caches bornés et les fondations solides lorsque les maisons s’atténuent.
+[Galerie et rapports](../art/terrain-isometric-js/integration/index.html).
+
+Les textures Piskel actuelles sont actives dans la forêt tempérée (biome 6),
+le désert (biomes 1 et 2) et le sol de départ. Les autres climats emploient le
+catalogue isométrique à onze familles ; ils ne sont pas remplacés par les
+textures de forêt ou de désert. La neige saisonnière peut recouvrir les sols.
+Les 82 localités autres que Clairfoyer conservent leur implantation régionale :
+leurs bâtiments utilisent le rendu isométrique courant, mais leurs plans
+détaillés et programmes de quartiers restent à concevoir. Les captures sont
+réalisées sous Chromium au format mobile et ne constituent pas un essai sur iPhone.
 
 ## Vérifications
 

@@ -1,10 +1,10 @@
 'use strict';
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),Projection=require('../scripts/world-projection');
-const W=require('../scripts/kaldor-weapons.js'),{loadGame}=require('./game-harness.cjs');
+const W=require('../scripts/kaldor-weapons.js'),{loadGame,combatGame}=require('./game-harness.cjs');
 let api;before(async()=>{api=await loadGame();});
 function arena(){
- const g=new api.Game();g.enemies=[];g.npcs=[];g.lineClear=()=>true;g.solid=()=>false;g.move=()=>{};
- g.populateAtlas=()=>{};g.checkQuests=()=>{};g.checkSteles=()=>{};g.stepNpcs=()=>{};
+ const g=combatGame(api);g.enemies=[];g.npcs=[];g.lineClear=()=>true;g.solid=()=>false;g.move=()=>{};
+ for(const key of ['populateAtlas','populateRoadTraffic','populateCivilians','advanceAtlas','checkQuests','checkSteles','stepNpcs'])g[key]=()=>{};
  g.player.spawnFX=0;g.player.level=0;return g;
 }
 function target(p,dir,combo,id){const q=W.pose(p.weapon,dir,2,combo);const delta=Projection.inverse(q.h[0]+q.u[0]*q.reach,q.h[1]+q.u[1]*q.reach+9);return {id,kind:'snake',x:p.x+delta.x,y:p.y+delta.y,r:1,level:0};}

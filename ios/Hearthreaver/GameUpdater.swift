@@ -14,7 +14,6 @@ final class GameUpdater {
             .appendingPathComponent("JeuMisAJour", isDirectory: true)
     }
     private static var gameFile: URL { folder.appendingPathComponent("index.html") }
-    private static var etagFile: URL { folder.appendingPathComponent("etag.txt") }
 
     /// Vrai si une version du jeu est disponible sur l'iPhone (téléchargée ou livrée avec l'app).
     static var hasLocalGame: Bool {
@@ -22,22 +21,57 @@ final class GameUpdater {
         return FileManager.default.fileExists(atPath: gameFile.path) || FileManager.default.fileExists(atPath: bundled.path)
     }
 
+    private let session: URLSession
+    private let directory: URL
+    private let remote: URL
+    private var requestID: UUID?
     private var completion: ((Bool) -> Void)?
+    private var updateReady: (() -> Void)?
+
+    var isChecking: Bool { requestID != nil }
+
+    init(session: URLSession = .shared, directory: URL = GameUpdater.folder,
+         remoteURL: URL = GameUpdater.remoteURL) {
+        self.session = session
+        self.directory = directory
+        self.remote = remoteURL
+    }
 
     /// `completion` est appelé une seule fois, sur le fil principal : quand la vérification est finie,
-    /// ou au bout de `wait` secondes. Dans ce cas le téléchargement continue et servira au lancement suivant.
-    func check(wait: TimeInterval, completion: @escaping (Bool) -> Void) {
+    /// ou au bout de `wait` secondes. Une mise à jour reçue ensuite déclenche
+    /// `onUpdateReady`, sans interrompre la partie qui a déjà commencé.
+    func check(wait: TimeInterval, onUpdateReady: (() -> Void)? = nil,
+               completion: @escaping (Bool) -> Void) {
+        precondition(Thread.isMainThread)
+        guard !isChecking else { completion(false); return }
+        let id = UUID()
+        requestID = id
         self.completion = completion
-        var request = URLRequest(url: Self.remoteURL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30)
-        if FileManager.default.fileExists(atPath: Self.gameFile.path),
-           let etag = try? String(contentsOf: Self.etagFile, encoding: .utf8), !etag.isEmpty {
+        updateReady = onUpdateReady
+        // Le jeu autonome dépasse 30 Mo : une connexion lente peut prendre
+        // plus que l'attente de lancement, sans justifier l'abandon du transfert.
+        var request = URLRequest(url: remote, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 120)
+        let game = directory.appendingPathComponent("index.html")
+        let etagFile = directory.appendingPathComponent("etag.txt")
+        if FileManager.default.fileExists(atPath: game.path),
+           let etag = try? String(contentsOf: etagFile, encoding: .utf8), !etag.isEmpty {
             request.setValue(etag, forHTTPHeaderField: "If-None-Match")
         }
-        URLSession.shared.dataTask(with: request) { data, response, _ in
-            let updated = Self.store(data: data, response: response)
-            DispatchQueue.main.async { self.finish(updated) }
+        session.dataTask(with: request) { data, response, _ in
+            let updated = self.store(data: data, response: response)
+            DispatchQueue.main.async {
+                guard self.requestID == id else { return }
+                self.requestID = nil
+                let ready = self.updateReady
+                self.updateReady = nil
+                if self.completion != nil { self.finish(updated) }
+                else if updated { ready?() }
+            }
         }.resume()
-        DispatchQueue.main.asyncAfter(deadline: .now() + wait) { self.finish(false) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + max(0, wait)) { [weak self] in
+            guard self?.requestID == id else { return }
+            self?.finish(false)
+        }
     }
 
     private func finish(_ updated: Bool) {
@@ -47,20 +81,27 @@ final class GameUpdater {
     }
 
     /// Range la nouvelle version si la réponse est un jeu complet et compatible (même clé de sauvegarde).
-    private static func store(data: Data?, response: URLResponse?) -> Bool {
+    private func store(data: Data?, response: URLResponse?) -> Bool {
         guard let http = response as? HTTPURLResponse, http.statusCode == 200,
-              let data, isValidGame(data) else { return false }
+              let data, Self.isValidGame(data) else { return false }
         let fm = FileManager.default
-        try? fm.createDirectory(at: folder, withIntermediateDirectories: true)
-        var dir = folder
+        let gameFile = directory.appendingPathComponent("index.html")
+        let etagFile = directory.appendingPathComponent("etag.txt")
+        let etag = http.value(forHTTPHeaderField: "ETag")
+        if fm.fileExists(atPath: gameFile.path) {
+            if let etag, let previous = try? String(contentsOf: etagFile, encoding: .utf8), previous == etag { return false }
+            if etag == nil, let previous = try? Data(contentsOf: gameFile, options: .mappedIfSafe), previous == data { return false }
+        }
+        try? fm.createDirectory(at: directory, withIntermediateDirectories: true)
+        var dir = directory
         var noBackup = URLResourceValues()
         noBackup.isExcludedFromBackup = true // re-téléchargeable : inutile dans la sauvegarde iCloud
         try? dir.setResourceValues(noBackup)
         do {
             try data.write(to: gameFile, options: .atomic)
-            if let etag = http.value(forHTTPHeaderField: "ETag") {
+            if let etag {
                 try? etag.write(to: etagFile, atomically: true, encoding: .utf8)
-            }
+            } else { try? fm.removeItem(at: etagFile) }
             return true
         } catch {
             return false

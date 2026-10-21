@@ -1,0 +1,151 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "mobile": true,
+  "results": [
+    {
+      "width": 844,
+      "floors": [
+        {
+          "floor": "geoles",
+          "checked": 55342,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        },
+        {
+          "floor": "grande-salle",
+          "checked": 65148,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        },
+        {
+          "floor": "galeries",
+          "checked": 44460,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        },
+        {
+          "floor": "trone",
+          "checked": 22021,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        }
+      ],
+      "speech": {
+        "advanced": true,
+        "dialogue": null,
+        "bubbles": [
+          {
+            "x": 62,
+            "y": 50,
+            "w": 96,
+            "h": 17,
+            "text": "Attrapez-le !",
+            "actor": "dungeon-grande-salle-0"
+          }
+        ],
+        "lines": 1
+      },
+      "popup": {
+        "owned": false,
+        "drops": 1,
+        "width": 216.21875,
+        "lines": 2,
+        "action": "Prendre"
+      },
+      "picked": {
+        "owned": true,
+        "drops": 0,
+        "equipped": "exile"
+      }
+    },
+    {
+      "width": 568,
+      "floors": [
+        {
+          "floor": "geoles",
+          "checked": 55342,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        },
+        {
+          "floor": "grande-salle",
+          "checked": 65148,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        },
+        {
+          "floor": "galeries",
+          "checked": 44460,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        },
+        {
+          "floor": "trone",
+          "checked": 22021,
+          "behind": {
+            "found": true,
+            "faded": 1
+          },
+          "unnecessaryPreserved": true,
+          "faded": 0
+        }
+      ],
+      "speech": {
+        "advanced": true,
+        "dialogue": null,
+        "bubbles": [
+          {
+            "x": 31,
+            "y": 79,
+            "w": 96,
+            "h": 17,
+            "text": "Attrapez-le !",
+            "actor": "dungeon-grande-salle-0"
+          }
+        ],
+        "lines": 1
+      },
+      "popup": {
+        "owned": false,
+        "drops": 1,
+        "width": 216.21875,
+        "lines": 2,
+        "action": "Prendre"
+      },
+      "picked": {
+        "owned": true,
+        "drops": 0,
+        "equipped": "exile"
+      }
+    }
+  ],
+  "browserErrors": []
+}

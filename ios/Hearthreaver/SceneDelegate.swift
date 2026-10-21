@@ -18,6 +18,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         (window?.rootViewController as? GameViewController)?.enforceLandscape()
+        (window?.rootViewController as? GameViewController)?.checkForGameUpdate()
     }
 
     // L'app passe en arrière-plan : le jeu se met en pause tout seul (comme dans Safari)

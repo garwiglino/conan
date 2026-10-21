@@ -83,8 +83,12 @@ function top(d,lu,lv,wx=0,wy=0){
  // masks describe authored kits; they must not quantise a diagonal world road.
  if(d.routes&&['path','ground','shore','paving'].includes(d.kind)){
   let best=null;
-  for(const r of d.routes){const dx=r.b[0]-r.a[0],dy=r.b[1]-r.a[1],len=dx*dx+dy*dy,t=clamp(((u-r.a[0])*dx+(v-r.a[1])*dy)/len,0,1),dist=Math.hypot(u-r.a[0]-t*dx,v-r.a[1]-t*dy);if(!best||dist-r.width<best.dist-best.width)best={dist,width:r.width,angle:Math.atan2(dy,dx)};}
-  if(best&&best.dist<best.width+(n-.5)*1.2)return road({...d,routeDistance:best.dist*.48/Math.max(1,best.width)*3.4,routeAngle:best.angle},u,v,lu,lv,false);
+  for(const r of d.routes){
+   const dx=r.b[0]-r.a[0],dy=r.b[1]-r.a[1],len=dx*dx+dy*dy,t=len?clamp(((u-r.a[0])*dx+(v-r.a[1])*dy)/len,0,1):0,du=u-r.a[0]-t*dx,dv=v-r.a[1]-t*dy;
+   const square=r.orthogonal===true&&(Math.abs(dx)<1e-6||Math.abs(dy)<1e-6),dist=square?Math.max(Math.abs(du),Math.abs(dv)):Math.hypot(du,dv);
+   if(!best||dist-r.width<best.dist-best.width)best={dist,width:r.width,angle:Math.atan2(dy,dx),square};
+  }
+  if(best&&best.dist<best.width+(best.square?0:(n-.5)*1.2))return road({...d,routeDistance:best.dist*.48/Math.max(1,best.width)*3.4,routeAngle:best.angle},u,v,lu,lv,false);
   if(d.kind==='path')return base(ground,u,v);
  }
  switch(d.kind){

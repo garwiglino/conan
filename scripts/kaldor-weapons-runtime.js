@@ -37,7 +37,7 @@ const KaldorArsenal=(()=>{
  };
  const context=Game.prototype.context;
  Game.prototype.context=function(){
-  const c=context.call(this);if(c&&c.kind!=='sleep')return c;
+  const c=context.call(this);if(globalThis.KaldorArmaments)return KaldorArmaments.weaponContext(this)||c;if(c&&c.kind!=='sleep')return c;
   const p=this.player;if(!this.arsenal||p.level)return c;
   let best=null,d=18;
   for(const o of this.atlasProps)if(o.kind==='kaldor_weapon'&&!o.taken){const n=Math.hypot(p.x-o.x,p.y-o.y);if(n<d&&this.lineClear(p,o)){d=n;best=o;}}
@@ -128,7 +128,7 @@ const KaldorArsenal=(()=>{
  // Freeze simulation at contact, including the victim and impact particles.
  // Input remains live: a press during this short pause is queued for the link.
  const updateCombat=Game.prototype.update;
- Game.prototype.update=function(dt,input={}){
+ function combatStep(dt,input={},step=updateCombat){
   dt=clamp(Number(dt)||0,0,.04);const p=this.player;p.impactTick=false;
   // Decay in real update time, including hit stop, so the camera settles quickly.
   if(this.weaponShake)this.weaponShake.remaining=Math.max(0,this.weaponShake.remaining-dt);
@@ -140,8 +140,9 @@ const KaldorArsenal=(()=>{
    p.impactTick=false;
    if(dt<1e-7)return;
   }
-  return updateCombat.call(this,dt,input);
- };
+  return step.call(this,dt,input);
+ }
+ Game.prototype.update=function(dt,input={}){return combatStep.call(this,dt,input);};
  const civilianDamage=Game.prototype.damageCivilian;
  Game.prototype.damageCivilian=function(n,amount,source){
   const applied=civilianDamage.call(this,n,amount,source);
@@ -209,5 +210,5 @@ const KaldorArsenal=(()=>{
  const row=KaldorWardrobe.inventoryHTML,bind=KaldorWardrobe.bindInventory;
  KaldorWardrobe.inventoryHTML=function(g){return row.call(this,g)+inventoryHTML(g);};
  KaldorWardrobe.bindInventory=function(body,g,refresh){bind.call(this,body,g,refresh);bindInventory(body,g,refresh);};
- return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,queueAttack};
+ return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,queueAttack,combatStep,contactShake};
 })();

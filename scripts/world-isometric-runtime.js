@@ -3,16 +3,19 @@
 (()=>{
 'use strict';
 const P=WorldProjection,T=HearthreaverIsometricTerrain;
+// Biomes redessinés (sources Piskel) : sol, chemins, places et flore, par famille de terrain.
+const ENV_DATA=Object.entries({forest:typeof HearthreaverTeremor==='object'?HearthreaverTeremor:null,desert:typeof HearthreaverSarak==='object'?HearthreaverSarak:null}).filter(([,d])=>d);
+const ENV=typeof createEnvironmentArt==='function'&&ENV_DATA.length?Object.fromEntries(ENV_DATA.map(([k,d])=>[k,createEnvironmentArt(d)])):null;
 const update=Game.prototype.update,direction=Game.prototype.direction;
 Game.prototype.update=function(dt,controls={}){const aim=P.input(controls.x||0,controls.y||0);return update.call(this,dt,{...controls,...aim});};
 Game.prototype.direction=function(x,y){const q=P.point(x,y);return direction.call(this,q.x,q.y);};
 Game.prototype.facing=function(dir){const a=[[0,-1],[1,0],[0,1],[-1,0]][dir]||[0,1],p=P.inverse(...a),l=Math.hypot(p.x,p.y);return [p.x/l,p.y/l];};
 const hit=bladeHits;bladeHits=function(a,b,f){return hit({...a,...P.point(a.x,a.y)},{...b,...P.point(b.x,b.y)},f);};
 function logical(renderer,fn){const g=renderer.g,cam=renderer.cam,W=renderer.W,H=renderer.H,view=P.rect({x:cam.x-96,y:cam.y-96,w:W+192,h:H+256});renderer.g=renderer.logicalGame||g;renderer.cam={x:view.x,y:view.y};renderer.W=view.w;renderer.H=view.h;try{return fn();}finally{renderer.g=g;renderer.cam=cam;renderer.W=W;renderer.H=H;}}
-function config(g){return {core:g.world.tiles.map(row=>Array.from(row)),trails:g.world.trails,lanes:[...g.settlements.sites.values()].flatMap(s=>{const n=Atlas.byId[s.id],p=Atlas.toGame(n.x,n.y);return s.lanes.map(l=>({...l,x:p.x+l.x,y:p.y+l.y,paved:!!n.regionalCentre}));})};}
+function config(g){return {core:g.world.tiles.map(row=>Array.from(row)),trails:g.world.trails,lanes:[...g.settlements.sites.values()].flatMap(s=>{const n=Atlas.byId[s.id],p=Atlas.toGame(n.x,n.y);return s.lanes.map(l=>({...l,x:p.x+l.x,y:p.y+l.y,paved:l.paved??!!n.regionalCentre}));})};}
 function workerSource(cfg){
  const pacing='{'+Object.entries(WorldPacing).map(([key,value])=>typeof value==='function'?value.toString():JSON.stringify(key)+':'+JSON.stringify(value)).join(',')+'}';
- return '"use strict";const WorldPacing='+pacing+';const createWorldAtlas='+createWorldAtlas.toString()+';const T=('+T.create.toString()+')('+JSON.stringify(HearthreaverTerrainPalettes)+');const makeArt='+createProjectedWorldArt.toString()+';const cfg='+JSON.stringify(cfg)+';let art;onmessage=e=>{const m=e.data;if(m.kind==="init"){art=makeArt(createWorldAtlas(m.raw),T,cfg);postMessage({kind:"ready"});return;}if(!art)return;const im=art.render(m.cx*512,m.cy*512,512,512,m.clock);postMessage({...m,...im},[im.data.buffer,...im.features.map(f=>f.data.buffer)]);};';
+ return '"use strict";const WorldPacing='+pacing+';const createWorldAtlas='+createWorldAtlas.toString()+';const T=('+T.create.toString()+')('+JSON.stringify(HearthreaverTerrainPalettes)+');const makeArt='+createProjectedWorldArt.toString()+';const ENV='+(ENV?'{'+ENV_DATA.map(([k,d])=>JSON.stringify(k)+':('+createEnvironmentArt.toString()+')('+JSON.stringify(d)+')').join(',')+'}':'null')+';const cfg='+JSON.stringify(cfg)+';let art;onmessage=e=>{const m=e.data;if(m.kind==="init"){art=makeArt(createWorldAtlas(m.raw),T,cfg,ENV);postMessage({kind:"ready"});return;}if(!art)return;const im=art.render(m.cx*512,m.cy*512,512,512,m.clock);postMessage({...m,...im},[im.data.buffer,...im.features.map(f=>f.data.buffer)]);};';
 }
 const props=Renderer.prototype.visibleAtlasProps,architecture=Renderer.prototype.architectureDrawObjects,map=Renderer.prototype.map;
 Renderer.prototype.visibleAtlasProps=function(){if(!this.projectionActive)return props.call(this);return logical(this,()=>props.call(this)).map(o=>this.projectionView.wrap(o));};
@@ -20,7 +23,7 @@ Renderer.prototype.architectureDrawObjects=function(){if(!this.projectionActive)
 Renderer.prototype.map=function(){const g=this.g;this.g=this.logicalGame||g;try{return map.call(this);}finally{this.g=g;}};
 Renderer.prototype.drawAtlasGround=function(){
  const g=this.logicalGame||this.g,clock=Math.floor(g.clock);g.atlas.setClock(clock);logical(this,()=>this.refreshColdSiteProps?.(clock));
- if(this.isometricTerrainGame!==g){this.atlasArtStream?.worker?.terminate();this.atlasGround=new Map();const cfg=config(g);this.projectedTerrain=createProjectedWorldArt(Atlas,T,cfg);this.atlasArtStream=new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'),globalThis,this.projectedTerrain,()=>workerSource(cfg));this.isometricTerrainGame=g;this.flatTerrainTiles=new Map();}
+ if(this.isometricTerrainGame!==g){this.atlasArtStream?.worker?.terminate();this.atlasGround=new Map();const cfg=config(g);this.projectedTerrain=createProjectedWorldArt(Atlas,T,cfg,ENV);this.atlasArtStream=new WorldArtStream(this.atlasGround,()=>document.createElement('canvas'),globalThis,this.projectedTerrain,()=>workerSource(cfg));this.isometricTerrainGame=g;this.flatTerrainTiles=new Map();}
  const view=P.rect({x:this.cam.x-48,y:this.cam.y-48,w:this.W+96,h:this.H+160}),a=Atlas.toWorld(view.x,view.y),b=Atlas.toWorld(view.x+view.w,view.y+view.h),centre=Atlas.toWorld(g.player.x,g.player.y),visible=[];
  for(let cy=Math.floor(a.y/32);cy<=Math.floor(b.y/32);cy++)for(let cx=Math.floor(a.x/32);cx<=Math.floor(b.x/32);cx++)visible.push([cx,cy]);
  visible.sort((a,b)=>a[0]+a[1]-b[0]-b[1]);this.atlasArtStream.focus(Math.floor(centre.x/32),Math.floor(centre.y/32),visible);this.atlasArtStream.setClock(clock);this.atlasVisible=[];this.projectedCliffs=[];
@@ -41,6 +44,34 @@ Renderer.prototype.drawAtlasGround=function(){
  }
  while(this.atlasGround.size>16)this.atlasGround.delete(this.atlasGround.keys().next().value);
  this.atlasArtStream.prefetch(Math.floor(centre.x/32),Math.floor(centre.y/32));
+};
+// Flore des biomes redessinés : mêmes emplacements et mêmes objets du monde,
+// sprites Piskel ancrés au pied, ombre portée à l'opacité de son calque.
+// Le désert couvre aussi la zone de départ (décors de la carte locale).
+const FLORA_PROPS={
+ forest:{world_oak_0:['chene_a','chene_b','bouleau_a'],world_oak_1:['chene_b','chene_c','buisson_a'],world_oak_2:['chene_c','chene_a','bouleau_b'],world_boulder_2:['rocher_a','rocher_b'],world_fern:['fougere','buisson_b'],world_mushrooms:['champignons'],world_flowers:['fleurs']},
+ desert:{rock_a:['rocher_a'],world_boulder_0:['rocher_a','rocher_rond'],rock_b:['rocher_b'],rock_c:['cheminee'],rock_d:['rocher_rond'],rock_e:['eboulis'],deadtree:['arbre_mort_a','arbre_mort_b'],shrub:['buisson_a','buisson_b'],palm:['palmier_a','palmier_b'],scrub:['touffe_a','touffe_b'],pebbles:['cailloux']}
+};
+let floraSprites=null;
+function floraSprite(family,name){
+ if(!floraSprites){floraSprites=new Map();for(const [k,E]of Object.entries(ENV)){const paint=(px,w,h)=>{const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d'),im=x.createImageData(w,h);for(let i=0;i<px.length;i++)if(px[i])im.data.set(E.rgb[px[i]],i*4);x.putImageData(im,0,0);return cv;};
+  for(const v of Object.values(E.flora))for(const f of v.frames)floraSprites.set(k+'/'+f.name,{img:paint(f.px,f.w,f.h),shadow:paint(f.sh,f.w,f.h),alpha:v.shadow,ax:f.ax,ay:f.ay});}}
+ return floraSprites.get(family+'/'+name);
+}
+function floraOf(o){
+ if(!ENV||!(FLORA_PROPS.forest[o.kind]||FLORA_PROPS.desert[o.kind]))return null;const L=o._logical||o;
+ if(L._flora===undefined){let family=null;
+  if(o.world){const w=Atlas.toWorld(L.x,L.y),cell=Atlas.cellAt(w.x,w.y);if(cell&&!Atlas.curseCells.has(cell.id))family=cell.biome===6?'forest':[1,2].includes(cell.biome)?'desert':null;}
+  else if(atlasCore(L.x/16,L.y/16))family='desert';
+  const kinds=family&&ENV[family]&&FLORA_PROPS[family][o.kind],r=Math.abs(Math.sin(L.x*12.9898+L.y*78.233)*43758.5453)%1;
+  L._flora=kinds?[family,kinds[Math.floor(r*kinds.length)]]:null;}
+ return L._flora&&floraSprite(...L._flora);
+}
+const prop=Renderer.prototype.prop;
+Renderer.prototype.prop=function(o){
+ const s=this.projectionActive&&!o.broken&&floraOf(o);if(!s)return prop.call(this,o);
+ const c=this.c,dx=o.shake>0?Math.round(Math.sin(o.shake*70)*o.shake*9):0,x=Math.round(o.x)+dx,y=Math.round(o.y);
+ c.save();c.globalAlpha*=s.alpha;c.drawImage(s.shadow,x-s.ax,y-s.ay);c.restore();c.drawImage(s.img,x-s.ax,y-s.ay);
 };
 Renderer.prototype.platformUnder=function(){const g=this.logicalGame,p=g.player,d=g.deck;return !p.level&&!p.onStairs&&p.x>d.x-12&&p.x<d.x+d.w+12&&p.y>d.y&&p.y<d.y+d.h+25;};
 Renderer.prototype.projectedStairsDepth=function(){const s=this.logicalGame.stairs;return P.point(s.x,s.bottom).y;};

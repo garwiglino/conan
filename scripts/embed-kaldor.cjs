@@ -27,7 +27,7 @@ if(!html.includes("const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,t
  "frame=HearthreaverKaldorCivilianArt.remap(state,frame,npcWalk,time);}}if(kind==='hero'){const dressed=HearthreaverKaldorCivilianArt.dressLook(actor,time);if(dressed){state=dressed.state;frame=dressed.frame;}}const im=this.get(");
 // Wardrobe: the Tenue row right under the character, its screen bound after the drink button.
 html=html.replace("Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>'+KaldorWardrobe.inventoryHTML(g);","Dégâts +'+pow+' % grâce à ton niveau.</small></div></div>';"); // first wardrobe build
-replaceOnce("Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+'<div class=\"m-sec\">Objets</div>","Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+KaldorWardrobe.inventoryHTML(g)+'<div class=\"m-sec\">Objets</div>");
+if(!html.includes('KaldorWardrobe.inventoryHTML(g)'))replaceOnce("Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+'<div class=\"m-sec\">Objets</div>","Têtes ×'+(p.lives??LIVES)+'</small></div></div>'+KaldorWardrobe.inventoryHTML(g)+'<div class=\"m-sec\">Objets</div>");
 replaceOnce("$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});","$('drink')?.addEventListener('click',()=>{if(g.drinkFlask()){handleEvents();renderMenu();}});KaldorWardrobe.bindInventory(body,g,()=>{handleEvents();renderMenu();});");
 // Take action on a mannequin or helmet post.
 html=html.replace("sleep:['moon','DORMIR'],outfit:['hand','PRENDRE']}","sleep:['moon','DORMIR']}"); // first wardrobe build

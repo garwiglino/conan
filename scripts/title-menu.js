@@ -6,11 +6,11 @@ function refreshTitleMenu(){
 }
 function titleNewGame(){
  if(refreshTitleMenu()){$('newGame').click();$('start').focus({preventScroll:true});return;}
- game=new Game();renderer.setGame(game);run();save();
+ game=new Game();game.startFirstDungeon();renderer.setGame(game);run();save();
 }
 function titleLoadGame(){
  if(!refreshTitleMenu())return;
- try{game=new Game(saved);renderer.setGame(game);run();}
+ try{game=new Game(saved);if(!saved)game.startFirstDungeon();renderer.setGame(game);run();}
  catch{$('menuStatus').textContent='Cette sauvegarde ne peut pas être chargée.';}
 }
 function syncTitleOptions(){

@@ -1,0 +1,38 @@
+{
+  "revision": "14387e9a2643c939",
+  "scenes": [
+    {
+      "focus": [
+        -860.4725,
+        -135
+      ],
+      "file": "clairfoyer-isometrique.png",
+      "title": "PLACE DU MARCHÉ"
+    },
+    {
+      "focus": [
+        -780,
+        68
+      ],
+      "file": "clairfoyer-quartier.png",
+      "title": "RUE HABITÉE"
+    },
+    {
+      "focus": [
+        -1010.4,
+        -316
+      ],
+      "file": "clairfoyer-nord.png",
+      "title": "QUARTIER NORD"
+    },
+    {
+      "focus": [
+        -1010.4,
+        196
+      ],
+      "file": "clairfoyer-sud.png",
+      "title": "QUARTIER SUD"
+    }
+  ],
+  "renderer": "native game depth slabs and whole-building occlusion"
+}

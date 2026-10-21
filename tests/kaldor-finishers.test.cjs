@@ -1,5 +1,5 @@
 'use strict';
-const {test}=require('node:test'),assert=require('node:assert/strict'),W=require('../scripts/kaldor-weapons.js');
+const {test}=require('node:test'),assert=require('node:assert/strict'),W=require('../scripts/kaldor-weapons.js'),Projection=require('../scripts/world-projection.js');
 test('all 48 weapons have a distinct named and choreographed fourth strike',()=>{
  const names=new Set(),paths=new Set();
  for(const w of W.all){const v=W.finisher(w.id);assert.ok(v.name&&v.kind&&v.effect);assert.ok(v.drive>0);names.add(v.name);
@@ -51,9 +51,10 @@ test('all finishers render in the shipped compositor, including rotating views, 
  A.wear('pagne-noue');A.wearHelmet(null);A.wield(W.START);
 });
 test('the actual fourth-combo combat loop hits a victim once across delivery and held impact',async()=>{
- const {loadGame}=require('./game-harness.cjs'),{Game}=await loadGame(),g=new Game();
+ const {loadGame,combatGame}=require('./game-harness.cjs'),api=await loadGame(),g=combatGame(api);
+ for(const key of ['populateAtlas','populateRoadTraffic','populateCivilians','advanceAtlas','checkQuests','checkSteles','stepNpcs'])g[key]=()=>{};
  g.enemies=[];g.npcs=[];g.player.weapon='sarisse-horizon';g.player.dir=2;g.player.spawnFX=0;g.player.combo=2;g.player.comboWindow=1;g.swingSword();assert.equal(g.player.combo,3);
- const q=W.pose(g.player.weapon,2,2,3),victim={id:'one-finisher-victim',kind:'snake',hp:100,r:6,level:g.player.level||0,x:g.player.x+q.h[0]+q.u[0]*(q.reach-2),y:g.player.y+q.h[1]+q.u[1]*(q.reach-2)+9};
+ const q=W.pose(g.player.weapon,2,2,3),delta=Projection.inverse(q.h[0]+q.u[0]*(q.reach-2),q.h[1]+q.u[1]*(q.reach-2)+9),victim={id:'one-finisher-victim',kind:'snake',hp:100,r:6,level:g.player.level||0,x:g.player.x+delta.x,y:g.player.y+delta.y};
  g.combatTargets=()=>[victim];g.lineClear=()=>true;let blows=0;g.damageEnemy=()=>blows++;
  const times=W.times(g.player.weapon,3),len=W.duration(g.player.weapon,3);g.player.attackStep=true;
  g.player.attack=len-times[0]-times[1]-times[2]*.5;for(let n=0;n<3;n++)g.update(0,{});

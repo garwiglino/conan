@@ -1,0 +1,410 @@
+{
+  "mode": "worker",
+  "results": [
+    {
+      "district": "halles",
+      "mobile": false,
+      "residents": [
+        {
+          "id": "resident-town-1-city-marche",
+          "district": "halles",
+          "activity": "weigh",
+          "fixture": "market_stall",
+          "status": "working",
+          "home": "grid-block-2-2-39",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-comptes",
+          "district": "halles",
+          "activity": "ledger",
+          "fixture": "clerks_desk",
+          "status": "working",
+          "home": "grid-block-2-2-40",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-cuisine",
+          "district": "halles",
+          "activity": "chop_food",
+          "fixture": "kitchen_table",
+          "status": "working",
+          "home": "grid-block-2-2-41",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 7.9000000059604645,
+        "p95FrameMs": 30.700000002980232,
+        "terrainCache": 6,
+        "pending": 3,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 24,
+        "fixtureFrames": 4,
+        "architecture": {
+          "models": 7,
+          "pixelArea": 360654,
+          "maxModels": 96
+        }
+      },
+      "file": "halles.png"
+    },
+    {
+      "district": "metiers",
+      "mobile": false,
+      "residents": [
+        {
+          "id": "resident-town-1-0",
+          "district": "metiers",
+          "activity": "stitch",
+          "fixture": "workbench",
+          "status": "working",
+          "home": "grid-block-2-0-15",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-batracien-town-1-1",
+          "district": "metiers",
+          "activity": "net",
+          "fixture": "rope_bench",
+          "status": "working",
+          "home": "grid-block-2-0-16",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-batracien-town-1-2",
+          "district": "metiers",
+          "activity": "weave",
+          "fixture": "fiber_rack",
+          "status": "working",
+          "home": "grid-block-2-0-17",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-batracien-town-1-3",
+          "district": "metiers",
+          "activity": "pottery",
+          "fixture": "potters_wheel",
+          "status": "waiting-for-resources",
+          "home": "grid-block-2-0-7",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-outils",
+          "district": "metiers",
+          "activity": "joinery",
+          "fixture": "sawhorse",
+          "status": "working",
+          "home": "grid-block-2-0-14",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 7.199999995529652,
+        "p95FrameMs": 31.80000000447035,
+        "terrainCache": 11,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 40,
+        "fixtureFrames": 9,
+        "architecture": {
+          "models": 12,
+          "pixelArea": 514452,
+          "maxModels": 96
+        }
+      },
+      "file": "metiers.png"
+    },
+    {
+      "district": "conseil",
+      "mobile": false,
+      "residents": [
+        {
+          "id": "resident-town-1-city-soins",
+          "district": "conseil",
+          "activity": "mortar",
+          "fixture": "apothecary_table",
+          "status": "waiting-for-resources",
+          "home": "grid-block-3-2-61",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-conseil",
+          "district": "conseil",
+          "activity": "ledger",
+          "fixture": "clerks_desk",
+          "status": "working",
+          "home": "grid-block-3-2-38",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 6.100000001490116,
+        "p95FrameMs": 26.700000002980232,
+        "terrainCache": 16,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 44,
+        "fixtureFrames": 11,
+        "architecture": {
+          "models": 22,
+          "pixelArea": 826931,
+          "maxModels": 96
+        }
+      },
+      "file": "conseil.png"
+    },
+    {
+      "district": "resine",
+      "mobile": false,
+      "residents": [
+        {
+          "id": "resident-town-1-city-resine",
+          "district": "resine",
+          "activity": "ledger",
+          "fixture": "clerks_desk",
+          "status": "working",
+          "home": "grid-block-0-4-133",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 5.5,
+        "p95FrameMs": 9.5,
+        "terrainCache": 16,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 52,
+        "fixtureFrames": 14,
+        "architecture": {
+          "models": 24,
+          "pixelArea": 995357,
+          "maxModels": 96
+        }
+      },
+      "file": "resine.png"
+    },
+    {
+      "district": "halles",
+      "mobile": true,
+      "residents": [
+        {
+          "id": "resident-town-1-city-marche",
+          "district": "halles",
+          "activity": "weigh",
+          "fixture": "market_stall",
+          "status": "working",
+          "home": "grid-block-2-2-39",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-comptes",
+          "district": "halles",
+          "activity": "ledger",
+          "fixture": "clerks_desk",
+          "status": "working",
+          "home": "grid-block-2-2-40",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-cuisine",
+          "district": "halles",
+          "activity": "chop_food",
+          "fixture": "kitchen_table",
+          "status": "working",
+          "home": "grid-block-2-2-41",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 6.4000000059604645,
+        "p95FrameMs": 29.100000001490116,
+        "terrainCache": 6,
+        "pending": 3,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 24,
+        "fixtureFrames": 4,
+        "architecture": {
+          "models": 7,
+          "pixelArea": 360654,
+          "maxModels": 96
+        }
+      },
+      "file": "halles-mobile.png"
+    },
+    {
+      "district": "metiers",
+      "mobile": true,
+      "residents": [
+        {
+          "id": "resident-town-1-0",
+          "district": "metiers",
+          "activity": "stitch",
+          "fixture": "workbench",
+          "status": "working",
+          "home": "grid-block-2-0-15",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-batracien-town-1-1",
+          "district": "metiers",
+          "activity": "net",
+          "fixture": "rope_bench",
+          "status": "working",
+          "home": "grid-block-2-0-16",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-batracien-town-1-2",
+          "district": "metiers",
+          "activity": "weave",
+          "fixture": "fiber_rack",
+          "status": "working",
+          "home": "grid-block-2-0-17",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-batracien-town-1-3",
+          "district": "metiers",
+          "activity": "pottery",
+          "fixture": "potters_wheel",
+          "status": "waiting-for-resources",
+          "home": "grid-block-2-0-7",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-outils",
+          "district": "metiers",
+          "activity": "joinery",
+          "fixture": "sawhorse",
+          "status": "working",
+          "home": "grid-block-2-0-14",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 6.199999995529652,
+        "p95FrameMs": 27.80000000447035,
+        "terrainCache": 12,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 40,
+        "fixtureFrames": 9,
+        "architecture": {
+          "models": 10,
+          "pixelArea": 454312,
+          "maxModels": 96
+        }
+      },
+      "file": "metiers-mobile.png"
+    },
+    {
+      "district": "conseil",
+      "mobile": true,
+      "residents": [
+        {
+          "id": "resident-town-1-city-soins",
+          "district": "conseil",
+          "activity": "mortar",
+          "fixture": "apothecary_table",
+          "status": "waiting-for-resources",
+          "home": "grid-block-3-2-61",
+          "reachable": true,
+          "inside": false
+        },
+        {
+          "id": "resident-town-1-city-conseil",
+          "district": "conseil",
+          "activity": "ledger",
+          "fixture": "clerks_desk",
+          "status": "working",
+          "home": "grid-block-3-2-38",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 5.799999997019768,
+        "p95FrameMs": 26.700000002980232,
+        "terrainCache": 16,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 44,
+        "fixtureFrames": 10,
+        "architecture": {
+          "models": 18,
+          "pixelArea": 715050,
+          "maxModels": 96
+        }
+      },
+      "file": "conseil-mobile.png"
+    },
+    {
+      "district": "resine",
+      "mobile": true,
+      "residents": [
+        {
+          "id": "resident-town-1-city-resine",
+          "district": "resine",
+          "activity": "ledger",
+          "fixture": "clerks_desk",
+          "status": "working",
+          "home": "grid-block-0-4-133",
+          "reachable": true,
+          "inside": false
+        }
+      ],
+      "metrics": {
+        "medianFrameMs": 5.5,
+        "p95FrameMs": 14.899999998509884,
+        "terrainCache": 16,
+        "pending": 5,
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 52,
+        "fixtureFrames": 13,
+        "architecture": {
+          "models": 20,
+          "pixelArea": 883476,
+          "maxModels": 96
+        }
+      },
+      "file": "resine-mobile.png"
+    }
+  ],
+  "browserErrors": []
+}

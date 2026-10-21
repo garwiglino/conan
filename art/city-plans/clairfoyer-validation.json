@@ -1,0 +1,811 @@
+{
+  "schema": 1,
+  "planRevision": "c90107da6364aa74",
+  "status": "geometry_checked_not_user_validated",
+  "canonPreserved": true,
+  "allResidentsAccountedFor": true,
+  "nativeScale": true,
+  "roadGeometry": {
+    "allAxisAligned": true,
+    "referenceRoutesPreserved": 126,
+    "sourceJunctionsPreserved": 98,
+    "referenceLengthM": 16019.317176441375,
+    "physicalLengthM": 20146.68906358394,
+    "distanceAudit": [
+      {
+        "id": "lane-0",
+        "referenceLengthM": 76.86612740105774,
+        "physicalLengthM": 108.66711280235523,
+        "extraM": 31.800985401297496
+      },
+      {
+        "id": "lane-1",
+        "referenceLengthM": 48.9930110249704,
+        "physicalLengthM": 66.5919490218163,
+        "extraM": 17.598937996845905
+      },
+      {
+        "id": "lane-2",
+        "referenceLengthM": 88.06746535322803,
+        "physicalLengthM": 106.28252512857887,
+        "extraM": 18.215059775350838
+      },
+      {
+        "id": "lane-3",
+        "referenceLengthM": 96.2423680679468,
+        "physicalLengthM": 134.3953143264791,
+        "extraM": 38.15294625853231
+      },
+      {
+        "id": "lane-4",
+        "referenceLengthM": 49.089788536379736,
+        "physicalLengthM": 58.99221771158676,
+        "extraM": 9.902429175207025
+      },
+      {
+        "id": "lane-5",
+        "referenceLengthM": 106.36324779708161,
+        "physicalLengthM": 118.26919821132263,
+        "extraM": 11.905950414241019
+      },
+      {
+        "id": "lane-6",
+        "referenceLengthM": 56.50056610725157,
+        "physicalLengthM": 64.61506569698479,
+        "extraM": 8.114499589733214
+      },
+      {
+        "id": "lane-7",
+        "referenceLengthM": 62.37845461727046,
+        "physicalLengthM": 87.31912376874848,
+        "extraM": 24.940669151478026
+      },
+      {
+        "id": "lane-8",
+        "referenceLengthM": 50.53981163432828,
+        "physicalLengthM": 68.26209179362397,
+        "extraM": 17.722280159295686
+      },
+      {
+        "id": "lane-9",
+        "referenceLengthM": 105.12891845262415,
+        "physicalLengthM": 143.03051733735336,
+        "extraM": 37.90159888472921
+      },
+      {
+        "id": "lane-10",
+        "referenceLengthM": 77.27641523094756,
+        "physicalLengthM": 109.03770770851807,
+        "extraM": 31.761292477570507
+      },
+      {
+        "id": "lane-11",
+        "referenceLengthM": 106.98170227751483,
+        "physicalLengthM": 147.34305557691107,
+        "extraM": 40.36135329939624
+      },
+      {
+        "id": "lane-12",
+        "referenceLengthM": 59.14550277371662,
+        "physicalLengthM": 77.55808092265667,
+        "extraM": 18.41257814894005
+      },
+      {
+        "id": "lane-13",
+        "referenceLengthM": 92.88991631081272,
+        "physicalLengthM": 115.96368481411957,
+        "extraM": 23.07376850330685
+      },
+      {
+        "id": "lane-14",
+        "referenceLengthM": 97.34175248345332,
+        "physicalLengthM": 119.02853802327928,
+        "extraM": 21.686785539825962
+      },
+      {
+        "id": "lane-15",
+        "referenceLengthM": 52.92637603617867,
+        "physicalLengthM": 64.3616559996653,
+        "extraM": 11.435279963486636
+      },
+      {
+        "id": "lane-16",
+        "referenceLengthM": 121.70687011413932,
+        "physicalLengthM": 139.55054376273853,
+        "extraM": 17.843673648599207
+      },
+      {
+        "id": "lane-17",
+        "referenceLengthM": 43.625922510596695,
+        "physicalLengthM": 49.78472756772841,
+        "extraM": 6.158805057131715
+      },
+      {
+        "id": "lane-18",
+        "referenceLengthM": 41.05022227083892,
+        "physicalLengthM": 48.37505884173916,
+        "extraM": 7.3248365709002385
+      },
+      {
+        "id": "lane-19",
+        "referenceLengthM": 69.35546797140222,
+        "physicalLengthM": 82.57850837517964,
+        "extraM": 13.223040403777418
+      },
+      {
+        "id": "lane-20",
+        "referenceLengthM": 79.70187390414605,
+        "physicalLengthM": 92.99832841402308,
+        "extraM": 13.296454509877023
+      },
+      {
+        "id": "lane-21",
+        "referenceLengthM": 120.98169933075151,
+        "physicalLengthM": 136.94291225556063,
+        "extraM": 15.961212924809118
+      },
+      {
+        "id": "lane-22",
+        "referenceLengthM": 76.15180510796888,
+        "physicalLengthM": 85.69755811247087,
+        "extraM": 9.54575300450199
+      },
+      {
+        "id": "lane-23",
+        "referenceLengthM": 47.49901175301447,
+        "physicalLengthM": 61.875399700249304,
+        "extraM": 14.376387947234832
+      },
+      {
+        "id": "lane-24",
+        "referenceLengthM": 113.68484164981109,
+        "physicalLengthM": 136.4074272693521,
+        "extraM": 22.722585619541007
+      },
+      {
+        "id": "lane-25",
+        "referenceLengthM": 68.8036339184928,
+        "physicalLengthM": 85.77755166094363,
+        "extraM": 16.973917742450823
+      },
+      {
+        "id": "lane-26",
+        "referenceLengthM": 114.19180306103122,
+        "physicalLengthM": 145.7635000255787,
+        "extraM": 31.571696964547485
+      },
+      {
+        "id": "lane-27",
+        "referenceLengthM": 51.70930252256073,
+        "physicalLengthM": 59.85440921688479,
+        "extraM": 8.145106694324056
+      },
+      {
+        "id": "lane-28",
+        "referenceLengthM": 41.90328217051555,
+        "physicalLengthM": 57.10130344844043,
+        "extraM": 15.19802127792488
+      },
+      {
+        "id": "lane-29",
+        "referenceLengthM": 108.17379065140483,
+        "physicalLengthM": 151.21222579102218,
+        "extraM": 43.03843513961735
+      },
+      {
+        "id": "lane-30",
+        "referenceLengthM": 95.22138232424554,
+        "physicalLengthM": 115.2878362264315,
+        "extraM": 20.066453902185955
+      },
+      {
+        "id": "lane-31",
+        "referenceLengthM": 53.58896024841887,
+        "physicalLengthM": 59.21665973221252,
+        "extraM": 5.6276994837936485
+      },
+      {
+        "id": "lane-32",
+        "referenceLengthM": 78.52489191026834,
+        "physicalLengthM": 109.65806575348907,
+        "extraM": 31.13317384322073
+      },
+      {
+        "id": "lane-33",
+        "referenceLengthM": 151.06624104033438,
+        "physicalLengthM": 213.58299884590835,
+        "extraM": 62.516757805573974
+      },
+      {
+        "id": "lane-34",
+        "referenceLengthM": 88.76852516706758,
+        "physicalLengthM": 119.38756982752174,
+        "extraM": 30.619044660454165
+      },
+      {
+        "id": "lane-35",
+        "referenceLengthM": 84.95634248140027,
+        "physicalLengthM": 110.76078417937106,
+        "extraM": 25.804441697970788
+      },
+      {
+        "id": "lane-36",
+        "referenceLengthM": 116.30184337242471,
+        "physicalLengthM": 149.95750787242898,
+        "extraM": 33.655664500004264
+      },
+      {
+        "id": "lane-37",
+        "referenceLengthM": 144.03119858639405,
+        "physicalLengthM": 193.075940557262,
+        "extraM": 49.04474197086793
+      },
+      {
+        "id": "lane-38",
+        "referenceLengthM": 66.47179262603645,
+        "physicalLengthM": 85.8102013544822,
+        "extraM": 19.338408728445756
+      },
+      {
+        "id": "lane-39",
+        "referenceLengthM": 62.17386828413648,
+        "physicalLengthM": 69.43114575551861,
+        "extraM": 7.257277471382132
+      },
+      {
+        "id": "lane-40",
+        "referenceLengthM": 84.18441336065715,
+        "physicalLengthM": 110.05825112178562,
+        "extraM": 25.87383776112847
+      },
+      {
+        "id": "lane-41",
+        "referenceLengthM": 62.33546726962425,
+        "physicalLengthM": 80.11599296963351,
+        "extraM": 17.780525700009257
+      },
+      {
+        "id": "lane-42",
+        "referenceLengthM": 177.53684586297305,
+        "physicalLengthM": 210.220072720129,
+        "extraM": 32.683226857155944
+      },
+      {
+        "id": "lane-43",
+        "referenceLengthM": 103.3862800688011,
+        "physicalLengthM": 123.26553578077055,
+        "extraM": 19.87925571196945
+      },
+      {
+        "id": "lane-44",
+        "referenceLengthM": 130.1975264929573,
+        "physicalLengthM": 170.36289766045462,
+        "extraM": 40.16537116749731
+      },
+      {
+        "id": "lane-45",
+        "referenceLengthM": 48.18378737174734,
+        "physicalLengthM": 57.17646974966263,
+        "extraM": 8.992682377915287
+      },
+      {
+        "id": "lane-46",
+        "referenceLengthM": 109.7266550362945,
+        "physicalLengthM": 154.65139133505545,
+        "extraM": 44.92473629876095
+      },
+      {
+        "id": "lane-47",
+        "referenceLengthM": 78.25155331639172,
+        "physicalLengthM": 83.17942851804003,
+        "extraM": 4.927875201648305
+      },
+      {
+        "id": "lane-48",
+        "referenceLengthM": 71.40096217720938,
+        "physicalLengthM": 84.36140900674536,
+        "extraM": 12.960446829535982
+      },
+      {
+        "id": "lane-49",
+        "referenceLengthM": 123.12946468352735,
+        "physicalLengthM": 139.91697391433667,
+        "extraM": 16.78750923080932
+      },
+      {
+        "id": "lane-50",
+        "referenceLengthM": 97.19443032542974,
+        "physicalLengthM": 102.95495207530931,
+        "extraM": 5.760521749879572
+      },
+      {
+        "id": "lane-51",
+        "referenceLengthM": 67.63789659814738,
+        "physicalLengthM": 95.65242016435877,
+        "extraM": 28.014523566211395
+      },
+      {
+        "id": "lane-52",
+        "referenceLengthM": 110.21210443937824,
+        "physicalLengthM": 133.8929031681073,
+        "extraM": 23.68079872872906
+      },
+      {
+        "id": "lane-53",
+        "referenceLengthM": 105.01492026804256,
+        "physicalLengthM": 135.74357879283485,
+        "extraM": 30.728658524792294
+      },
+      {
+        "id": "lane-54",
+        "referenceLengthM": 98.2974933037403,
+        "physicalLengthM": 130.9402217647695,
+        "extraM": 32.64272846102919
+      },
+      {
+        "id": "lane-55",
+        "referenceLengthM": 164.22939055150957,
+        "physicalLengthM": 200.5754388476567,
+        "extraM": 36.34604829614713
+      },
+      {
+        "id": "lane-56",
+        "referenceLengthM": 75.64880930716183,
+        "physicalLengthM": 93.435777045377,
+        "extraM": 17.786967738215168
+      },
+      {
+        "id": "lane-57",
+        "referenceLengthM": 143.45766241095973,
+        "physicalLengthM": 174.5492195645619,
+        "extraM": 31.091557153602167
+      },
+      {
+        "id": "lane-58",
+        "referenceLengthM": 94.60551693102967,
+        "physicalLengthM": 116.47032375344531,
+        "extraM": 21.864806822415645
+      },
+      {
+        "id": "lane-59",
+        "referenceLengthM": 86.14930285569368,
+        "physicalLengthM": 121.69319025101717,
+        "extraM": 35.543887395323495
+      },
+      {
+        "id": "lane-60",
+        "referenceLengthM": 162.4344996935816,
+        "physicalLengthM": 223.92561536417344,
+        "extraM": 61.491115670591824
+      },
+      {
+        "id": "lane-61",
+        "referenceLengthM": 119.35704211167317,
+        "physicalLengthM": 168.0182888945725,
+        "extraM": 48.661246782899326
+      },
+      {
+        "id": "lane-62",
+        "referenceLengthM": 126.42581734396919,
+        "physicalLengthM": 171.97935798079664,
+        "extraM": 45.55354063682745
+      },
+      {
+        "id": "lane-63",
+        "referenceLengthM": 108.5010345301846,
+        "physicalLengthM": 133.44037631068068,
+        "extraM": 24.93934178049608
+      },
+      {
+        "id": "lane-64",
+        "referenceLengthM": 147.2566741304692,
+        "physicalLengthM": 183.3548196333727,
+        "extraM": 36.09814550290349
+      },
+      {
+        "id": "lane-65",
+        "referenceLengthM": 41.98022230571298,
+        "physicalLengthM": 59.29553442788625,
+        "extraM": 17.315312122173275
+      },
+      {
+        "id": "lane-66",
+        "referenceLengthM": 103.21077594843432,
+        "physicalLengthM": 116.41063863255005,
+        "extraM": 13.199862684115729
+      },
+      {
+        "id": "lane-67",
+        "referenceLengthM": 93.63263720572036,
+        "physicalLengthM": 130.09071157421744,
+        "extraM": 36.45807436849708
+      },
+      {
+        "id": "lane-68",
+        "referenceLengthM": 65.56119478532926,
+        "physicalLengthM": 87.40832870663473,
+        "extraM": 21.84713392130547
+      },
+      {
+        "id": "lane-69",
+        "referenceLengthM": 96.16655762693053,
+        "physicalLengthM": 130.6569585665033,
+        "extraM": 34.49040093957278
+      },
+      {
+        "id": "lane-70",
+        "referenceLengthM": 150.1452927444732,
+        "physicalLengthM": 205.61563384216265,
+        "extraM": 55.47034109768944
+      },
+      {
+        "id": "lane-71",
+        "referenceLengthM": 63.59889805050453,
+        "physicalLengthM": 78.76456350244513,
+        "extraM": 15.165665451940598
+      },
+      {
+        "id": "lane-72",
+        "referenceLengthM": 172.26651085956735,
+        "physicalLengthM": 242.42655707765573,
+        "extraM": 70.16004621808838
+      },
+      {
+        "id": "lane-73",
+        "referenceLengthM": 99.95823630325351,
+        "physicalLengthM": 138.923669409662,
+        "extraM": 38.9654331064085
+      },
+      {
+        "id": "lane-74",
+        "referenceLengthM": 81.5183527280413,
+        "physicalLengthM": 91.68299739868034,
+        "extraM": 10.16464467063905
+      },
+      {
+        "id": "lane-75",
+        "referenceLengthM": 81.4125791780118,
+        "physicalLengthM": 114.55785781953425,
+        "extraM": 33.14527864152245
+      },
+      {
+        "id": "lane-76",
+        "referenceLengthM": 161.54699496603902,
+        "physicalLengthM": 219.86928612445985,
+        "extraM": 58.322291158420825
+      },
+      {
+        "id": "lane-77",
+        "referenceLengthM": 173.0610417587641,
+        "physicalLengthM": 178.15598823397917,
+        "extraM": 5.0949464752150675
+      },
+      {
+        "id": "lane-78",
+        "referenceLengthM": 154.08952201817056,
+        "physicalLengthM": 179.68742558819577,
+        "extraM": 25.59790357002521
+      },
+      {
+        "id": "lane-79",
+        "referenceLengthM": 105.51643053348045,
+        "physicalLengthM": 118.6300230540894,
+        "extraM": 13.113592520608961
+      },
+      {
+        "id": "lane-80",
+        "referenceLengthM": 111.43754095900235,
+        "physicalLengthM": 148.37135373901748,
+        "extraM": 36.93381278001513
+      },
+      {
+        "id": "lane-81",
+        "referenceLengthM": 138.7182655434756,
+        "physicalLengthM": 189.17803319605542,
+        "extraM": 50.459767652579814
+      },
+      {
+        "id": "lane-82",
+        "referenceLengthM": 162.0591059925959,
+        "physicalLengthM": 227.81363009659322,
+        "extraM": 65.75452410399731
+      },
+      {
+        "id": "lane-83",
+        "referenceLengthM": 129.4042780115675,
+        "physicalLengthM": 173.03210834821414,
+        "extraM": 43.62783033664664
+      },
+      {
+        "id": "lane-84",
+        "referenceLengthM": 92.5108349697528,
+        "physicalLengthM": 130.76334106521364,
+        "extraM": 38.25250609546083
+      },
+      {
+        "id": "lane-85",
+        "referenceLengthM": 80.29690069073663,
+        "physicalLengthM": 108.24264580447021,
+        "extraM": 27.94574511373358
+      },
+      {
+        "id": "lane-86",
+        "referenceLengthM": 82.78665515481411,
+        "physicalLengthM": 101.64832055831454,
+        "extraM": 18.861665403500425
+      },
+      {
+        "id": "lane-87",
+        "referenceLengthM": 109.09206203486379,
+        "physicalLengthM": 154.05045279107065,
+        "extraM": 44.95839075620687
+      },
+      {
+        "id": "lane-88",
+        "referenceLengthM": 64.69793676619143,
+        "physicalLengthM": 89.26680119306178,
+        "extraM": 24.56886442687035
+      },
+      {
+        "id": "lane-89",
+        "referenceLengthM": 144.6245505229116,
+        "physicalLengthM": 148.82592543189247,
+        "extraM": 4.201374908980881
+      },
+      {
+        "id": "lane-90",
+        "referenceLengthM": 98.97836236617113,
+        "physicalLengthM": 137.5400354550572,
+        "extraM": 38.56167308888607
+      },
+      {
+        "id": "lane-91",
+        "referenceLengthM": 172.98600194131473,
+        "physicalLengthM": 215.36838838650715,
+        "extraM": 42.382386445192424
+      },
+      {
+        "id": "lane-92",
+        "referenceLengthM": 69.72082682812929,
+        "physicalLengthM": 90.87066445125271,
+        "extraM": 21.149837623123418
+      },
+      {
+        "id": "lane-93",
+        "referenceLengthM": 114.7102801307201,
+        "physicalLengthM": 158.51074298387255,
+        "extraM": 43.80046285315245
+      },
+      {
+        "id": "lane-94",
+        "referenceLengthM": 172.43338801871496,
+        "physicalLengthM": 224.8088348471619,
+        "extraM": 52.37544682844694
+      },
+      {
+        "id": "lane-95",
+        "referenceLengthM": 177.53462256030193,
+        "physicalLengthM": 218.96935298611294,
+        "extraM": 41.43473042581101
+      },
+      {
+        "id": "lane-96",
+        "referenceLengthM": 83.32072201843965,
+        "physicalLengthM": 94.63505243814939,
+        "extraM": 11.314330419709734
+      },
+      {
+        "id": "lane-97",
+        "referenceLengthM": 95.91851968310675,
+        "physicalLengthM": 113.9619681974406,
+        "extraM": 18.043448514333846
+      },
+      {
+        "id": "lane-98",
+        "referenceLengthM": 74.81759154009995,
+        "physicalLengthM": 105.56642860631132,
+        "extraM": 30.748837066211365
+      },
+      {
+        "id": "lane-99",
+        "referenceLengthM": 179.4925136159369,
+        "physicalLengthM": 247.85325923926143,
+        "extraM": 68.36074562332453
+      },
+      {
+        "id": "lane-100",
+        "referenceLengthM": 88.77107680848833,
+        "physicalLengthM": 106.03089968109157,
+        "extraM": 17.259822872603237
+      },
+      {
+        "id": "lane-101",
+        "referenceLengthM": 140.22329339230322,
+        "physicalLengthM": 187.88563509158047,
+        "extraM": 47.66234169927725
+      },
+      {
+        "id": "lane-102",
+        "referenceLengthM": 147.86683816513616,
+        "physicalLengthM": 162.35947038248946,
+        "extraM": 14.492632217353304
+      },
+      {
+        "id": "lane-103",
+        "referenceLengthM": 116.69826446428381,
+        "physicalLengthM": 142.03023533710262,
+        "extraM": 25.331970872818815
+      },
+      {
+        "id": "lane-104",
+        "referenceLengthM": 234.16611181045434,
+        "physicalLengthM": 265.3692972744996,
+        "extraM": 31.203185464045276
+      },
+      {
+        "id": "lane-105",
+        "referenceLengthM": 140.440230946194,
+        "physicalLengthM": 147.19299979623196,
+        "extraM": 6.752768850037967
+      },
+      {
+        "id": "lane-106",
+        "referenceLengthM": 203.08184247485204,
+        "physicalLengthM": 279.0411133539535,
+        "extraM": 75.95927087910147
+      },
+      {
+        "id": "lane-107",
+        "referenceLengthM": 115.1261091411368,
+        "physicalLengthM": 117.69188022007643,
+        "extraM": 2.5657710789396333
+      },
+      {
+        "id": "lane-108",
+        "referenceLengthM": 80.6523295896933,
+        "physicalLengthM": 102.11108233592552,
+        "extraM": 21.45875274623222
+      },
+      {
+        "id": "lane-109",
+        "referenceLengthM": 142.14788880453813,
+        "physicalLengthM": 196.53062132384343,
+        "extraM": 54.38273251930531
+      },
+      {
+        "id": "lane-110",
+        "referenceLengthM": 215.12485075062804,
+        "physicalLengthM": 304.1525437566295,
+        "extraM": 89.02769300600144
+      },
+      {
+        "id": "lane-111",
+        "referenceLengthM": 70.8673276962931,
+        "physicalLengthM": 81.98658289268545,
+        "extraM": 11.119255196392345
+      },
+      {
+        "id": "lane-112",
+        "referenceLengthM": 141.75865039155465,
+        "physicalLengthM": 176.90194065218282,
+        "extraM": 35.14329026062816
+      },
+      {
+        "id": "lane-113",
+        "referenceLengthM": 200.65756083985568,
+        "physicalLengthM": 249.31259387821223,
+        "extraM": 48.65503303835655
+      },
+      {
+        "id": "lane-114",
+        "referenceLengthM": 85.27548443529206,
+        "physicalLengthM": 93.48099465693377,
+        "extraM": 8.205510221641717
+      },
+      {
+        "id": "lane-115",
+        "referenceLengthM": 105.76677604016331,
+        "physicalLengthM": 147.4310316660211,
+        "extraM": 41.664255625857805
+      },
+      {
+        "id": "lane-116",
+        "referenceLengthM": 195.97025548507904,
+        "physicalLengthM": 257.3011254209403,
+        "extraM": 61.33086993586127
+      },
+      {
+        "id": "lane-117",
+        "referenceLengthM": 74.53999548297114,
+        "physicalLengthM": 98.46484987699432,
+        "extraM": 23.924854394023185
+      },
+      {
+        "id": "artery-118",
+        "referenceLengthM": 481.95658977195944,
+        "physicalLengthM": 604.5841277445916,
+        "extraM": 122.62753797263213
+      },
+      {
+        "id": "artery-119",
+        "referenceLengthM": 472.20083784389504,
+        "physicalLengthM": 638.5733625299396,
+        "extraM": 166.37252468604453
+      },
+      {
+        "id": "artery-120",
+        "referenceLengthM": 507.57089524501316,
+        "physicalLengthM": 629.823483040979,
+        "extraM": 122.25258779596584
+      },
+      {
+        "id": "artery-121",
+        "referenceLengthM": 382.67408696086454,
+        "physicalLengthM": 500.0817188598289,
+        "extraM": 117.40763189896438
+      },
+      {
+        "id": "artery-122",
+        "referenceLengthM": 381.39196114768794,
+        "physicalLengthM": 456.5570502593401,
+        "extraM": 75.16508911165215
+      },
+      {
+        "id": "arrival-east",
+        "referenceLengthM": 755.335295492102,
+        "physicalLengthM": 830,
+        "extraM": 74.66470450789802
+      },
+      {
+        "id": "arrival-south",
+        "referenceLengthM": 358.2612592044609,
+        "physicalLengthM": 420.6000000000022,
+        "extraM": 62.3387407955413
+      },
+      {
+        "id": "resin-access",
+        "referenceLengthM": 220.4536101718726,
+        "physicalLengthM": 230,
+        "extraM": 9.546389828127388
+      }
+    ]
+  },
+  "aesthetics": {
+    "orientations": {
+      "face": 676,
+      "droite": 624,
+      "dos": 700,
+      "gauche": 684
+    },
+    "minimumBuildingGapM": 2.500000000000023,
+    "pathWidthM": 2,
+    "pathsChecked": 2684,
+    "thresholdsChecked": 2684,
+    "thresholdIssues": [],
+    "streetClearanceIssues": [],
+    "pathIssues": []
+  },
+  "foundationsChecked": 2684,
+  "foundationIssues": [],
+  "walkability": {
+    "gridStepM": 0.5,
+    "actorRadiusM": 0.3125,
+    "visitedCells": 8190611,
+    "unreachableEntrances": [],
+    "blockedStreetCentrelines": []
+  },
+  "spatialBudget": {
+    "chunkSizeM": 32,
+    "occupiedChunks": 556,
+    "maxBuildingsPerAnchorChunk": 13,
+    "runtimeBenchmark": "not_run_proposal_not_activated"
+  },
+  "pending": [
+    "user review of city layout",
+    "potable water confirmation",
+    "outpost budget and supply",
+    "review of every other city before any push"
+  ],
+  "runtimeChanged": false,
+  "pushed": false
+}

@@ -13,7 +13,7 @@ class WorldDanger {
  atPoint(x,y){
   this.refresh();const key=x+','+y;if(this.cache.has(key))return this.cache.get(key);
   const g=this.game,cell=Atlas.cellAt(x,y),site=Atlas.siteAt(x,y,12),near=Atlas.closestRoad(x,y),road=near&&near.d<32?near.road:null;
-  const roadIds=road?(Atlas.edgeById.get([near.segment.a[2],near.segment.b[2]].sort().join('|'))?.roads||[road.id]):[];
+  const roadIds=road?(Atlas.edgeById.get(near.segment.edge)?.roads||[road.id]):[];
   const events=new Map();for(const id of [...roadIds,site?.id,site?.town])for(const e of this.targets.get(id)||[])events.set(e.id,e);
   // Site events also reach the actual actor positions and the settlement outskirts.
   for(const e of this.events){const n=Atlas.byId[e.target];if(n&&Math.hypot(x-e.x,y-e.y)<(n.radius||12)+20)events.set(e.id,e);}

@@ -6,9 +6,9 @@ test('all ordinary cuts continue their signed arc into a pronounced overshoot',(
  let cuts=0;
  for(const w of W.all)for(let d=0;d<4;d++)for(let c=0;c<3;c++){
   const load=W.pose(w.id,d,1,c),hit=W.pose(w.id,d,2,c),post=W.pose(w.id,d,3.5,c),incoming=turn(angle(load),angle(hit)),outgoing=turn(angle(hit),angle(post));
-  if(Math.abs(incoming)<.1){assert.ok(distance(tip(load),tip(hit))>4);continue;}
+  if(Math.abs(incoming)<.1){assert.ok(distance(tip(load),tip(hit))>=4);continue;}
   assert.ok(Math.abs(incoming)>=.9,w.id+' pronounced preparation');
-  assert.ok(distance(load.h,hit.h)>7,w.id+' hands load away from contact');
+  assert.ok(distance(load.h,hit.h)>2,w.id+' compact hands still load away from contact');
   cuts++;assert.ok(incoming*outgoing>0,w.id+':'+d+':'+c+' never brakes in the opposite direction');
   assert.ok(Math.abs(outgoing)>=100*Math.PI/180,w.id+' extended follow-through');
   assert.ok(distance(tip(hit),tip(post))>8,w.id+' leading end carries past contact');

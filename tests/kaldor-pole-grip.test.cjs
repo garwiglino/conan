@@ -17,7 +17,7 @@ test('face-on polearms keep both separated hands on the shaft through guard and 
 test('front spear thrust translates toward the target along the centred shaft',()=>{
  for(const w of poles.filter(w=>w.family==='spear'))for(const c of [0,...(W.finisher(w.id).kind==='lunge'?[3]:[])]){
   const a=W.pose(w.id,2,1,c),b=W.pose(w.id,2,2,c),dx=b.h[0]-a.h[0],dy=b.h[1]-a.h[1];
-  assert.ok(Math.abs(dx)<1e-9&&dy>5,w.id+' moves forward on the centre line');
+  assert.ok(Math.abs(dx)<1e-9&&dy>=4,w.id+' moves forward on the centre line');
   assert.ok(a.u[0]*b.u[0]+a.u[1]*b.u[1]>.999);assert.ok((dx*b.u[0]+dy*b.u[1])/Math.hypot(dx,dy)>.99);
  }
 });

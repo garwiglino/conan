@@ -1,0 +1,24 @@
+{
+  "planRevision": "c90107da6364aa74",
+  "checks": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "views": 8,
+      "zoom": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "views": 8,
+      "zoom": true,
+      "errors": []
+    }
+  ],
+  "pushed": false
+}

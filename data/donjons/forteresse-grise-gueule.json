@@ -1,0 +1,287 @@
+{
+  "id": "forteresse-grise-gueule",
+  "nom": "Forteresse de Grise-Gueule",
+  "kit": "forteresse-gobeline",
+  "resume": "Premier niveau du jeu. Kaldor, capturé par les gobelins, se réveille dans les geôles de la forteresse. Il doit monter jusqu'à la salle du trône, battre Grise-Gueule et libérer la fée : elle seule peut briser le sceau de la porte de sortie.",
+  "unites": "Une case = 2 m (32 unités). Les plans vont de i vers l'est (colonnes) et j vers le sud (lignes). Les positions (objets, décors, repères) sont en cases : [3.5, 2.5] = centre de la case (3, 2). Un bord s'écrit 'i,j,N' ou 'i,j,O' (bord nord ou ouest de la case), 'i,j,S' pour un muret.",
+  "lieu": {
+    "nom": "Forteresse de Grise-Gueule",
+    "territoire": "Sarak",
+    "region": { "id": 10, "nom": "Safrane" },
+    "zone": "Étendue sauvage de Sarak, sans route (layout.wilds)",
+    "monde": { "x": 61553, "y": 29042 },
+    "affiche": false,
+    "note": "L'intérieur n'est pas posé sur la carte du monde : il est chargé à part, sur fond noir. Tant que Kaldor est dedans, le jeu affiche « Lieu inconnu » et la carte ne montre pas sa position. En sortant, il apparaît devant la porte de la forteresse à ces coordonnées, et le lieu s'inscrit sur la carte."
+  },
+  "depart": { "etage": "geoles", "pos": [12.5, 3.6], "note": "Kaldor se réveille sur la paillasse de sa cellule. Le mur du fond s'est effondré sur un boyau creusé par les gobelins." },
+  "sortie": { "etage": "grande-salle", "bord": "11,2,N", "condition": "fee", "note": "La grande porte est scellée par une rune. Seule la fée, libérée dans la salle du trône, peut briser le sceau." },
+  "cles": [
+    { "id": "serpent", "nom": "Clé serpent", "ouvre": "Porte serpent", "etage": "geoles", "pos": [7.3, 4.5], "ou": "sur le squelette de la cellule 1" },
+    { "id": "crane", "nom": "Clé crâne", "ouvre": "Porte crâne", "etage": "galeries", "pos": [13.4, 1.6], "ou": "dans le coffre de l'armurerie" },
+    { "id": "croc", "nom": "Clé croc", "ouvre": "Porte croc", "etage": "grande-salle", "pos": [5.4, 12.4], "ou": "dans le coffre de la caserne" }
+  ],
+  "boss": { "id": "grise-gueule", "nom": "Grise-Gueule", "etage": "trone", "pos": [11.5, 5.6], "description": "Chef de la forteresse : grand gobelin tout maigre, l'air nigaud, armé d'une massue." },
+  "fee": { "etage": "trone", "pos": [14.3, 3.2], "levier": "15,1,N", "note": "Enfermée dans la cage suspendue près du trône. Le levier fait descendre la cage une fois le chef battu." },
+  "obscurite": { "fermetures": ["porte-verrouillee", "herse", "porte-cellule"], "luminosite": 0.14, "note": "Une pièce séparée du reste par une porte verrouillée, une herse baissée ou une grille de cellule reste dans le noir (14 % de sa luminosité, tramé) tant que l'ouverture est fermée et que le héros n'y est pas entré, par exemple par le monte-charge. À l'ouverture, elle s'éclaire en une demi-seconde. Les pièces d'arrivée (réveil, haut ou bas d'un escalier) sont visibles tout de suite." },
+  "monte_charge": { "case": [3, 10], "arrets": ["geoles", "grande-salle", "galeries"], "depart": "geoles", "treuil": { "etage": "galeries", "pos": [1.7, 10.6] }, "note": "Le puits est à la même case à chaque étage. La plate-forme attend au fond (geôles). Le treuil de l'étage des galeries la remonte ; ensuite un levier à chaque arrêt l'appelle." },
+  "etages": [
+    {
+      "id": "geoles",
+      "nom": "Les geôles",
+      "niveau": -1,
+      "plan": [
+        "########################",
+        "##,,,,,,,,,,,,,,,,,....#",
+        "##,,,,,,,,,,,,,,,,,....#",
+        "######::#::#::#::##....#",
+        "######::#::#::#::##....#",
+        "#############:#####....#",
+        "#############::####....#",
+        "##############:######:##",
+        "#.....#######:::::::::##",
+        "#.....#######:::::::::##",
+        "#.....#######:::::::::##",
+        "#.....#######:::::::::##",
+        "#.....##################",
+        "########################"
+      ],
+      "murs": {
+        "3,1,N": "escalier-montant", "2,2,O": "mur-torche",
+        "5,1,O": "porte-verrouillee", "5,2,O": "mur-c",
+        "7,1,N": "mur-torche", "10,1,N": "chaines", "13,1,N": "mur-torche", "16,1,N": "baniere", "18,1,N": "mur-torche",
+        "6,3,N": "chaines", "7,3,N": "porte-cellule", "9,3,N": "porte-cellule", "10,3,N": "chaines",
+        "12,3,N": "mur-c", "13,3,N": "porte-cellule", "15,3,N": "porte-cellule", "16,3,N": "chaines",
+        "19,1,O": "mur-torche", "19,2,O": "porte-ouverte", "20,1,N": "levier-haut", "21,1,N": "baniere", "22,1,N": "mur-torche",
+        "15,8,N": "mur-torche", "17,8,N": "mur-ruine", "19,8,N": "mur-torche", "20,8,N": "mur-c", "13,10,O": "mur-breche",
+        "2,8,N": "mur-torche", "4,8,N": "chaines"
+      },
+      "murets": { "12,4,S": "muret-casse", "20,6,S": "muret-casse", "22,6,S": "muret-casse", "16,11,S": "muret-casse" },
+      "escaliers": [],
+      "toiles": [[2, 1], [6, 3], [13, 8], [1, 8]],
+      "objets": [
+        ["tonneau", 2.4, 2.6],
+        ["tas-os", 6.5, 4.4], ["cle", 7.3, 4.5],
+        ["paillasse", 9.5, 4.4],
+        ["paillasse", 12.5, 3.6], ["blocs", 12.5, 4.7],
+        ["paillasse", 16.4, 4.4], ["tonneau", 15.4, 4.6],
+        ["table", 20.5, 4.4], ["brasero", 21.6, 3.0], ["tonneau", 22.5, 1.5], ["caisses", 22.4, 5.5], ["ratelier", 19.6, 5.5], ["coffre", 22.5, 3.6],
+        ["tas-os", 16.5, 9.6], ["tas-os", 19.6, 10.4], ["pilier-brise", 17.6, 8.7], ["eboulis", 13.7, 10.6], ["blocs", 20.4, 8.7],
+        ["monte-charge", 3.5, 10.5], ["coffre", 1.6, 8.7], ["tresor", 1.7, 11.6], ["caisses", 5.4, 8.6], ["tas-os", 5.2, 12.3]
+      ],
+      "decors": [
+        ["paille", 9.3, 2.5], ["flaque", 11.5, 1.8], ["os", 14.2, 2.4], ["tache", 4.0, 2.2], ["gravats", 17.5, 1.6], ["fissure", 6.4, 1.7],
+        ["paille", 9.8, 4.6], ["crane", 6.6, 3.6], ["paille", 16.0, 3.8], ["tache", 15.6, 4.2],
+        ["gravats", 13.4, 4.6], ["gravats", 13.5, 5.4], ["traces", 13.5, 6.4], ["gravats", 14.5, 7.5], ["traces", 21.4, 7.5],
+        ["os", 21.2, 4.8], ["flaque", 22.0, 4.5], ["traces", 20.6, 6.0],
+        ["os", 15.0, 9.0], ["crane", 17.8, 10.8], ["os", 18.6, 9.0], ["flaque", 14.6, 11.2], ["mousse", 13.4, 8.6], ["os", 20.8, 11.0], ["crane", 15.6, 10.6], ["tache", 19.0, 11.4], ["gravats", 13.8, 9.2],
+        ["flaque", 3.5, 8.6], ["mousse", 1.4, 12.4], ["os", 4.4, 11.6], ["grille", 2.5, 12.2]
+      ],
+      "gobelins": [[20.6, 2.6], [21.6, 5.0], [17.6, 10.6]],
+      "liens": [{ "bord": "3,1,N", "vers": "grande-salle", "arrivee": [3, 1], "note": "escalier qui monte au rez-de-chaussée" }],
+      "mecanismes": [{ "id": "levier-cellules", "bord": "20,1,N", "ouvre": ["7,3,N", "9,3,N", "13,3,N", "15,3,N"], "effet": "ouvre les quatre grilles de cellule (porte-cellule devient porte-cellule-ouverte)" }],
+      "portes": [{ "id": "porte-serpent", "nom": "Porte serpent", "bord": "5,1,O", "cle": "serpent" }],
+      "reperes": [
+        { "n": "1", "pos": [12.5, 3.6], "texte": "Réveil de Kaldor dans sa cellule. Le mur du fond s'est effondré sur un boyau." },
+        { "n": "2", "pos": [17.0, 9.8], "texte": "Le boyau mène à l'ossuaire, où les gobelins jettent les corps : premier gobelin." },
+        { "n": "3", "pos": [20.6, 3.6], "texte": "Salle des gardes : gobelins." },
+        { "n": "4", "pos": [20.5, 1.4], "z": 22, "texte": "Levier des cellules : les quatre grilles s'ouvrent." },
+        { "n": "5", "pos": [7.3, 4.5], "texte": "Cellule 1 : la Clé serpent sur le squelette d'un ancien prisonnier." },
+        { "n": "6", "pos": [5.0, 1.5], "z": 20, "texte": "Porte serpent, puis l'escalier vers le rez-de-chaussée." },
+        { "n": "A", "pos": [2.6, 9.6], "texte": "Fond du puits, par le monte-charge (facultatif) : coffre et trésor." }
+      ]
+    },
+    {
+      "id": "grande-salle",
+      "nom": "La grande salle",
+      "niveau": 0,
+      "plan": [
+        "########################",
+        "#=====###########.....##",
+        "#=====,.........#.....##",
+        "#=====#.........,.....##",
+        "#=====#.........#.....##",
+        "#######.........#.....##",
+        "#######.........########",
+        "#=====#.........########",
+        "#=====,.........########",
+        "#=====#.........########",
+        "#=====#.........########",
+        "#=====#####,############",
+        "#=====##=======#########",
+        "########=======#########",
+        "########=======#########",
+        "########=======#########",
+        "########################"
+      ],
+      "murs": {
+        "2,1,N": "mur-torche", "4,1,N": "mur-b",
+        "6,2,O": "porte-ouverte",
+        "8,2,N": "baniere", "9,2,N": "mur-torche", "11,2,N": "porte-scellee", "13,2,N": "mur-torche", "14,2,N": "baniere", "15,2,N": "meurtriere",
+        "7,4,O": "mur-torche", "7,6,O": "chaines", "7,8,O": "herse", "7,10,O": "meurtriere",
+        "16,3,O": "herse",
+        "18,1,N": "mur-torche", "19,1,N": "escalier-montant", "21,1,N": "mur-c", "17,4,O": "mur-torche",
+        "2,7,N": "levier-haut", "4,7,N": "mur-torche", "1,9,O": "baniere",
+        "11,12,N": "porte-ouverte", "9,12,N": "mur-torche", "13,12,N": "mur-torche", "8,14,O": "chaines"
+      },
+      "murets": {},
+      "escaliers": [[3, 1, "nord"], [3, 10, "puits"]],
+      "toiles": [[1, 1], [17, 1], [1, 7], [8, 12]],
+      "objets": [
+        ["caisses", 1.5, 3.6], ["caisse", 2.6, 3.4], ["tonneau", 5.5, 1.5], ["caisses", 5.4, 4.5], ["tonneau", 1.5, 1.6],
+        ["pilier-rond", 9.0, 5.8], ["pilier-rond", 14.0, 5.8], ["pilier-rond", 9.0, 9.2], ["pilier-rond", 14.0, 9.2],
+        ["brasero", 10.1, 3.7], ["brasero", 12.9, 3.7],
+        ["dalle-pression", 15.5, 5.5], ["dalle-pression", 15.5, 7.5], ["caisse", 12.3, 8.4],
+        ["totem", 7.7, 9.6], ["blocs", 15.3, 9.7],
+        ["paillasse", 1.6, 8.6], ["paillasse", 1.6, 11.6], ["paillasse", 3.6, 12.5], ["table", 4.6, 8.5], ["ratelier", 5.5, 10.5], ["coffre", 5.4, 12.4], ["tonneau", 5.5, 7.5],
+        ["table", 9.6, 13.6], ["table", 12.4, 13.6], ["marmite", 13.6, 15.0], ["tonneau", 14.5, 12.5], ["caisses", 8.6, 15.4], ["tonneau", 10.5, 15.4],
+        ["caisses", 21.4, 4.5], ["tonneau", 17.5, 5.4], ["blocs", 20.6, 5.2], ["ratelier", 21.5, 2.4]
+      ],
+      "decors": [
+        ["fissure", 10.5, 4.2], ["tache", 12.8, 8.6], ["traces", 11.5, 9.5], ["os", 8.2, 6.2], ["flaque", 14.5, 9.6], ["gravats", 15.3, 2.6], ["crane", 8.6, 10.4], ["mousse", 7.4, 9.0], ["fissure", 13.4, 3.4],
+        ["paille", 3.5, 3.0], ["tache", 2.2, 2.4], ["gravats", 4.6, 1.6],
+        ["paille", 2.4, 8.5], ["paille", 2.4, 11.5], ["os", 3.6, 8.0], ["tache", 4.4, 11.2],
+        ["os", 11.2, 14.6], ["flaque", 9.4, 14.8], ["tache", 12.6, 12.6], ["crane", 14.2, 14.2],
+        ["traces", 19.5, 3.0], ["gravats", 18.0, 2.5]
+      ],
+      "gobelins": [[11.5, 5.0], [9.5, 9.5], [13.6, 7.0], [11.0, 14.4], [13.2, 13.6], [2.6, 9.4], [4.0, 11.0], [19.0, 4.0]],
+      "liens": [
+        { "trémie": [3, 1], "vers": "geoles", "note": "escalier qui descend aux geôles" },
+        { "bord": "19,1,N", "vers": "galeries", "arrivee": [19, 1], "note": "escalier qui monte aux galeries" }
+      ],
+      "mecanismes": [
+        { "id": "dalles-herse", "dalles": [[15.5, 5.5], [15.5, 7.5]], "ouvre": ["16,3,O"], "effet": "la herse de l'escalier reste levée tant que les deux dalles sont enfoncées (une caisse sur chacune)" },
+        { "id": "levier-caserne", "bord": "2,7,N", "ouvre": ["7,8,O"], "effet": "lève la herse entre la caserne et la grande salle (raccourci)" }
+      ],
+      "portes": [{ "id": "porte-scellee", "nom": "Porte de la forteresse", "bord": "11,2,N", "condition": "fee" }],
+      "reperes": [
+        { "n": "7", "pos": [3.5, 2.6], "texte": "Arrivée dans la réserve : des caisses qu'on peut pousser." },
+        { "n": "8", "pos": [11.5, 2.8], "z": 26, "texte": "Grande salle : la porte de la forteresse est scellée par une rune violette." },
+        { "n": "9", "pos": [15.5, 6.5], "texte": "Deux dalles de pression : une caisse sur chacune lève la herse de l'escalier." },
+        { "n": "10", "pos": [19.5, 2.2], "texte": "Escalier vers l'étage des galeries." },
+        { "n": "15", "pos": [3.0, 8.4], "texte": "Caserne, atteinte par le monte-charge : gobelins endormis, Clé croc dans le coffre. Le levier lève la herse vers la grande salle." },
+        { "n": "20", "pos": [11.5, 4.2], "texte": "Retour avec la fée par la caserne : elle brise le sceau. Kaldor sort de la forteresse." },
+        { "n": "B", "pos": [11.5, 13.8], "texte": "Réfectoire (facultatif) : gobelins, marmite." }
+      ]
+    },
+    {
+      "id": "galeries",
+      "nom": "Les galeries",
+      "niveau": 1,
+      "plan": [
+        "########################",
+        "########......####....##",
+        "########......####....##",
+        "########......####....##",
+        "########......####....##",
+        "##########,#######....##",
+        "##,,,,,,,,,,,,,,,,....##",
+        "##,,,,,,,,,,,,,,,,....##",
+        "####,#######,#####....##",
+        "#.....####.....#########",
+        "#.....####.....#########",
+        "#.....####.....#########",
+        "#.....####.....#########",
+        "########################"
+      ],
+      "murs": {
+        "9,1,N": "mur-torche", "10,1,N": "baniere", "12,1,N": "mur-torche", "13,1,N": "chaines",
+        "10,5,N": "herse",
+        "4,6,N": "mur-torche", "7,6,N": "baniere", "13,6,N": "mur-torche", "16,6,N": "meurtriere",
+        "2,6,O": "levier-haut", "2,7,O": "mur-torche",
+        "18,6,O": "arche", "18,7,O": "mur-c",
+        "20,1,N": "levier-haut", "21,1,N": "mur-torche", "18,3,O": "meurtriere", "18,5,O": "mur-torche",
+        "4,9,N": "porte-verrouillee", "12,9,N": "porte-verrouillee",
+        "2,9,N": "mur-torche", "1,11,O": "chaines",
+        "10,10,O": "escalier-montant", "14,9,N": "mur-torche", "10,12,O": "baniere"
+      },
+      "murets": {},
+      "escaliers": [[19, 1, "nord"], [3, 10, "puits"]],
+      "toiles": [[8, 1], [1, 9], [10, 9], [18, 1]],
+      "objets": [
+        ["ratelier", 8.6, 1.5], ["ratelier", 11.0, 1.4], ["coffre", 13.4, 1.6], ["table", 11.6, 3.2], ["caisses", 13.4, 4.4], ["tonneau", 8.5, 4.4],
+        ["caisses", 16.5, 7.6], ["tonneau", 2.5, 7.5],
+        ["brasero", 20.0, 4.5], ["paillasse", 21.4, 8.4], ["tonneau", 21.5, 2.5], ["caisses", 18.6, 8.5], ["ratelier", 21.6, 5.6],
+        ["treuil", 1.7, 10.6], ["caisses", 5.4, 12.4], ["tonneau", 5.5, 9.5], ["tonneau", 1.5, 12.4],
+        ["etendard", 14.4, 12.4], ["totem", 14.4, 10.0], ["tas-os", 11.8, 12.3]
+      ],
+      "decors": [
+        ["traces", 6.0, 6.6], ["os", 9.0, 7.4], ["flaque", 14.0, 7.2], ["gravats", 3.2, 6.4], ["tache", 11.6, 6.5], ["fissure", 15.5, 6.3],
+        ["gravats", 9.5, 3.4], ["traces", 11.0, 2.4],
+        ["paille", 21.0, 7.6], ["os", 19.4, 6.4], ["tache", 20.4, 2.8],
+        ["traces", 3.6, 12.2], ["tache", 1.6, 9.6], ["gravats", 4.6, 11.0],
+        ["os", 11.5, 11.5], ["crane", 13.4, 12.4], ["traces", 10.8, 9.6]
+      ],
+      "gobelins": [[10.5, 2.4], [12.2, 3.6], [8.0, 6.8], [14.5, 7.2], [19.8, 6.0], [21.0, 3.6], [12.5, 11.6]],
+      "liens": [
+        { "trémie": [19, 1], "vers": "grande-salle", "note": "escalier qui descend au rez-de-chaussée" },
+        { "bord": "10,10,O", "vers": "trone", "arrivee": [9, 11], "note": "escalier du chef, qui monte à la salle du trône" }
+      ],
+      "mecanismes": [
+        { "id": "leviers-armurerie", "bords": ["20,1,N", "2,6,O"], "ouvre": ["10,5,N"], "effet": "les deux leviers baissés lèvent la herse de l'armurerie" },
+        { "id": "treuil", "pos": [1.7, 10.6], "effet": "remonte le monte-charge du fond du puits ; ensuite il dessert les geôles, la caserne et les galeries" }
+      ],
+      "portes": [
+        { "id": "porte-crane", "nom": "Porte crâne", "bord": "4,9,N", "cle": "crane" },
+        { "id": "porte-croc", "nom": "Porte croc", "bord": "12,9,N", "cle": "croc" }
+      ],
+      "reperes": [
+        { "n": "11", "pos": [20.5, 1.4], "z": 22, "texte": "Arrivée dans la galerie des gardes. Premier levier." },
+        { "n": "12", "pos": [2.4, 6.5], "z": 22, "texte": "Second levier, au bout du couloir." },
+        { "n": "13", "pos": [13.4, 1.6], "texte": "Les deux leviers baissés lèvent la herse de l'armurerie : Clé crâne dans le coffre." },
+        { "n": "14", "pos": [1.7, 10.6], "texte": "Porte crâne, puis le treuil : le monte-charge remonte du fond du puits. On descend à la caserne." },
+        { "n": "16", "pos": [12.5, 9.6], "z": 20, "texte": "Revenu avec la Clé croc : Porte croc, puis l'escalier du chef." }
+      ]
+    },
+    {
+      "id": "trone",
+      "nom": "La salle du trône",
+      "niveau": 2,
+      "plan": [
+        "########################",
+        "#####.............######",
+        "#####.............######",
+        "#####.............######",
+        "#####.............######",
+        "#####.............######",
+        "#####.............######",
+        "#####.............######",
+        "#####.............######",
+        "###########,############",
+        "#########.....##########",
+        "#########.....##########",
+        "#########.....##########",
+        "#########.....##########",
+        "########################"
+      ],
+      "murs": {
+        "6,1,N": "mur-torche", "7,1,N": "fenetre", "8,1,N": "baniere", "10,1,N": "mur-torche", "12,1,N": "mur-torche", "13,1,N": "baniere",
+        "15,1,N": "levier-haut", "16,1,N": "fenetre", "17,1,N": "chaines",
+        "5,3,O": "mur-torche", "5,5,O": "fenetre", "5,7,O": "mur-torche",
+        "11,10,N": "porte", "9,10,N": "mur-torche", "13,10,N": "mur-torche", "9,13,O": "chaines"
+      },
+      "murets": {},
+      "escaliers": [[9, 11, "ouest"]],
+      "toiles": [[5, 1], [9, 10]],
+      "objets": [
+        ["trone", 11.5, 2.2], ["tas-os", 9.8, 2.6], ["tas-os", 13.3, 2.5],
+        ["cage-fee", 14.3, 3.2], ["coffre-ouvert", 17.4, 1.6], ["tresor", 16.6, 2.6],
+        ["pilier-rond", 7.0, 4.5], ["pilier-rond", 7.0, 7.5], ["pilier-rond", 16.0, 7.5], ["pilier-rond", 16.0, 4.5],
+        ["brasero", 9.5, 5.0], ["brasero", 13.5, 5.0], ["totem", 8.4, 2.4],
+        ["totem", 13.4, 12.6], ["etendard", 13.4, 10.6], ["tonneau", 12.5, 13.4], ["tas-os", 10.6, 13.4]
+      ],
+      "decors": [
+        ["os", 10.5, 4.5], ["crane", 12.6, 4.2], ["traces", 11.5, 6.8], ["tache", 9.4, 7.6], ["os", 14.6, 6.6], ["flaque", 6.4, 8.4], ["crane", 16.8, 8.4], ["fissure", 12.8, 7.8], ["gravats", 6.2, 2.6], ["os", 11.4, 8.6],
+        ["traces", 11.5, 11.6], ["os", 12.6, 12.2], ["tache", 10.4, 12.8]
+      ],
+      "gobelins": [[10.6, 12.4], [12.6, 11.4]],
+      "liens": [{ "trémie": [9, 11], "vers": "galeries", "note": "escalier qui redescend aux galeries" }],
+      "mecanismes": [{ "id": "levier-cage", "bord": "15,1,N", "effet": "fait descendre la cage de la fée (après le combat)" }],
+      "portes": [{ "id": "porte-chef", "nom": "Porte du chef", "bord": "11,10,N", "note": "se referme derrière Kaldor pendant le combat" }],
+      "reperes": [
+        { "n": "17", "pos": [11.5, 10.6], "z": 20, "texte": "Antichambre et porte du chef : elle se referme pendant le combat." },
+        { "n": "18", "pos": [11.5, 5.6], "texte": "Grise-Gueule, le chef : grand gobelin tout maigre, l'air nigaud, une massue." },
+        { "n": "19", "pos": [15.5, 1.4], "z": 22, "texte": "Levier de la cage : la fée est libérée et suit Kaldor." }
+      ]
+    }
+  ]
+}

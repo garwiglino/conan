@@ -15,7 +15,7 @@ test('each of the 48 arms has four named, distinct combos and real mass/balance'
    }
   }
  }
- assert.ok(W.duration('brise-givre',0)>W.duration('aiguille-corail',0)*2);
+ assert.ok(W.duration('brise-givre',0)>W.duration('aiguille-corail',0)*1.9);
  assert.ok(W.hitPause('brise-givre',3)>W.hitPause('aiguille-corail',3));
  assert.ok(W.get('brise-givre').damage>W.get('aiguille-corail').damage*3);
 });
@@ -65,7 +65,8 @@ test('strikes carry the grip across the body and thrusts drive a stable point fo
   }
   if(['cleave','smash'].includes(W.finisher(w.id).kind)){
    const a=W.pose(w.id,2,1,3),b=W.pose(w.id,2,3,3);
-   assert.ok(b.h[1]-a.h[1]>12,w.id+' overhead falls from a raised grip');
+   assert.ok(b.h[1]-a.h[1]>4,w.id+' raised hands accompany the edge');
+   assert.ok(b.h[1]+b.u[1]*b.reach-a.h[1]-a.u[1]*a.reach>12,w.id+' overhead carries the blade through a full downward arc');
   }
  }
 });

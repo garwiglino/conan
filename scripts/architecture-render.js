@@ -1,13 +1,13 @@
 /* Cached native pixel slabs sorted with actor feet, not the roof's screen Y.
  * Browser canvases are built once per visible model; no PNG is fetched. */
-(function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('../sprites/architecture/architecture-game.js'));else r.HearthreaverArchitectureRender=f(r.HearthreaverArchitectureGame);})(globalThis,function(A){
+(function(r,f){if(typeof module==='object'&&module.exports)module.exports=f(require('../sprites/architecture/architecture-game.js'));else r.HearthreaverArchitectureRender=f(r.HearthreaverArchitectureGame);})(globalThis,function createRenderer(A){
 'use strict';
 const frames=new Map(),STEP=8,MAX=96,BASE_HEIGHT=8,FADE_ALPHA=.32;let factory=null;
 const projectPoint=(x,y)=>typeof WorldProjection!=='undefined'?WorldProjection.point(x,y):require('./world-projection.js').point(x,y);
 function frame(o,snow){
- const id=snow&&A.catalogue[o.id+'-hiver']?o.id+'-hiver':o.id,dir=o.dir||A.entry(id).views[0],key=[id,dir,!!snow,(o.open===undefined&&/^F(07|08|09|10|11)$/.test(id))||o.open===1,o.weather!==false].join('/');
+ const id=snow&&A.catalogue[o.id+'-hiver']?o.id+'-hiver':o.id,dir=o.dir||A.entry(id).views[0],key=[id,dir,o.district||'',!!snow,(o.open===undefined&&/^F(07|08|09|10|11)$/.test(id))||o.open===1,o.weather!==false].join('/');
  if(frames.has(key)){const old=frames.get(key);frames.delete(key);frames.set(key,old);return old;}
- const p=A.pixels(id,{dir,open:o.open,weather:o.weather}),data=new Uint8ClampedArray(p.data),groups=new Map(),upper=new Uint8Array(p.indices.length),depths=new Float32Array(p.indices.length);
+ const p=A.pixels(id,{dir,district:o.district,open:o.open,weather:o.weather}),data=new Uint8ClampedArray(p.data),groups=new Map(),upper=new Uint8Array(p.indices.length),depths=new Float32Array(p.indices.length);
  if(snow&&!id.endsWith('-hiver'))for(let x=0;x<p.width;x++){
   let y=0;while(y<p.height&&p.layers[y*p.width+x]!==2)y++;if(y>=p.height)continue;
   for(let dy=0;dy<2&&y+dy<p.height;dy++)if(p.layers[(y+dy)*p.width+x]===2)data.set(dy?[190,209,215,255]:[222,233,230,255],((y+dy)*p.width+x)*4);
@@ -58,5 +58,5 @@ function objects(renderer,o,snow=false){
  }}));
 }
 function diagnostics(){return {models:frames.size,pixelArea:[...frames.values()].reduce((s,v)=>s+v.pixelArea,0),maxModels:MAX};}
-return Object.freeze({objects,frame,obscures,diagnostics,setCanvasFactory(f){factory=f;frames.clear();},clear(){frames.clear();}});
+return Object.freeze({objects,frame,obscures,diagnostics,createRenderer,setCanvasFactory(f){factory=f;frames.clear();},clear(){frames.clear();}});
 });

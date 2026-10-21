@@ -1,0 +1,10 @@
+{
+  "mobile": true,
+  "viewport": [
+    568,
+    320
+  ],
+  "characters": 11,
+  "states": 18,
+  "browserErrors": []
+}

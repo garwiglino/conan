@@ -1,5 +1,940 @@
 {
+  "source": "ios/Hearthreaver/Game/index.html",
+  "browser": "Chromium",
+  "viewport": [
+    844,
+    390
+  ],
+  "sources": [
+    "sprites/terrain/terrain-isometric.js",
+    "sprites/environnement/teremor-data.js",
+    "sprites/environnement/sarak-data.js",
+    "sprites/environnement/environment-iso.js",
+    "sprites/architecture/isometric-pixels.js",
+    "sprites/architecture/city-pixels.js",
+    "scripts/settlement-runtime.js",
+    "scripts/city-life-runtime.js",
+    "scripts/city-wayfinding-runtime.js",
+    "scripts/world-projection.js",
+    "scripts/world-isometric-art.js",
+    "scripts/world-isometric-runtime.js"
+  ],
   "mode": "cooperative fallback",
+  "localities": [
+    {
+      "id": "town-1",
+      "name": "Clairfoyer",
+      "territory": "Teremor",
+      "biome": 12,
+      "buildings": 2613,
+      "arrival": {
+        "x": -494331.8348342815,
+        "y": -82282.62548913212
+      }
+    },
+    {
+      "id": "town-2",
+      "name": "Aulneport",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 29,
+      "arrival": {
+        "x": -347431.78426690795,
+        "y": 48654.9623693861
+      }
+    },
+    {
+      "id": "town-3",
+      "name": "Coralbourg",
+      "territory": "Tagon",
+      "biome": 5,
+      "buildings": 18,
+      "arrival": {
+        "x": -338840.36105023226,
+        "y": 307447.9919483594
+      }
+    },
+    {
+      "id": "town-4",
+      "name": "Sylvehaute",
+      "territory": "Teremor",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": -485927.5946002692,
+        "y": 42531.04087404256
+      }
+    },
+    {
+      "id": "town-5",
+      "name": "Port-Sarak",
+      "territory": "Sarak",
+      "biome": 12,
+      "buildings": 48,
+      "arrival": {
+        "x": 14499.863566580227,
+        "y": 139496.88912955255
+      }
+    },
+    {
+      "id": "town-6",
+      "name": "Citadelle-de-Sarak",
+      "territory": "Sarak",
+      "biome": 2,
+      "buildings": 48,
+      "arrival": {
+        "x": 45684.98192741068,
+        "y": -21911.00397771317
+      }
+    },
+    {
+      "id": "town-7",
+      "name": "Oasis-du-Safran",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": -22957.362767727667,
+        "y": 15574.627917919996
+      }
+    },
+    {
+      "id": "town-8",
+      "name": "Clairval",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -406009.85434132617,
+        "y": 52662.17747553802
+      }
+    },
+    {
+      "id": "town-9",
+      "name": "Puits-des-Caravanes",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": 59188.92917906093,
+        "y": 68701.86157268917
+      }
+    },
+    {
+      "id": "town-10",
+      "name": "Port-des-Veilleurs",
+      "territory": "Varan",
+      "biome": 8,
+      "buildings": 48,
+      "arrival": {
+        "x": -41483.047266111105,
+        "y": 246905.6053872465
+      }
+    },
+    {
+      "id": "town-11",
+      "name": "Pont-des-Ormes",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -497140.79527585953,
+        "y": 73538.19959738523
+      }
+    },
+    {
+      "id": "town-12",
+      "name": "Rive-du-Cerf",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 48,
+      "arrival": {
+        "x": -388040.1943285302,
+        "y": -93625.52519849976
+      }
+    },
+    {
+      "id": "town-13",
+      "name": "Bois-des-Fées",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -447158.69806580315,
+        "y": 81462.56179769574
+      }
+    },
+    {
+      "id": "town-14",
+      "name": "Gué-Clair",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -327288.05616283196,
+        "y": 47599.737418917044
+      }
+    },
+    {
+      "id": "town-15",
+      "name": "Port-des-Aulnes",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -428114.3373517627,
+        "y": 22974.99643949996
+      }
+    },
+    {
+      "id": "town-16",
+      "name": "Chêne-Creux",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -385735.51723633026,
+        "y": -29701.515167806494
+      }
+    },
+    {
+      "id": "town-17",
+      "name": "Mont-Vert",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -314602.0570696445,
+        "y": 11273.614058566483
+      }
+    },
+    {
+      "id": "town-18",
+      "name": "Rive-des-Saules",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -470757.82743586553,
+        "y": 31022.36778677752
+      }
+    },
+    {
+      "id": "town-19",
+      "name": "Fort-des-Ronces",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -522704.3165859978,
+        "y": -38730.15092018723
+      }
+    },
+    {
+      "id": "town-20",
+      "name": "Relais-des-Dunes",
+      "territory": "Sarak",
+      "biome": 2,
+      "buildings": 18,
+      "arrival": {
+        "x": 88119.78226582344,
+        "y": -26571.608303845605
+      }
+    },
+    {
+      "id": "town-21",
+      "name": "Val-Fleuri",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -456742.02109413577,
+        "y": 18195.50837491736
+      }
+    },
+    {
+      "id": "town-22",
+      "name": "Tour-des-Braises",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": 99315.35810300666,
+        "y": -11059.292756512157
+      }
+    },
+    {
+      "id": "town-23",
+      "name": "Puits-Rouge",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": 71061.72437022759,
+        "y": -17801.938073912952
+      }
+    },
+    {
+      "id": "town-24",
+      "name": "Auberge-du-Lac",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -469707.99540744786,
+        "y": 65693.14688848983
+      }
+    },
+    {
+      "id": "town-25",
+      "name": "Val-des-Mousses",
+      "territory": "Teremor",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": -532292.7999428629,
+        "y": -75102.46862857732
+      }
+    },
+    {
+      "id": "town-26",
+      "name": "Lisière-Rousse",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -305598.0936150717,
+        "y": 37048.10316129641
+      }
+    },
+    {
+      "id": "town-27",
+      "name": "Anse-des-Palmes",
+      "territory": "Tagon",
+      "biome": 5,
+      "buildings": 30,
+      "arrival": {
+        "x": -326567.7024718441,
+        "y": 262945.5613324095
+      }
+    },
+    {
+      "id": "town-28",
+      "name": "Bourg-du-Pont",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -373406.75164735556,
+        "y": -48856.38460918519
+      }
+    },
+    {
+      "id": "town-29",
+      "name": "Gué-des-Pierres",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -405589.34959647246,
+        "y": 31062.991453483137
+      }
+    },
+    {
+      "id": "town-30",
+      "name": "Source-Claire",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -355962.2640427347,
+        "y": -40849.06545821364
+      }
+    },
+    {
+      "id": "town-31",
+      "name": "Bosquet-du-Merle",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -481228.8,
+        "y": 84427.59999999998
+      }
+    },
+    {
+      "id": "town-32",
+      "name": "Col-des-Cèdres",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -485496.5335212132,
+        "y": -48734.78614501981
+      }
+    },
+    {
+      "id": "town-33",
+      "name": "Rive-du-Moulin",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -421142.50447276846,
+        "y": 40911.50708430441
+      }
+    },
+    {
+      "id": "town-34",
+      "name": "Roche-du-Serpent",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": 31151.74448105489,
+        "y": 81807.04614271814
+      }
+    },
+    {
+      "id": "town-35",
+      "name": "Pas-du-Sel",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 48,
+      "arrival": {
+        "x": -33224.788599988395,
+        "y": -17063.397149997083
+      }
+    },
+    {
+      "id": "town-36",
+      "name": "Pré-des-Roches",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -440089.11595736997,
+        "y": 7969.004311391691
+      }
+    },
+    {
+      "id": "town-37",
+      "name": "Lac-des-Aulnes",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -504205.30811287806,
+        "y": -44952.60221538242
+      }
+    },
+    {
+      "id": "town-38",
+      "name": "Bois-de-Lune",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 48,
+      "arrival": {
+        "x": -341475.29427987605,
+        "y": 30419.218667379475
+      }
+    },
+    {
+      "id": "town-39",
+      "name": "Vigie-Verte",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -406354.1189986562,
+        "y": -59554.29782531106
+      }
+    },
+    {
+      "id": "town-40",
+      "name": "Santalune",
+      "territory": "Tagon",
+      "biome": 5,
+      "buildings": 18,
+      "arrival": {
+        "x": -323518.28819147195,
+        "y": 347477.7916832119
+      }
+    },
+    {
+      "id": "town-41",
+      "name": "Ronceraie",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -423942.6999765903,
+        "y": 61494.71385569822
+      }
+    },
+    {
+      "id": "town-42",
+      "name": "Branchebasse",
+      "territory": "Teremor",
+      "biome": 12,
+      "buildings": 48,
+      "arrival": {
+        "x": -439987.30810183566,
+        "y": 100621.5260633205
+      }
+    },
+    {
+      "id": "town-43",
+      "name": "Vallombre",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -463282.0439238334,
+        "y": 92105.2835982021
+      }
+    },
+    {
+      "id": "town-44",
+      "name": "Hautes-Fougères",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -425464.9738434216,
+        "y": -57706.444540025404
+      }
+    },
+    {
+      "id": "town-45",
+      "name": "Clairpré",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -438480.2729577425,
+        "y": 49009.02588965162
+      }
+    },
+    {
+      "id": "town-46",
+      "name": "Ormerive",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -497772.8832983027,
+        "y": -63556.708525920076
+      }
+    },
+    {
+      "id": "town-47",
+      "name": "Vieux-Chêne",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -450625.67277550744,
+        "y": 63801.57441576818
+      }
+    },
+    {
+      "id": "town-48",
+      "name": "Pont-des-Fougères",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -398413.7409278864,
+        "y": -77658.89731384358
+      }
+    },
+    {
+      "id": "town-49",
+      "name": "Roche-du-Cerf",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -461427.8274685567,
+        "y": 47931.75326090543
+      }
+    },
+    {
+      "id": "town-50",
+      "name": "Bourg-des-Coquilles",
+      "territory": "Tagon",
+      "biome": 7,
+      "buildings": 30,
+      "arrival": {
+        "x": -426356.8,
+        "y": 244905.99999999994
+      }
+    },
+    {
+      "id": "town-51",
+      "name": "Havre-des-Épices",
+      "territory": "Tagon",
+      "biome": 5,
+      "buildings": 48,
+      "arrival": {
+        "x": -474917.38425179245,
+        "y": 282846.030717872
+      }
+    },
+    {
+      "id": "town-52",
+      "name": "Oasis-des-Palmes",
+      "territory": "Sarak",
+      "biome": 4,
+      "buildings": 18,
+      "arrival": {
+        "x": 82254.49739631619,
+        "y": -2178.9955900314226
+      }
+    },
+    {
+      "id": "town-53",
+      "name": "Val-Serein",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -449561.6398092761,
+        "y": 33415.94096684814
+      }
+    },
+    {
+      "id": "town-54",
+      "name": "Plage-Dorée",
+      "territory": "Tagon",
+      "biome": 5,
+      "buildings": 18,
+      "arrival": {
+        "x": -317409.1495304685,
+        "y": 310003.1222525256
+      }
+    },
+    {
+      "id": "town-55",
+      "name": "Relais-des-Lianes",
+      "territory": "Tagon",
+      "biome": 7,
+      "buildings": 48,
+      "arrival": {
+        "x": -368212.16268063005,
+        "y": 360306.5833765328
+      }
+    },
+    {
+      "id": "town-56",
+      "name": "Ruisselet",
+      "territory": "Teremor",
+      "biome": 8,
+      "buildings": 18,
+      "arrival": {
+        "x": -517650.23265110113,
+        "y": -58615.748802906564
+      }
+    },
+    {
+      "id": "town-57",
+      "name": "Basse-Sylve",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -427397.4673042122,
+        "y": 79999.37622993688
+      }
+    },
+    {
+      "id": "town-58",
+      "name": "Havre-du-Cuivre",
+      "territory": "Sarak",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": 49923.438273606975,
+        "y": 87238.76392125161
+      }
+    },
+    {
+      "id": "town-59",
+      "name": "Moulin-Vert",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -387424.5024972116,
+        "y": -61972.73696797991
+      }
+    },
+    {
+      "id": "town-60",
+      "name": "Relais-des-Trois-Pierres",
+      "territory": "Sarak",
+      "biome": 2,
+      "buildings": 18,
+      "arrival": {
+        "x": -18400.856285741214,
+        "y": -3093.868186412269
+      }
+    },
+    {
+      "id": "town-61",
+      "name": "Rive-de-Corail",
+      "territory": "Tagon",
+      "biome": 7,
+      "buildings": 18,
+      "arrival": {
+        "x": -372157.7198398944,
+        "y": 341536.99497807375
+      }
+    },
+    {
+      "id": "town-62",
+      "name": "Palmehaute",
+      "territory": "Tagon",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -361928.97252174123,
+        "y": 325291.2899929843
+      }
+    },
+    {
+      "id": "town-63",
+      "name": "Havre-du-Givre",
+      "territory": "Igea",
+      "biome": 9,
+      "buildings": 48,
+      "arrival": {
+        "x": -326311.5451288211,
+        "y": -157097.61546261027
+      }
+    },
+    {
+      "id": "town-64",
+      "name": "Lisière-des-Pins",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -322819.13199448143,
+        "y": 28579.697917254198
+      }
+    },
+    {
+      "id": "town-65",
+      "name": "Col-de-Verre",
+      "territory": "Sarak",
+      "biome": 2,
+      "buildings": 18,
+      "arrival": {
+        "x": -8090.5917918167515,
+        "y": -28194.00387942936
+      }
+    },
+    {
+      "id": "town-66",
+      "name": "Bourg-des-Acacias",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": -37718.268756434525,
+        "y": 3549.4983324186423
+      }
+    },
+    {
+      "id": "town-67",
+      "name": "Pâleval",
+      "territory": "Igea",
+      "biome": 9,
+      "buildings": 18,
+      "arrival": {
+        "x": -375265.82178413885,
+        "y": -169424.22453049937
+      }
+    },
+    {
+      "id": "town-68",
+      "name": "Fort-Écho",
+      "territory": "Igea",
+      "biome": 9,
+      "buildings": 18,
+      "arrival": {
+        "x": -344487.98844019126,
+        "y": -162767.63967174332
+      }
+    },
+    {
+      "id": "town-69",
+      "name": "Val-des-Neiges",
+      "territory": "Igea",
+      "biome": 9,
+      "buildings": 48,
+      "arrival": {
+        "x": -248607.7589957573,
+        "y": -114386.9644811627
+      }
+    },
+    {
+      "id": "town-70",
+      "name": "Roche-Blanche",
+      "territory": "Igea",
+      "biome": 10,
+      "buildings": 48,
+      "arrival": {
+        "x": -153212.80077253352,
+        "y": -114149.6484252888
+      }
+    },
+    {
+      "id": "town-71",
+      "name": "Veille-Boréale",
+      "territory": "Igea",
+      "biome": 10,
+      "buildings": 18,
+      "arrival": {
+        "x": -109398.37550776414,
+        "y": -115878.37943372512
+      }
+    },
+    {
+      "id": "town-72",
+      "name": "Col-des-Loups",
+      "territory": "Igea",
+      "biome": 9,
+      "buildings": 18,
+      "arrival": {
+        "x": -340111.7967791757,
+        "y": -181383.91445668813
+      }
+    },
+    {
+      "id": "town-73",
+      "name": "Bac-des-Roseaux",
+      "territory": "Varan",
+      "biome": 12,
+      "buildings": 48,
+      "arrival": {
+        "x": -165388.96513742133,
+        "y": 265450.3375789101
+      }
+    },
+    {
+      "id": "town-74",
+      "name": "Tourbeclaire",
+      "territory": "Varan",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": -124118.41465192137,
+        "y": 247106.566984849
+      }
+    },
+    {
+      "id": "town-75",
+      "name": "Brume-aux-Saules",
+      "territory": "Varan",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": -35968.54761463911,
+        "y": 284898.86724097887
+      }
+    },
+    {
+      "id": "town-76",
+      "name": "Pont-des-Joncs",
+      "territory": "Varan",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": -135818.32702067366,
+        "y": 294200.27143129724
+      }
+    },
+    {
+      "id": "town-77",
+      "name": "Refuge-des-Aulnes",
+      "territory": "Varan",
+      "biome": 12,
+      "buildings": 18,
+      "arrival": {
+        "x": -49751.587663434984,
+        "y": 298225.4486239234
+      }
+    },
+    {
+      "id": "town-78",
+      "name": "Val-des-Pins",
+      "territory": "Teremor",
+      "biome": 9,
+      "buildings": 18,
+      "arrival": {
+        "x": -375795.06656278967,
+        "y": -77119.50013910548
+      }
+    },
+    {
+      "id": "town-79",
+      "name": "Marchebrune",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -361054.2685975777,
+        "y": -63496.18356678455
+      }
+    },
+    {
+      "id": "town-80",
+      "name": "Hautes-Lisières",
+      "territory": "Teremor",
+      "biome": 6,
+      "buildings": 18,
+      "arrival": {
+        "x": -286666.3547874688,
+        "y": 33938.3982593849
+      }
+    },
+    {
+      "id": "town-81",
+      "name": "Griseborne",
+      "territory": "Sarak",
+      "biome": 4,
+      "buildings": 18,
+      "arrival": {
+        "x": -43313.06395820725,
+        "y": -38293.648561515845
+      }
+    },
+    {
+      "id": "town-82",
+      "name": "Rive-Fauve",
+      "territory": "Sarak",
+      "biome": 1,
+      "buildings": 18,
+      "arrival": {
+        "x": -41036.98949285323,
+        "y": 22455.117516427243
+      }
+    },
+    {
+      "id": "town-83",
+      "name": "Col-des-Cendres",
+      "territory": "Sarak",
+      "biome": 2,
+      "buildings": 18,
+      "arrival": {
+        "x": -58428.337161739066,
+        "y": -4335.301075663386
+      }
+    }
+  ],
   "results": [
     {
       "id": "camp",
@@ -17,8 +952,8 @@
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
+        "buildings": 4514,
+        "workstations": 78,
         "actorFrames": 0,
         "fixtureFrames": 0,
         "architecture": {
@@ -31,12 +966,12 @@
     {
       "id": "town-1",
       "logical": [
-        -494521,
-        -82406.85
+        -508316.8,
+        -84523.20000000001
       ],
       "projected": [
-        -412114.15,
-        -288463.925
+        -423793.6,
+        -296420
       ],
       "cache": 8,
       "pending": 5,
@@ -44,26 +979,26 @@
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
+        "buildings": 4514,
+        "workstations": 78,
         "actorFrames": 2,
-        "fixtureFrames": 1,
+        "fixtureFrames": 4,
         "architecture": {
-          "models": 15,
-          "pixelArea": 778889,
+          "models": 6,
+          "pixelArea": 382664,
           "maxModels": 96
         }
       }
     },
     {
-      "id": "town-69",
+      "id": "town-2",
       "logical": [
-        -248740,
-        -114589.85
+        -347684,
+        48545.15
       ],
       "projected": [
-        -134150.15,
-        -181664.925
+        -396229.15,
+        -149569.425
       ],
       "cache": 12,
       "pending": 5,
@@ -71,13 +1006,94 @@
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
+        "buildings": 4514,
+        "workstations": 78,
         "actorFrames": 2,
-        "fixtureFrames": 1,
+        "fixtureFrames": 6,
         "architecture": {
-          "models": 27,
-          "pixelArea": 1454642,
+          "models": 19,
+          "pixelArea": 995122,
+          "maxModels": 96
+        }
+      }
+    },
+    {
+      "id": "town-69",
+      "logical": [
+        -248716,
+        -114534.15
+      ],
+      "projected": [
+        -134181.85,
+        -181625.075
+      ],
+      "cache": 16,
+      "pending": 3,
+      "occluders": 0,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 3,
+        "fixtureFrames": 6,
+        "architecture": {
+          "models": 31,
+          "pixelArea": 1673449,
+          "maxModels": 96
+        }
+      }
+    },
+    {
+      "id": "town-6",
+      "logical": [
+        45402,
+        -21971.85
+      ],
+      "projected": [
+        67373.85,
+        11715.075
+      ],
+      "cache": 16,
+      "pending": 5,
+      "occluders": 0,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 4,
+        "fixtureFrames": 6,
+        "architecture": {
+          "models": 43,
+          "pixelArea": 2212761,
+          "maxModels": 96
+        }
+      }
+    },
+    {
+      "id": "town-73",
+      "logical": [
+        -165673,
+        265399.15
+      ],
+      "projected": [
+        -431072.15,
+        49863.07500000001
+      ],
+      "cache": 16,
+      "pending": 5,
+      "occluders": 0,
+      "restored": true,
+      "stats": {
+        "sites": 83,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 6,
+        "fixtureFrames": 6,
+        "architecture": {
+          "models": 52,
+          "pixelArea": 2655152,
           "maxModels": 96
         }
       }
@@ -98,20 +1114,20 @@
       "restored": true,
       "stats": {
         "sites": 83,
-        "buildings": 1947,
-        "workstations": 27,
-        "actorFrames": 2,
-        "fixtureFrames": 2,
+        "buildings": 4514,
+        "workstations": 78,
+        "actorFrames": 6,
+        "fixtureFrames": 7,
         "architecture": {
-          "models": 37,
-          "pixelArea": 1959282,
+          "models": 59,
+          "pixelArea": 3008370,
           "maxModels": 96
         }
       }
     }
   ],
   "occlusion": {
-    "alpha": 0.32017202790471316,
+    "alpha": 0.32,
     "free": true,
     "foundationSolid": true
   },
