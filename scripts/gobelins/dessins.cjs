@@ -93,28 +93,28 @@ const NU={
 '...O11112O..O21111O...',
 '...OOOOOOO..OOOOOOO...'),
  droite:vue(0,
-'.......OOOO.....',
-'.....OO32233O...',
-'....O33222233O..',
-'OOOOO333331112O.',
-'O12343333OOO13O.',
-'.O1244333yYO11O.',
-'..O244333111123O',
-'..O243332111234O',
-'...OO3332111OOO.',
-'.....O33211OWO..',
-'......O3211114O.',
-'....O33345554O..',
-'...O33332111O...',
-'..O133432112O...',
-'.O1234O33211O...',
-'.O1123O43221O...',
-'O11112O43322O...',
-'O1O1O2O43322O...',
-'.OOOOOO432OO....',
-'....O4O1233O....',
-'....O1111123O...',
-'....OOOOOOOOO...'),
+'......OOOOO.....',
+'....OO32222OO...',
+'...O332222221O..',
+'...O333222211O..',
+'OOOOOOO32OOO11O.',
+'O11223433yYO1O..',
+'.O1344432112111O',
+'..O34443211O233O',
+'...OO443211OOOO.',
+'...O443211OO1O..',
+'....O432111WO...',
+'...O33455OOO....',
+'...O123O32111O..',
+'...O123O432111O.',
+'...O124O432111O.',
+'..O1123O43211O..',
+'..O11112O3321O..',
+'..O1O1O2O4332O..',
+'...OOOOOO4332O..',
+'....O43OO1232O..',
+'...O4334OO11112O',
+'...OOOOOOOOOOOOO'),
  dos:vue(0,
 '........OOOOOO........',
 '......OO222223OO......',
@@ -138,15 +138,17 @@ const NU={
 '.....O123O..O321O.....',
 '...O12222O..O22221O...',
 '...OOOOOOO..OOOOOOO...')};
-// Oreilles de profil, rangées 3 à 8 : colonnes de la pointe à la base.
-const OREILLE_DROITE=[[0,4],[0,4],[1,4],[2,4],[2,4],[3,4]];
+// Oreille de profil, rangées 4 à 8 : colonnes de la pointe à la base.
+const OREILLE_DROITE=[[0,6],[0,6],[1,6],[2,6],[3,4]];
 function zoneCorps(dir,r,c){
  if(dir==='droite'){
-  const o=OREILLE_DROITE[r-3];if(o&&c>=o[0]&&c<=o[1])return 'oreilles';
-  if(r>=4&&r<=10&&c>=8&&c<=14)return 'visage';
+  const o=OREILLE_DROITE[r-4];if(o&&c>=o[0]&&c<=o[1])return 'oreilles';
+  if(r>=4&&r<=10&&c>=8)return 'visage';
   if(r<=10)return 'crane';
-  if(r<=12||(r===13&&c>=6)||(r<=16&&c>=7))return 'torse';
-  if((r<=18&&c>=7)||r===19)return 'jambes';
+  // Le bras pend devant le flanc : le torse commence après lui (colonne 8, puis 9 à la main).
+  const devant=r<=15?8:9;
+  if(r===11||(r<=16&&c>=devant))return 'torse';
+  if((r<=18&&c>=devant)||r===19)return 'jambes';
   return r>=20?'pieds':'bras';
  }
  if(r>=3&&r<=8&&(c<=4||c>=17))return 'oreilles';
@@ -185,18 +187,18 @@ const FEMININ={
 '.....OOOO.......',
 '....OHHHhO......',
 '.....OhhOOO.....',
-'....OHHHHHhhO...',
-'....OHHHHhh33O..',
-'OOOOOHHhh31112O.',
-'O123433333OO13O.',
-'.O124433OyYO11O.',
-'..O244333111123O',
-'..O243332111234O',
-'..GOO3332111OOO.',
-'...OHO3321pOWO..',
-'...OHhO3211114O.',
-'...OHh3345554O..',
-'...OO3332111O...'),
+'...OHHHHHhhOO...',
+'...OHHHHhh221O..',
+'...OHHHh22211O..',
+'OOOOOOO322OO11O.',
+'O1122343OyYO1O..',
+'.O1344432112111O',
+'..O34443211O233O',
+'..GOO443211OOOO.',
+'.OHO44321pOO1O..',
+'..OHO432111WO...',
+'..OHh3455OOO....',
+'...OO23O32111O..'),
  dos:mod(NU.dos,-2,
 '.........OOOO.........',
 '........OHHHhO........',
@@ -230,14 +232,14 @@ const HARNAIS={
 '.O1O12OdMMOOMMdO21O1O.',
 '..OOOOOdMO..OMdOOOOO..'),
  droite:mod(NU.droite,11,
-'....O3MdL5554O..',
-'...O3MdLM11MO...',
-'..O133dLLMMdO...',
-'.O1234OdMMMdO...',
-'.O1123OeeeMSMO..',
-'O11112OMMMMdO...',
-'O1O1O2OdMMMdO...',
-'.OOOOOOdMMOO....'),
+'...OLMd55OOO....',
+'...O123OMd111O..',
+'...O123OMLMd11O.',
+'...O124OMMMd11O.',
+'..O1123OeeeMSMO.',
+'..O11112OMMMdMO.',
+'..O1O1O2OdMMMdO.',
+'...OOOOOOdMMdO..'),
  dos:mod(NU.dos,11,
 '...O13SdOOOOOOdS43O...',
 '...O124LMMMMMMd432O...',
@@ -247,7 +249,7 @@ const HARNAIS={
 '..O112OMMdSSdMMO211O..',
 '.O1O12OdMMOOMMdO21O1O.',
 '..OOOOOdMO..OMdOOOOO..')};
-const bourse={face:[[15,16,12,14]],droite:[[15,15,10,13]],dos:[[15,16,9,12]]};
+const bourse={face:[[15,16,12,14]],droite:[[15,16,11,14]],dos:[[15,16,9,12]]};
 const dans=(zones,r,c)=>(zones||[]).some(([r0,r1,c0,c1])=>r>=r0&&r<=r1&&c>=c0&&c<=c1);
 const zoneHarnais=(dir,r,c)=>dans(bourse[dir],r,c)?'bourse':r<=14?'gilet':r===15?'ceinture':'culotte';
 const NOMS_HARNAIS={culotte:'HABIT 11 - Culotte de cuir',gilet:'HABIT 12 - Gilet de cuir',ceinture:'HABIT 15 - Ceinture',bourse:'HABIT 16 - Bourse'};
@@ -260,11 +262,11 @@ const PAGNE={
 '..OOOOO23OMdO34OOOOO..',
 '.....O123OOOO321O.....'),
  droite:mod(NU.droite,15,
-'.O1123OeeeedO...',
-'O11112O433OLMO..',
-'O1O1O2O433OLMO..',
-'.OOOOOO432OMdO..',
-'....O4O1233OO...'),
+'..O1123OeeeedO..',
+'..O11112O3OLMO..',
+'..O1O1O2O4OLMO..',
+'...OOOOOO4OMdO..',
+'....O43OO12OOO..'),
  dos:mod(NU.dos,15,
 '..O112OeddddddeO211O..',
 '..O112O4OLLLMO4O211O..',
@@ -274,7 +276,9 @@ const PAGNE={
 const NOMS_PAGNE={pagne:'HABIT 14 - Pagne'};
 const BANDEAU={
  face:mod(PAGNE.face,12,'...O124TTTTTTTt432O...','...O134tttttttn432O...'),
- droite:mod(PAGNE.droite,12,'...O3TTTTTTtO...','..O133ttttttO...'),
+ droite:mod(PAGNE.droite,12,
+'...O123OTTTTtO..',
+'...O123OtttttnO.'),
  dos:mod(PAGNE.dos,12,'...O124TTTCCTTt432O...','...O134tttCCttn432O...')};
 const zoneBandeau=(dir,r)=>r<=13?'bandeau':'pagne';
 const NOMS_BANDEAU={bandeau:'HABIT 12 - Bandeau',pagne:'HABIT 14 - Pagne'};
@@ -292,16 +296,16 @@ const VILLAGEOIS={
 '.....ONNnO..OnNNO.....',
 '...O11bBbO..ObBb11O...'),
  droite:mod(NU.droite,11,
-'....OTTTT5554O..',
-'...OTTTTTTTtO...',
-'..OTTtOTTTTtO...',
-'.O1234OTTTTtO...',
-'.O1123ObbBbbO...',
-'O11112OTTtLMO...',
-'O1O1O2OtttMdO...',
-'.OOOOOONnnOO....',
-'....OnONNnnO....',
-'....O1bBb123O...'),
+'...OTTt55OOO....',
+'...OTTtOTTTTtO..',
+'...OtttOTTTTTtO.',
+'...O124OTTTTTtO.',
+'..O1123ObbBbbO..',
+'..O11112OTTLMO..',
+'..O1O1O2OttMdO..',
+'...OOOOOONNnnO..',
+'....OnnOONNNnO..',
+'...O4bbbOObBb12O'),
  dos:mod(NU.dos,11,
 '...OTTTTTTTTTTttttO...',
 '...OTTOTTTTTTttOTtO...',
@@ -313,8 +317,8 @@ const VILLAGEOIS={
 '..OOOOONnO..OnNOOOOO..',
 '.....ONNnO..OnNNO.....',
 '...O1bBb2O..O2bBb1O...')};
-const bourseVillageois={face:[[16,17,11,12]],droite:[[16,17,10,11]]};
-const manches={face:[[11,13,0,6],[11,13,15,21]],droite:[[13,13,0,6]],dos:[[11,13,0,6],[11,13,15,21]]};
+const bourseVillageois={face:[[16,17,11,12]],droite:[[16,17,11,12]]};
+const manches={face:[[11,13,0,6],[11,13,15,21]],droite:[[12,13,0,7]],dos:[[11,13,0,6],[11,13,15,21]]};
 const zoneVillageois=(dir,r,c)=>r>=20?'pieds':r>=18?'braies':r===15?'ceinture':dans(bourseVillageois[dir],r,c)?'bourse':dans(manches[dir],r,c)?'manches':'tunique';
 const NOMS_VILLAGEOIS={pieds:'HABIT 10 - Bandes de pied',braies:'HABIT 11 - Braies',tunique:'HABIT 12 - Tunique',ceinture:'HABIT 15 - Ceinture de corde',bourse:'HABIT 16 - Bourse',manches:'HABIT 13 - Manches courtes'};
 
@@ -332,16 +336,16 @@ const GUERRIER={
 '.....OeekO..OkeeO.....',
 '...OIeeekO..OkeeeIO...'),
  droite:mod(NU.droite,11,
-'....OiIiI5554O..',
-'...OiIiIiIijO...',
-'..OIijOiIiIjO...',
-'.OdIdeOIiIijO...',
-'.OdedeOkkkBkO...',
-'O11112OIijCIO...',
-'O1O1O2OIjjCjO...',
-'.OOOOOOOjOrOO...',
-'....OkOeekO.....',
-'....OeeeeekIO...'),
+'...OiIi55OOO....',
+'...OIiIOIiIijO..',
+'...OiIjOiIiIjjO.',
+'...OdIeOIiIijjO.',
+'..OdedeOkkBkkO..',
+'..O11112OIijCIO.',
+'..O1O1O2OIjjCjO.',
+'...OOOOOOOjOrOO.',
+'....OkkOOeeekO..',
+'...OkkkkOOeeekIO'),
  dos:mod(NU.dos,11,
 '...OiIiIiIiIiIijijO...',
 '...OIiOIiIiIiijOijO...',
@@ -353,8 +357,8 @@ const GUERRIER={
 '..OOOOOOjOCrOjOOOOOO..',
 '.....OeekO..OkeeO.....',
 '...OkeeeeO..OeeeekO...')};
-const mailles={face:[[11,13,0,6],[11,13,15,21]],droite:[[13,13,0,6]],dos:[[11,13,0,6],[11,13,15,21]]};
-const brassards={face:[[14,15,0,6],[14,15,15,21]],droite:[[14,15,0,6]],dos:[[14,15,0,6],[14,15,15,21]]};
+const mailles={face:[[11,13,0,6],[11,13,15,21]],droite:[[12,13,0,7]],dos:[[11,13,0,6],[11,13,15,21]]};
+const brassards={face:[[14,15,0,6],[14,15,15,21]],droite:[[14,15,0,7]],dos:[[14,15,0,6],[14,15,15,21]]};
 const zoneGuerrier=(dir,r,c)=>r>=19?'bottes':r>=16?'tassettes':dans(brassards[dir],r,c)?'brassards':r===15?'ceinturon':dans(mailles[dir],r,c)?'manches':'cotte';
 const NOMS_GUERRIER={bottes:'HABIT 10 - Bottes ferrees',cotte:'HABIT 12 - Cotte de mailles',tassettes:'HABIT 14 - Tassettes de fer',ceinturon:'HABIT 15 - Ceinturon',manches:'HABIT 13 - Manches de mailles',brassards:'HABIT 17 - Brassards'};
 // Spalière sur l'épaule gauche : à droite de la vue de face, à gauche de dos ; de profil,
@@ -373,11 +377,11 @@ const SPALIERE=calque('HABIT 18 - Spaliere dentelee',{
 '.OjjjjO...............',
 '..OjOj................'),x:LEFT.dos},
  gauche:{...vue(9,
-'..O.O...........',
-'.OIOIO..........',
-'.OIiIiIj........',
-'.OjjjjjO........',
-'.OjOjO..........'),miroir:true}});
+'...O.O..........',
+'..OIOIO.........',
+'..OIiIiIjO......',
+'..OjjjjjjO......',
+'..OjOjOjO.......'),miroir:true}});
 
 // ---------- Coiffes : un calque COIFFE 21 et son masque (cheveux cachés) ----------
 const CAPUCHE={
@@ -397,20 +401,20 @@ const CAPUCHE={
 '..OVVVV34555543vvvvO..',
 '..OOOO4211221134OOOO..'),
  droite:mod(NU.droite,-1,
-'......OOOOO.....',
-'....OOVVVVvOO...',
-'...OVVVVVVVvvO..',
+'.....OOOOOO.....',
+'....OVVVVVvO....',
+'...OVVVVVVvvO...',
+'..OVVVVVVVVvvO..',
 '..OVVVVVVVVvvvO.',
-'OOOOOVVVVVVVvvO.',
-'O1234VVVVvOO13O.',
-'.O124VVVvyYO11O.',
-'..O24VVVv111123O',
-'..O24VVVv111234O',
-'..OOOVVVv111OOO.',
-'..OVVVVVv11OWO..',
-'.OVVVVVVv11114O.',
-'.OVVVVVVv5554O..',
-'.OOOOOOOO111O...'),
+'OOOOOOOVvOOO11O.',
+'O112234VvyYO1O..',
+'.O13444Vv112111O',
+'..O3444Vv11O233O',
+'.OVOOVVVv11OOOO.',
+'.OVVVVVv11OO1O..',
+'.OVVVVv2111WO...',
+'.OVVVVVv5OOO....',
+'.OOOOOOOO2111O..'),
  dos:mod(NU.dos,-1,
 '.......OOOOOOOO.......',
 '.....OOVVVVVVvvOO.....',
@@ -442,11 +446,11 @@ const CASQUE={
 '.......OO.......',
 '....O.OIjO.O....',
 '...OIOOIjOOjO...',
-'...OIiIiiiijjO..',
+'...OIiIiiiijO...',
+'..OIiiiiiiijjO..',
 '..OIiiiiiiijjjO.',
-'OOOOOIiiiiiijjO.',
-'O1234jIjIjIjIjO.',
-'.O1244333yYOIjO.'),
+'OOOOOOOjIjIjIjO.',
+'O11223433yYOIO..'),
  dos:mod(NU.dos,-2,
 '..........OO..........',
 '.......O.OjIO.O.......',
@@ -474,19 +478,19 @@ const CIMETERRE_FACE=vue(6,
 '........k',
 '........B');
 const CIMETERRE_DROITE=vue(6,
-'......O',
-'.....OIO',
-'.....OIjO',
-'.....OIOO',
-'......OIjO',
-'......OIOO',
+'........O',
+'.......OIO',
 '.......OIjO',
-'.......OIjO',
-'........OkBkO',
-'..........k',
-'..........k',
-'..........k',
-'..........B');
+'.......OIOO',
+'........OIjO',
+'........OIOO',
+'.........OIjO',
+'.........OIjO',
+'..........OkBkO',
+'............k',
+'............k',
+'............k',
+'............B');
 const retourne=v=>({...vue(v.at,...v.rows.map(r=>[...r.padEnd(W,'.')].reverse().join(''))),x:0});
 const CIMETERRE_DEVANT=calque('ARME - Cimeterre dentele (devant)',{
  face:{...CIMETERRE_FACE,x:0},droite:{...CIMETERRE_DROITE,x:0},dos:retourne(CIMETERRE_FACE)});
