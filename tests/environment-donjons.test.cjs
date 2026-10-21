@@ -55,3 +55,17 @@ test('the dungeon plates match the data',async()=>{
  for(const id of Dj.names()){const D=Dj.load(id);for(const [rel,buf]of await Dj.plates(id,await kitOf(D.kit))){const f=path.join(Dj.OUT,rel);
   assert.ok(fs.existsSync(f)&&fs.readFileSync(f).equals(buf),rel+' : npm run donjon:environment');}}
 });
+test('closed rooms start in the dark and light up when their doors or levers open them',()=>{
+ for(const id of Dj.names()){const D=Dj.load(id);if(!D.obscurite)continue;const shut=new Set(D.obscurite.fermetures);
+  for(const e of D.etages){const start=Dj.rooms(D,e),lift=D.monte_charge?.arrets.includes(e.id)?D.monte_charge.case:null;
+   assert.ok(start.visibles.size>0,e.id+' : une pièce d’arrivée visible');
+   // Ce que chaque levier ou porte ouvre est bien une ouverture fermée de l'étage.
+   const opens=[...(e.mecanismes||[]).flatMap(m=>m.ouvre||[]),...(e.portes||[]).filter(p=>p.cle).map(p=>p.bord)];
+   for(const k of opens)assert.ok(shut.has(e.murs[k]),e.id+' '+k+' : ouverture fermée');
+   // Une porte à clé cache une pièce au départ.
+   for(const p of (e.portes||[]).filter(p=>p.cle)){const [i,j,o]=p.bord.split(','),a=[+i,+j],b=o==='N'?[+i,j-1]:[i-1,+j];
+    assert.ok([a,b].some(c=>!start.visibles.has(start.room(...c))),p.nom+' : une pièce dans le noir derrière');}
+   // Tout ouvert, il ne reste dans le noir que ce qu'on atteint par le monte-charge.
+   const all=Dj.rooms(D,e,opens),liftRoom=lift?all.room(...lift):-2;
+   e.plan.forEach((r,j)=>[...r].forEach((c,i)=>{if(c!=='#'&&!all.visibles.has(all.room(i,j)))assert.equal(all.room(i,j),liftRoom,e.id+' : case '+i+','+j+' toujours dans le noir');}));}}
+});

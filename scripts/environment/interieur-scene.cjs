@@ -57,15 +57,16 @@ function layout(scene){
  const pick=(i,j,s)=>{const r=hash(i,j,s.charCodeAt(0));return r<.5?'mur-a':r<.8?'mur-b':'mur-c';};
  for(let j=0;j<NJ;j++)for(let i=0;i<NI;i++){if(!cell(i,j))continue;const X=i*CELL,Y=j*CELL;
   const n=scene.murs?.[i+','+j+',N'],o=scene.murs?.[i+','+j+',O'];
-  if(!cell(i,j-1)||n)push('nord/'+(n||pick(i,j,'N')),P(X,Y),[i,j-1],X+16+Y-4,{edge:[i,j,'N']});
-  if(!cell(i-1,j)||o)push('ouest/'+(o||pick(i,j,'O')),P(X,Y),[i-1,j],X-4+Y+16,{edge:[i,j,'O']});
-  if(!cell(i,j+1))push('sud/'+(scene.murets?.[i+','+j+',S']||(cell(i-1,j+1)?'muret-debut':'muret')),P(X,Y+CELL),[i,j+1],X+16+Y+CELL+4,{edge:[i,j,'S']});
-  if(!cell(i+1,j))push('est/'+(scene.murets?.[i+','+j+',E']||'muret'),P(X+CELL,Y),[i+1,j],X+CELL+4+Y+16,{edge:[i,j,'E']});
+  if(!cell(i,j-1)||n)push('nord/'+(n||pick(i,j,'N')),P(X,Y),[i,j-1],X+16+Y-4,{edge:[i,j,'N'],cells:[[i,j],[i,j-1]]});
+  if(!cell(i-1,j)||o)push('ouest/'+(o||pick(i,j,'O')),P(X,Y),[i-1,j],X-4+Y+16,{edge:[i,j,'O'],cells:[[i,j],[i-1,j]]});
+  if(!cell(i,j+1))push('sud/'+(scene.murets?.[i+','+j+',S']||(cell(i-1,j+1)?'muret-debut':'muret')),P(X,Y+CELL),[i,j+1],X+16+Y+CELL+4,{edge:[i,j,'S'],cells:[[i,j]]});
+  if(!cell(i+1,j))push('est/'+(scene.murets?.[i+','+j+',E']||'muret'),P(X+CELL,Y),[i+1,j],X+CELL+4+Y+16,{edge:[i,j,'E'],cells:[[i,j]]});
  }
  for(let J=0;J<=NJ;J++)for(let I=0;I<=NI;I++){const q=[cell(I-1,J-1),cell(I,J-1),cell(I-1,J),cell(I,J)].map(Boolean),n=q.filter(Boolean).length;if(n!==1)continue;const X=I*CELL,Y=J*CELL;
-  if(q[3])push('angle-nord',P(X,Y),[I-1,J-1],X+Y-8);else if(q[2])push('bout-nord',P(X,Y),[I,J-1],X+Y);else if(q[1])push('bout-ouest',P(X,Y),[I-1,J],X+Y);else push('angle-sud',P(X,Y),[I,J],X+Y+8);}
- for(const [I,J]of scene.toiles||[])push('toile',P(I*CELL,J*CELL),[I,J-1],I*CELL+J*CELL+1e4);
- for(const [nom,u,v]of scene.objets||[])push(nom,[u,v],[Math.floor(u/CELL),Math.floor(v/CELL)],u+v);
+  if(q[3])push('angle-nord',P(X,Y),[I-1,J-1],X+Y-8,{cells:[[I,J]]});else if(q[2])push('bout-nord',P(X,Y),[I,J-1],X+Y,{cells:[[I-1,J]]});
+  else if(q[1])push('bout-ouest',P(X,Y),[I-1,J],X+Y,{cells:[[I,J-1]]});else push('angle-sud',P(X,Y),[I,J],X+Y+8,{cells:[[I-1,J-1]]});}
+ for(const [I,J]of scene.toiles||[])push('toile',P(I*CELL,J*CELL),[I,J-1],I*CELL+J*CELL+1e4,{cells:[[I,J]]});
+ for(const [nom,u,v]of scene.objets||[])push(nom,[u,v],[Math.floor(u/CELL),Math.floor(v/CELL)],u+v,{cells:[[Math.floor(u/CELL),Math.floor(v/CELL)]]});
  items.sort((a,b)=>a.key-b.key||a.sub-b.sub);
  return {items,cell,NI,NJ};
 }
@@ -73,22 +74,22 @@ function layout(scene){
  * la matière ou null), pièces posées calque par calque. (OX, OY) : pixel du
  * point u = v = 0. */
 function surface(kit,w,h,OX,OY,{image=0}={}){
- const data=new Uint8ClampedArray(w*h*4),floor=new Uint8Array(w*h);for(let i=0;i<w*h;i++)data[i*4+3]=255;
+ const data=new Uint8ClampedArray(w*h*4),floor=new Uint8Array(w*h),shade=new Float32Array(w*h).fill(1);for(let i=0;i<w*h;i++)data[i*4+3]=255;
  const proj=(u,v,z=0)=>[OX+u-v,OY+(u+v)/2-z];
  // Sol, mélange par relief à moins de 5 unités d'un bord entre deux matières.
  const S=kit.sols,tex=(m,x,y)=>{const t=S[m],k=(mod(y-OY,t.h)*t.w+mod(x-OX,t.w))*4;return [t.px,k,t.ht?t.ht[k]/255:.5];};
- const paint=cell=>{for(let y=0;y<h;y++)for(let x=0;x<w;x++){const X=x-OX+.5,Y=y-OY+.5,u=Y+X/2,v=Y-X/2,i=Math.floor(u/CELL),j=Math.floor(v/CELL),m=cell(i,j);if(!m)continue;
+ const paint=(cell,f)=>{for(let y=0;y<h;y++)for(let x=0;x<w;x++){const X=x-OX+.5,Y=y-OY+.5,u=Y+X/2,v=Y-X/2,i=Math.floor(u/CELL),j=Math.floor(v/CELL),m=cell(i,j);if(!m)continue;
   let px,k,ht,score;[px,k,ht]=tex(m,x,y);score=ht;const fu=u-i*CELL,fv=v-j*CELL;
   for(const [di,dj,d]of [[0,-1,fv],[1,0,CELL-fu],[0,1,CELL-fv],[-1,0,fu]]){if(d>=5)continue;const n=cell(i+di,j+dj);if(!n||n===m)continue;const [p2,k2,h2]=tex(n,x,y),own=ht+d*.09,other=h2-d*.09;if(other>own&&other>score){px=p2;k=k2;score=other;}}
-  data.set(px.subarray(k,k+3),(y*w+x)*4);floor[y*w+x]=1;}};
- const blit=(piece,ref,{layer='couleur',alpha=1,onlyFloor=false,img=image}={})=>{const P=kit.pieces.get(piece);if(!P)throw Error('pièce absente du kit : '+piece);const fr=P.images[img%P.images.length][layer];if(!fr)return;
+  data.set(px.subarray(k,k+3),(y*w+x)*4);floor[y*w+x]=1;if(f)shade[y*w+x]=f(i,j);}};
+ const blit=(piece,ref,{layer='couleur',alpha=1,onlyFloor=false,img=image,f=null}={})=>{const P=kit.pieces.get(piece);if(!P)throw Error('pièce absente du kit : '+piece);const fr=P.images[img%P.images.length][layer];if(!fr)return;
   const [X,Y]=proj(...ref),x0=Math.round(X-P.ancre[0]),y0=Math.round(Y-P.ancre[1]);
   for(let y=0;y<P.h;y++)for(let x=0;x<P.w;x++){const s=(y*P.w+x)*4;if(!fr[s+3])continue;const xx=x0+x,yy=y0+y;if(xx<0||yy<0||xx>=w||yy>=h)continue;const d=(yy*w+xx)*4;if(onlyFloor&&!floor[yy*w+xx])continue;
-   for(let c=0;c<3;c++)data[d+c]=Math.round(data[d+c]*(1-alpha)+fr[s+c]*alpha);}};
+   for(let c=0;c<3;c++)data[d+c]=Math.round(data[d+c]*(1-alpha)+fr[s+c]*alpha);if(f!==null&&layer==='couleur')shade[yy*w+xx]=f;}};
  // Une pièce complète : ombre et lueur sur le sol à leur opacité, puis la couleur.
  const place=(piece,ref,opts={})=>{const P=kit.pieces.get(piece);if(!P)throw Error('pièce absente du kit : '+piece);
   for(const layer of ['ombre','lueur'])if(P.opacites[layer])blit(piece,ref,{...opts,layer,alpha:P.opacites[layer],onlyFloor:true});blit(piece,ref,opts);};
- return {w,h,data,proj,floor,paint,blit,place};
+ return {w,h,data,proj,floor,shade,paint,blit,place};
 }
 /* Sources de lumière des pièces : décalage (u, v, z) depuis l'ancre au sol,
  * rayon (unités) et force. Hors de leur portée, la salle tombe à AMBIANT de
@@ -97,24 +98,32 @@ const LUMIERES={'nord/mur-torche':{at:[16,5,37],rayon:118,force:1},'ouest/mur-to
  brasero:{at:[0,0,18],rayon:130,force:1.1},marmite:{at:[0,0,8],rayon:64,force:.55},'nord/fenetre':{at:[16,6,28],rayon:64,force:.5},'ouest/fenetre':{at:[6,16,28],rayon:64,force:.5},
  'nord/porte-scellee':{at:[16,3,15],rayon:84,force:.6},'ouest/porte-scellee':{at:[3,16,15],rayon:84,force:.6},'cage-fee':{at:[0,0,22],rayon:76,force:.55}};
 const AMBIANT=.3,BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
-function light(S,items){const src=[];for(const it of items){const L=LUMIERES[it.piece];if(L)src.push({p:S.proj(it.ref[0]+L.at[0],it.ref[1]+L.at[1],L.at[2]),...L});}
+function light(S,items,fOf=()=>1){const src=[];for(const it of items){const L=LUMIERES[it.piece];if(L)src.push({p:S.proj(it.ref[0]+L.at[0],it.ref[1]+L.at[1],L.at[2]),...L,force:L.force*fOf(it)});}
  for(let y=0;y<S.h;y++)for(let x=0;x<S.w;x++){let I=0;for(const l of src){const d=Math.hypot(x-l.p[0],(y-l.p[1])*1.15)/l.rayon;if(d<1)I+=(1-d)**1.4*l.force*1.6;}
   const f=AMBIANT+(1-AMBIANT)*Math.min(1,I),q=Math.min(8,Math.floor(f*8+BAYER[(y%4)*4+x%4]/16))/8,k=(y*S.w+x)*4;
   if(q<1)for(let c=0;c<3;c++)S.data[k+c]=Math.round(S.data[k+c]*q);}}
-/* Rend la scène : image RGBA (w × h) et projection monde -> pixel. */
-function compose(kit,scene,{image=0,pad=24,lumiere=true}={}){
+/* Rend la scène : image RGBA (w × h) et projection monde -> pixel.
+ * obscur(i, j) : luminosité de la case (1 = normale), pour les pièces encore
+ * fermées d'un donjon. Un mur ou une ouverture entre deux salles prend la
+ * plus claire des deux (on le voit depuis la salle éclairée) ; les torches
+ * éclairent d'autant. OPENING : pièces de mur qui laissent passer. */
+const OPENING=/^(nord|ouest)\/(arche|porte|herse|escalier)/;
+function compose(kit,scene,{image=0,pad=24,lumiere=true,obscur=null}={}){
  const L=layout(scene),{cell,NI,NJ}=L,w=CELL*(NI+NJ)+pad*2,h=16*(NI+NJ)+H+pad*2+8,OX=CELL*NJ+pad,OY=H+pad+8;
- const S=surface(kit,w,h,OX,OY,{image}),{blit}=S;
+ const S=surface(kit,w,h,OX,OY,{image}),{blit}=S,at=(u,v)=>obscur?obscur(Math.floor(u/CELL),Math.floor(v/CELL)):null;
+ const fOf=it=>!obscur||!it.cells?1:Math.max(...it.cells.map(c=>cell(...c)?obscur(...c):0));
  // 1. Sol.
- S.paint(cell);
+ S.paint(cell,obscur);
  // 2. Décors, trémies, ombres et lueurs sur le sol.
- for(const [nom,u,v]of scene.decors||[])blit('decor/'+nom,[u,v],{onlyFloor:true});
- for(const [i,j,o]of scene.escaliers||[])blit(o==='puits'?'puits':'escalier-descendant-'+o,[i*CELL,j*CELL]);
+ for(const [nom,u,v]of scene.decors||[])blit('decor/'+nom,[u,v],{onlyFloor:true,f:at(u,v)});
+ for(const [i,j,o]of scene.escaliers||[])blit(o==='puits'?'puits':'escalier-descendant-'+o,[i*CELL,j*CELL],{f:obscur?obscur(i,j):null});
  for(const layer of ['ombre','lueur'])for(const it of L.items){const P=kit.pieces.get(it.piece);if(P&&P.opacites[layer])blit(it.piece,it.ref,{layer,alpha:P.opacites[layer],onlyFloor:true});}
  // 3. Murs, angles, murets et objets dans l'ordre.
- for(const it of L.items)blit(it.piece,it.ref);
+ for(const it of L.items)blit(it.piece,it.ref,{f:obscur?fOf(it):null});
  // 4. Lumière : obscurité loin des torches, du brasero et des fenêtres.
- if(lumiere)light(S,L.items);
+ if(lumiere)light(S,L.items,fOf);
+ // 5. Pièces fermées : leur luminosité, par paliers de 1/8 tramés.
+ if(obscur)for(let y=0;y<h;y++)for(let x=0;x<w;x++){const f=S.shade[y*w+x];if(f>=1)continue;const q=Math.min(8,Math.floor(f*8+BAYER[(y%4)*4+x%4]/16))/8,k=(y*w+x)*4;for(let c=0;c<3;c++)S.data[k+c]=Math.round(S.data[k+c]*q);}
  return {w,h,data:S.data,proj:S.proj,layout:L};
 }
-module.exports={SALLE,FLOORS,LUMIERES,AMBIANT,layout,compose,surface,fromDocuments,CELL,H};
+module.exports={SALLE,FLOORS,LUMIERES,AMBIANT,OPENING,layout,compose,surface,fromDocuments,CELL,H};

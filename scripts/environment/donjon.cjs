@@ -1,14 +1,17 @@
 'use strict';
 /* Donjons assemblés avec le kit d'un intérieur : données dans
  * data/donjons/<id>.json, planches dans art/environnement/donjons/<id>/ :
- *  - etage-<niveau>-<etage>.png : l'étage rendu (×2), ses repères numérotés
- *    (chemin principal), les gobelins prévus et la légende ;
+ *  - etage-<niveau>-<etage>.png : l'étage rendu (×2) tel que le héros le
+ *    découvre (pièces fermées dans le noir), ses repères numérotés (chemin
+ *    principal), les gobelins prévus et la légende ;
  *  - vue-d-ensemble.png : les étages empilés, escaliers et monte-charge
  *    reliés, et tout le parcours dans l'ordre.
  * Les étages partagent la même grille : une case (i, j) est au même endroit
  * à chaque niveau (le puits du monte-charge, les escaliers).
  *   node scripts/environment/donjon.cjs [id]          écrit les planches
- *   node scripts/environment/donjon.cjs [id] --gif d  écrit aussi les images animées (RGBA brutes) dans d */
+ *   node scripts/environment/donjon.cjs [id] --gif d  écrit aussi dans d les images des aperçus
+ *     animés : <etage>-<k>.png (4 images) et revelation-<k>.png (le premier
+ *     levier qui ouvre des pièces fermées : elles s'éclairent). */
 const fs=require('fs'),path=require('path'),{createCanvas}=require('@napi-rs/canvas');
 const I=require('./interieurs.cjs'),Scene=require('./interieur-scene.cjs'),{CELL}=Scene;
 const DATA=path.join(__dirname,'../../data/donjons'),OUT=path.join(__dirname,'../../art/environnement/donjons');
@@ -18,10 +21,36 @@ const load=id=>JSON.parse(fs.readFileSync(path.join(DATA,id+'.json'),'utf8'));
 const grid=D=>({NI:Math.max(...D.etages.map(e=>e.plan[0].length)),NJ:Math.max(...D.etages.map(e=>e.plan.length))});
 /* Étage -> scène de interieur-scene (plan complété à la grille commune,
  * positions en unités du monde). */
-function scene(D,e){const {NI,NJ}=grid(D),u=([n,x,y])=>[n,x*CELL,y*CELL];
- const plan=Array.from({length:NJ},(_,j)=>(e.plan[j]||'').padEnd(NI,'#'));
- return {plan,murs:e.murs,murets:e.murets,escaliers:e.escaliers,toiles:e.toiles,objets:(e.objets||[]).map(u),decors:(e.decors||[]).map(u)};}
-const render=(kit,D,e,opts)=>Scene.compose(kit,scene(D,e),opts);
+function scene(D,e,{ouvertes=[],murs={}}={}){const {NI,NJ}=grid(D),u=([n,x,y])=>[n,x*CELL,y*CELL];
+ const plan=Array.from({length:NJ},(_,j)=>(e.plan[j]||'').padEnd(NI,'#')),m={...e.murs};for(const k of ouvertes)m[k]=OUVERT[m[k]]||m[k];
+ return {plan,murs:{...m,...murs},murets:e.murets,escaliers:e.escaliers,toiles:e.toiles,objets:(e.objets||[]).map(u),decors:(e.decors||[]).map(u)};}
+/* Pièces dans le noir. Les cases de sol d'un étage se groupent en pièces :
+ * deux cases voisines vont ensemble sauf si leur bord porte un mur, ou une
+ * ouverture fermée (D.obscurite.fermetures : porte verrouillée, herse, grille).
+ * Au départ, seules les pièces des entrées sont visibles (réveil du héros,
+ * arrivée d'escalier) ; une pièce s'éclaire quand une ouverture la relie à une
+ * pièce visible, ou quand le héros y entre (monte-charge). ouvertes : bords
+ * ouverts. Renvoie {room(i, j) -> n° de pièce ou -1, visibles, count}. */
+const OUVERT={'porte-verrouillee':'porte-ouverte','herse':'herse-levee','porte-cellule':'porte-cellule-ouverte'};
+function rooms(D,e,ouvertes=[]){
+ const shut=new Set(D.obscurite?.fermetures||[]),open=new Set(ouvertes),floor=(i,j)=>{const c=e.plan[j]?.[i];return !!c&&c!=='#';};
+ const blocks=(i,j,o)=>{const k=i+','+j+','+o,m=e.murs?.[k];if(!m)return false;if(!Scene.OPENING.test((o==='N'?'nord/':'ouest/')+m))return true;return shut.has(m)&&!open.has(k);};
+ const id=new Map();let count=0;
+ e.plan.forEach((r,j0)=>[...r].forEach((_,i0)=>{if(!floor(i0,j0)||id.has(i0+','+j0))return;const todo=[[i0,j0]];id.set(i0+','+j0,count);
+  while(todo.length){const [i,j]=todo.pop();
+   for(const [a,b,edge]of [[i,j-1,[i,j,'N']],[i,j+1,[i,j+1,'N']],[i-1,j,[i,j,'O']],[i+1,j,[i+1,j,'O']]])if(floor(a,b)&&!id.has(a+','+b)&&!blocks(...edge)){id.set(a+','+b,count);todo.push([a,b]);}}
+  count++;}));
+ const room=(i,j)=>id.get(i+','+j)??-1,entries=(e.escaliers||[]).filter(t=>t[2]!=='puits').map(([i,j])=>[i,j]);
+ if(D.depart.etage===e.id)entries.push(D.depart.pos.map(Math.floor));
+ return {room,visibles:new Set(entries.map(c=>room(...c))),count};
+}
+/* Luminosité de chaque case : 1 si sa pièce est visible, sinon
+ * D.obscurite.luminosite ; fondu (0 à 1) éclaire peu à peu les pièces que les
+ * bords ouvertes viennent de relier (par rapport à avant). */
+function obscur(D,e,{ouvertes=[],avant=[],fondu=1}={}){const L=D.obscurite?.luminosite??1;if(L>=1)return null;
+ const now=rooms(D,e,ouvertes),then=rooms(D,e,avant);
+ return (i,j)=>!now.visibles.has(now.room(i,j))?L:then.visibles.has(then.room(i,j))?1:L+(1-L)*fondu;}
+const render=(kit,D,e,{etat=null,...opts}={})=>Scene.compose(kit,scene(D,e,etat||{}),{...opts,obscur:etat?obscur(D,e,etat):null});
 // Cadre des pixels non noirs.
 function bounds(r){let x0=r.w,y0=r.h,x1=-1,y1=-1;for(let y=0;y<r.h;y++)for(let x=0;x<r.w;x++){const k=(y*r.w+x)*4;if(r.data[k]|r.data[k+1]|r.data[k+2]){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}}return {x0,y0,x1,y1};}
 function canvasOf(r,{x0=0,y0=0,w=r.w,h=r.h}={}){const c=createCanvas(w,h),x=c.getContext('2d'),im=x.createImageData(w,h);
@@ -36,14 +65,14 @@ const level=n=>n<0?'Niveau −'+(-n):'Niveau '+n;
 
 /* Planche d'un étage : rendu ×2, repères, gobelins, légende dessous. */
 function floorPlate(kit,D,e){
- const r=render(kit,D,e),b=bounds(r),m=16,S=2,x0=b.x0-m,y0=b.y0-m,w=b.x1-b.x0+1+m*2,h=b.y1-b.y0+1+m*2;
+ const full=render(kit,D,e),b=bounds(full),r=render(kit,D,e,{etat:{}}),m=16,S=2,x0=b.x0-m,y0=b.y0-m,w=b.x1-b.x0+1+m*2,h=b.y1-b.y0+1+m*2;
  const W=Math.max(w*S,1100),pad=24,head=84,at=([x,y],z=0)=>{const [px,py]=r.proj(x*CELL,y*CELL,z);return [(px-x0)*S+(W-w*S)/2,(py-y0)*S+head];};
  const probe=createCanvas(10,10).getContext('2d');probe.font='17px sans-serif';
  const lines=e.reperes.flatMap(p=>wrap(probe,p.texte,W-pad*2-46).map((t,k)=>({n:k?null:p.n,t})));
  const H=head+h*S+30+lines.length*25+70,cv=createCanvas(W,H),c=cv.getContext('2d');
  c.fillStyle=INK;c.fillRect(0,0,W,H);c.imageSmoothingEnabled=false;
  c.fillStyle=PAPER;c.font='bold 26px sans-serif';c.fillText(D.nom+' · '+level(e.niveau)+' · '+e.nom,pad,38);
- c.fillStyle=DIM;c.font='16px sans-serif';c.fillText('Rendu du kit « '+D.kit+' » (×2). Une case = 2 m. État de départ : grilles et herses fermées, rune allumée.',pad,64);
+ c.fillStyle=DIM;c.font='16px sans-serif';c.fillText('Rendu du kit « '+D.kit+' » (×2), une case = 2 m. État à l’arrivée : les pièces fermées à clé ou par une herse restent dans le noir.',pad,64);
  c.drawImage(canvasOf(r,{x0,y0,w,h}),(W-w*S)/2,head,w*S,h*S);
  for(const g of e.gobelins||[])goblin(c,...at(g),7);
  for(const p of e.reperes)marker(c,...at(p.pos,p.z||0),p.n);
@@ -66,7 +95,7 @@ function overview(kit,D){
  const tag=p=>'niv. '+(p.etage.niveau<0?'−'+(-p.etage.niveau):p.etage.niveau),lines=steps.flatMap(p=>wrap(probe,p.texte,side-120).map((t,k)=>({p:k?null:p,t})));
  const W=pad+w+pad+side,H=Math.max(y,head+60+lines.length*22+steps.length*6+340)+pad,cv=createCanvas(W,H),c=cv.getContext('2d');
  c.fillStyle=INK;c.fillRect(0,0,W,H);c.imageSmoothingEnabled=false;
- c.fillStyle=PAPER;c.font='bold 28px sans-serif';c.fillText(D.nom+' : vue d’ensemble',pad,40);
+ c.fillStyle=PAPER;c.font='bold 28px sans-serif';c.fillText(D.nom+' : vue d’ensemble, toutes les pièces éclairées',pad,40);
  c.fillStyle=DIM;c.font='16px sans-serif';c.fillText(wrap(probe,D.resume,W-pad*2)[0],pad,68);c.fillText(wrap(probe,D.resume,W-pad*2).slice(1).join(' '),pad,90);
  const at=(f,[x,y],z=0)=>{const [px,py]=f.r.proj(x*CELL,y*CELL,z);return [pad+px-x0,f.y+py-f.y0];},byId=new Map(floors.map(f=>[f.e.id,f]));
  for(const f of floors){c.fillStyle=STEP;c.font='bold 20px sans-serif';c.fillText(level(f.e.niveau)+' · '+f.e.nom,pad,f.y-10);c.drawImage(canvasOf(f.r,{x0,y0:f.y0,w,h:f.h}),pad,f.y);}
@@ -100,13 +129,15 @@ async function plates(id,kit){
  files.set(id+'/vue-d-ensemble.png',overview(kit,D));
  return files;
 }
-module.exports={names,load,grid,scene,render,bounds,plates,DATA,OUT};
+module.exports={names,load,grid,scene,rooms,obscur,render,bounds,plates,OUVERT,DATA,OUT};
 
 if(require.main===module)(async()=>{
  const args=process.argv.slice(2),gif=args.indexOf('--gif'),ids=args.filter((a,k)=>!a.startsWith('--')&&k!==gif+1);
  for(const id of ids.length?ids:names()){const D=load(id),kit=await I.read(D.kit);
   for(const [rel,buf]of await plates(id,kit)){const f=path.join(OUT,rel);fs.mkdirSync(path.dirname(f),{recursive:true});fs.writeFileSync(f,buf);console.log(path.relative(process.cwd(),f));}
-  if(gif>=0){const dir=args[gif+1];fs.mkdirSync(dir,{recursive:true});
-   for(const e of D.etages){const r0=render(kit,D,e),b=bounds(r0),m=12;
-    for(let k=0;k<4;k++){const r=k?render(kit,D,e,{image:k}):r0,c=canvasOf(r,{x0:b.x0-m,y0:b.y0-m,w:b.x1-b.x0+1+m*2,h:b.y1-b.y0+1+m*2});fs.writeFileSync(path.join(dir,e.id+'-'+k+'.png'),c.toBuffer('image/png'));}}}}
+  if(gif>=0){const dir=args[gif+1],m=12,crop=r=>{const b=bounds(render(kit,D,r.e));return {x0:b.x0-m,y0:b.y0-m,w:b.x1-b.x0+1+m*2,h:b.y1-b.y0+1+m*2};};fs.mkdirSync(dir,{recursive:true});
+   const save=(name,r,box)=>fs.writeFileSync(path.join(dir,name+'.png'),canvasOf(r,box).toBuffer('image/png'));
+   for(const e of D.etages){const box=crop({e});for(let k=0;k<4;k++)save(e.id+'-'+k,render(kit,D,e,{image:k,etat:{}}),box);}
+   const e=D.etages.find(x=>(x.mecanismes||[]).some(q=>q.bord&&q.ouvre)),lever=e.mecanismes.find(q=>q.bord&&q.ouvre),box=crop({e});
+   for(let k=0;k<18;k++){const etat=k<6?{}:{ouvertes:lever.ouvre,fondu:Math.min(1,(k-5)/5),murs:{[lever.bord]:'levier-bas'}};save('revelation-'+k,render(kit,D,e,{image:k,etat}),box);}}}
 })();

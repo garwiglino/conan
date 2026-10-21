@@ -22,6 +22,7 @@
   ],
   "boss": { "id": "grise-gueule", "nom": "Grise-Gueule", "etage": "trone", "pos": [11.5, 5.6], "description": "Chef de la forteresse : grand gobelin tout maigre, l'air nigaud, armé d'une massue." },
   "fee": { "etage": "trone", "pos": [14.3, 3.2], "levier": "15,1,N", "note": "Enfermée dans la cage suspendue près du trône. Le levier fait descendre la cage une fois le chef battu." },
+  "obscurite": { "fermetures": ["porte-verrouillee", "herse", "porte-cellule"], "luminosite": 0.14, "note": "Une pièce séparée du reste par une porte verrouillée, une herse baissée ou une grille de cellule reste dans le noir (14 % de sa luminosité, tramé) tant que l'ouverture est fermée et que le héros n'y est pas entré, par exemple par le monte-charge. À l'ouverture, elle s'éclaire en une demi-seconde. Les pièces d'arrivée (réveil, haut ou bas d'un escalier) sont visibles tout de suite." },
   "monte_charge": { "case": [3, 10], "arrets": ["geoles", "grande-salle", "galeries"], "depart": "geoles", "treuil": { "etage": "galeries", "pos": [1.7, 10.6] }, "note": "Le puits est à la même case à chaque étage. La plate-forme attend au fond (geôles). Le treuil de l'étage des galeries la remonte ; ensuite un levier à chaque arrêt l'appelle." },
   "etages": [
     {
@@ -77,7 +78,7 @@
       ],
       "gobelins": [[20.6, 2.6], [21.6, 5.0], [17.6, 10.6]],
       "liens": [{ "bord": "3,1,N", "vers": "grande-salle", "arrivee": [3, 1], "note": "escalier qui monte au rez-de-chaussée" }],
-      "mecanismes": [{ "id": "levier-cellules", "bord": "20,1,N", "effet": "ouvre les quatre grilles de cellule (porte-cellule devient porte-cellule-ouverte)" }],
+      "mecanismes": [{ "id": "levier-cellules", "bord": "20,1,N", "ouvre": ["7,3,N", "9,3,N", "13,3,N", "15,3,N"], "effet": "ouvre les quatre grilles de cellule (porte-cellule devient porte-cellule-ouverte)" }],
       "portes": [{ "id": "porte-serpent", "nom": "Porte serpent", "bord": "5,1,O", "cle": "serpent" }],
       "reperes": [
         { "n": "1", "pos": [12.5, 3.6], "texte": "Réveil de Kaldor dans sa cellule. Le mur du fond s'est effondré sur un boyau." },
@@ -148,8 +149,8 @@
         { "bord": "19,1,N", "vers": "galeries", "arrivee": [19, 1], "note": "escalier qui monte aux galeries" }
       ],
       "mecanismes": [
-        { "id": "dalles-herse", "dalles": [[15.5, 5.5], [15.5, 7.5]], "bord": "16,3,O", "effet": "la herse de l'escalier reste levée tant que les deux dalles sont enfoncées (une caisse sur chacune)" },
-        { "id": "levier-caserne", "bord": "2,7,N", "effet": "lève la herse entre la caserne et la grande salle (raccourci)", "herse": "7,8,O" }
+        { "id": "dalles-herse", "dalles": [[15.5, 5.5], [15.5, 7.5]], "ouvre": ["16,3,O"], "effet": "la herse de l'escalier reste levée tant que les deux dalles sont enfoncées (une caisse sur chacune)" },
+        { "id": "levier-caserne", "bord": "2,7,N", "ouvre": ["7,8,O"], "effet": "lève la herse entre la caserne et la grande salle (raccourci)" }
       ],
       "portes": [{ "id": "porte-scellee", "nom": "Porte de la forteresse", "bord": "11,2,N", "condition": "fee" }],
       "reperes": [
@@ -216,7 +217,7 @@
         { "bord": "10,10,O", "vers": "trone", "arrivee": [9, 11], "note": "escalier du chef, qui monte à la salle du trône" }
       ],
       "mecanismes": [
-        { "id": "leviers-armurerie", "bords": ["20,1,N", "2,6,O"], "effet": "les deux leviers baissés lèvent la herse de l'armurerie", "herse": "10,5,N" },
+        { "id": "leviers-armurerie", "bords": ["20,1,N", "2,6,O"], "ouvre": ["10,5,N"], "effet": "les deux leviers baissés lèvent la herse de l'armurerie" },
         { "id": "treuil", "pos": [1.7, 10.6], "effet": "remonte le monte-charge du fond du puits ; ensuite il dessert les geôles, la caserne et les galeries" }
       ],
       "portes": [

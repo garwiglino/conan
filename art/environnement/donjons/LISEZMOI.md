@@ -5,7 +5,19 @@ Un donjon est un intérieur complet, sur plusieurs étages, assemblé avec le ki
 - Données : `data/donjons/<id>.json` (plans, murs, objets, clés, mécanismes, repères, lieu dans le monde).
 - Planches : `donjons/<id>/`, refaites par `npm run donjon:environment`.
 - Code : `scripts/environment/donjon.cjs`. Les règles d'assemblage sont celles des intérieurs, dans `../LISEZMOI.md`, section « Intérieurs ».
-- Test : `tests/environment-donjons.test.cjs`. Il vérifie que chaque pièce existe dans le kit, que les clés ouvrent les bonnes portes, que les escaliers et le puits se répondent d'un étage à l'autre, qu'aucun objet ne bouche une ouverture, et que chaque case est accessible une fois les portes ouvertes.
+- Test : `tests/environment-donjons.test.cjs`. Il vérifie que chaque pièce existe dans le kit, que les clés ouvrent les bonnes portes, que les escaliers et le puits se répondent d'un étage à l'autre, qu'aucun objet ne bouche une ouverture, que chaque case est accessible une fois les portes ouvertes, et que les pièces fermées sont dans le noir au départ.
+
+## Pièces dans le noir
+
+Une pièce fermée par une porte verrouillée, une herse baissée ou une grille de cellule reste dans le noir tant qu'elle est fermée. On devine ses murs à 14 % de leur luminosité, en trame, mais pas son contenu. Quand un levier, une clé ou des dalles l'ouvrent, elle s'éclaire en une demi-seconde. Une pièce qu'on atteint par le monte-charge s'éclaire quand le héros y arrive.
+
+- Les pièces se calculent toutes seules : deux cases voisines font partie de la même pièce, sauf si un mur ou une ouverture fermée les sépare (`rooms()` dans `donjon.cjs`).
+- Au départ, seules les pièces d'arrivée sont visibles : celle du réveil, et celles du haut ou du bas d'un escalier.
+- Un mur ou une porte entre une pièce éclairée et une pièce dans le noir reste éclairé : on le voit depuis la pièce où l'on est.
+- Les torches d'une pièce dans le noir n'éclairent pas les pièces voisines.
+- Réglages dans le JSON, bloc `obscurite` : les ouvertures qui ferment une pièce (`fermetures`) et la luminosité d'une pièce fermée (`luminosite`). Chaque levier, dalle ou porte à clé liste dans `ouvre` les bords qu'il ouvre.
+
+Les planches d'étage montrent ce que le héros voit en arrivant. La vue d'ensemble montre toutes les pièces éclairées.
 
 ## Forteresse de Grise-Gueule
 
