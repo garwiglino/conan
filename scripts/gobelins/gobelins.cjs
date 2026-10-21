@@ -52,7 +52,7 @@ function tint(layer,from,to){
 }
 // Calques d'un personnage, dans l'ordre d'empilement, prêts à dessiner.
 function assemble(S,p,D=data()){
- const body=source(S,'corps/'+p.corps),teinte=D.teintes[p.teinte||'gris-vert'];
+ const body=source(S,'corps/'+p.corps),teinte=D.teintes[p.teinte||'olive'];
  if(!teinte)throw RangeError('Teinte inconnue : '+p.teinte);
  const layers=body.layers.filter(l=>rank(l.name)!==null).map(l=>tint(l,D.peau_reference,teinte.couleurs));
  const pieces=p.pieces||{},used=new Set();
@@ -93,12 +93,12 @@ const NAMES={'ANATOMIE 10 - Pieds nus':'Pieds','ANATOMIE 11 - Jambes':'Jambes','
 const short=n=>NAMES[n]||n.replace(/^(HABIT|COIFFE|ARME|CHEVEUX|BIJOUX) (\d+ )?- ?/,'').replace(/ \((devant|derriere)\)$/,'').replace('Spaliere dentelee','Spalière').replace('Casque a pointes','Casque').replace('Cimeterre dentele','Cimeterre').replace('Bottes ferrees','Bottes').replace('Tassettes de fer','Tassettes').replace('Cotte de mailles','Mailles').replace('Manches de mailles','Manches');
 function designBase(S,D){
  const hero=D.personnages[0],R=render(S,hero,D),s=6,pw=CROP[2]*s+24,ph=CROP[3]*s+50,W=4*pw+5*16;
- const lineup=[...neighbours(),...D.personnages.filter(p=>['guerrier-kesh','villageoise','gobelin-nu'].includes(p.id)).map(p=>[p.nom,render(S,p,D).views[0]])];
+ const lineup=[...neighbours(),...D.personnages.filter(p=>['gobelin','gobeline','guerrier-kesh'].includes(p.id)).map(p=>[p.nom,render(S,p,D).views[0]])];
  const layers=R.layers.filter(l=>l.frames[0].some((a,i)=>i%4===3&&a)),cols=Math.min(layers.length,7),LC=[6,11,36,26],rows=Math.ceil(layers.length/cols);
  const H=90+ph+40+40+CROP[3]*5+70+40+rows*(LC[3]*4+44)+20,[cv,c]=canvasOf(W,H);
- title(c,'HEARTHREAVER · GOBELINS · DESIGN DE BASE (proposition)','Piskel · 48 × 48, pieds en x 24, y 36 · calques nommés comme ceux des humains · armure de fer noirci, dans l’esprit des gobelins de la Moria',W);
+ title(c,'HEARTHREAVER · GOBELINS · DESIGN DE BASE (proposition)','D’après la référence en quatre vues · Piskel · 48 × 48, pieds en x 24, y 36 · calques nommés comme ceux des humains',W);
  let y=90;VIEWS.forEach((v,k)=>{const x=16+k*(pw+16);c.fillStyle=PANEL;c.fillRect(x,y,pw,ph);blit(c,R.views[k],x+12,y+8,s,CROP);label(c,v.toUpperCase(),x+16,y+ph-14);});
- label(c,hero.nom+' : corps masculin, tenue « guerrier », casque à pointes, cimeterre dentelé, teinte gris-vert',16,y+ph+26,{color:DIM});
+ label(c,hero.nom+' : '+['corps '+hero.corps,'tenue « '+hero.tenue+' »',hero.coiffe,hero.arme,'teinte '+D.teintes[hero.teinte].nom.toLowerCase()].filter(Boolean).join(', '),16,y+ph+26,{color:DIM});
  y+=ph+40+30;label(c,'MÊME ÉCHELLE ×5 · MÊME ANCRAGE',16,y,{bold:true});y+=10;
  const lw=W/lineup.length;lineup.forEach(([n,f],k)=>{const x=k*lw+(lw-CROP[2]*5)/2;blit(c,f,x,y,5,CROP);label(c,n,k*lw+lw/2,y+CROP[3]*5+22,{align:'center',color:k<3?DIM:PAPER});});
  y+=CROP[3]*5+70;label(c,'CALQUES SÉPARÉS, DANS L’ORDRE D’EMPILEMENT (vue de face)',16,y,{bold:true});y+=14;
@@ -106,7 +106,7 @@ function designBase(S,D){
  return cv.toBuffer('image/png');
 }
 function variantes(S,D){
- const s=3,cw=CROP[2]*s,list=D.personnages,W=16+(cw+8)*4+420,rowH=CROP[3]*s+16,teintes=Object.entries(D.teintes);
+ const s=3,cw=CROP[2]*s,list=D.personnages,W=16+(cw+8)*4+500,rowH=CROP[3]*s+16,teintes=Object.entries(D.teintes);
  const H=90+list.length*rowH+60+CROP[3]*4+60,[cv,c]=canvasOf(W,H);
  title(c,'GOBELINS · TENUES, COIFFES ET TEINTES','Chaque ligne : face, droite, dos, gauche. Les pièces d’une tenue se remplacent une à une, comme chez les humains.',W);
  let y=86;
@@ -115,7 +115,7 @@ function variantes(S,D){
   const bits=[p.corps,'tenue '+p.tenue+(p.pieces?' + '+Object.entries(p.pieces).map(([k,v])=>v===null?'sans '+SLOT_LABELS[k]:SLOT_LABELS[k]+' '+v).join(', '):''),p.coiffe,p.arme,'peau '+D.teintes[p.teinte].nom.toLowerCase()].filter(Boolean);
   label(c,bits.slice(0,2).join(' · '),x,y+48,{color:DIM,size:13});label(c,bits.slice(2).join(' · '),x,y+66,{color:DIM,size:13});y+=rowH;}
  y+=34;label(c,'TEINTES DE PEAU',16,y,{bold:true});y+=10;
- const base=D.personnages.find(p=>p.id==='gobelin-nu'),tw=(W-32)/teintes.length;
+ const base=D.personnages[0],tw=(W-32)/teintes.length;
  teintes.forEach(([id,t],k)=>{const f=render(S,{...base,teinte:id},D).views[0],x=16+k*tw;blit(c,f,x+(tw-CROP[2]*4)/2,y,4,CROP);label(c,t.nom,x+tw/2,y+CROP[3]*4+20,{align:'center',bold:true});label(c,t.ou,x+tw/2,y+CROP[3]*4+40,{align:'center',size:13,color:DIM});});
  return cv.toBuffer('image/png');
 }

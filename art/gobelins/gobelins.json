@@ -1,17 +1,20 @@
 {
   "cadre": {"taille": 48, "ancre": [24, 36], "vues": ["face", "droite", "dos", "gauche"], "moteur": "+16 sur x et y : cadre 80 × 80, ancre 40, 52"},
-  "peau_reference": ["a3ae8c", "7f8c6c", "5c6852", "404a3c"],
+  "peau_reference": ["d8cb61", "b4ad53", "828244", "5a5734", "3c3a24"],
   "teintes": {
-    "gris-vert": {"nom": "Gris-vert", "couleurs": ["a3ae8c", "7f8c6c", "5c6852", "404a3c"], "ou": "la plus répandue"},
-    "mousse": {"nom": "Mousse", "couleurs": ["9fb062", "7a8c48", "586a35", "3d4a26"], "ou": "villages forestiers de Boisclair"},
-    "ocre": {"nom": "Ocre", "couleurs": ["b9a26c", "937d4e", "6c5a37", "4a3d27"], "ou": "clan Kesh, oasis de Sarak"},
-    "cendre": {"nom": "Cendre", "couleurs": ["b3b2a7", "8c8b82", "66655f", "474641"], "ou": "carriers de Griseborne"}
+    "olive": {"nom": "Olive", "couleurs": ["d8cb61", "b4ad53", "828244", "5a5734", "3c3a24"], "ou": "la plus répandue"},
+    "gris-vert": {"nom": "Gris-vert", "couleurs": ["c0c8a2", "9ea887", "737f64", "4f5945", "353d2f"], "ou": "gobelins des souterrains"},
+    "mousse": {"nom": "Mousse", "couleurs": ["b5c56a", "92a552", "6a7c3d", "4a582b", "31391d"], "ou": "villages forestiers de Boisclair"},
+    "ocre": {"nom": "Ocre", "couleurs": ["d6bb7a", "b0965c", "816c42", "5a4a2e", "3d321f"], "ou": "clan Kesh, oasis de Sarak"},
+    "cendre": {"nom": "Cendre", "couleurs": ["c9c8bc", "a6a59a", "7a7971", "56554f", "3a3936"], "ou": "carriers de Griseborne"}
   },
   "personnages": [
-    {"id": "guerrier-kesh", "nom": "Guerrier de Kesh", "corps": "masculin", "tenue": "guerrier", "coiffe": "casque-a-pointes", "arme": "cimeterre-dentele", "teinte": "gris-vert"},
+    {"id": "gobelin", "nom": "Gobelin", "corps": "masculin", "tenue": "harnais", "teinte": "olive"},
+    {"id": "gobeline", "nom": "Gobeline", "corps": "feminin", "tenue": "harnais", "teinte": "olive"},
+    {"id": "guerrier-kesh", "nom": "Guerrier de Kesh", "corps": "masculin", "tenue": "guerrier", "coiffe": "casque-a-pointes", "arme": "cimeterre-dentele", "teinte": "ocre"},
     {"id": "guerriere-kesh", "nom": "Guerrière de Kesh", "corps": "feminin", "tenue": "guerrier", "coiffe": "casque-a-pointes", "arme": "cimeterre-dentele", "teinte": "ocre"},
     {"id": "villageois", "nom": "Villageois", "corps": "masculin", "tenue": "villageois", "coiffe": "capuche", "teinte": "mousse"},
-    {"id": "villageoise", "nom": "Villageoise", "corps": "feminin", "tenue": "villageois", "teinte": "gris-vert"},
+    {"id": "villageoise", "nom": "Villageoise", "corps": "feminin", "tenue": "villageois", "teinte": "olive"},
     {"id": "gobelin-nu", "nom": "Gobelin, pagne", "corps": "masculin", "tenue": "pagne", "teinte": "gris-vert"},
     {"id": "gobeline-nue", "nom": "Gobeline, pagne", "corps": "feminin", "tenue": "pagne-bandeau", "teinte": "cendre"},
     {"id": "milicien", "nom": "Milicien de village", "corps": "masculin", "tenue": "villageois", "pieces": {"tunic": "guerrier", "gloves": "guerrier", "collar": "guerrier"}, "coiffe": "casque-a-pointes", "teinte": "mousse"},

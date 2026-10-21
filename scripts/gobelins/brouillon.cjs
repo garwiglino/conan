@@ -43,7 +43,7 @@ function documentOf(key){
  flush();
  return {name:'gobelin-'+key.replace(/\.piskel$/,'').replace('/','-'),description:F.description+' Cadres : face, droite, dos, gauche.',width:SIZE,height:SIZE,fps:2,layers};
 }
-function palette(){const D=G.data(),rows=Object.entries(COULEURS).filter(([k])=>k!=='M'&&k!=='K').map(([k,h])=>[h,k]);
+function palette(){const D=G.data(),rows=Object.entries(COULEURS).filter(([k])=>k!=='X').map(([k,h])=>[h,k]);
  for(const [id,t]of Object.entries(D.teintes))t.couleurs.forEach((h,k)=>rows.push([h,'peau '+id+' '+(k+1)]));
  const seen=new Set();return 'GIMP Palette\nName: gobelins\nColumns: 8\n#\n'+rows.filter(([h])=>!seen.has(h)&&seen.add(h)).map(([h,n])=>[0,2,4].map(i=>String(parseInt(h.slice(i,i+2),16)).padStart(3)).join(' ')+'\t'+n).join('\n')+'\n';}
 
