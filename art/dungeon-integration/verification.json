@@ -1,0 +1,44 @@
+{
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "mobile": false,
+      "start": {
+        "active": true,
+        "floor": "geoles",
+        "zone": "Lieu inconnu · Les geôles",
+        "position": [
+          400,
+          115.2
+        ]
+      },
+      "reloadedFloor": "trone",
+      "mapHidden": true,
+      "exit": {
+        "escaped": true,
+        "mapVisible": true,
+        "fortressListed": true
+      }
+    },
+    {
+      "mobile": true,
+      "start": {
+        "active": true,
+        "floor": "geoles",
+        "zone": "Lieu inconnu · Les geôles",
+        "position": [
+          400,
+          115.2
+        ]
+      },
+      "reloadedFloor": "trone",
+      "mapHidden": true,
+      "exit": {
+        "escaped": true,
+        "mapVisible": true,
+        "fortressListed": true
+      }
+    }
+  ],
+  "browserErrors": []
+}

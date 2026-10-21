@@ -1,5 +1,7 @@
 # Hearthreaver — Le retour de Kaldor
 
+**Premier niveau officiel : la Forteresse de Grise-Gueule.** Nouvelle partie commence dans les geôles du donjon conçu dans la [PR #11](https://github.com/garwiglino/conan/pull/11) : quatre étages, trois clés, caisses et dalles de pression, leviers, monte-charge, combat contre Grise-Gueule et libération de la fée. La sortie mène à Sarak ; les sauvegardes antérieures gardent leur progression. [Parcours, commandes et vérifications](docs/premier-niveau.md) · [Capture du départ](art/dungeon-integration/mobile-geoles.png).
+
 **Environnement et chemins du monde :** sources Piskel de Sarak et Teremor intégrées ; 137 routes terrestres à angles droits, avec leurs ponts et leurs parcours physiques. [Sources et fonctionnement](docs/terrain-isometrique.md) · [Captures réelles](art/world-roads/index.html).
 
 **Clairfoyer intégré :** trame à angles droits, blocs inégaux, cours carrées et rectangulaires, rues décalées, onze palettes de quartier, nouveaux bâtiments et postes isométriques. [Captures du jeu](art/city-plans/jeu/index.html) · [Plan des quartiers](art/city-plans/quartiers/clairfoyer-quartiers.png) · [Conception et limites](docs/conception-villes.md). Dix-huit habitants représentatifs suivent leur métier, leurs ressources et leurs trajets logement–travail. [Vie des quartiers en jeu](art/city-plans/vie/index.html). Les personnages conservent quatre directions ; les 82 autres localités gardent leur implantation existante.
@@ -21,7 +23,7 @@ Jeu d'action en pixel art, jouable dans le navigateur (clavier ou écran tactile
 
 **Ancienne architecture humaine cardinale — archive et outils de référence :** [atelier natif et assemblages](art/architecture/atelier.html), [catalogue complet et API](docs/architecture-javascript.md), [pack des sources, sprites et calques](art/architecture/architecture-complete.zip). 106 bâtiments, 8 variantes d’hiver et 120 modules, à l’échelle de l’humain de 19 px.
 
-Le héros est **Kaldor « the Flamebearer »**. Dans la version jouable actuelle, il commence au Campement des Exilés avec la fée ; Elyne, à proximité, rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. La prison de test a été retirée.
+Le héros est **Kaldor « the Flamebearer »**. Dans une nouvelle partie, il se réveille dans les geôles de Grise-Gueule et doit libérer la fée avant de sortir dans Sarak. Elyne attend au Campement des Exilés et rejoint le groupe au premier dialogue. L’exploration est libre. Les trois sceaux, les quêtes locales et le Temple du Serpent restent jouables ; l’escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés. L’ancienne prison de test a été remplacée par le donjon officiel.
 
 [État réel du jeu : fonctionnalités intégrées, ressources disponibles et limites](docs/etat-du-jeu.md). [Registre des corrections de cohérence et vérifications](docs/corrections-coherence.md). [Personnes, patrouilles, combustible et échanges causaux](docs/campagne-causale.md). [Chargement et performances du monde](docs/world-performance.md). [Affectations et réparateurs](docs/personnes-affectations.md).
 

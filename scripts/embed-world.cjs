@@ -72,3 +72,5 @@ const districtPlans=JSON.stringify(require('./build-settlements.cjs').build())+'
 if(read('data/architecture/settlements.json')!==districtPlans)fs.writeFileSync(path.join(root,'data/architecture/settlements.json'),districtPlans);
 require('./embed-architecture.cjs');
 require('./embed-world-isometric.cjs');
+
+require('./embed-dungeon.cjs');

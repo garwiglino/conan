@@ -30,7 +30,21 @@ const RAMPS={
  bois:    ['#2c2429','#4a3b37','#6d5848','#917860','#b49c7f','#d2bf9f','#e9ddc3'],
  oasis:   ['#11242f','#143843','#185055','#1f6a67','#2b8579','#45a18a','#76bea0','#b9dfc2'],
  pise:    ['#665042','#977153','#bb9466','#d7b780','#edcf98'],
- zellige: ['#1c2844','#25456a','#2b6c86','#3d9794','#79c1a7']
+ zellige: ['#1c2844','#25456a','#2b6c86','#3d9794','#79c1a7'],
+ // Intérieurs, forteresse gobeline : pierre sombre et froide, pierre chauffée
+ // par les torches, flamme, fer et rouille, chiffons rouges, bois noirci,
+ // paille et peinture verte des gobelins.
+ cachot:  ['#0c0b11','#15131c','#1e1b27','#282533','#342f40','#423c4e','#524b5d','#655d6e','#7d7483'],
+ lueur:   ['#1f181b','#2f2427','#433331','#5b433b','#765847','#937056','#b38b67','#d2aa7c'],
+ torche:  ['#3a1410','#6e2214','#a8361a','#d65a1f','#f08a2a','#f9bb47','#fde27f','#fff6d0'],
+ fer:     ['#101116','#1d1f26','#2f323b','#474b55','#666b74','#8d9198','#b8bbbd'],
+ rouille: ['#2e1913','#4f2818','#74391d','#9a5126'],
+ chiffon: ['#1e1212','#331a19','#4a2320','#632d27','#7d3b31','#965042'],
+ planche: ['#1c1513','#2c201b','#3e2d24','#543c2e','#6c4e3a','#87644a','#a27e5d'],
+ paille:  ['#2f271b','#4a3d26','#655631','#80703f','#9a8a52','#b4a46c'],
+ gobelin: ['#141a12','#1f2a19','#2c3b21','#3d4f29','#526634','#6c8042'],
+ // Magie (sceau de la porte, fée) : violet profond vers blanc lilas.
+ arcane:  ['#120c22','#211640','#352063','#4e2f8a','#6f45b3','#9a6fd6','#c7a6ef','#efe0ff']
 };
 const list=[];for(const [ramp,colors]of Object.entries(RAMPS))colors.forEach((hex,i)=>list.push({name:ramp+i,ramp,tone:i,hex}));
 const index=new Map(list.map((c,i)=>[c.name,i+1]));

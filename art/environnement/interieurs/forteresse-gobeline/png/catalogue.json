@@ -1,0 +1,2172 @@
+{
+ "interieur": "Forteresse gobeline",
+ "palette": "../palette-forteresse-gobeline.gpl",
+ "grille": {
+  "case": "case de salle de 2 m = 32 unités = losange 64 × 32 px",
+  "projection": "x = u − v, y = (u + v) / 2 − z ; 16 unités par mètre",
+  "axes": "i vers l’est (bas-droite), j vers le sud (bas-gauche) ; u = 32 i, v = 32 j"
+ },
+ "dimensions": {
+  "case": 32,
+  "mur": 48,
+  "epaisseur": 8,
+  "muret": 6
+ },
+ "regles": {
+  "fond": "tout ce qui n’est pas une case de salle reste noir",
+  "murs": "grand mur sur le bord nord ou ouest d’une case de salle qui touche le vide (ou une autre salle, s’il y a une ouverture) ; épaisseur côté vide",
+  "murets": "muret sur le bord sud ou est qui touche le vide ; muret-debut quand la case de vide a aussi une case de salle à l’ouest de la case de salle",
+  "angles": "à chaque sommet qui n’a qu’une case de salle parmi ses quatre : sud-est -> angle-nord, sud-ouest -> bout-nord, nord-est -> bout-ouest, nord-ouest -> angle-sud",
+  "ordre": "sol, décors au sol, trémies, ombres, lueurs, puis murs, murets, angles et objets triés par i + j de la case qui les porte (case de vide pour les murs), puis par u + v",
+  "ouvertures": "une porte remplace un module de mur ; la case de salle devant une porte ou un escalier montant reste sans objet",
+  "cloisons": "un mur entre deux salles cache jusqu’à 1,5 case derrière lui : quand un personnage y passe, dessiner ce mur à 40 % d’opacité",
+  "lumiere": "après tout le reste, chaque pixel est assombri selon sa distance (à l’écran, y × 1,15) aux sources « lumiere » des pièces : I = somme de force × 1,6 × (1 − d / rayon)^1,4 ; luminosité = 0.3 + 0.7 × min(1, I), par huitièmes tramés (Bayer 4 × 4)"
+ },
+ "sols": [
+  {
+   "nom": "dalles",
+   "png": "sols/dalles.png",
+   "taille": [
+    128,
+    64
+   ],
+   "source": "sols/dalles.piskel",
+   "hauteur": "sols/dalles-hauteur.png"
+  },
+  {
+   "nom": "paves",
+   "png": "sols/paves.png",
+   "taille": [
+    128,
+    64
+   ],
+   "source": "sols/paves.piskel",
+   "hauteur": "sols/paves-hauteur.png"
+  },
+  {
+   "nom": "terre",
+   "png": "sols/terre.png",
+   "taille": [
+    128,
+    64
+   ],
+   "source": "sols/terre.piskel",
+   "hauteur": "sols/terre-hauteur.png"
+  },
+  {
+   "nom": "planches",
+   "png": "sols/planches.png",
+   "taille": [
+    128,
+    64
+   ],
+   "source": "sols/planches.piskel",
+   "hauteur": "sols/planches-hauteur.png"
+  }
+ ],
+ "elements": [
+  {
+   "nom": "mur-a",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "mur plein",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/mur-a.png",
+   "ombre": {
+    "png": "murs/nord/mur-a-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "mur-b",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "mur plein, mousse et pierre saillante",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/mur-b.png",
+   "ombre": {
+    "png": "murs/nord/mur-b-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "mur-c",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "mur plein, fissure et pierre manquante",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/mur-c.png",
+   "ombre": {
+    "png": "murs/nord/mur-c-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "mur-ruine",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "haut du mur écroulé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/mur-ruine.png",
+   "ombre": {
+    "png": "murs/nord/mur-ruine-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "mur-breche",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "brèche en V jusqu’à 1 m, gravats dans la salle",
+   "taille": [
+    43,
+    71
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/mur-breche.png",
+   "ombre": {
+    "png": "murs/nord/mur-breche-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "meurtriere",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "meurtrière, ciel de nuit dans la fente",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/meurtriere.png",
+   "ombre": {
+    "png": "murs/nord/meurtriere-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "fenetre",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "fenêtre à barreaux, clair de lune au sol",
+   "taille": [
+    47,
+    72
+   ],
+   "ancre": [
+    7,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/fenetre.png",
+   "ombre": {
+    "png": "murs/nord/fenetre-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "murs/nord/fenetre-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     16,
+     6,
+     28
+    ],
+    "rayon": 64,
+    "force": 0.5
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "baniere",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "bannière gobeline au crâne",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/baniere.png",
+   "ombre": {
+    "png": "murs/nord/baniere-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "chaines",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "chaînes et fers scellés",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/chaines.png",
+   "ombre": {
+    "png": "murs/nord/chaines-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "levier-haut",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "levier mural levé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/levier-haut.png",
+   "ombre": {
+    "png": "murs/nord/levier-haut-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "levier-bas",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "levier mural abaissé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "murs/nord/levier-bas.png",
+   "ombre": {
+    "png": "murs/nord/levier-bas-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/nord.piskel"
+  },
+  {
+   "nom": "arche",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "arche ouverte (passage de 1,25 m)",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/arche.png",
+   "ombre": {
+    "png": "portes/nord/arche-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "porte",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "porte de bois fermée",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte.png",
+   "ombre": {
+    "png": "portes/nord/porte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "porte-ouverte",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "porte ouverte, battant rabattu vers l’autre côté",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte-ouverte.png",
+   "ombre": {
+    "png": "portes/nord/porte-ouverte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "porte-verrouillee",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "porte verrouillée : barres, cadenas",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte-verrouillee.png",
+   "ombre": {
+    "png": "portes/nord/porte-verrouillee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "herse",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "herse baissée",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/herse.png",
+   "ombre": {
+    "png": "portes/nord/herse-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "herse-levee",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "herse levée (passage)",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/herse-levee.png",
+   "ombre": {
+    "png": "portes/nord/herse-levee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "escalier-montant",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "escalier qui monte dans le mur ; la case devant reste libre",
+   "taille": [
+    50,
+    73
+   ],
+   "ancre": [
+    10,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/escalier-montant.png",
+   "ombre": {
+    "png": "portes/nord/escalier-montant-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "porte-cellule",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "grille de cellule fermée, serrure",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte-cellule.png",
+   "ombre": {
+    "png": "portes/nord/porte-cellule-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "porte-cellule-ouverte",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "grille de cellule ouverte, battant rabattu dans la cellule",
+   "taille": [
+    43,
+    70
+   ],
+   "ancre": [
+    3,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "png": "portes/nord/porte-cellule-ouverte.png",
+   "ombre": {
+    "png": "portes/nord/porte-cellule-ouverte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/nord.piskel"
+  },
+  {
+   "nom": "mur-torche",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "torche murale animée, lueur chaude sur le mur et au sol",
+   "taille": [
+    49,
+    73
+   ],
+   "ancre": [
+    9,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "images": [
+    "murs/nord/mur-torche-1.png",
+    "murs/nord/mur-torche-2.png",
+    "murs/nord/mur-torche-3.png",
+    "murs/nord/mur-torche-4.png"
+   ],
+   "fps": 8,
+   "ombre": {
+    "png": "murs/nord/mur-torche-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "murs/nord/mur-torche-lueur.png",
+    "opacite": 0.35,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     16,
+     5,
+     37
+    ],
+    "rayon": 118,
+    "force": 1
+   },
+   "source": "murs/torche-nord.piskel"
+  },
+  {
+   "nom": "porte-scellee",
+   "role": "mur",
+   "orientation": "nord",
+   "description": "grande porte scellée par une rune violette qui pulse (animée) ; s’ouvre avec la fée",
+   "taille": [
+    45,
+    71
+   ],
+   "ancre": [
+    5,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord nord vers le bas-droite",
+   "images": [
+    "portes/nord/porte-scellee-1.png",
+    "portes/nord/porte-scellee-2.png",
+    "portes/nord/porte-scellee-3.png",
+    "portes/nord/porte-scellee-4.png"
+   ],
+   "fps": 6,
+   "ombre": {
+    "png": "portes/nord/porte-scellee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "portes/nord/porte-scellee-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     16,
+     3,
+     15
+    ],
+    "rayon": 84,
+    "force": 0.6
+   },
+   "source": "portes/scellee-nord.piskel"
+  },
+  {
+   "nom": "mur-a",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "mur plein",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/mur-a.png",
+   "ombre": {
+    "png": "murs/ouest/mur-a-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "mur-b",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "mur plein, mousse et pierre saillante",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/mur-b.png",
+   "ombre": {
+    "png": "murs/ouest/mur-b-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "mur-c",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "mur plein, fissure et pierre manquante",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/mur-c.png",
+   "ombre": {
+    "png": "murs/ouest/mur-c-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "mur-ruine",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "haut du mur écroulé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/mur-ruine.png",
+   "ombre": {
+    "png": "murs/ouest/mur-ruine-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "mur-breche",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "brèche en V jusqu’à 1 m, gravats dans la salle",
+   "taille": [
+    43,
+    71
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/mur-breche.png",
+   "ombre": {
+    "png": "murs/ouest/mur-breche-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "meurtriere",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "meurtrière, ciel de nuit dans la fente",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/meurtriere.png",
+   "ombre": {
+    "png": "murs/ouest/meurtriere-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "fenetre",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "fenêtre à barreaux, clair de lune au sol",
+   "taille": [
+    47,
+    72
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/fenetre.png",
+   "ombre": {
+    "png": "murs/ouest/fenetre-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "murs/ouest/fenetre-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     6,
+     16,
+     28
+    ],
+    "rayon": 64,
+    "force": 0.5
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "baniere",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "bannière gobeline au crâne",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/baniere.png",
+   "ombre": {
+    "png": "murs/ouest/baniere-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "chaines",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "chaînes et fers scellés",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/chaines.png",
+   "ombre": {
+    "png": "murs/ouest/chaines-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "levier-haut",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "levier mural levé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/levier-haut.png",
+   "ombre": {
+    "png": "murs/ouest/levier-haut-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "levier-bas",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "levier mural abaissé",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "murs/ouest/levier-bas.png",
+   "ombre": {
+    "png": "murs/ouest/levier-bas-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "murs/ouest.piskel"
+  },
+  {
+   "nom": "arche",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "arche ouverte (passage de 1,25 m)",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/arche.png",
+   "ombre": {
+    "png": "portes/ouest/arche-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "porte",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "porte de bois fermée",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte.png",
+   "ombre": {
+    "png": "portes/ouest/porte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "porte-ouverte",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "porte ouverte, battant rabattu vers l’autre côté",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte-ouverte.png",
+   "ombre": {
+    "png": "portes/ouest/porte-ouverte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "porte-verrouillee",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "porte verrouillée : barres, cadenas",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte-verrouillee.png",
+   "ombre": {
+    "png": "portes/ouest/porte-verrouillee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "herse",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "herse baissée",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/herse.png",
+   "ombre": {
+    "png": "portes/ouest/herse-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "herse-levee",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "herse levée (passage)",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/herse-levee.png",
+   "ombre": {
+    "png": "portes/ouest/herse-levee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "escalier-montant",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "escalier qui monte dans le mur ; la case devant reste libre",
+   "taille": [
+    50,
+    73
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/escalier-montant.png",
+   "ombre": {
+    "png": "portes/ouest/escalier-montant-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "porte-cellule",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "grille de cellule fermée, serrure",
+   "taille": [
+    43,
+    69
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte-cellule.png",
+   "ombre": {
+    "png": "portes/ouest/porte-cellule-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "porte-cellule-ouverte",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "grille de cellule ouverte, battant rabattu dans la cellule",
+   "taille": [
+    43,
+    70
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "png": "portes/ouest/porte-cellule-ouverte.png",
+   "ombre": {
+    "png": "portes/ouest/porte-cellule-ouverte-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "portes/ouest.piskel"
+  },
+  {
+   "nom": "mur-torche",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "torche murale animée, lueur chaude sur le mur et au sol",
+   "taille": [
+    50,
+    73
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "images": [
+    "murs/ouest/mur-torche-1.png",
+    "murs/ouest/mur-torche-2.png",
+    "murs/ouest/mur-torche-3.png",
+    "murs/ouest/mur-torche-4.png"
+   ],
+   "fps": 8,
+   "ombre": {
+    "png": "murs/ouest/mur-torche-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "murs/ouest/mur-torche-lueur.png",
+    "opacite": 0.35,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     5,
+     16,
+     37
+    ],
+    "rayon": 118,
+    "force": 1
+   },
+   "source": "murs/torche-ouest.piskel"
+  },
+  {
+   "nom": "porte-scellee",
+   "role": "mur",
+   "orientation": "ouest",
+   "description": "grande porte scellée par une rune violette qui pulse (animée) ; s’ouvre avec la fée",
+   "taille": [
+    46,
+    71
+   ],
+   "ancre": [
+    40,
+    52
+   ],
+   "ancre_au_sol": "sommet nord de la case de salle (u = 32 i, v = 32 j), au sol ; le mur suit le bord ouest vers le bas-gauche",
+   "images": [
+    "portes/ouest/porte-scellee-1.png",
+    "portes/ouest/porte-scellee-2.png",
+    "portes/ouest/porte-scellee-3.png",
+    "portes/ouest/porte-scellee-4.png"
+   ],
+   "fps": 6,
+   "ombre": {
+    "png": "portes/ouest/porte-scellee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "portes/ouest/porte-scellee-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     3,
+     16,
+     15
+    ],
+    "rayon": 84,
+    "force": 0.6
+   },
+   "source": "portes/scellee-ouest.piskel"
+  },
+  {
+   "nom": "muret",
+   "role": "muret",
+   "orientation": "sud",
+   "description": "muret arasé",
+   "taille": [
+    40,
+    26
+   ],
+   "ancre": [
+    8,
+    6
+   ],
+   "ancre_au_sol": "sommet ouest de la case de salle (u = 32 i, v = 32 j + 32) ; le muret suit le bord sud",
+   "png": "murets/sud/muret.png",
+   "source": "murets/sud.piskel"
+  },
+  {
+   "nom": "muret-debut",
+   "role": "muret",
+   "orientation": "sud",
+   "description": "muret rogné de 8 unités au départ (angle rentrant entre deux murets)",
+   "taille": [
+    32,
+    22
+   ],
+   "ancre": [
+    0,
+    2
+   ],
+   "ancre_au_sol": "sommet ouest de la case de salle (u = 32 i, v = 32 j + 32) ; le muret suit le bord sud",
+   "png": "murets/sud/muret-debut.png",
+   "source": "murets/sud.piskel"
+  },
+  {
+   "nom": "muret-casse",
+   "role": "muret",
+   "orientation": "sud",
+   "description": "muret cassé, gravats dans la salle",
+   "taille": [
+    40,
+    26
+   ],
+   "ancre": [
+    8,
+    6
+   ],
+   "ancre_au_sol": "sommet ouest de la case de salle (u = 32 i, v = 32 j + 32) ; le muret suit le bord sud",
+   "png": "murets/sud/muret-casse.png",
+   "source": "murets/sud.piskel"
+  },
+  {
+   "nom": "muret",
+   "role": "muret",
+   "orientation": "est",
+   "description": "muret arasé",
+   "taille": [
+    40,
+    26
+   ],
+   "ancre": [
+    32,
+    6
+   ],
+   "ancre_au_sol": "sommet est de la case de salle (u = 32 i + 32, v = 32 j) ; le muret suit le bord est",
+   "png": "murets/est/muret.png",
+   "source": "murets/est.piskel"
+  },
+  {
+   "nom": "muret-debut",
+   "role": "muret",
+   "orientation": "est",
+   "description": "muret rogné de 8 unités au départ (angle rentrant entre deux murets)",
+   "taille": [
+    32,
+    22
+   ],
+   "ancre": [
+    32,
+    2
+   ],
+   "ancre_au_sol": "sommet est de la case de salle (u = 32 i + 32, v = 32 j) ; le muret suit le bord est",
+   "png": "murets/est/muret-debut.png",
+   "source": "murets/est.piskel"
+  },
+  {
+   "nom": "muret-casse",
+   "role": "muret",
+   "orientation": "est",
+   "description": "muret cassé, gravats dans la salle",
+   "taille": [
+    40,
+    26
+   ],
+   "ancre": [
+    32,
+    6
+   ],
+   "ancre_au_sol": "sommet est de la case de salle (u = 32 i + 32, v = 32 j) ; le muret suit le bord est",
+   "png": "murets/est/muret-casse.png",
+   "source": "murets/est.piskel"
+  },
+  {
+   "nom": "angle-nord",
+   "role": "angle",
+   "description": "angle du fond entre deux grands murs (sol au sud-est du sommet)",
+   "taille": [
+    16,
+    56
+   ],
+   "ancre": [
+    8,
+    56
+   ],
+   "ancre_au_sol": "sommet de la grille (u = 32 I, v = 32 J), au sol",
+   "png": "angles/angle-nord.png",
+   "source": "angles/angles.piskel"
+  },
+  {
+   "nom": "bout-nord",
+   "role": "angle",
+   "description": "pilier d’about à droite, au bout d’un mur nord (sol au sud-ouest du sommet)",
+   "taille": [
+    16,
+    56
+   ],
+   "ancre": [
+    0,
+    52
+   ],
+   "ancre_au_sol": "sommet de la grille (u = 32 I, v = 32 J), au sol",
+   "png": "angles/bout-nord.png",
+   "source": "angles/angles.piskel"
+  },
+  {
+   "nom": "bout-ouest",
+   "role": "angle",
+   "description": "pilier d’about à gauche, au bout d’un mur ouest (sol au nord-est du sommet)",
+   "taille": [
+    16,
+    56
+   ],
+   "ancre": [
+    16,
+    52
+   ],
+   "ancre_au_sol": "sommet de la grille (u = 32 I, v = 32 J), au sol",
+   "png": "angles/bout-ouest.png",
+   "source": "angles/angles.piskel"
+  },
+  {
+   "nom": "angle-sud",
+   "role": "angle",
+   "description": "angle de devant entre deux murets (sol au nord-ouest du sommet)",
+   "taille": [
+    16,
+    14
+   ],
+   "ancre": [
+    8,
+    6
+   ],
+   "ancre_au_sol": "sommet de la grille (u = 32 I, v = 32 J), au sol",
+   "png": "angles/angle-sud.png",
+   "source": "angles/angles.piskel"
+  },
+  {
+   "nom": "escalier-descendant-nord",
+   "role": "escalier",
+   "description": "trémie : marches qui descendent vers le nord",
+   "taille": [
+    58,
+    30
+   ],
+   "ancre": [
+    29,
+    0
+   ],
+   "ancre_au_sol": "sommet nord de la case de l’escalier",
+   "png": "escaliers/escalier-descendant-nord.png",
+   "source": "escaliers/descendant.piskel"
+  },
+  {
+   "nom": "escalier-descendant-ouest",
+   "role": "escalier",
+   "description": "trémie : marches qui descendent vers l’ouest",
+   "taille": [
+    58,
+    30
+   ],
+   "ancre": [
+    29,
+    0
+   ],
+   "ancre_au_sol": "sommet nord de la case de l’escalier",
+   "png": "escaliers/escalier-descendant-ouest.png",
+   "source": "escaliers/descendant.piskel"
+  },
+  {
+   "nom": "puits",
+   "role": "escalier",
+   "description": "trémie : puits du monte-charge, chaînes dans le noir",
+   "taille": [
+    60,
+    32
+   ],
+   "ancre": [
+    30,
+    1
+   ],
+   "ancre_au_sol": "sommet nord de la case de l’escalier",
+   "png": "escaliers/puits.png",
+   "source": "escaliers/puits.piskel"
+  },
+  {
+   "nom": "pilier-carre",
+   "role": "objet",
+   "description": "pilier carré",
+   "taille": [
+    28,
+    62
+   ],
+   "ancre": [
+    14,
+    55
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/pilier-carre.png",
+   "ombre": {
+    "png": "objets/pilier-carre-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/piliers.piskel"
+  },
+  {
+   "nom": "pilier-rond",
+   "role": "objet",
+   "description": "pilier rond",
+   "taille": [
+    28,
+    62
+   ],
+   "ancre": [
+    14,
+    55
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/pilier-rond.png",
+   "ombre": {
+    "png": "objets/pilier-rond-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/piliers.piskel"
+  },
+  {
+   "nom": "pilier-brise",
+   "role": "objet",
+   "description": "pilier brisé",
+   "taille": [
+    34,
+    35
+   ],
+   "ancre": [
+    17,
+    22
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/pilier-brise.png",
+   "ombre": {
+    "png": "objets/pilier-brise-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/piliers.piskel"
+  },
+  {
+   "nom": "eboulis",
+   "role": "objet",
+   "description": "éboulis",
+   "taille": [
+    41,
+    25
+   ],
+   "ancre": [
+    18,
+    15
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/eboulis.png",
+   "ombre": {
+    "png": "objets/eboulis-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/ruines.piskel"
+  },
+  {
+   "nom": "blocs",
+   "role": "objet",
+   "description": "blocs taillés tombés",
+   "taille": [
+    34,
+    24
+   ],
+   "ancre": [
+    16,
+    15
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/blocs.png",
+   "ombre": {
+    "png": "objets/blocs-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/ruines.piskel"
+  },
+  {
+   "nom": "caisse",
+   "role": "objet",
+   "description": "caisse",
+   "taille": [
+    24,
+    23
+   ],
+   "ancre": [
+    12,
+    16
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/caisse.png",
+   "ombre": {
+    "png": "objets/caisse-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "caisses",
+   "role": "objet",
+   "description": "caisses empilées",
+   "taille": [
+    32,
+    31
+   ],
+   "ancre": [
+    16,
+    22
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/caisses.png",
+   "ombre": {
+    "png": "objets/caisses-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "tonneau",
+   "role": "objet",
+   "description": "tonneau",
+   "taille": [
+    22,
+    25
+   ],
+   "ancre": [
+    11,
+    18
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/tonneau.png",
+   "ombre": {
+    "png": "objets/tonneau-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "coffre",
+   "role": "objet",
+   "description": "coffre",
+   "taille": [
+    26,
+    23
+   ],
+   "ancre": [
+    13,
+    16
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/coffre.png",
+   "ombre": {
+    "png": "objets/coffre-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "coffre-verrouille",
+   "role": "objet",
+   "description": "coffre verrouillé",
+   "taille": [
+    26,
+    23
+   ],
+   "ancre": [
+    13,
+    16
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/coffre-verrouille.png",
+   "ombre": {
+    "png": "objets/coffre-verrouille-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "coffre-ouvert",
+   "role": "objet",
+   "description": "coffre ouvert, or",
+   "taille": [
+    27,
+    29
+   ],
+   "ancre": [
+    13,
+    22
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/coffre-ouvert.png",
+   "ombre": {
+    "png": "objets/coffre-ouvert-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "table",
+   "role": "objet",
+   "description": "table et chope",
+   "taille": [
+    32,
+    27
+   ],
+   "ancre": [
+    16,
+    19
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/table.png",
+   "ombre": {
+    "png": "objets/table-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "ratelier",
+   "role": "objet",
+   "description": "râtelier d’armes",
+   "taille": [
+    24,
+    39
+   ],
+   "ancre": [
+    12,
+    32
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/ratelier.png",
+   "ombre": {
+    "png": "objets/ratelier-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "paillasse",
+   "role": "objet",
+   "description": "paillasse et couverture",
+   "taille": [
+    30,
+    17
+   ],
+   "ancre": [
+    15,
+    8
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/paillasse.png",
+   "ombre": {
+    "png": "objets/paillasse-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mobilier.piskel"
+  },
+  {
+   "nom": "totem",
+   "role": "objet",
+   "description": "totem à crânes",
+   "taille": [
+    17,
+    49
+   ],
+   "ancre": [
+    8,
+    44
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/totem.png",
+   "ombre": {
+    "png": "objets/totem-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/gobelins.piskel"
+  },
+  {
+   "nom": "etendard",
+   "role": "objet",
+   "description": "étendard gobelin",
+   "taille": [
+    17,
+    49
+   ],
+   "ancre": [
+    9,
+    45
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/etendard.png",
+   "ombre": {
+    "png": "objets/etendard-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/gobelins.piskel"
+  },
+  {
+   "nom": "cage",
+   "role": "objet",
+   "description": "cage",
+   "taille": [
+    32,
+    42
+   ],
+   "ancre": [
+    16,
+    34
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/cage.png",
+   "ombre": {
+    "png": "objets/cage-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/gobelins.piskel"
+  },
+  {
+   "nom": "marmite",
+   "role": "objet",
+   "description": "marmite verte sur le feu",
+   "taille": [
+    37,
+    25
+   ],
+   "ancre": [
+    19,
+    17
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/marmite.png",
+   "ombre": {
+    "png": "objets/marmite-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "objets/marmite-lueur.png",
+    "opacite": 0.35,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     0,
+     0,
+     8
+    ],
+    "rayon": 64,
+    "force": 0.55
+   },
+   "source": "objets/gobelins.piskel"
+  },
+  {
+   "nom": "tresor",
+   "role": "objet",
+   "description": "tas d’or",
+   "taille": [
+    26,
+    15
+   ],
+   "ancre": [
+    13,
+    8
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/tresor.png",
+   "ombre": {
+    "png": "objets/tresor-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/gobelins.piskel"
+  },
+  {
+   "nom": "trone",
+   "role": "objet",
+   "description": "trône du chef, crânes et cornes",
+   "taille": [
+    56,
+    65
+   ],
+   "ancre": [
+    28,
+    51
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/trone.png",
+   "ombre": {
+    "png": "objets/trone-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "tas-os",
+   "role": "objet",
+   "description": "tas d’os",
+   "taille": [
+    32,
+    17
+   ],
+   "ancre": [
+    18,
+    9
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/tas-os.png",
+   "ombre": {
+    "png": "objets/tas-os-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "cle",
+   "role": "objet",
+   "description": "clé (la même pour toutes les portes, seul le nom change)",
+   "taille": [
+    18,
+    12
+   ],
+   "ancre": [
+    10,
+    7
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/cle.png",
+   "ombre": {
+    "png": "objets/cle-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "dalle-pression",
+   "role": "objet",
+   "description": "dalle de pression levée, rune éteinte",
+   "taille": [
+    28,
+    16
+   ],
+   "ancre": [
+    14,
+    9
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/dalle-pression.png",
+   "ombre": {
+    "png": "objets/dalle-pression-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "dalle-pression-enfoncee",
+   "role": "objet",
+   "description": "dalle de pression enfoncée, rune allumée",
+   "taille": [
+    28,
+    15
+   ],
+   "ancre": [
+    14,
+    8
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/dalle-pression-enfoncee.png",
+   "ombre": {
+    "png": "objets/dalle-pression-enfoncee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/donjon.piskel"
+  },
+  {
+   "nom": "treuil",
+   "role": "objet",
+   "description": "treuil du monte-charge",
+   "taille": [
+    26,
+    28
+   ],
+   "ancre": [
+    13,
+    20
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/treuil.png",
+   "ombre": {
+    "png": "objets/treuil-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "source": "objets/mecanismes.piskel"
+  },
+  {
+   "nom": "monte-charge",
+   "role": "objet",
+   "description": "plate-forme du monte-charge (posée sur le puits)",
+   "taille": [
+    56,
+    78
+   ],
+   "ancre": [
+    28,
+    64
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "png": "objets/monte-charge.png",
+   "source": "objets/mecanismes.piskel"
+  },
+  {
+   "nom": "brasero",
+   "role": "objet",
+   "description": "brasero animé, lueur au sol",
+   "taille": [
+    53,
+    37
+   ],
+   "ancre": [
+    27,
+    25
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "images": [
+    "objets/brasero-1.png",
+    "objets/brasero-2.png",
+    "objets/brasero-3.png",
+    "objets/brasero-4.png"
+   ],
+   "fps": 8,
+   "ombre": {
+    "png": "objets/brasero-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "objets/brasero-lueur.png",
+    "opacite": 0.35,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     0,
+     0,
+     18
+    ],
+    "rayon": 130,
+    "force": 1.1
+   },
+   "source": "objets/brasero.piskel"
+  },
+  {
+   "nom": "cage-fee",
+   "role": "objet",
+   "description": "cage suspendue de la fée (animée)",
+   "taille": [
+    53,
+    64
+   ],
+   "ancre": [
+    27,
+    52
+   ],
+   "ancre_au_sol": "pied de l’objet, au sol",
+   "images": [
+    "objets/cage-fee-1.png",
+    "objets/cage-fee-2.png",
+    "objets/cage-fee-3.png",
+    "objets/cage-fee-4.png"
+   ],
+   "fps": 8,
+   "ombre": {
+    "png": "objets/cage-fee-ombre.png",
+    "opacite": 0.5,
+    "usage": "sur le sol seulement, avant les pièces"
+   },
+   "lueur": {
+    "png": "objets/cage-fee-lueur.png",
+    "opacite": 0.3,
+    "usage": "sur le sol seulement, après les ombres"
+   },
+   "lumiere": {
+    "depuis_l_ancre": [
+     0,
+     0,
+     22
+    ],
+    "rayon": 76,
+    "force": 0.55
+   },
+   "source": "objets/cage-fee.piskel"
+  },
+  {
+   "nom": "fissure",
+   "role": "decors",
+   "description": "fissure",
+   "taille": [
+    8,
+    6
+   ],
+   "ancre": [
+    4,
+    3
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/fissure.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "flaque",
+   "role": "decors",
+   "description": "flaque",
+   "taille": [
+    9,
+    5
+   ],
+   "ancre": [
+    4,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/flaque.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "os",
+   "role": "decors",
+   "description": "os",
+   "taille": [
+    7,
+    5
+   ],
+   "ancre": [
+    3,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/os.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "crane",
+   "role": "decors",
+   "description": "crâne",
+   "taille": [
+    5,
+    4
+   ],
+   "ancre": [
+    2,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/crane.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "paille",
+   "role": "decors",
+   "description": "paille",
+   "taille": [
+    9,
+    4
+   ],
+   "ancre": [
+    4,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/paille.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "mousse",
+   "role": "decors",
+   "description": "mousse",
+   "taille": [
+    8,
+    4
+   ],
+   "ancre": [
+    4,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/mousse.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "tache",
+   "role": "decors",
+   "description": "tache sombre",
+   "taille": [
+    7,
+    5
+   ],
+   "ancre": [
+    4,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/tache.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "gravats",
+   "role": "decors",
+   "description": "gravats",
+   "taille": [
+    7,
+    5
+   ],
+   "ancre": [
+    3,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/gravats.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "grille",
+   "role": "decors",
+   "description": "grille d’égout",
+   "taille": [
+    10,
+    6
+   ],
+   "ancre": [
+    5,
+    3
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/grille.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "traces",
+   "role": "decors",
+   "description": "traces de griffes",
+   "taille": [
+    10,
+    5
+   ],
+   "ancre": [
+    5,
+    2
+   ],
+   "ancre_au_sol": "centre du décor, au sol",
+   "png": "decors/traces.png",
+   "source": "decors/decors-sol.piskel"
+  },
+  {
+   "nom": "toile",
+   "role": "toile",
+   "description": "toile d’araignée du coin nord",
+   "taille": [
+    17,
+    11
+   ],
+   "ancre": [
+    8,
+    46
+   ],
+   "ancre_au_sol": "sommet nord de la case du coin, au sol (la toile est dessinée en haut des murs)",
+   "png": "decors/toile.png",
+   "source": "decors/toile.piskel"
+  }
+ ]
+}

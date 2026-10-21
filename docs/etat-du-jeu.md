@@ -1,4 +1,4 @@
-# État réel du jeu — 19 octobre 2026
+# État réel du jeu — 21 octobre 2026
 
 Cette page décrit les fonctionnalités présentes dans les sources et les HTML web/iOS du dépôt. Elle ne garantit pas leur publication sur le site ni leur installation sur un iPhone. La bible décrit le cadre de conception ; une entrée de catalogue ou une animation disponible ne signifie pas que son comportement est activé dans le monde.
 
@@ -6,7 +6,7 @@ Les [19 corrections de l’audit transversal](corrections-audit-monde.md) détai
 
 ## Aventure et exploration jouables
 
-- Kaldor commence au Campement des Exilés avec la fée. Elyne, à proximité, rejoint le groupe au premier dialogue. La prison de test a été retirée ; l'escorte vers le Refuge des Veilleurs et le retour à Clairfoyer ne sont pas imposés.
+- Une nouvelle partie commence dans les geôles de la Forteresse de Grise-Gueule : quatre étages jouables issus de la PR #11, trois clés, leviers, caisses poussables et tirables, dalles, monte-charge, chef et fée captive. La fée libérée brise le sceau de sortie vers Sarak. La carte est cachée tant que Kaldor est captif ; le lieu est ajouté après la sortie. Les anciennes sauvegardes restent dans le monde. Voir [le premier niveau](premier-niveau.md). Elyne attend au Campement des Exilés ; l'escorte vers le Refuge des Veilleurs et le retour à Clairfoyer restent facultatifs.
 - Les trois sceaux, la porte du Temple du Serpent, les quêtes du Veilleur et de Zahra, les stèles, coffres, colosses et le Prêtre de Nharos restent jouables. Vaincre le Prêtre libère le temple et permet de poursuivre l'exploration.
 - Le monde mesure 72 × 48 km, à 16 pixels par mètre, avec 14 régions, 83 localités et 133 routes dans l'atlas. Igea, Teremor et Sarak partagent le continent ; Varan et Tagon sont des îles.
 - Terrain déterministe chargé autour du joueur, routes et ponts, frontières naturelles, carte, brouillard de guerre et suivi de destination sont intégrés. Les localités restent principalement des relais : les quartiers, intérieurs et quêtes propres à chacune ne sont pas construits.
