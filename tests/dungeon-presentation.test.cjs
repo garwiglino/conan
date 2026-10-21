@@ -30,7 +30,7 @@ test('weapon loot remains on its dungeon floor, survives a save and uses the sha
  const saved=g.serialize();assert.equal(saved.dungeon.floors['grande-salle'].weaponDrops[0].weapon,drop.weapon);
  const restored=combatGame(a);restored.startFirstDungeon(saved.dungeon);assert.equal(restored.weaponDrops[0].weapon,drop.weapon);assert.equal(restored.weaponDrops.length,1);
  g.enterDungeonFloor('galeries',{x:19.5*32,y:1.5*32});assert.equal(g.weaponDrops.length,0);g.enterDungeonFloor('grande-salle',{x:drop.x,y:drop.y});assert.equal(g.weaponDrops[0].weapon,drop.weapon);
- drop.delay=0;g.stepWeaponDrops(.04);assert.ok(g.arsenal.owned.includes(drop.weapon));assert.equal(g.weaponDrops.length,0);assert.ok(g.events.some(v=>v.type==='weaponfound'));
+ drop.delay=0;g.stepWeaponDrops(.04);assert.ok(!g.arsenal.owned.includes(drop.weapon));g.interact();assert.ok(g.arsenal.owned.includes(drop.weapon));assert.equal(g.weaponDrops.length,0);assert.ok(g.events.some(v=>v.type==='weaponfound'));
 });
 test('shared lethal damage keeps the first chief outcome local to the dungeon',()=>{
  const g=dungeon();g.enterDungeonFloor('trone',{x:11.5*32,y:6.8*32});const chief=g.enemies.find(e=>e.chief),kills=g.player.kills;g.damageEnemy(chief,chief.hp*10);

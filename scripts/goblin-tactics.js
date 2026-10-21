@@ -2,7 +2,7 @@
 const GoblinTactics=(()=>{
  const games=new WeakMap(),length=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
  function clear(g,a,b,r=6){const d=length(a,b),n=Math.ceil(d/5);for(let i=1;i<=n;i++)if(g.solid(a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n,r))return false;return true;}
- function state(g){let s=games.get(g);if(!s||s.floor!==g.dungeon.floor||s.enemies!==g.enemies){s={floor:g.dungeon.floor,enemies:g.enemies,actors:new Map(),nextStrike:0};games.set(g,s);}return s;}
+ function state(g){let s=games.get(g);if(!s||s.floor!==g.dungeon.floor||s.enemies!==g.enemies){s={floor:g.dungeon.floor,enemies:g.enemies,actors:new Map(),nextStrike:0,nextBark:0,lines:[]};games.set(g,s);}return s;}
  function reset(g){games.delete(g);}
  function plan(g,dt){
   const s=state(g),p=g.player,now=g.time,live=g.enemies.filter(e=>!e.dead&&(!e.chief||g.dungeon.bossFight));
@@ -10,7 +10,13 @@ const GoblinTactics=(()=>{
   for(const e of live){let m=s.actors.get(e);if(!m){m={until:0,slot:null,route:[],repath:0};s.actors.set(e,m);}
    // Alerts need an unoccluded nearby witness; nobody sees through a closed door.
    const sees=visible.includes(e),witness=visible.find(a=>length(a,e)<100&&g.lineClear(a,e));
-   if(sees||witness){m.until=now+2.8;m.last={x:p.x,y:p.y};}m.sees=sees;
+   if(sees||witness){
+    if(m.until<=now&&now>=s.nextBark&&now>=(m.nextBark||0)){
+     const lines=e.chief?['Tu ne sortiras pas !']:sees?['Un intrus !','Attrapez-le !','Il est là !','À moi !']:['Par ici !','On le tient !'];
+     const seed=String(e.id).split('').reduce((n,c)=>n+c.charCodeAt(0),0);
+     s.lines=[{actor:e,text:lines[seed%lines.length],start:now,until:now+2.2}];s.nextBark=now+2.6;m.nextBark=now+10;
+    }
+    m.until=now+2.8;m.last={x:p.x,y:p.y};}m.sees=sees;
   }
   const active=live.filter(e=>s.actors.get(e).until>now&&length(e,p)<210),group=active.filter(e=>s.actors.get(e).sees),used=new Set();
   // Stable world-space sectors do not spin when the player changes facing.
@@ -50,5 +56,6 @@ const GoblinTactics=(()=>{
   const n=Math.hypot(dx,dy)||1,speed=e.chief?25:plan.group.length>1?31:26,amount=Math.min(speed*dt,d),ox=e.x,oy=e.y;
   g.move(e,dx/n*amount,dy/n*amount);const moved=Math.hypot(e.x-ox,e.y-oy);e.moving=moved>.001;if(e.moving){e.dir=g.direction(e.x-ox,e.y-oy);e.anim=(e.anim||0)+moved/5.5;}
  }
- return {plan,goal,canStrike,reserve,move,reset};
+ function speech(g){const s=games.get(g);return s&&s.floor===g.dungeon?.floor&&s.enemies===g.enemies?s.lines.filter(l=>!l.actor.dead&&g.time<l.until):[];}
+ return {plan,goal,canStrike,reserve,move,reset,speech};
 })();

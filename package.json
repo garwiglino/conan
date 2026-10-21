@@ -79,7 +79,9 @@
     "test:dungeon-lighting": "node --test tests/dungeon-lighting.test.cjs",
     "check:dungeon-lighting": "node scripts/check-dungeon-lighting.cjs",
     "test:goblin-tactics": "node --test tests/goblin-tactics.test.cjs tests/goblin-combat.test.cjs",
-    "check:goblin-tactics": "node scripts/check-goblin-tactics.cjs"
+    "check:goblin-tactics": "node scripts/check-goblin-tactics.cjs",
+    "test:dungeon-readability": "node --test --test-concurrency=1 tests/dungeon-readability.test.cjs tests/dungeon-presentation.test.cjs tests/kaldor-armaments.test.cjs tests/goblin-tactics.test.cjs",
+    "check:dungeon-readability": "node scripts/check-dungeon-readability.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",

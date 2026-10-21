@@ -37,7 +37,7 @@ const KaldorArsenal=(()=>{
  };
  const context=Game.prototype.context;
  Game.prototype.context=function(){
-  const c=context.call(this);if(c&&c.kind!=='sleep')return c;
+  const c=context.call(this);if(globalThis.KaldorArmaments)return KaldorArmaments.weaponContext(this)||c;if(c&&c.kind!=='sleep')return c;
   const p=this.player;if(!this.arsenal||p.level)return c;
   let best=null,d=18;
   for(const o of this.atlasProps)if(o.kind==='kaldor_weapon'&&!o.taken){const n=Math.hypot(p.x-o.x,p.y-o.y);if(n<d&&this.lineClear(p,o)){d=n;best=o;}}

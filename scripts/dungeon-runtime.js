@@ -15,7 +15,7 @@ Art.promise=Promise.all([
  ...Object.entries(A.floors).map(async([id,p])=>{Art.floors[id]={...p,ground:await load(p.ground)};}),
  ...Object.entries(A.goblins).map(async([id,p])=>{Art.goblins[id]=await Promise.all(p.map(load));})
 ]).then(()=>{Art.ready=true;}).catch(e=>{Art.error=e.message;});
-QUESTS.unshift({id:'evasion',main:true,title:'La forteresse de Grise-Gueule',obj:'Sortir avec la fée',desc:'Niveau 1 · Échappe-toi des geôles, trouve les clés serpent, crâne et croc, terrasse Grise-Gueule et libère la fée pour briser le sceau de la sortie.',goal:1,reward:{xp:100},count:g=>g.story?.dungeonEscaped?1:0});
+QUESTS.unshift({id:'evasion',main:true,title:'La forteresse de Grise-Gueule',obj:'Quitter la forteresse',desc:'Niveau 1 · Échappe-toi des geôles, trouve les clés serpent, crâne et croc, affronte Grise-Gueule et trouve comment briser le sceau de la sortie.',goal:1,reward:{xp:100},count:g=>g.story?.dungeonEscaped?1:0});
 function record(e){return {open:[],levers:[],chests:[],seen:[],crates:e.objets.map(([n,x,y],i)=>n==='caisse'?{id:i,x:x*CELL,y:y*CELL}:null).filter(Boolean),enemies:(e.gobelins||[]).map((p,i)=>({id:'dungeon-'+e.id+'-'+i,kind:'goblin',skin:i%2?'pillard':'guerrier-kesh',...at(p),homeX:p[0]*CELL,homeY:p[1]*CELL,hp:3,maxHp:3,r:6,dir:2,anim:0,cooldown:1,wind:0,stun:0,flash:0,attack:0}))};}
 function current(g){return byId[g.dungeon.floor];}
 function state(g){return g.dungeon.floors[g.dungeon.floor];}
@@ -73,11 +73,11 @@ Game.prototype.revealDungeon=function(){const s=state(this),e=current(this),seen
   for(const [a,b,k]of [[i,j-1,i+','+j+',N'],[i,j+1,i+','+(j+1)+',N'],[i-1,j,i+','+j+',O'],[i+1,j,(i+1)+','+j+',O']])if(!e.murs[k]||!blocks(this,k,e.murs[k]))todo.push([a,b]);}
  s.seen=[...seen];this.dungeonSeen=seen;
 };
-Game.prototype.dungeonContext=function(){const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
+Game.prototype.dungeonContext=function(){const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
  for(const b of s.crates){const d=Math.max(1,dist(p,b)),probe={x:b.x+(p.x-b.x)/d*12,y:b.y+(p.y-b.y)/d*12};if(near(p,b,28)&&this.lineClear(p,probe))options.push({kind:'dungeon-crate',id:b.id,text:'E  TIRER LA CAISSE · MARCHE POUR POUSSER',d});}
  for(const k of D.cles)if(k.etage===e.id&&!this.dungeon.keys.includes(k.id))add({kind:'dungeon-key',id:k.id},k.pos,'E  PRENDRE : '+k.nom);
  for(const m of e.mecanismes||[]){for(const k of m.bords|| (m.bord?[m.bord]:[]))wall({kind:'dungeon-lever',id:m.id,bord:k},k,'E  ACTIONNER LE LEVIER');if(m.id==='treuil')add({kind:'dungeon-winch'},m.pos,'E  REMONTER LE MONTE-CHARGE');}
- for(const d of e.portes||[])if(d.condition==='fee')wall({kind:'dungeon-exit'},d.bord,this.dungeon.fairy?'E  BRISER LE SCEAU ET SORTIR':'LA FÉE PEUT BRISER CE SCEAU');else if(d.cle&&!open(this,d.bord))wall({kind:'dungeon-door',door:d},d.bord,'E  OUVRIR : '+d.nom);
+ for(const d of e.portes||[])if(d.condition==='fee')wall({kind:'dungeon-exit'},d.bord,this.dungeon.fairy?'E  BRISER LE SCEAU ET SORTIR':'LE SCEAU RESTE VERROUILLÉ');else if(d.cle&&!open(this,d.bord))wall({kind:'dungeon-door',door:d},d.bord,'E  OUVRIR : '+d.nom);
  for(const l of e.liens||[]){if(l.bord)wall({kind:'dungeon-stairs',link:l},l.bord,'E  MONTER');else add({kind:'dungeon-stairs',link:l},l['trémie'].map(v=>v+.5),'E  DESCENDRE');}
  if(D.monte_charge.arrets.includes(e.id))add({kind:'dungeon-lift'},D.monte_charge.case.map(v=>v+.5),this.dungeon.lift?'E  MONTE-CHARGE : CHOISIR UN ÉTAGE':'LE TREUIL EST AUX GALERIES');
  e.objets.forEach(([n,x,y],i)=>{if(/^(coffre|tresor)$/.test(n)&&!s.chests.includes(i)&&!D.cles.some(k=>k.etage===e.id&&near(at(k.pos),at([x,y]),4)))add({kind:'dungeon-chest',i},[x,y],'E  FOUILLER LE COFFRE');});
@@ -86,16 +86,16 @@ Game.prototype.dungeonContext=function(){const e=current(this),s=state(this),p=t
 const context=Game.prototype.context;Game.prototype.context=function(){return this.dungeon?.active?this.dungeonContext():context.call(this);};
 const interact=Game.prototype.interact;
 Game.prototype.interact=function(){if(!this.dungeon?.active)return interact.call(this);if(this.dead||this.dying||this.player.attack>0||this.player.dash>0)return;
- const c=this.dungeonContext();if(!c)return;const s=state(this),e=current(this),d=this.dungeon;
+ const c=this.dungeonContext();if(!c)return;if(c.kind==='weapon'){this.takeNearbyWeapon(c.id);return;}const s=state(this),e=current(this),d=this.dungeon;
  if(c.kind==='dungeon-crate'){const b=s.crates.find(b=>b.id===c.id),p=this.player,dx=p.x-b.x,dy=p.y-b.y,x=Math.abs(dx)>Math.abs(dy)?Math.sign(dx)*8:0,y=x?0:Math.sign(dy)*8;if(!geometry(this,p.x+x,p.y+y,5,b)&&!geometry(this,b.x+x,b.y+y,9,b)){p.x+=x;p.y+=y;b.x+=x;b.y+=y;this.updateDungeonPlates();}}
  if(c.kind==='dungeon-key'){d.keys.push(c.id);this.emit('loot');this.emit('notice',{title:D.cles.find(k=>k.id===c.id).nom,text:'La clé est conservée dans ton inventaire.'});}
  if(c.kind==='dungeon-door'){if(d.keys.includes(c.door.cle)){openEdge(this,c.door.bord);this.emit('door',{open:true});}else this.emit('message',{text:'Il te manque la '+D.cles.find(k=>k.id===c.door.cle).nom+'.'});}
- if(c.kind==='dungeon-lever'){const m=e.mecanismes.find(m=>m.id===c.id);if(c.id==='levier-cage'){if(!d.bossDead){this.emit('message',{text:'Grise-Gueule garde le levier. Terrasse-le d’abord.'});return;}if(!d.fairy){d.fairy=true;this.story.fairy=true;this.emit('notice',{title:'La fée est libre',text:'Ramène-la à la porte scellée de la grande salle.'});}}else{if(!s.levers.includes(c.bord))s.levers.push(c.bord);if(!(m.bords||[m.bord]).some(k=>!s.levers.includes(k)))for(const k of m.ouvre||[])openEdge(this,k);}this.emit('lever');}
+ if(c.kind==='dungeon-lever'){const m=e.mecanismes.find(m=>m.id===c.id);if(c.id==='levier-cage'){if(!d.bossDead){this.emit('message',{text:'Grise-Gueule garde le levier. Terrasse-le d’abord.'});return;}if(!d.fairy){d.fairy=true;this.story.fairy=true;this.emit('notice',{title:'La cage est ouverte',text:'Rejoins la porte scellée de la grande salle.'});}}else{if(!s.levers.includes(c.bord))s.levers.push(c.bord);if(!(m.bords||[m.bord]).some(k=>!s.levers.includes(k)))for(const k of m.ouvre||[])openEdge(this,k);}this.emit('lever');}
  if(c.kind==='dungeon-winch'){d.lift=true;this.emit('notice',{title:'Monte-charge activé',text:'Le puits dessert les galeries, la caserne et les geôles.'});}
  if(c.kind==='dungeon-lift'){if(!d.lift){this.emit('message',{text:'Actionne d’abord le treuil des galeries.'});return;}const stops=D.monte_charge.arrets;this.talk('MONTE-CHARGE',['Choisis un étage.'],null,20,null,{prompt:'Quel étage ?',options:[...stops.filter(id=>id!==e.id).map(id=>({label:byId[id].nom,lines:[''],end:true,act:()=>this.enterDungeonFloor(id,at([4.5,10.5]))})),{label:'Rester ici',lines:[''],end:true}]});}
  if(c.kind==='dungeon-stairs'){const l=c.link,t=byId[l.vers];let pos;if(l.arrivee)pos=l.arrivee.map(v=>v+.5);else{const back=t.liens.find(q=>q.vers===e.id&&q.bord),p=edge(back.bord);pos=[(p.x+(p.o==='O'?12:0))/CELL,(p.y+(p.o==='N'?12:0))/CELL];}this.enterDungeonFloor(t.id,at(pos));}
  if(c.kind==='dungeon-chest'){s.chests.push(c.i);this.player.coins+=5;this.player.flasks=Math.min(FLASK_MAX,(this.player.flasks||0)+1);this.emit('chest');}
- if(c.kind==='dungeon-exit'){if(!d.fairy){this.emit('message',{text:'Une rune violette ferme la porte. Il faut libérer la fée.'});return;}this.leaveFirstDungeon();return;}
+ if(c.kind==='dungeon-exit'){if(!d.fairy){this.emit('message',{text:'Une rune violette ferme la porte. Son secret se trouve plus haut.'});return;}this.leaveFirstDungeon();return;}
  this.revealDungeon();this.emit('save');
 };
 Game.prototype.leaveFirstDungeon=function(){if(!this.dungeon?.active||!this.dungeon.fairy||!this.dungeon.bossDead)return false;
@@ -103,7 +103,7 @@ Game.prototype.leaveFirstDungeon=function(){if(!this.dungeon?.active||!this.dung
  this.story.escaped=this.story.fairy=this.story.dungeonEscaped=true;this.fairyActor.alpha=1;
  const p=Atlas.toGame(D.lieu.monde.x,D.lieu.monde.y);this.placeSafely(p.x,p.y);Object.assign(this.fairyActor,{x:this.player.x-20,y:this.player.y-12});Object.assign(this.escortActor,{x:START.x+36,y:START.y});
  this.checkpoint={x:this.player.x,y:this.player.y,level:0};this.worldCheckpoint={...this.checkpoint};this.pendingBossWin=false;this.won=false;this.bossActive=false;this.targetId=null;this.dialogue=null;this.shots=[];this.hazards=[];this.remains=[];this.blood=[];this.bloodFX=[];
- this.discover(['sceaux'],true);this.checkQuests();this.registerDungeonPlace();this.updateLocation(0);this.recordExploration();this.emit('notice',{title:'Niveau 1 terminé',text:'Forteresse de Grise-Gueule · Sarak. La fée t’accompagne désormais.'});this.emit('save');return true;
+ this.discover(['sceaux'],true);this.checkQuests();this.registerDungeonPlace();this.updateLocation(0);this.recordExploration();this.emit('notice',{title:'Niveau 1 terminé',text:'Tu as quitté la forteresse de Grise-Gueule · Sarak.'});this.emit('save');return true;
 };
 Game.prototype.registerDungeonPlace=function(){if(!this.story.dungeonEscaped)return;const id='dungeon-'+D.id;if(!this.mapPlaces.some(p=>p.id===id))this.mapPlaces.push({id,name:D.nom,category:'story',x:D.lieu.monde.x,y:D.lieu.monde.y,radius:8});this.visitedPlaces.add(id);};
 const zone=Game.prototype.zone;Game.prototype.zone=function(){return this.dungeon?.active?'Lieu inconnu · '+current(this).nom:zone.call(this);};
@@ -118,7 +118,7 @@ Game.prototype.damageEnemy=function(e,n){
  // Keep the shared power, riposte, hit sound, blood, target, loot and feedback.
  // The goblin rig only supplies its own reaction and the dungeon boss outcome.
  e.hurtElapsed=0;e.stun=Math.max(e.stun||0,HearthreaverGoblins.duration('hurt'));HearthreaverGoblins.cancel(e);
- if(e.dead){e.deathElapsed=0;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle libère la fée.'});}this.emit('save');}
+ if(e.dead){e.deathElapsed=0;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle est maintenant accessible.'});}this.emit('save');}
  return result;
 };
 const defend=Game.prototype.defend;Game.prototype.defend=function(from){const parry=this.player.parry>0,result=defend.call(this,from);if(result&&parry&&this.dungeon?.active&&from?.kind==='goblin'){HearthreaverGoblins.cancel(from);from.hurtElapsed=0;}return result;};

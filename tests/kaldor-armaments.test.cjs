@@ -1,9 +1,9 @@
 'use strict';
 const {test,before}=require('node:test'),assert=require('node:assert/strict');
-const {loadGame,canvas}=require('./game-harness.cjs'),W=require('../scripts/kaldor-weapons.js');
+const {loadGame,combatGame,canvas}=require('./game-harness.cjs'),W=require('../scripts/kaldor-weapons.js');
 let api,g;
 const plain=v=>JSON.parse(JSON.stringify(v));
-before(async()=>{api=await loadGame();await api.HearthreaverKaldorCivilianArt.preload();g=new api.Game();});
+before(async()=>{api=await loadGame();await api.HearthreaverKaldorCivilianArt.preload();g=combatGame(api);});
 function foe(kind,id){const p=g.player,n=api.enemy(kind==='bandit'?'skeleton':kind,p.x+18,p.y,id);n.kind=kind;n.hp=1;n.world=true;n.level=p.level||0;n.guardTime=0;n.block=0;n.rage=true;n.stun=0;n.wind=0;n.attack=0;g.enemies.push(n);return n;}
 function reset(){g.events=[];g.weaponDrops=[];g.arsenal.owned=[W.START];g.player.weapon=W.START;g.arsenal.equipped=W.START;g.won=false;g.dead=false;g.dying=null;g.journey=null;g.dialogue=null;g.sleeping=null;g.transit=null;g.player.level=0;g.player.riposte=0;g.player.combo=0;}
 
@@ -24,7 +24,7 @@ test('racial loadouts distinguish common, elite and actual frog roles; future ce
 
 test('a lethal hit drops only the carried unknown weapon; known weapons produce no drop or card',()=>{
  reset();const n=foe('skeleton','armament-death');g.damageEnemy(n,100);assert.ok(n.dead);assert.equal(g.weaponDrops.length,1);assert.equal(g.weaponDrops[0].weapon,'lame-ossuaire');
- assert.equal(g.events.filter(e=>e.type==='weaponfound').length,0,'discovery happens on pickup');
+ assert.equal(g.events.filter(e=>e.type==='weaponfound').length,0,'discovery happens on approach');
  g.damageEnemy(n,100);g.dropCarriedWeapon(n);assert.equal(g.weaponDrops.length,1);
  g.arsenal.owned.push('lame-ossuaire');const known=foe('skeleton','armament-known');g.events=[];g.damageEnemy(known,100);assert.ok(known.dead);assert.ok(!g.events.some(e=>e.type==='weaponfound'));assert.ok(!g.weaponDrops.some(d=>d.source===known.id));
  const animal=foe('snake','armament-animal');g.damageEnemy(animal,100);assert.ok(!g.weaponDrops.some(d=>d.source===animal.id));
@@ -41,17 +41,17 @@ test('picking up is local, floor- and line-of-sight-aware, gives one info card, 
  Object.assign(g.player,{x:d.x,y:d.y,level:1});g.stepWeaponDrops(1);assert.ok(!g.arsenal.owned.includes(d.weapon));
  g.player.level=0;const clear=g.lineClear;g.lineClear=()=>false;g.stepWeaponDrops(1);assert.ok(!g.arsenal.owned.includes(d.weapon));g.lineClear=clear;
  g.events=[];const coins=g.player.coins;g.stepWeaponDrops(1);
- assert.ok(g.arsenal.owned.includes('baton-cultiste'));assert.equal(g.weaponDrops.length,0);assert.equal(g.player.coins,coins);assert.equal(g.player.weapon,W.START);
+ assert.ok(!g.arsenal.owned.includes('baton-cultiste'));assert.equal(g.weaponDrops.length,1);assert.ok(g.takeNearbyWeapon('baton-cultiste'));assert.ok(g.arsenal.owned.includes('baton-cultiste'));assert.equal(g.weaponDrops.length,0);assert.equal(g.player.coins,coins);assert.equal(g.player.weapon,W.START);
  const cards=g.events.filter(e=>e.type==='weaponfound');assert.equal(cards.length,1);assert.equal(cards[0].weapon,'baton-cultiste');assert.match(cards[0].text,/2 mains/);assert.match(cards[0].stats,/Dégâts/);assert.ok(cards[0].description);assert.deepEqual(plain(cards[0].anchor),{x:d.x,y:d.y,level:d.level});
  g.stepWeaponDrops(1);assert.equal(g.events.filter(e=>e.type==='weaponfound').length,1);Object.assign(g.player,pos);
 });
 
 test('pending weapon loot survives saving and rejects duplicates, owned arms and corrupt records',()=>{
  reset();const n=foe('bandit','armament-saved');g.damageEnemy(n,100);const saved=plain(g.serialize());
- assert.equal(saved.arsenal.drops[0].weapon,'sabre-piste');const r=new api.Game(saved);assert.equal(r.weaponDrops.length,1);assert.equal(r.weaponDrops[0].source,n.id);
+ assert.equal(saved.arsenal.drops[0].weapon,'sabre-piste');const r=combatGame(api,saved);assert.equal(r.weaponDrops.length,1);assert.equal(r.weaponDrops[0].source,n.id);
  const d=r.weaponDrops[0];api.KaldorArmaments.restoreDrops(r,[d,d,{...d,weapon:W.START},{...d,weapon:'unknown'},{...d,x:Infinity}]);assert.equal(r.weaponDrops.length,1);
- Object.assign(r.player,{x:d.x,y:d.y,level:d.level});r.dialogue=null;r.stepWeaponDrops(1);const collected=plain(r.serialize());assert.equal(collected.arsenal.drops.length,0);assert.ok(collected.arsenal.owned.includes('sabre-piste'));
- const old=new api.Game({...saved,arsenal:undefined});assert.equal(old.weaponDrops.length,0);assert.equal(old.arsenal.equipped,W.START);
+ Object.assign(r.player,{x:d.x,y:d.y,level:d.level});r.dialogue=null;r.stepWeaponDrops(1);assert.ok(!r.arsenal.owned.includes(d.weapon));assert.ok(r.takeNearbyWeapon(d.weapon));const collected=plain(r.serialize());assert.equal(collected.arsenal.drops.length,0);assert.ok(collected.arsenal.owned.includes('sabre-piste'));
+ const old=combatGame(api,{...saved,arsenal:undefined});assert.equal(old.weaponDrops.length,0);assert.equal(old.arsenal.equipped,W.START);
 });
 
 test('hostile human and batracien guards drop their own arms through their real damage channels',()=>{

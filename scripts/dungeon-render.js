@@ -2,10 +2,21 @@
 (()=>{
 'use strict';
 const F=FirstDungeon,D=F.design,frame=Renderer.prototype.frame;
+function drawGoblinSpeech(r,g){
+ const c=r.c,used=[];r.goblinSpeechRects=used;if(g.dead||g.dying||g.dialogue)return;
+ c.save();c.setTransform(r.k||1,0,0,r.k||1,0,0);
+ for(const speech of GoblinTactics.speech(g)){
+  const n=speech.actor;if(!g.dungeonSeen?.has(Math.floor(n.x/32)+','+Math.floor(n.y/32)))continue;
+  const q=WorldProjection.point(n.x,n.y),x=q.x-r.cam.x,y=r.top+q.y-r.cam.y-40,w=textW(c,speech.text)+12,h=17;
+  if(x<0||x>r.W||y-h<r.top+4||y>r.H-8)continue;
+  const left=Math.round(clamp(x-w/2,4,r.W-w-4)),top=Math.round(y-h);
+  box(c,left-1,top-1,w+2,h+2,'#30291f');box(c,left,top,w,h,'#e8d7b2');box(c,Math.round(x)-1,top+h,3,3,'#30291f');text(c,speech.text,left+6,top+5,'#30291f');used.push({x:left,y:top,w,h,text:speech.text,actor:n.id});
+ }c.restore();
+}
 Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call(this);
  const g=this.g,c=this.c,p=g.player,K=this.k||1,W=this.W,H=this.H,T=this.top,e=F.current(g),s=F.state(g),art=F.art,P=WorldProjection.point;
  c.setTransform(K,0,0,K,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#050408';c.fillRect(0,0,W,H);
- const hero=P(p.x,p.y);this.cam={x:Math.round(hero.x-W/2),y:Math.round(hero.y-(H-T)/2-10)};
+ const hero=P(p.x,p.y),now=performance.now()/1000;this.dungeonOcclusionDt=Math.min(.05,Math.max(0,now-(this.dungeonOcclusionTime??now-1/60)));this.dungeonOcclusionTime=now;this.dungeonOcclusion=[];this.cam={x:Math.round(hero.x-W/2),y:Math.round(hero.y-(H-T)/2-10)};
  if(!art.ready){text(c,art.error?'Erreur de chargement du donjon':'Chargement du donjon…',12,T+30,'#eee0c8');return;}
  const a=art.floors[e.id],seen=g.dungeonSeen||new Set(s.seen),items=[],brightness=this.dungeonBrightness||(this.dungeonBrightness=new Map()),visible=(i,j)=>seen.has(i+','+j);
  c.save();c.beginPath();c.rect(0,T,W,H-T);c.clip();const shake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);c.translate(-this.cam.x+shake,T-this.cam.y);c.drawImage(a.ground,-a.origin[0],-a.origin[1]);
@@ -21,7 +32,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   if(name==='monte-charge')continue;
   if(name==='dalle-pression'&&s.crates.some(b=>Math.hypot(b.x-ref[0],b.y-ref[1])<10))name='dalle-pression-enfoncee';
   if(!light&&!it.edge)continue;
-  items.push({key:it.key,sub:it.sub,draw:()=>{const alpha=light?1:.14,q=P(...ref);c.save();if(it.edge&&q.y>hero.y&&Math.abs(q.x-hero.x)<48&&q.y-hero.y<46)c.globalAlpha=.35;blit(name,...ref,alpha);c.restore();}});
+  items.push({key:it.key,sub:it.sub,draw:()=>{const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...it,ref},z,im,p):1;blit(name,...ref,alpha);}});
  }
  if(D.monte_charge.arrets.includes(e.id)&&(g.dungeon.lift||e.id==='geoles')){const [i,j]=D.monte_charge.case;items.push({key:i+j,sub:(i+j+1)*32,draw:()=>blit('monte-charge',(i+.5)*32,(j+.5)*32)});}
  if(this.projectionViewGame!==g){this.projectionViewGame=g;this.projectionView=WorldProjection.display(g);}
@@ -46,7 +57,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   DungeonLighting.draw(this,c);this.drawFloaters();
   c.restore();this.bubble();
  }finally{this.g=g;this.projectionActive=false;this.logicalGame=null;}
- this.hud();KaldorArmaments.renderDiscovery(this);c.save();
+ drawGoblinSpeech(this,g);this.hud();KaldorArmaments.renderDiscovery(this);c.save();
  const boss=g.enemies.find(n=>n.chief);if(g.dungeon.bossFight&&boss&&!boss.dead&&!g.dialogue){const y=T+36;this.uiBox(W/2-78,y,156,24);text(c,'GRISE-GUEULE',W/2-35,y+4,'#e5bf67');c.fillStyle='#38242a';c.fillRect(W/2-70,y+16,140,3);c.fillStyle='#bf4a3a';c.fillRect(W/2-70,y+16,140*boss.hp/boss.maxHp,3);}
  c.restore();
 };
