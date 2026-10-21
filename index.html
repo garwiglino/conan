@@ -9656,7 +9656,7 @@ Renderer.prototype.travelHudBar=function(){
 };
 const TRAVEL_BODY_GLYPHS={chilly:{rows:['..1..','1.1.1','.111.','1.1.1','..1..'],colors:{'1':'#8fb1c4'}},freezing:{rows:['..1..','1.1.1','.121.','1.1.1','..1..'],colors:{'1':'#b9e4fb','2':'#ffffff'}},overheated:{rows:['1.1.1','.222.','12221','.222.','1.1.1'],colors:{'1':'#c97a2c','2':'#f2b950'}}};
 const travelHud=Renderer.prototype.hud;
-Renderer.prototype.hud=function(){travelHud.call(this);const g=this.g;if(!g.location?.current||g.dialogue||g.journey)return;const c=this.c,L=g.location.current,x=(this.safe.l||0)+5,y=this.top+5,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80));
+Renderer.prototype.hud=function(){travelHud.call(this);const g=this.g;if(g.dungeon?.active){const c=this.c,x=(this.safe.l||0)+5,y=this.top+5,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80));if(!g.dialogue){c.save();box(c,x-2,y-2,max+5,26,'#1b1715');box(c,x-2,y-2,1,26,'#b79c66');c.font='6px PixelUI, monospace';travelText(c,'Niveau 1 · Lieu inconnu',x+2,y);travelText(c,travelFit(c,FirstDungeon.current(g).nom,max-4),x+2,y+8,'#b8baa1');travelText(c,'Clés '+g.dungeon.keys.length+'/3 · Fioles '+(g.player.flasks||0),x+2,y+16,'#b8baa1');c.restore();}return;}if(!g.location?.current||g.dialogue||g.journey)return;const c=this.c,L=g.location.current,x=(this.safe.l||0)+5,y=this.top+5,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80));
  c.save();c.globalAlpha=.88;box(c,x-2,y-2,max+5,18,'#1b1715');c.globalAlpha=1;box(c,x-2,y-2,1,18,'#b79c66');c.font='6px PixelUI, monospace';const temperature=Math.round(g.sky().temperature),label=temperature+'°C',tw=c.measureText(label).width,body=g.bodyHeat?.().state,glyph=TRAVEL_BODY_GLYPHS[body],gw=glyph?7:0;travelText(c,travelFit(c,L.title,max-tw-gw-10),x+2,y,'#e9d8b6');
  // The air temperature, coloured by what Kaldor feels in his outfit; a snowflake when he is cold, a sun when too warm.
  const bite=body==='freezing'&&g.time-(g.bodyHeatHit??-Infinity)<.4;if(glyph)pixels(c,glyph.rows,x+max-tw-gw,y,bite?{'1':'#ffffff','2':'#ffffff'}:glyph.colors);travelText(c,label,x+max-tw,y,body==='freezing'?'#9fd2ee':body==='chilly'?'#b7d0d4':body==='overheated'?'#e7a35a':temperature<=0?'#b7d0d4':'#c5bea7');this.temperatureReadout={temperature,label,width:tw,body};travelText(c,travelFit(c,L.detail||'Terres Sauvages',max-52),x+2,y+8,'#b8baa1');c.restore();this.navigationMarker();
@@ -16613,7 +16613,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=createWorldJustice
 (()=>{
  const hud=Renderer.prototype.hud;
  Renderer.prototype.hud=function(){
-  hud.call(this);this.pursuitReadout=null;const g=this.g;if(!g.pursuitStatus||g.dialogue||g.journey||g.dead||g.dying||g.sleeping)return;
+  hud.call(this);this.pursuitReadout=null;const g=this.g;if(g.dungeon?.active||!g.pursuitStatus||g.dialogue||g.journey||g.dead||g.dying||g.sleeping)return;
   const a=g.pursuitStatus();if(!a.zone)return;const c=this.c,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80)),w=48,x=(this.safe.l||0)+5+max-w,y=this.top+12,color=a.level?'#e5a071':'#9dad94';
   c.save();if(a.level){const left=(this.safe.l||0)+7;c.font='6px PixelUI, monospace';box(c,left,y,max-52,8,'#1b1715');travelText(c,travelFit(c,a.zone.authorityName,max-52),left,y+1,color);}
   box(c,x,y,w,8,'#1b1715');travelText(c,'R'+a.level,x+1,y+1,color,5);
@@ -17073,7 +17073,7 @@ const KaldorArsenal=(()=>{
  // Freeze simulation at contact, including the victim and impact particles.
  // Input remains live: a press during this short pause is queued for the link.
  const updateCombat=Game.prototype.update;
- Game.prototype.update=function(dt,input={}){
+ function combatStep(dt,input={},step=updateCombat){
   dt=clamp(Number(dt)||0,0,.04);const p=this.player;p.impactTick=false;
   // Decay in real update time, including hit stop, so the camera settles quickly.
   if(this.weaponShake)this.weaponShake.remaining=Math.max(0,this.weaponShake.remaining-dt);
@@ -17085,8 +17085,9 @@ const KaldorArsenal=(()=>{
    p.impactTick=false;
    if(dt<1e-7)return;
   }
-  return updateCombat.call(this,dt,input);
- };
+  return step.call(this,dt,input);
+ }
+ Game.prototype.update=function(dt,input={}){return combatStep.call(this,dt,input);};
  const civilianDamage=Game.prototype.damageCivilian;
  Game.prototype.damageCivilian=function(n,amount,source){
   const applied=civilianDamage.call(this,n,amount,source);
@@ -17154,7 +17155,7 @@ const KaldorArsenal=(()=>{
  const row=KaldorWardrobe.inventoryHTML,bind=KaldorWardrobe.bindInventory;
  KaldorWardrobe.inventoryHTML=function(g){return row.call(this,g)+inventoryHTML(g);};
  KaldorWardrobe.bindInventory=function(body,g,refresh){bind.call(this,body,g,refresh);bindInventory(body,g,refresh);};
- return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,queueAttack};
+ return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,queueAttack,combatStep,contactShake};
 })();
 
 /* Carried equipment and first-discovery loot. Race chooses a craft tradition,
@@ -21711,7 +21712,7 @@ Game.prototype.enterDungeonFloor=function(id,position,savePoint=true){
  if(!byId[id]||!this.dungeon?.active)return false;
  this.dungeon.floor=id;this.enemies=state(this).enemies;
  Object.assign(this.player,{x:position.x,y:position.y,level:0,attack:0,dash:0,attackBuffer:0,onStairs:false});delete this.player.elevation;
- this.targetId=null;this.shots=[];this.hazards=[];this.blood=[];this.bloodFX=[];this.remains=[];
+ this.particles=[];this.floaters=[];this.debris=[];this.weaponShake=null;this.targetId=null;this.shots=[];this.hazards=[];this.blood=[];this.bloodFX=[];this.remains=[];
  this.checkpoint={x:position.x,y:position.y,level:0};if(savePoint)checkpoint(this);
  this.revealDungeon();this.emit('save');return true;
 };
@@ -21778,7 +21779,7 @@ const qState=Game.prototype.qState;Game.prototype.qState=function(q){if(this.dun
 const targets=Game.prototype.combatTargets;Game.prototype.combatTargets=function(){return this.dungeon?.active?this.enemies:targets.call(this);};
 const bodies=Game.prototype.bodies;Game.prototype.bodies=function(o){return this.dungeon?.active?(o===this.player?this.enemies.filter(e=>!e.dead):[this.player]):bodies.call(this,o);};
 const damageEnemy=Game.prototype.damageEnemy;
-Game.prototype.damageEnemy=function(e,n){if(!this.dungeon?.active)return damageEnemy.call(this,e,n);if(e.dead)return;e.hp=Math.max(0,e.hp-n);e.flash=.15;e.stun=.18;this.player.hitPause=.045;this.spill(e,this.player,!e.hp);this.emit('hit');if(!e.hp){e.dead=true;this.player.kills++;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle libère la fée.'});}else if(this.player.kills%3===0)this.player.hp=Math.min(this.player.maxHp,this.player.hp+1);this.emit('save');}};
+Game.prototype.damageEnemy=function(e,n){if(!this.dungeon?.active)return damageEnemy.call(this,e,n);if(e.dead)return;e.hp=Math.max(0,e.hp-n);e.flash=.15;e.stun=.18;this.player.hitPause=HearthreaverWeapons.hitPause(this.player.weapon,this.player.combo);KaldorArsenal.contactShake(this);this.spill(e,this.player,!e.hp);this.emit('hit');if(!e.hp){e.dead=true;this.player.kills++;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle libère la fée.'});}else if(this.player.kills%3===0)this.player.hp=Math.min(this.player.maxHp,this.player.hp+1);this.emit('save');}};
 const respawn=Game.prototype.respawn;Game.prototype.respawn=function(){if(!this.dungeon?.active)return respawn.call(this);const c=this.dungeon.checkpoint;this.dying=null;this.dead=false;this.dialogue=null;this.dungeon.bossFight=false;for(const e of this.enemies){e.wind=0;e.stun=0;e.attack=0;e.cooldown=1;}Object.assign(this.player,{hp:this.player.maxHp,inv:2,attackCD:0,hurt:0,guard:false,parry:0});this.enterDungeonFloor(c.floor,c,false);};
 const sky=Game.prototype.sky;Game.prototype.sky=function(){if(!this.dungeon?.active)return sky.call(this);return {...sky.call(this),rain:0,snow:0,storm:0,wind:0,cloud:0,night:0,family:'cursed',temperature:16};};
 const save=Game.prototype.serialize;Game.prototype.serialize=function(){if(!this.dungeon?.active){const s=save.call(this);if(this.dungeon)s.dungeon=this.dungeon;return s;}
@@ -21788,20 +21789,21 @@ const save=Game.prototype.serialize;Game.prototype.serialize=function(){if(!this
 };
 const restore=Game.prototype.finishAtlasRestore;Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);if(saved?.dungeon?.active)this.startFirstDungeon(saved.dungeon);else{if(saved?.dungeon)this.dungeon=saved.dungeon;this.registerDungeonPlace();if(this.story.dungeonEscaped&&saved?.atlas?.navigation==='dungeon-'+D.id)this.navigation=saved.atlas.navigation;}};
 const update=Game.prototype.update;
-Game.prototype.update=function(dt,controls={}){if(!this.dungeon?.active)return update.call(this,dt,controls);dt=clamp(dt,0,.04);this.time+=dt;this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}if(this.dying){this.stepDying(dt);return;}if(this.dead)return;
- this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.updateEffects(dt);const p=this.player,input={...controls,...WorldProjection.input(controls.x||0,controls.y||0)};
+Game.prototype.update=function(dt,controls={}){if(!this.dungeon?.active)return update.call(this,dt,controls);return KaldorArsenal.combatStep.call(this,dt,{...controls,...WorldProjection.input(controls.x||0,controls.y||0)},dungeonStep);};
+function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}if(this.dying){this.stepDying(dt);return;}if(this.dead)return;
+ this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.updateEffects(dt);const p=this.player,input={...controls};
  for(const k of ['attack','attackCD','dash','dashCD','inv','comboWindow','hurt','parry','parryCD','guardFlash','riposte','hitPause','attackBuffer'])p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,(p[k]||0)-dt);
- p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);const guardEdge=input.guard&&!p.guardHeld;p.guardHeld=!!input.guard;p.guard=!!input.guard&&p.attack<=0&&p.dash<=0;if(guardEdge&&p.guard&&p.parryCD<=0){p.parry=.18;p.parryCD=.42;}
+ p.lvlFX=Math.max(0,(p.lvlFX||0)-dt);p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);if(p.spawnFX>SPAWN_T-.9){input.x=0;input.y=0;input.attack=false;input.attackPressed=false;input.dodge=false;input.guard=false;input.interact=false;}const guardEdge=input.guard&&!p.guardHeld;p.guardHeld=!!input.guard;p.guard=!!input.guard&&p.attack<=0&&p.dash<=0&&p.hurt<=0;if(!p.guard)p.parry=0;if(guardEdge&&p.guard&&p.parryCD<=0){p.parry=.18;p.parryCD=.42;}
  if(input.dodge)this.dodge(input.x,input.y);
  const attackEdge=!!input.attackPressed||input.attack&&!p.attackHeld;p.attackHeld=!!input.attack;
  if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,input.x,input.y);
  const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);
  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=buffered?p.bufferX:input.x,y=buffered?p.bufferY:input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
  if(input.interact)this.interact();if(!this.dungeon.active)return;
- const ox=p.x,oy=p.y;if(p.dash>0)this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);else if((input.x||input.y)&&p.attack<=0&&p.hurt<=0){p.dir=this.turnTo(p.dir,input.x,input.y);this.movePlayer(p,input.x*dt*(p.guard?29:67),input.y*dt*(p.guard?29:67));}
+ const ox=p.x,oy=p.y;if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&p.attack<=0&&p.hurt<=0){p.dir=this.turnTo(p.dir,input.x,input.y);this.movePlayer(p,input.x*dt*(p.guard?29:67),input.y*dt*(p.guard?29:67));}
  p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
  this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
- if(p.attack>0){const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
+ if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
  if(this.dungeon.floor==='trone'&&p.y<9*CELL&&!this.dungeon.bossDead)this.dungeon.bossFight=true;
  for(const e of this.enemies){if(e.dead)continue;for(const k of ['cooldown','stun','flash','attack'])e[k]=Math.max(0,(e[k]||0)-dt);if(e.stun>0)continue;const d=dist(e,p);if(e.chief&&!this.dungeon.bossFight)continue;
   if(e.wind>0){e.wind-=dt;if(e.wind<=0){e.attack=.22;if(d<(e.chief?38:25)&&this.lineClear(e,p))this.damagePlayer(e.chief?2:1,e);e.cooldown=e.chief?1.25:.95;}continue;}
@@ -21810,7 +21812,7 @@ Game.prototype.update=function(dt,controls={}){if(!this.dungeon?.active)return u
  }
  this.dungeonRevealTimer=(this.dungeonRevealTimer||0)-dt;if(this.dungeonRevealTimer<=0){this.revealDungeon();this.dungeonRevealTimer=.15;}
  this.saveTimer+=dt;if(this.saveTimer>=5){this.saveTimer=0;this.emit('save');}
-};
+}
 function inventoryHTML(g){if(!g.dungeon)return '';return '<div class="m-sec">Clés de la forteresse</div>'+D.cles.map(k=>'<div class="inv-row"><div class="grow">'+k.nom+'<small>'+ (g.dungeon.keys.includes(k.id)?'Obtenue · '+k.ouvre:'À trouver dans la forteresse')+'</small></div></div>').join('');}
 return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML};
 })();
@@ -21825,7 +21827,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
  const hero=P(p.x,p.y);this.cam={x:Math.round(hero.x-W/2),y:Math.round(hero.y-(H-T)/2-10)};
  if(!art.ready){text(c,art.error?'Erreur de chargement du donjon':'Chargement du donjon…',12,T+30,'#eee0c8');return;}
  const a=art.floors[e.id],seen=g.dungeonSeen||new Set(s.seen),items=[],brightness=this.dungeonBrightness||(this.dungeonBrightness=new Map()),visible=(i,j)=>seen.has(i+','+j);
- c.save();c.beginPath();c.rect(0,T,W,H-T);c.clip();c.translate(-this.cam.x,T-this.cam.y);c.drawImage(a.ground,-a.origin[0],-a.origin[1]);
+ c.save();c.beginPath();c.rect(0,T,W,H-T);c.clip();const shake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);c.translate(-this.cam.x+shake,T-this.cam.y);c.drawImage(a.ground,-a.origin[0],-a.origin[1]);
  // Room reveal is gradual, without revealing the contents behind closed doors.
  for(let j=0;j<e.plan.length;j++)for(let i=0;i<e.plan[j].length;i++){if(e.plan[j][i]==='#')continue;const k=e.id+'/'+i+','+j,target=visible(i,j)?1:.14,old=brightness.get(k)??target,b=old+(target-old)*.14;brightness.set(k,b);const q=P(i*32,j*32);c.fillStyle='rgba(0,0,0,'+(1-b*.8)+')';c.beginPath();c.moveTo(q.x,q.y);c.lineTo(q.x+32,q.y+16);c.lineTo(q.x,q.y+32);c.lineTo(q.x-32,q.y+16);c.fill();}
  const blit=(name,x,y,alpha=1)=>{const z=art.pieces[name];if(!z)return;const im=z.frames[Math.floor(g.time*z.fps)%z.frames.length],q=P(x,y);c.save();c.globalAlpha*=alpha;c.drawImage(im,Math.round(q.x-z.anchor[0]),Math.round(q.y-z.anchor[1]));c.restore();};
@@ -21841,8 +21843,10 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   items.push({key:it.key,sub:it.sub,draw:()=>{const alpha=light?1:.14,q=P(...ref);c.save();if(it.edge&&q.y>hero.y&&Math.abs(q.x-hero.x)<48&&q.y-hero.y<46)c.globalAlpha=.35;blit(name,...ref,alpha);c.restore();}});
  }
  if(D.monte_charge.arrets.includes(e.id)&&(g.dungeon.lift||e.id==='geoles')){const [i,j]=D.monte_charge.case;items.push({key:i+j,sub:(i+j+1)*32,draw:()=>blit('monte-charge',(i+.5)*32,(j+.5)*32)});}
- const view=WorldProjection.display(g);this.logicalGame=g;this.projectionActive=true;this.g=view.game;
+ if(this.projectionViewGame!==g){this.projectionViewGame=g;this.projectionView=WorldProjection.display(g);}
+ const view=this.projectionView;this.logicalGame=g;this.projectionActive=true;this.g=view.game;
  try{
+  for(const b of view.game.blood)drawBloodStain(c,b);
   items.push({key:Math.floor(p.x/32)+Math.floor(p.y/32),sub:p.x+p.y,draw:()=>this.hero(view.wrap(p))});
   for(const n of g.enemies){if(!visible(Math.floor(n.x/32),Math.floor(n.y/32)))continue;items.push({key:Math.floor(n.x/32)+Math.floor(n.y/32),sub:n.x+n.y,draw:()=>{
    const q=P(n.x,n.y),v=[2,1,0,3][n.dir]??0,im=art.goblins[n.skin][v],bob=n.anim&&!n.dead?Math.round(Math.sin(n.anim*2)):0;c.save();
@@ -21852,14 +21856,14 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
     if(n.hp<n.maxHp){c.fillStyle='#271b24';c.fillRect(q.x-11,q.y-(n.chief?44:26),22,3);c.fillStyle='#c0644b';c.fillRect(q.x-11,q.y-(n.chief?44:26),22*n.hp/n.maxHp,2);}}
    c.restore();}});}
   items.sort((a,b)=>a.key-b.key||a.sub-b.sub);for(const it of items)it.draw();
-  if(g.dungeon.fairy){const q=P(p.x-16,p.y-16);c.fillStyle='#c7a6ef';c.fillRect(q.x-2,q.y-15+Math.sin(g.time*4)*2,4,4);c.fillStyle='#efe0ff';c.fillRect(q.x-5,q.y-17,3,2);c.fillRect(q.x+2,q.y-17,3,2);}
+  for(const fx of view.game.bloodFX)drawBloodFX(c,fx);
+  for(const v of view.game.particles)box(c,v.x,v.y-(v.z||0),v.size||2,v.size||2,v.color);
+  this.drawFloaters();
+  if(g.dungeon.fairy)this.npcDraw(view.wrap({...g.fairyActor,x:p.x-16,y:p.y-16,alpha:1}));
   c.restore();this.bubble();
  }finally{this.g=g;this.projectionActive=false;this.logicalGame=null;}
- c.save();const barH=34;this.uiBox(3,3,W-40,barH);text(c,'NIVEAU 1 · LIEU INCONNU',8,6,'#e5bf67',.75);text(c,e.nom,8,18,'#eadfc8',.75);
- for(let i=0;i<p.maxHp/2;i++){c.fillStyle=p.hp>i*2?'#c96155':'#3b2934';c.fillRect(W-100+i*10,9,6,p.hp===i*2+1?3:5);}
- text(c,'Clés '+g.dungeon.keys.length+'/3 · Fioles '+(p.flasks||0),Math.max(10,W-125),22,'#d4c7ad',.65);
- const ctx=g.context();if(ctx){const label=this.touch?ctx.text.replace(/^E\s+/,''):ctx.text;c.font='8px PixelUI, monospace';const lines=canvasLines(c,label,W-32),y=H-12-lines.length*11;this.uiBox(7,y-4,W-14,lines.length*11+8);lines.forEach((line,i)=>text(c,line,14,y+i*11,'#f1dfab'));}
- const boss=g.enemies.find(n=>n.chief);if(g.dungeon.bossFight&&boss&&!boss.dead){this.uiBox(W/2-78,T+4,156,24);text(c,'GRISE-GUEULE',W/2-35,T+8,'#e5bf67');c.fillStyle='#38242a';c.fillRect(W/2-70,T+20,140,3);c.fillStyle='#bf4a3a';c.fillRect(W/2-70,T+20,140*boss.hp/boss.maxHp,3);}
+ this.hud();c.save();
+ const boss=g.enemies.find(n=>n.chief);if(g.dungeon.bossFight&&boss&&!boss.dead&&!g.dialogue){const y=T+36;this.uiBox(W/2-78,y,156,24);text(c,'GRISE-GUEULE',W/2-35,y+4,'#e5bf67');c.fillStyle='#38242a';c.fillRect(W/2-70,y+16,140,3);c.fillStyle='#bf4a3a';c.fillRect(W/2-70,y+16,140*boss.hp/boss.maxHp,3);}
  c.restore();
 };
 })();

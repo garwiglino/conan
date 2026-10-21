@@ -42,7 +42,7 @@ Game.prototype.enterDungeonFloor=function(id,position,savePoint=true){
  if(!byId[id]||!this.dungeon?.active)return false;
  this.dungeon.floor=id;this.enemies=state(this).enemies;
  Object.assign(this.player,{x:position.x,y:position.y,level:0,attack:0,dash:0,attackBuffer:0,onStairs:false});delete this.player.elevation;
- this.targetId=null;this.shots=[];this.hazards=[];this.blood=[];this.bloodFX=[];this.remains=[];
+ this.particles=[];this.floaters=[];this.debris=[];this.weaponShake=null;this.targetId=null;this.shots=[];this.hazards=[];this.blood=[];this.bloodFX=[];this.remains=[];
  this.checkpoint={x:position.x,y:position.y,level:0};if(savePoint)checkpoint(this);
  this.revealDungeon();this.emit('save');return true;
 };
@@ -109,7 +109,7 @@ const qState=Game.prototype.qState;Game.prototype.qState=function(q){if(this.dun
 const targets=Game.prototype.combatTargets;Game.prototype.combatTargets=function(){return this.dungeon?.active?this.enemies:targets.call(this);};
 const bodies=Game.prototype.bodies;Game.prototype.bodies=function(o){return this.dungeon?.active?(o===this.player?this.enemies.filter(e=>!e.dead):[this.player]):bodies.call(this,o);};
 const damageEnemy=Game.prototype.damageEnemy;
-Game.prototype.damageEnemy=function(e,n){if(!this.dungeon?.active)return damageEnemy.call(this,e,n);if(e.dead)return;e.hp=Math.max(0,e.hp-n);e.flash=.15;e.stun=.18;this.player.hitPause=.045;this.spill(e,this.player,!e.hp);this.emit('hit');if(!e.hp){e.dead=true;this.player.kills++;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle libère la fée.'});}else if(this.player.kills%3===0)this.player.hp=Math.min(this.player.maxHp,this.player.hp+1);this.emit('save');}};
+Game.prototype.damageEnemy=function(e,n){if(!this.dungeon?.active)return damageEnemy.call(this,e,n);if(e.dead)return;e.hp=Math.max(0,e.hp-n);e.flash=.15;e.stun=.18;this.player.hitPause=HearthreaverWeapons.hitPause(this.player.weapon,this.player.combo);KaldorArsenal.contactShake(this);this.spill(e,this.player,!e.hp);this.emit('hit');if(!e.hp){e.dead=true;this.player.kills++;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle libère la fée.'});}else if(this.player.kills%3===0)this.player.hp=Math.min(this.player.maxHp,this.player.hp+1);this.emit('save');}};
 const respawn=Game.prototype.respawn;Game.prototype.respawn=function(){if(!this.dungeon?.active)return respawn.call(this);const c=this.dungeon.checkpoint;this.dying=null;this.dead=false;this.dialogue=null;this.dungeon.bossFight=false;for(const e of this.enemies){e.wind=0;e.stun=0;e.attack=0;e.cooldown=1;}Object.assign(this.player,{hp:this.player.maxHp,inv:2,attackCD:0,hurt:0,guard:false,parry:0});this.enterDungeonFloor(c.floor,c,false);};
 const sky=Game.prototype.sky;Game.prototype.sky=function(){if(!this.dungeon?.active)return sky.call(this);return {...sky.call(this),rain:0,snow:0,storm:0,wind:0,cloud:0,night:0,family:'cursed',temperature:16};};
 const save=Game.prototype.serialize;Game.prototype.serialize=function(){if(!this.dungeon?.active){const s=save.call(this);if(this.dungeon)s.dungeon=this.dungeon;return s;}
@@ -119,20 +119,21 @@ const save=Game.prototype.serialize;Game.prototype.serialize=function(){if(!this
 };
 const restore=Game.prototype.finishAtlasRestore;Game.prototype.finishAtlasRestore=function(saved){restore.call(this,saved);if(saved?.dungeon?.active)this.startFirstDungeon(saved.dungeon);else{if(saved?.dungeon)this.dungeon=saved.dungeon;this.registerDungeonPlace();if(this.story.dungeonEscaped&&saved?.atlas?.navigation==='dungeon-'+D.id)this.navigation=saved.atlas.navigation;}};
 const update=Game.prototype.update;
-Game.prototype.update=function(dt,controls={}){if(!this.dungeon?.active)return update.call(this,dt,controls);dt=clamp(dt,0,.04);this.time+=dt;this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}if(this.dying){this.stepDying(dt);return;}if(this.dead)return;
- this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.updateEffects(dt);const p=this.player,input={...controls,...WorldProjection.input(controls.x||0,controls.y||0)};
+Game.prototype.update=function(dt,controls={}){if(!this.dungeon?.active)return update.call(this,dt,controls);return KaldorArsenal.combatStep.call(this,dt,{...controls,...WorldProjection.input(controls.x||0,controls.y||0)},dungeonStep);};
+function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake=Math.max(0,this.shake-dt);if(this.dialogue){this.typeDialogue(dt);return;}if(this.dying){this.stepDying(dt);return;}if(this.dead)return;
+ this.elapsed+=dt;this.clock+=dt*1440/DAY_LEN;this.updateEffects(dt);const p=this.player,input={...controls};
  for(const k of ['attack','attackCD','dash','dashCD','inv','comboWindow','hurt','parry','parryCD','guardFlash','riposte','hitPause','attackBuffer'])p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,(p[k]||0)-dt);
- p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);const guardEdge=input.guard&&!p.guardHeld;p.guardHeld=!!input.guard;p.guard=!!input.guard&&p.attack<=0&&p.dash<=0;if(guardEdge&&p.guard&&p.parryCD<=0){p.parry=.18;p.parryCD=.42;}
+ p.lvlFX=Math.max(0,(p.lvlFX||0)-dt);p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);if(p.spawnFX>SPAWN_T-.9){input.x=0;input.y=0;input.attack=false;input.attackPressed=false;input.dodge=false;input.guard=false;input.interact=false;}const guardEdge=input.guard&&!p.guardHeld;p.guardHeld=!!input.guard;p.guard=!!input.guard&&p.attack<=0&&p.dash<=0&&p.hurt<=0;if(!p.guard)p.parry=0;if(guardEdge&&p.guard&&p.parryCD<=0){p.parry=.18;p.parryCD=.42;}
  if(input.dodge)this.dodge(input.x,input.y);
  const attackEdge=!!input.attackPressed||input.attack&&!p.attackHeld;p.attackHeld=!!input.attack;
  if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,input.x,input.y);
  const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);
  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=buffered?p.bufferX:input.x,y=buffered?p.bufferY:input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
  if(input.interact)this.interact();if(!this.dungeon.active)return;
- const ox=p.x,oy=p.y;if(p.dash>0)this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);else if((input.x||input.y)&&p.attack<=0&&p.hurt<=0){p.dir=this.turnTo(p.dir,input.x,input.y);this.movePlayer(p,input.x*dt*(p.guard?29:67),input.y*dt*(p.guard?29:67));}
+ const ox=p.x,oy=p.y;if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&p.attack<=0&&p.hurt<=0){p.dir=this.turnTo(p.dir,input.x,input.y);this.movePlayer(p,input.x*dt*(p.guard?29:67),input.y*dt*(p.guard?29:67));}
  p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
  this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
- if(p.attack>0){const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
+ if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
  if(this.dungeon.floor==='trone'&&p.y<9*CELL&&!this.dungeon.bossDead)this.dungeon.bossFight=true;
  for(const e of this.enemies){if(e.dead)continue;for(const k of ['cooldown','stun','flash','attack'])e[k]=Math.max(0,(e[k]||0)-dt);if(e.stun>0)continue;const d=dist(e,p);if(e.chief&&!this.dungeon.bossFight)continue;
   if(e.wind>0){e.wind-=dt;if(e.wind<=0){e.attack=.22;if(d<(e.chief?38:25)&&this.lineClear(e,p))this.damagePlayer(e.chief?2:1,e);e.cooldown=e.chief?1.25:.95;}continue;}
@@ -141,7 +142,7 @@ Game.prototype.update=function(dt,controls={}){if(!this.dungeon?.active)return u
  }
  this.dungeonRevealTimer=(this.dungeonRevealTimer||0)-dt;if(this.dungeonRevealTimer<=0){this.revealDungeon();this.dungeonRevealTimer=.15;}
  this.saveTimer+=dt;if(this.saveTimer>=5){this.saveTimer=0;this.emit('save');}
-};
+}
 function inventoryHTML(g){if(!g.dungeon)return '';return '<div class="m-sec">Clés de la forteresse</div>'+D.cles.map(k=>'<div class="inv-row"><div class="grow">'+k.nom+'<small>'+ (g.dungeon.keys.includes(k.id)?'Obtenue · '+k.ouvre:'À trouver dans la forteresse')+'</small></div></div>').join('');}
 return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML};
 })();

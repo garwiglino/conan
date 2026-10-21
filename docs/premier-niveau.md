@@ -40,3 +40,11 @@ Captures réelles : [départ sur mobile](../art/dungeon-integration/mobile-geole
 ## Limites de cette intégration
 
 Les gobelins utilisent les quatre vues Piskel de Claude, avec déplacement, orientation, anticipation de frappe et blessure. Le chef reprend cette anatomie dans une silhouette plus haute et une massue dessinée en pixels ; il n’a pas encore de planche d’animation dédiée. Le donjon n’a pas encore de musique originale. L’extérieur est un lieu connu sur la carte ; la façade visitable et la réentrée ne sont pas implémentées. Le contrôle navigateur utilise Chromium ; la compilation et l’installation natives Xcode ne sont pas vérifiées dans cet environnement.
+
+## Continuité du moteur et de l’interface
+
+Le donjon conserve le HUD horizontal du monde (santé, vies, pièces, expérience, satiété et sceaux), les commandes et les bulles habituelles. La carte de lieu indique « Lieu inconnu », l’étage, les clés et les fioles ; aucune autorité extérieure ni recherche régionale n’est affichée pendant la captivité.
+
+La vue projetée reste stable entre les images : les huit poses de marche de Kaldor suivent sa distance réellement parcourue. Les attaques réutilisent le traitement commun des pauses d’impact et des commandes mises en attente, avec l’avancée soumise aux collisions, les effets de sang, les particules, les gains et la fée du moteur actuel. Les plans, les pixels du donjon et la progression enregistrée sont conservés.
+
+Le contrôle navigateur vérifie aussi huit poses distinctes pendant une marche simulée avec les commandes normales, la stabilité de la projection, le HUD commun et le rendu des effets. `tests/dungeon-presentation.test.cjs` couvre la pause de contact, la direction des commandes mises en attente et l’avancée unique par frappe.

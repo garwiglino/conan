@@ -2,7 +2,7 @@
 (()=>{
  const hud=Renderer.prototype.hud;
  Renderer.prototype.hud=function(){
-  hud.call(this);this.pursuitReadout=null;const g=this.g;if(!g.pursuitStatus||g.dialogue||g.journey||g.dead||g.dying||g.sleeping)return;
+  hud.call(this);this.pursuitReadout=null;const g=this.g;if(g.dungeon?.active||!g.pursuitStatus||g.dialogue||g.journey||g.dead||g.dying||g.sleeping)return;
   const a=g.pursuitStatus();if(!a.zone)return;const c=this.c,max=Math.max(70,Math.min(144,this.W-(this.safe.l||0)-(this.safe.r||0)-80)),w=48,x=(this.safe.l||0)+5+max-w,y=this.top+12,color=a.level?'#e5a071':'#9dad94';
   c.save();if(a.level){const left=(this.safe.l||0)+7;c.font='6px PixelUI, monospace';box(c,left,y,max-52,8,'#1b1715');travelText(c,travelFit(c,a.zone.authorityName,max-52),left,y+1,color);}
   box(c,x,y,w,8,'#1b1715');travelText(c,'R'+a.level,x+1,y+1,color,5);

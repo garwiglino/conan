@@ -68,7 +68,7 @@
     "check:world-roads": "node scripts/check-world-roads.cjs",
     "check:city-life": "node scripts/check-city-life.cjs",
     "build:dungeon": "node scripts/build-dungeon.cjs && node scripts/embed-dungeon.cjs",
-    "test:dungeon": "node --test tests/dungeon-runtime.test.cjs tests/environment-donjons.test.cjs tests/environment-interieurs.test.cjs tests/gobelins.test.cjs",
+    "test:dungeon": "node --test tests/dungeon-runtime.test.cjs tests/dungeon-presentation.test.cjs tests/environment-donjons.test.cjs tests/environment-interieurs.test.cjs tests/gobelins.test.cjs",
     "check:dungeon": "node scripts/check-dungeon.cjs",
     "donjon:environment": "node scripts/environment/donjon.cjs",
     "gobelins": "node scripts/gobelins/gobelins.cjs"
