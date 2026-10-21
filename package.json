@@ -75,7 +75,11 @@
     "build:goblin-animations": "node scripts/gobelins/compile-animation.cjs && node scripts/embed-dungeon.cjs",
     "preview:goblin-animations": "node scripts/gobelins/preview-animation.cjs",
     "test:goblin-animations": "node --test --test-concurrency=2 tests/gobelins.test.cjs tests/goblin-animation.test.cjs tests/goblin-combat.test.cjs",
-    "check:goblin-animations": "node scripts/gobelins/check-animation-mobile.cjs"
+    "check:goblin-animations": "node scripts/gobelins/check-animation-mobile.cjs",
+    "test:dungeon-lighting": "node --test tests/dungeon-lighting.test.cjs",
+    "check:dungeon-lighting": "node scripts/check-dungeon-lighting.cjs",
+    "test:goblin-tactics": "node --test tests/goblin-tactics.test.cjs tests/goblin-combat.test.cjs",
+    "check:goblin-tactics": "node scripts/check-goblin-tactics.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",

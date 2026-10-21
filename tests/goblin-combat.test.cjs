@@ -17,14 +17,14 @@ test('an interrupted wind-up and a target leaving before impact cannot receive d
  Object.assign(e,{dead:false,hp:3,stun:0,dir:1,cooldown:99});G.start(e);g.damageEnemy(e,1);p.hitPause=0;for(let i=0;i<35;i++)g.update(.04,{});assert.equal(hits,0);assert.equal(e.swingElapsed,null);
  e.stun=0;G.start(e);p.x=e.x+160;p.y=e.y;for(let i=0;i<35;i++)g.update(.04,{});assert.equal(hits,0);
 });
-test('real enemy AI approaches short blade range, projects its view once, and returns to idle after movement',()=>{
+test('real enemy AI approaches short blade range, projects its view once, and returns to idle after its last-known-position search',()=>{
  const g=arena(),G=a.HearthreaverGoblins,e=g.enemies[0],p=g.player;
  Object.assign(e,{dead:false,x:p.x-18,y:p.y+18,dir:2,cooldown:0,stun:0});
  // Let the real logical move update this fixture; no world crowd is needed.
  g.move=(o,x,y)=>{o.x+=x;o.y+=y;};
  let moved=false,started=false;for(let i=0;i<100;i++){g.update(.04,{});moved||=e.moving;if(Number.isFinite(e.swingElapsed)){started=true;break;}}
  assert.ok(moved);assert.ok(started);assert.equal(e.swingDir,1,'logical north-east projects to screen right');
- G.cancel(e);e.cooldown=99;p.x=e.x+200;g.update(.04,{});assert.equal(e.moving,false);assert.equal(G.look(e,g.time).state,'idle');
+ G.cancel(e);e.cooldown=99;p.x=e.x+240;g.time+=3;g.update(.04,{});assert.equal(e.moving,false);assert.equal(G.look(e,g.time).state,'idle');
 });
 
 test('goblin attack facing projects logical target coordinates exactly once in all four views',()=>{

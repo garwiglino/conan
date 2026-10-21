@@ -48,3 +48,19 @@ Le donjon conserve le HUD horizontal du monde (santé, vies, pièces, expérienc
 La vue projetée reste stable entre les images : les huit poses de marche de Kaldor suivent sa distance réellement parcourue. Les attaques réutilisent le traitement commun des pauses d’impact et des commandes mises en attente, avec l’avancée soumise aux collisions, les effets de sang, les particules, les gains et la fée du moteur actuel. Les plans, les pixels du donjon et la progression enregistrée sont conservés.
 
 Le contrôle navigateur vérifie aussi huit poses distinctes pendant une marche simulée avec les commandes normales, la stabilité de la projection, le HUD commun et le rendu des effets. `tests/dungeon-presentation.test.cjs` couvre la pause de contact, la direction des commandes mises en attente et l’avancée unique par frappe.
+
+## Éclairage souterrain
+
+L’ambiance reste sombre indépendamment de l’heure extérieure. Torches murales et braseros utilisent la passe de lumière colorée du monde : le masque dynamique éclaire le sol, les murs, les personnages et leurs armes, avec un scintillement discret et une lueur chaude au foyer. Les halos fixes au sol ont été retirés du décor compilé. Les sources reprennent les positions et hauteurs de `interieur-scene.cjs` ; leur projection isométrique est appliquée une seule fois.
+
+Une faible lumière neutre autour de Kaldor garde ses mains et ses appuis lisibles. Les sources des pièces non découvertes ne contribuent pas ; le sceau ouvert et la cage vidée perdent leur lumière. L’éclairage est appliqué avant les textes flottants et l’interface. Le masque est limité à la fenêtre de jeu pour le téléphone.
+
+`npm run test:dungeon-lighting` vérifie les sources, l’obscurité et le masque partagé. `npm run check:dungeon-lighting` contrôle les quatre étages sur deux formats de téléphone, avec des captures dans `art/dungeon-lighting/`.
+
+### Gobelins en groupe
+
+`GoblinTactics` attribue des secteurs stables autour du joueur. Deux gobelins pressent la cible pendant que les autres prennent les flancs ou se replacent pendant leur récupération. La vitesse de déplacement passe de 26 à 31 unités/s en groupe (chef : 25). Les corps restent solides entre alliés. Deux attaques au maximum peuvent être en cours, avec au moins 0,32 s entre leurs départs ; chaque coup conserve son anticipation native, sa direction verrouillée et son unique événement de dégâts sur l’impact. La récupération ordinaire après impact est de 0,72 s.
+
+La vision porte à 150 unités. Un témoin alerte un allié à moins de 100 unités uniquement avec une ligne de vue dégagée. Après perte de vue, la recherche utilise la dernière position connue pendant 2,8 s. Les routes autour des obstacles sont calculées sur une grille locale de 16 px, avec un budget de 240 nœuds et un recalcul au plus toutes les 0,55 s par gobelin. Les portes fermées, caisses et meubles bloquent la formation comme les déplacements. Le boss reste inactif avant son déclenchement habituel. Les décisions et chemins sont transitoires et ne sont pas stockés dans la sauvegarde.
+
+Vérification : `npm run test:goblin-tactics` et `npm run check:goblin-tactics` (jeu iOS hors ligne, deux formats de téléphone émulé, collisions réelles du donjon).

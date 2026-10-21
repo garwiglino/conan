@@ -42,8 +42,8 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   items.sort((a,b)=>a.key-b.key||a.sub-b.sub);for(const it of items)it.draw();
   for(const fx of view.game.bloodFX)drawBloodFX(c,fx);
   for(const v of view.game.particles)box(c,v.x,v.y-(v.z||0),v.size||2,v.size||2,v.color);
-  this.drawFloaters();
   if(g.dungeon.fairy)this.npcDraw(view.wrap({...g.fairyActor,x:p.x-16,y:p.y-16,alpha:1}));
+  DungeonLighting.draw(this,c);this.drawFloaters();
   c.restore();this.bubble();
  }finally{this.g=g;this.projectionActive=false;this.logicalGame=null;}
  this.hud();KaldorArmaments.renderDiscovery(this);c.save();

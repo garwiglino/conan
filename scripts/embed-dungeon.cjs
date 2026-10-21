@@ -1,7 +1,9 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 let html=read('index.html');
-const code='// BEGIN FIRST DUNGEON\nconst DUNGEON_DATA='+read('data/donjons/compiled/forteresse-grise-gueule.json').trim()+';\n'+read('sprites/gobelins/native-layers.js')+'\n'+read('sprites/gobelins/gobelin.js')+'\n'+read('scripts/dungeon-runtime.js')+'\n'+read('scripts/dungeon-render.js')+'\n// END FIRST DUNGEON';
+// Keep the shared light compositor current without rebuilding world geography.
+html=html.replace(/\/\/ BEGIN WEATHER RENDER[\s\S]*?\/\/ END WEATHER RENDER/,()=> '// BEGIN WEATHER RENDER\n'+read('scripts/weather-render.js')+'\n// END WEATHER RENDER');
+const code='// BEGIN FIRST DUNGEON\nconst DUNGEON_DATA='+read('data/donjons/compiled/forteresse-grise-gueule.json').trim()+';\n'+read('sprites/gobelins/native-layers.js')+'\n'+read('sprites/gobelins/gobelin.js')+'\n'+read('scripts/goblin-tactics.js')+'\n'+read('scripts/dungeon-runtime.js')+'\n'+read('scripts/dungeon-lighting.js')+'\n'+read('scripts/dungeon-render.js')+'\n// END FIRST DUNGEON';
 html=html.replace(/\/\/ BEGIN FIRST DUNGEON[\s\S]*?\/\/ END FIRST DUNGEON\s*/, '');
 html=html.replace('// app.js',()=>code+'\n// app.js');
 if(!html.includes('FirstDungeon.inventoryHTML(g)'))html=html.replace('KaldorWardrobe.inventoryHTML(g)', 'KaldorWardrobe.inventoryHTML(g)+FirstDungeon.inventoryHTML(g)');

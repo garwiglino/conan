@@ -1,3 +1,23 @@
+// Shared indoor/outdoor light compositor: the mask covers the viewport only.
+// Lights add their colour to the ambient mask, which multiplies actual scenery
+// and actors. Glows are a separate additive pass, never painted floor pools.
+function renderLightLayer(renderer,c,W,VH,tint,lights){
+ const cx=renderer.cam.x,cy=renderer.cam.y,dark=1-(tint[0]*.3+tint[1]*.55+tint[2]*.15)/255;
+ const O=renderer.skyCv||(renderer.skyCv=document.createElement('canvas')),w=Math.ceil(W)+2,h=Math.ceil(VH)+2;
+ if(O.width!==w||O.height!==h){O.width=w;O.height=h;}
+ const x=O.getContext('2d'),ox=Math.floor(cx),oy=Math.floor(cy);
+ x.globalCompositeOperation='source-over';x.fillStyle='rgb('+tint.join(',')+')';x.fillRect(0,0,w,h);
+ if(dark>.18){const k=Math.min(1,(dark-.18)/.4);x.globalCompositeOperation='lighter';
+  for(const[lx,ly,R,col,amp]of (lights||renderer.lights())){
+   if(!(R>0)||!Number.isFinite(lx+ly+amp))continue;const X=lx-ox,Y=ly-oy;if(X<-R||Y<-R||X>w+R||Y>h+R)continue;
+   x.save();x.translate(X,Y);x.scale(1,.72);const gr=x.createRadialGradient(0,0,0,0,0,R);
+   for(const[st,a]of[[0,.92],[.18,.72],[.42,.4],[.68,.15],[.86,.04],[1,0]])gr.addColorStop(st,'rgb('+col.map(v=>Math.round(v*a*amp*k)).join(',')+')');
+   x.fillStyle=gr;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.fill();x.restore();
+  }
+ }
+ c.save();c.globalCompositeOperation='multiply';c.drawImage(O,ox,oy);c.restore();
+ return dark;
+}
 // Integrate velocity frame by frame: changing weather must never rewind a drop's path.
 class RainVisuals{
  constructor(game,W,H){this.game=game;this.W=W;this.H=H;this.time=game.time;this.slant=.04+.96*clamp(game.sky().wind,0,1);this.drops=[];this.impacts=[];this.credit=0;this.serial=0;}
@@ -54,19 +74,7 @@ function renderWeather(renderer,c,W,VH){
  const reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
  const flash=g.weather?.flash(reduced)||0,tint=weatherTint(sky,flash),dark=1-(tint[0]*.3+tint[1]*.55+tint[2]*.15)/255;
  renderer.mg=renderer.magic();
- const O=renderer.skyCv||(renderer.skyCv=document.createElement('canvas')),w=Math.ceil(W)+2,h=Math.ceil(VH)+2;
- if(O.width!==w||O.height!==h){O.width=w;O.height=h;}
- const x=O.getContext('2d'),ox=Math.floor(cx),oy=Math.floor(cy);
- x.globalCompositeOperation='source-over';x.fillStyle='rgb('+tint.join(',')+')';x.fillRect(0,0,w,h);
- if(dark>.18){const k=Math.min(1,(dark-.18)/.4);x.globalCompositeOperation='lighter';
-  for(const[lx,ly,R,col,amp]of renderer.lights()){
-   if(!(R>0)||!Number.isFinite(lx+ly+amp))continue;const X=lx-ox,Y=ly-oy;if(X<-R||Y<-R||X>w+R||Y>h+R)continue;
-   x.save();x.translate(X,Y);x.scale(1,.72);const gr=x.createRadialGradient(0,0,0,0,0,R);
-   for(const[st,a]of[[0,.92],[.18,.72],[.42,.4],[.68,.15],[.86,.04],[1,0]])gr.addColorStop(st,'rgb('+col.map(v=>Math.round(v*a*amp*k)).join(',')+')');
-   x.fillStyle=gr;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.fill();x.restore();
-  }
- }
- c.save();c.globalCompositeOperation='multiply';c.drawImage(O,ox,oy);c.restore();
+ renderLightLayer(renderer,c,W,VH,tint);
  if(flash>0){
   // The same strike illuminates the landscape, airborne rain and wet surfaces.
   const side=g.weather.strike.pan,gr=c.createLinearGradient(cx+(side<0?0:W),cy,cx+(side<0?W:0),cy+VH);
