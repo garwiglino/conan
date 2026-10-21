@@ -1,6 +1,6 @@
 """Package the current native sources, icons and offline game together."""
 from pathlib import Path
-from zipfile import ZipFile, ZIP_DEFLATED
+from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 import plistlib
 import re
 import struct
@@ -35,13 +35,34 @@ for ref in scheme.iter('BuildableReference'):
     assert ref.attrib['ReferencedContainer'] == 'container:Hearthreaver.xcodeproj'
     assert ref.attrib['BlueprintIdentifier'] + ' /* Hearthreaver */ = {' in pbx
 target = root / 'Hearthreaver-iOS.zip'
+# Folder entries and fixed permissions, whatever the packager's umask, so that every unzip tool
+# (Archive Utility on macOS included) rebuilds the .xcodeproj package with its project.pbxproj.
+def entry(source, name):
+    info = ZipInfo.from_file(source, name)
+    if source.is_dir():
+        info.external_attr, info.CRC, info.compress_size = (0o40755 << 16) | 0x10, 0, 0
+    else:
+        info.external_attr = 0o100644 << 16
+    return info
 with ZipFile(target, 'w', ZIP_DEFLATED, compresslevel=9) as archive:
+    archive.mkdir(entry(root / 'ios', 'Hearthreaver-iOS'))
     for source in sorted((root / 'ios').rglob('*')):
-        if source.is_file() and not any(part in {'xcuserdata', '.DS_Store'} for part in source.parts):
-            archive.write(source, 'Hearthreaver-iOS/' + source.relative_to(root / 'ios').as_posix())
+        if any(part in {'xcuserdata', '.DS_Store'} for part in source.parts):
+            continue
+        name = 'Hearthreaver-iOS/' + source.relative_to(root / 'ios').as_posix()
+        if source.is_dir():
+            archive.mkdir(entry(source, name))
+        elif source.is_file():
+            archive.writestr(entry(source, name), source.read_bytes(), ZIP_DEFLATED, 9)
 with ZipFile(target) as archive:
     assert archive.testzip() is None
-    assert 'Hearthreaver-iOS/Hearthreaver.xcodeproj/project.pbxproj' in archive.namelist()
+    names = archive.namelist()
+    assert 'Hearthreaver-iOS/Hearthreaver.xcodeproj/project.pbxproj' in names
+    for index, name in enumerate(names):
+        parent = name.rstrip('/').rpartition('/')[0]
+        assert not parent or names.index(parent + '/') < index, 'Missing folder entry before ' + name
+    for info in archive.infolist():
+        assert info.external_attr >> 16 == (0o40755 if info.is_dir() else 0o100644), info.filename
     assert not any('/Conan' in name for name in archive.namelist())
     assert b'Hearthreaver' in archive.read('Hearthreaver-iOS/Hearthreaver/Info.plist')
     assert archive.read('Hearthreaver-iOS/Hearthreaver/Game/index.html') == (root / 'ios/Hearthreaver/Game/index.html').read_bytes()

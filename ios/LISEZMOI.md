@@ -22,6 +22,15 @@ Une app iOS native en Swift qui contient **le jeu exact** : le fichier HTML du d
    - active *Réglages › Confidentialité et sécurité › Mode développeur* ;
    - fais confiance au développeur dans *Réglages › Général › VPN et gestion de l'appareil*.
 
+### Si Xcode dit qu'il manque `project.pbxproj`
+Le message « cannot be opened because it is missing its project.pbxproj file » veut dire que la copie ouverte sur le Mac est incomplète : le fichier est bien dans le dépôt et dans l'archive. Repars d'une copie propre, hors du dossier Téléchargements, en collant cette ligne dans le Terminal :
+
+```sh
+mkdir -p ~/Developer && cd ~/Developer && curl -fL -o Hearthreaver-iOS.zip https://github.com/garwiglino/conan/raw/main/Hearthreaver-iOS.zip && unzip -oq Hearthreaver-iOS.zip && open Hearthreaver-iOS/Hearthreaver.xcodeproj
+```
+
+Elle télécharge l'archive à jour, l'extrait dans `~/Developer/Hearthreaver-iOS`, puis ouvre le projet. Sans Terminal : supprime l'ancien dossier `Hearthreaver-iOS`, télécharge à nouveau [l'archive](https://github.com/garwiglino/conan/raw/main/Hearthreaver-iOS.zip), double-clique dessus, attends la fin de l'extraction, puis ouvre `Hearthreaver.xcodeproj`. Si Xcode n'a pas le droit de lire le dossier Téléchargements (*Réglages Système › Confidentialité et sécurité › Fichiers et dossiers*), autorise-le ou garde le projet dans `~/Developer`.
+
 Avec un compte Apple gratuit, l'app doit être réinstallée depuis Xcode tous les 7 jours. Avec le programme développeur payant, elle reste installée, et TestFlight ou l'App Store deviennent possibles.
 
 ## Mises à jour du jeu : automatiques

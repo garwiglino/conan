@@ -114,7 +114,7 @@ La musique du titre démarre dès l’introduction et continue sans redémarrer 
 - `scripts/title-art.lua` reconstruit les dessins dans Aseprite ; `npm run build:title-theme` reconstruit le MIDI et sa partition JSON ; `npm run embed:title` intègre le tout dans les versions web et iOS hors ligne.
 - Les identifiants techniques historiques de stockage, d'origine iOS et de dépôt restent stables pour préserver les sauvegardes et les mises à jour des installations existantes.
 - [Archive iOS](Hearthreaver-iOS.zip) : sources natives, nouvelles icônes et jeu hors ligne synchronisé.
-- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.4 (build 5). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
+- [Projet Xcode Hearthreaver](ios/Hearthreaver.xcodeproj) : cible et schéma partagés Hearthreaver, version native 1.5 (build 6). Si Xcode signale qu'il manque `project.pbxproj`, suivre [la marche à suivre](ios/LISEZMOI.md#si-xcode-dit-quil-manque-projectpbxproj). La signature conserve l'identifiant historique pour mettre à jour l'app existante sans perdre sa sauvegarde.
 
 ## Crédits
 - Polices : [Alagard](https://www.dafont.com/alagard.font) (Hewett Tsoi) · [Pixel Operator](https://www.dafont.com/pixel-operator.font) (Jayvee Enaguas, CC0)
