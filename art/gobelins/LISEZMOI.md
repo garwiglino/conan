@@ -11,7 +11,8 @@ Proposition de design, à valider, d'après la référence en quatre vues de Lin
 - Cadre de 48 × 48, pieds à l'ancre x 24, y 36, comme les hommes-singes et les batraciens. Le moteur ajoute 16 sur les deux axes, ce qui donne le cadre 80 × 80 des humains, avec l'ancre en 40, 52.
 - Quatre cadres par fichier, dans l'ordre des humains : face, droite, dos, gauche.
 - Contour d'encre `#100c14`, alpha binaire.
-- Un gobelin fait 22 pixels de haut, des pieds au haut du crâne, dont 11 pour la tête : c'est la proportion de la référence. Son corps est plus court que celui d'un humain, mais sa tête le rend un peu plus haut, et ses oreilles le rendent beaucoup plus large (22 pixels).
+- Un gobelin se tient voûté, comme ceux du Seigneur des anneaux : tête basse enfoncée entre des épaules hautes, bras longs, et de profil tête projetée en avant, dos bombé, genoux fléchis. Il fait ainsi 20 pixels de haut, des pieds au haut du crâne (22 debout, dont 11 pour la tête). Ses oreilles le rendent beaucoup plus large qu'un humain (22 pixels).
+- Les dessins de `scripts/gobelins/dessins.cjs` sont faits debout, puis pliés dans la posture voûtée de la même façon pour le corps et pour tout ce qui se pose dessus : une tenue, une coiffe ou une arme dessinée debout reste donc ajustée.
 
 ## Fichiers
 

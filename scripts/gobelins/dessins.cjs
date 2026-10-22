@@ -4,7 +4,8 @@
  * Une vue est une fenêtre de 32 × 25 pixels : colonne 0 = x 8, rangée 0 = y 12 du
  * cadre natif 48 × 48. L'ancre (les pieds) est en x 24, y 36, comme pour les
  * hommes-singes et les batraciens ; le moteur ajoute 16 sur les deux axes.
- * Le gobelin fait 22 pixels de haut : rangée de figure 0 = haut du crâne (y 14),
+ * Debout, le gobelin fait 22 pixels de haut (voûté, 20 : voir « Posture voûtée »
+ * plus bas) : rangée de figure 0 = haut du crâne (y 14),
  * rangée 21 = bas des pieds (y 35). Les dessins sont en rangées de figure ; la vue de
  * face et la vue de dos commencent à la colonne 5 de la fenêtre, la vue droite à la 8.
  * Le corps nu est découpé en calques par zones (pieds, jambes, torse, bras, crâne,
@@ -499,7 +500,7 @@ const CIMETERRE_DERRIERE=calque('ARME - Cimeterre dentele (derriere)',{gauche:re
 // ---------- Fichiers Piskel ----------
 const tenue=(planche,zone,noms)=>decoupe(planche,NU,zone,noms);
 const coiffe=(planche,nom)=>decoupe(planche,NU,()=>'coiffe',{coiffe:nom});
-const FICHIERS={
+const FICHIERS_DROITS={
  'corps/masculin.piskel':{type:'corps',sexe:'masculin',description:'Gobelin, corps masculin : anatomie et tête, sans habit. Pieds à l’ancre x 24, y 36.',calques:[...ANATOMIE,CRANE,VISAGE_M,OREILLES]},
  'corps/feminin.piskel':{type:'corps',sexe:'feminin',description:'Gobeline, corps féminin : même silhouette que le masculin (les habits vont aux deux), son visage, un chignon avec deux tresses et des anneaux d’oreille.',calques:[...ANATOMIE,CRANE,VISAGE_F,CHEVEUX,OREILLES,BIJOUX]},
  'tenues/harnais.piskel':{type:'tenue',description:'La tenue de la référence : gilet de cuir ouvert, culotte de cuir, ceinture et bourse.',calques:tenue(HARNAIS,zoneHarnais,NOMS_HARNAIS)},
@@ -511,4 +512,44 @@ const FICHIERS={
  'coiffes/casque-a-pointes.piskel':{type:'coiffe',description:'Casque de fer noirci à crête de pointes, avec nasal. Les tresses restent visibles dessous.',calques:[...coiffe(CASQUE,'COIFFE 21 - Casque a pointes'),masque('MASQUE COIFFE - occulter les cheveux',0,5)]},
  'armes/cimeterre-dentele.piskel':{type:'arme',description:'Cimeterre court à dos dentelé, dans la main droite. Le calque « derrière » passe sous le corps (vue gauche).',calques:[CIMETERRE_DERRIERE,CIMETERRE_DEVANT]}
 };
+// ---------- Posture voûtée (gobelins du Seigneur des anneaux) ----------
+/* Tous les dessins ci-dessus sont droits ; la posture les plie après coup, de
+ * la même façon pour le corps nu et pour tout ce qui se pose dessus, si bien que
+ * les tenues, coiffes et armes restent ajustées. Chaque calque suit la partie
+ * qu'il habille :
+ *  - tête (crâne, visage, oreilles, cheveux, bijoux, coiffe et son masque) :
+ *    baissée de 2 rangées, et de profil avancée de 2 colonnes ;
+ *  - corps (anatomie, habits, spalière) : épaules et haut du dos remontés de 2
+ *    rangées (le torse et les bras s'allongent, les mains ne bougent pas) et
+ *    élargis d'une colonne de chaque côté ; de profil, buste penché en avant,
+ *    dos bombé en bosse, genoux fléchis vers l'avant ;
+ *  - arme : suit la main.
+ * Le gobelin mesure ainsi 20 pixels au lieu de 22, la tête enfoncée entre des
+ * épaules hautes, les bras longs. Une fonction donne, pour un pixel de la vue
+ * pliée (rangée r, colonne c de figure), le pixel du dessin droit qu'il montre. */
+const ETIRE=[11,12,12,13,14,14,15,16];            // rangées 9 à 16 du corps plié
+const leve=r=>r<9?r+2:r<=16?ETIRE[r-9]:r;           // rangée source du corps
+const large=(r,c,w)=>{const m=w-1;if(r<9||r>18)return c;if(r>16&&c>6&&c<m-6)return c;return c<=6?c+1:c>=m-6?c-1:c;};
+// De profil : la tête descend et avance devant le haut du buste, qui monte en
+// bosse au-dessus de la nuque ; le bas du dos recule d'une colonne et les genoux
+// fléchissent vers l'avant.
+const RECUL=r=>r>=9&&r<=13?1:0,GENOU=r=>r===17||r===18?1:0;
+const POSTURE={
+ face:{tete:(r,c)=>[r-2,c],corps:(r,c)=>[leve(r),large(r,c,22)],arme:(r,c)=>[r,large(r,c,22)]},
+ dos:{tete:(r,c)=>[r-2,c],corps:(r,c)=>[leve(r),large(r,c,22)],arme:(r,c)=>[r,large(r,c,22)]},
+ droite:{tete:(r,c)=>[r-2,c-2],corps:(r,c)=>[leve(r),c+RECUL(r)-GENOU(r)],arme:(r,c)=>[r,c-GENOU(r)]}
+};
+const partie=name=>/^(07 Crane|08 Visage|CHEVEUX|BIJOUX|COIFFE|MASQUE)/.test(name)?'tete':/^ARME/.test(name)?'arme':'corps';
+// Plie une vue d'un calque (rangées de la fenêtre) ; la vue gauche est le miroir de la droite.
+function plier(rows,dir,part){
+ const vue=dir==='gauche'?'droite':dir,f=POSTURE[vue][part],left=LEFT[vue],src=rows.map(r=>[...r]);
+ return Array.from({length:H},(_,j)=>Array.from({length:W},(_,i)=>{
+  const ii=dir==='gauche'?W-1-i:i,[r,c]=f(j-TOP,ii-left),J=r+TOP,I0=c+left,I=dir==='gauche'?W-1-I0:I0;
+  return J>=0&&J<H&&I>=0&&I<W?src[J][I]:'.';}).join(''));
+}
+const plies=new Set();
+for(const F of Object.values(FICHIERS_DROITS))for(const l of F.calques){if(plies.has(l))continue;plies.add(l);
+ for(const [dir,v]of Object.entries(l.views)){if(v.at!==0||v.rows.length!==H)throw Error(l.name+' / '+dir+' : vue hors format');v.rows=plier(v.rows,dir,partie(l.name));}}
+
+const FICHIERS=FICHIERS_DROITS;
 module.exports={X0,Y0,W,H,SIZE,ANCHOR,VIEWS,COULEURS,PEAU,FICHIERS,NU,HARNAIS,grille};
