@@ -82,7 +82,11 @@
     "test:goblin-tactics": "node --test tests/goblin-tactics.test.cjs tests/goblin-combat.test.cjs",
     "check:goblin-tactics": "node scripts/check-goblin-tactics.cjs",
     "test:dungeon-readability": "node --test --test-concurrency=1 tests/dungeon-readability.test.cjs tests/dungeon-presentation.test.cjs tests/kaldor-armaments.test.cjs tests/goblin-tactics.test.cjs",
-    "check:dungeon-readability": "node scripts/check-dungeon-readability.cjs"
+    "check:dungeon-readability": "node scripts/check-dungeon-readability.cjs",
+    "test:dungeon-crates": "node --test --test-concurrency=1 tests/dungeon-crates-population.test.cjs tests/dungeon-runtime.test.cjs",
+    "check:dungeon-crates": "node scripts/check-dungeon-crates.cjs",
+    "test:dungeon-loot": "node --test --test-concurrency=1 tests/dungeon-loot.test.cjs tests/goblin-pressure.test.cjs tests/weapon-handedness.test.cjs",
+    "check:dungeon-loot": "node scripts/check-dungeon-loot-combat.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",

@@ -3,7 +3,12 @@ const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirnam
 let html=read('index.html');
 // Keep the shared light compositor current without rebuilding world geography.
 html=html.replace(/\/\/ BEGIN WEATHER RENDER[\s\S]*?\/\/ END WEATHER RENDER/,()=> '// BEGIN WEATHER RENDER\n'+read('scripts/weather-render.js')+'\n// END WEATHER RENDER');
-const code='// BEGIN FIRST DUNGEON\nconst DUNGEON_DATA='+read('data/donjons/compiled/forteresse-grise-gueule.json').trim()+';\n'+read('sprites/gobelins/native-layers.js')+'\n'+read('sprites/gobelins/gobelin.js')+'\n'+read('scripts/goblin-tactics.js')+'\n'+read('scripts/dungeon-runtime.js')+'\n'+read('scripts/dungeon-lighting.js')+'\n'+read('scripts/dungeon-occlusion.js')+'\n'+read('scripts/dungeon-render.js')+'\n// END FIRST DUNGEON';
+// Replace the legacy inline loot loop once; both update paths call the same code.
+const lootStart=html.indexOf('for(const d of this.drops){if(d.air)'),lootEnd=lootStart<0?-1:html.indexOf('this.drops=this.drops.filter(d=>!d.taken);',lootStart);
+if(lootStart>=0){if(lootEnd<0)throw Error('Incomplete legacy loot loop');html=html.slice(0,lootStart)+'this.stepLoot(dt);'+html.slice(lootEnd+'this.drops=this.drops.filter(d=>!d.taken);'.length);}
+const oldChest="if(c.kind==='chest'){const ch=this.chests[c.i];ch.open=true;this.ejectLoot(ch,['coin','coin','coin','coin','coin','heart','heart']);this.emit('chest');this.emit('save');";
+html=html.replace(oldChest,"if(c.kind==='chest'){const ch=this.chests[c.i];this.openLootChest(ch);");
+const code='// BEGIN FIRST DUNGEON\nconst DUNGEON_DATA='+read('data/donjons/compiled/forteresse-grise-gueule.json').trim()+';\n'+read('sprites/gobelins/native-layers.js')+'\n'+read('sprites/gobelins/gobelin.js')+'\n'+read('scripts/loot-runtime.js')+'\n'+read('scripts/goblin-tactics.js')+'\n'+read('scripts/dungeon-runtime.js')+'\n'+read('scripts/dungeon-lighting.js')+'\n'+read('scripts/dungeon-occlusion.js')+'\n'+read('scripts/dungeon-render.js')+'\n// END FIRST DUNGEON';
 html=html.replace(/\/\/ BEGIN FIRST DUNGEON[\s\S]*?\/\/ END FIRST DUNGEON\s*/, '');
 html=html.replace('// app.js',()=>code+'\n// app.js');
 if(!html.includes('FirstDungeon.inventoryHTML(g)'))html=html.replace('KaldorWardrobe.inventoryHTML(g)', 'KaldorWardrobe.inventoryHTML(g)+FirstDungeon.inventoryHTML(g)');

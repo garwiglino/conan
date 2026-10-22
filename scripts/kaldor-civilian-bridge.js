@@ -159,8 +159,8 @@
  // Kaldor's greatsword at the human NPC scale: 11px blade, 5px gold guard,
  // 3px wrapped grip and pommel (16px from pommel to tip, as tall as his body).
  const BLADE=11;
- function paintSword(b,hx,hy,ux,uy,{hands=2,blade=BLADE}={}){
-  if(customWeapon()){weapons().paint(b,wielded,hx,hy,ux,uy,blade/BLADE);return;}
+ function paintSword(b,hx,hy,ux,uy,{hands=2,blade=BLADE,dir=2}={}){
+  if(customWeapon()){weapons().paint(b,wielded,hx,hy,ux,uy,blade/BLADE,weapons().handedness(dir));return;}
   blade=Math.max(2,Math.round(blade));
   const nx=-uy,ny=ux,at=d=>[hx+ux*d,hy+uy*d];
   // Second blade row on the axis that keeps a 2px edge at every angle.
@@ -522,10 +522,10 @@
   let arms=null;
   if(customWeapon()){
    arms=nativeArmLayers(dir,s.h,u,[0,0],s.body||[0,0]);
-   paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0});sword.outline();
+   paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0,dir});sword.outline();
   }else{
    if(dir===1||dir===3)for(const [sx,sy] of SHOULDERS[dir])arm(s.z?hands:sword,sx,sy,s.h[0],s.h[1]);
-   paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0});
+   paintSword(sword,s.h[0],s.h[1],u[0],u[1],{hands:0,dir});
    fist(s.z===0?sword:hands,s.h[0],s.h[1]);fist(s.z===0?sword:hands,s.h[0]-u[0]*2,s.h[1]-u[1]*2);
    sword.outline();hands.outline();
   }
@@ -561,7 +561,7 @@
    held.h=[h[0]+shift[0],h[1]+shift[1]];arms=nativeArmLayers(dir,h,held.u,shift,[0,0],g.span);
   }
   const [hx,hy]=held.h,[ux,uy]=held.u;
-  paintSword(sword,hx,hy,ux,uy,{hands:0,blade:BLADE*held.length});
+  paintSword(sword,hx,hy,ux,uy,{hands:0,blade:BLADE*held.length,dir});
   if(!customWeapon()){
    if(profile){
     for(const [sx,sy] of SHOULDERS[dir])arm(grip,sx+shift[0],sy+shift[1],hx,hy);

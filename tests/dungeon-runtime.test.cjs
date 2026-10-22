@@ -20,7 +20,7 @@ test('opening is isolated; save/load retains floor, keys, crate positions and he
  const g=game();assert.equal(g.zone(),'Lieu inconnu · Les geôles');assert.equal(g.player.x,D.depart.pos[0]*32);assert.equal(g.npcs.length,0);assert.equal(g.story.fairy,false);assert.equal(g.sky().rain,0);assert.equal(g.solid(g.player.x,g.player.y),false);
  g.player.hp=6;g.dungeon.keys.push('serpent');g.dungeon.floors['grande-salle'].crates[0].x+=8;
  const saved=g.serialize(),l=combatGame(a);l.startFirstDungeon(saved.dungeon);assert.equal(l.player.x,g.player.x);
- const loaded=new a.Game(saved);assert.equal(loaded.player.hp,6);assert.equal(loaded.dungeon.floor,'geoles');assert.equal(loaded.dungeon.keys[0],'serpent');assert.equal(loaded.player.y,g.player.y);assert.equal(loaded.dungeon.floors['grande-salle'].crates[0].x,g.dungeon.floors['grande-salle'].crates[0].x);
+ const loaded=combatGame(a,saved);assert.equal(loaded.player.hp,6);assert.equal(loaded.dungeon.floor,'geoles');assert.equal(loaded.dungeon.keys[0],'serpent');assert.equal(loaded.player.y,g.player.y);assert.equal(loaded.dungeon.floors['grande-salle'].crates[0].x,g.dungeon.floors['grande-salle'].crates[0].x);
  assert.equal(g.quests.known.has('evasion'),true);assert.deepEqual(Array.from(g.trackedQuests(),q=>q.id),['evasion']);
 });
 test('the complete authored escape is physically reachable, including pressure crates and the lift return',()=>{
@@ -36,16 +36,16 @@ test('the complete authored escape is physically reachable, including pressure c
  use(g,'dungeon-lever','leviers-armurerie');assert.equal(g.dungeon.floors.galeries.open.includes('10,5,N'),false);
  // Target the other lever by its authored edge.
  walk(g,()=>{const c=g.context();return c?.kind==='dungeon-lever'&&c.bord==='2,6,O';});g.interact();assert.ok(g.dungeon.floors.galeries.open.includes('10,5,N'));
- use(g,'dungeon-key','crane');use(g,'dungeon-door','porte-crane');use(g,'dungeon-winch');assert.equal(g.dungeon.lift,true);
+ use(g,'dungeon-chest','crane');for(let i=0;i<20;i++)g.update(.02,{});use(g,'dungeon-key','crane');use(g,'dungeon-door','porte-crane');use(g,'dungeon-winch');assert.equal(g.dungeon.lift,true);
  use(g,'dungeon-lift');assert.ok(g.dialogue);const option=g.dialogue.menu.options.find(o=>o.label==='La grande salle');assert.ok(option);option.act();g.dialogue=null;quiet(g);
- use(g,'dungeon-key','croc');use(g,'dungeon-lever','levier-caserne');assert.ok(g.dungeon.floors['grande-salle'].open.includes('7,8,O'));
+ use(g,'dungeon-chest','croc');for(let i=0;i<20;i++)g.update(.02,{});use(g,'dungeon-key','croc');use(g,'dungeon-lever','levier-caserne');assert.ok(g.dungeon.floors['grande-salle'].open.includes('7,8,O'));
  use(g,'dungeon-lift');g.dialogue.menu.options.find(o=>o.label==='Les galeries').act();g.dialogue=null;quiet(g);
  use(g,'dungeon-door','porte-croc');use(g,'dungeon-stairs','trone');quiet(g);
  use(g,'dungeon-lever','levier-cage');assert.equal(g.dungeon.fairy,false,'chief must be defeated');
  const chief=g.enemies.find(e=>e.chief);chief.dead=false;g.damageEnemy(chief,chief.hp);assert.equal(g.dungeon.bossDead,true);use(g,'dungeon-lever','levier-cage');assert.equal(g.dungeon.fairy,true);
  use(g,'dungeon-stairs','galeries');quiet(g);use(g,'dungeon-lift');g.dialogue.menu.options.find(o=>o.label==='La grande salle').act();g.dialogue=null;quiet(g);
  use(g,'dungeon-exit');assert.equal(g.dungeon.active,false);assert.equal(g.story.dungeonEscaped,true);assert.ok(g.quests.done.has('evasion'));assert.ok(g.mapPlaces.some(p=>p.id==='dungeon-'+D.id));assert.ok(Math.hypot(a.Atlas.toWorld(g.player.x,g.player.y).x-D.lieu.monde.x,a.Atlas.toWorld(g.player.x,g.player.y).y-D.lieu.monde.y)<40);assert.equal(g.worldCheckpoint.x,g.player.x);
- const restored=new a.Game(g.serialize());assert.equal(restored.dungeon.active,false);assert.equal(restored.player.x,g.player.x);assert.ok(restored.visitedPlaces.has('dungeon-'+D.id));
+ const restored=combatGame(a,g.serialize());assert.equal(restored.dungeon.active,false);assert.equal(restored.player.x,g.player.x);assert.ok(restored.visitedPlaces.has('dungeon-'+D.id));
 });
 test('doors, simultaneous pressure, cage and exit enforce their prerequisites',()=>{
  const g=game();quiet(g);g.enterDungeonFloor('galeries',{x:4.5*32,y:9.5*32});use(g,'dungeon-door','porte-crane');assert.equal(g.dungeon.floors.galeries.open.includes('4,9,N'),false);
@@ -54,10 +54,10 @@ test('doors, simultaneous pressure, cage and exit enforce their prerequisites',(
 });
 test('death and reload return to the last floor arrival, keeping puzzle progress',()=>{
  const g=game();g.enterDungeonFloor('galeries',{x:19.5*32,y:1.5*32});g.dungeon.keys.push('serpent');g.player.lives=2;g.player.inv=0;g.player.hp=1;g.damagePlayer(2,{x:g.player.x+10,y:g.player.y,level:0});assert.ok(g.dying);assert.equal(g.player.lives,1);
- const loaded=new a.Game(g.serialize());assert.equal(loaded.dungeon.floor,'galeries');assert.equal(loaded.player.hp,10);g.respawn();assert.equal(g.player.hp,10);assert.equal(g.dungeon.floor,'galeries');assert.equal(g.player.lives,1);assert.ok(g.dungeon.keys.includes('serpent'));
+ const loaded=combatGame(a,g.serialize());assert.equal(loaded.dungeon.floor,'galeries');assert.equal(loaded.player.hp,10);g.respawn();assert.equal(g.player.hp,10);assert.equal(g.dungeon.floor,'galeries');assert.equal(g.player.lives,1);assert.ok(g.dungeon.keys.includes('serpent'));
 });
 test('legacy world saves keep their position and do not acquire the dungeon quest',()=>{
- const g=combatGame(a),saved=g.serialize(),loaded=new a.Game(saved);assert.equal(loaded.dungeon,undefined);assert.equal(loaded.player.x,g.player.x);loaded.checkQuests();assert.equal(loaded.quests.known.has('evasion'),false);
+ const g=combatGame(a),saved=g.serialize(),loaded=combatGame(a,saved);assert.equal(loaded.dungeon,undefined);assert.equal(loaded.player.x,g.player.x);loaded.checkQuests();assert.equal(loaded.quests.known.has('evasion'),false);
 });
 
 test('normal attack, guard and dodge inputs work in the interior without freeing the temple',()=>{
@@ -66,5 +66,5 @@ test('normal attack, guard and dodge inputs work in the interior without freeing
  g.player.attack=0;g.update(.04,{guard:true});assert.equal(g.player.guard,true);const hp=g.player.hp;g.damagePlayer(1,e);assert.equal(g.player.hp,hp,'facing guard blocks');g.update(.04,{dodge:true,x:1,y:0});assert.ok(g.player.dash>0);assert.ok(g.player.inv>0);
 });
 test('pulling rescues a crate placed against a wall and persists across a save',()=>{
- const g=game();g.enterDungeonFloor('grande-salle',{x:15.5*32,y:3.5*32});quiet(g);const b=g.dungeon.floors['grande-salle'].crates[1];Object.assign(b,{x:15.5*32,y:2.5*32});Object.assign(g.player,{x:b.x,y:b.y+18});const y=b.y;assert.equal(g.context().kind,'dungeon-crate');g.interact();assert.equal(b.y,y+8);assert.equal(new a.Game(g.serialize()).dungeon.floors['grande-salle'].crates[1].y,b.y);
+ const g=game();g.enterDungeonFloor('grande-salle',{x:15.5*32,y:3.5*32});quiet(g);const b=g.dungeon.floors['grande-salle'].crates[1];Object.assign(b,{x:15.5*32,y:2.5*32});Object.assign(g.player,{x:b.x,y:b.y+18});const y=b.y;assert.equal(g.context().kind,'dungeon-crate');g.interact();assert.equal(b.y,y,'grabbing does not teleport');for(let i=0;i<20;i++)g.update(.02,{x:-1,y:.5});assert.ok(b.y>y+8);assert.equal(combatGame(a,g.serialize()).dungeon.floors['grande-salle'].crates[1].y,b.y);
 });

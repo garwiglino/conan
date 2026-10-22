@@ -151,11 +151,11 @@ const KaldorArsenal=(()=>{
  };
  // The rack stays empty after pickup, with the weapon's actual silhouette.
  const prop=Renderer.prototype.prop;
- function drawWeapon(c,id,hx,hy,ux,uy){
+ function drawWeapon(c,id,hx,hy,ux,uy,dir=2){
   const pixels=new Map(),key=(x,y)=>Math.round(x)+','+Math.round(y);
   const b={set(x,y,color,z=0){const k=key(x,y),v=pixels.get(k);if(!v||v.z<=z)pixels.set(k,{x:Math.round(x),y:Math.round(y),color,z});},
    line(x,y,X,Y,color,z=0){const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)this.set(x+(X-x)*i/n,y+(Y-y)*i/n,color,z);}};
-  W.paint(b,id,hx,hy,ux,uy);
+  W.paint(b,id,hx,hy,ux,uy,1,W.handedness(dir));
   const outline=new Map();for(const v of pixels.values())for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){const k=key(v.x+dx,v.y+dy);if(!pixels.has(k))outline.set(k,[v.x+dx,v.y+dy]);}
   c.fillStyle='#100c14';for(const [x,y]of outline.values())c.fillRect(x,y,1,1);
   for(const v of pixels.values()){c.fillStyle=v.color;c.fillRect(v.x,v.y,1,1);}
@@ -176,10 +176,10 @@ const KaldorArsenal=(()=>{
   if(!g.arsenal)return '';
   const w=W.get(g.arsenal.equipped),owned=W.all.filter(w=>g.arsenal.owned.includes(w.id));
   return '<div class="m-sec">Armes</div><section class="arsenal"><div class="arms-counter">Armes · '+owned.length+'/'+W.all.length+'</div>'+
-   '<div class="arms-current"><canvas data-arms-preview width="80" height="80" aria-label="Kaldor avec son arme"></canvas><div class="grow"><b>'+escape(w.label)+'</b><small>'+escape(W.families[w.family])+' · '+w.hands+' main'+(w.hands===2?'s':'')+' · '+escape(w.rarity)+' · '+escape(w.territory)+'</small><small>'+stats(g,w)+'</small><p>'+escape(w.description)+'</p><small>4e coup : '+escape(W.finisher(w.id).name)+(W.finisher(w.id).magic?' · effets magiques':'')+'</small>'+
+   '<div class="arms-current"><canvas data-arms-preview width="80" height="80" aria-label="Kaldor avec son arme"></canvas><div class="grow"><b>'+escape(w.label)+'</b><small>'+escape(W.category(w.id))+' · '+w.hands+' main'+(w.hands===2?'s':'')+' · '+escape(w.rarity)+' · '+escape(w.territory)+'</small><small>'+stats(g,w)+'</small><p>'+escape(w.description)+'</p><small>4e coup : '+escape(W.finisher(w.id).name)+(W.finisher(w.id).magic?' · effets magiques':'')+'</small>'+
    '<div class="arms-controls"><button class="q-track" data-arms-turn="-1" aria-label="Tourner à gauche">◀</button><button class="q-track" data-arms-turn="1" aria-label="Tourner à droite">▶</button><select data-arms-motion aria-label="Animation de l’arme"><option value="attack">Combos</option><option value="finisher">4e coup</option><option value="walk">Marche</option><option value="holster">Rangement</option></select></div></div></div>'+
    '<p class="arms-note" role="status">Choisis une arme trouvée pour l’équiper. Le quatrième coup est plus puissant. La cadence est relative à l’épée de départ ; une arme lourde frappe moins souvent.</p>'+
-   '<div class="arms-grid">'+owned.map(v=>'<button class="arms-piece'+(v.id===w.id?' on':'')+'" data-equip-weapon="'+v.id+'" aria-pressed="'+(v.id===w.id)+'"><canvas data-weapon-icon="'+v.id+'" width="40" height="40" aria-hidden="true"></canvas><span>'+escape(v.label)+'<small>'+escape(W.families[v.family])+' · '+stats(g,v)+'</small></span></button>').join('')+'</div>'+
+   '<div class="arms-grid">'+owned.map(v=>'<button class="arms-piece'+(v.id===w.id?' on':'')+'" data-equip-weapon="'+v.id+'" aria-pressed="'+(v.id===w.id)+'"><canvas data-weapon-icon="'+v.id+'" width="40" height="40" aria-hidden="true"></canvas><span>'+escape(v.label)+'<small>'+escape(W.category(v.id))+' · '+stats(g,v)+'</small></span></button>').join('')+'</div>'+
    '<details class="arms-find"><summary>'+ (W.all.length-owned.length)+' armes à découvrir</summary>'+W.all.filter(v=>!g.arsenal.owned.includes(v.id)).map(v=>'<p><b>'+escape(v.label)+'</b> · '+escape(Atlas.byId[v.site]?.name||v.discovery||'Arme portée par un combattant')+'<small>'+escape(v.culture)+' · '+escape(v.territory)+' · '+escape(v.rarity)+'</small></p>').join('')+'</details></section>';
  }
  let previewDirection=2,previewMotion='attack';

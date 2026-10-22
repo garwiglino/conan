@@ -1,0 +1,8 @@
+'use strict';
+const {test,before}=require('node:test'),assert=require('node:assert/strict'),{loadGame,combatGame}=require('./game-harness.cjs'),P=require('../scripts/world-projection.js');let a;before(async()=>a=await loadGame());
+test('goblins approaching from one side occupy the full ring, strafe in combat and sustain real impact pressure',()=>{
+ const g=combatGame(a);g.startFirstDungeon();g.enterDungeonFloor('grande-salle',{x:368,y:208});const p=g.player;p.spawnFX=0;p.inv=999;g.enemies=[[-55,-25],[-70,-8],[-62,16],[-83,29]].map(([x,y],i)=>{const v=P.inverse(x,y);return {id:'pressure-'+i,kind:'goblin',skin:i%2?'pillard':'guerrier-kesh',armed:true,x:p.x+v.x,y:p.y+v.y,r:6,hp:30,maxHp:30,dir:2,cooldown:0,stun:0,anim:0};});
+ let starts=0,impacts=0,movingSwing=0,maxAttacks=0;g.damagePlayer=()=>impacts++;
+ for(let i=0;i<600;i++){const was=g.enemies.map(e=>Number.isFinite(e.swingElapsed)),old=g.enemies.map(e=>[e.x,e.y]);g.update(.02,{});let active=0;g.enemies.forEach((e,j)=>{if(Number.isFinite(e.swingElapsed)){active++;if(!was[j])starts++;if(Math.hypot(e.x-old[j][0],e.y-old[j][1])>.01)movingSwing++;assert.equal(e.dir,e.swingDir,'delivery facing stays locked');}});maxAttacks=Math.max(maxAttacks,active);}
+ const angles=g.enemies.map(e=>{const v=P.point(e.x-p.x,e.y-p.y);return Math.atan2(v.y,v.x);}).sort((x,y)=>x-y),gaps=angles.map((x,i)=>(angles[(i+1)%angles.length]+(i===angles.length-1?2*Math.PI:0))-x),report={starts,impacts,movingSwing,maxAttacks,angles,gaps};console.log('pressure:',JSON.stringify(report));assert.ok(Math.max(...gaps)<Math.PI,JSON.stringify(report));assert.ok(starts>=16&&impacts>=10,JSON.stringify(report));assert.ok(movingSwing>30);assert.ok(maxAttacks<=2);
+});

@@ -396,8 +396,10 @@
  }
  // Palette-authored silhouettes in weapon-local coordinates. Every point is
  // rounded by the compositor's pixel buffer, with one common ink outline.
- function paint(b,id,hx,hy,ux,uy,scale=1){
-  const w=get(id),p=PALETTES[w.material],n=[-uy,ux],L=w.length*Math.max(.15,scale),long=['spear','staff','glaive'].includes(w.family);
+ const handedness=dir=>dir===0||dir===3?-1:1;
+ const category=id=>FAMILIES[get(id).family];
+ function paint(b,id,hx,hy,ux,uy,scale=1,side=1){
+  const w=get(id),p=PALETTES[w.material],n=[-uy*side,ux*side],L=w.length*Math.max(.15,scale),long=['spear','staff','glaive'].includes(w.family);
   const at=(r,s=0)=>[hx+ux*r+n[0]*s,hy+uy*r+n[1]*s];
   const dot=(r,s,c,z=3)=>b.set(...at(r,s),c,z);
   const line=(r,s,R,S,c,z=2)=>b.line(...at(r,s),...at(R,S),c,z);
@@ -458,7 +460,7 @@
    const q=drawPose(Math.max(1,f-n*.24));
    const ghost={set(x,y,color,z){if(((Math.round(x)+Math.round(y)+n)&(n===2?3:1))===0)sink(q,x,y).set(x,y,p[0],-5+n);},
     line(x,y,X,Y,color,z){const count=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=count;i++)this.set(x+(X-x)*i/count,y+(Y-y)*i/count,color,z);}};
-   paint(ghost,id,...q.h,...q.u);
+   paint(ghost,id,...q.h,...q.u,1,handedness(q.view??dir));
   }
   for(let i=0;i<=36;i++){
    const t=i/36,q=drawPose(previous+(deliveryEnd(combo)-previous)*t),r=q.reach;
@@ -574,9 +576,9 @@
  }
  // The midpoint of the complete stored silhouette sits on the spine, not on
  // either shoulder. This same endpoint drives both holstering and drawing.
- function storedShape(b,id,h,u){
+ function storedShape(b,id,h,u,dir=2){
   const w=get(id);
-  if(['spear','staff','glaive','axe','mace'].includes(w.family)){paint(b,id,...h,...u);return;}
+  if(['spear','staff','glaive','axe','mace'].includes(w.family)){paint(b,id,...h,...u,1,handedness(dir));return;}
   const L=Math.min(18,w.length),[x,y]=h,tx=x+u[0]*(L+2),ty=y+u[1]*(L+2);
   b.line(x,y,tx,ty,'#50342f',1);b.line(x+1,y,tx+1,ty,'#754b37',2);
   b.line(x,y,x-u[0]*4,y-u[1]*4,'#754b37',3);
@@ -592,11 +594,11 @@
   const center=[dir===1?-3:dir===3?3:0,-10];
   let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
   const bounds={set(x,y){x=Math.round(x);y=Math.round(y);x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);},line(x,y,X,Y){this.set(x,y);this.set(X,Y);}};
-  storedShape(bounds,id,[0,0],u);
+  storedShape(bounds,id,[0,0],u,dir);
   const result=freeze({h:[center[0]-(x0+x1)/2,center[1]-(y0+y1)/2],u,center});storedPoses.set(key,result);return result;
  }
- function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u);}
+ function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u,dir);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,category,handedness,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });

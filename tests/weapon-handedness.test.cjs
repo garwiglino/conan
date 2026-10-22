@@ -1,0 +1,4 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),W=require('../scripts/kaldor-weapons.js');
+test('every explicit weapon name uses its canonical category',()=>{for(const w of W.all){assert.ok(W.category(w.id));if(/dague|couteau|crochet|aiguille|croc d/i.test(w.label))assert.equal(w.family,'dagger',w.label);if(/sabre/i.test(w.label))assert.equal(w.family,'sabre',w.label);}assert.equal(W.category('dague-kesh'),'Dague');});
+test('curved blades and asymmetric heads mirror with the view instead of reversing their edge',()=>{for(const w of W.all){const draw=(dir,flip)=>{const points=[];const b={set(x,y,c){points.push([Math.round((flip?-x:x)*1e6),Math.round(y*1e6),c]);},line(x,y,X,Y,c){this.set(x,y,c);this.set(X,Y,c);}};W.paint(b,w.id,0,0,dir===1?.6:-.6,-.8,1,W.handedness(dir));return points.map(v=>JSON.stringify(v)).sort();};assert.deepEqual(draw(1,true),draw(3,false),w.id);}});
