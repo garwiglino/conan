@@ -246,7 +246,7 @@ const DungeonCave=(()=>{
  const hash=text=>{let h=2166136261;for(const ch of String(text))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return h;};
  const clock=()=>typeof performance!=='undefined'?performance.now():Date.now();
  // Niveaux relatifs des couches, calés par rendu hors ligne contre l'ambiance de forêt au grand jour.
- const MIX={air:.09,draft:1.7,trickle:.22,leak:.55,drip:.6,events:.6,wet:1};
+ const MIX={air:.05,draft:1.05,trickle:.15,leak:.2,drip:.24,events:.5,wet:1};
  // Filtre passe-bande RBJ pour le pré-calcul des tampons.
  function band(f,q,sr){const w=2*Math.PI*f/sr,al=Math.sin(w)/(2*q),a0=1+al;let x1=0,x2=0,y1=0,y2=0;
   const b0=al/a0,b2=-al/a0,a1=-2*Math.cos(w)/a0,a2=(1-al)/a0;return x=>{const y=b0*x+b2*x2-a1*y1-a2*y2;x2=x1;x1=x;y2=y1;y1=y;return y;};}
@@ -265,9 +265,9 @@ const DungeonCave=(()=>{
   return b;}
  // Goutte : petit choc puis bulle dont la hauteur monte (la bulle qui se referme sous la surface).
  function* drop(c,f0,seed,heavy){const sr=c.sampleRate,n=Math.floor(sr*.32),b=c.createBuffer(1,n,sr),d=b.getChannelData(0),r=rng(seed);
-  const rise=.45+r()*.5,tau=.016+r()*.016;
+  const rise=.3+r()*.4,tau=.016+r()*.016;
   function* bubble(at,f,amp,decay){let ph=0;for(let i=Math.floor(at*sr);i<n;i++){const t=i/sr-at,e=Math.min(1,t/.0006)*Math.exp(-t/decay);if(e<1e-4&&t>.01)break;ph+=2*Math.PI*f*(1+rise*(1-Math.exp(-t/.011)))/sr;d[i]+=amp*e*Math.sin(ph);if(tick(i))yield;}}
-  for(let i=0;i<sr*.004;i++)d[i]+=(r()*2-1)*.22*Math.exp(-i/sr/.0005);
+  for(let i=0;i<sr*.004;i++)d[i]+=(r()*2-1)*.1*Math.exp(-i/sr/.0005);
   yield* bubble(0,f0,1,tau);
   if(heavy){yield* bubble(.022+r()*.02,f0*(1.25+r()*.2),.35,tau*.7);let ph=0;for(let i=0;i<n;i++){const t=i/sr;ph+=2*Math.PI*(150+60*Math.exp(-t/.01))/sr;d[i]+=.32*Math.sin(ph)*Math.exp(-t/.03);if(tick(i))yield;}}
   normalize(d,.8);return b;}
@@ -305,14 +305,16 @@ const DungeonCave=(()=>{
  // Ordre de fabrication : d'abord les gouttes et la pierre (une fuite s'entend tout de suite), puis l'air,
  // le filet d'eau, le souffle et les bruits lointains. Chaque couche commence dès que son tampon est prêt.
  function recipe(c){const r=rng(1709),jobs=[];
-  for(let k=0;k<10;k++)jobs.push(['drops',k,drop(c,650*3.7**(k/9)*(.97+r()*.06),300+k*17,k<3)]);
+  for(let k=0;k<10;k++)jobs.push(['drops',k,drop(c,520*2.6**(k/9)*(.97+r()*.06),300+k*17,k<3)]);
   jobs.push(['stoneIR',0,impulse(c,2.8,2600,5101)],['air',0,air(c,401)],['trickle',0,trickle(c,77)],['draft',0,draft(c,903)],['roomIR',0,impulse(c,1.5,3200,5303)]);
   for(const [kind,make,seeds]of [['chains',chains,[11,12]],['stone',stone,[21,22]],['creak',creak,[31,32]],['splash',splash,[41]]])seeds.forEach((s,k)=>jobs.push([kind,k,make(c,s)]));
   return jobs;}
  // Ce que chaque étage tire de son nom : rythme et place des fuites, filet d'eau, densité des gouttes, écho.
  function floorPlan(id){const r=rng(hash(id));
-  const leak=()=>({period:1.15+r()*1.25,drop:Math.floor(r()*10),rate:.95+r()*.1,pan:(r()*2-1)*.65,gain:.5+r()*.3});
-  return {leaks:[leak(),...(r()<.5?[leak()]:[])],trickle:r()<.65?{gain:.35+r()*.4,pan:(r()*2-1)*.7}:null,drip:1.5+r()*2.4,wet:.5+r()*.35,events:20+r()*20,
+  // Une fuite lente par salle ; parfois une seconde, plus loin, plus lente et plus faible.
+  const leak=(far=1)=>({period:(3.4+r()*3.6)*far,drop:Math.floor(r()*10),rate:.95+r()*.1,pan:(r()*2-1)*.65,gain:(.5+r()*.3)/far});
+  const first=leak();
+  return {leaks:[first,...(r()<.3?[leak(1.7)]:[])],trickle:r()<.65?{gain:.35+r()*.4,pan:(r()*2-1)*.7}:null,drip:8+r()*7,wet:.5+r()*.35,events:20+r()*20,
    weights:{chains:1+r()*2,stone:1+r()*1.5,creak:.6+r()*1.4,splash:.5+r()}};}
  function create(c,destination,options={}){
   const M={...MIX,...options.mix},S={drops:[],chains:[],stone:[],creak:[],splash:[]},jobs=recipe(c),r=options.random||Math.random;
@@ -334,7 +336,7 @@ const DungeonCave=(()=>{
   // Couches continues : air, souffle, filet d'eau. Elles ne tournent que sous terre.
   function layer(key,t){if(!S[key]||cave.loops[key])return;const s=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner(),w=c.createGain(),filter=key==='trickle'?null:c.createBiquadFilter();
    s.buffer=S[key];s.loop=true;p.pan.value=0;w.gain.value=key==='air'?.1:key==='draft'?.6:.45;g.gain.value=0;
-   if(filter){filter.type=key==='air'?'lowpass':'bandpass';filter.frequency.value=key==='air'?240:260;filter.Q.value=key==='air'?.7:4;s.connect(filter);filter.connect(g);}else s.connect(g);
+   if(filter){filter.type=key==='air'?'highpass':'bandpass';filter.frequency.value=key==='air'?75:260;filter.Q.value=key==='air'?.7:4;s.connect(filter);filter.connect(g);}else s.connect(g);
    g.connect(p);p.connect(dry);p.connect(w);w.connect(send);s.start(t,r()*S[key].duration);const l=cave.loops[key]={s,g,p,w,filter};
    // L'air respire : un battement très lent de son niveau.
    if(key==='air'){const lfo=c.createOscillator(),depth=c.createGain();lfo.frequency.value=.055;depth.gain.value=.3*M.air;lfo.connect(depth);depth.connect(g.gain);lfo.start(t);l.lfo=lfo;l.depth=depth;}
@@ -359,13 +361,13 @@ const DungeonCave=(()=>{
    P.leaks.forEach((leak,k)=>{if(cave.leakAt[k]<t-1)cave.leakAt[k]=t+.05;
     while(cave.leakAt[k]<ahead){shot(S.drops[leak.drop]||S.drops[0],cave.leakAt[k],{gain:leak.gain*M.leak*(.9+r()*.2),pan:leak.pan,rate:leak.rate*(.995+r()*.01),wet:P.wet,kind:'leak'+k});cave.leakAt[k]+=leak.period*(.96+r()*.08);}});
    if(cave.dripAt<t-1)cave.dripAt=t+.1;
-   while(cave.dripAt<ahead){const d=r();shot(S.drops[Math.floor(r()*S.drops.length)],cave.dripAt,{gain:(.18+.42*(1-d))*M.drip,pan:(r()*2-1)*.85,rate:.92+r()*.16,wet:P.wet*(.6+.8*d),distant:d>.55});cave.dripAt+=P.drip*(.25-Math.log(1-r()*.95)*.75);}
+   while(cave.dripAt<ahead){const d=r();shot(S.drops[Math.floor(r()*S.drops.length)],cave.dripAt,{gain:(.18+.42*(1-d))*M.drip,pan:(r()*2-1)*.85,rate:.92+r()*.16,wet:P.wet*(.6+.8*d),distant:d>.4});cave.dripAt+=P.drip*(.25-Math.log(1-r()*.95)*.75);}
    if(cave.eventAt<t-1)cave.eventAt=t+5;
    if(cave.eventAt<ahead){const W=P.weights,kinds=['chains','stone','creak','splash'].filter(k=>S[k].length),total=kinds.reduce((s,k)=>s+W[k],0);let x=r()*total,kind=kinds[kinds.length-1];
     for(const k of kinds)if((x-=W[k])<0){kind=k;break;}
-    if(kind)shot(S[kind][Math.floor(r()*S[kind].length)],cave.eventAt,{gain:(kind==='stone'?.6:kind==='creak'?.32:.42)*M.events,pan:(r()*2-1)*.9,rate:.9+r()*.2,wet:1.3,distant:true,kind});
+    if(kind)shot(S[kind][Math.floor(r()*S[kind].length)],cave.eventAt,{gain:(kind==='stone'?.3:kind==='creak'?.32:.42)*M.events,pan:(r()*2-1)*.9,rate:.9+r()*.2,wet:1.3,distant:true,kind});
     cave.eventAt+=P.events*(.6+r()*.8);}
-   const D=cave.loops.draft;if(D&&t>cave.draftAt){cave.draftAt=t+3+r()*5;D.filter.frequency.setTargetAtTime(170+r()*240,t,2.2);D.g.gain.setTargetAtTime((.1+r()*.22)*M.draft,t,2.5);}
+   const D=cave.loops.draft;if(D&&t>cave.draftAt){cave.draftAt=t+3+r()*5;D.filter.frequency.setTargetAtTime(170+r()*240,t,2.2);D.g.gain.setTargetAtTime((.1+r()*.16)*M.draft,t,2.5);}
   }
   return {update,prepare,get floor(){return cave.floor;},get running(){return cave.running;},get ready(){return !jobs.length;},get sounds(){return S;},get plan(){return cave.plan;}};
  }
