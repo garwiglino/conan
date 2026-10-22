@@ -3,6 +3,8 @@ const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirnam
 let html=read('index.html');
 // Keep the shared light compositor current without rebuilding world geography.
 html=html.replace(/\/\/ BEGIN WEATHER RENDER[\s\S]*?\/\/ END WEATHER RENDER/,()=> '// BEGIN WEATHER RENDER\n'+read('scripts/weather-render.js')+'\n// END WEATHER RENDER');
+html=html.replaceAll("'Clés '+g.dungeon.keys.length+'/3 · Fioles '","'Fioles '");
+html=html.replace(/\/\/ BEGIN LANDSCAPE DESIGN[\s\S]*?\/\/ END LANDSCAPE DESIGN/,()=> '// BEGIN LANDSCAPE DESIGN\n'+read('scripts/landscape-ui.js')+'\n'+read('scripts/dialogue-pages.js')+'\n'+read('scripts/interaction-ui.js')+'\n// END LANDSCAPE DESIGN');
 // Replace the legacy inline loot loop once; both update paths call the same code.
 const lootStart=html.indexOf('for(const d of this.drops){if(d.air)'),lootEnd=lootStart<0?-1:html.indexOf('this.drops=this.drops.filter(d=>!d.taken);',lootStart);
 if(lootStart>=0){if(lootEnd<0)throw Error('Incomplete legacy loot loop');html=html.slice(0,lootStart)+'this.stepLoot(dt);'+html.slice(lootEnd+'this.drops=this.drops.filter(d=>!d.taken);'.length);}

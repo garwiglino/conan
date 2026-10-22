@@ -13,7 +13,7 @@ async function session(fn){
  const {chromium}=require('playwright');
  const server=http.createServer((q,r)=>{const p=path.join(ROOT,decodeURIComponent(q.url.split('?')[0]).replace(/^\/+/,'')||'index.html');if(!p.startsWith(ROOT)){r.statusCode=403;return r.end();}fs.readFile(p,(e,d)=>{if(e){r.statusCode=404;return r.end();}r.setHeader('Content-Type',TYPES[path.extname(p)]||'application/octet-stream');r.end(d);});}).listen(0,'127.0.0.1');
  await new Promise(r=>server.on('listening',r));
- const exe=['/opt/pw-browsers/chromium'].find(f=>fs.existsSync(f)),browser=await chromium.launch({headless:true,...(exe?{executablePath:exe}:{})});
+ const exe=['/opt/pw-browsers/chromium','/usr/bin/chromium'].find(f=>fs.existsSync(f)),browser=await chromium.launch({headless:true,...(exe?{executablePath:exe}:{})});
  try{
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:'+server.address().port+'/index.html');

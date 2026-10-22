@@ -22,22 +22,23 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
  c.save();c.beginPath();c.rect(0,T,W,H-T);c.clip();const shake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);c.translate(-this.cam.x+shake,T-this.cam.y);c.drawImage(a.ground,-a.origin[0],-a.origin[1]);
  // Room reveal is gradual, without revealing the contents behind closed doors.
  for(let j=0;j<e.plan.length;j++)for(let i=0;i<e.plan[j].length;i++){if(e.plan[j][i]==='#')continue;const k=e.id+'/'+i+','+j,target=visible(i,j)?1:.14,old=brightness.get(k)??target,b=old+(target-old)*.14;brightness.set(k,b);const q=P(i*32,j*32);c.fillStyle='rgba(0,0,0,'+(1-b*.8)+')';c.beginPath();c.moveTo(q.x,q.y);c.lineTo(q.x+32,q.y+16);c.lineTo(q.x,q.y+32);c.lineTo(q.x-32,q.y+16);c.fill();}
- const blit=(name,x,y,alpha=1)=>{const z=art.pieces[name];if(!z)return;const im=z.frames[Math.floor(g.time*z.fps)%z.frames.length],q=P(x,y);c.save();c.globalAlpha*=alpha;c.drawImage(im,Math.round(q.x-z.anchor[0]),Math.round(q.y-z.anchor[1]));c.restore();};
+ const blit=(name,x,y,alpha=1)=>{const z=art.pieces[name];if(!z)return;const i=/-brise$/.test(name)?e.objets.findIndex(([n,a,b])=>n===name.replace('-brise','')&&a*32===x&&b*32===y):-1,im=z.frames[i>=0?LootPresentation.breakFrame(s.props[i]):Math.floor(g.time*z.fps)%z.frames.length],q=P(x,y);c.save();c.globalAlpha*=alpha;c.drawImage(im,Math.round(q.x-z.anchor[0]),Math.round(q.y-z.anchor[1]));c.restore();};
  for(const it of a.items){let name=it.piece,ref=it.ref,light=!it.cells||it.cells.some(([i,j])=>visible(i,j));
   if(it.edge){const border=it.edge.join(','),orient=name.split('/')[0];if(s.open.includes(border))name=orient+'/'+({'porte-verrouillee':'porte-ouverte','porte-cellule':'porte-cellule-ouverte','herse':'herse-levee'}[e.murs[border]]||'porte-ouverte');if(s.levers.includes(border)||border===D.fee.levier&&g.dungeon.fairy)name=orient+'/levier-bas';if(name===orient+'/porte'&&g.dungeon.floor==='trone'&&!g.dungeon.bossFight)name=orient+'/porte-ouverte';}
   if(name==='cle'&&D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&Math.hypot(k.pos[0]*32-ref[0],k.pos[1]*32-ref[1])<3))continue;
   if(name==='caisse'){const i=e.objets.findIndex(([n,x,y])=>n==='caisse'&&x*32===ref[0]&&y*32===ref[1]),b=s.crates.find(b=>b.id===i);if(b){ref=[b.x,b.y];light=visible(Math.floor(b.x/32),Math.floor(b.y/32));}}
   if(name==='coffre'){
    const i=e.objets.findIndex(([n,x,y])=>n==='coffre'&&x*32===ref[0]&&y*32===ref[1]),oldKey=D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&F.keyChest(g,k)===i),phase=LootPresentation.chestFrame(oldKey?{open:true}:F.chestState(g,i));
-   name=phase===4?'coffre-ouvert':phase?'coffre-ouverture-'+phase:'coffre';
+   name=phase===4?'coffre-vide':phase?'coffre-ouverture-'+phase:'coffre';
   }
+  if(['tonneau','caisses'].includes(name)){const i=e.objets.findIndex(([n,x,y])=>n===name&&x*32===ref[0]&&y*32===ref[1]);if(s.props?.[i]?.broken)name+='-brise';}
   if(name==='tresor'&&s.chests.some(i=>e.objets[i][1]*32===ref[0]&&e.objets[i][2]*32===ref[1]))continue;
   if(name==='cage-fee'&&g.dungeon.fairy)name='cage';
   if(name==='monte-charge')continue;
   if(name==='dalle-pression'&&s.crates.some(b=>Math.hypot(b.x-ref[0],b.y-ref[1])<10))name='dalle-pression-enfoncee';
   if(!light&&!it.edge)continue;
   const depth=name==='caisse'?{...it,ref,occlusionKey:it.piece+'/'+it.ref.join(','),key:Math.floor(ref[0]/32)+Math.floor(ref[1]/32),sub:ref[0]+ref[1]}:it;
-  items.push({ground:name.startsWith('dalle-pression'),key:depth.key,sub:depth.sub,draw:()=>{if(name==='cle'){const q=P(...ref);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,ref[0]);return;}const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...depth,ref},z,im,p):1;blit(name,...ref,alpha);}});
+  items.push({ground:name.startsWith('dalle-pression'),key:depth.key,sub:depth.sub,draw:()=>{if(name==='cle'){const q=P(...ref);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,ref[0]);return;}if(/^(tonneau|caisses)$/.test(name)){const q=P(...ref);this.shadow(q.x,q.y,name==='tonneau'?12:18);}const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...depth,ref},z,im,p):1;blit(name,...ref,alpha);}});
  }
  for(const k of D.cles)if(k.etage===e.id&&!g.dungeon.keys.includes(k.id)&&F.keyChest(g,k)>=0&&F.keyReady(g,k)){
   const x=k.pos[0]*32,y=k.pos[1]*32;items.push({key:Math.floor(x/32)+Math.floor(y/32),sub:x+y+1,draw:()=>{const q=P(x,y);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,x,12);}});

@@ -24,9 +24,22 @@ function openEdge(g,k){const s=state(g);if(!s.open.includes(k))s.open.push(k);}
 function keyChest(g,k){return current(g).objets.findIndex(([n,x,y])=>n==='coffre'&&Math.hypot(x*CELL-k.pos[0]*CELL,y*CELL-k.pos[1]*CELL)<4);}
 function chestState(g,i){return state(g).chestStates?.[i]||{open:state(g).chests.includes(i)};}
 function keyReady(g,k){const i=keyChest(g,k);return i<0||state(g).chests.includes(i)&&LootPresentation.chestFrame(chestState(g,i))>=2;}
-Game.prototype.openDungeonChest=function(i){const e=current(this),s=state(this),o=e.objets[i];if(!o||s.chests.includes(i))return false;
+Game.prototype.openDungeonChest=function(i){const e=current(this),s=state(this),o=e.objets[i];if(!o||!['coffre','tresor'].includes(o[0])||s.chests.includes(i))return false;
  s.chestStates??={};const ch=s.chestStates[i]={x:o[1]*CELL,y:o[2]*CELL,level:0,open:false};s.chests.push(i);return this.openLootChest(ch);
 };
+Game.prototype.damageDungeonProp=function(i,n){const o=current(this).objets[i],s=state(this);if(!o||!['tonneau','caisses'].includes(o[0]))return false;
+ s.props??={};const prop=s.props[i]??={x:o[1]*CELL,y:o[2]*CELL,level:0,hp:2};if(prop.broken)return false;
+ prop.hp=Math.max(0,prop.hp-n);if(prop.hp>0){this.emit('hit');return true;}
+ prop.broken=true;prop.breakAge=0;const rule=BREAKABLE[o[0]==='tonneau'?'barrel':'crates'];this.emit('break',{mat:rule.mat});const loot=rule.loot();if(loot.length)this.ejectLoot(prop,loot,.12);this.emit('save');return true;
+};
+Game.prototype.hitDungeonProps=function(){if(!this.player.impactTick)return;current(this).objets.forEach(([n,x,y],i)=>{const target={x:x*CELL,y:y*CELL,r:n==='tonneau'?8:10,level:0};if(['tonneau','caisses'].includes(n)&&!state(this).props?.[i]?.broken&&bladeHits(this.player,target,2)&&this.lineClear(this.player,target))this.damageDungeonProp(i,this.weaponDamage(this.player.combo===3?2:1));});};
+Game.prototype.stepDungeonProps=function(dt){for(const prop of Object.values(state(this).props||{}))if(prop.broken&&Number.isFinite(prop.breakAge))prop.breakAge=Math.min(.6,prop.breakAge+dt);};
+Game.prototype.dungeonLiftStops=function(){return this.dungeon.lift?D.monte_charge.arrets.filter(id=>id!==this.dungeon.floor&&floor(byId[id],4.5*CELL,10.5*CELL)):[];};
+Game.prototype.openDungeonLift=function(){const stops=this.dungeonLiftStops();if(!stops.length)return false;
+ this.talk('',[],null,0,null,{prompt:'',options:[...stops.map(id=>({label:byId[id].nom,act:()=>this.enterDungeonFloor(id,at([4.5,10.5]))})),{label:'Rester ici',end:true}]});
+ Object.assign(this.dialogue,{uiOnly:true,choosing:true,shown:1e9});return true;
+};
+const choose=Game.prototype.choose;Game.prototype.choose=function(i){const d=this.dialogue;if(!d?.uiOnly)return choose.call(this,i);const option=d.menu.options[i];if(!option)return;this.dialogue=null;option.act?.();this.emit('dialogue');this.emit('save');};
 function checkpoint(g){g.dungeon.checkpoint={floor:g.dungeon.floor,x:g.player.x,y:g.player.y};}
 Game.prototype.startFirstDungeon=function(saved=null){
  if(this.dungeon?.active)return false;
@@ -67,7 +80,7 @@ function geometry(g,x,y,r,skipCrate=null){const e=current(g);
  for(const [k,n]of Object.entries(e.murs)){const p=edge(k);if(blocks(g,k,n)){if(p.o==='N'?Math.abs(y-p.y)<r+3&&Math.abs(x-p.x)<CELL/2+r:Math.abs(x-p.x)<r+3&&Math.abs(y-p.y)<CELL/2+r)return true;}}
  for(const b of state(g).crates)if(b!==skipCrate&&Math.abs(x-b.x)<r+9&&Math.abs(y-b.y)<r+9)return true;
  // Furniture has a small physical footprint. Beds and rubble at the start remain traversable.
- for(const [n,a,b]of e.objets)if(/^(pilier-rond|pilier-carre|table|marmite|trone|totem|caisses)$/.test(n)&&Math.abs(x-a*CELL)<r+7&&Math.abs(y-b*CELL)<r+5)return true;
+ for(const [i,[n,a,b]]of e.objets.entries())if(!state(g).props?.[i]?.broken&&/^(pilier-rond|pilier-carre|table|marmite|trone|totem|caisses)$/.test(n)&&Math.abs(x-a*CELL)<r+7&&Math.abs(y-b*CELL)<r+5)return true;
  return false;
 }
 const solid=Game.prototype.solid;Game.prototype.solid=function(x,y,r=5,level=0){return this.dungeon?.active?geometry(this,x,y,r):solid.call(this,x,y,r,level);};
@@ -101,7 +114,7 @@ Game.prototype.revealDungeon=function(){const s=state(this),e=current(this),seen
 Game.prototype.dungeonContext=function(){if(this.dungeonGrip)return {kind:'dungeon-crate',id:this.dungeonGrip.id,text:'E  LÂCHER LA CAISSE · DÉPLACER AU JOYSTICK'};const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
  for(const b of s.crates){const d=Math.max(1,dist(p,b)),probe={x:b.x+(p.x-b.x)/d*12,y:b.y+(p.y-b.y)/d*12};if(near(p,b,28)&&this.lineClear(p,probe))options.push({kind:'dungeon-crate',id:b.id,text:'E  SAISIR LA CAISSE · POUSSER / TIRER',d});}
  for(const k of D.cles)if(k.etage===e.id&&!this.dungeon.keys.includes(k.id)&&keyReady(this,k))add({kind:'dungeon-key',id:k.id},k.pos,'E  PRENDRE : '+k.nom);
- for(const m of e.mecanismes||[]){for(const k of m.bords|| (m.bord?[m.bord]:[]))wall({kind:'dungeon-lever',id:m.id,bord:k},k,'E  ACTIONNER LE LEVIER');if(m.id==='treuil')add({kind:'dungeon-winch'},m.pos,'E  REMONTER LE MONTE-CHARGE');}
+ for(const m of e.mecanismes||[]){for(const k of m.bords|| (m.bord?[m.bord]:[]))if(!s.levers.includes(k)&&!(m.id==='levier-cage'&&this.dungeon.fairy))wall({kind:'dungeon-lever',id:m.id,bord:k},k,'E  ACTIONNER LE LEVIER');if(m.id==='treuil'&&!this.dungeon.lift)add({kind:'dungeon-winch'},m.pos,'E  REMONTER LE MONTE-CHARGE');}
  for(const d of e.portes||[])if(d.condition==='fee')wall({kind:'dungeon-exit'},d.bord,this.dungeon.fairy?'E  BRISER LE SCEAU ET SORTIR':'LE SCEAU RESTE VERROUILLÉ');else if(d.cle&&!open(this,d.bord))wall({kind:'dungeon-door',door:d},d.bord,'E  OUVRIR : '+d.nom);
  for(const l of e.liens||[]){if(l.bord)wall({kind:'dungeon-stairs',link:l},l.bord,'E  MONTER');else add({kind:'dungeon-stairs',link:l},l['trémie'].map(v=>v+.5),'E  DESCENDRE');}
  if(D.monte_charge.arrets.includes(e.id))add({kind:'dungeon-lift'},D.monte_charge.case.map(v=>v+.5),this.dungeon.lift?'E  MONTE-CHARGE : CHOISIR UN ÉTAGE':'LE TREUIL EST AUX GALERIES');
@@ -117,11 +130,11 @@ Game.prototype.interact=function(){if(!this.dungeon?.active)return interact.call
   else{const b=s.crates.find(b=>b.id===c.id),p=this.player,dx=p.x-b.x,dy=p.y-b.y;this.dungeonGrip={id:b.id,floor:e.id,dx,dy};p.dir=this.direction(-dx,-dy);}
   this.emit('save');return;
  }
- if(c.kind==='dungeon-key'){d.keys.push(c.id);this.emit('loot');this.emit('notice',{title:D.cles.find(k=>k.id===c.id).nom,text:'La clé est conservée dans ton inventaire.'});}
+ if(c.kind==='dungeon-key'){d.keys.push(c.id);this.emit('loot');}
  if(c.kind==='dungeon-door'){if(d.keys.includes(c.door.cle)){openEdge(this,c.door.bord);this.emit('door',{open:true});}else this.emit('message',{text:'Il te manque la '+D.cles.find(k=>k.id===c.door.cle).nom+'.'});}
- if(c.kind==='dungeon-lever'){const m=e.mecanismes.find(m=>m.id===c.id);if(c.id==='levier-cage'){if(!d.bossDead){this.emit('message',{text:'Grise-Gueule garde le levier. Terrasse-le d’abord.'});return;}if(!d.fairy){d.fairy=true;this.story.fairy=true;this.emit('notice',{title:'La cage est ouverte',text:'Rejoins la porte scellée de la grande salle.'});}}else{if(!s.levers.includes(c.bord))s.levers.push(c.bord);if(!(m.bords||[m.bord]).some(k=>!s.levers.includes(k)))for(const k of m.ouvre||[])openEdge(this,k);}this.emit('lever');}
- if(c.kind==='dungeon-winch'){d.lift=true;this.emit('notice',{title:'Monte-charge activé',text:'Le puits dessert les galeries, la caserne et les geôles.'});}
- if(c.kind==='dungeon-lift'){if(!d.lift){this.emit('message',{text:'Actionne d’abord le treuil des galeries.'});return;}const stops=D.monte_charge.arrets;this.talk('MONTE-CHARGE',['Choisis un étage.'],null,20,null,{prompt:'Quel étage ?',options:[...stops.filter(id=>id!==e.id).map(id=>({label:byId[id].nom,lines:[''],end:true,act:()=>this.enterDungeonFloor(id,at([4.5,10.5]))})),{label:'Rester ici',lines:[''],end:true}]});}
+ if(c.kind==='dungeon-lever'){const m=e.mecanismes.find(m=>m.id===c.id);if(c.id==='levier-cage'){if(!d.bossDead){this.emit('message',{text:'Grise-Gueule garde le levier. Terrasse-le d’abord.'});return;}if(!d.fairy){d.fairy=true;this.story.fairy=true;}}else{if(!s.levers.includes(c.bord))s.levers.push(c.bord);if(!(m.bords||[m.bord]).some(k=>!s.levers.includes(k)))for(const k of m.ouvre||[])openEdge(this,k);}this.emit('lever');}
+ if(c.kind==='dungeon-winch'){d.lift=true;this.emit('lever');}
+ if(c.kind==='dungeon-lift')this.openDungeonLift();
  if(c.kind==='dungeon-stairs'){const l=c.link,t=byId[l.vers];let pos;if(l.arrivee)pos=l.arrivee.map(v=>v+.5);else{const back=t.liens.find(q=>q.vers===e.id&&q.bord),p=edge(back.bord);pos=[(p.x+(p.o==='O'?12:0))/CELL,(p.y+(p.o==='N'?12:0))/CELL];}this.enterDungeonFloor(t.id,at(pos));}
  if(c.kind==='dungeon-chest')this.openDungeonChest(c.i);
  if(c.kind==='dungeon-exit'){if(!d.fairy){this.emit('message',{text:'Une rune violette ferme la porte. Son secret se trouve plus haut.'});return;}this.leaveFirstDungeon();return;}
@@ -179,7 +192,7 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
  if(this.dungeon.floor==='trone'&&p.y<9*CELL&&!this.dungeon.bossDead)this.dungeon.bossFight=true;
- this.stepLoot(dt);
+ this.hitDungeonProps();this.stepDungeonProps(dt);this.stepLoot(dt);
  const tactics=GoblinTactics.plan(this,dt);
  // The native enemy drawing and its single damaging event share one clock.
  for(const e of this.enemies){
@@ -196,6 +209,6 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  this.dungeonRevealTimer=(this.dungeonRevealTimer||0)-dt;if(this.dungeonRevealTimer<=0){this.revealDungeon();this.dungeonRevealTimer=.15;}
  this.saveTimer+=dt;if(this.saveTimer>=5){this.saveTimer=0;this.emit('save');}
 }
-function inventoryHTML(g){if(!g.dungeon)return '';return '<div class="m-sec">Clés de la forteresse</div>'+D.cles.map(k=>'<div class="inv-row"><div class="grow">'+k.nom+'<small>'+ (g.dungeon.keys.includes(k.id)?'Obtenue · '+k.ouvre:'À trouver dans la forteresse')+'</small></div></div>').join('');}
+function inventoryHTML(g){if(!g.dungeon)return '';return '<div class="m-sec">Clés de la forteresse</div>'+D.cles.filter(k=>g.dungeon.keys.includes(k.id)).map(k=>'<div class="inv-row"><div class="grow">'+k.nom+'<small>'+ (g.dungeon.keys.includes(k.id)?'Obtenue · '+k.ouvre:'À trouver dans la forteresse')+'</small></div></div>').join('');}
 return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML,keyChest,keyReady,chestState};
 })();
