@@ -50,20 +50,20 @@ test('a spammed combo shows its full recoil, links without idle, and keeps each 
    }
    if(drawing===3.5)postTicks++;
    if(p.combo===3)break;
-   if(p.attack>0)assert.notEqual(drawing,5,'no idle between queued blows');
+   if(p.attack>0)assert.notEqual(drawing,5,'no idle between fresh linked blows');
    previous={combo:p.combo,drawing};
   }
   assert.equal(linked,3,id+' complete combo');
  }
 });
 
-test('contact hit stop freezes attacker, victim and effects, buffers input, and ends without losing time',()=>{
+test('contact hit stop freezes attacker, victim and effects, discards input, and ends without losing time',()=>{
  const g=arena(),p=g.player;Object.assign(p,{weapon:'exile',dir:1});g.swingSword();
  const row=W.times(p.weapon,0);p.attack=W.duration(p.weapon,0)-row[0]-row[1]-.001;
  p.hitPause=W.hitPause(p.weapon,0);const before={time:g.time,attack:p.attack,comboWindow:p.comboWindow,x:p.x,y:p.y};
  let simulated=0;g.stepNpcs=()=>simulated++;g.update(.01,{attackPressed:true,x:0,y:1});
  assert.equal(simulated,0);assert.deepEqual({time:g.time,attack:p.attack,comboWindow:p.comboWindow,x:p.x,y:p.y},before);
- assert.ok(p.attackBuffer>0);assert.ok(Math.abs(p.bufferY-Math.SQRT1_2)<1e-10);assert.equal(p.impactTick,false);
+ assert.equal(p.attackBuffer,0);assert.equal(p.impactTick,false);
  const remaining=p.hitPause;g.update(remaining+.005,{});assert.ok(Math.abs(g.time-before.time-.005)<1e-8);assert.equal(p.hitPause,0);assert.ok(simulated>0);
  assert.ok(W.hitPause('aiguille-corail')>=.025);assert.ok(W.hitPause('brise-givre',3)<=.065);
  // A miss never requests a stop.
@@ -123,21 +123,31 @@ test('every attack reserves readable follow-through at 25, 60 and 120 fps before
 });
 
 
-test('holding attack fires once, early taps queue one stroke, and excess presses never form a backlog',()=>{
- const g=arena(),p=g.player;g.populateRoadTraffic=()=>{};g.populateCivilians=()=>{};g.advanceAtlas=()=>{};
- const reset=id=>{Object.assign(p,{weapon:id,dir:1,attack:0,attackCD:0,combo:0,comboWindow:0,hitPause:0,hurt:0,attackBuffer:0,attackHeld:false});g.npcs=[];g.targetId=null;};
+test('early spam is discarded in world and dungeon; holding never repeats and fresh late presses chain',()=>{
+ for(const dungeon of [false,true]){
+ const g=arena(),p=g.player;if(dungeon){g.startFirstDungeon();g.enterDungeonFloor('grande-salle',{x:368,y:208});g.enemies=[];p.spawnFX=0;}
  for(const id of ['exile','aiguille-corail','brise-givre','lance-boisclair']){
-  reset(id);const start=g.swing;for(let i=0;i<100;i++){g.update(.04,{attack:true});if(p.impactTick)p.hitPause=W.hitPause(id,p.combo);}
-  assert.equal(g.swing-start,1,id+' holding cannot repeat');
-  // Even an immediate second tap, well before a heavy impact, is kept.
-  reset(id);const first=g.swing;g.update(.01,{attack:true,attackPressed:true});g.update(.01,{});
-  const firstTime=g.time;g.update(.01,{attack:true,attackPressed:true});
-  for(let i=0;i<3;i++){g.update(.01,{});g.update(.01,{attack:true,attackPressed:true});}
-  while(g.swing===first+1)g.update(.01,{});
-  assert.equal(g.swing,first+2,id+' starts exactly the queued stroke');
-  const row=W.times(id,0);assert.ok(g.time-firstTime>=row[0]+row[1]+row[2]+row[3]+row[4]-.03,id+' cannot cancel recoil');
-  for(let i=0;i<100;i++)g.update(.04,{});
-  assert.equal(g.swing,first+2,id+' spam before the link does not queue several future blows');
+  const reset=()=>Object.assign(p,{weapon:id,dir:1,attack:0,attackCD:0,combo:0,comboWindow:0,hitPause:0,hurt:0,attackBuffer:0,attackHeld:false,spawnFX:0});
+  reset();let start=g.swing;
+  for(let i=0;i<120;i++)g.update(.04,{attack:true});
+  assert.equal(g.swing-start,1,id+' held attack fires once');
+  reset();start=g.swing;g.update(.01,{attack:true,attackPressed:true});
+  for(let i=0;i<5;i++){g.update(.01,{});g.update(.01,{attack:true,attackPressed:true});}
+  p.attackBuffer=10; // Older saves cannot reintroduce the removed queue.
+  for(let i=0;i<120;i++)g.update(.04,{});
+  assert.equal(g.swing-start,1,id+' ignored early presses never execute later');
+  reset();start=g.swing;g.update(.01,{attackPressed:true});
+  for(let combo=0;combo<3;combo++){
+   let ticks=0;while(!W.canChain(p.attack,id,combo)&&ticks++<400)g.update(.005,{});
+   assert.ok(ticks<400);assert.equal(p.combo,combo);
+   g.update(.001,{attackPressed:true});assert.equal(p.combo,combo+1,id+' fresh press in link window');
+  }
+  assert.equal(g.swing-start,4);
+  // A press consumed by hit stop stays consumed even when the tick has time left.
+  reset();g.update(.01,{attackPressed:true});p.comboRecoilShown=true;p.attack=W.times(id,0)[5]/2;p.hitPause=.001;
+  const before=g.swing;g.update(.01,{attackPressed:true,attack:true});assert.equal(g.swing,before);
+  for(let i=0;i<120;i++)g.update(.04,{attack:true});assert.equal(g.swing,before);
+ }
  }
 });
 

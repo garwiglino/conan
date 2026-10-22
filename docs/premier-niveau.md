@@ -45,7 +45,7 @@ Les gobelins utilisent les quatre vues Piskel de Claude, avec déplacement, orie
 
 Le donjon conserve le HUD horizontal du monde (santé, vies, pièces, expérience, satiété et sceaux), les commandes et les bulles habituelles. La carte de lieu indique « Lieu inconnu », l’étage, les clés et les fioles ; aucune autorité extérieure ni recherche régionale n’est affichée pendant la captivité.
 
-La vue projetée reste stable entre les images : les huit poses de marche de Kaldor suivent sa distance réellement parcourue. Les attaques réutilisent le traitement commun des pauses d’impact et des commandes mises en attente, avec l’avancée soumise aux collisions, les effets de sang, les particules, les gains et la fée du moteur actuel. Les plans, les pixels du donjon et la progression enregistrée sont conservés.
+La vue projetée reste stable entre les images : les huit poses de marche de Kaldor suivent sa distance réellement parcourue. Les attaques réutilisent le traitement commun des pauses d’impact et des appuis frais sans mise en attente, avec l’avancée soumise aux collisions, les effets de sang, les particules, les gains et la fée du moteur actuel. Les plans, les pixels du donjon et la progression enregistrée sont conservés.
 
 Le contrôle navigateur vérifie aussi huit poses distinctes pendant une marche simulée avec les commandes normales, la stabilité de la projection, le HUD commun et le rendu des effets. `tests/dungeon-presentation.test.cjs` couvre la pause de contact, la direction des commandes mises en attente et l’avancée unique par frappe.
 
@@ -63,11 +63,15 @@ Une faible lumière neutre autour de Kaldor garde ses mains et ses appuis lisibl
 
 La vision porte à 170 unités, avec 2,8 s de mémoire de la dernière position réellement observée ou signalée par un témoin visible. `DungeonSight` vérifie chaque frontière de case et les intersections exactes avec les murs : aucune transparence graphique ne donne la vue à travers un mur ou une porte fermée. Les alertes entre alliés exigent également une ligne de vue dégagée. Après perte de vue, la recherche ne suit pas les déplacements cachés du joueur.
 
+Un gobelin visible à moins de 29 unités du joueur peut reprendre la place d’un allié encore en approche, sans attendre d’avoir atteint son secteur. Un coup déjà lancé conserve sa place et sa direction : deux attaques engagées au maximum, avec leurs anticipations normales. Si les deux places sont occupées, l’adversaire directement menacé tente un pas de dégagement latéral et arrière, soumis aux murs et collisions. Un coup reçu donne priorité à sa riposte après sa vraie animation de blessure ; il ne retire ni les dégâts ni l’étourdissement. À courte portée, l’approche cherche une position atteignable par la véritable trajectoire d’impact, sans agrandir les dégâts ni traverser les corps ; elle termine ce petit ajustement avant de frapper. Les passages étroits conservent leur réservation.
+
+Les attaques du joueur n’ont plus de commande mémorisée, dans le monde comme dans le donjon. Les appuis pendant une préparation, un impact, un arrêt d’impact ou une récupération non interruptible sont consommés. Un nouvel appui pendant la fenêtre de liaison permet le coup suivant ; garder le bouton appuyé ne répète pas l’attaque. Les quatre coups conservent leurs vitesses et leurs poses de fin de course.
+
 Les portes ouvertes ont une réservation temporaire : un seul gobelin franchit le seuil, les autres attendent en file espacée. Le gobelin qui passe libère l’issue avant de se placer au combat. Les routes utilisent A* par pas de 8 unités, un budget de 240 nœuds et des contrôles de géométrie et de corps. Un blocage prolongé déclenche un nouveau calcul. Les réservations, chemins et intentions sont transitoires ; ils ne modifient pas les sauvegardes.
 
 Références : [Michael Dawe, Beyond the Kung-Fu Circle, Game AI Pro](https://www.gameaipro.com/GameAIPro/GameAIPro_Chapter28_Beyond_the_Kung-Fu_Circle_A_Flexible_System_for_Managing_NPC_Attacks.pdf) pour distinguer espaces d’approche et capacités d’attaque ; [Red Blob Games, Line drawing on a grid](https://www.redblobgames.com/grids/line-drawing/) pour vérifier les cases traversées et les coins. Les paramètres ci-dessus sont adaptés et testés pour ce donjon.
 
-Vérification : `npm run test:goblin-tactics` et `npm run check:goblin-tactics` (jeu iOS hors ligne, deux formats de téléphone émulé, collisions réelles du donjon).
+Vérification : tests `goblin-tactics`, `goblin-combat`, `goblin-pressure`, `goblin-space-vision` et `kaldor-combo-contact` ; `npm run check:goblin-space` charge le jeu iOS hors ligne en 844 × 390 et 568 × 320 avec collisions réelles. Le rapport `art/goblin-space-vision/verification.json` contrôle aussi la réaction locale et les appuis sans mise en attente. Ces contrôles utilisent un téléphone émulé, sans compilation Xcode ni appareil physique.
 
 ### Lisibilité, alertes et armes au sol
 

@@ -76,7 +76,7 @@ html=html.replaceAll("HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile')
 replaceOnce("let state='idle',frame=0;if(kind==='guardian'", "if(kind==='hero')HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile',actor);let state='idle',frame=0;if(kind==='guardian'");
 html=html.replace("&&actor.weapon!=='exile'",'');
 html=html.replaceAll("if(frame===2&&!p.attackStep)","if((frame===2||frame===3)&&!p.attackStep)");
-// Every queued stroke acquires afresh; no-input attacks prioritize nearby foes.
+// Every fresh stroke acquires afresh; no-input attacks prioritize nearby foes.
 replaceOnce("else if(!this.target())this.aimAttack(...this.facing(p.dir));", "else this.aimAttack(...this.facing(p.dir),true);");
 replaceOnce("HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');", "HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile',actor);");
 // One damage event per swing, shared by monsters, people, guards and props.
@@ -84,18 +84,15 @@ replaceOnce("HearthreaverKaldorCivilianArt.wield(actor.weapon||'exile');", "Hear
 replaceOnce('this.swing++;p.attackStep=false;', 'this.swing++;p.attackStep=false;p.impactDone=false;p.impactTick=false;p.comboRecoilShown=false;');
 replaceOnce("p[k]=Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));",
  "p[k]=k==='attack'&&p.weapon?HearthreaverWeapons.advance(p[k],dt,p.weapon,p.combo):Math.max(0,p[k]-((k==='attack'||k==='attackCD')&&p.hitPause>0?0:dt));");
-html=html.replaceAll('link=(buffered||input.attack)&&p.combo<3','link=buffered&&p.combo<3');
-replaceOnce('const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.attackCD<.065&&p.attack<.065;',
- 'const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);');
-// An input can be buffered early, but cannot erase the follow-through.
-replaceOnce('(p.attackCD<=0||link)&&p.dash<=0', '((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0');
-// Fresh presses only. Keep at most the next stroke; holding never repeats.
-replaceOnce('if(attackEdge&&p.attackCD>0&&p.attack<.23){p.attackBuffer=.26;p.bufferX=dx;p.bufferY=dy;}',
- 'if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,dx,dy);');
-replaceOnce('if((input.attack||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)',
- 'if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)');
+// Migrate the former one-stroke buffer to fresh, immediately usable presses.
+html=html.replaceAll('if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,dx,dy);','')
+ .replaceAll('const buffered=p.attackBuffer>0,link=buffered&&','const link=attackEdge&&')
+ .replaceAll('(attackEdge||buffered)&&','attackEdge&&')
+ .replaceAll('const ax=buffered?p.bufferX:dx,ay=buffered?p.bufferY:dy;','const ax=dx,ay=dy;')
+ .replaceAll('\n  \n  this.faceTarget();if(input.dodge)', '\n  this.faceTarget();if(input.dodge)');
 const impactAnchor='if(p.attack>0){const frame=attackFrame(p.attack,p.combo,p.weapon);';
-const impactEvent="p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;";
+html=html.replaceAll('p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;','p.comboRecoilShown=p.comboRecoilShown||p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;');
+const impactEvent="p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.comboRecoilShown||p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;";
 replaceOnce(impactAnchor,impactEvent+impactAnchor);
 replaceOnce('if((frame===2||frame===3)&&!p.attackStep)', 'if(p.impactTick&&!p.attackStep)');
 // Contact shake shares the existing reduced-motion preference and world-only

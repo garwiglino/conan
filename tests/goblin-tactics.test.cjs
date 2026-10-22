@@ -10,3 +10,39 @@ test('bounded path detours around a wall without cutting through it',()=>{
  g.move=(actor,x,y)=>{assert.ok(!g.solid(actor.x+x,actor.y+y,actor.r),JSON.stringify({x:actor.x,y:actor.y,mx:x,my:y}));actor.x+=x;actor.y+=y;};
  let wentAround=false;for(let i=0;i<300;i++){g.time+=.04;const p=T.plan(g,.04);T.move(g,e,T.goal(g,e,p),p,.04);wentAround||=e.y<145;}assert.ok(wentAround,'follows a collision-checked detour rather than pushing the wall');assert.ok(e.x>340);
 });
+
+test('approaching a waiting goblin transfers approach priority without cancelling committed attacks',()=>{
+ const g=arena(4),T=a.GoblinTactics;let plan=T.plan(g,.02);
+ // Establish two distant approach holders and engage another goblin locally.
+ const distant=g.enemies.slice(0,2),local=g.enemies[2];plan.s.engagers=new Set(distant);
+ for(const e of distant){Object.assign(e,{x:g.player.x-60,y:g.player.y});const m=plan.s.actors.get(e);m.engageUntil=g.time+2;m.retreatUntil=0;}
+ Object.assign(local,{x:g.player.x+19,y:g.player.y,cooldown:0});
+ plan=T.plan(g,.02);assert.ok(plan.pressing.has(local));assert.equal(plan.pressing.size,2);assert.ok(T.canStrike(g,local,plan));
+ // With two native swings already committed, the threatened third actor moves.
+ for(const e of distant){e.swingElapsed=.1;e.swingDir=1;}
+ local.x=g.player.x+19;local.y=g.player.y;plan=T.plan(g,.02);
+ assert.ok(!plan.pressing.has(local));assert.ok(!T.canStrike(g,local,plan));
+ const goal=T.goal(g,local,plan),before={x:local.x,y:local.y};
+ g.move=(e,x,y)=>{e.x+=x;e.y+=y;};T.move(g,local,goal,plan,.04);
+ assert.ok(Math.hypot(local.x-before.x,local.y-before.y)>.1,'locally threatened actor evades instead of waiting still');
+ assert.ok(Math.abs(local.y-before.y)>.01,'evade includes a lateral step');
+ assert.ok(distant.every(e=>e.swingElapsed===.1),'no committed strike is cancelled');
+});
+
+test('a wounded goblin keeps its full hurt reaction, then prioritizes retaliation',()=>{
+ const g=arena(3),T=a.GoblinTactics,e=g.enemies[2];let plan=T.plan(g,.02);Object.assign(e,{x:g.player.x+20,y:g.player.y,stun:.2});
+ T.provoke(g,e);plan=T.plan(g,.02);assert.equal(e.stun,.2);assert.ok(!T.canStrike(g,e,plan));
+ e.stun=0;g.time+=.21;plan=T.plan(g,.02);assert.ok(plan.pressing.has(e));assert.ok(T.canStrike(g,e,plan));
+ g.lineClear=()=>false;plan=T.plan(g,.02);assert.ok(!T.canStrike(g,e,plan),'provocation never grants sight through walls');
+});
+
+test('a side-on local engagement finds a real contact position without overlapping bodies',()=>{
+ const g=arena(1),T=a.GoblinTactics,e=g.enemies[0],p=g.player;
+ Object.assign(e,{x:p.x+19,y:p.y,cooldown:0,armed:true});g.player.inv=999;
+ // Restore real movement and crowd collision; retain only the open geometry.
+ delete g.move;let ticks=0;while(!Number.isFinite(e.swingElapsed)&&ticks++<60)g.update(.02,{});
+ assert.ok(Number.isFinite(e.swingElapsed),'local reaction leads to a real swing');
+ assert.ok(ticks*.02<=1.2,'does not wait for a formation turn');
+ const se=g.bodySize(e),sp=g.bodySize(p);assert.ok(((e.x-p.x)/(se[0]+sp[0]))**2+((e.y-p.y)/(se[1]+sp[1]))**2>=.99,'native body ellipses stay separate');
+ assert.ok(a.HearthreaverGoblins.hits(e,p),'authored impact actually reaches the player');
+});

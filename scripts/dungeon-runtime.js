@@ -163,7 +163,7 @@ Game.prototype.damageEnemy=function(e,n){
  const before=e.hp,result=damageEnemy.call(this,e,n);if(e.hp>=before)return result;
  // Keep the shared power, riposte, hit sound, blood, target, loot and feedback.
  // The goblin rig only supplies its own reaction and the dungeon boss outcome.
- e.hurtElapsed=0;e.stun=Math.max(e.stun||0,HearthreaverGoblins.duration('hurt'));HearthreaverGoblins.cancel(e);
+ e.hurtElapsed=0;e.stun=Math.max(e.stun||0,HearthreaverGoblins.duration('hurt'));HearthreaverGoblins.cancel(e);GoblinTactics.provoke(this,e);
  if(e.dead){e.deathElapsed=0;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle est maintenant accessible.'});}this.emit('save');}
  return result;
 };
@@ -186,14 +186,13 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  p.lvlFX=Math.max(0,(p.lvlFX||0)-dt);p.spawnFX=Math.max(0,(p.spawnFX||0)-dt);if(p.spawnFX>SPAWN_T-.9){input.x=0;input.y=0;input.attack=false;input.attackPressed=false;input.dodge=false;input.guard=false;input.interact=false;}const guardEdge=input.guard&&!p.guardHeld;p.guardHeld=!!input.guard;p.guard=!!input.guard&&p.attack<=0&&p.dash<=0&&p.hurt<=0;if(!p.guard)p.parry=0;if(guardEdge&&p.guard&&p.parryCD<=0){p.parry=.18;p.parryCD=.42;}
  if(input.dodge)this.dodge(input.x,input.y);
  const attackEdge=!!input.attackPressed||input.attack&&!p.attackHeld;p.attackHeld=!!input.attack;
- if(attackEdge&&(p.attack>0||p.attackCD>0)&&p.dash<=0&&p.hurt<=0)KaldorArsenal.queueAttack(p,input.x,input.y);
- const buffered=p.attackBuffer>0,link=buffered&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);
- if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=buffered?p.bufferX:input.x,y=buffered?p.bufferY:input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
+ const link=attackEdge&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);
+ if(attackEdge&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=input.x,y=input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
  if(input.interact)this.interact();if(!this.dungeon.active)return;
  p.steer=!!(input.x||input.y);
  this.dungeonSteer={x:input.x||0,y:input.y||0};const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){const k=Math.max(1,Math.hypot(input.x||0,input.y||0));this.movePlayer(p,(input.x||0)/k*dt*24,(input.y||0)/k*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
  p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
- if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
+ if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.comboRecoilShown||p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
  if(this.dungeon.floor==='trone'&&p.y<9*CELL&&!this.dungeon.bossDead)this.dungeon.bossFight=true;
  this.hitDungeonProps();this.stepDungeonProps(dt);this.stepLoot(dt);

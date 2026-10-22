@@ -5,39 +5,39 @@
     {
       "width": 844,
       "open": {
-        "impacts": 15,
-        "starts": 15,
+        "impacts": 16,
+        "starts": 17,
         "maxClose": 2,
         "maxSwings": 2,
-        "hpLost": 1,
-        "p95ms": 11.399999999441206
+        "hpLost": 2,
+        "p95ms": 9.799999998882413
       },
       "escape": 160.80000000000197,
       "doorway": {
         "maxThreshold": 1,
         "queued": 3,
-        "crossed": 4,
-        "p95ms": 9.799999999813735
+        "crossed": 3,
+        "p95ms": 5.599999999627471
       },
       "flow": {
         "playerX": 300.2999999999992,
         "allCrossed": true,
         "positions": [
           [
-            271.4188575470112,
-            93.7808819871006
+            311.7198569792236,
+            90.18753701337893
           ],
           [
-            245.15024856980298,
-            115.25262015620306
+            252.43250041460988,
+            104.02528038965487
           ],
           [
-            294.71428122127907,
-            92.6807980672211
+            283.7518965876707,
+            77.17692434030917
           ],
           [
-            256.5367555621285,
-            101.37624041253332
+            230.44229693731492,
+            104.40673853052671
           ]
         ]
       },
@@ -47,44 +47,59 @@
         "detected": 0,
         "swings": 0
       },
-      "detectedAfterOpen": 1
+      "detectedAfterOpen": 1,
+      "engagement": {
+        "priority": true,
+        "reacted": true,
+        "started": true,
+        "reactionSeconds": 0.86,
+        "position": [
+          367.6194011149565,
+          190.21637316206636
+        ]
+      },
+      "input": {
+        "afterSpam": 1,
+        "linked": true,
+        "held": 2
+      }
     },
     {
       "width": 568,
       "open": {
-        "impacts": 15,
-        "starts": 15,
+        "impacts": 16,
+        "starts": 17,
         "maxClose": 2,
         "maxSwings": 2,
-        "hpLost": 1,
-        "p95ms": 11.099999999627471
+        "hpLost": 2,
+        "p95ms": 7.700000001117587
       },
       "escape": 160.80000000000197,
       "doorway": {
         "maxThreshold": 1,
         "queued": 3,
-        "crossed": 4,
-        "p95ms": 10.5
+        "crossed": 3,
+        "p95ms": 5.400000000372529
       },
       "flow": {
         "playerX": 300.2999999999992,
         "allCrossed": true,
         "positions": [
           [
-            270.881723222739,
-            92.83935636598378
+            311.7198569792236,
+            90.18753701337893
           ],
           [
-            245.15024856980298,
-            115.25262015620306
+            252.43250041460988,
+            104.02528038965487
           ],
           [
-            294.8384095801636,
-            92.2687044087077
+            283.7518965876707,
+            77.17692434030917
           ],
           [
-            256.5942623376466,
-            102.13866265435546
+            230.44229693731492,
+            104.40673853052671
           ]
         ]
       },
@@ -94,7 +109,22 @@
         "detected": 0,
         "swings": 0
       },
-      "detectedAfterOpen": 1
+      "detectedAfterOpen": 1,
+      "engagement": {
+        "priority": true,
+        "reacted": true,
+        "started": true,
+        "reactionSeconds": 0.86,
+        "position": [
+          367.6194011149565,
+          190.21637316206636
+        ]
+      },
+      "input": {
+        "afterSpam": 1,
+        "linked": true,
+        "held": 2
+      }
     }
   ],
   "browserErrors": []

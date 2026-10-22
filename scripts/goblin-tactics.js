@@ -7,6 +7,9 @@ const GoblinTactics=(()=>{
  function clear(g,a,b,r=6){const d=length(a,b),n=Math.ceil(d/4);for(let i=1;i<=n;i++)if(g.solid(a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n,r))return false;return true;}
  function state(g){let s=games.get(g);if(!s||s.floor!==g.dungeon.floor||s.enemies!==g.enemies){s={floor:g.dungeon.floor,enemies:g.enemies,actors:new Map(),nextStrike:0,nextBark:0,lines:[],engagers:new Set(),portals:new Map()};games.set(g,s);}return s;}
  function reset(g){games.delete(g);}
+ // Being hit changes intent, never the native hurt duration or the player's hit.
+ function provoke(g,e){const m=state(g).actors.get(e);if(m){m.provokedUntil=g.time+1.2;m.wasSwing=false;}}
+
  function portalPlan(g,s,active,now){
   for(const e of active){const m=s.actors.get(e);m.portal=null;m.clearingPortal=null;}
   const ports=g.dungeonPortals?.()||[];s.ports=ports;const valid=new Set(ports.map(p=>p.id));for(const id of s.portals.keys())if(!valid.has(id))s.portals.delete(id);
@@ -31,19 +34,59 @@ const GoblinTactics=(()=>{
   const steer=g.dungeonSteer;if(steer&&Math.hypot(steer.x,steer.y)>.2){const wanted=angle({x:p.x+steer.x,y:p.y+steer.y},p);s.gap+=Math.max(-dt*.8,Math.min(dt*.8,delta(wanted,s.gap)));}
   const signature=group.map(e=>e.id).sort().join('|'),count=Math.min(8,group.length),span=Math.PI*5/3;
   if(s.formation!==signature){s.formation=signature;s.sectors=new Map();const free=Array.from({length:count},(_,i)=>i);for(const e of [...group].sort((a,b)=>length(a,p)-length(b,p))){let best=null,score=Infinity;for(const i of free){const q=ring(p,s.gap+Math.PI/6+(i+.5)*span/count,46),v=length(e,q)+(g.solid(q.x,q.y,e.r||6)?70:0);if(v<score){score=v;best=i;}}if(best!==null)free.splice(free.indexOf(best),1);s.sectors.set(e,best);}}
-  for(const e of group){const m=s.actors.get(e);m.slot=s.sectors.get(e);m.angle=m.slot===null?angle(e,p):s.gap+Math.PI/6+(m.slot+.5)*span/count;m.ready=group.length<2||m.portal?.owner||Math.abs(delta(m.angle,angle(e,p)))<.6;}
+  for(const e of group){const m=s.actors.get(e);m.slot=s.sectors.get(e);m.angle=m.slot===null?angle(e,p):s.gap+Math.PI/6+(m.slot+.5)*span/count;m.local=length(e,p)<=29;m.threat=m.local||p.attack>0&&g.targetId===e.id&&length(e,p)<48;
+   m.priority=m.local?100-length(e,p):m.provokedUntil>now?55:p.attack>0&&m.threat?45:0;
+   m.ready=m.local||group.length<2||m.portal?.owner||Math.abs(delta(m.angle,angle(e,p)))<.6;}
   for(const e of [...s.engagers]){const m=s.actors.get(e);if(!group.includes(e)||e.stun>0||m.portal&&!m.portal.owner||m.retreatUntil>now||!swing(e)&&now>m.engageUntil){s.engagers.delete(e);if(m&&now>m.engageUntil&&!m.portal&&!m.clearingPortal)m.retreatUntil=now+.3;}}
   for(const e of group)if(swing(e))s.engagers.add(e);
-  const candidates=group.filter(e=>e.stun<=0&&!swing(e)&&e.cooldown<=.08&&s.actors.get(e).retreatUntil<=now&&s.actors.get(e).ready&&(!s.actors.get(e).portal||s.actors.get(e).portal.owner)).sort((a,b)=>(s.actors.get(a).lastStrike??-10)-(s.actors.get(b).lastStrike??-10)||length(a,p)-length(b,p));
-  for(const e of candidates){if(s.engagers.size>=2)break;if(!s.engagers.has(e)){s.engagers.add(e);s.actors.get(e).engageUntil=now+1.6;}}
+  // Committed blows own capacity first, including after a local priority transfer.
+  const committed=[...s.engagers].filter(swing);
+  if(committed.length>=2)for(const e of [...s.engagers])if(!swing(e))s.engagers.delete(e);
+  const candidates=group.filter(e=>e.stun<=0&&!swing(e)&&e.cooldown<=.08&&s.actors.get(e).retreatUntil<=now&&s.actors.get(e).ready&&(!s.actors.get(e).portal||s.actors.get(e).portal.owner)).sort((a,b)=>s.actors.get(b).priority-s.actors.get(a).priority||(s.actors.get(a).lastStrike??-10)-(s.actors.get(b).lastStrike??-10)||length(a,p)-length(b,p));
+  for(const e of candidates){
+   if(s.engagers.has(e))continue;
+   // A locally engaged opponent can replace an approaching ally, never a swing.
+   if(s.engagers.size>=2&&s.actors.get(e).priority>0){const yieldTo=[...s.engagers].filter(a=>!swing(a)&&s.actors.get(a).priority<s.actors.get(e).priority-8).sort((a,b)=>length(b,p)-length(a,p))[0];if(yieldTo)s.engagers.delete(yieldTo);}
+   if(s.engagers.size<2){s.engagers.add(e);s.actors.get(e).engageUntil=now+1.6;}
+  }
+  for(const e of group){const m=s.actors.get(e);
+   if(m.threat&&!s.engagers.has(e)&&!swing(e)&&e.stun<=0&&now>=(m.nextEvade||0)){
+    const a=angle(e,p),turn=(m.slot??0)%2?1:-1;
+    for(const side of [turn,-turn]){const q=ring(p,a+side*.48,Math.max(36,length(e,p)+10));if(clear(g,e,q,e.r||6)){m.evade=q;m.evadeUntil=now+.3;m.nextEvade=now+.65;break;}}
+   }
+  }
   return {s,active,group,pressing:new Set(s.engagers),now};
+ }
+ // Approach a position the authored impact can actually reach. Isometric body
+ // collisions can stop a straight pursuit beside, rather than inside, its arc.
+ function contactGoal(g,e,m){
+  const p=g.player,combo=e.nextCombo||0,dir=g.direction(p.x-e.x,p.y-e.y),connects=q=>HearthreaverGoblins.hits({...e,x:q.x,y:q.y,swingDir:g.direction(p.x-q.x,p.y-q.y),goblinCombo:combo},p);
+  const distance=length(e,p);
+  if(distance>42){m.contact=null;return p;}
+  // Keep ordinary pursuit direct. Orbit only when a body actually blocks
+  // the last step and the authored contact cannot reach from this position.
+  if(!m.contact&&!(m.alignUntil>g.time)){
+   if(distance>24||!g.crowd?.(e,e.x+(p.x-e.x)/(distance||1),e.y+(p.y-e.y)/(distance||1)))return p;
+   m.alignUntil=g.time+2;
+  }
+  if(connects(e)){m.contact=null;return length(e,p)<=(e.chief?32:21)?{x:e.x,y:e.y}:p;}
+  const approach=q=>{const current=angle(e,p),error=delta(angle(q,p),current);return Math.abs(error)>.18?ring(p,current+Math.max(-.23,Math.min(.23,error)),Math.max(e.chief?30:22,length(e,p))):q;};
+  if(m.contact&&m.contact.combo===combo&&m.contact.dir===dir&&length(e,m.contact)<45&&length(m.contact.player,p)<3&&!g.solid(m.contact.x,m.contact.y,e.r||6))return approach(m.contact);
+  const a=angle(e,p),options=[];
+  for(const turn of [0,.2,-.2,.4,-.4,.55,-.55,.7,-.7,1,-1,1.3,-1.3])for(const radius of [17,19,21]){
+   const q=ring(p,a+turn,e.chief?radius+8:radius);
+   if(g.direction(p.x-q.x,p.y-q.y)===dir&&!g.solid(q.x,q.y,e.r||6)&&connects(q)&&clear(g,e,q,e.r||6))options.push(q);
+  }
+  options.sort((a,b)=>length(e,a)-length(e,b));
+  m.contact=options.length?{...options[0],combo,dir,player:{x:p.x,y:p.y}}:null;return m.contact?approach(m.contact):p;
  }
  function goal(g,e,plan){const m=plan.s.actors.get(e);if(!plan.active.includes(e))return null;
   if(m.portal&&!m.portal.owner){const q={x:m.portal.x,y:m.portal.y};q[m.portal.axis]+=m.portal.side*(50+m.portal.rank*24);return !g.solid(q.x,q.y,e.r||6)?q:{x:e.x,y:e.y};}
   if(!m.sees)return m.last;
+  if(m.evadeUntil>plan.now&&!plan.pressing.has(e)&&!m.portal&&!m.clearingPortal)return m.evade;
   if(m.clearingPortal){const port=m.clearingPortal,tan=port.axis==='x'?'y':'x';for(const offset of [24,-24,32,-32]){const q={x:port.x,y:port.y};q[port.axis]+=port.side*68;q[tan]+=offset;if(!g.solid(q.x,q.y,e.r||6))return q;}}
 
-  if(plan.pressing.has(e)&&m.ready){if(length(e,g.player)>30&&plan.active.filter(a=>a!==e&&length(a,g.player)<30).length>=2)return ring(g.player,angle(e,g.player),37);return g.player;}
+  if(plan.pressing.has(e)&&m.ready){if(length(e,g.player)>30&&plan.active.filter(a=>a!==e&&length(a,g.player)<30).length>=2)return ring(g.player,angle(e,g.player),37);return contactGoal(g,e,m);}
   if(m.portal?.owner){if(m.retreatUntil>plan.now){const q={x:m.portal.x,y:m.portal.y};q[m.portal.axis]+=m.portal.side*32;return q;}return g.player;}
   if(plan.group.length<2&&m.retreatUntil<=plan.now)return length(e,g.player)>20?g.player:{x:e.x,y:e.y};
   const radius=m.slot===null?70:m.retreatUntil>plan.now?53:46;
@@ -70,17 +113,17 @@ const GoblinTactics=(()=>{
   while(m.route.length&&length(e,m.route[0])<1)m.route.shift();return m.route[0]||null;
  }
  function move(g,e,target,plan,dt){
-  const m=plan.s.actors.get(e);if(!target||length(e,target)<3)return;
+  const m=plan.s.actors.get(e);if(!target||length(e,target)<(m.contact===target ? .4 : 3))return;
   // Follow the circumference to a far flank instead of cutting through the hero.
-  if(m.sees&&!m.portal&&!m.clearingPortal&&plan.group.length>1&&!m.ready&&length(e,g.player)<95){const current=angle(e,g.player),error=delta(m.angle,current),radius=Math.max(40,Math.min(58,length(e,g.player))),sign=Math.sign(error)||1;
+  if(m.sees&&!m.portal&&!m.clearingPortal&&plan.group.length>1&&!m.ready&&!(m.evadeUntil>plan.now)&&length(e,g.player)<95){const current=angle(e,g.player),error=delta(m.angle,current),radius=Math.max(40,Math.min(58,length(e,g.player))),sign=Math.sign(error)||1;
    for(const turn of [sign,-sign]){const q=ring(g.player,current+turn*.30,radius);if(clear(g,e,q,e.r||6)){target=q;break;}}
   }
-  if(!m.portal&&!m.clearingPortal&&!plan.pressing.has(e)&&length(e,g.player)<30){const q=ring(g.player,angle(e,g.player),46);if(clear(g,e,q,e.r||6))target=q;}
+  if(!m.portal&&!m.clearingPortal&&!plan.pressing.has(e)&&!(m.evadeUntil>plan.now)&&length(e,g.player)<30){const q=ring(g.player,angle(e,g.player),46);if(clear(g,e,q,e.r||6))target=q;}
   const q=waypoint(g,e,target,m);if(!q)return;
   let dx=q.x-e.x,dy=q.y-e.y,d=Math.hypot(dx,dy);if(d<.01)return;dx/=d;dy/=d;
   // Separate rigid bodies without changing their art or rotating a committed strike.
   for(const a of plan.active)if(a!==e){const n=length(a,e),r=(a.r||6)+(e.r||6)+9;if(n<r&&n>.01){dx+=(e.x-a.x)/n*(r-n)/r*1.6;dy+=(e.y-a.y)/n*(r-n)/r*1.6;}}
-  const n=Math.hypot(dx,dy)||1,speed=e.chief?29:plan.group.length>1?42:32,amount=Math.min(speed*dt,d),ox=e.x,oy=e.y;
+  const n=Math.hypot(dx,dy)||1,speed=e.chief?29:plan.pressing.has(e)||plan.group.length>1?42:32,amount=Math.min(speed*dt,d),ox=e.x,oy=e.y;
   let mx=dx/n*amount,my=dy/n*amount;
   // A cached path or separation force may graze a corner: slide safely and replan.
   if(g.solid(e.x+mx,e.y+my,e.r||6)){m.route=[];m.repath=g.time+.12;if(!g.solid(e.x+mx,e.y,e.r||6))my=0;else if(!g.solid(e.x,e.y+my,e.r||6))mx=0;else return;}
@@ -96,5 +139,5 @@ const GoblinTactics=(()=>{
   else if(frame===3||frame===4){const left=Math.max(0,5-(m.recover||0)),a=angle(e,g.player),turn=Math.sign(delta(m.angle,a))||((m.slot||0)%2?1:-1),q=ring(g.player,a+turn*.08,length(e,g.player)+6),d=length(e,q),amount=Math.min(left,16*dt,d);if(d>.01){const ox=e.x,oy=e.y;if(portalFree(g,e,e.x+(q.x-e.x)/d*amount,e.y+(q.y-e.y)/d*amount,plan.s))g.move(e,(q.x-e.x)/d*amount,(q.y-e.y)/d*amount);m.recover=(m.recover||0)+Math.hypot(e.x-ox,e.y-oy);}}
  }
  function speech(g){const s=games.get(g);return s&&s.floor===g.dungeon?.floor&&s.enemies===g.enemies?s.lines.filter(l=>!l.actor.dead&&g.time<l.until):[];}
- return {plan,goal,canStrike,reserve,move,combatMove,reset,speech};
+ return {plan,goal,canStrike,reserve,move,combatMove,reset,provoke,speech};
 })();
