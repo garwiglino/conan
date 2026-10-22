@@ -1,0 +1,101 @@
+{
+  "mobile": true,
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "width": 844,
+      "open": {
+        "impacts": 15,
+        "starts": 15,
+        "maxClose": 2,
+        "maxSwings": 2,
+        "hpLost": 1,
+        "p95ms": 11.399999999441206
+      },
+      "escape": 160.80000000000197,
+      "doorway": {
+        "maxThreshold": 1,
+        "queued": 3,
+        "crossed": 4,
+        "p95ms": 9.799999999813735
+      },
+      "flow": {
+        "playerX": 300.2999999999992,
+        "allCrossed": true,
+        "positions": [
+          [
+            271.4188575470112,
+            93.7808819871006
+          ],
+          [
+            245.15024856980298,
+            115.25262015620306
+          ],
+          [
+            294.71428122127907,
+            92.6807980672211
+          ],
+          [
+            256.5367555621285,
+            101.37624041253332
+          ]
+        ]
+      },
+      "sight": {
+        "blocked": true,
+        "reverse": true,
+        "detected": 0,
+        "swings": 0
+      },
+      "detectedAfterOpen": 1
+    },
+    {
+      "width": 568,
+      "open": {
+        "impacts": 15,
+        "starts": 15,
+        "maxClose": 2,
+        "maxSwings": 2,
+        "hpLost": 1,
+        "p95ms": 11.099999999627471
+      },
+      "escape": 160.80000000000197,
+      "doorway": {
+        "maxThreshold": 1,
+        "queued": 3,
+        "crossed": 4,
+        "p95ms": 10.5
+      },
+      "flow": {
+        "playerX": 300.2999999999992,
+        "allCrossed": true,
+        "positions": [
+          [
+            270.881723222739,
+            92.83935636598378
+          ],
+          [
+            245.15024856980298,
+            115.25262015620306
+          ],
+          [
+            294.8384095801636,
+            92.2687044087077
+          ],
+          [
+            256.5942623376466,
+            102.13866265435546
+          ]
+        ]
+      },
+      "sight": {
+        "blocked": true,
+        "reverse": true,
+        "detected": 0,
+        "swings": 0
+      },
+      "detectedAfterOpen": 1
+    }
+  ],
+  "browserErrors": []
+}

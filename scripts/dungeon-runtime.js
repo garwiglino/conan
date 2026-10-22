@@ -75,6 +75,10 @@ Game.prototype.enterDungeonFloor=function(id,position,savePoint=true){
  this.revealDungeon();this.emit('save');return true;
 };
 function blocks(g,k,n){if(open(g,k))return false;if(n==='porte'&&g.dungeon.floor==='trone')return !!g.dungeon.bossFight&&!g.dungeon.bossDead;return !pass.test(n)&&!/^levier/.test(n);}
+Game.prototype.dungeonPortals=function(){const e=current(this),out=[];
+ for(const [id,n]of Object.entries(e.murs))if(/^(porte|arche|herse)/.test(n)&&!blocks(this,id,n)){const p=edge(id);out.push({id,...p,axis:p.o==='O'?'x':'y',half:16});}
+ return out;
+};
 function geometry(g,x,y,r,skipCrate=null){const e=current(g);
  for(const [dx,dy]of [[-r,-r],[r,-r],[-r,r],[r,r],[0,0]])if(!floor(e,x+dx,y+dy))return true;
  for(const [k,n]of Object.entries(e.murs)){const p=edge(k);if(blocks(g,k,n)){if(p.o==='N'?Math.abs(y-p.y)<r+3&&Math.abs(x-p.x)<CELL/2+r:Math.abs(x-p.x)<r+3&&Math.abs(y-p.y)<CELL/2+r)return true;}}
@@ -187,7 +191,7 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=buffered?p.bufferX:input.x,y=buffered?p.bufferY:input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
  if(input.interact)this.interact();if(!this.dungeon.active)return;
  p.steer=!!(input.x||input.y);
- const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){const k=Math.max(1,Math.hypot(input.x||0,input.y||0));this.movePlayer(p,(input.x||0)/k*dt*24,(input.y||0)/k*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
+ this.dungeonSteer={x:input.x||0,y:input.y||0};const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){const k=Math.max(1,Math.hypot(input.x||0,input.y||0));this.movePlayer(p,(input.x||0)/k*dt*24,(input.y||0)/k*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
  p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
  if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
@@ -204,11 +208,11 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
   if(Number.isFinite(e.swingElapsed)){GoblinTactics.combatMove(this,e,tactics,dt);continue;}
   const dir=this.direction(p.x-e.x,p.y-e.y),reachable=d<=(e.chief?32:21)&&HearthreaverGoblins.hits({...e,swingDir:dir,goblinCombo:e.nextCombo||0},p);
   if(reachable&&e.cooldown<=0&&this.lineClear(e,p)&&GoblinTactics.canStrike(this,e,tactics)){e.dir=dir;HearthreaverGoblins.start(e);GoblinTactics.reserve(tactics,e);this.emit('foe',{kind:'skeleton',act:'strike',vol:.4});}
-  else if(!reachable||tactics.group.length>1)GoblinTactics.move(this,e,GoblinTactics.goal(this,e,tactics),tactics,dt);
+  else GoblinTactics.move(this,e,GoblinTactics.goal(this,e,tactics),tactics,dt);
  }
  this.dungeonRevealTimer=(this.dungeonRevealTimer||0)-dt;if(this.dungeonRevealTimer<=0){this.revealDungeon();this.dungeonRevealTimer=.15;}
  this.saveTimer+=dt;if(this.saveTimer>=5){this.saveTimer=0;this.emit('save');}
 }
 function inventoryHTML(g){if(!g.dungeon)return '';return '<div class="m-sec">Clés de la forteresse</div>'+D.cles.filter(k=>g.dungeon.keys.includes(k.id)).map(k=>'<div class="inv-row"><div class="grow">'+k.nom+'<small>'+ (g.dungeon.keys.includes(k.id)?'Obtenue · '+k.ouvre:'À trouver dans la forteresse')+'</small></div></div>').join('');}
-return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML,keyChest,keyReady,chestState};
+return {design:D,art:Art,current,state,at,edge,geometry,inventoryHTML,keyChest,keyReady,chestState,blocks};
 })();

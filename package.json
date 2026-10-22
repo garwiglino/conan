@@ -88,7 +88,9 @@
     "check:dungeon-loot": "node scripts/check-dungeon-loot-combat.cjs",
     "build:dungeon-objects": "node scripts/build-dungeon-object-art.cjs && node scripts/build-dungeon.cjs && node scripts/embed-dungeon.cjs",
     "test:dungeon-objects": "node --test --test-concurrency=1 tests/dungeon-prop-interactions.test.cjs tests/dungeon-loot.test.cjs tests/dungeon-runtime.test.cjs",
-    "check:dungeon-objects": "node scripts/check-dungeon-props.cjs"
+    "check:dungeon-objects": "node scripts/check-dungeon-props.cjs",
+    "test:goblin-space": "node --test --test-concurrency=1 tests/goblin-tactics.test.cjs tests/goblin-pressure.test.cjs tests/goblin-space-vision.test.cjs tests/dungeon-runtime.test.cjs",
+    "check:goblin-space": "node scripts/check-goblin-space.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",
