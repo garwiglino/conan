@@ -27,3 +27,5 @@ html=html.replaceAll('Explore les environs avec la fée. Parle à Elyne pour voy
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'ios/Hearthreaver/Game/index.html'),html.replace(/<meta name="apple-mobile-web-app-title"[^>]*><link rel="apple-touch-icon"[^>]*><link rel="manifest"[^>]*>/,''));
 console.log('Embedded official first dungeon in web and offline iOS builds.');
+
+require('./embed-mobile-controls.cjs');

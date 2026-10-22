@@ -715,6 +715,27 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 #screen #dialogueControls #dlgBye,#screen #dialogueControls #dlgNext{position:absolute!important;inset:auto!important;left:var(--action-left)!important;bottom:calc(env(safe-area-inset-bottom) + 44px)!important;width:var(--action-width);min-width:0;max-width:none;margin:0;pointer-events:auto}
 
 /* END LANDSCAPE DESIGN */
+/* BEGIN PHONE CONTROLS */
+/* Thumb controls keep one CSS coordinate system, independent of font size/DPR. */
+#screen.panels-x .joystick{--joy-size:116px;bottom:calc(var(--control-bottom,0px) + 20px)!important}
+#screen.panels-x .joystick:not(.active){left:max(calc(var(--control-left,0px) + 8px),calc((var(--pc,150px) - var(--joy-size))/2))!important}
+#screen.panels-x #stickZone{left:0;width:48%;bottom:0;height:auto;pointer-events:none}
+#screen.panels-x .action-pad{width:156px!important;height:168px!important;right:calc(var(--control-right,0px) + 4px)!important;bottom:calc(var(--control-bottom,0px) + 8px)!important;transform:none!important;transform-origin:right bottom}
+#screen.panels-x .action-pad [data-key="attack"]{left:62px!important;top:72px!important;width:88px!important;height:88px!important}
+#screen.panels-x .action-pad [data-key="dodge"]{left:0!important;top:106px!important;width:52px!important;height:52px!important}
+#screen.panels-x .action-pad [data-key="guard"]{left:98px!important;top:8px!important;width:52px!important;height:52px!important}
+#screen.panels-x .action-pad [data-key="interact"]{left:8px!important;top:24px!important;width:50px!important;height:50px!important}
+#screen.panels-x .action-pad button.held{transform:none!important}
+#screen.panels-x .console-bar{right:calc(var(--control-right,0px) + 4px)!important;width:max(94px,calc(var(--pc,150px) - var(--control-right,0px) - 8px))!important}
+#screen.panels-x .tracker{left:calc(var(--control-left,0px) + 4px)!important;width:max(94px,calc(var(--pc,150px) - var(--control-left,0px) - 8px))!important}
+
+@media(max-height:350px){
+#screen.panels-x .action-pad [data-key="interact"]{left:-52px!important;top:0!important}
+#screen.panels-x .action-pad [data-key="guard"]{left:0!important;top:52px!important}
+#screen.panels-x .action-pad [data-key="dodge"]{top:112px!important}
+}
+
+/* END PHONE CONTROLS */
 </style>
 </head>
 <body>
@@ -22476,9 +22497,30 @@ addEventListener('orientationchange',()=>setTimeout(syncLandscape,250));
 window.visualViewport?.addEventListener('resize',syncLandscape);
 
 // END LANDSCAPE UI
+// BEGIN PHONE VIEWPORT
+// A fixed phone frame: safe-area changes protect controls inside/over the rails,
+// never add a second set of gutters to the world viewport.
 const PANEL=150;
-function fitScreen(){if(innerHeight>innerWidth)return;const cv=$('game'),scr=$('screen'),sw=Math.max(1,scr.clientWidth||innerWidth),sh=Math.max(1,scr.clientHeight||innerHeight),cs=getComputedStyle($('safeProbe')),ins={t:parseFloat(cs.paddingTop)||0,r:parseFloat(cs.paddingRight)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0},touch=document.body.classList.contains('mobile'),land=sw>=sh;let gl=0,gr=0,gt=0,gb=0;scr.classList.toggle('panels-x',touch&&land);scr.classList.toggle('panels-y',touch&&!land);if(touch&&land){gl=ins.l+PANEL;gr=ins.r+PANEL;}else if(touch){gb=ins.b+Math.min(210,Math.round(sh*.26));}const gw=Math.max(1,sw-gl-gr),gh=Math.max(1,sh-gt-gb),ratio=gw/gh;let H=200,W=Math.round(200*ratio);if(W<216){W=216;H=Math.min(1000,Math.round(216/ratio));}const scale=gw/W,safe={t:Math.ceil(Math.max(0,ins.t-gt)/scale),r:Math.ceil(Math.max(0,ins.r-gr)/scale),b:Math.ceil(Math.max(0,ins.b-gb)/scale),l:Math.ceil(Math.max(0,ins.l-gl)/scale)};const K=Math.max(1,Math.min(4,Math.round(scale*(window.devicePixelRatio||1))));if(cv.width!==W*K)cv.width=W*K;if(cv.height!==H*K)cv.height=H*K;renderer.resize(W,H,safe,K,scale);for(const [k,v] of [['--gl',gl],['--gr',gr],['--gt',gt],['--gb',gb],['--hud',Math.round(renderer.top*scale)],['--pc',PANEL]])scr.style.setProperty(k,v+'px');}
+function fitScreen(){
+ if(innerHeight>innerWidth)return;
+ const cv=$('game'),scr=$('screen'),sw=Math.max(1,scr.clientWidth||innerWidth),sh=Math.max(1,scr.clientHeight||innerHeight),cs=getComputedStyle($('safeProbe'));
+ const ins={t:parseFloat(cs.paddingTop)||0,r:parseFloat(cs.paddingRight)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0};
+ const touch=document.body.classList.contains('mobile')||matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0;
+ const gl=touch?PANEL:0,gr=touch?PANEL:0,gt=0,gb=0;
+ scr.classList.toggle('panels-x',touch);scr.classList.remove('panels-y');
+ const gw=Math.max(1,sw-gl-gr),gh=sh,ratio=gw/gh;let H=200,W=Math.round(200*ratio);
+ if(W<216){W=216;H=Math.min(1000,Math.round(216/ratio));}
+ const scale=gw/W,safe={t:Math.ceil(ins.t/scale),r:Math.ceil(Math.max(0,ins.r-gr)/scale),b:Math.ceil(ins.b/scale),l:Math.ceil(Math.max(0,ins.l-gl)/scale)};
+ const K=Math.max(1,Math.min(4,Math.round(scale*(window.devicePixelRatio||1))));
+ if(cv.width!==W*K)cv.width=W*K;if(cv.height!==H*K)cv.height=H*K;
+ renderer.resize(W,H,safe,K,scale);
+ for(const [k,v]of [['--gl',gl],['--gr',gr],['--gt',gt],['--gb',gb],['--hud',Math.round(renderer.top*scale)],['--pc',PANEL],['--control-left',ins.l],['--control-right',ins.r],['--control-bottom',ins.b]])scr.style.setProperty(k,v+'px');
+ layoutStick();
+}
+function layoutStick(){const scr=$('screen'),z=$('stickZone');if(!z)return;z.style.top=Math.round(Math.max(64,scr.clientHeight*.25))+'px';}
 fitScreen();addEventListener('resize',fitScreen);addEventListener('orientationchange',()=>setTimeout(fitScreen,250));document.addEventListener('fullscreenchange',fitScreen);document.addEventListener('webkitfullscreenchange',fitScreen);window.visualViewport?.addEventListener('resize',fitScreen);
+
+// END PHONE VIEWPORT
 const titleScene=new TitleScene($('titleScene'),$('titleFlame')),reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');let titleTime=0,titleDeparture=false;
 // BEGIN TITLE MENU UI
 // Title-only navigation. The existing in-game pause/death controls keep their roles.
@@ -22580,26 +22622,56 @@ async function enterFull(silent=false){const el=document.documentElement,req=el.
 if(window.webkit?.messageHandlers||navigator.standalone||matchMedia('(display-mode: standalone)').matches)$('full').hidden=true;
 $('full').addEventListener('click',async()=>{if(fsElement()){try{await (document.exitFullscreen||document.webkitExitFullscreen).call(document);}catch{}}else await enterFull();});
 $('start').addEventListener('click',()=>{if(mobileMode)enterFull(true);});
+// BEGIN PHONE TOUCH INPUT
 const touchKeys=new Map();
 const stick={x:0,y:0},joystick=$('joystick'),knob=$('joystickKnob'),zone=$('stickZone');let stickId=null,origin=null;
-function stickStart(x,y){const zr=zone.getBoundingClientRect(),sr=$('screen').getBoundingClientRect(),half=joystick.offsetWidth/2;const cx=Math.min(zr.right-half-4,Math.max(zr.left+half+4,x)),cy=Math.min(zr.bottom-half-4,Math.max(zr.top+half+4,y));origin={x:cx,y:cy};joystick.style.left=(cx-sr.left-half)+'px';joystick.style.top=(cy-sr.top-half)+'px';joystick.style.bottom='auto';joystick.classList.add('active');stickMove(x,y);}
-function stickMove(x,y){if(!origin)return;const radius=joystick.offsetWidth*.24;let dx=x-origin.x,dy=y-origin.y,dd=Math.hypot(dx,dy);
- if(dd>radius){const k=(dd-radius)/dd,sr=$('screen').getBoundingClientRect(),half=joystick.offsetWidth/2;origin.x=Math.min(sr.right-half,Math.max(sr.left+half,origin.x+dx*k));origin.y=Math.min(sr.bottom-half,Math.max(sr.top+half,origin.y+dy*k)); // la base peut sortir de sa zone tant que le doigt la tire
-  joystick.style.left=(origin.x-sr.left-half)+'px';joystick.style.top=(origin.y-sr.top-half)+'px';dx=x-origin.x;dy=y-origin.y;dd=Math.hypot(dx,dy);}
- const len=Math.min(radius,dd),nx=dd?dx/dd:0,ny=dd?dy/dd:0,mag=dd>radius*.16?1:0;stick.x=nx*mag;stick.y=ny*mag;knob.style.transform='translate('+Math.round(nx*len)+'px,'+Math.round(ny*len)+'px)';}
+function canTouchPlay(){return state==='playing'&&!game.dialogue&&!landscapeBlocked;}
+function stickStart(x,y){
+ const home=joystick.getBoundingClientRect(),sr=$('screen').getBoundingClientRect(),half=joystick.offsetWidth/2,cx=home.x+home.width/2,cy=home.y+home.height/2;
+ // Near the visible base, preserve immediate directional control. Further away,
+ // create a floating base under the finger instead of rejecting the gesture.
+ const near=Math.hypot(x-cx,y-cy)<=half+24;
+ origin=near?{x:cx,y:cy}:{x:Math.max(sr.left+half,Math.min(sr.left+sr.width*.48-half,x)),y:Math.max(sr.top+half,Math.min(sr.bottom-half,y))};
+ joystick.classList.add('active');positionStick();stickMove(x,y);
+}
+function positionStick(){if(!origin)return;const sr=$('screen').getBoundingClientRect(),half=joystick.offsetWidth/2;joystick.style.left=(origin.x-sr.left-half)+'px';joystick.style.top=(origin.y-sr.top-half)+'px';joystick.style.bottom='auto';}
+function stickMove(x,y){
+ if(!origin)return;const radius=joystick.offsetWidth*.24;let dx=x-origin.x,dy=y-origin.y,dd=Math.hypot(dx,dy);
+ if(dd>radius){const k=(dd-radius)/dd,sr=$('screen').getBoundingClientRect(),half=joystick.offsetWidth/2;
+  origin.x=Math.min(sr.left+sr.width*.48-half,Math.max(sr.left+half,origin.x+dx*k));origin.y=Math.min(sr.bottom-half,Math.max(sr.top+half,origin.y+dy*k));positionStick();dx=x-origin.x;dy=y-origin.y;dd=Math.hypot(dx,dy);
+ }
+ const len=Math.min(radius,dd),nx=dd?dx/dd:0,ny=dd?dy/dd:0,mag=dd>radius*.16?1:0;
+ stick.x=nx*mag;stick.y=ny*mag;knob.style.transform='translate('+Math.round(nx*len)+'px,'+Math.round(ny*len)+'px)';
+}
 function releaseStick(){stickId=null;origin=null;stick.x=stick.y=0;knob.style.transform='translate(0px,0px)';joystick.classList.remove('active');joystick.style.left=joystick.style.top=joystick.style.bottom='';}
-zone.addEventListener('touchstart',e=>{e.preventDefault();if(state!=='playing'||game.dialogue)return;if(stickId!==null&&![...e.touches].some(t=>'t'+t.identifier===stickId))releaseStick();if(stickId!==null)return;const t=e.changedTouches[0];stickId='t'+t.identifier;stickStart(t.clientX,t.clientY);},{passive:false});
+function pressTouchAction(id,key){if(!canTouchPlay())return;touchKeys.set(id,key);if(key==='attack')pending.attack=true;if(key==='dodge')pending.dodge=true;if(key==='interact')pending.interact=true;syncHeld();}
+function touchSurfaceStart(id,x,y,target){
+ if(!canTouchPlay()||touchKeys.has(id)||id===stickId)return false;
+ if(target?.closest?.('button,a,input,select,textarea,summary,[role="dialog"],.menu,.world-panel,.world-journey,.tracker,.notice-stack,#overlay,#dialogueControls,#dialogue,#landscapeGate'))return false;
+ // A small, non-overlapping catchment around the actual action buttons catches
+ // thumb misses without firing through menus or stealing another button's touch.
+ let key=null,best=Infinity;for(const b of document.querySelectorAll('.action-pad [data-key]')){
+  if(b.disabled||!b.getClientRects().length)continue;const r=b.getBoundingClientRect(),margin=b.dataset.key==='attack'?12:6,dx=Math.max(r.left-x,0,x-r.right),dy=Math.max(r.top-y,0,y-r.bottom),d=Math.hypot(dx,dy);
+  if(d<=margin&&d<best){best=d;key=b.dataset.key;}
+ }
+ if(key){pressTouchAction(id,key);return true;}
+ const r=zone.getBoundingClientRect();if(stickId===null&&x>=r.left&&x<r.right&&y>=r.top&&y<=r.bottom){stickId=id;stickStart(x,y);return true;}return false;
+}
+$('screen').addEventListener('touchstart',e=>{let used=false;for(const t of e.changedTouches)used=touchSurfaceStart('t'+t.identifier,t.clientX,t.clientY,t.target||e.target)||used;if(used)e.preventDefault();},{passive:false});
 window.addEventListener('touchmove',e=>{if(stickId===null)return;for(const t of e.changedTouches)if('t'+t.identifier===stickId)stickMove(t.clientX,t.clientY);},{passive:true});
-zone.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||state!=='playing'||game.dialogue||stickId!==null)return;e.preventDefault();stickId='p'+e.pointerId;stickStart(e.clientX,e.clientY);});
-window.addEventListener('pointermove',e=>{if('p'+e.pointerId===stickId)stickMove(e.clientX,e.clientY);});window.addEventListener('pointerup',e=>{if('p'+e.pointerId===stickId)releaseStick();if(e.pointerType!=='touch'){touchKeys.delete('p'+e.pointerId);syncHeld();}});
-zone.addEventListener('contextmenu',e=>e.preventDefault());
+$('screen').addEventListener('pointerdown',e=>{if(e.pointerType==='touch')return;if(touchSurfaceStart('p'+e.pointerId,e.clientX,e.clientY,e.target))e.preventDefault();});
+window.addEventListener('pointermove',e=>{if('p'+e.pointerId===stickId)stickMove(e.clientX,e.clientY);});
+window.addEventListener('pointerup',e=>{if('p'+e.pointerId===stickId)releaseStick();if(e.pointerType!=='touch'){touchKeys.delete('p'+e.pointerId);syncHeld();}});
+window.addEventListener('pointercancel',e=>{if('p'+e.pointerId===stickId)releaseStick();touchKeys.delete('p'+e.pointerId);syncHeld();});
 function touchPrune(e){const live=new Set([...e.touches].map(t=>'t'+t.identifier));if(stickId&&stickId[0]==='t'&&!live.has(stickId))releaseStick();for(const id of [...touchKeys.keys()])if(String(id)[0]==='t'&&!live.has(id))touchKeys.delete(id);syncHeld();}
 window.addEventListener('touchend',touchPrune,{passive:true});window.addEventListener('touchcancel',touchPrune,{passive:true});
 function syncHeld(){document.querySelectorAll('[data-key]').forEach(b=>b.classList.toggle('held',touchHas(b.dataset.key)));}
-function resetTouch(){releaseStick();touchKeys.clear();document.querySelectorAll('[data-key]').forEach(b=>b.classList.remove('held'));}
+function resetTouch(){releaseStick();touchKeys.clear();pending.attack=pending.dodge=pending.interact=false;document.querySelectorAll('[data-key]').forEach(b=>b.classList.remove('held'));}
 function touchHas(key){return [...touchKeys.values()].includes(key);}
-document.querySelectorAll('[data-key]').forEach(button=>{const key=button.dataset.key;const press=id=>{if(state!=='playing'||game.dialogue)return;touchKeys.set(id,key);if(key==='attack')pending.attack=true;if(key==='dodge')pending.dodge=true;if(key==='interact')pending.interact=true;syncHeld();};button.addEventListener('touchstart',e=>{e.preventDefault();for(const t of e.changedTouches)press('t'+t.identifier);},{passive:false});button.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')return;e.preventDefault();press('p'+e.pointerId);});button.addEventListener('contextmenu',e=>e.preventDefault());});
+document.querySelectorAll('[data-key]').forEach(button=>{const key=button.dataset.key;button.addEventListener('touchstart',e=>{e.preventDefault();for(const t of e.changedTouches)pressTouchAction('t'+t.identifier,key);},{passive:false});button.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')return;e.preventDefault();pressTouchAction('p'+e.pointerId,key);});button.addEventListener('contextmenu',e=>e.preventDefault());});
 window.addEventListener('blur',resetTouch);document.addEventListener('visibilitychange',()=>{if(document.hidden)resetTouch();});
+
+// END PHONE TOUCH INPUT
 $('dialogueNext').addEventListener('click',()=>game.advanceDialogue());$('dlgNext').addEventListener('click',()=>game.advanceDialogue());document.fonts?.load('8px PixelUI');document.fonts?.load('32px Medieval');
 let choiceSel=0,choiceKey='';
 function syncDialogue(){$('screen').classList.toggle('playing',state==='playing');const d=state==='playing'?game.dialogue:null;$('screen').classList.toggle('dialoguing',!!d);$('dialogue').hidden=true;
@@ -22804,7 +22876,6 @@ function renderTracker(force=false){
  }
 }
 
-function layoutStick(){const scr=$('screen'),z=$('stickZone');if(!scr.classList.contains('panels-x')){z.style.top='';return;}const sr=scr.getBoundingClientRect(),t=$('tracker').getBoundingClientRect(),low=(t.height?t.bottom-sr.top:24)+8;z.style.top=Math.round(Math.min(sr.height*.6,low))+'px';}
 function rewardText(r={}){return [r.xp?r.xp+' XP':'',r.coins?r.coins+' pièces':'',r.flasks?r.flasks+' fiole'+(r.flasks>1?'s':''):''].filter(Boolean).join(' · ');}
 function rewardHTML(r={}){return (r.xp?'<span class="rw rw-xp"><img alt="" src="'+ICONS.xp+'"><b>'+r.xp+'</b> XP</span>':'')+(r.coins?'<span class="rw"><img alt="" src="'+ICONS.coin+'">'+r.coins+' pièces</span>':'')+(r.flasks?'<span class="rw"><img alt="" src="'+ICONS.flask+'">'+r.flasks+' fiole'+(r.flasks>1?'s':'')+' de soin</span>':'');}
 function openQuestPanel(P){const q=QUESTS.find(q=>q.id===P.id);if(!q){game.panelDone(false);return;}const g=game,n=NPCS.find(n=>n.id===q.giver),c=Math.min(q.goal,q.count(g)),offer=P.mode==='offer';$('qpBox').className='menu-box qp-box'+(q.main?' main':'')+(offer?'':' reward');$('qpEyebrow').textContent=(offer?'Nouvelle quête':'Quête accomplie')+(n?' · '+n.title:'');$('qpTitle').textContent=q.title;$('qpBody').innerHTML='<p class="qp-desc">'+esc(q.desc)+'</p><div class="qp-sec">Objectif</div><div class="qp-obj"><span>'+esc(q.obj)+'</span><b>'+c+'/'+q.goal+'</b></div><div class="q-bar"><i style="width:'+Math.round(100*c/q.goal)+'%"></i></div><div class="qp-sec">Récompenses</div><div class="qp-rew">'+rewardHTML(q.reward)+'</div>';$('qpActions').innerHTML=offer?'<button class="q-track" id="qpNo">Plus tard</button><button class="inv-act" id="qpYes">Accepter</button>':'<button class="inv-act" id="qpYes">Recevoir</button>';$('qpYes').onclick=()=>closeQuestPanel(true);if($('qpNo'))$('qpNo').onclick=()=>closeQuestPanel(false);resetTouch();keys.clear();$('qpanel').hidden=false;sound.fx(offer?'questnew':'questaccept');setTimeout(()=>$('qpYes').focus({preventScroll:true}),30);}

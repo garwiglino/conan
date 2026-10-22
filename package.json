@@ -93,7 +93,9 @@
     "check:goblin-space": "node scripts/check-goblin-space.cjs",
     "test:combat-defense": "node --test --test-concurrency=1 tests/player-defense.test.cjs tests/goblin-animation.test.cjs tests/goblin-space-vision.test.cjs",
     "check:combat-defense": "node scripts/check-combat-defense.cjs",
-    "preview:combat-defense": "node scripts/preview-combat-defense.cjs"
+    "preview:combat-defense": "node scripts/preview-combat-defense.cjs",
+    "embed:mobile-controls": "node scripts/embed-mobile-controls.cjs",
+    "check:mobile-controls": "node scripts/check-mobile-controls.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",
