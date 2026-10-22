@@ -32,6 +32,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
    name=phase===4?'coffre-ouvert':phase?'coffre-ouverture-'+phase:'coffre';
   }
   if(name==='tresor'&&s.chests.some(i=>e.objets[i][1]*32===ref[0]&&e.objets[i][2]*32===ref[1]))continue;
+  if((name==='tonneau'||name==='caisses')&&s.broken?.some(i=>e.objets[i][0]===name&&e.objets[i][1]*32===ref[0]&&e.objets[i][2]*32===ref[1]))continue;
   if(name==='cage-fee'&&g.dungeon.fairy)name='cage';
   if(name==='monte-charge')continue;
   if(name==='dalle-pression'&&s.crates.some(b=>Math.hypot(b.x-ref[0],b.y-ref[1])<10))name='dalle-pression-enfoncee';

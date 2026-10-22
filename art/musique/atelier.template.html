@@ -68,7 +68,7 @@ button{font:inherit;color:inherit;cursor:pointer}
  <header>
   <div class="eyebrow">Hearthreaver · dark fantasy</div>
   <h1>Atelier <span>musical</span></h1>
-  <p class="lede">Les quinze musiques du jeu, jouées par le même séquenceur que le jeu. Biomes, voyage et donjons sont des ambiances discrètes ; les thèmes sont réservés au combat, au boss et à la défaite. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct. Les bruitages d'ambiance des donjons, réglés à part dans le jeu, ont leur propre lecteur sous les morceaux.</p>
+  <p class="lede">Les quinze musiques du jeu, jouées par le même séquenceur que le jeu. Biomes, voyage et donjons sont des ambiances discrètes ; les thèmes sont réservés au combat, au boss et à la défaite. Chaque note tombe sur la grille de sa mesure ; la grille ci-dessous la montre en direct. Sous les morceaux&nbsp;: l'ambiance sonore des donjons, réglée à part dans le jeu, puis tous les bruitages du donjon.</p>
  </header>
 
  <section class="player" aria-label="Lecture">
@@ -101,12 +101,24 @@ button{font:inherit;color:inherit;cursor:pointer}
   <p class="hint">Elle joue seule ou sous n'importe quelle musique, comme dans le jeu. Chaque étage a ses propres fuites.</p>
  </section>
 
+ <section class="player sfx" aria-labelledby="dsfxTitle">
+  <div class="now">
+   <div style="min-width:0"><h2 id="dsfxTitle">Bruitages du donjon</h2><p>Sur le réglage Bruitages du jeu, dans la réverbération de pierre des souterrains. Chaque bouton joue une variante au hasard&nbsp;; tout est synthétisé par le jeu, sans fichier audio.</p></div>
+  </div>
+  <div class="controls">
+   <label class="volume" for="dsfxVol">Volume <input id="dsfxVol" type="range" min="0" max="100" value="100"></label>
+   <span class="hint" id="dsfxState" aria-live="polite"></span>
+  </div>
+ </section>
+ <section class="groups" id="dsfxGroups" aria-label="Bruitages du donjon"></section>
+
  <section class="notes">
   <h3>Ce qui change dans le jeu</h3>
   <ul>
    <li>Biomes et voyage : ambiances sans mélodie, propres à chaque région. Bourdon, chœur qui respire, quelques gouttes de harpe, de marimba ou de cloche, un tambour lointain, parfois un appel de deux notes.</li>
    <li>Donjons : « Sous la pierre » joue dans tous les donjons. Dès qu'un gobelin voit le héros, « Ils t'ont vu » prend le relais (même tonalité, même bourdon) et reste cinq secondes après ; le chef déclenche le thème du boss.</li>
    <li>Sous terre, le vent et la faune se taisent. Les bruitages d'ambiance de la cave prennent leur place sur le réglage Environnement, séparé de la musique : gouttes dans les flaques, fuites régulières, filet d'eau, air humide, chaînes et pierres au loin, dans une réverbération de pierre où résonnent aussi les pas et les lames (réglage Bruitages). Chaque étage a ses propres fuites.</li>
+   <li>Bruitages du donjon : chaque porte, herse, levier, dalle, treuil et le monte-charge a son son, la caisse se saisit, se traîne et se repose, et les tonneaux et les piles de caisses se brisent en deux coups. Les gobelins crient quand ils te voient, en frappant, quand ils sont touchés et en mourant, Grise-Gueule d'une voix plus grave. Les sons viennent de là où ils se produisent, à gauche ou à droite.</li>
    <li>Combat, boss et défaite gardent leurs thèmes dark fantasy : cors, chœur scandé, cordes qui martèlent, timbales, tambours de guerre, enclume et gong.</li>
    <li>Les voix sont celles du thème titre (cuivres, chœur, timbales, cloches), construites sur les ondes 8 bits du jeu.</li>
    <li>Les mesures sont vérifiées à la construction : une mesure qui ne remplit pas exactement ses 16 pas (ou 12 en balancé) bloque le build.</li>
@@ -146,6 +158,27 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
  let cave=null,caveOn=false,caveFloor=CAVE_FLOORS[0]?.[0]||'geoles',caveVolume=1;
  function caveTick(){if(!ctx||ctx.state!=='running')return;if(caveOn)cave??=DungeonCave.create(ctx,ctx.destination);
   cave?.update(ctx.currentTime,{floor:caveOn?caveFloor:null,level:AMB_VOLUME*SFX_VOLUME*caveVolume*.7*1.6/.45});}
+ // Bruitages du donjon : la banque du jeu et sa réverbération de pierre, au rapport bruitages/musique des réglages par défaut.
+ const DSFX=[['Portes et mécanismes',[['key','Clé','Trousseau ramassé'],['door_unlock','Porte à clé','Clé, verrou, gonds, battant'],['door_locked','Porte verrouillée','La poignée résiste'],['door_open','Porte qui s’ouvre','Gonds et battant'],['door_slam','Porte du chef','Elle claque derrière toi'],['lever','Levier','Fer, cliquet, mécanisme'],['gate_rise','Herse levée','Chaîne et grille de fer'],['gate_drop','Herse qui retombe','Une dalle se libère'],['gate_cells','Grilles des cellules','Quatre verrous'],['cage_open','Cage de la fée','Elle descend au bout de sa chaîne'],['plate_down','Dalle enfoncée','Pierre qui s’enfonce'],['plate_up','Dalle relâchée','Pierre qui remonte'],['winch','Treuil','Cliquet et tambour'],['lift','Monte-charge','Chaîne et plate-forme']]],
+  ['Caisses et tonneaux',[['crate_grab','Saisir la caisse','Mains sur le bois'],['crate_scrape','Traîner la caisse','Bois sur pierre'],['crate_release','Lâcher la caisse','Reposée au sol'],['crate_hit','Caisse frappée','Premier coup'],['crate_break','Caisse brisée','Planches qui volent'],['barrel_hit','Tonneau frappé','Douves et cerclage'],['barrel_break','Tonneau brisé','Douves, cercle de fer, liquide']]],
+  ['Gobelins',[['gob_bark','Cri d’alerte','« Un intrus ! »'],['gob_effort','Attaque','L’élan du coup'],['gob_hurt','Touché','Douleur'],['gob_die','Mort','Dernier cri'],['gob_fall','Chute','Corps et arme sur la pierre']]],
+  ['Grise-Gueule',[['chief_roar','Rugissement','« Tu ne sortiras pas ! »'],['chief_effort','Attaque','Coup de hachoir'],['chief_hurt','Touché','Grognement'],['chief_die','Mort','Le chef tombe'],['chief_fall','Chute','Armure et hachoir']]]];
+ let dsfx=null,dsfxBus=null,dsfxRoom=null,dsfxCave=null,dsfxVolume=1,dsfxWait=null;
+ // Même égalisation des échantillons que le jeu (Sound.sampleTrim).
+ const trims=new WeakMap();
+ function trim(b){if(trims.has(b))return trims.get(b);const a=b.getChannelData(0),size=Math.max(1,Math.floor(b.sampleRate*.05));let peak=0,energy=0,max=0;
+  for(let i=0;i<a.length;i++){peak=Math.max(peak,Math.abs(a[i]));energy+=a[i]*a[i];if(i>=size)energy-=a[i-size]*a[i-size];if(i>=size-1)max=Math.max(max,Math.sqrt(Math.max(0,energy)/size));}
+  const g=Math.min(.65,.12/Math.max(peak,.001),.03/Math.max(max,.001));trims.set(b,g);return g;}
+ function dsfxStart(){ensure();if(dsfx)return;dsfx=DungeonSfx.create(ctx,{budget:10});dsfxBus=ctx.createGain();dsfxBus.connect(ctx.destination);dsfxRoom=DungeonCave.room(ctx,ctx.destination);dsfxBus.connect(dsfxRoom.input);dsfxCave=DungeonCave.create(ctx,ctx.createGain());}
+ function dsfxTick(){if(!dsfx||!ctx||ctx.state!=='running')return;if(!dsfx.ready)dsfx.prepare(10);
+  if(dsfxCave){dsfxCave.prepare(6);const ir=dsfxCave.sounds.roomIR;if(ir){dsfxRoom.load(ir);dsfxRoom.set(.24);dsfxCave=null;}}
+  dsfxBus.gain.setTargetAtTime(SFX_VOLUME*dsfxVolume*.7*1.6/.45,ctx.currentTime,.03);$('dsfxState').textContent=dsfx.ready?'':'Fabrication des sons…';
+  if(dsfxWait&&dsfx.pick(dsfxWait)){const n=dsfxWait;dsfxWait=null;dsfxPlay(n);}}
+ function dsfxPlay(name){dsfxStart();dsfxTick();const b=dsfx.pick(name);if(!b){dsfxWait=name;$('dsfxState').textContent='Fabrication des sons…';return;}
+  const t=ctx.currentTime,s=ctx.createBufferSource(),g=ctx.createGain(),level=(DungeonSfx.LEVEL[name]??.7)*trim(b);s.buffer=b;s.playbackRate.value=1+(Math.random()*2-1)*.04;s.connect(g);g.connect(dsfxBus);
+  // La caisse traînée : deux secondes de boucle, avec un élan et un arrêt.
+  if(name==='crate_scrape'){s.loop=true;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(level,t+.2);g.gain.setValueAtTime(level,t+1.8);g.gain.linearRampToValueAtTime(0,t+2.2);s.playbackRate.setValueAtTime(.85,t);s.playbackRate.linearRampToValueAtTime(1.15,t+.4);s.start(t);s.stop(t+2.3);}
+  else{g.gain.value=level;s.start(t);}s.onended=()=>{s.disconnect();g.disconnect();};}
  function describe(){const d=MUSIC_DATA[selected];$('nowTitle').textContent=d.title;$('nowMood').textContent=d.mood;
   const grid=d.grid===12?'12 pas balancés':'16 pas';$('nowFacts').innerHTML='<span>'+d.bpm+' BPM</span><span>'+grid+'</span><span>'+d.bars+' mesures</span><span>'+fmt(d.dur)+'</span>';}
  function render(){describe();for(const b of document.querySelectorAll('.track'))b.setAttribute('aria-pressed',String(b.dataset.name===playing));$('playBtn').textContent=playing===selected?'↺ Reprendre':'▶ Écouter';}
@@ -162,6 +195,10 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
  $('caveFloor').addEventListener('change',e=>{caveFloor=e.target.value;});
  $('caveBtn').addEventListener('click',()=>{caveOn=!caveOn;if(caveOn){ensure();}$('caveBtn').setAttribute('aria-pressed',String(caveOn));$('caveBtn').textContent=caveOn?'■ Arrêter la cave':'▶ Écouter la cave';});
  $('caveVol').addEventListener('input',e=>{caveVolume=+e.target.value/100;});
+ for(const [label,items]of DSFX){const g=document.createElement('div');g.className='group';g.innerHTML='<h3>'+label+'</h3>';const list=document.createElement('div');list.className='list';
+  for(const [name,title,what]of items){const b=document.createElement('button');b.type='button';b.className='track';b.id='sfx-'+name;b.innerHTML='<strong>'+title+'</strong><span>'+what+'</span>';b.addEventListener('click',()=>dsfxPlay(name));list.append(b);}
+  g.append(list);$('dsfxGroups').append(g);}
+ $('dsfxVol').addEventListener('input',e=>{dsfxVolume=+e.target.value/100;});
  $('vol').addEventListener('input',e=>{volume=+e.target.value/100;if(ctx)music.out.gain.setTargetAtTime(MUSIC_VOLUME*volume*1.6,ctx.currentTime,.03);});
  // Grille : une colonne par pas, une ligne par instrument, la hauteur de la note dans sa ligne.
  const cv=$('roll'),g2=cv.getContext('2d');
@@ -191,8 +228,8 @@ const SILENT_WAV=/*__SILENT_WAV__*/'';
   $('barCount').textContent=p?(p.intro?'Introduction · mesure '+(p.bar+1)+' / '+d.bars:'Mesure '+(p.bar+1)+' / '+d.bars):'Mesure — / '+MUSIC_DATA[selected].bars;
   const beat=p?Math.floor(p.inBar*4):-1;[...$('beats').children].forEach((el,i)=>el.classList.toggle('on',i===beat));
  }
- function frame(){if(music&&ctx.state==='running')music.update(playing);caveTick();draw();requestAnimationFrame(frame);}
- setInterval(()=>{if(music&&ctx.state==='running')music.update(playing);caveTick();},100);
+ function frame(){if(music&&ctx.state==='running')music.update(playing);caveTick();dsfxTick();draw();requestAnimationFrame(frame);}
+ setInterval(()=>{if(music&&ctx.state==='running')music.update(playing);caveTick();dsfxTick();},100);
  const startName=location.hash.slice(1);if(MUSIC_DATA[startName])selected=startName;
  render();requestAnimationFrame(frame);
 })();

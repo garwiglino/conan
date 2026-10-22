@@ -40,8 +40,8 @@ html=html.includes('// BEGIN BIOME MIDI')?html.replace(/\/\/ BEGIN BIOME MIDI[\s
 // Musiques 8 bits (biomes, voyage, combat, boss, défaite) : scripts/chiptune-songs.cjs → audio/music-scores.json.
 const musicScores='// BEGIN CHIPTUNE MUSIC\nconst MUSIC_SCORES='+JSON.stringify(json(path.join(root,'audio/music-scores.json')))+';\nObject.assign(MUSIC_DATA,MUSIC_SCORES);\n// END CHIPTUNE MUSIC';
 html=html.includes('// BEGIN CHIPTUNE MUSIC')?html.replace(/\/\/ BEGIN CHIPTUNE MUSIC[\s\S]*?\/\/ END CHIPTUNE MUSIC/,()=>musicScores):html.replace('// END BIOME MIDI',()=>'// END BIOME MIDI\n'+musicScores);
-// Donjons : musique, alerte et ambiance de cave (scripts/dungeon-audio.js), juste après les partitions.
-const dungeonAudio='// BEGIN DUNGEON AUDIO\n'+fs.readFileSync(path.join(root,'scripts/dungeon-audio.js'),'utf8')+'\n// END DUNGEON AUDIO';
+// Donjons : musique, alerte, ambiance de cave (scripts/dungeon-audio.js) et bruitages (scripts/dungeon-sfx.js), juste après les partitions.
+const dungeonAudio='// BEGIN DUNGEON AUDIO\n'+['dungeon-audio.js','dungeon-sfx.js'].map(f=>fs.readFileSync(path.join(root,'scripts',f),'utf8')).join('\n')+'\n// END DUNGEON AUDIO';
 html=html.includes('// BEGIN DUNGEON AUDIO')?html.replace(/\/\/ BEGIN DUNGEON AUDIO[\s\S]*?\/\/ END DUNGEON AUDIO/,()=>dungeonAudio):html.replace('// END CHIPTUNE MUSIC',()=>'// END CHIPTUNE MUSIC\n'+dungeonAudio);
 const weatherScores='// BEGIN WEATHER MIDI\nconst WEATHER_SCORES='+JSON.stringify(json(path.join(root,'audio/weather-scores.json')))+';\n// END WEATHER MIDI';
 html=html.includes('// BEGIN WEATHER MIDI')?html.replace(/\/\/ BEGIN WEATHER MIDI[\s\S]*?\/\/ END WEATHER MIDI/,()=>weatherScores):html.replace('// app.js',()=>weatherScores+'\n// app.js');

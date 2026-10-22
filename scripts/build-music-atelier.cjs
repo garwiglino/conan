@@ -7,7 +7,7 @@ const engine = [pick(/^const MUSIC_VOLUME=.*$/m, 'MUSIC_VOLUME'), pick(/^const M
   pick(/^function titleVoice\(m,song,tr,t,dur,note,vel\)\{[\s\S]*?\n\}(?=\n)/m, 'voix cuivres, chœur, timbales et cloches'),
   pick(/\/\/ music\.js — séquenceur chiptune[\s\S]*?(?=\n\/\/ jingles 8-bit)/, 'classe Music'),
   pick(/^const SFX_VOLUME=.*$/m, 'SFX_VOLUME'), pick(/^const AMB_VOLUME=[^;]*;/m, 'AMB_VOLUME'),
-  pick(/^const DungeonCave=[\s\S]*?\n\}\)\(\);/m, 'cave des donjons')].join('\n');
+  pick(/^const DungeonCave=[\s\S]*?\n\}\)\(\);/m, 'cave des donjons'), pick(/^const DungeonSfx=[\s\S]*?\n\}\)\(\);/m, 'bruitages des donjons')].join('\n');
 const floors = JSON.stringify(require(path.join(root, 'data/donjons/forteresse-grise-gueule.json')).etages.map(e => [e.id, e.nom]));
 const silent = pick(/(?<=^const SILENT_WAV=)'[^']*'/m, 'SILENT_WAV');
 const scores = fs.readFileSync(path.join(root, 'audio/music-scores.json'), 'utf8').trim();

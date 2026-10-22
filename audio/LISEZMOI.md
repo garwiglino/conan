@@ -50,4 +50,24 @@ Tous les donjons partagent la même musique, choisie par `scripts/dungeon-audio.
 
 Sous terre, le vent, la faune et les grillons se taisent. La cave prend leur place sur le bus environnement, donc sur le curseur Environnement et à part de la musique : elle joue même musique coupée, et le curseur Musique ne la touche pas. On y entend des gouttes qui tombent dans des flaques (bulle dont la hauteur monte), une fuite lente et régulière (parfois une seconde, plus loin), un filet d'eau, un air lourd qui respire, un souffle de galerie, et de loin en loin des chaînes, une pierre qui tombe, un gond qui grince ou un plouf dans l'eau profonde, le tout dans une réverbération de pierre de 2,8 s. Les bruitages (pas, lames, coups) passent aussi dans une réverbération courte tant que le héros est sous terre. Chaque étage tire de son identifiant le rythme et la place de ses fuites, le filet d'eau, la densité des gouttes et la part d'écho : on reconnaît la salle à l'oreille. Tout est synthétisé dans le jeu, sans fichier audio, par petites tranches de 4 ms d'une image à l'autre pour ne pas figer le démarrage. La cave reste discrète : environ 20 à 30 gouttes par minute selon l'étage, un souffle presque sans grave, une médiane de -57 à -62 dB contre -45,6 dB pour une forêt au grand jour (rendu Chromium), et des gouttes qui culminent vers -35 dB.
 
+## Bruitages du donjon
+
+`scripts/dungeon-sfx.js` synthétise tous les bruitages du donjon dans le jeu, sans fichier audio : modes amortis pour le bois et le fer, frottement collé-glissé pour les gonds, poulies et planches, maillons de chaîne, raclements, bulles, et voix à formants pour les gobelins (impulsions glottiques avec gigue, râle et sous-harmonique, quatre formants qui glissent d'une voyelle à l'autre, conduit vocal court ; Grise-Gueule a un conduit plus long et une voix plus grave et plus rauque). La banque se fabrique à l'entrée du donjon, 3 ms par image au plus (environ 1 s de calcul en tout, gobelins et casse d'abord), à 32 kHz. 31 familles, 84 variantes ; une variante n'est jamais jouée deux fois de suite.
+
+| Famille | Quand |
+|---|---|
+| `key` | une clé est ramassée |
+| `door_unlock`, `door_locked`, `door_open`, `door_slam` | porte ouverte à la clé, porte verrouillée sans la clé, porte qui s'ouvre (sceau, porte du chef après sa mort), porte du chef qui claque au début du combat |
+| `lever`, `gate_cells`, `gate_rise`, `gate_drop`, `cage_open` | levier ; grilles des cellules ; herse levée par un levier ou les dalles ; herse qui retombe quand une dalle se libère ; cage de la fée |
+| `plate_down`, `plate_up` | caisse posée sur une dalle, ou retirée |
+| `winch`, `lift` | treuil des galeries ; trajet du monte-charge |
+| `crate_grab`, `crate_scrape`, `crate_release` | caisse saisie ; boucle de traînée dont le niveau et la hauteur suivent la vitesse ; caisse lâchée |
+| `crate_hit`, `crate_break`, `barrel_hit`, `barrel_break` | pile de caisses ou tonneau frappé, puis brisé |
+| `gob_bark`, `gob_effort`, `gob_hurt`, `gob_die`, `gob_fall` | gobelin qui crie en voyant le héros (bulle de dialogue), élan d'attaque, touché, mort, chute du corps et de l'arme |
+| `chief_roar`, `chief_effort`, `chief_hurt`, `chief_die`, `chief_fall` | les mêmes pour Grise-Gueule |
+
+Un guetteur compare l'état du donjon d'une image à l'autre (portes et herses ouvertes, leviers, clés, dalles, caisse saisie, treuil, étage, combat du chef, points de vie des gobelins, bulles d'alerte) et joue le son de chaque changement, sur le bus des bruitages (curseur Bruitages), donc dans la réverbération de pierre de la cave. Chaque son est placé à gauche ou à droite selon sa position à l'écran et s'atténue avec la distance. Les niveaux suivent l'égalisation des échantillons du jeu (`Sound.sampleTrim`) puis le tableau `LEVEL`.
+
+Les tonneaux et les piles de caisses se brisent en deux coups (un seul pour le dernier coup du combo), avec les mêmes points de vie et le même butin que les objets cassables du monde ; l'état cassé est sauvegardé par étage, et une pile brisée ne bloque plus le passage (aucune pile ne fermait un chemin). La caisse qu'on pousse sur les dalles reste entière.
+
 Rendu hors ligne avec `web-audio-engine` : ce moteur coupe un nœud resté un moment sans source, ce qui fait taire à tort une piste après un silence ; il faut lui garder une source muette branchée. Il fait aussi tomber à zéro une valeur tenue entre une rampe et un `setValueAtTime` posé plus loin, ce qui coupe les notes longues après 200 ms ; pour mesurer, un tel `setValueAtTime` doit devenir une rampe vers la même valeur. Les navigateurs ne sont concernés ni par l'un ni par l'autre.
