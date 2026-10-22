@@ -51,3 +51,14 @@ test('bounded target aim is shared by the drawn blade and impact, keeps original
   assert.equal(G.pose('attack',dir,5,combo,e.swingAim).angle,G.pose('idle',dir,0).angle);
  }
 });
+
+test('every goblin combo telegraphs four distinct pre-hit poses without smears, then hits once and follows through',()=>{
+ for(const chief of [false,true])for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
+  const e={dir,chief,nextCombo:combo};G.start(e);const poses=new Set();let contacts=0;
+  for(let i=0;i<200&&Number.isFinite(e.swingElapsed);i++){
+   const look=G.look(e);if(G.telegraph(e)){poses.add(look.frame);assert.equal(G.pose('attack',dir,look.frame,combo).smear,0);}
+   if(G.advance(e,1/120)){contacts++;assert.equal(G.look(e).frame,2);assert.equal(G.telegraph(e),false);}
+  }
+  assert.deepEqual([...poses],[0,.75,1,1.25]);assert.equal(contacts,1);
+ }
+});

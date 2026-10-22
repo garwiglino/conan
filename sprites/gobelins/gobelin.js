@@ -18,13 +18,17 @@
  const character=id=>DATA.characters[id]||DATA.characters.gobelin;
  function times(state,chief=false,combo=0){
   const row=(CLIPS[state]||CLIPS.idle).times.slice();
-  if(state==='attack'){row[1]=chief?.50:.17;if(!chief){row[0]=.055;row[3]=.045;row[4]=.085;row[5]=.065;}const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
+  if(state==='attack'){row[1]=chief?.50:.23;if(!chief){row[0]=.055;row[3]=.045;row[4]=.085;row[5]=.065;}const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
   if(state==='hurt'&&!chief)return row.map(t=>t*.375);
   return row;
  }
  const duration=(state,chief=false,combo=0)=>times(state,chief,combo).reduce((a,b)=>a+b,0);
  function frame(state,time=0,chief=false,combo=0){const row=times(state,chief,combo),total=row.reduce((a,b)=>a+b,0);let t=Math.max(0,time);if(CLIPS[state]?.loop)t%=total;for(let i=0;i<row.length;i++){if(t<row[i]-1e-8)return i;t-=row[i];}return row.length-1;}
  function pose(state,dir=2,index=0,combo=0,aim=0){
+  if(state==='attack'&&(index===.75||index===1.25)){
+   const low=index===.75?0:1,high=low+1,t=index===.75?.66:.16,a=pose(state,dir,low,combo,aim),b=pose(state,dir,high,combo,aim),p={...a,phase:index,angle:a.angle+Math.atan2(Math.sin(b.angle-a.angle),Math.cos(b.angle-a.angle))*t,smear:0};
+   for(const key of ['body','head','armL','armR','legL','legR','pouch','cape'])p[key]=a[key].map((v,i)=>Math.round(v+(b[key][i]-v)*t));return p;
+  }
   const [fx,fy]=FWD[dir]||FWD[2],a=Math.atan2(fy,fx),p={body:[0,0],head:[0,0],armL:[0,0],armR:[0,0],legL:[0,0],legR:[0,0],pouch:[0,0],cape:[0,0],angle:-Math.PI/2,smear:0,phase:index};
   const armedSide=dir===0||dir===3?'R':'L',main='arm'+armedSide,off='arm'+(armedSide==='L'?'R':'L'),side=dir===3?-1:1;
   if(state==='idle'){p.body[1]=index===1?-1:0;p.head[1]=index===2?-1:p.body[1];p.armL[1]=p.armR[1]=p.body[1];}
@@ -74,11 +78,13 @@
   const hit=!actor.swingImpact&&before<contact+row[2]&&actor.swingElapsed>=contact;if(hit)actor.swingImpact=true;
   if(actor.swingElapsed>=end){actor.swingElapsed=null;actor.wind=0;actor.attack=0;}return hit;
  }
+ function attackFrame(actor){const row=times('attack',actor.chief,actor.goblinCombo),t=actor.swingElapsed;if(t<row[0])return 0;const load=(t-row[0])/row[1];if(load<.30)return .75;if(load<.68)return 1;if(load<1)return 1.25;return frame('attack',t,actor.chief,actor.goblinCombo);}
+ function telegraph(actor){return !actor.dead&&(actor.stun||0)<=0&&Number.isFinite(actor.swingElapsed)&&actor.wind>0;}
  function look(actor,time=0){
   const dir=Number.isFinite(actor.swingElapsed)?actor.swingDir:actor.dir;
   if(actor.dead)return {state:'death',dir:actor.dir,frame:frame('death',actor.deathElapsed??duration('death')),combo:0};
   if(actor.stun>0)return {state:'hurt',dir:actor.dir,frame:frame('hurt',actor.hurtElapsed||0),combo:0};
-  if(Number.isFinite(actor.swingElapsed))return {state:'attack',dir,frame:frame('attack',actor.swingElapsed,actor.chief,actor.goblinCombo),combo:actor.goblinCombo||0};
+  if(Number.isFinite(actor.swingElapsed))return {state:'attack',dir,frame:attackFrame(actor),combo:actor.goblinCombo||0};
   if(CLIPS[actor.goblinState])return {state:actor.goblinState,dir:actor.dir,frame:frame(actor.goblinState,actor.stateElapsed||0),combo:actor.goblinCombo||0};
   const state=actor.moving?'walk':actor.guard?'guard':'idle';return {state,dir:actor.dir,frame:frame(state,actor.moving?(actor.anim||0)*.20:time),combo:0};
  }
@@ -108,5 +114,5 @@
   if(!cv){cv=ctx.canvas.ownerDocument?.createElement('canvas')||(typeof document!=='undefined'?document.createElement('canvas'):null);if(!cv)throw Error('Goblin drawing requires a canvas factory');cv.width=cv.height=SIZE;const c=cv.getContext('2d'),r=raster(id,l.state,l.dir,l.frame,l.combo,options),im=c.createImageData(SIZE,SIZE);im.data.set(r.data);c.putImageData(im,0,0);if(cache.size>=256)cache.delete(cache.keys().next().value);cache.set(key,cv);}
   const x=Math.round(actor.x)-40,y=Math.round(actor.y)-52;ctx.drawImage(cv,x,y);if(actor.flash>0){ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha*=.45;ctx.drawImage(cv,x,y);ctx.restore();}return l;
  }
- return Object.freeze({DATA,SIZE,ANCHOR,CLIPS,LABELS,character,times,duration,frame,pose,weaponPose,aim,start,cancel,advance,look,hits,raster,draw});
+ return Object.freeze({DATA,SIZE,ANCHOR,CLIPS,LABELS,character,times,duration,frame,pose,weaponPose,aim,start,cancel,advance,look,telegraph,hits,raster,draw});
 });

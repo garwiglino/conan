@@ -119,6 +119,9 @@ const KaldorArsenal=(()=>{
    return result;
   };
  }
+ // Animate confirmed defensive contacts, never a mere press of the button.
+ const defend=Game.prototype.defend;
+ Game.prototype.defend=function(from){const p=this.player,parry=p.parry>0,result=defend.call(this,from);if(result){p.defenseFX={kind:parry?'parry':'guard_hit',elapsed:0};p.hitPause=Math.max(p.hitPause||0,parry?.035:.02);}return result;};
  // Freeze simulation at contact, including the victim and impact particles.
  // Consume presses during hit stop; they cannot become a delayed stroke.
  const updateCombat=Game.prototype.update;
@@ -133,6 +136,7 @@ const KaldorArsenal=(()=>{
    p.impactTick=false;
    if(dt<1e-7)return;
   }
+  if(p.defenseFX){p.defenseFX.elapsed+=dt;if(!W.defenseLook(p)||p.hurt>0||p.dash>0||p.attack>0)p.defenseFX=null;}
   return step.call(this,dt,input);
  }
  Game.prototype.update=function(dt,input={}){return combatStep.call(this,dt,input);};

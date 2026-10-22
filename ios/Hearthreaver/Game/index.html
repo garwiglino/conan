@@ -5750,6 +5750,20 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   const u=pole?(dir===0?[.12,-.993]:dir===2?[-.12,.993]:dir===1?[.985,-.173]:[-.985,-.173]):dir===0?[.6,-.8]:dir===2?[-.65,-.76]:dir===1?[.58,-.815]:[-.58,-.815];
   return {h,u,reach:w.length+2,profile};
  }
+ // Cross-body defense is separate from the relaxed attack-ready/carry pose.
+ const DEFENSE_TIMES=freeze({guard_hit:[.035,.065,.075,.085],parry:[.035,.055,.065,.105]});
+ function defenseLook(actor){const fx=actor?.defenseFX,row=DEFENSE_TIMES[fx?.kind];if(!row||fx.elapsed>=row.reduce((a,b)=>a+b,0))return null;let t=fx.elapsed;for(let f=0;f<row.length;f++){if(t<row[f])return {state:fx.kind,frame:f};t-=row[f];}return null;}
+ function defensePose(id,dir,state='guard',frame=0){
+  const w=get(id),profile=dir===1||dir===3,pole=isPole(id),f=Math.max(0,Math.min(3,frame|0)),[fx,fy]=forward(dir);
+  const h=profile?[dir===1?5:-5,-8]:dir===0?[pole?-3:5,-9]:[pole?3:-5,-8];
+  // The transverse plane foreshortens upright in profile; it never points
+  // into the opponent as if the defensive hold were a spear thrust.
+  const base=profile?[dir===1?-.16:.16,-.987]:dir===0?[-.97,-.243]:[.97,-.243];
+  const parry=state==='parry',hit=state==='guard_hit',recoil=hit?[1,2,1,0][f]:parry?[0,1,1,0][f]:0;
+  const turn=(dir===0||dir===3?-1:1)*(hit?[-.08,-.15,.05,0][f]:parry?[.10,.42,.23,0][f]:0),a=Math.atan2(base[1],base[0])+turn;
+  const body=[Math.round(-fx*recoil),Math.round(-fy*recoil*.5)],span=pole?(profile?5:8):2;
+  return {h:[h[0]+body[0],h[1]+body[1]-(parry?[0,2,1,0][f]:0)],u:[Math.cos(a),Math.sin(a)],body,head:[...body],span,profile,reach:w.length+2,smear:parry&&f===1?.5:parry&&f===2?.16:0};
+ }
  // Normal carrying differs from combat guard: shaft upright across the
  // chest, high leading hand and low supporting hand. The transverse diagonal
  // projects vertically in profile, retaining its shortened vertical component.
@@ -6261,7 +6275,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u,dir);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,category,handedness,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,category,handedness,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,defensePose,defenseLook,defenseTimes:DEFENSE_TIMES,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });
 
 /* Hearthreaver — Kaldor, long-haired barbarian hero, authored pixel art v3.
@@ -6739,6 +6753,9 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
    b.mode='stowing';b.phaseAt=t;
   }
   if(attacking)return {state,frame,mode:'drawn'};
+  const defense=typeof HearthreaverWeapons!=='undefined'?HearthreaverWeapons.defenseLook(actor):null;
+  if(defense&&!forced){b.mode='drawn';b.lastAttack=t;return {...defense,mode:'drawn'};}
+  if(guarding&&!forced){b.mode='drawn';return {state:'guard',frame:actor.moving?6:0,mode:'drawn'};}
   if(forced){ // visual only: impact/use never summons a sheathed sword into the hand.
     if(b.mode==='stowing'){b.mode='drawn';b.lastAttack=t;}
     if(b.mode==='sheathed'&&['hurt','use','melee'].includes(state))
@@ -6859,6 +6876,7 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
  function remap(state,frame,walkFrame,time){
   if(state==='idle'||state==='sheathed_idle')return frameAt('idle',time);
   if(state==='walk'||state==='sheathed_walk')return walkFrame;
+  if(state==='guard'&&frame>=6)return 6+walkFrame;
   // Legacy weaponVisual transition: 6 phases x 6 gait frames.
   // Keep the 6 phases while replacing gait with NPC's 8 real frames.
   if(state==='sheathe_walk'||state==='draw_walk')return Math.floor(frame/6)*8+walkFrame;
@@ -7344,6 +7362,21 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   return {sword,hands,behind:held.behind,L,arms};
  }
 
+ // Block and parry use the same rigid native outfit/hand layers as attacks.
+ function defenseFrame(dir,state,frame){
+  const walking=state==='guard'&&frame>=6,p=walking?pose('walk',(frame-6)%8,dir):{action:'idle',frame:0},s=weapons().defensePose(wielded,dir,state,walking?0:frame),L=layers(p.action,dir,p.frame);if(!L)return null;
+  const gait=walking?bodyShift(p.action,dir,p.frame):[0,0];s.h=s.h.map((v,i)=>v+gait[i]);
+  const [out,c]=canvas80(),blade=buffer(),trail=buffer(),arms=nativeArmLayers(dir,s.h,s.u,[0,0],s.body.map((v,i)=>v+gait[i]),s.span);
+  paintSword(blade,...s.h,...s.u,{hands:0,dir});blade.outline();
+  if(s.smear){const prev=weapons().defensePose(wielded,dir,state,0),len=weapons().get(wielded).length;
+   for(let k=0;k<7;k++){const t=k/7,start=Math.atan2(prev.u[1],prev.u[0]),end=Math.atan2(s.u[1],s.u[0]),a=start+Math.atan2(Math.sin(end-start),Math.cos(end-start))*t;
+    if(s.smear<.2&&k%2)continue;trail.set(s.h[0]+Math.cos(a)*len,s.h[1]+Math.sin(a)*len,s.smear>.2?'#d9f1e8':'#78989d');}
+  }
+  if(dir===0){paintAt(c,trail);paintAt(c,blade);c.drawImage(arms.front,0,0);}
+  c.drawImage(arms.back,0,0);stack(c,L,L,dir,s.head,[0,0],s.body.map((v,i)=>v+gait[i]),s.body);
+  if(dir!==0){paintAt(c,trail);paintAt(c,blade);c.drawImage(arms.front,0,0);}
+  return out;
+ }
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
@@ -7356,6 +7389,8 @@ globalThis.KALDOR_WEAPON_LIMBS={"version":1,"method":"Unmodified native arm/hand
   if(state==='dress'||state==='helm'){
    out=dressFrame(dir,Math.max(0,Math.min(clip(state).durations.length-1,frame|0)),state);
    if(!out)return null;
+  }else if(['guard','guard_hit','parry'].includes(state)&&customWeapon()){
+   out=defenseFrame(dir,state,frame);if(!out)return null;
   }else if(state==='attack'){
    out=attackFrame(dir,Math.max(0,Math.min(5,frame)),combo,swordPose);
    if(!out)return null;
@@ -17072,6 +17107,9 @@ const KaldorArsenal=(()=>{
    return result;
   };
  }
+ // Animate confirmed defensive contacts, never a mere press of the button.
+ const defend=Game.prototype.defend;
+ Game.prototype.defend=function(from){const p=this.player,parry=p.parry>0,result=defend.call(this,from);if(result){p.defenseFX={kind:parry?'parry':'guard_hit',elapsed:0};p.hitPause=Math.max(p.hitPause||0,parry?.035:.02);}return result;};
  // Freeze simulation at contact, including the victim and impact particles.
  // Consume presses during hit stop; they cannot become a delayed stroke.
  const updateCombat=Game.prototype.update;
@@ -17086,6 +17124,7 @@ const KaldorArsenal=(()=>{
    p.impactTick=false;
    if(dt<1e-7)return;
   }
+  if(p.defenseFX){p.defenseFX.elapsed+=dt;if(!W.defenseLook(p)||p.hurt>0||p.dash>0||p.attack>0)p.defenseFX=null;}
   return step.call(this,dt,input);
  }
  Game.prototype.update=function(dt,input={}){return combatStep.call(this,dt,input);};
@@ -21714,13 +21753,17 @@ const DUNGEON_DATA={"design":{"id":"forteresse-grise-gueule","nom":"Forteresse d
  const character=id=>DATA.characters[id]||DATA.characters.gobelin;
  function times(state,chief=false,combo=0){
   const row=(CLIPS[state]||CLIPS.idle).times.slice();
-  if(state==='attack'){row[1]=chief?.50:.17;if(!chief){row[0]=.055;row[3]=.045;row[4]=.085;row[5]=.065;}const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
+  if(state==='attack'){row[1]=chief?.50:.23;if(!chief){row[0]=.055;row[3]=.045;row[4]=.085;row[5]=.065;}const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
   if(state==='hurt'&&!chief)return row.map(t=>t*.375);
   return row;
  }
  const duration=(state,chief=false,combo=0)=>times(state,chief,combo).reduce((a,b)=>a+b,0);
  function frame(state,time=0,chief=false,combo=0){const row=times(state,chief,combo),total=row.reduce((a,b)=>a+b,0);let t=Math.max(0,time);if(CLIPS[state]?.loop)t%=total;for(let i=0;i<row.length;i++){if(t<row[i]-1e-8)return i;t-=row[i];}return row.length-1;}
  function pose(state,dir=2,index=0,combo=0,aim=0){
+  if(state==='attack'&&(index===.75||index===1.25)){
+   const low=index===.75?0:1,high=low+1,t=index===.75?.66:.16,a=pose(state,dir,low,combo,aim),b=pose(state,dir,high,combo,aim),p={...a,phase:index,angle:a.angle+Math.atan2(Math.sin(b.angle-a.angle),Math.cos(b.angle-a.angle))*t,smear:0};
+   for(const key of ['body','head','armL','armR','legL','legR','pouch','cape'])p[key]=a[key].map((v,i)=>Math.round(v+(b[key][i]-v)*t));return p;
+  }
   const [fx,fy]=FWD[dir]||FWD[2],a=Math.atan2(fy,fx),p={body:[0,0],head:[0,0],armL:[0,0],armR:[0,0],legL:[0,0],legR:[0,0],pouch:[0,0],cape:[0,0],angle:-Math.PI/2,smear:0,phase:index};
   const armedSide=dir===0||dir===3?'R':'L',main='arm'+armedSide,off='arm'+(armedSide==='L'?'R':'L'),side=dir===3?-1:1;
   if(state==='idle'){p.body[1]=index===1?-1:0;p.head[1]=index===2?-1:p.body[1];p.armL[1]=p.armR[1]=p.body[1];}
@@ -21770,11 +21813,13 @@ const DUNGEON_DATA={"design":{"id":"forteresse-grise-gueule","nom":"Forteresse d
   const hit=!actor.swingImpact&&before<contact+row[2]&&actor.swingElapsed>=contact;if(hit)actor.swingImpact=true;
   if(actor.swingElapsed>=end){actor.swingElapsed=null;actor.wind=0;actor.attack=0;}return hit;
  }
+ function attackFrame(actor){const row=times('attack',actor.chief,actor.goblinCombo),t=actor.swingElapsed;if(t<row[0])return 0;const load=(t-row[0])/row[1];if(load<.30)return .75;if(load<.68)return 1;if(load<1)return 1.25;return frame('attack',t,actor.chief,actor.goblinCombo);}
+ function telegraph(actor){return !actor.dead&&(actor.stun||0)<=0&&Number.isFinite(actor.swingElapsed)&&actor.wind>0;}
  function look(actor,time=0){
   const dir=Number.isFinite(actor.swingElapsed)?actor.swingDir:actor.dir;
   if(actor.dead)return {state:'death',dir:actor.dir,frame:frame('death',actor.deathElapsed??duration('death')),combo:0};
   if(actor.stun>0)return {state:'hurt',dir:actor.dir,frame:frame('hurt',actor.hurtElapsed||0),combo:0};
-  if(Number.isFinite(actor.swingElapsed))return {state:'attack',dir,frame:frame('attack',actor.swingElapsed,actor.chief,actor.goblinCombo),combo:actor.goblinCombo||0};
+  if(Number.isFinite(actor.swingElapsed))return {state:'attack',dir,frame:attackFrame(actor),combo:actor.goblinCombo||0};
   if(CLIPS[actor.goblinState])return {state:actor.goblinState,dir:actor.dir,frame:frame(actor.goblinState,actor.stateElapsed||0),combo:actor.goblinCombo||0};
   const state=actor.moving?'walk':actor.guard?'guard':'idle';return {state,dir:actor.dir,frame:frame(state,actor.moving?(actor.anim||0)*.20:time),combo:0};
  }
@@ -21804,7 +21849,7 @@ const DUNGEON_DATA={"design":{"id":"forteresse-grise-gueule","nom":"Forteresse d
   if(!cv){cv=ctx.canvas.ownerDocument?.createElement('canvas')||(typeof document!=='undefined'?document.createElement('canvas'):null);if(!cv)throw Error('Goblin drawing requires a canvas factory');cv.width=cv.height=SIZE;const c=cv.getContext('2d'),r=raster(id,l.state,l.dir,l.frame,l.combo,options),im=c.createImageData(SIZE,SIZE);im.data.set(r.data);c.putImageData(im,0,0);if(cache.size>=256)cache.delete(cache.keys().next().value);cache.set(key,cv);}
   const x=Math.round(actor.x)-40,y=Math.round(actor.y)-52;ctx.drawImage(cv,x,y);if(actor.flash>0){ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha*=.45;ctx.drawImage(cv,x,y);ctx.restore();}return l;
  }
- return Object.freeze({DATA,SIZE,ANCHOR,CLIPS,LABELS,character,times,duration,frame,pose,weaponPose,aim,start,cancel,advance,look,hits,raster,draw});
+ return Object.freeze({DATA,SIZE,ANCHOR,CLIPS,LABELS,character,times,duration,frame,pose,weaponPose,aim,start,cancel,advance,look,telegraph,hits,raster,draw});
 });
 
 // Coins, healing loot and chest feedback are shared by the world and interiors.
@@ -21879,6 +21924,28 @@ const GoblinTactics=(()=>{
   }
  }
  function portalFree(g,e,x,y,s){for(const p of s.ports||[]){const tan=p.axis==='x'?'y':'x',inside=(a,b)=>Math.abs(a-p[p.axis])<12&&Math.abs(b-p[tan])<14;if(!inside(p.axis==='x'?x:y,p.axis==='x'?y:x)||inside(e[p.axis],e[tan]))continue;if(g.enemies.some(a=>a!==e&&!a.dead&&inside(a[p.axis],a[tan])))return false;}return true;}
+ // Reserve an actual walkable exit, including at a wall or in a room corner.
+ // Angular gaps alone can point into masonry and leave every real exit occupied.
+ function escapePlan(g,s,group,now){
+  const p=g.player,steer=g.dungeonSteer,moving=steer&&Math.hypot(steer.x,steer.y)>.2,wanted=moving?angle({x:p.x+steer.x,y:p.y+steer.y},p):s.gap;
+  const crowdKey=group.map(e=>e.id+':'+Math.round(e.x/8)+','+Math.round(e.y/8)).join('|'),blocked=!moving&&s.exit&&group.some(e=>{const x=e.x-p.x,y=e.y-p.y;return x*s.exit.x+y*s.exit.y>0&&x*s.exit.x+y*s.exit.y<48&&Math.abs(-x*s.exit.y+y*s.exit.x)<17;});
+  if(now>=(s.nextEscape||0)||blocked&&crowdKey!==s.escapeCrowd||moving&&Math.abs(delta(wanted,s.escapeWanted??wanted))>.35){
+   s.escapeCrowd=crowdKey;s.nextEscape=now+.18;s.escapeWanted=wanted;let best=null,score=Infinity;
+   for(let i=0;i<24;i++){const a=wanted+i*Math.PI/12,q=ring(p,a,52);if(!clear(g,p,q,5))continue;
+    const ux=(q.x-p.x)/52,uy=(q.y-p.y)/52,v=Math.abs(delta(a,wanted)),crowd=group.reduce((n,e)=>{const x=e.x-p.x,y=e.y-p.y;return n+(x*ux+y*uy>0&&x*ux+y*uy<52&&Math.abs(-x*uy+y*ux)<17?1:0);},0),value=v+crowd*(moving?.15:4);
+    if(value<score){score=value;best=a;}}
+   if(best!==null){s.gap=best;const q=ring(p,best,1);s.exit={x:q.x-p.x,y:q.y-p.y};}else s.exit=null;
+  }
+  for(const e of group){const m=s.actors.get(e);m.yield=false;if(!s.exit||m.portal||m.clearingPortal)continue;
+   const v={x:e.x-p.x,y:e.y-p.y},along=v.x*s.exit.x+v.y*s.exit.y,side=v.x*-s.exit.y+v.y*s.exit.x;
+   if(along<=0||along>48||Math.abs(side)>=17)continue;
+   const choices=[];for(const sign of [Math.sign(side)||((m.slot||0)%2?1:-1),-(Math.sign(side)||((m.slot||0)%2?1:-1))]){
+    const q={x:p.x+s.exit.x*Math.max(19,Math.min(34,along))-s.exit.y*sign*27,y:p.y+s.exit.y*Math.max(19,Math.min(34,along))+s.exit.x*sign*27};
+    if(!g.solid(q.x,q.y,e.r||6)&&clear(g,e,q,e.r||6))choices.push(q);
+   }
+   if(choices.length){m.yield=true;m.yieldGoal=choices[0];if(!swing(e))s.engagers.delete(e);}
+  }
+ }
  function plan(g,dt){
   const s=state(g),p=g.player,now=g.time,live=g.enemies.filter(e=>!e.dead&&(!e.chief||g.dungeon.bossFight)&&(!e.bossGuard||g.dungeon.bossFight||g.dungeon.bossDead)),visible=live.filter(e=>length(e,p)<170&&g.lineClear(e,p));
   for(const e of live){let m=s.actors.get(e);if(!m){m={until:0,slot:null,route:[],repath:0,retreatUntil:0};s.actors.set(e,m);}
@@ -21893,6 +21960,7 @@ const GoblinTactics=(()=>{
   const steer=g.dungeonSteer;if(steer&&Math.hypot(steer.x,steer.y)>.2){const wanted=angle({x:p.x+steer.x,y:p.y+steer.y},p);s.gap+=Math.max(-dt*.8,Math.min(dt*.8,delta(wanted,s.gap)));}
   const signature=group.map(e=>e.id).sort().join('|'),count=Math.min(8,group.length),span=Math.PI*5/3;
   if(s.formation!==signature){s.formation=signature;s.sectors=new Map();const free=Array.from({length:count},(_,i)=>i);for(const e of [...group].sort((a,b)=>length(a,p)-length(b,p))){let best=null,score=Infinity;for(const i of free){const q=ring(p,s.gap+Math.PI/6+(i+.5)*span/count,46),v=length(e,q)+(g.solid(q.x,q.y,e.r||6)?70:0);if(v<score){score=v;best=i;}}if(best!==null)free.splice(free.indexOf(best),1);s.sectors.set(e,best);}}
+  escapePlan(g,s,group,now);
   for(const e of group){const m=s.actors.get(e);m.slot=s.sectors.get(e);m.angle=m.slot===null?angle(e,p):s.gap+Math.PI/6+(m.slot+.5)*span/count;m.local=length(e,p)<=29;m.threat=m.local||p.attack>0&&g.targetId===e.id&&length(e,p)<48;
    m.priority=m.local?100-length(e,p):m.provokedUntil>now?55:p.attack>0&&m.threat?45:0;
    m.ready=m.local||group.length<2||m.portal?.owner||Math.abs(delta(m.angle,angle(e,p)))<.6;}
@@ -21901,7 +21969,7 @@ const GoblinTactics=(()=>{
   // Committed blows own capacity first, including after a local priority transfer.
   const committed=[...s.engagers].filter(swing);
   if(committed.length>=2)for(const e of [...s.engagers])if(!swing(e))s.engagers.delete(e);
-  const candidates=group.filter(e=>e.stun<=0&&!swing(e)&&e.cooldown<=.08&&s.actors.get(e).retreatUntil<=now&&s.actors.get(e).ready&&(!s.actors.get(e).portal||s.actors.get(e).portal.owner)).sort((a,b)=>s.actors.get(b).priority-s.actors.get(a).priority||(s.actors.get(a).lastStrike??-10)-(s.actors.get(b).lastStrike??-10)||length(a,p)-length(b,p));
+  const candidates=group.filter(e=>e.stun<=0&&!swing(e)&&e.cooldown<=.08&&!s.actors.get(e).yield&&s.actors.get(e).retreatUntil<=now&&s.actors.get(e).ready&&(!s.actors.get(e).portal||s.actors.get(e).portal.owner)).sort((a,b)=>s.actors.get(b).priority-s.actors.get(a).priority||(s.actors.get(a).lastStrike??-10)-(s.actors.get(b).lastStrike??-10)||length(a,p)-length(b,p));
   for(const e of candidates){
    if(s.engagers.has(e))continue;
    // A locally engaged opponent can replace an approaching ally, never a swing.
@@ -21942,6 +22010,7 @@ const GoblinTactics=(()=>{
  function goal(g,e,plan){const m=plan.s.actors.get(e);if(!plan.active.includes(e))return null;
   if(m.portal&&!m.portal.owner){const q={x:m.portal.x,y:m.portal.y};q[m.portal.axis]+=m.portal.side*(50+m.portal.rank*24);return !g.solid(q.x,q.y,e.r||6)?q:{x:e.x,y:e.y};}
   if(!m.sees)return m.last;
+  if(m.yield)return m.yieldGoal;
   if(m.evadeUntil>plan.now&&!plan.pressing.has(e)&&!m.portal&&!m.clearingPortal)return m.evade;
   if(m.clearingPortal){const port=m.clearingPortal,tan=port.axis==='x'?'y':'x';for(const offset of [24,-24,32,-32]){const q={x:port.x,y:port.y};q[port.axis]+=port.side*68;q[tan]+=offset;if(!g.solid(q.x,q.y,e.r||6))return q;}}
 
@@ -21954,7 +22023,7 @@ const GoblinTactics=(()=>{
   if(length(e,g.player)<35)for(const turn of [0,.5,-.5,1,-1]){const q=ring(g.player,angle(e,g.player)+turn,43);if(clear(g,e,q,e.r||6))return q;}
   return {x:e.x,y:e.y};
  }
- function canStrike(g,e,p){const m=p.s.actors.get(e);return m?.sees&&!swing(e)&&p.pressing.has(e)&&m.ready&&(!m.portal||m.portal.owner)&&p.now>=p.s.nextStrike&&g.enemies.filter(a=>!a.dead&&a.stun<=0&&swing(a)).length<2;}
+ function canStrike(g,e,p){const m=p.s.actors.get(e);return m?.sees&&!m.yield&&!swing(e)&&p.pressing.has(e)&&m.ready&&(!m.portal||m.portal.owner)&&p.now>=p.s.nextStrike&&g.enemies.filter(a=>!a.dead&&a.stun<=0&&swing(a)).length<2;}
  function reserve(p,e){p.s.nextStrike=p.now+.16;if(e){const m=p.s.actors.get(e);m.lastStrike=p.now;m.wasSwing=true;}}
  function waypoint(g,e,target,m){
   const navigable=(a,b)=>{if(!clear(g,a,b,e.r||6))return false;if(!g.crowd||target===g.player)return true;const n=Math.ceil(length(a,b)/4);for(let i=1;i<=n;i++)if(g.crowd(e,a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n))return false;return true;};
@@ -21974,10 +22043,10 @@ const GoblinTactics=(()=>{
  function move(g,e,target,plan,dt){
   const m=plan.s.actors.get(e);if(!target||length(e,target)<(m.contact===target ? .4 : 3))return;
   // Follow the circumference to a far flank instead of cutting through the hero.
-  if(m.sees&&!m.portal&&!m.clearingPortal&&plan.group.length>1&&!m.ready&&!(m.evadeUntil>plan.now)&&length(e,g.player)<95){const current=angle(e,g.player),error=delta(m.angle,current),radius=Math.max(40,Math.min(58,length(e,g.player))),sign=Math.sign(error)||1;
+  if(m.sees&&!m.portal&&!m.clearingPortal&&plan.group.length>1&&!m.ready&&!m.yield&&!(m.evadeUntil>plan.now)&&length(e,g.player)<95){const current=angle(e,g.player),error=delta(m.angle,current),radius=Math.max(40,Math.min(58,length(e,g.player))),sign=Math.sign(error)||1;
    for(const turn of [sign,-sign]){const q=ring(g.player,current+turn*.30,radius);if(clear(g,e,q,e.r||6)){target=q;break;}}
   }
-  if(!m.portal&&!m.clearingPortal&&!plan.pressing.has(e)&&!(m.evadeUntil>plan.now)&&length(e,g.player)<30){const q=ring(g.player,angle(e,g.player),46);if(clear(g,e,q,e.r||6))target=q;}
+  if(!m.portal&&!m.clearingPortal&&!plan.pressing.has(e)&&!m.yield&&!(m.evadeUntil>plan.now)&&length(e,g.player)<30){const q=ring(g.player,angle(e,g.player),46);if(clear(g,e,q,e.r||6))target=q;}
   const q=waypoint(g,e,target,m);if(!q)return;
   let dx=q.x-e.x,dy=q.y-e.y,d=Math.hypot(dx,dy);if(d<.01)return;dx/=d;dy/=d;
   // Separate rigid bodies without changing their art or rotating a committed strike.
@@ -21987,12 +22056,12 @@ const GoblinTactics=(()=>{
   // A cached path or separation force may graze a corner: slide safely and replan.
   if(g.solid(e.x+mx,e.y+my,e.r||6)){m.route=[];m.repath=g.time+.12;if(!g.solid(e.x+mx,e.y,e.r||6))my=0;else if(!g.solid(e.x,e.y+my,e.r||6))mx=0;else return;}
   // Waiting actors yield the inner space; only token holders may approach it.
-  if(!plan.pressing.has(e)&&!m.portal&&!m.clearingPortal&&length({x:e.x+mx,y:e.y+my},g.player)<32&&length({x:e.x+mx,y:e.y+my},g.player)<length(e,g.player))return;
+  if(!plan.pressing.has(e)&&!m.yield&&!m.portal&&!m.clearingPortal&&length({x:e.x+mx,y:e.y+my},g.player)<32&&length({x:e.x+mx,y:e.y+my},g.player)<length(e,g.player))return;
   if(!portalFree(g,e,e.x+mx,e.y+my,plan.s))return;
   g.move(e,mx,my);const moved=Math.hypot(e.x-ox,e.y-oy);m.stuck=moved<.01?(m.stuck||0)+dt:0;if(m.stuck>.16){m.route=[];m.repath=g.time+.12;m.stuck=0;}e.moving=moved>.001;if(e.moving){e.dir=m.sees?g.direction(g.player.x-e.x,g.player.y-e.y):g.direction(e.x-ox,e.y-oy);e.anim=(e.anim||0)+moved/5.5;}
  }
  function combatMove(g,e,plan,dt){
-  const m=plan.s.actors.get(e);if(!m?.sees)return;const frame=HearthreaverGoblins.look(e).frame,stamp=e.swingElapsed;
+  const m=plan.s.actors.get(e);if(!m?.sees)return;if(m.yield){const dir=e.dir;move(g,e,m.yieldGoal,plan,dt);e.dir=dir;return;}const frame=HearthreaverGoblins.look(e).frame,stamp=e.swingElapsed;
   if(m.swingStamp>stamp||m.swingStamp===undefined){m.advance=0;m.recover=0;}m.swingStamp=stamp;
   if(frame===0||frame===1&&e.wind>.16){const left=Math.max(0,2-(m.advance||0)),amount=Math.min(left,12*dt),[x,y]=g.facing(e.swingDir);const ox=e.x,oy=e.y;if(length(e,g.player)>12&&portalFree(g,e,e.x+x*amount,e.y+y*amount,plan.s))g.move(e,x*amount,y*amount);m.advance=(m.advance||0)+Math.hypot(e.x-ox,e.y-oy);}
   else if(frame===3||frame===4){const left=Math.max(0,5-(m.recover||0)),a=angle(e,g.player),turn=Math.sign(delta(m.angle,a))||((m.slot||0)%2?1:-1),q=ring(g.player,a+turn*.08,length(e,g.player)+6),d=length(e,q),amount=Math.min(left,16*dt,d);if(d>.01){const ox=e.x,oy=e.y;if(portalFree(g,e,e.x+(q.x-e.x)/d*amount,e.y+(q.y-e.y)/d*amount,plan.s))g.move(e,(q.x-e.x)/d*amount,(q.y-e.y)/d*amount);m.recover=(m.recover||0)+Math.hypot(e.x-ox,e.y-oy);}}
@@ -22356,6 +22425,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
    this.shadow(q.x,q.y,n.chief?18:14);
    if(!n.dead&&g.targetId===n.id)this.targetRing(q.x,q.y,n.chief?15:12);
    HearthreaverGoblins.draw(c,{...n,x:q.x,y:q.y,armed:n.armamentDropped?false:n.armed},g.time);
+   if(HearthreaverGoblins.telegraph(n)){const x=Math.round(q.x),y=Math.round(q.y)-38;pixels(c,['000','010','010','000','010'],x-1,y,{'0':'#211820','1':'#f2c078'});}
    if(!n.dead&&g.targetId===n.id)pixels(c,['0...0','00.00','.000.','..0..'],Math.round(q.x)-2,Math.round(q.y)-35,{'0':'#f5d680'});
    if(!n.dead&&n.hp<n.maxHp){c.fillStyle='#271b24';c.fillRect(q.x-11,q.y-31,22,3);c.fillStyle='#c0644b';c.fillRect(q.x-11,q.y-31,22*n.hp/n.maxHp,2);}
    c.restore();}});}

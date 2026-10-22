@@ -56,6 +56,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
    this.shadow(q.x,q.y,n.chief?18:14);
    if(!n.dead&&g.targetId===n.id)this.targetRing(q.x,q.y,n.chief?15:12);
    HearthreaverGoblins.draw(c,{...n,x:q.x,y:q.y,armed:n.armamentDropped?false:n.armed},g.time);
+   if(HearthreaverGoblins.telegraph(n)){const x=Math.round(q.x),y=Math.round(q.y)-38;pixels(c,['000','010','010','000','010'],x-1,y,{'0':'#211820','1':'#f2c078'});}
    if(!n.dead&&g.targetId===n.id)pixels(c,['0...0','00.00','.000.','..0..'],Math.round(q.x)-2,Math.round(q.y)-35,{'0':'#f5d680'});
    if(!n.dead&&n.hp<n.maxHp){c.fillStyle='#271b24';c.fillRect(q.x-11,q.y-31,22,3);c.fillStyle='#c0644b';c.fillRect(q.x-11,q.y-31,22*n.hp/n.maxHp,2);}
    c.restore();}});}

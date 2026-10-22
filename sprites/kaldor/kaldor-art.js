@@ -473,6 +473,9 @@
    b.mode='stowing';b.phaseAt=t;
   }
   if(attacking)return {state,frame,mode:'drawn'};
+  const defense=typeof HearthreaverWeapons!=='undefined'?HearthreaverWeapons.defenseLook(actor):null;
+  if(defense&&!forced){b.mode='drawn';b.lastAttack=t;return {...defense,mode:'drawn'};}
+  if(guarding&&!forced){b.mode='drawn';return {state:'guard',frame:actor.moving?6:0,mode:'drawn'};}
   if(forced){ // visual only: impact/use never summons a sheathed sword into the hand.
     if(b.mode==='stowing'){b.mode='drawn';b.lastAttack=t;}
     if(b.mode==='sheathed'&&['hurt','use','melee'].includes(state))

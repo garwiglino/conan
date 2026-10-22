@@ -6,3 +6,19 @@ test('exact sight blocks thin walls, closed doors and grazing rays in both direc
 test('unseen goblins neither detect nor attack through a closed door; memory does not track the hidden player',()=>{const g=game('geoles',{x:169,y:48}),T=a.GoblinTactics,F=a.FirstDungeon;g.enemies=[actor(0,151,48)];let p=T.plan(g,.02);assert.equal(p.active.length,0);assert.equal(T.speech(g).length,0);F.state(g).open.push('5,1,O');p=T.plan(g,.02);assert.equal(p.active.length,1);const last={...p.s.actors.get(g.enemies[0]).last};F.state(g).open=[];g.player.x=190;g.time+=.2;p=T.plan(g,.02);assert.equal(p.s.actors.get(g.enemies[0]).sees,false);assert.deepEqual({...p.s.actors.get(g.enemies[0]).last},last);assert.equal(T.canStrike(g,g.enemies[0],p),false);g.player.x=900;assert.equal(T.plan(g,.02).active.length,1,'search uses the remembered position even when the hidden player moves far away');g.time+=3;assert.equal(T.plan(g,.02).active.length,0);});
 test('eight goblins preserve breathing space and the player can walk out while attacks remain active and readable',()=>{const g=game(),p=g.player,T=a.GoblinTactics;g.enemies=Array.from({length:8},(_,i)=>{const v=P.inverse(-60-i*5,(i-3.5)*10);return actor(i,p.x+v.x,p.y+v.y);});let impacts=0,starts=0,maxClose=0;g.damagePlayer=(n,e)=>{assert.equal(a.HearthreaverGoblins.look(e).frame,2);impacts++;};for(let i=0;i<800;i++){const was=g.enemies.map(e=>Number.isFinite(e.swingElapsed));g.update(.02,{});starts+=g.enemies.filter((e,j)=>Number.isFinite(e.swingElapsed)&&!was[j]).length;if(i>250)maxClose=Math.max(maxClose,g.enemies.filter(e=>Math.hypot(e.x-p.x,e.y-p.y)<28).length);}const plan=T.plan(g,.02),v=P.point(...Object.values(P.inverse(Math.cos(plan.s.gap),Math.sin(plan.s.gap)))),k=Math.hypot(v.x,v.y),old={x:p.x,y:p.y};for(let i=0;i<120;i++)g.update(.02,{x:v.x/k,y:v.y/k});const escaped=Math.hypot(p.x-old.x,p.y-old.y);console.log('space',JSON.stringify({impacts,starts,maxClose,escaped}));assert.ok(impacts>=6&&starts>=8);assert.ok(maxClose<=2);assert.ok(escaped>55);});
 test('doorway reservations form a spaced queue and only one goblin occupies the threshold',()=>{const g=game('grande-salle',{x:240,y:80}),T=a.GoblinTactics;g.enemies=[166,143,120,97].map((x,i)=>actor(i,x,80));let maxThreshold=0,crossed=new Set(),queued=0;for(let i=0;i<650;i++){g.update(.02,{});const p=T.plan(g,.02);queued=Math.max(queued,p.active.filter(e=>p.s.actors.get(e).portal&&!p.s.actors.get(e).portal.owner).length);maxThreshold=Math.max(maxThreshold,g.enemies.filter(e=>Math.abs(e.x-192)<12&&Math.abs(e.y-80)<14).length);for(const e of g.enemies){assert.equal(g.solid(e.x,e.y,e.r),false);if(e.x>216)crossed.add(e.id);}}console.log('door',JSON.stringify({maxThreshold,queued,crossed:crossed.size}));assert.ok(queued>=2);assert.ok(maxThreshold<=1);assert.ok(crossed.size>=2);});
+
+test('a corner exit points into walkable space and goblins yield the requested escape lane with real collisions',()=>{
+ const g=game(),p=g.player,T=a.GoblinTactics,origin={x:p.x,y:p.y};
+ g.solid=(x,y,r=5)=>x-r<origin.x-10||y-r<origin.y-10;
+ g.enemies=[[21,0],[0,21],[28,28],[49,8]].map(([x,y],i)=>actor(i,p.x+x,p.y+y));
+ g.dungeonSteer={x:1,y:1};let plan=T.plan(g,.02);
+ assert.ok(plan.s.exit.x>0&&plan.s.exit.y>0,'escape points away from both corner walls');
+ let yields=0;const old={x:p.x,y:p.y};
+ // The player keeps trying to walk out while native enemies fight and yield.
+ for(let i=0;i<150;i++){
+  const input=P.point(1,1),n=Math.hypot(input.x,input.y);g.update(.02,{x:input.x/n,y:input.y/n});plan=T.plan(g,.02);
+  yields+=plan.group.filter(e=>plan.s.actors.get(e).yield).length;
+  assert.ok(!g.solid(p.x,p.y,5));for(const e of g.enemies)assert.ok(!g.solid(e.x,e.y,e.r));
+ }
+ const escaped=Math.hypot(p.x-old.x,p.y-old.y);console.log('corner escape',JSON.stringify({escaped,yields}));assert.ok(yields>0);assert.ok(escaped>70,'the player walks out rather than staying pinned');
+});
