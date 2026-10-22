@@ -24,7 +24,7 @@ const DESCRIPTION={
 function documents(id){
  const B=biomes.load(id),G=B.grids(),sets=B.pieces(),D=B.decors(),F=B.sprites(),docs=[],slug=n=>id+'-'+n;
  const manifest={biome:B.nom,global:B.global,palette:'palette-'+id+'.gpl',echelle:'1 px par unité ; une case de 1 m = losange 32 × 16 ; pièces de chemin sur 2 m',niveaux:{},fichiers:[]};
- if(B.accents)manifest.accents=B.accents;if(B.macro)manifest.macro=B.macro;
+ if(B.rampes)manifest.rampes=B.rampes;if(B.accents)manifest.accents=B.accents;if(B.macro)manifest.macro=B.macro;
  for(const [tid,name]of Object.entries(B.sols)){const g=G[tid],withHeight=tid!=='water',layers=[...(withHeight?[{name:'hauteur',frames:[heights(g)]}]:[]),{name:'couleur',frames:[rgba(g)]}];
   docs.push({file:'sols/'+name+'.piskel',doc:{name:slug(name),description:DESCRIPTION.texture,width:g.w,height:g.h,layers}});manifest.fichiers.push({fichier:'sols/'+name+'.piskel',role:'texture',id:tid});}
  for(const [tid,name]of Object.entries(B.pavages)){const list=[G[tid],G[tid+'_v']];
@@ -45,7 +45,7 @@ function documents(id){
   manifest.fichiers.push({fichier:'flore/'+fid+'.piskel',role:'flore',id:fid,ancre:[f.ax,f.ay],cadres:names});}
  return {docs,manifest,name:B.nom};
 }
-(async()=>{
+if(require.main===module)(async()=>{
  for(const id of wanted.length?wanted:[...biomes.names,...interieurs.names]){
   const inside=interieurs.names.includes(id),DIR=inside?path.join(ROOT,'interieurs',id):path.join(ROOT,id),{docs,manifest}=inside?interieurs.documents(id):documents(id);
   // Les retouches faites dans Piskel sont gardées : seuls les fichiers absents sont écrits.
@@ -58,3 +58,4 @@ function documents(id){
   console.log(id+' : '+todo.length+' fichiers .piskel écrits ('+(docs.length-todo.length)+' existants gardés) dans '+path.relative(process.cwd(),DIR));
  }
 })().catch(e=>{console.error(e.message||e);process.exit(1);});
+module.exports={documents};

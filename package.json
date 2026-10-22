@@ -56,7 +56,7 @@
     "package:terrain-isometric": "python3 scripts/package-terrain-isometric.py",
     "test:world-isometric": "node --test tests/world-isometric.test.cjs",
     "check:world-isometric": "node scripts/check-world-isometric.cjs",
-    "test:environment": "node --test tests/environment-teremor.test.cjs tests/environment-sarak.test.cjs tests/environment-kit.test.cjs tests/environment-interieurs.test.cjs tests/environment-donjons.test.cjs",
+    "test:environment": "node --test tests/environment-teremor.test.cjs tests/environment-sarak.test.cjs tests/environment-varan.test.cjs tests/environment-kit.test.cjs tests/environment-interieurs.test.cjs tests/environment-donjons.test.cjs",
     "build:environment": "node scripts/environment/build-environment.cjs",
     "kit:environment": "node scripts/environment/export-kit.cjs",
     "donjon:environment": "node scripts/environment/donjon.cjs",

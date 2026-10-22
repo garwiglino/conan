@@ -1,10 +1,12 @@
 'use strict';
 /* Pinceaux de pixel art : grilles indexées, tampons dessinés à la main
- * (ASCII), répartition à densité égale et raccords sans couture. */
+ * (ASCII), répartition à densité égale et raccords sans couture. Les indices
+ * sont ceux de la palette commune (plus de 256 couleurs : Uint16) ; chaque
+ * biome est réindexé sur ses propres rampes à la construction. */
 const P=require('./palette.cjs');
 function rng(seed){let a=seed>>>0;return ()=>{a=a+0x6D2B79F5>>>0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};}
 class Grid{
- constructor(w,h,{wrap=false,fill=0,height=0}={}){this.w=w;this.h=h;this.wrap=wrap;this.px=new Uint8Array(w*h).fill(fill?P.id(fill):0);this.ht=new Float32Array(w*h).fill(height);}
+ constructor(w,h,{wrap=false,fill=0,height=0}={}){this.w=w;this.h=h;this.wrap=wrap;this.px=new Uint16Array(w*h).fill(fill?P.id(fill):0);this.ht=new Float32Array(w*h).fill(height);}
  at(x,y){x=Math.round(x);y=Math.round(y);if(this.wrap){x=(x%this.w+this.w)%this.w;y=(y%this.h+this.h)%this.h;}else if(x<0||y<0||x>=this.w||y>=this.h)return -1;return y*this.w+x;}
  get(x,y){const i=this.at(x,y);return i<0?0:this.px[i];}
  name(x,y){const v=this.get(x,y);return v?P.list[v-1].name:null;}

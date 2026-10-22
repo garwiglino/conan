@@ -4,10 +4,10 @@
  * V = y + ½ - (x + ½)/2 : les joints suivent les diagonales 2:1 de la
  * projection, comme les arêtes des bâtiments. Chaque motif est périodique
  * dans le plan et à l'écran (128 × 64), ce qui garde les raccords sans couture.
- * Ombrage identique aux pavés irréguliers : arête claire en haut à gauche,
- * joint sombre d'un pixel en bas à droite, cœur de pierre en trois tons.
+ * Ombrage : arête claire en haut à gauche, joint sombre d'un pixel en bas à
+ * droite, grain tramé et usure (matiere.cjs).
  * axis 'v' : même motif tourné d'un quart de tour, pour les rues nord-sud. */
-const {rng,Grid}=require('./brushes.cjs');
+const {rng}=require('./brushes.cjs');
 const hashOf=(s,seed)=>{let h=2166136261^seed;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967296;};
 // Période d'écran de chaque motif (multiple de 32 × 16, compatible avec son réseau au sol).
 // Tomettes : réseau (10, 0), (5, 8) ; ses périodes à l'écran imposent 160 × 80.
@@ -44,28 +44,24 @@ function cabochon(u,v){const ci=Math.round(u/12),cj=Math.round(v/12),du=u-ci*12,
  const i=Math.floor(u/12),j=Math.floor(v/12);return {key:C.cabochon('t',i*12,j*12),along:u-i*12,across:v-j*12,size:[12,12]};}
 const PATTERNS={setts,flags,bricks,fan,hex,cabochon};
 
+/* Rendu mûr (matiere.cjs) : pierre grenée et tramée, arête claire en haut à
+ * gauche, ombre en bas à droite, joints sombres, usure et fêlures. Chaque
+ * style : joint(x, y, coin) et shader({s, x, y, r, edge, deep}). */
+const M=require('./matiere.cjs');
+const stone=(ramp,{base=[4.4,5.4,6.2],cuts=[.3,.85],crack=0,moss=0,grain=1.4,size=[128,64]})=>({s,x,y,r,edge,deep})=>{
+ let t=(r<cuts[0]?base[0]:r>cuts[1]?base[2]:base[1])+(edge?1.3:deep?-1.2:0)+(M.snoise(x,y,2,Math.floor(r*997),size[0],size[1])-.5)*grain;
+ if(M.hash(x,y,11)<.035)t-=1.4;
+ if(moss&&!edge&&deep&&M.hash(x,y,12)<moss)return [M.tone('mousse',1),.85];
+ if(crack&&r<crack&&Math.abs(s.along-s.size[0]*.55+(s.across-s.size[1]*.5)*.9)<.5)return [M.tone(ramp,Math.max(0,base[0]-2)),.85];
+ return [M.dtone(ramp,t,x,y),edge?.95:.9];};
 const STYLE={
- setts:{joint:['pierre2','pierre1'],kinds:[[.6,['pierre5','pierre4','pierre3']],[.94,['pierre4','pierre3','pierre2']],[1,['terre5','terre4','terre3']]]},
- flags:{joint:['gres0','pierre1'],kinds:[[.7,['gres3','gres2','gres1']],[.92,['gres2','gres1','gres0']],[1,['pierre4','pierre3','pierre2']]],cracks:true},
- bricks:{joint:['brique1','brique0'],kinds:[[.6,['brique3','brique2','brique1']],[.95,['brique4','brique3','brique2']],[1,['gres2','gres1','gres0']]]},
- fan:{joint:['pierre2','pierre1'],kinds:[[.6,['pierre5','pierre4','pierre3']],[.95,['pierre4','pierre3','pierre2']],[1,['terre5','terre4','terre3']]]}
+ setts:{joint:(x,y,c)=>M.tone(M.hash(x,y,3)<.3?'mousse':'humus',c?0:1),shader:stone('roc',{base:[4.6,5.6,6.6],size:[192,96]})},
+ flags:{joint:(x,y,c)=>M.tone('roc',c?1:2),shader:stone('gresm',{base:[4.2,5.3,6.2],cuts:[.25,.88],crack:.18,size:[128,64]})},
+ bricks:{joint:(x,y,c)=>M.tone('gresm',c?1:2),shader:stone('briquem',{base:[3.6,4.6,5.6],cuts:[.3,.92],grain:1.2,size:[160,80]})},
+ fan:{joint:(x,y,c)=>M.tone(M.hash(x,y,4)<.25?'mousse':'humus',c?0:1),shader:stone('roc',{base:[4.4,5.4,6.4],size:[192,96]})}
 };
-/* style : {joint:[clair, sombre], kinds:[[seuil, [arête, cœur, ombre]], …] ou
- * (pierre) -> kinds, cracks}. Par défaut le style de Teremor du motif. */
-function paving(kind,{axis='u',seed=91,pattern:name=kind,style=STYLE[kind]}={}){
- const [W,H]=SIZE[name],pattern=PATTERNS[name],R=rng(seed),g=new Grid(W,H,{wrap:true,fill:style.joint[0],height:.15});
- const at=(x,y)=>{x=(x%W+W)%W;y=(y%H+H)%H;const U=y+.5+(x+.5)/2,V=y+.5-(x+.5)/2;return axis==='v'?pattern(V,U):pattern(U,V);};
- const cell=[];for(let y=0;y<H;y++)for(let x=0;x<W;x++)cell.push(at(x,y));
- const key=(x,y)=>cell[((y%H+H)%H)*W+((x%W+W)%W)].key;
- for(let y=0;y<H;y++)for(let x=0;x<W;x++){
-  const s=cell[y*W+x],k=s.key,jr=key(x+1,y)!==k,jd=key(x,y+1)!==k,jl=key(x-1,y)!==k,ju=key(x,y-1)!==k;
-  if(jr||jd){g.set(x,y,jd&&jr?style.joint[1]:style.joint[0],.15);continue;}
-  const r=hashOf(k,seed),kinds=typeof style.kinds==='function'?style.kinds(s):style.kinds,tones=kinds.find(([p])=>r<p)[1];
-  let c=ju||jl?tones[0]:key(x,y+2)!==k||key(x+2,y)!==k?tones[2]:tones[1];
-  // Usure : quelques pixels plus sombres au cœur des grandes dalles, fêlures rares.
-  if(style.cracks&&c===tones[1]){const w=hashOf(k+'#',seed);if(w<.18&&Math.abs(s.along-s.size[0]*.5+(s.across-s.size[1]*.5)*.8)<.45)c=tones[2];else if(R()<.025)c=tones[2];}
-  g.set(x,y,c,ju||jl?.95:.9);
- }
- return g;
+/* style : {joint, shader} (voir plus haut). Par défaut le style de Teremor du motif. */
+function paving(kind,{axis='u',pattern:name=kind,style=STYLE[kind]}={}){
+ const [W,H]=SIZE[name];return M.pave(W,H,PATTERNS[name],{axis,...style});
 }
-module.exports={paving,PATTERNS,SIZE,STYLE};
+module.exports={paving,PATTERNS,SIZE,STYLE,stone};

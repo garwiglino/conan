@@ -1,0 +1,126 @@
+GIMP Palette
+Name: Varan
+Columns: 8
+#
+ 45  56  48	mousse0
+ 67  81  58	mousse1
+101 112  70	mousse2
+137 145  83	mousse3
+174 183 115	mousse4
+ 46  25  19	rouille0
+ 79  40  24	rouille1
+116  57  29	rouille2
+154  81  38	rouille3
+ 28  21  19	planche0
+ 44  32  27	planche1
+ 62  45  36	planche2
+ 84  60  46	planche3
+108  78  58	planche4
+135 100  74	planche5
+162 126  93	planche6
+ 15  14  19	roc0
+ 25  24  30	roc1
+ 36  34  42	roc2
+ 49  47  54	roc3
+ 63  60  66	roc4
+ 80  75  78	roc5
+ 97  91  91	roc6
+117 110 106	roc7
+138 130 121	roc8
+160 151 139	roc9
+182 173 158	roc10
+ 14  17  14	jonc0
+ 22  26  19	jonc1
+ 31  36  24	jonc2
+ 41  47  29	jonc3
+ 54  59  34	jonc4
+ 67  71  39	jonc5
+ 82  84  45	jonc6
+ 98  98  52	jonc7
+115 112  58	jonc8
+132 128  71	jonc9
+150 144  86	jonc10
+168 160 101	jonc11
+ 13  12  11	vase0
+ 24  22  19	vase1
+ 36  32  28	vase2
+ 49  43  36	vase3
+ 63  54  44	vase4
+ 77  66  52	vase5
+ 93  82  65	vase6
+110  98  78	vase7
+126 113  91	vase8
+140 127 105	vase9
+154 142 118	vase10
+  7  12  11	marais0
+ 11  19  17	marais1
+ 16  26  22	marais2
+ 21  34  28	marais3
+ 27  42  34	marais4
+ 34  51  39	marais5
+ 44  60  45	marais6
+ 55  71  51	marais7
+ 67  81  57	marais8
+ 84  96  70	marais9
+104 113  84	marais10
+124 130  99	marais11
+ 31  44  23	lentille0
+ 50  66  30	lentille1
+ 72  91  37	lentille2
+ 98 118  44	lentille3
+126 142  57	lentille4
+154 166  73	lentille5
+ 13  18  16	saule0
+ 20  27  23	saule1
+ 27  37  30	saule2
+ 36  48  39	saule3
+ 47  61  48	saule4
+ 58  74  58	saule5
+ 72  88  69	saule6
+ 87 102  79	saule7
+105 118  92	saule8
+126 136 107	saule9
+148 154 122	saule10
+ 14  10   9	tourbe0
+ 26  19  15	tourbe1
+ 38  28  22	tourbe2
+ 51  38  29	tourbe3
+ 65  50  37	tourbe4
+ 80  62  47	tourbe5
+ 95  76  58	tourbe6
+111  90  69	tourbe7
+ 47  42  62	iris0
+ 75  60  99	iris1
+111  90 138	iris2
+176 138  44	iris3
+217 182  72	iris4
+232 223 192	iris5
+ 11  17  15	frondaison0
+ 16  25  20	frondaison1
+ 21  33  26	frondaison2
+ 27  43  31	frondaison3
+ 34  54  36	frondaison4
+ 43  65  41	frondaison5
+ 54  77  45	frondaison6
+ 66  89  50	frondaison7
+ 81 103  53	frondaison8
+ 98 117  58	frondaison9
+119 131  69	frondaison10
+141 145  80	frondaison11
+ 17  13  13	ecorcem0
+ 29  22  20	ecorcem1
+ 42  32  27	ecorcem2
+ 58  45  36	ecorcem3
+ 74  58  45	ecorcem4
+ 92  74  57	ecorcem5
+110  90  69	ecorcem6
+129 109  87	ecorcem7
+148 128 106	ecorcem8
+210 203 180	fleurm0
+165 157 134	fleurm1
+195 160  74	fleurm2
+154 122  50	fleurm3
+122  97 137	fleurm4
+ 86  69 106	fleurm5
+154  74  58	fleurm6
+109  50  41	fleurm7

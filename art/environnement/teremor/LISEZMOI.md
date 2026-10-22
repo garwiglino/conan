@@ -19,4 +19,4 @@ Les mêmes éléments, exportés en PNG un par un, sont dans `png/` (catalogue d
 - `falaises/paroi.piskel` : face éclairée et face à l'ombre.
 - `flore/` : arbres, buissons, rochers, fougères, champignons, fleurs ; une variante par cadre, ombre portée sur le calque `ombre`.
 - `decors/` : petits décors posés sur l'herbe.
-- `manifeste.json` : rôle de chaque fichier pour la construction.
+- `manifeste.json` : rôle de chaque fichier pour la construction, rampes de la palette, couleurs d’accent (rebord des falaises, écume, tablier des ponts) et grandes plages du sol.

@@ -49,10 +49,12 @@ function createProjectedWorldArt(atlas,T,config={},env=null){
  }
  // Localités des biomes redessinés : sol nu entre les ruelles, place pavée au centre.
  // Le pavage de la place dépend du biome et de la localité (stable d'une partie à
- // l'autre) ; les campements du désert n'ont pas de place.
+ // l'autre) ; les campements du désert et du marais n'ont pas de place.
  const PLAZAS={
   forest:{town:['flags','fan','bricks','setts'],port:['flags','setts'],relay:['cobble','setts'],ruin:['cobble'],refuge:['cobble'],camp:['cobble'],dock:['cobble']},
-  desert:{town:['cabochon','hex','flags','cobble'],port:['flags','hex'],relay:['cobble','flags'],ruin:['cobble'],refuge:['cobble'],camp:[],dock:['flags']}
+  desert:{town:['cabochon','hex','flags','cobble'],port:['flags','hex'],relay:['cobble','flags'],ruin:['cobble'],refuge:['cobble'],camp:[],dock:['flags']},
+  // Marais : caillebotis et rondins sur la vase, dalles moussues dans les bourgs.
+  marsh:{town:['flags','boards','logs'],port:['boards','logs'],relay:['logs','cobble'],ruin:['cobble'],refuge:['logs'],camp:[],dock:['boards']}
  };
  const plazaOf=(site,family)=>{const list=(PLAZAS[family]||PLAZAS.forest)[site.kind]||['cobble'];if(!list.length)return null;let h=0;for(const ch of String(site.id))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return list[(h>>>3)%list.length];};
  // Les routes (code 1) deviennent des pièces de chemin, sauf sur la place qu'elles traversent.

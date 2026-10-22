@@ -6,8 +6,11 @@ Ce dossier rassemble les tuiles redessinées des biomes, prêtes à alimenter le
 |---|---|---|---|
 | Forêt tempérée de Teremor | `teremor/` | biome 6 (forêt) | famille `teremor` : T01–T04, H01–H04, TER-C01–C03, remparts TER-H01–H08 |
 | Désert de Sarak | `sarak/` | biomes 1 et 2 (désert), zone de départ (Campement des Exilés) | famille `sarak` : T13–T16, H13–H16, SAR-C01–C03, remparts SAR-H01–H08 |
+| Marais de Varan | `varan/` | biome 12 (marais) | famille `teremor` en attendant une famille du marais |
 
-Les bâtiments communs (B01 grange, B05 halle de marché, B07 auberge-relais…) vont dans les deux biomes. Les tailles et les portes de chaque bâtiment sont dans le catalogue d'architecture (`sprites/architecture/architecture-isometric.js`, `entry(id)`).
+Les bâtiments communs (B01 grange, B05 halle de marché, B07 auberge-relais…) vont dans tous les biomes.
+
+Les trois biomes ont le même rendu que la forteresse gobeline : matière grenée et tramée (Bayer 4 × 4), mottes et pierres éclairées en haut à gauche, ombre propre en bas à droite, contour sombre sélectif sur la flore, rampes de couleurs longues et désaturées. Chaque biome a sa propre palette (liste `rampes` du manifeste, 255 couleurs au plus). Les tailles et les portes de chaque bâtiment sont dans le catalogue d'architecture (`sprites/architecture/architecture-isometric.js`, `entry(id)`).
 
 Les intérieurs sont des salles fermées entourées de noir. Le premier est la **forteresse gobeline** (`interieurs/forteresse-gobeline/`), un donjon de pierre sombre ; voir la section « Intérieurs ». Le jeu n'a pas encore de rendu d'intérieur : le kit est prêt à brancher.
 
@@ -66,6 +69,9 @@ Les intérieurs sont des salles fermées entourées de noir. Le premier est la *
 | Sarak | `chemin` | chemin | piste | pistes, ruelles de terre |
 | Sarak | `pave`, `rangs`, `dalles`, `tomettes`, `cabochons` | pavé | grès, rangs, pisé, tomettes, cabochons | routes et rues de ville |
 | Sarak | `oued` | ruisseau | eau d'oasis | oueds, canaux |
+| Varan | `chemin` | chemin | vase | sentiers, ruelles de terre |
+| Varan | `pave`, `rangs`, `rondins`, `dalles` | pavé | galets, caillebotis, rondins, dalles moussues | routes et rues de village |
+| Varan | `ruisseau` | ruisseau | eau du marais | chenaux, mares |
 
 - Les PNG de `chemins/<jeu>/` sont des aperçus posés sur le sol de base. Dans le jeu, la matière se lit en coordonnées écran (point 2), sinon on verrait un joint entre deux pièces. Le compositeur `sprites/environnement/environment-iso.js` le fait à partir des formes.
 
@@ -75,13 +81,14 @@ Les intérieurs sont des salles fermées entourées de noir. Le premier est la *
 - Rues : les ruelles des centres régionaux sont pavées en **rangs**, les autres en **chemin** de terre.
 - Places : un disque centré sur la localité, d'un rayon de 7 m pour un bourg, 5 m pour un port et 3,5 m pour les autres. Les rues **s'arrêtent au bord de la place** et ne la traversent pas.
 
-| Localité | Teremor | Sarak |
-|---|---|---|
-| bourg | dallage, éventail, briques ou rangs | cabochons, tomettes, dalles de pisé ou pavés de grès |
-| port | dallage ou rangs | dalles de pisé ou tomettes |
-| relais | pavés ou rangs | pavés de grès ou dalles de pisé |
-| ruine, refuge | pavés | pavés de grès |
-| campement | pavés | aucune place |
+| Localité | Teremor | Sarak | Varan |
+|---|---|---|---|
+| bourg | dallage, éventail, briques ou rangs | cabochons, tomettes, dalles de pisé ou pavés de grès | dalles moussues, caillebotis ou rondins |
+| port | dallage ou rangs | dalles de pisé ou tomettes | caillebotis ou rondins |
+| relais | pavés ou rangs | pavés de grès ou dalles de pisé | rondins ou galets |
+| ruine | pavés | pavés de grès | galets |
+| refuge | pavés | pavés de grès | rondins |
+| campement | pavés | aucune place | aucune place |
 
 Le choix dans chaque liste est fixe pour une localité donnée : il dépend de son identifiant.
 
@@ -95,7 +102,7 @@ Le choix dans chaque liste est fixe pour une localité donnée : il dépend de s
 ## 6. Flore et décors
 
 - Chaque sprite de `flore/` a une **ancre** (catalogue) : c'est son pied. On place l'ancre au centre de sa case (u = 16 i + 8, v = 16 j + 9).
-- On dessine d'abord `-ombre.png`, à l'opacité du catalogue (0,45 en forêt, 0,5 au désert), puis le sprite trié avec les bâtiments et les personnages.
+- On dessine d'abord `-ombre.png`, à l'opacité du catalogue (0,45 en forêt, 0,5 au désert et au marais), puis le sprite trié avec les bâtiments et les personnages.
 - Densités des planches, à prendre comme repère (dans le jeu, les objets du monde gardent leurs emplacements actuels) :
   - grands éléments (arbres, rochers, arbres morts) sur environ 3 à 8 % des cases libres ;
   - au désert, les palmiers seulement à 2 m au plus de l'eau, sur environ 30 % de ces cases ;
@@ -158,7 +165,7 @@ Un intérieur est un espace fermé entouré de noir, comme dans les jeux de ce g
 
 ## 9. Brancher dans le jeu
 
-1. Mettre les biomes voulus dans `jeu.json`, par exemple `{"biomes_actifs": ["teremor", "sarak"]}`.
+1. Mettre les biomes voulus dans `jeu.json`, par exemple `{"biomes_actifs": ["teremor", "sarak", "varan"]}`.
 2. Lancer `npm run build:environment`, puis `python3 scripts/package-ios.py`. Cela réintègre le jeu web et iOS et refait `Hearthreaver-iOS.zip`.
 
 Le jeu dessine alors les régions du biome avec le compositeur (`sprites/environnement/environment-iso.js`) et les données `sprites/environnement/<biome>-data.js`. Les autres biomes ne changent pas, et les murs de la zone de départ gardent leur dessin. Pour revenir aux tuiles actuelles, on vide la liste et on relance la seconde commande.

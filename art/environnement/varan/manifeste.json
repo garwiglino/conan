@@ -1,0 +1,350 @@
+{
+ "biome": "Marais de Varan",
+ "global": "HearthreaverVaran",
+ "palette": "palette-varan.gpl",
+ "echelle": "1 px par unité ; une case de 1 m = losange 32 × 16 ; pièces de chemin sur 2 m",
+ "niveaux": {
+  "chemin": [
+   "jonc4",
+   "vase3",
+   "vase4",
+   "vase5"
+  ],
+  "pave": [
+   "jonc4",
+   "roc2",
+   "roc3",
+   "roc4"
+  ],
+  "ruisseau": [
+   "jonc4",
+   "marais2",
+   "marais3",
+   "marais4"
+  ]
+ },
+ "fichiers": [
+  {
+   "fichier": "sols/jonchaie.piskel",
+   "role": "texture",
+   "id": "grass"
+  },
+  {
+   "fichier": "sols/vase.piskel",
+   "role": "texture",
+   "id": "dirt"
+  },
+  {
+   "fichier": "sols/galets.piskel",
+   "role": "texture",
+   "id": "cobble"
+  },
+  {
+   "fichier": "sols/eau.piskel",
+   "role": "texture",
+   "id": "water"
+  },
+  {
+   "fichier": "sols/tourbe.piskel",
+   "role": "texture",
+   "id": "litter"
+  },
+  {
+   "fichier": "sols/berge.piskel",
+   "role": "texture",
+   "id": "bank"
+  },
+  {
+   "fichier": "sols/planches.piskel",
+   "role": "texture",
+   "id": "plank"
+  },
+  {
+   "fichier": "pavages/caillebotis.piskel",
+   "role": "texture",
+   "cadres": [
+    "boards",
+    "boards_v"
+   ]
+  },
+  {
+   "fichier": "pavages/rondins.piskel",
+   "role": "texture",
+   "cadres": [
+    "logs",
+    "logs_v"
+   ]
+  },
+  {
+   "fichier": "pavages/dalles.piskel",
+   "role": "texture",
+   "cadres": [
+    "flags",
+    "flags_v"
+   ]
+  },
+  {
+   "fichier": "falaises/paroi.piskel",
+   "role": "falaise",
+   "cadres": [
+    "cliffS",
+    "cliffE"
+   ]
+  },
+  {
+   "fichier": "chemins/chemin.piskel",
+   "role": "pieces",
+   "jeu": "chemin",
+   "cadres": [
+    "droite-NS",
+    "droite-EO",
+    "virage-NE",
+    "virage-ES",
+    "virage-SO",
+    "virage-ON",
+    "T-sans-O",
+    "T-sans-S",
+    "T-sans-E",
+    "T-sans-N",
+    "croisement",
+    "impasse-N",
+    "impasse-E",
+    "impasse-S",
+    "impasse-O",
+    "placette"
+   ]
+  },
+  {
+   "fichier": "chemins/pave.piskel",
+   "role": "pieces",
+   "jeu": "pave",
+   "cadres": [
+    "droite-NS",
+    "droite-EO",
+    "virage-NE",
+    "virage-ES",
+    "virage-SO",
+    "virage-ON",
+    "T-sans-O",
+    "T-sans-S",
+    "T-sans-E",
+    "T-sans-N",
+    "croisement",
+    "impasse-N",
+    "impasse-E",
+    "impasse-S",
+    "impasse-O",
+    "placette"
+   ]
+  },
+  {
+   "fichier": "chemins/ruisseau.piskel",
+   "role": "pieces",
+   "jeu": "ruisseau",
+   "cadres": [
+    "droite-NS",
+    "droite-EO",
+    "virage-NE",
+    "virage-ES",
+    "virage-SO",
+    "virage-ON",
+    "T-sans-O",
+    "T-sans-S",
+    "T-sans-E",
+    "T-sans-N",
+    "croisement",
+    "impasse-N",
+    "impasse-E",
+    "impasse-S",
+    "impasse-O",
+    "placette"
+   ]
+  },
+  {
+   "fichier": "decors/decors-sol.piskel",
+   "role": "decors",
+   "ancre": [
+    4,
+    4
+   ],
+   "taux": 0.07
+  },
+  {
+   "fichier": "flore/cypres.piskel",
+   "role": "flore",
+   "id": "cypres",
+   "ancre": [
+    40,
+    117
+   ],
+   "cadres": [
+    "cypres_a",
+    "cypres_b"
+   ]
+  },
+  {
+   "fichier": "flore/saule.piskel",
+   "role": "flore",
+   "id": "saule",
+   "ancre": [
+    45,
+    83
+   ],
+   "cadres": [
+    "saule_a",
+    "saule_b"
+   ]
+  },
+  {
+   "fichier": "flore/chicot.piskel",
+   "role": "flore",
+   "id": "chicot",
+   "ancre": [
+    28,
+    79
+   ],
+   "cadres": [
+    "chicot"
+   ]
+  },
+  {
+   "fichier": "flore/souche.piskel",
+   "role": "flore",
+   "id": "souche",
+   "ancre": [
+    15,
+    21
+   ],
+   "cadres": [
+    "souche"
+   ]
+  },
+  {
+   "fichier": "flore/roseaux.piskel",
+   "role": "flore",
+   "id": "roseaux",
+   "ancre": [
+    17,
+    34
+   ],
+   "cadres": [
+    "roseaux_a",
+    "roseaux_b"
+   ]
+  },
+  {
+   "fichier": "flore/massettes.piskel",
+   "role": "flore",
+   "id": "massettes",
+   "ancre": [
+    15,
+    36
+   ],
+   "cadres": [
+    "massettes"
+   ]
+  },
+  {
+   "fichier": "flore/fougere.piskel",
+   "role": "flore",
+   "id": "fougere",
+   "ancre": [
+    19,
+    22
+   ],
+   "cadres": [
+    "fougere"
+   ]
+  },
+  {
+   "fichier": "flore/champignons.piskel",
+   "role": "flore",
+   "id": "champignons",
+   "ancre": [
+    10,
+    13
+   ],
+   "cadres": [
+    "champignons"
+   ]
+  },
+  {
+   "fichier": "flore/rocher.piskel",
+   "role": "flore",
+   "id": "rocher",
+   "ancre": [
+    18,
+    23
+   ],
+   "cadres": [
+    "rocher_a",
+    "rocher_b"
+   ]
+  }
+ ],
+ "rampes": [
+  "roc",
+  "jonc",
+  "vase",
+  "marais",
+  "lentille",
+  "saule",
+  "tourbe",
+  "iris",
+  "mousse",
+  "planche",
+  "rouille",
+  "ecorcem",
+  "frondaison",
+  "fleurm"
+ ],
+ "accents": {
+  "lipLit": "jonc7",
+  "lipShade": "jonc5",
+  "drape": "jonc3",
+  "drape2": "jonc2",
+  "bankFace": "vase4",
+  "bankFace2": "vase3",
+  "waterDeep": "marais1",
+  "foam": "marais9",
+  "plank": "planche4",
+  "deckShade": "planche2",
+  "deckShade2": "planche1",
+  "deckLip": "planche5"
+ },
+ "macro": {
+  "scale": [
+   180,
+   64
+  ],
+  "hi": 0.42,
+  "lo": -0.5,
+  "dither": 0.8
+ },
+ "jeux": {
+  "chemin": {
+   "forme": "chemin",
+   "matiere": "dirt"
+  },
+  "pave": {
+   "forme": "pave",
+   "matiere": "cobble"
+  },
+  "rangs": {
+   "forme": "pave",
+   "matiere": "boards"
+  },
+  "rondins": {
+   "forme": "pave",
+   "matiere": "logs"
+  },
+  "dalles": {
+   "forme": "pave",
+   "matiere": "flags"
+  },
+  "ruisseau": {
+   "forme": "ruisseau",
+   "matiere": "water"
+  }
+ }
+}

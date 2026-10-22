@@ -4,7 +4,7 @@
 'use strict';
 const P=WorldProjection,T=HearthreaverIsometricTerrain;
 // Biomes redessinés (sources Piskel) : sol, chemins, places et flore, par famille de terrain.
-const ENV_DATA=Object.entries({forest:typeof HearthreaverTeremor==='object'?HearthreaverTeremor:null,desert:typeof HearthreaverSarak==='object'?HearthreaverSarak:null}).filter(([,d])=>d);
+const ENV_DATA=Object.entries({forest:typeof HearthreaverTeremor==='object'?HearthreaverTeremor:null,desert:typeof HearthreaverSarak==='object'?HearthreaverSarak:null,marsh:typeof HearthreaverVaran==='object'?HearthreaverVaran:null}).filter(([,d])=>d);
 const ENV=typeof createEnvironmentArt==='function'&&ENV_DATA.length?Object.fromEntries(ENV_DATA.map(([k,d])=>[k,createEnvironmentArt(d)])):null;
 const update=Game.prototype.update,direction=Game.prototype.direction;
 Game.prototype.update=function(dt,controls={}){const aim=P.input(controls.x||0,controls.y||0);return update.call(this,dt,{...controls,...aim});};
@@ -50,7 +50,8 @@ Renderer.prototype.drawAtlasGround=function(){
 // Le désert couvre aussi la zone de départ (décors de la carte locale).
 const FLORA_PROPS={
  forest:{world_oak_0:['chene_a','chene_b','bouleau_a'],world_oak_1:['chene_b','chene_c','buisson_a'],world_oak_2:['chene_c','chene_a','bouleau_b'],world_boulder_2:['rocher_a','rocher_b'],world_fern:['fougere','buisson_b'],world_mushrooms:['champignons'],world_flowers:['fleurs']},
- desert:{rock_a:['rocher_a'],world_boulder_0:['rocher_a','rocher_rond'],rock_b:['rocher_b'],rock_c:['cheminee'],rock_d:['rocher_rond'],rock_e:['eboulis'],deadtree:['arbre_mort_a','arbre_mort_b'],shrub:['buisson_a','buisson_b'],palm:['palmier_a','palmier_b'],scrub:['touffe_a','touffe_b'],pebbles:['cailloux']}
+ desert:{rock_a:['rocher_a'],world_boulder_0:['rocher_a','rocher_rond'],rock_b:['rocher_b'],rock_c:['cheminee'],rock_d:['rocher_rond'],rock_e:['eboulis'],deadtree:['arbre_mort_a','arbre_mort_b'],shrub:['buisson_a','buisson_b'],palm:['palmier_a','palmier_b'],scrub:['touffe_a','touffe_b'],pebbles:['cailloux']},
+ marsh:{world_cypress:['cypres_a','cypres_b','saule_a','cypres_a','saule_b','chicot'],world_boulder_2:['rocher_a','rocher_b','souche'],world_reeds:['roseaux_a','roseaux_b','massettes'],world_fern:['fougere'],world_mushrooms:['champignons','souche']}
 };
 let floraSprites=null;
 function floraSprite(family,name){
@@ -59,9 +60,9 @@ function floraSprite(family,name){
  return floraSprites.get(family+'/'+name);
 }
 function floraOf(o){
- if(!ENV||!(FLORA_PROPS.forest[o.kind]||FLORA_PROPS.desert[o.kind]))return null;const L=o._logical||o;
+ if(!ENV||!Object.values(FLORA_PROPS).some(f=>f[o.kind]))return null;const L=o._logical||o;
  if(L._flora===undefined){let family=null;
-  if(o.world){const w=Atlas.toWorld(L.x,L.y),cell=Atlas.cellAt(w.x,w.y);if(cell&&!Atlas.curseCells.has(cell.id))family=cell.biome===6?'forest':[1,2].includes(cell.biome)?'desert':null;}
+  if(o.world){const w=Atlas.toWorld(L.x,L.y),cell=Atlas.cellAt(w.x,w.y);if(cell&&!Atlas.curseCells.has(cell.id))family=cell.biome===6?'forest':[1,2].includes(cell.biome)?'desert':cell.biome===12?'marsh':null;}
   else if(atlasCore(L.x/16,L.y/16))family='desert';
   const kinds=family&&ENV[family]&&FLORA_PROPS[family][o.kind],r=Math.abs(Math.sin(L.x*12.9898+L.y*78.233)*43758.5453)%1;
   L._flora=kinds?[family,kinds[Math.floor(r*kinds.length)]]:null;}

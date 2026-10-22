@@ -5,22 +5,22 @@
  "echelle": "1 px par unité ; une case de 1 m = losange 32 × 16 ; pièces de chemin sur 2 m",
  "niveaux": {
   "chemin": [
-   "sable5",
-   "piste3",
-   "piste4",
-   "piste5"
+   "dune8",
+   "battue3",
+   "battue4",
+   "battue5"
   ],
   "pave": [
-   "sable5",
-   "gres1",
-   "gres2",
-   "gres3"
+   "dune8",
+   "gresm2",
+   "gresm3",
+   "gresm4"
   ],
   "ruisseau": [
-   "sable5",
-   "oasis2",
-   "oasis3",
-   "oasis4"
+   "dune8",
+   "bleu2",
+   "bleu3",
+   "bleu4"
   ]
  },
  "fichiers": [
@@ -182,8 +182,8 @@
    "role": "flore",
    "id": "palmier",
    "ancre": [
-    28,
-    73
+    30,
+    75
    ],
    "cadres": [
     "palmier_a",
@@ -195,8 +195,8 @@
    "role": "flore",
    "id": "arbre_mort",
    "ancre": [
-    22,
-    46
+    23,
+    48
    ],
    "cadres": [
     "arbre_mort_a",
@@ -221,8 +221,8 @@
    "role": "flore",
    "id": "touffe",
    "ancre": [
-    11,
-    13
+    12,
+    14
    ],
    "cadres": [
     "touffe_a",
@@ -272,27 +272,41 @@
    "role": "flore",
    "id": "cailloux",
    "ancre": [
-    8,
-    7
+    9,
+    8
    ],
    "cadres": [
     "cailloux"
    ]
   }
  ],
+ "rampes": [
+  "roc",
+  "dune",
+  "gresrouge",
+  "battue",
+  "palmier",
+  "bleu",
+  "ecorcem",
+  "gresm",
+  "briquem",
+  "saule",
+  "jonc",
+  "fleurm"
+ ],
  "accents": {
-  "lipLit": "sable7",
-  "lipShade": "sable6",
-  "drape": "sable4",
-  "drape2": "sable3",
-  "bankFace": "sable4",
-  "bankFace2": "sable3",
-  "waterDeep": "oasis1",
-  "foam": "oasis7",
-  "plank": "bois3",
-  "deckShade": "bois2",
-  "deckShade2": "bois1",
-  "deckLip": "bois5"
+  "lipLit": "dune11",
+  "lipShade": "dune9",
+  "drape": "dune6",
+  "drape2": "dune5",
+  "bankFace": "dune6",
+  "bankFace2": "dune4",
+  "waterDeep": "bleu1",
+  "foam": "bleu10",
+  "plank": "gresm4",
+  "deckShade": "gresm2",
+  "deckShade2": "gresm1",
+  "deckLip": "gresm6"
  },
  "macro": {
   "scale": [

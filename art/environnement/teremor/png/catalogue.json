@@ -1060,6 +1060,48 @@
    "usage": "peint à plat sur le sol, environ 8 % des cases de sol nu"
   },
   {
+   "png": "decors/decor-08.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    3,
+    3
+   ],
+   "ancre": [
+    1,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 8 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-09.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    4,
+    2
+   ],
+   "ancre": [
+    1,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 8 % des cases de sol nu"
+  },
+  {
+   "png": "decors/decor-10.png",
+   "source": "decors/decors-sol.piskel",
+   "role": "décor au sol",
+   "taille": [
+    5,
+    3
+   ],
+   "ancre": [
+    2,
+    1
+   ],
+   "usage": "peint à plat sur le sol, environ 8 % des cases de sol nu"
+  },
+  {
    "png": "flore/chene_a.png",
    "source": "flore/chene.piskel",
    "role": "flore",
@@ -1068,8 +1110,8 @@
     84
    ],
    "ancre": [
-    32,
-    79
+    31,
+    78
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1082,8 +1124,8 @@
     84
    ],
    "ancre": [
-    32,
-    79
+    31,
+    78
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1093,12 +1135,12 @@
    "source": "flore/chene.piskel",
    "role": "flore",
    "taille": [
-    64,
-    82
+    67,
+    84
    ],
    "ancre": [
-    31,
-    77
+    33,
+    78
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1107,12 +1149,12 @@
    "source": "flore/chene.piskel",
    "role": "ombre",
    "taille": [
-    64,
-    82
+    67,
+    84
    ],
    "ancre": [
-    31,
-    77
+    33,
+    78
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1122,12 +1164,12 @@
    "source": "flore/chene.piskel",
    "role": "flore",
    "taille": [
-    61,
-    82
+    59,
+    81
    ],
    "ancre": [
-    30,
-    77
+    28,
+    75
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1136,12 +1178,12 @@
    "source": "flore/chene.piskel",
    "role": "ombre",
    "taille": [
-    61,
-    82
+    59,
+    81
    ],
    "ancre": [
-    30,
-    77
+    28,
+    75
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1151,12 +1193,12 @@
    "source": "flore/bouleau.piskel",
    "role": "flore",
    "taille": [
-    45,
-    90
+    46,
+    92
    ],
    "ancre": [
     22,
-    85
+    87
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1165,12 +1207,12 @@
    "source": "flore/bouleau.piskel",
    "role": "ombre",
    "taille": [
-    45,
-    90
+    46,
+    92
    ],
    "ancre": [
     22,
-    85
+    87
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1180,12 +1222,12 @@
    "source": "flore/bouleau.piskel",
    "role": "flore",
    "taille": [
-    42,
-    88
+    45,
+    83
    ],
    "ancre": [
     21,
-    83
+    78
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1194,12 +1236,12 @@
    "source": "flore/bouleau.piskel",
    "role": "ombre",
    "taille": [
-    42,
-    88
+    45,
+    83
    ],
    "ancre": [
     21,
-    83
+    78
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1209,12 +1251,12 @@
    "source": "flore/buisson.piskel",
    "role": "flore",
    "taille": [
-    30,
-    21
+    34,
+    23
    ],
    "ancre": [
-    13,
-    17
+    17,
+    19
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1223,12 +1265,12 @@
    "source": "flore/buisson.piskel",
    "role": "ombre",
    "taille": [
-    30,
-    21
+    34,
+    23
    ],
    "ancre": [
-    13,
-    17
+    17,
+    19
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1238,12 +1280,12 @@
    "source": "flore/buisson.piskel",
    "role": "flore",
    "taille": [
-    30,
-    22
+    32,
+    23
    ],
    "ancre": [
-    13,
-    18
+    15,
+    19
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1252,12 +1294,12 @@
    "source": "flore/buisson.piskel",
    "role": "ombre",
    "taille": [
-    30,
-    22
+    32,
+    23
    ],
    "ancre": [
-    13,
-    18
+    15,
+    19
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1267,12 +1309,12 @@
    "source": "flore/rocher.piskel",
    "role": "flore",
    "taille": [
-    29,
-    23
+    33,
+    25
    ],
    "ancre": [
-    12,
-    18
+    16,
+    20
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1281,12 +1323,12 @@
    "source": "flore/rocher.piskel",
    "role": "ombre",
    "taille": [
-    29,
-    23
+    33,
+    25
    ],
    "ancre": [
-    12,
-    18
+    16,
+    20
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1296,11 +1338,11 @@
    "source": "flore/rocher.piskel",
    "role": "flore",
    "taille": [
-    25,
+    28,
     22
    ],
    "ancre": [
-    11,
+    14,
     17
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
@@ -1310,11 +1352,11 @@
    "source": "flore/rocher.piskel",
    "role": "ombre",
    "taille": [
-    25,
+    28,
     22
    ],
    "ancre": [
-    11,
+    14,
     17
    ],
    "opacite": 0.45,
@@ -1325,12 +1367,12 @@
    "source": "flore/fougere.piskel",
    "role": "flore",
    "taille": [
-    32,
-    14
+    44,
+    20
    ],
    "ancre": [
-    15,
-    11
+    21,
+    15
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1339,12 +1381,12 @@
    "source": "flore/fougere.piskel",
    "role": "ombre",
    "taille": [
-    32,
-    14
+    44,
+    20
    ],
    "ancre": [
-    15,
-    11
+    21,
+    15
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1354,12 +1396,12 @@
    "source": "flore/champignons.piskel",
    "role": "flore",
    "taille": [
-    13,
-    9
+    19,
+    13
    ],
    "ancre": [
-    5,
-    7
+    9,
+    10
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1368,12 +1410,12 @@
    "source": "flore/champignons.piskel",
    "role": "ombre",
    "taille": [
-    13,
-    9
+    19,
+    13
    ],
    "ancre": [
-    5,
-    7
+    9,
+    10
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"
@@ -1383,12 +1425,12 @@
    "source": "flore/fleurs.piskel",
    "role": "flore",
    "taille": [
-    15,
-    10
+    24,
+    17
    ],
    "ancre": [
-    7,
-    8
+    11,
+    13
    ],
    "usage": "pied (ancre) posé au centre de sa case, trié par profondeur"
   },
@@ -1397,12 +1439,12 @@
    "source": "flore/fleurs.piskel",
    "role": "ombre",
    "taille": [
-    15,
-    10
+    24,
+    17
    ],
    "ancre": [
-    7,
-    8
+    11,
+    13
    ],
    "opacite": 0.45,
    "usage": "dessinée avant le sprite, à l’opacité indiquée"

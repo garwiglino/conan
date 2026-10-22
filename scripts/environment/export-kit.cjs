@@ -117,7 +117,12 @@ const KITS={
   gros:['chene_a','chene_b','chene_c','bouleau_a','bouleau_b','buisson_a','rocher_a'],petits:['fougere','fleurs','champignons','buisson_b'],eau:false},
  sarak:{rue:'rangs',ruelle:'chemin',place:'cabochon',placeNom:'carreaux à cabochons',
   maisons:[['H13','face',1],['T14','face',6],['SAR-C01','dos',1],['T16','dos',6],['H14','face',12,'place'],['T13','dos',13,'place'],['T15','face',22],['H16','dos',21]],
-  gros:['rocher_a','rocher_b','rocher_rond','arbre_mort_a','arbre_mort_b','buisson_a','buisson_b'],petits:['touffe_a','touffe_b','cailloux','buisson_b'],eau:true}
+  gros:['rocher_a','rocher_b','rocher_rond','arbre_mort_a','arbre_mort_b','buisson_a','buisson_b'],petits:['touffe_a','touffe_b','cailloux','buisson_b'],eau:true,
+  rive:['palmier_a','palmier_b','palmier_a','buisson_a'],riveNom:'palmiers'},
+ varan:{rue:'rangs',ruelle:'chemin',place:'flags',placeNom:'dalles moussues',rueNom:'rue en caillebotis',
+  maisons:[['T01','face',1],['H02','face',6],['H01','dos',1],['T03','dos',7],['H03','face',12,'place'],['T04','dos',13,'place'],['H02','face',22],['T02','dos',21]],
+  gros:['cypres_a','cypres_b','saule_a','chicot','rocher_a','souche'],petits:['roseaux_a','roseaux_b','massettes','fougere','champignons'],eau:true,
+  rive:['roseaux_a','massettes','roseaux_b','saule_a','roseaux_a','massettes','roseaux_b','saule_b'],riveNom:'roseaux et saules'}
 };
 const row=(cj,a,b)=>Array.from({length:b-a+1},(_,k)=>[a+k,cj]),col=(ci,a,b)=>Array.from({length:b-a+1},(_,k)=>[ci,a+k]);
 function footprintOf(id,dir){const e=Arch.entry(id),turned=dir==='droite'||dir==='gauche';return {w:(turned?e.depth:e.width)/16,d:(turned?e.width:e.depth)/16,e};}
@@ -145,7 +150,7 @@ async function dispositionPlate(biome,scratch){
  const M=district(biome),N=M.N,K=M.K,data=require(path.join(SPRITES,biome+'-data.js'));
  const tmp=path.join(scratch,'.disposition-'+biome+'.png');
  const nearWater=(i,j)=>{for(let b=-2;b<=2;b++)for(let a=-2;a<=2;a++)if(M.code[(j+b)*N+i+a]===3)return true;return false;};
- compose(M,tmp,{data,big:(i,j)=>K.eau&&nearWater(i,j)?['palmier_a','palmier_b','palmier_a','buisson_a']:K.gros,small:K.petits,heroes:[[16*16,16*16]]});
+ compose(M,tmp,{data,big:(i,j)=>K.eau&&nearWater(i,j)?K.rive:K.gros,small:K.petits,heroes:[[16*16,16*16]]});
  const rendu=await loadImage(tmp);fs.unlinkSync(tmp);
  const w=rendu.width,h=rendu.height,ox=w/2,oy=48,pad=24,head=92,legend=150,W=w*2+pad*3,H=head+h+legend,cv=createCanvas(W,H),c=cv.getContext('2d');
  c.fillStyle='#141b1c';c.fillRect(0,0,W,H);c.imageSmoothingEnabled=false;c.drawImage(rendu,pad,head);
@@ -163,8 +168,8 @@ async function dispositionPlate(biome,scratch){
   const [x,y]=at(r.hi+r.w/2,r.hj+r.d/2),fr=n=>String(n).replace('.',',');text(r.id,x,y-3,{size:14,bold:true});text(fr(r.w)+' × '+fr(r.d)+' m · porte '+(south?'sud':'nord'),x,y+13,{size:12});}
  const [px,py]=at(16,16);text('Place : '+K.placeNom,px,py+6,{size:16,bold:true});
  c.fillStyle='#efe4c6';c.font='bold 26px sans-serif';c.fillText(data.biome+' : disposition type d’un bourg',pad,38);c.font='18px sans-serif';c.fillText('Rendu',pad,head-14);c.fillText('Plan (mêmes cases)',X0,head-14);
- const items=[['#d8cdb3','sol nu (texture de base)'],['#9b6b3e','rue pavée en rangs, case de 2 m (chiffre = masque)'],['#bf9a68','ruelle de terre, case de 2 m'],['#7fa7c4','place : un seul pavage, les rues s’y arrêtent'],['#5b4840','emprise d’une maison (catalogue d’architecture)'],['#e8c66a','marge : une case de sol nu autour de chaque maison'],['#d9572f','dégagement devant la porte (22 unités ≈ 1,4 m)'],['#3f7a35','flore : sur les cases libres, loin des rues et des maisons']];
- if(K.eau)items.push(['#3e8fb0','eau : palmiers à 2 m au plus de la rive']);
+ const items=[['#d8cdb3','sol nu (texture de base)'],['#9b6b3e',(K.rueNom||'rue pavée en rangs')+', case de 2 m (chiffre = masque)'],['#bf9a68','ruelle de terre, case de 2 m'],['#7fa7c4','place : un seul pavage, les rues s’y arrêtent'],['#5b4840','emprise d’une maison (catalogue d’architecture)'],['#e8c66a','marge : une case de sol nu autour de chaque maison'],['#d9572f','dégagement devant la porte (22 unités ≈ 1,4 m)'],['#3f7a35','flore : sur les cases libres, loin des rues et des maisons']];
+ if(K.eau)items.push(['#3e8fb0','eau : '+K.riveNom+' à 2 m au plus de la rive']);
  items.forEach(([col,label],k)=>{const x=pad+(k%3)*(W/3),y=head+h+30+Math.floor(k/3)*36;c.fillStyle=col;c.fillRect(x,y-16,26,20);c.strokeStyle='#000';c.lineWidth=1;c.strokeRect(x,y-16,26,20);c.fillStyle='#efe4c6';c.font='17px sans-serif';c.fillText(label,x+36,y);});
  return cv.toBuffer('image/png');
 }

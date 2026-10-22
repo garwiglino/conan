@@ -1,10 +1,15 @@
 'use strict';
-/* Rassemble les grilles de Teremor au format du compositeur (palette indexée). */
+/* Rassemble les grilles de Teremor au format du compositeur (palette indexée,
+ * réduite aux rampes du biome comme à la construction). */
 const P=require('./palette.cjs'),pieces=require('./teremor-pieces.cjs'),{paving}=require('./teremor-pavings.cjs'),ground=require('./teremor-ground.cjs'),cliffs=require('./teremor-cliffs.cjs'),{decals}=require('./teremor-decals.cjs');
 const b64=a=>Buffer.from(a).toString('base64');
 function pack(g,{height=true}={}){return {w:g.w,h:g.h,px:b64(g.px),ht:height?b64(Uint8Array.from(g.ht,v=>Math.round(Math.max(0,Math.min(1,v))*255))):null};}
 // Couleurs de référence des niveaux de forme (édition Piskel) : herbe, bord, bord, cœur.
-const LEVELS=[['herbe4','terre3','terre4','terre5'],['herbe4','pierre2','pierre3','pierre4'],['herbe4','eau2','eau3','eau4']];
+const LEVELS=[['pre4','humus3','humus4','humus5'],['pre4','roc2','roc3','roc4'],['pre4','riviere2','riviere3','riviere4']];
+// Rampes du rendu mûr (palette du biome) et couleurs posées par le compositeur.
+const RAMPES=['roc','pre','humus','frondaison','ecorcem','riviere','gresm','briquem','fleurm','mousse','bouleau','champi'];
+const ACCENTS={lipLit:'pre7',lipShade:'pre5',drape:'pre3',drape2:'pre2',bankFace:'humus4',bankFace2:'humus3',waterDeep:'riviere1',foam:'riviere10',plank:'ecorcem4',deckShade:'ecorcem2',deckShade2:'ecorcem1',deckLip:'ecorcem6'};
+const MACRO={scale:[180,64],hi:.45,lo:-.5,dither:.8};
 // Pavages de ville (textures dans l'axe des rues) et jeux de pièces qui les posent.
 const PAVINGS={setts:'paves-rangs',flags:'dallage',bricks:'briques',fan:'eventail'};
 const SETS={chemin:{forme:'chemin',matiere:'dirt'},pave:{forme:'pave',matiere:'cobble'},rangs:{forme:'pave',matiere:'setts'},dalles:{forme:'pave',matiere:'flags'},briques:{forme:'pave',matiere:'bricks'},eventail:{forme:'pave',matiere:'fan'},ruisseau:{forme:'ruisseau',matiere:'water'}};
@@ -12,15 +17,17 @@ const PIECE_SETS=()=>({chemin:pieces.set({half:9,colours:LEVELS[0]}),pave:pieces
 function grids(){
  return {
   grass:ground.grass(),dirt:ground.dirt(),cobble:ground.cobbles(),water:ground.water(),litter:ground.litter(),
-  bank:ground.dirt({seed:7,base:5,pebbles:1.2}),plank:ground.planks(),cliffS:cliffs.face({seed:61}),cliffE:cliffs.face({seed:62,lit:false}),
+  bank:ground.dirt({seed:7,base:4,pebbles:1.4}),plank:ground.planks(),cliffS:cliffs.face({seed:61}),cliffE:cliffs.face({seed:62,lit:false}),
   ...Object.fromEntries(Object.keys(PAVINGS).flatMap(k=>[[k,paving(k)],[k+'_v',paving(k,{axis:'v'})]]))
  };
 }
 function assets(G=grids(),D=decals()){
- const textures={};for(const [k,g]of Object.entries(G))textures[k]=pack(g,{height:!k.startsWith('cliff')&&k!=='water'});
- return {palette:P.hexes,names:P.list.map(c=>c.name),toneOf:P.list.map(c=>[c.ramp,c.tone]),ramps:Object.fromEntries(Object.entries(P.RAMPS).map(([k,v])=>[k,v.length])),textures,
-  decals:D.map(g=>({w:g.w,h:g.h,ax:g.anchor[0],ay:g.anchor[1],px:b64(g.px)})),decalRate:.08,
-  pieces:Object.fromEntries(Object.entries(PIECE_SETS()).map(([k,list])=>[k,list.map(g=>({mask:g.mask,w:64,h:32,px:b64(g.px)}))])),
-  levelOf:Object.fromEntries(LEVELS.flatMap(cols=>cols.map((n,i)=>[P.id(n),i/3])).filter(([,v])=>v>0)),sets:SETS};
+ const pal=require('./build-environment.cjs').paletteOf(RAMPES),re=g=>Uint8Array.from(g.px,v=>v&&pal.id(P.list[v-1].name));
+ const pk=(g,o)=>({...pack(g,o),px:b64(re(g))});
+ const textures={};for(const [k,g]of Object.entries(G))textures[k]=pk(g,{height:!k.startsWith('cliff')&&k!=='water'});
+ return {palette:pal.hexes,names:pal.list.map(c=>c.name),toneOf:pal.list.map(c=>[c.ramp,c.tone]),ramps:Object.fromEntries(RAMPES.map(k=>[k,P.RAMPS[k].length])),textures,accents:ACCENTS,macro:MACRO,
+  decals:D.map(g=>({w:g.w,h:g.h,ax:g.anchor[0],ay:g.anchor[1],px:b64(re(g))})),decalRate:.08,
+  pieces:Object.fromEntries(Object.entries(PIECE_SETS()).map(([k,list])=>[k,list.map(g=>({mask:g.mask,w:64,h:32,px:b64(re(g))}))])),
+  levelOf:Object.fromEntries(LEVELS.flatMap(cols=>cols.map((n,i)=>[pal.id(n),i/3])).filter(([,v])=>v>0)),sets:SETS};
 }
-module.exports={grids,assets,pack,PIECE_SETS,LEVELS,PAVINGS,SETS};
+module.exports={grids,assets,pack,PIECE_SETS,LEVELS,PAVINGS,SETS,RAMPES,ACCENTS,MACRO};

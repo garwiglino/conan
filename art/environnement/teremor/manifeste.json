@@ -5,22 +5,22 @@
  "echelle": "1 px par unité ; une case de 1 m = losange 32 × 16 ; pièces de chemin sur 2 m",
  "niveaux": {
   "chemin": [
-   "herbe4",
-   "terre3",
-   "terre4",
-   "terre5"
+   "pre4",
+   "humus3",
+   "humus4",
+   "humus5"
   ],
   "pave": [
-   "herbe4",
-   "pierre2",
-   "pierre3",
-   "pierre4"
+   "pre4",
+   "roc2",
+   "roc3",
+   "roc4"
   ],
   "ruisseau": [
-   "herbe4",
-   "eau2",
-   "eau3",
-   "eau4"
+   "pre4",
+   "riviere2",
+   "riviere3",
+   "riviere4"
   ]
  },
  "fichiers": [
@@ -183,7 +183,7 @@
    "id": "chene",
    "ancre": [
     36,
-    79
+    78
    ],
    "cadres": [
     "chene_a",
@@ -235,8 +235,8 @@
    "role": "flore",
    "id": "fougere",
    "ancre": [
-    17,
-    19
+    24,
+    28
    ],
    "cadres": [
     "fougere"
@@ -247,8 +247,8 @@
    "role": "flore",
    "id": "champignons",
    "ancre": [
-    8,
-    10
+    11,
+    15
    ],
    "cadres": [
     "champignons"
@@ -259,14 +259,51 @@
    "role": "flore",
    "id": "fleurs",
    "ancre": [
-    9,
-    12
+    15,
+    18
    ],
    "cadres": [
     "fleurs"
    ]
   }
  ],
+ "rampes": [
+  "roc",
+  "pre",
+  "humus",
+  "frondaison",
+  "ecorcem",
+  "riviere",
+  "gresm",
+  "briquem",
+  "fleurm",
+  "mousse",
+  "bouleau",
+  "champi"
+ ],
+ "accents": {
+  "lipLit": "pre7",
+  "lipShade": "pre5",
+  "drape": "pre3",
+  "drape2": "pre2",
+  "bankFace": "humus4",
+  "bankFace2": "humus3",
+  "waterDeep": "riviere1",
+  "foam": "riviere10",
+  "plank": "ecorcem4",
+  "deckShade": "ecorcem2",
+  "deckShade2": "ecorcem1",
+  "deckLip": "ecorcem6"
+ },
+ "macro": {
+  "scale": [
+   180,
+   64
+  ],
+  "hi": 0.45,
+  "lo": -0.5,
+  "dither": 0.8
+ },
  "jeux": {
   "chemin": {
    "forme": "chemin",
