@@ -10,11 +10,22 @@ function walk(g,goal,step=8){const p=g.player,from={x:p.x,y:p.y},todo=[[0,0]],pa
  for(let n=0;n<todo.length;n++){const [i,j]=todo[n];p.x=from.x+i*step;p.y=from.y+j*step;if(goal(p)){end=[i,j];break;}
   for(const [di,dj]of [[1,0],[-1,0],[0,1],[0,-1]]){const x=i+di,y=j+dj,k=x+','+y;if(parents.has(k)||g.solid(from.x+x*step,from.y+y*step,5))continue;parents.set(k,[i,j]);todo.push([x,y]);}}
  Object.assign(p,from);if(!end&&step===8)return walk(g,goal,2);assert.ok(end,'reachable destination on '+g.dungeon.floor+' from '+JSON.stringify(from));const steps=[];for(let q=end;parents.get(q.join(','));q=parents.get(q.join(',')))steps.push(q);for(const [i,j]of steps.reverse()){const x=from.x+i*step,y=from.y+j*step;g.movePlayer(p,x-p.x,y-p.y);assert.ok(Math.hypot(p.x-x,p.y-y)<.1,'walk blocked');}}
-function use(g,kind,id){walk(g,()=>{const c=g.context();return c?.kind===kind&&(!id||c.id===id||c.door?.id===id||c.link?.vers===id);});g.interact();}
-function push(g,b,x,y){for(const [tx,ty]of [[b.x,y],[x,y]]){const dx=Math.abs(tx-b.x)>1?Math.sign(tx-b.x):0,dy=Math.abs(ty-b.y)>1?Math.sign(ty-b.y):0;if(!dx&&!dy)continue;const target={x:b.x-dx*17,y:b.y-dy*17};walk(g,p=>Math.hypot(p.x-target.x,p.y-target.y)<6); // align on the centre before pushing
- if(dx)g.movePlayer(g.player,0,b.y-g.player.y);else g.movePlayer(g.player,b.x-g.player.x,0);
- for(let n=0;n<600&&Math.hypot(b.x-tx,b.y-ty)>1;n++)g.movePlayer(g.player,dx*1,dy*1);
- assert.ok(Math.hypot(b.x-tx,b.y-ty)<=1,'crate push reached '+[tx,ty]+' got '+[b.x,b.y]);}}
+function use(g,kind,id){if(g.dungeonGrip)g.interact();walk(g,()=>{const c=g.context();return c?.kind===kind&&(!id||c.id===id||c.door?.id===id||c.link?.vers===id);});g.interact();}
+function push(g,b,x,y){
+ if(g.dungeonGrip&&g.dungeonGrip.id!==b.id)g.interact();
+ for(const [tx,ty]of [[b.x,y],[x,y]]){const dx=Math.abs(tx-b.x)>1?Math.sign(tx-b.x):0,dy=Math.abs(ty-b.y)>1?Math.sign(ty-b.y):0;if(!dx&&!dy)continue;
+  if(g.dungeonGrip){const offset={x:g.player.x-b.x,y:g.player.y-b.y},n=Math.ceil(Math.hypot(tx-b.x,ty-b.y));let clear=true;
+   for(let i=1;i<=n;i++){const x=b.x+(tx-b.x)*i/n,y=b.y+(ty-b.y)*i/n;if(a.FirstDungeon.geometry(g,x,y,9,b)||a.FirstDungeon.geometry(g,x+offset.x,y+offset.y,5,b)){clear=false;break;}}
+   if(!clear)g.interact();
+  }
+  if(!g.dungeonGrip){const target={x:b.x-dx*17,y:b.y-dy*17};walk(g,p=>Math.hypot(p.x-target.x,p.y-target.y)<6);
+   if(dx)g.movePlayer(g.player,0,b.y-g.player.y);else g.movePlayer(g.player,b.x-g.player.x,0);
+   g.interact();assert.ok(g.dungeonGrip,'explicit grip required to move a crate');
+  }
+  for(let n=0;n<600&&Math.hypot(b.x-tx,b.y-ty)>1;n++)g.movePlayer(g.player,dx,dy);
+  assert.ok(Math.hypot(b.x-tx,b.y-ty)<=1,'crate drag reached '+[tx,ty]+' got '+[b.x,b.y]);
+ }
+}
 function quiet(g){for(const e of g.enemies)e.dead=true;}
 test('opening is isolated; save/load retains floor, keys, crate positions and health',()=>{
  const g=game();assert.equal(g.zone(),'Lieu inconnu · Les geôles');assert.equal(g.player.x,D.depart.pos[0]*32);assert.equal(g.npcs.length,0);assert.equal(g.story.fairy,false);assert.equal(g.sky().rain,0);assert.equal(g.solid(g.player.x,g.player.y),false);

@@ -13,6 +13,9 @@ html=html.replace(/\/\/ BEGIN FIRST DUNGEON[\s\S]*?\/\/ END FIRST DUNGEON\s*/, '
 html=html.replace('// app.js',()=>code+'\n// app.js');
 if(!html.includes('FirstDungeon.inventoryHTML(g)'))html=html.replace('KaldorWardrobe.inventoryHTML(g)', 'KaldorWardrobe.inventoryHTML(g)+FirstDungeon.inventoryHTML(g)');
 // All app entry points create the official opening; programmatic Game arenas keep their API.
+// Keep the phone action label in step with the explicit crate grip.
+html=html.replace("if(c){if(c.kind==='lift'){","if(c){if(c.kind==='dungeon-crate'){ico='hand';lab=g.dungeonGrip?'LÂCHER':'SAISIR';}else if(c.kind==='lift'){");
+html=html.replace("ok?'Agir : '+lab.toLowerCase():'Interagir'","ok?lab.toLowerCase():'Interagir'");
 const start=html.indexOf('// app.js');html=html.slice(0,start)+html.slice(start).replace(/game=new Game\(\);(?!game.startFirstDungeon\(\);)/g,'game=new Game();game.startFirstDungeon();').replace(/game=new Game\(saved\);(?!if\(!saved\)game.startFirstDungeon\(\);)/g,'game=new Game(saved);if(!saved)game.startFirstDungeon();');
 html=html.replaceAll('Explore les environs avec la fée. Parle à Elyne pour voyager ensemble. Carte : G.','Échappe-toi des geôles. Explore le passage derrière la paillasse.');
 fs.writeFileSync(path.join(root,'index.html'),html);

@@ -75,8 +75,8 @@ const tile=Game.prototype.tile;Game.prototype.tile=function(x,y){if(!this.dungeo
 const movePlayer=Game.prototype.movePlayer;
 Game.prototype.movePlayer=function(p,dx,dy){if(!this.dungeon?.active)return movePlayer.call(this,p,dx,dy);
  if(p===this.player&&this.dungeonGrip){this.moveDungeonCrate(p,dx,dy);return;}
- const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));for(let i=0;i<steps;i++)for(const [x,y]of [[dx/steps,0],[0,dy/steps]]){if(!x&&!y)continue;const nx=p.x+x,ny=p.y+y,b=state(this).crates.find(b=>Math.abs(nx-b.x)<14&&Math.abs(ny-b.y)<14);
-  if(b){const bx=b.x+x,by=b.y+y;if(!geometry(this,bx,by,9,b)&&!this.enemies.some(e=>!e.dead&&near(e,{x:bx,y:by},15))){b.x=bx;b.y=by;}}
+ // An unheld crate is solid; walking, dodging and attack steps cannot push it.
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));for(let i=0;i<steps;i++)for(const [x,y]of [[dx/steps,0],[0,dy/steps]]){if(!x&&!y)continue;const nx=p.x+x,ny=p.y+y;
   if(!this.solid(nx,ny,p.r||5)&&!this.crowd(p,nx,ny)){p.x=nx;p.y=ny;}}
  this.updateDungeonPlates();
 };
@@ -84,12 +84,12 @@ Game.prototype.movePlayer=function(p,dx,dy){if(!this.dungeon?.active)return move
 Game.prototype.moveDungeonCrate=function(p,dx,dy){
  const grip=this.dungeonGrip,b=state(this).crates.find(b=>b.id===grip?.id);
  if(!b||grip.floor!==this.dungeon.floor||Math.hypot(p.x-b.x-grip.dx,p.y-b.y-grip.dy)>2){this.dungeonGrip=null;return;}
- const amount=grip.axis==='x'?dx:dy,n=Math.max(1,Math.ceil(Math.abs(amount)));
- for(let i=0;i<n;i++){
-  const x=grip.axis==='x'?amount/n:0,y=grip.axis==='y'?amount/n:0,nx=p.x+x,ny=p.y+y,bx=b.x+x,by=b.y+y;
-  if(geometry(this,nx,ny,p.r||5,b)||geometry(this,bx,by,9,b)||this.crowd(p,nx,ny)||this.enemies.some(e=>!e.dead&&near(e,{x:bx,y:by},15)))break;
-  p.x=nx;p.y=ny;b.x=bx;b.y=by;
- }
+ const n=Math.max(1,Math.ceil(Math.hypot(dx,dy)));
+ const advance=(x,y)=>{const nx=p.x+x,ny=p.y+y,bx=b.x+x,by=b.y+y;
+  if(geometry(this,nx,ny,p.r||5,b)||geometry(this,bx,by,9,b)||this.crowd(p,nx,ny)||this.enemies.some(e=>!e.dead&&near(e,{x:bx,y:by},15)))return false;
+  p.x=nx;p.y=ny;b.x=bx;b.y=by;return true;
+ };
+ for(let i=0;i<n;i++){const x=dx/n,y=dy/n;if(!advance(x,y)){if(x)advance(x,0);if(y)advance(0,y);}}
  p.dir=this.direction(b.x-p.x,b.y-p.y);this.updateDungeonPlates();
 };
 Game.prototype.updateDungeonPlates=function(){if(!this.dungeon?.active)return;for(const m of current(this).mecanismes||[])if(m.dalles){const s=state(this),down=m.dalles.every(p=>s.crates.some(b=>near(b,at(p),10)));for(const k of m.ouvre){if(down)openEdge(this,k);else if(!near(this.player,edge(k),24)&&!this.enemies.some(e=>!e.dead&&near(e,edge(k),24)))s.open=s.open.filter(v=>v!==k);}}};
@@ -98,7 +98,7 @@ Game.prototype.revealDungeon=function(){const s=state(this),e=current(this),seen
   for(const [a,b,k]of [[i,j-1,i+','+j+',N'],[i,j+1,i+','+(j+1)+',N'],[i-1,j,i+','+j+',O'],[i+1,j,(i+1)+','+j+',O']])if(!e.murs[k]||!blocks(this,k,e.murs[k]))todo.push([a,b]);}
  s.seen=[...seen];this.dungeonSeen=seen;
 };
-Game.prototype.dungeonContext=function(){if(this.dungeonGrip)return {kind:'dungeon-crate',id:this.dungeonGrip.id,text:'E  LÂCHER LA CAISSE · AVANCER / RECULER'};const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
+Game.prototype.dungeonContext=function(){if(this.dungeonGrip)return {kind:'dungeon-crate',id:this.dungeonGrip.id,text:'E  LÂCHER LA CAISSE · DÉPLACER AU JOYSTICK'};const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
  for(const b of s.crates){const d=Math.max(1,dist(p,b)),probe={x:b.x+(p.x-b.x)/d*12,y:b.y+(p.y-b.y)/d*12};if(near(p,b,28)&&this.lineClear(p,probe))options.push({kind:'dungeon-crate',id:b.id,text:'E  SAISIR LA CAISSE · POUSSER / TIRER',d});}
  for(const k of D.cles)if(k.etage===e.id&&!this.dungeon.keys.includes(k.id)&&keyReady(this,k))add({kind:'dungeon-key',id:k.id},k.pos,'E  PRENDRE : '+k.nom);
  for(const m of e.mecanismes||[]){for(const k of m.bords|| (m.bord?[m.bord]:[]))wall({kind:'dungeon-lever',id:m.id,bord:k},k,'E  ACTIONNER LE LEVIER');if(m.id==='treuil')add({kind:'dungeon-winch'},m.pos,'E  REMONTER LE MONTE-CHARGE');}
@@ -114,7 +114,7 @@ Game.prototype.interact=function(){if(!this.dungeon?.active)return interact.call
  const c=this.dungeonContext();if(!c)return;if(c.kind==='weapon'){this.takeNearbyWeapon(c.id);return;}const s=state(this),e=current(this),d=this.dungeon;
  if(c.kind==='dungeon-crate'){
   if(this.dungeonGrip)this.dungeonGrip=null;
-  else{const b=s.crates.find(b=>b.id===c.id),p=this.player,dx=p.x-b.x,dy=p.y-b.y;this.dungeonGrip={id:b.id,floor:e.id,axis:Math.abs(dx)>Math.abs(dy)?'x':'y',dx,dy};p.dir=this.direction(-dx,-dy);}
+  else{const b=s.crates.find(b=>b.id===c.id),p=this.player,dx=p.x-b.x,dy=p.y-b.y;this.dungeonGrip={id:b.id,floor:e.id,dx,dy};p.dir=this.direction(-dx,-dy);}
   this.emit('save');return;
  }
  if(c.kind==='dungeon-key'){d.keys.push(c.id);this.emit('loot');this.emit('notice',{title:D.cles.find(k=>k.id===c.id).nom,text:'La clé est conservée dans ton inventaire.'});}
@@ -174,7 +174,7 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=buffered?p.bufferX:input.x,y=buffered?p.bufferY:input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
  if(input.interact)this.interact();if(!this.dungeon.active)return;
  p.steer=!!(input.x||input.y);
- const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){this.movePlayer(p,(input.x||0)*dt*24,(input.y||0)*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
+ const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){const k=Math.max(1,Math.hypot(input.x||0,input.y||0));this.movePlayer(p,(input.x||0)/k*dt*24,(input.y||0)/k*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
  p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
  if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}

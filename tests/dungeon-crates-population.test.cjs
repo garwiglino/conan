@@ -32,3 +32,16 @@ test('throne guards keep fighting after the chief falls, while a migrated cleare
  const g=game();g.enterDungeonFloor('trone',{x:350,y:220});g.player.spawnFX=0;g.dungeon.bossFight=false;g.dungeon.bossDead=true;g.lineClear=()=>true;const guard=g.enemies.find(e=>e.bossGuard);assert.ok(a.GoblinTactics.plan(g,.04).active.includes(guard));
  const saved=g.serialize().dungeon;saved.floors.trone.enemies=saved.floors.trone.enemies.filter(e=>!e.bossGuard);const r=combatGame(a);r.startFirstDungeon(saved);assert.ok(r.enemies.filter(e=>e.bossGuard).every(e=>e.dead&&e.hp===0));
 });
+
+test('walking or combat movement cannot push a crate before grabbing or after releasing',()=>{
+ const g=arena(),b=g.dungeon.floors['grande-salle'].crates[1],p=g.player;Object.assign(b,{x:368,y:208});Object.assign(p,{x:350,y:208});
+ for(let i=0;i<30;i++)g.movePlayer(p,2,0);assert.equal(b.x,368);assert.equal(b.y,208);assert.ok(p.x<=354);
+ g.interact();assert.ok(g.dungeonGrip);g.movePlayer(p,4,0);assert.equal(b.x,372);g.interact();assert.equal(g.dungeonGrip,null);
+ for(let i=0;i<30;i++)g.movePlayer(p,2,0);assert.equal(b.x,372);
+});
+test('one grip permits changing freely through all eight joystick directions at the same bounded speed',()=>{
+ const g=arena(),b=g.dungeon.floors['grande-salle'].crates[1],p=g.player;Object.assign(b,{x:368,y:208});Object.assign(p,{x:350,y:208});g.interact();const grip=g.dungeonGrip;
+ for(const [x,y]of [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]]){const ox=b.x,oy=b.y,k=Math.hypot(x,y);const input=P.point(x,y),length=Math.hypot(input.x,input.y);input.x/=length;input.y/=length;for(let i=0;i<8;i++)g.update(.02,input);
+  assert.equal(g.dungeonGrip,grip);assert.ok(Math.abs(b.x-ox-x/k*3.84)<1e-6);assert.ok(Math.abs(b.y-oy-y/k*3.84)<1e-6);assert.ok(Math.abs(p.x-b.x+18)<1e-6);assert.ok(Math.abs(p.y-b.y)<1e-6);
+ }
+});

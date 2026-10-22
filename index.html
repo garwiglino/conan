@@ -22010,8 +22010,8 @@ const tile=Game.prototype.tile;Game.prototype.tile=function(x,y){if(!this.dungeo
 const movePlayer=Game.prototype.movePlayer;
 Game.prototype.movePlayer=function(p,dx,dy){if(!this.dungeon?.active)return movePlayer.call(this,p,dx,dy);
  if(p===this.player&&this.dungeonGrip){this.moveDungeonCrate(p,dx,dy);return;}
- const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));for(let i=0;i<steps;i++)for(const [x,y]of [[dx/steps,0],[0,dy/steps]]){if(!x&&!y)continue;const nx=p.x+x,ny=p.y+y,b=state(this).crates.find(b=>Math.abs(nx-b.x)<14&&Math.abs(ny-b.y)<14);
-  if(b){const bx=b.x+x,by=b.y+y;if(!geometry(this,bx,by,9,b)&&!this.enemies.some(e=>!e.dead&&near(e,{x:bx,y:by},15))){b.x=bx;b.y=by;}}
+ // An unheld crate is solid; walking, dodging and attack steps cannot push it.
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));for(let i=0;i<steps;i++)for(const [x,y]of [[dx/steps,0],[0,dy/steps]]){if(!x&&!y)continue;const nx=p.x+x,ny=p.y+y;
   if(!this.solid(nx,ny,p.r||5)&&!this.crowd(p,nx,ny)){p.x=nx;p.y=ny;}}
  this.updateDungeonPlates();
 };
@@ -22019,12 +22019,12 @@ Game.prototype.movePlayer=function(p,dx,dy){if(!this.dungeon?.active)return move
 Game.prototype.moveDungeonCrate=function(p,dx,dy){
  const grip=this.dungeonGrip,b=state(this).crates.find(b=>b.id===grip?.id);
  if(!b||grip.floor!==this.dungeon.floor||Math.hypot(p.x-b.x-grip.dx,p.y-b.y-grip.dy)>2){this.dungeonGrip=null;return;}
- const amount=grip.axis==='x'?dx:dy,n=Math.max(1,Math.ceil(Math.abs(amount)));
- for(let i=0;i<n;i++){
-  const x=grip.axis==='x'?amount/n:0,y=grip.axis==='y'?amount/n:0,nx=p.x+x,ny=p.y+y,bx=b.x+x,by=b.y+y;
-  if(geometry(this,nx,ny,p.r||5,b)||geometry(this,bx,by,9,b)||this.crowd(p,nx,ny)||this.enemies.some(e=>!e.dead&&near(e,{x:bx,y:by},15)))break;
-  p.x=nx;p.y=ny;b.x=bx;b.y=by;
- }
+ const n=Math.max(1,Math.ceil(Math.hypot(dx,dy)));
+ const advance=(x,y)=>{const nx=p.x+x,ny=p.y+y,bx=b.x+x,by=b.y+y;
+  if(geometry(this,nx,ny,p.r||5,b)||geometry(this,bx,by,9,b)||this.crowd(p,nx,ny)||this.enemies.some(e=>!e.dead&&near(e,{x:bx,y:by},15)))return false;
+  p.x=nx;p.y=ny;b.x=bx;b.y=by;return true;
+ };
+ for(let i=0;i<n;i++){const x=dx/n,y=dy/n;if(!advance(x,y)){if(x)advance(x,0);if(y)advance(0,y);}}
  p.dir=this.direction(b.x-p.x,b.y-p.y);this.updateDungeonPlates();
 };
 Game.prototype.updateDungeonPlates=function(){if(!this.dungeon?.active)return;for(const m of current(this).mecanismes||[])if(m.dalles){const s=state(this),down=m.dalles.every(p=>s.crates.some(b=>near(b,at(p),10)));for(const k of m.ouvre){if(down)openEdge(this,k);else if(!near(this.player,edge(k),24)&&!this.enemies.some(e=>!e.dead&&near(e,edge(k),24)))s.open=s.open.filter(v=>v!==k);}}};
@@ -22033,7 +22033,7 @@ Game.prototype.revealDungeon=function(){const s=state(this),e=current(this),seen
   for(const [a,b,k]of [[i,j-1,i+','+j+',N'],[i,j+1,i+','+(j+1)+',N'],[i-1,j,i+','+j+',O'],[i+1,j,(i+1)+','+j+',O']])if(!e.murs[k]||!blocks(this,k,e.murs[k]))todo.push([a,b]);}
  s.seen=[...seen];this.dungeonSeen=seen;
 };
-Game.prototype.dungeonContext=function(){if(this.dungeonGrip)return {kind:'dungeon-crate',id:this.dungeonGrip.id,text:'E  LÂCHER LA CAISSE · AVANCER / RECULER'};const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
+Game.prototype.dungeonContext=function(){if(this.dungeonGrip)return {kind:'dungeon-crate',id:this.dungeonGrip.id,text:'E  LÂCHER LA CAISSE · DÉPLACER AU JOYSTICK'};const weapon=KaldorArmaments.weaponContext(this);if(weapon)return weapon;const e=current(this),s=state(this),p=this.player,options=[],add=(q,pos,text)=>{const point=at(pos);if(near(p,point,28)&&this.lineClear(p,point))options.push({...q,...point,text,d:dist(p,point)});},wall=(q,k,text)=>{const a=edge(k);for(const side of [1,-1]){const x=a.x+(a.o==='O'?side*10:0),y=a.y+(a.o==='N'?side*10:0);if(floor(e,x,y))add(q,[x/CELL,y/CELL],text);}};
  for(const b of s.crates){const d=Math.max(1,dist(p,b)),probe={x:b.x+(p.x-b.x)/d*12,y:b.y+(p.y-b.y)/d*12};if(near(p,b,28)&&this.lineClear(p,probe))options.push({kind:'dungeon-crate',id:b.id,text:'E  SAISIR LA CAISSE · POUSSER / TIRER',d});}
  for(const k of D.cles)if(k.etage===e.id&&!this.dungeon.keys.includes(k.id)&&keyReady(this,k))add({kind:'dungeon-key',id:k.id},k.pos,'E  PRENDRE : '+k.nom);
  for(const m of e.mecanismes||[]){for(const k of m.bords|| (m.bord?[m.bord]:[]))wall({kind:'dungeon-lever',id:m.id,bord:k},k,'E  ACTIONNER LE LEVIER');if(m.id==='treuil')add({kind:'dungeon-winch'},m.pos,'E  REMONTER LE MONTE-CHARGE');}
@@ -22049,7 +22049,7 @@ Game.prototype.interact=function(){if(!this.dungeon?.active)return interact.call
  const c=this.dungeonContext();if(!c)return;if(c.kind==='weapon'){this.takeNearbyWeapon(c.id);return;}const s=state(this),e=current(this),d=this.dungeon;
  if(c.kind==='dungeon-crate'){
   if(this.dungeonGrip)this.dungeonGrip=null;
-  else{const b=s.crates.find(b=>b.id===c.id),p=this.player,dx=p.x-b.x,dy=p.y-b.y;this.dungeonGrip={id:b.id,floor:e.id,axis:Math.abs(dx)>Math.abs(dy)?'x':'y',dx,dy};p.dir=this.direction(-dx,-dy);}
+  else{const b=s.crates.find(b=>b.id===c.id),p=this.player,dx=p.x-b.x,dy=p.y-b.y;this.dungeonGrip={id:b.id,floor:e.id,dx,dy};p.dir=this.direction(-dx,-dy);}
   this.emit('save');return;
  }
  if(c.kind==='dungeon-key'){d.keys.push(c.id);this.emit('loot');this.emit('notice',{title:D.cles.find(k=>k.id===c.id).nom,text:'La clé est conservée dans ton inventaire.'});}
@@ -22109,7 +22109,7 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  if((attackEdge||buffered)&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const x=buffered?p.bufferX:input.x,y=buffered?p.bufferY:input.y;if(x||y)this.aimAttack(x,y);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((x||y)&&!this.target())p.dir=this.direction(x,y);this.swingSword();}
  if(input.interact)this.interact();if(!this.dungeon.active)return;
  p.steer=!!(input.x||input.y);
- const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){this.movePlayer(p,(input.x||0)*dt*24,(input.y||0)*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
+ const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){const k=Math.max(1,Math.hypot(input.x||0,input.y||0));this.movePlayer(p,(input.x||0)/k*dt*24,(input.y||0)/k*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
  p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
  if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
@@ -22168,12 +22168,12 @@ const DungeonLighting=(()=>{
  return Object.freeze({AMBIENT,collect,draw});
 })();
 
-// Fade only a foreground wall whose opaque art covers the hero's head/torso.
+// Fade only a foreground wall or crate whose opaque art covers the hero's head/torso.
 // Transparent sprite margins, distant walls and low corridor borders stay solid.
 const DungeonOcclusion=(()=>{
  const masks=new WeakMap();
  function covered(it,piece,image,p){
-  if(!it.edge)return false;
+  if(!it.edge&&it.piece!=='caisse')return false;
   const key=Math.floor(p.x/32)+Math.floor(p.y/32),sub=p.x+p.y;
   if(it.key<key||it.key===key&&it.sub<=sub)return false;
   const q=WorldProjection.point(...it.ref),hero=WorldProjection.point(p.x,p.y),left=Math.round(q.x-piece.anchor[0]),top=Math.round(q.y-piece.anchor[1]);
@@ -22184,11 +22184,11 @@ const DungeonOcclusion=(()=>{
   return hits>=4;
  }
  function alpha(renderer,it,piece,image,p){
-  const hidden=covered(it,piece,image,p),target=hidden?.42:1;
+  const hidden=covered(it,piece,image,p),target=hidden?(it.piece==='caisse'?.55:.42):1;
   if(renderer.dungeonOcclusionFloor!==renderer.g.dungeon.floor){renderer.dungeonOcclusionFloor=renderer.g.dungeon.floor;renderer.dungeonWallAlpha=new Map();}
-  const key=it.piece+'/'+it.ref.join(','),map=renderer.dungeonWallAlpha,old=map.get(key)??1,dt=renderer.dungeonOcclusionDt??1/60,value=target+(old-target)*Math.exp(-dt/.075),a=Math.abs(value-target)<.005?target:value;
+  const key=it.occlusionKey||it.piece+'/'+it.ref.join(','),map=renderer.dungeonWallAlpha,old=map.get(key)??1,dt=renderer.dungeonOcclusionDt??1/60,value=target+(old-target)*Math.exp(-dt/.075),a=Math.abs(value-target)<.005?target:value;
   if(a<1)map.set(key,a);else map.delete(key);
-  if(it.edge)renderer.dungeonOcclusion.push({piece:it.piece,ref:it.ref,covered:hidden,alpha:a});return a;
+  if(it.edge||it.piece==='caisse')renderer.dungeonOcclusion.push({piece:it.piece,ref:it.ref,covered:hidden,alpha:a});return a;
  }
  return {covered,alpha};
 })();
@@ -22221,7 +22221,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
  for(const it of a.items){let name=it.piece,ref=it.ref,light=!it.cells||it.cells.some(([i,j])=>visible(i,j));
   if(it.edge){const border=it.edge.join(','),orient=name.split('/')[0];if(s.open.includes(border))name=orient+'/'+({'porte-verrouillee':'porte-ouverte','porte-cellule':'porte-cellule-ouverte','herse':'herse-levee'}[e.murs[border]]||'porte-ouverte');if(s.levers.includes(border)||border===D.fee.levier&&g.dungeon.fairy)name=orient+'/levier-bas';if(name===orient+'/porte'&&g.dungeon.floor==='trone'&&!g.dungeon.bossFight)name=orient+'/porte-ouverte';}
   if(name==='cle'&&D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&Math.hypot(k.pos[0]*32-ref[0],k.pos[1]*32-ref[1])<3))continue;
-  if(name==='caisse'){const i=e.objets.findIndex(([n,x,y])=>n==='caisse'&&x*32===ref[0]&&y*32===ref[1]),b=s.crates.find(b=>b.id===i);if(b)ref=[b.x,b.y];}
+  if(name==='caisse'){const i=e.objets.findIndex(([n,x,y])=>n==='caisse'&&x*32===ref[0]&&y*32===ref[1]),b=s.crates.find(b=>b.id===i);if(b){ref=[b.x,b.y];light=visible(Math.floor(b.x/32),Math.floor(b.y/32));}}
   if(name==='coffre'){
    const i=e.objets.findIndex(([n,x,y])=>n==='coffre'&&x*32===ref[0]&&y*32===ref[1]),oldKey=D.cles.some(k=>k.etage===e.id&&g.dungeon.keys.includes(k.id)&&F.keyChest(g,k)===i),phase=LootPresentation.chestFrame(oldKey?{open:true}:F.chestState(g,i));
    name=phase===4?'coffre-ouvert':phase?'coffre-ouverture-'+phase:'coffre';
@@ -22231,7 +22231,8 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
   if(name==='monte-charge')continue;
   if(name==='dalle-pression'&&s.crates.some(b=>Math.hypot(b.x-ref[0],b.y-ref[1])<10))name='dalle-pression-enfoncee';
   if(!light&&!it.edge)continue;
-  items.push({key:it.key,sub:it.sub,draw:()=>{if(name==='cle'){const q=P(...ref);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,ref[0]);return;}const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...it,ref},z,im,p):1;blit(name,...ref,alpha);}});
+  const depth=name==='caisse'?{...it,ref,occlusionKey:it.piece+'/'+it.ref.join(','),key:Math.floor(ref[0]/32)+Math.floor(ref[1]/32),sub:ref[0]+ref[1]}:it;
+  items.push({ground:name.startsWith('dalle-pression'),key:depth.key,sub:depth.sub,draw:()=>{if(name==='cle'){const q=P(...ref);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,ref[0]);return;}const z=art.pieces[name],im=z?.frames[Math.floor(g.time*z.fps)%z.frames.length],alpha=z?DungeonOcclusion.alpha(this,{...depth,ref},z,im,p):1;blit(name,...ref,alpha);}});
  }
  for(const k of D.cles)if(k.etage===e.id&&!g.dungeon.keys.includes(k.id)&&F.keyChest(g,k)>=0&&F.keyReady(g,k)){
   const x=k.pos[0]*32,y=k.pos[1]*32;items.push({key:Math.floor(x/32)+Math.floor(y/32),sub:x+y+1,draw:()=>{const q=P(x,y);LootPresentation.key(c,art.pieces.cle,g.time,q.x,q.y,x,12);}});
@@ -22252,7 +22253,7 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
    if(!n.dead&&g.targetId===n.id)pixels(c,['0...0','00.00','.000.','..0..'],Math.round(q.x)-2,Math.round(q.y)-35,{'0':'#f5d680'});
    if(!n.dead&&n.hp<n.maxHp){c.fillStyle='#271b24';c.fillRect(q.x-11,q.y-31,22,3);c.fillStyle='#c0644b';c.fillRect(q.x-11,q.y-31,22*n.hp/n.maxHp,2);}
    c.restore();}});}
-  items.sort((a,b)=>a.key-b.key||a.sub-b.sub);for(const it of items)it.draw();
+  items.sort((a,b)=>Number(!!b.ground)-Number(!!a.ground)||a.key-b.key||a.sub-b.sub);for(const it of items)it.draw();
   for(const fx of view.game.bloodFX)drawBloodFX(c,fx);
   for(const v of view.game.particles)box(c,v.x,v.y-(v.z||0),v.size||2,v.size||2,v.color);
   if(g.dungeon.fairy)this.npcDraw(view.wrap({...g.fairyActor,x:p.x-16,y:p.y-16,alpha:1}));
@@ -22458,9 +22459,9 @@ document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault();},{passive
 // Bouton AGIR : icône et libellé suivent l'action disponible ; grisé quand rien n'est à portée (ou action verrouillée).
 const ACT={talk:['talk','PARLER'],chest:['chest','OUVRIR'],lever:['lever','ACTIVER'],seal:['seal','PRENDRE'],gate:['key','OUVRIR'],sleep:['moon','DORMIR'],outfit:['hand','PRENDRE'],helmet:['hand','PRENDRE'],weapon:['hand','PRENDRE']};let actSig='',actIco='hand';
 function syncAct(){const b=document.querySelector('.action-pad [data-key="interact"]');if(!b)return;const g=game,c=state==='playing'&&!g.dialogue&&!g.sleeping&&!g.dying&&!g.dead&&!g.won&&!g.transit?g.context():null;let ico='hand',lab='AGIR',ok=false;
- if(c){if(c.kind==='lift'){const l=g.lifts[c.i],here=Math.abs(l.y-c.y)<1;ico=here?(c.y===l.top?'down':'up'):'call';lab=here?(c.y===l.top?'DESCENDRE':'MONTER'):'APPELER';}else if(ACT[c.kind])[ico,lab]=ACT[c.kind];ok=/^E\s/.test(c.text);}
+ if(c){if(c.kind==='dungeon-crate'){ico='hand';lab=g.dungeonGrip?'LÂCHER':'SAISIR';}else if(c.kind==='lift'){const l=g.lifts[c.i],here=Math.abs(l.y-c.y)<1;ico=here?(c.y===l.top?'down':'up'):'call';lab=here?(c.y===l.top?'DESCENDRE':'MONTER'):'APPELER';}else if(ACT[c.kind])[ico,lab]=ACT[c.kind];ok=/^E\s/.test(c.text);}
  const sig=ico+'|'+lab+'|'+ok;if(sig===actSig)return;actSig=sig;b.style.setProperty('--ui-b-interact','var(--ui-b-x-'+ico+')');b.style.setProperty('--ui-b-interact-on','var(--ui-b-x-'+ico+'-on)');
- b.querySelector('span').textContent=lab;b.classList.toggle('idle',!ok);b.setAttribute('aria-label',ok?'Agir : '+lab.toLowerCase():'Interagir');if(ico!==actIco){actIco=ico;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}}
+ b.querySelector('span').textContent=lab;b.classList.toggle('idle',!ok);b.setAttribute('aria-label',ok?lab.toLowerCase():'Interagir');if(ico!==actIco){actIco=ico;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}}
 function updateUI(){$('zone').textContent=game.zone();renderTracker();syncBadge();updateWorldUI();}
 // ---------------------------------------------------------------- ui.js
 // Kit d'interface 8 bits : cadres de bronze (9 tranches), plaques de boutons, boutons ronds tactiles,
