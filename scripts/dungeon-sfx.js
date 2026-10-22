@@ -1,7 +1,8 @@
 // Bruitages du donjon : portes, herses, leviers, dalles, caisse traînée, treuil, monte-charge, clés, tonneaux et
 // caisses qui cassent, voix des gobelins et de Grise-Gueule. Tout est synthétisé par modèles physiques simples
-// (modes de bois et de fer, frottement collé-glissé, chaînes, bruit filtré, voix à formants), en tâche de fond par
-// petites tranches d'une image à l'autre dès l'entrée dans le donjon. Chaque son a plusieurs variantes.
+// (modes de bois, fer mat qui cliquette sans jamais sonner comme une cloche, frottement collé-glissé, chaînes, bruit
+// filtré, voix de créatures à formants), en tâche de fond par petites tranches d'une image à l'autre dès l'entrée
+// dans le donjon. Chaque son a plusieurs variantes.
 const DungeonSfx=(()=>{
  const rng=seed=>{let s=(seed>>>0)%2147483646+1;return ()=>(s=s*16807%2147483647)/2147483647;};
  const tick=i=>(i&2047)===0;
@@ -29,11 +30,17 @@ const DungeonSfx=(()=>{
   for(let k=0;k<count;k++){const fk=f*WOOD[k]*(.96+r()*.08);yield* mode(B,at,fk,amp*.8**k*(.55+r()*.45)*(k?1:1.2),decay*(f/fk)**.6);}
   yield* hiss(B,r,at,.006,amp*.7*bright,biquad('lp',1800+3000*bright,.7,B.sr),.0003,3);
   if(thump)yield* mode(B,at,f*.42,amp*thump,decay*1.6,.6);}
- // Fer : modes inharmoniques (barre libre par défaut) qui sonnent longtemps.
- const BAR=[1,2.76,5.4,8.93,13.3],HOOP=[1,2.83,5.43,8.8];
- function* metal(B,r,at,{f=900,amp=1,decay=.25,ratios=BAR,spread=.03,tap=.4}={}){
-  for(let k=0;k<ratios.length;k++){const fk=f*ratios[k]*(1-spread+r()*2*spread);if(fk>B.sr*.42)break;yield* mode(B,at,fk,amp*.75**k*(.6+r()*.4),decay*(f/fk)**.35);}
-  if(tap)yield* hiss(B,r,at,.003,amp*tap,biquad('hp',2500,.7,B.sr),.0002,2);}
+ // Fer : un choc mat, jamais une cloche. Le fer du donjon est lourd, boulonné, posé sur la pierre ou tenu en main :
+ // beaucoup de modes inharmoniques serrés, très amortis, noyés dans un claquement de bruit coloré ; les grosses
+ // pièces cliquettent (petits rebonds de jeu) au lieu de résonner.
+ const IRON=[1,1.47,1.93,2.44,2.97,3.58,4.2,4.93,5.71,6.6,7.62,8.8];
+ function* knock(B,r,at,decay,amp,filt){const {d,sr,n}=B,s=Math.max(0,Math.floor(at*sr)),m=Math.min(n,s+Math.ceil(decay*sr*7)),k=Math.exp(-1/(decay*sr)),up=sr*.0003;let e=amp;
+  for(let i=s;i<m;i++){d[i]+=e*Math.min(1,(i-s)/up)*filt(r()*2-1)*2;e*=k;if(tick(i))yield;}}
+ function* metal(B,r,at,{f=900,amp=1,decay=.02,count=9,grit=.8,tap=.5,rattle=0,spread=.07}={}){
+  for(let k=0;k<count;k++){const fk=f*IRON[k]*(1-spread+r()*2*spread);if(fk>B.sr*.42)break;yield* mode(B,at,fk,amp*.6*.82**k*(.35+r()*.65),decay*(f/fk)**.5*(.6+r()*.8));yield;}
+  yield* knock(B,r,at,decay*.8,amp*grit,biquad('bp',f*2.2,.9,B.sr));
+  if(tap)yield* hiss(B,r,at,.003,amp*tap,biquad('hp',2500,.7,B.sr),.0002,2);
+  for(let j=0,t=at;j<rattle;j++){t+=.012+r()*.03;yield* metal(B,r,t,{f:f*(.85+r()*.3),amp:amp*.45*.7**j*(.5+r()*.5),decay:decay*.5,count:6,grit,tap:tap*.6,spread});}}
  // Choc sourd sur la pierre : sinus grave qui retombe, poussière étouffée.
  function* thud(B,r,at,{f=70,amp=1,decay=.09,dust=.4}={}){yield* mode(B,at,f,amp,decay,.8);yield* hiss(B,r,at,.12,amp*dust,biquad('lp',900,.7,B.sr),.001,3);}
  // Échardes : grains de bruit très courts, de plus en plus rares.
@@ -46,10 +53,10 @@ const DungeonSfx=(()=>{
  function* creak(B,r,at,dur,{rate=[90,60],res=HINGE,amp=1,wobble=.25,attack=.08,release=.15}={}){const {d,sr,n}=B,s=Math.floor(at*sr),m=Math.min(n,s+Math.floor(dur*sr)),R=res.map(([f,q,g])=>[biquad('bp',f,q,sr),g]);let next=0;const phase=r()*6;
   for(let i=Math.max(0,s);i<m;i++){const t=(i-s)/sr,u=t/dur;let x=0;if(t>=next){x=1;const cr=rate[0]+(rate[1]-rate[0])*u;next=t+1/Math.max(4,cr*(1+wobble*Math.sin(2*Math.PI*1.3*t+phase))+r()*cr*.15);}
    const e=trap(t,dur,attack,release);let y=0;for(const [f,g]of R)y+=f(x)*g;d[i]+=amp*e*y*6;if(tick(i))yield;}}
- // Chaîne qui défile : maillons qui claquent, un sur cinq plus lourd.
+ // Chaîne qui défile : maillons qui claquent sec, de hauteurs très diverses (pas de grelot), un sur cinq plus lourd.
  function* chain(B,r,at,dur,{rate=22,amp=.6,f=2600,attack=.1,release=.2}={}){
   for(let t=0;t<dur;){const e=trap(t,dur,attack,release),heavy=r()<.2;
-   yield* metal(B,r,at+t,{f:(heavy?f*.45:f)*(.85+r()*.3),amp:amp*e*(heavy?1:.55)*(.6+r()*.4),decay:heavy?.05:.018,ratios:[1,2.1,3.7],spread:.08,tap:.6});
+   yield* metal(B,r,at+t,{f:(heavy?f*.38:f*.7)*(.7+r()*.6),amp:amp*e*(heavy?.9:.5)*(.6+r()*.4),decay:heavy?.012:.005,count:heavy?8:5,grit:1,tap:.7,spread:.12});
    t+=1/(rate*(.7+r()*.6));}}
  // Raclement : bruit coloré, rugosité lente, accrocs.
  function* scrape(B,r,at,dur,{amp=.6,f=900,q=1.2,grit=40,low=180,attack=.05,release=.1}={}){const {d,sr,n}=B,s=Math.floor(at*sr),m=Math.min(n,s+Math.floor(dur*sr)),bp=biquad('bp',f,q,sr),lp=biquad('lp',low,.8,sr);let rough=.5,target=.5,next=0,snag=0;
@@ -57,98 +64,112 @@ const DungeonSfx=(()=>{
    const e=trap(t,dur,attack,release),w=r()*2-1;d[i]+=amp*e*rough*(bp(w)*3*(1+snag*2)+lp(w)*2);if(tick(i))yield;}}
  // Bulles qui montent : liquide renversé, gargouillis.
  function* bubbles(B,r,at,dur,{rate=30,amp=.4,lo=250,hi=900}={}){for(let t=at;t<at+dur;t+=-Math.log(1-r()*.99)/rate){const u=(t-at)/dur;yield* mode(B,t,lo*(hi/lo)**r(),amp*(1-u)*(.3+.7*r()),.012+r()*.03,-.45);}}
- // Voix à formants : impulsions glottiques lissées (gigue, râle, sous-harmonique), souffle, quatre formants qui glissent
- // d'une voyelle à l'autre. `scale` > 1 raccourcit le conduit vocal (gobelin), < 1 l'allonge.
+ // Voix de créature : impulsions glottiques lissées (gigue, ruptures de hauteur), seconde source désaccordée (biphonie,
+ // grondement à l'octave dessous), râle des fausses cordes (bruit haché de 15 à 70 Hz), souffle, quatre formants
+ // larges qui glissent d'une voyelle à l'autre en tremblant, résonance de poitrine, saturation asymétrique.
+ // `scale` > 1 raccourcit le conduit vocal (gobelin), < 1 l'allonge (Grise-Gueule).
  const VOWELS={a:[800,1250,2600,3500],e:[480,1900,2550,3400],i:[310,2250,2950,3600],o:[520,900,2450,3300],u:[350,780,2350,3200],ae:[700,1650,2500,3400],eu:[500,1450,2450,3300],ng:[280,1100,2500,3300]};
  const BW=[90,110,150,220],FG=[1,.75,.4,.22];
  const curve=(v,u)=>{if(!Array.isArray(v))return v;if(v.length<2)return v[0];const x=Math.min(.9999,Math.max(0,u))*(v.length-1),k=Math.floor(x);return v[k]+(v[k+1]-v[k])*(x-k);};
- function* voice(B,r,at,segs,{scale=1.3,breath=.16,jitter=.03,drive=1.6}={}){const sat=Math.tanh(drive);const {d,sr,n}=B,F=BW.map(()=>biquad('bp',1000,5,sr)),air=biquad('hp',1200,.7,sr);let t0=at,ph=0,last=0,odd=1,wob=0,shim=0;
-  for(const g of segs){const s=Math.floor(t0*sr),m=Math.min(n,s+Math.floor(g.dur*sr)),len=Math.max(1,m-s),va=VOWELS[g.v[0]],vb=VOWELS[g.v[1]??g.v[0]],voiced=g.voiced??1,rasp=g.rasp||0,fr=g.fr||45,sub=g.sub||0,noise=g.noise??breath;
+ const pulse=ph=>ph<.6?.5*(1-Math.cos(Math.PI*ph/.6)):ph<.78?Math.cos(Math.PI*(ph-.6)/.36):0;
+ const BREAKS=[.5,.67,1.5,1.9];
+ function* voice(B,r,at,segs,{scale=1.3,breath=.16,jitter=.03,drive=1.6,chest=0,flutter=.05,low=35}={}){const sat=Math.tanh(drive),{d,sr,n}=B,F=BW.map(()=>biquad('bp',1000,5,sr)),air=biquad('hp',1200,.7,sr),
+  body=biquad('bp',190*scale,1.6,sr),dc=biquad('hp',low,.7,sr),fl=[0,0,0,0];let t0=at,ph=0,ph2=0,pg=0,last=0,last2=0,odd=1,wob=0,wob2=0,shim=0,jm=1,jt=1,hold=0;
+  for(const g of segs){const s=Math.floor(t0*sr),m=Math.min(n,s+Math.floor(g.dur*sr)),len=Math.max(1,m-s),va=VOWELS[g.v[0]],vb=VOWELS[g.v[1]??g.v[0]],voiced=g.voiced??1,rasp=g.rasp||0,fr=g.fr||45,sub=g.sub||0,noise=g.noise??breath,
+    growl=g.growl||0,gr=g.gr||fr,bi=g.bi||0,br=g.br||.5,brk=g.brk||0;
    if(g.burst)yield* hiss(B,r,t0,g.burst.dur||.012,g.burst.amp||.5,chainF(biquad('bp',g.burst.f*scale,1.3,sr)),.0005,1.5);
    for(let i=Math.max(0,s);i<m;i++){const u=(i-s)/len;
-    if(((i-s)&31)===0){const k=u*u*(3-2*u);for(let j=0;j<4;j++){const f=(va[j]+(vb[j]-va[j])*k)*scale;F[j].set(f,f/(BW[j]*scale*(g.wide||1)));}}
-    wob+=((r()*2-1)-wob)*.003;shim+=((r()*2-1)-shim)*.01;
-    const f0=curve(g.f0,u)*(1+jitter*wob*8);ph+=f0/sr;if(ph>=1){ph-=1;odd=-odd;}
-    const gl=ph<.6?.5*(1-Math.cos(Math.PI*ph/.6)):ph<.78?Math.cos(Math.PI*(ph-.6)/.36):0,dg=(gl-last)*sr/Math.max(30,f0)*.18;last=gl;
-    const t=(i-s)/sr,am=1+rasp*.8*Math.sin(2*Math.PI*fr*t+wob*3),sb=odd>0?1:1-sub,a=curve(g.amp,u)*(1+shim*.3),w=r()*2-1;
-    const x=voiced*dg*am*sb+noise*(.3+.7*gl*voiced+(1-voiced))*w*1.2;let y=0;for(let j=0;j<4;j++)y+=F[j](x)*FG[j];
-    d[i]+=a*(Math.tanh(y*1.6*drive)/sat+air(w)*noise*.08*(1-voiced*.6));if(tick(i))yield;}
+    if(((i-s)&31)===0){const k=u*u*(3-2*u);for(let j=0;j<4;j++){fl[j]+=((r()*2-1)-fl[j])*.04;const f=(va[j]+(vb[j]-va[j])*k)*scale*(1+flutter*fl[j]*(j?1.4:1));F[j].set(f,f/(BW[j]*scale*(g.wide||1)));}
+     // Ruptures : la voix casse d'un coup (octave, quinte) puis revient, comme un cri de bête.
+     if(hold>0)hold-=32;else if(jt!==1)jt=1;else if(brk&&r()<brk*32/sr){jt=BREAKS[Math.floor(r()*4)];hold=sr*(.015+r()*.05);}}
+    jm+=(jt-jm)*.02;wob+=((r()*2-1)-wob)*.003;wob2+=((r()*2-1)-wob2)*.004;shim+=((r()*2-1)-shim)*.01;
+    const f0=curve(g.f0,u)*(1+jitter*wob*8)*jm;ph+=f0/sr;if(ph>=1){ph-=1;odd=-odd;}
+    const gl=pulse(ph),dg=(gl-last)*sr/Math.max(30,f0)*.18;last=gl;
+    let x2=0;if(bi){const f2=f0*br*(1+jitter*wob2*14);ph2+=f2/sr;if(ph2>=1)ph2-=1;const g2=pulse(ph2);x2=(g2-last2)*sr/Math.max(25,f2)*.18;last2=g2;}
+    pg+=gr*(1+wob2*3)/sr;if(pg>=1)pg-=1;const gate=pg<.4?Math.sin(Math.PI*pg/.4)**2:0;
+    const t=(i-s)/sr,am=(1+rasp*.8*Math.sin(2*Math.PI*fr*t+wob*3))*(1-growl*.75+growl*1.5*gate),sb=odd>0?1:1-sub,a=curve(g.amp,u)*(1+shim*.3),w=r()*2-1;
+    const x=voiced*(dg*sb+bi*x2)*am+noise*(.3+.7*gl*voiced+(1-voiced))*w*1.2+growl*gate*w*.9;
+    let y=0;for(let j=0;j<4;j++)y+=F[j](x)*FG[j];if(chest)y+=body(x)*chest*1.5;
+    const z=Math.tanh(y*1.6*drive)/sat;d[i]+=a*(dc(z+.18*z*z)+air(w)*noise*.08*(1-voiced*.6));if((i&511)===0)yield;}
    t0+=g.dur;}}
  // Petit outil : sons « voix » successifs.
  const V=(dur,v,f0,amp,more={})=>({dur,v:Array.isArray(v)?v:[v],f0,amp,...more});
  const H=(dur,v,amp)=>({dur,v:[v],f0:200,amp,voiced:0,noise:.9});
  const GAP=dur=>({dur,v:['a'],f0:300,amp:0,voiced:0,noise:0});
+ const GOB={scale:1.35,flutter:.08,breath:.2},CHIEF={scale:.78,drive:2.6,chest:.25,low:100,flutter:.06,breath:.22,jitter:.045};
 
  // Recettes : [secondes, générateur]. Le hasard (graine propre à chaque variante) donne les nuances.
  const R={
-  key:[.7,function*(B,r){yield* metal(B,r,0,{f:2100,amp:.5,decay:.06,ratios:[1,2.4,4.1],tap:.8});for(let k=0;k<5;k++)yield* metal(B,r,.035+k*.05+r()*.03,{f:2600+r()*2400,amp:(.9-k*.12)*(.5+r()*.5),decay:.07+r()*.08,ratios:[1,2.4,4.1,6.3]});}],
+  key:[.55,function*(B,r){yield* hiss(B,r,0,.08,.07,biquad('bp',1400,.8,B.sr),.012,2);yield* metal(B,r,.025,{f:1250+r()*200,amp:.7,decay:.016,count:8,grit:.35,rattle:2});yield* metal(B,r,.1+r()*.04,{f:1700+r()*500,amp:.35,decay:.01,count:6,grit:.35,rattle:1});}],
   door_unlock:[2.7,function*(B,r){
-   yield* scrape(B,r,0,.13,{amp:.22,f:4200,q:2,grit:300,low:500,attack:.01,release:.03});yield* metal(B,r,.11,{f:3300,amp:.25,decay:.03,ratios:[1,2.3]});
-   yield* metal(B,r,.24,{f:1800,amp:.55,decay:.035,ratios:[1,2.3,3.9]});yield* scrape(B,r,.34,.15,{amp:.45,f:1500,q:1.5,grit:120,low:300,attack:.02,release:.04});
-   yield* metal(B,r,.5,{f:520,amp:.9,decay:.09,ratios:[1,2.3,3.9,6.1]});yield* wood(B,r,.5,{f:140,amp:.6,decay:.06,thump:.5});
+   yield* scrape(B,r,0,.13,{amp:.22,f:4200,q:2,grit:300,low:500,attack:.01,release:.03});yield* metal(B,r,.11,{f:2800,amp:.3,decay:.005,count:5});
+   yield* metal(B,r,.24,{f:1500,amp:.55,decay:.01,count:7,rattle:1});yield* scrape(B,r,.34,.15,{amp:.45,f:1500,q:1.5,grit:120,low:300,attack:.02,release:.04});
+   yield* metal(B,r,.5,{f:430,amp:.85,decay:.028,count:10,rattle:2});yield* wood(B,r,.5,{f:140,amp:.7,decay:.06,thump:.6});
    yield* creak(B,r,.78,1.1,{rate:[70,38],res:HINGE,amp:.55});yield* hiss(B,r,.8,1.1,.18,biquad('lp',260,.7,B.sr),.35,1);
-   yield* wood(B,r,1.9,{f:105,amp:.95,decay:.09,thump:1});yield* thud(B,r,1.9,{f:58,amp:.5,decay:.14,dust:.5});yield* metal(B,r,1.93,{f:1900,amp:.2,decay:.12,ratios:HOOP});}],
-  door_open:[2.1,function*(B,r){yield* metal(B,r,0,{f:600,amp:.5,decay:.07,ratios:[1,2.3,3.9]});yield* creak(B,r,.12,1.15,{rate:[78,40],res:HINGE,amp:.55});yield* hiss(B,r,.15,1.1,.18,biquad('lp',260,.7,B.sr),.35,1);
+   yield* wood(B,r,1.9,{f:105,amp:.95,decay:.09,thump:1});yield* thud(B,r,1.9,{f:58,amp:.5,decay:.14,dust:.5});yield* metal(B,r,1.92,{f:650,amp:.22,decay:.014,count:8,rattle:2});}],
+  door_open:[2.1,function*(B,r){yield* metal(B,r,0,{f:850,amp:.5,decay:.012,count:8,rattle:1});yield* wood(B,r,.005,{f:190,amp:.3,decay:.03});yield* creak(B,r,.12,1.15,{rate:[78,40],res:HINGE,amp:.55});yield* hiss(B,r,.15,1.1,.18,biquad('lp',260,.7,B.sr),.35,1);
    yield* wood(B,r,1.3,{f:105,amp:.95,decay:.09,thump:1});yield* thud(B,r,1.3,{f:58,amp:.5,decay:.14,dust:.5});}],
-  door_locked:[.75,function*(B,r){for(const [at,a]of [[0,.8],[.11,.55],[.25,.7]]){yield* wood(B,r,at,{f:155+r()*20,amp:a,decay:.05,thump:.4});yield* metal(B,r,at+.004,{f:1400+r()*150,amp:a*.45,decay:.04,ratios:HOOP});yield* metal(B,r,at+.01,{f:2700,amp:a*.3,decay:.02,ratios:[1,2.2]});}}],
+  door_locked:[.75,function*(B,r){for(const [at,a]of [[0,.8],[.11,.55],[.25,.7]]){yield* wood(B,r,at,{f:155+r()*20,amp:a,decay:.05,thump:.4});yield* metal(B,r,at+.004,{f:700+r()*100,amp:a*.45,decay:.012,count:8,rattle:1});}}],
   door_slam:[2.4,function*(B,r){yield* creak(B,r,0,.26,{rate:[150,230],res:HINGE,amp:.45,attack:.03,release:.04});yield* hiss(B,r,.02,.32,.35,biquad('lp',420,.7,B.sr),.18,1);
-   yield* wood(B,r,.32,{f:92,amp:1,decay:.12,thump:1.2,bright:1.2});yield* thud(B,r,.32,{f:52,amp:1,decay:.26,dust:.8});
-   yield* metal(B,r,.62,{f:380,amp:.65,decay:.35});yield* metal(B,r,.8,{f:386,amp:.2,decay:.2});yield* crackle(B,r,.36,.6,{rate:110,amp:.12,lo:1500,hi:5000});}],
-  gate_rise:[2.7,function*(B,r){yield* metal(B,r,0,{f:300,amp:.7,decay:.2});yield* chain(B,r,.08,2.05,{rate:20,amp:.5});yield* scrape(B,r,.12,1.95,{amp:.2,f:480,q:1.4,grit:30,low:110,attack:.2,release:.25});
-   yield* metal(B,r,2.2,{f:420,amp:.8,decay:.3});yield* thud(B,r,2.2,{f:74,amp:.65,decay:.12,dust:.3});}],
+   yield* wood(B,r,.32,{f:92,amp:1,decay:.12,thump:1.2,bright:1.2});yield* thud(B,r,.32,{f:52,amp:1,decay:.26,dust:.8});yield* metal(B,r,.33,{f:240,amp:.55,decay:.035,count:11,rattle:3});
+   yield* metal(B,r,.62,{f:300,amp:.45,decay:.03,count:10,rattle:2});yield* wood(B,r,.62,{f:170,amp:.4,decay:.04});yield* crackle(B,r,.36,.6,{rate:110,amp:.12,lo:1500,hi:5000});}],
+  gate_rise:[2.7,function*(B,r){yield* metal(B,r,0,{f:230,amp:.65,decay:.035,count:10,rattle:2});yield* chain(B,r,.08,2.05,{rate:20,amp:.5});yield* scrape(B,r,.12,1.95,{amp:.2,f:480,q:1.4,grit:30,low:110,attack:.2,release:.25});
+   yield* metal(B,r,2.2,{f:260,amp:.75,decay:.04,count:11,rattle:3});yield* thud(B,r,2.2,{f:74,amp:.75,decay:.12,dust:.3});}],
   gate_drop:[1.6,function*(B,r){yield* chain(B,r,0,.46,{rate:46,amp:.5,attack:.03,release:.05});yield* scrape(B,r,.02,.42,{amp:.4,f:900,q:1,grit:60,low:200,attack:.05,release:.03});
-   yield* metal(B,r,.46,{f:260,amp:1,decay:.42,ratios:BAR});yield* thud(B,r,.46,{f:60,amp:1,decay:.2,dust:.7});yield* metal(B,r,.62,{f:265,amp:.3,decay:.2});yield* metal(B,r,.72,{f:262,amp:.14,decay:.15});}],
-  gate_cells:[1.7,function*(B,r){for(const [k,at]of [[0,0],[1,.18],[2,.34],[3,.53]]){yield* metal(B,r,at,{f:640+k*35+r()*40,amp:.75,decay:.09,ratios:[1,2.2,3.6,5.5]});yield* metal(B,r,at+.01,{f:2400,amp:.25,decay:.02,ratios:[1,2.3]});yield* creak(B,r,at+.06,.28,{rate:[130,80],res:HINGE.map(([f,q,g])=>[f*(1.2+k*.08),q,g]),amp:.2,attack:.03,release:.08});}}],
-  cage_open:[2.3,function*(B,r){yield* chain(B,r,0,1.65,{rate:17,amp:.38,f:2200});yield* creak(B,r,.05,1.55,{rate:[48,34],res:TIMBER,amp:.3});yield* metal(B,r,1.75,{f:600,amp:.8,decay:.25});yield* thud(B,r,1.75,{f:80,amp:.55,decay:.1});yield* metal(B,r,1.9,{f:1500,amp:.25,decay:.15,ratios:HOOP});}],
-  lever:[1.2,function*(B,r){yield* metal(B,r,0,{f:900,amp:.4,decay:.05});yield* creak(B,r,.05,.3,{rate:[140,90],res:IRONROD,amp:.35,attack:.03,release:.05});
-   yield* metal(B,r,.36,{f:1500,amp:1,decay:.05,ratios:[1,2.3,4.1]});yield* wood(B,r,.36,{f:220,amp:.5,decay:.04});
-   yield* thud(B,r,.5,{f:66,amp:.7,decay:.15,dust:.3});yield* metal(B,r,.5,{f:230,amp:.38,decay:.3});yield* chain(B,r,.55,.35,{rate:26,amp:.22,attack:.03,release:.1});}],
-  plate_down:[.8,function*(B,r){yield* scrape(B,r,0,.26,{amp:.5,f:350,q:.8,grit:80,low:120,attack:.03,release:.05});yield* metal(B,r,.22,{f:1100,amp:.45,decay:.03,ratios:[1,2.3,3.9]});yield* thud(B,r,.22,{f:82,amp:.8,decay:.1,dust:.5});}],
-  plate_up:[.6,function*(B,r){yield* scrape(B,r,0,.18,{amp:.4,f:420,q:.8,grit:80,low:140,attack:.02,release:.04});yield* metal(B,r,.16,{f:1350,amp:.4,decay:.025,ratios:[1,2.3,3.9]});yield* wood(B,r,.16,{f:180,amp:.4,decay:.04});}],
-  winch:[2.9,function*(B,r){for(let t=0,k=0;t<2.4;k++){yield* metal(B,r,t,{f:1700+r()*120,amp:.55,decay:.025,ratios:[1,2.5,4.2]});yield* wood(B,r,t,{f:260,amp:.25,decay:.02});t+=1/(6+5*t/2.4)*(.92+r()*.16);}
-   yield* creak(B,r,0,2.5,{rate:[40,55],res:TIMBER,amp:.25});yield* chain(B,r,.1,2.4,{rate:9,amp:.2});yield* metal(B,r,2.5,{f:1500,amp:.8,decay:.05,ratios:[1,2.3,4.1]});yield* thud(B,r,2.5,{f:75,amp:.4});}],
-  lift:[3.1,function*(B,r){yield* metal(B,r,0,{f:330,amp:.6,decay:.15});yield* thud(B,r,0,{f:70,amp:.6});yield* chain(B,r,.1,2.6,{rate:24,amp:.4});yield* creak(B,r,.1,2.6,{rate:[35,48],res:TIMBER,amp:.3});
-   yield* hiss(B,r,.1,2.6,.12,biquad('lp',500,.7,B.sr),.6,.5);yield* thud(B,r,2.75,{f:70,amp:.9,decay:.12});yield* wood(B,r,2.75,{f:130,amp:.6,decay:.07,thump:.6});}],
+   yield* metal(B,r,.46,{f:190,amp:.9,decay:.05,count:12,rattle:4});yield* thud(B,r,.46,{f:60,amp:1,decay:.2,dust:.7});
+   yield* metal(B,r,.6,{f:210,amp:.3,decay:.03,count:10,rattle:2});yield* thud(B,r,.6,{f:66,amp:.25,decay:.08,dust:.2});yield* crackle(B,r,.5,.5,{rate:70,amp:.1,lo:900,hi:4000});}],
+  gate_cells:[1.7,function*(B,r){for(const [k,at]of [[0,0],[1,.18],[2,.34],[3,.53]]){yield* metal(B,r,at,{f:480+k*30+r()*40,amp:.75,decay:.022,count:9,rattle:2});yield* metal(B,r,at+.01,{f:2200,amp:.2,decay:.005,count:5});yield* creak(B,r,at+.06,.28,{rate:[130,80],res:HINGE.map(([f,q,g])=>[f*(1.2+k*.08),q,g]),amp:.2,attack:.03,release:.08});}}],
+  cage_open:[2.3,function*(B,r){yield* chain(B,r,0,1.65,{rate:17,amp:.38,f:2200});yield* creak(B,r,.05,1.55,{rate:[48,34],res:TIMBER,amp:.3});yield* metal(B,r,1.75,{f:400,amp:.75,decay:.03,count:10,rattle:3});yield* thud(B,r,1.75,{f:80,amp:.55,decay:.1});}],
+  lever:[1.2,function*(B,r){yield* metal(B,r,0,{f:800,amp:.4,decay:.01,count:7});yield* creak(B,r,.05,.3,{rate:[140,90],res:IRONROD,amp:.35,attack:.03,release:.05});
+   yield* metal(B,r,.36,{f:1100,amp:1,decay:.013,count:8,rattle:1});yield* wood(B,r,.36,{f:220,amp:.5,decay:.04});
+   yield* thud(B,r,.5,{f:66,amp:.7,decay:.15,dust:.3});yield* metal(B,r,.5,{f:230,amp:.4,decay:.035,count:10,rattle:2});yield* chain(B,r,.55,.35,{rate:26,amp:.22,attack:.03,release:.1});}],
+  plate_down:[.8,function*(B,r){yield* scrape(B,r,0,.26,{amp:.5,f:350,q:.8,grit:80,low:120,attack:.03,release:.05});yield* metal(B,r,.22,{f:650,amp:.4,decay:.012,count:8});yield* thud(B,r,.22,{f:82,amp:.8,decay:.1,dust:.5});}],
+  plate_up:[.6,function*(B,r){yield* scrape(B,r,0,.18,{amp:.4,f:420,q:.8,grit:80,low:140,attack:.02,release:.04});yield* metal(B,r,.16,{f:850,amp:.35,decay:.01,count:8});yield* wood(B,r,.16,{f:180,amp:.4,decay:.04});}],
+  winch:[2.9,function*(B,r){for(let t=0,k=0;t<2.4;k++){yield* metal(B,r,t,{f:1300+r()*300,amp:.5,decay:.006,count:6,spread:.12});yield* wood(B,r,t,{f:260,amp:.3,decay:.02});t+=1/(6+5*t/2.4)*(.92+r()*.16);}
+   yield* creak(B,r,0,2.5,{rate:[40,55],res:TIMBER,amp:.25});yield* chain(B,r,.1,2.4,{rate:9,amp:.2});yield* metal(B,r,2.5,{f:950,amp:.75,decay:.014,count:8,rattle:1});yield* thud(B,r,2.5,{f:75,amp:.4});}],
+  lift:[3.1,function*(B,r){yield* metal(B,r,0,{f:260,amp:.55,decay:.035,count:10,rattle:3});yield* thud(B,r,0,{f:70,amp:.6});yield* chain(B,r,.1,2.6,{rate:24,amp:.4});yield* creak(B,r,.1,2.6,{rate:[35,48],res:TIMBER,amp:.3});
+   yield* hiss(B,r,.1,2.6,.12,biquad('lp',500,.7,B.sr),.6,.5);yield* thud(B,r,2.75,{f:70,amp:.9,decay:.12});yield* wood(B,r,2.75,{f:130,amp:.6,decay:.07,thump:.6});yield* metal(B,r,2.76,{f:300,amp:.35,decay:.03,count:10,rattle:2});}],
   crate_grab:[.4,function*(B,r){yield* hiss(B,r,0,.05,.25,biquad('lp',1200,.7,B.sr),.004,2);yield* wood(B,r,.01,{f:210,amp:.45,decay:.035,bright:.4});yield* creak(B,r,.04,.13,{rate:[200,160],res:TIMBER,amp:.15,attack:.02,release:.04});}],
   crate_release:[.55,function*(B,r){yield* wood(B,r,0,{f:150,amp:.9,decay:.07,thump:.8,bright:.7});yield* thud(B,r,0,{f:70,amp:.5});yield* wood(B,r,.06,{f:340,amp:.2,decay:.03});}],
   crate_hit:[.55,function*(B,r){yield* wood(B,r,0,{f:180+r()*30,amp:1,decay:.06,thump:.6});yield* crackle(B,r,.01,.12,{rate:260,amp:.35});}],
   crate_break:[1.5,function*(B,r){yield* wood(B,r,0,{f:165,amp:1,decay:.07,thump:1});yield* hiss(B,r,.004,.05,.9,biquad('bp',2600,.8,B.sr),.0005,1.5);yield* crackle(B,r,.01,.36,{rate:900,amp:.6});yield* thud(B,r,.05,{f:75,amp:.5,decay:.1});
    for(let k=0;k<6;k++)yield* wood(B,r,.12+k*.1+r()*.08,{f:260+r()*260,amp:(.55-k*.06)*(.6+r()*.4),decay:.035,count:5});yield* crackle(B,r,.5,.45,{rate:60,amp:.1,lo:800,hi:3000});}],
-  barrel_hit:[.6,function*(B,r){yield* wood(B,r,0,{f:150,amp:.9,decay:.06});yield* mode(B,0,230*(.95+r()*.1),.6,.07);yield* mode(B,0,115,.4,.06);yield* metal(B,r,.002,{f:1400,amp:.2,decay:.12,ratios:HOOP,tap:0});}],
+  barrel_hit:[.6,function*(B,r){yield* wood(B,r,0,{f:150,amp:.9,decay:.06});yield* mode(B,0,230*(.95+r()*.1),.6,.05);yield* mode(B,0,115,.4,.06);yield* metal(B,r,.002,{f:800,amp:.22,decay:.01,count:7,tap:0,rattle:1});}],
   barrel_break:[2,function*(B,r){yield* wood(B,r,0,{f:140,amp:1,decay:.07,thump:1});yield* hiss(B,r,.004,.05,.8,biquad('bp',2300,.8,B.sr),.0005,1.5);yield* crackle(B,r,.01,.35,{rate:800,amp:.5});
    yield* hiss(B,r,.02,.38,.45,biquad('bp',1400,.7,B.sr),.01,1.5);yield* bubbles(B,r,.05,.55,{rate:30,amp:.3});
-   for(const [at,a]of [[.03,.35],[.33,.2],[.6,.1]])yield* metal(B,r,at,{f:420,amp:a,decay:.42,ratios:HOOP,tap:.2});
+   // Les cercles de fer rebondissent sur la pierre : trois chocs mats qui cliquettent.
+   for(const [at,a]of [[.03,.35],[.33,.2],[.6,.1]])yield* metal(B,r,at,{f:340+r()*80,amp:a,decay:.03,count:9,rattle:3,tap:.2});
    for(let k=0;k<7;k++)yield* wood(B,r,.1+k*.11+r()*.08,{f:300+r()*300,amp:(.5-k*.05)*(.6+r()*.4),decay:.035,count:5});}],
-  // Gobelins : voix aiguës et nasales, conduit vocal court.
-  gob_hurt:[[.42,function*(B,r){yield* voice(B,r,0,[V(.04,'ng',[340,380],[0,.5]),V(.17,['ng','a'],[380,560,470],[.5,1,.9],{rasp:.35}),V(.08,['a','ae'],[470,330],[.9,0],{rasp:.5})]);}],
-   [.36,function*(B,r){yield* voice(B,r,0,[V(.13,['e','ae'],[520,600,430],[1,1,.8],{rasp:.25,burst:{f:1500,amp:.6}}),V(.025,'ae',[430,400],[.8,0])]);yield* hiss(B,r,.19,.012,.25,biquad('bp',2600,1.2,B.sr),.0005,1.5);}],
-   [.42,function*(B,r){yield* voice(B,r,0,[H(.05,'a',[0,.6]),V(.25,['a','o'],[300,470,280],[.6,1,0],{rasp:.6,sub:.35,fr:38})]);}],
-   [.3,function*(B,r){yield* voice(B,r,0,[V(.03,'i',[620,700],[0,.8]),V(.12,['i','ae'],[700,780,520],[.8,1,0],{rasp:.15})]);}]],
-  gob_die:[[1.45,function*(B,r){yield* voice(B,r,0,[V(.05,['ng','ae'],[380,420],[0,.7]),V(.32,['ae','a'],[420,640,600],[.7,1,1],{rasp:.35}),V(.45,['a','o'],[600,330,210],[1,.8,.55],{rasp:.6,sub:.4,fr:42}),V(.25,['o','u'],[160,70,55],[.5,.35,0],{rasp:.9,sub:.6,fr:30})]);yield* bubbles(B,r,.95,.4,{rate:28,amp:.18,lo:180,hi:500});}],
-   [1.3,function*(B,r){yield* voice(B,r,0,[V(.36,['u','a'],[400,520,300],[.8,1,.2],{rasp:.5,sub:.3,burst:{f:1100,amp:.5}}),H(.16,'a',[.25,0]),GAP(.2),V(.32,['eu','u'],[210,180,120],[0,.35,0],{rasp:.7,breath:.5,noise:.35})]);}],
-   [1.2,function*(B,r){yield* voice(B,r,0,[V(.06,'i',[700,820],[0,.8]),V(.38,['i','ae','a'],[820,980,560],[.8,1,.7],{rasp:.25}),V(.3,['a','o'],[560,240,120],[.7,.5,0],{rasp:.75,sub:.5,fr:35})]);
+  // Gobelins : petites bêtes hargneuses. Conduit court, cris qui cassent, grondement de gorge.
+  gob_hurt:[[.42,function*(B,r){yield* voice(B,r,0,[V(.04,'ng',[380,450],[0,.5],{growl:.6,gr:60}),V(.17,['ae','i'],[480,880,700],[.5,1,.9],{rasp:.2,growl:.7,gr:58,sub:.25,brk:8,wide:1.4}),V(.09,['i','eu'],[700,380],[.9,0],{growl:.85,gr:48,wide:1.4})],GOB);}],
+   [.36,function*(B,r){yield* voice(B,r,0,[V(.13,['e','ae'],[560,760,520],[1,1,.8],{growl:.8,gr:62,sub:.3,burst:{f:1500,amp:.6},wide:1.4}),V(.03,'ae',[520,420],[.8,0],{growl:.8})],GOB);yield* hiss(B,r,.19,.014,.25,biquad('bp',2600,1.2,B.sr),.0005,1.5);}],
+   [.42,function*(B,r){yield* voice(B,r,0,[H(.05,'a',[0,.6]),V(.25,['a','o'],[300,470,260],[.6,1,0],{growl:.9,gr:40,sub:.35,bi:.4,wide:1.3})],GOB);}],
+   [.3,function*(B,r){yield* voice(B,r,0,[V(.03,'i',[750,900],[0,.8],{growl:.3}),V(.13,['i','ae'],[900,1150,680],[.8,1,0],{growl:.6,gr:65,brk:10,wide:1.5})],GOB);}]],
+  gob_die:[[1.5,function*(B,r){yield* voice(B,r,0,[V(.05,['ng','ae'],[420,520],[0,.7],{growl:.4}),V(.34,['ae','a'],[520,920,820],[.7,1,1],{growl:.6,gr:55,sub:.2,brk:7,wide:1.4}),V(.45,['a','o'],[820,380,210],[1,.8,.55],{growl:.8,gr:40,bi:.35,sub:.35,wide:1.4}),V(.3,['o','u'],[170,90,60],[.5,.35,0],{growl:1,gr:20,noise:.5,voiced:.6})],GOB);yield* bubbles(B,r,.95,.4,{rate:28,amp:.18,lo:180,hi:500});}],
+   [1.35,function*(B,r){yield* voice(B,r,0,[V(.36,['u','a'],[440,660,360],[.8,1,.2],{growl:.7,gr:50,brk:5,burst:{f:1100,amp:.5},wide:1.4}),H(.16,'a',[.25,0]),GAP(.18),V(.34,['eu','u'],[150,110,75],[0,.4,0],{growl:1,gr:17,voiced:.5,noise:.4})],GOB);}],
+   [1.25,function*(B,r){yield* voice(B,r,0,[V(.06,'i',[780,950],[0,.8],{growl:.3}),V(.38,['i','ae','a'],[950,1250,720],[.8,1,.7],{growl:.55,gr:62,brk:10,wide:1.5}),V(.32,['a','o'],[720,260,110],[.7,.5,0],{growl:.9,gr:30,sub:.5,bi:.3})],GOB);
     for(const at of [.8,.88,.97])yield* hiss(B,r,at,.008,.25,biquad('bp',1200,1.5,B.sr),.0005,1);}]],
-  gob_bark:[[.85,function*(B,r){yield* voice(B,r,0,[V(.12,'a',[360,420],[.9,1],{rasp:.7,fr:28,burst:{f:1100,amp:.5}}),V(.04,'a',[420,380],[.7,.2]),H(.04,'a',[.3,.6]),V(.1,'a',[400,460],[.8,.9],{rasp:.3}),V(.05,'a',[460,420],[.9,0]),GAP(.05),V(.22,['a','ae'],[480,640,520],[1,1,0],{rasp:.45,burst:{f:1800,amp:.6}})]);}],
-   [.8,function*(B,r){yield* voice(B,r,0,[V(.1,'a',[420,470],[0,1],{rasp:.3}),GAP(.04),V(.08,'a',[380,430],[.8,.9],{rasp:.75,fr:28,burst:{f:1700,amp:.5}}),V(.03,'a',[430,400],[.8,.3]),GAP(.03),V(.22,['e','ae'],[470,610,500],[1,1,0],{rasp:.4,burst:{f:1300,amp:.4}}),{...H(.025,'e',[.4,0]),noise:.6}]);}],
-   [.85,function*(B,r){yield* voice(B,r,0,[V(.08,'i',[460,520],[0,.8]),V(.1,['i','a'],[520,600],[.8,1]),V(.04,'a',[600,560],[1,.4]),V(.06,'a',[480,520],[.7,1],{rasp:.8,fr:28}),V(.28,['a','o'],[560,700,450],[1,1,0],{rasp:.45})]);}],
-   [.7,function*(B,r){yield* voice(B,r,0,[H(.04,'o',[0,.6]),V(.15,['o','i'],[430,520],[.8,1],{rasp:.35}),GAP(.04),V(.08,'i',[480,540],[0,.9]),V(.22,['a','ae'],[560,680,460],[1,1,0],{rasp:.45})]);}]],
-  gob_effort:[[.25,function*(B,r){yield* voice(B,r,0,[H(.035,'eu',[0,.7]),V(.09,'eu',[420,360],[1,0],{rasp:.4})]);}],
-   [.25,function*(B,r){yield* voice(B,r,0,[V(.14,['i','a'],[520,610,470],[1,1,0],{rasp:.3,burst:{f:1900,amp:.55}})]);}],
-   [.28,function*(B,r){yield* voice(B,r,0,[V(.16,'eu',[270,250,230],[.6,1,0],{rasp:.85,fr:32,sub:.4})]);yield* hiss(B,r,.17,.012,.3,biquad('bp',2200,1.2,B.sr),.0005,1.5);}]],
+  gob_bark:[[.85,function*(B,r){yield* voice(B,r,0,[V(.12,'a',[360,420],[.9,1],{rasp:.4,growl:.6,gr:34,burst:{f:1100,amp:.5}}),V(.04,'a',[420,380],[.7,.2],{growl:.5}),H(.04,'a',[.3,.6]),V(.1,'a',[400,470],[.8,.9],{growl:.4,gr:50}),V(.05,'a',[470,420],[.9,0]),GAP(.05),V(.22,['a','ae'],[480,700,520],[1,1,0],{growl:.55,gr:46,brk:4,burst:{f:1800,amp:.6},wide:1.3})],GOB);}],
+   [.8,function*(B,r){yield* voice(B,r,0,[V(.1,'a',[420,470],[0,1],{growl:.4,gr:52}),GAP(.04),V(.08,'a',[380,430],[.8,.9],{rasp:.4,growl:.7,gr:30,burst:{f:1700,amp:.5}}),V(.03,'a',[430,400],[.8,.3]),GAP(.03),V(.22,['e','ae'],[470,640,500],[1,1,0],{growl:.5,gr:48,brk:4,burst:{f:1300,amp:.4},wide:1.3}),{...H(.025,'e',[.4,0]),noise:.6}],GOB);}],
+   [.85,function*(B,r){yield* voice(B,r,0,[V(.08,'i',[460,520],[0,.8],{growl:.3}),V(.1,['i','a'],[520,620],[.8,1],{growl:.4,gr:55}),V(.04,'a',[620,560],[1,.4]),V(.06,'a',[480,520],[.7,1],{rasp:.4,growl:.8,gr:30}),V(.28,['a','o'],[560,740,450],[1,1,0],{growl:.5,gr:44,brk:4,wide:1.3})],GOB);}],
+   [.7,function*(B,r){yield* voice(B,r,0,[H(.04,'o',[0,.6]),V(.15,['o','i'],[430,540],[.8,1],{growl:.5,gr:46}),GAP(.04),V(.08,'i',[480,540],[0,.9],{growl:.3}),V(.22,['a','ae'],[560,720,460],[1,1,0],{growl:.55,gr:50,brk:5,wide:1.3})],GOB);}]],
+  gob_effort:[[.25,function*(B,r){yield* voice(B,r,0,[H(.035,'eu',[0,.7]),V(.09,'eu',[420,360],[1,0],{growl:.7,gr:44})],GOB);}],
+   [.25,function*(B,r){yield* voice(B,r,0,[V(.14,['i','a'],[520,640,470],[1,1,0],{growl:.5,gr:56,burst:{f:1900,amp:.55}})],GOB);}],
+   [.28,function*(B,r){yield* voice(B,r,0,[V(.16,'eu',[270,250,230],[.6,1,0],{growl:.95,gr:32,sub:.4,bi:.3})],GOB);yield* hiss(B,r,.17,.012,.3,biquad('bp',2200,1.2,B.sr),.0005,1.5);}]],
   gob_fall:[[.9,function*(B,r){yield* thud(B,r,0,{f:95,amp:.9,decay:.08,dust:.7});yield* hiss(B,r,0,.08,.5,biquad('lp',1500,.7,B.sr),.002,2);yield* thud(B,r,.12,{f:120,amp:.4,decay:.05,dust:.3});
-   for(const [at,a]of [[.07,.45],[.2,.25],[.31,.12]])yield* metal(B,r,at,{f:1900,amp:a,decay:.12,ratios:[1,2.6,4.7]});}],
+   for(const [at,a]of [[.07,.45],[.2,.25],[.31,.12]])yield* metal(B,r,at,{f:1100+r()*300,amp:a,decay:.012,count:7,rattle:1});}],
    [.9,function*(B,r){yield* thud(B,r,0,{f:90,amp:.9,decay:.09,dust:.7});yield* hiss(B,r,0,.08,.5,biquad('lp',1400,.7,B.sr),.002,2);yield* thud(B,r,.14,{f:115,amp:.35,decay:.05,dust:.3});
    for(const [at,a]of [[.06,.6],[.19,.3],[.29,.15]])yield* wood(B,r,at,{f:330,amp:a,decay:.04,count:5});}]],
-  // Grise-Gueule : grand gobelin, voix grave et rauque.
-  chief_roar:[[1.45,function*(B,r){yield* voice(B,r,0,[V(.12,['u','o'],[100,120],[0,.7],{rasp:.7,fr:28}),V(.85,['o','a','a'],[120,175,160,130],[.7,1,1,.8],{rasp:.6,sub:.45,fr:34,noise:.2}),V(.3,['a','o'],[130,95],[.8,0],{rasp:.8,sub:.5})],{scale:1,drive:2.2});}]],
-  chief_hurt:[[.45,function*(B,r){yield* voice(B,r,0,[H(.04,'a',[0,.7]),V(.25,['a','o'],[150,210,140],[.7,1,0],{rasp:.6,sub:.4})],{scale:1,drive:2.2});}],
-   [.4,function*(B,r){yield* voice(B,r,0,[V(.21,['u','o'],[170,190,130],[0,1,0],{rasp:.5,sub:.3})],{scale:1,drive:2.2});yield* hiss(B,r,.22,.014,.3,biquad('bp',1800,1.2,B.sr),.0005,1.5);}]],
-  chief_die:[[2.3,function*(B,r){yield* voice(B,r,0,[V(.08,'o',[130,160],[0,.8],{rasp:.5}),V(.6,'a',[160,230,210],[.8,1,1],{rasp:.6,sub:.4}),V(.7,['a','o','u'],[210,120,80],[1,.7,.4],{rasp:.8,sub:.6,fr:30}),V(.35,'u',[70,50],[.4,0],{rasp:1,sub:.7,fr:25})],{scale:1,drive:2.2});
-   yield* bubbles(B,r,1.45,.5,{rate:24,amp:.2,lo:150,hi:420});yield* hiss(B,r,1.85,.4,.04,biquad('lp',700,.7,B.sr),.08,1.5);}]],
-  chief_effort:[[.3,function*(B,r){yield* voice(B,r,0,[H(.04,'a',[0,.7]),V(.17,'a',[165,140],[1,0],{rasp:.5,sub:.3})],{scale:1,drive:2.2});}],
-   [.32,function*(B,r){yield* voice(B,r,0,[V(.05,'ng',[130,140],[0,.6]),V(.18,['ng','eu'],[140,175,120],[.6,1,0],{rasp:.6,sub:.35})],{scale:1,drive:2.2});}]],
-  chief_fall:[[1.3,function*(B,r){yield* thud(B,r,0,{f:58,amp:1,decay:.18,dust:1});yield* metal(B,r,0,{f:700,amp:.45,decay:.3});yield* metal(B,r,.02,{f:1300,amp:.3,decay:.2,ratios:HOOP});
-   for(const [at,a]of [[.1,.5],[.3,.25],[.45,.12]])yield* metal(B,r,at,{f:900,amp:a,decay:.35});yield* crackle(B,r,.05,.6,{rate:90,amp:.12,lo:800,hi:3500});}]],
+  // Grise-Gueule : une bête énorme. Conduit long, voix qui gronde à l'octave dessous, poitrine qui résonne.
+  chief_roar:[[1.75,function*(B,r){yield* voice(B,r,0,[{...H(.09,'o',[0,.35,0]),noise:.7},V(.16,['u','o'],[58,80],[0,.7],{growl:1,gr:24,bi:.5,wide:1.3}),V(.95,['o','a','a'],[80,128,122,100],[.7,1,1,.85],{growl:.8,gr:31,bi:.6,noise:.32,rasp:.3,fr:37,brk:1.5,wide:1.35}),V(.38,['a','o','u'],[100,68,52],[.85,.45,0],{growl:1,gr:21,bi:.5,noise:.45,wide:1.3})],CHIEF);}]],
+  chief_hurt:[[.5,function*(B,r){yield* voice(B,r,0,[H(.04,'a',[0,.7]),V(.3,['a','o'],[105,150,88],[.7,1,0],{growl:.9,gr:29,bi:.55,brk:3,wide:1.35})],CHIEF);}],
+   [.45,function*(B,r){yield* voice(B,r,0,[V(.24,['u','o'],[115,140,85],[0,1,0],{growl:1,gr:27,bi:.6,wide:1.3})],CHIEF);yield* hiss(B,r,.25,.05,.3,biquad('bp',900,1,B.sr),.004,2);}]],
+  chief_die:[[2.7,function*(B,r){yield* voice(B,r,0,[V(.1,'o',[85,110],[0,.8],{growl:.7,gr:28,bi:.4}),V(.62,'a',[110,155,140],[.8,1,1],{growl:.8,gr:31,bi:.6,brk:2,noise:.3,wide:1.35}),V(.75,['a','o','u'],[140,78,55],[1,.7,.4],{growl:1,gr:23,bi:.5,noise:.4,wide:1.3}),V(.5,'u',[52,38],[.4,0],{growl:1,gr:14,voiced:.5,noise:.5})],CHIEF);
+   yield* bubbles(B,r,1.5,.5,{rate:24,amp:.2,lo:150,hi:420});yield* hiss(B,r,2,.5,.05,biquad('lp',700,.7,B.sr),.08,1.5);}]],
+  chief_effort:[[.32,function*(B,r){yield* voice(B,r,0,[H(.04,'a',[0,.7]),V(.18,'a',[110,88],[1,0],{growl:.9,gr:30,bi:.5})],CHIEF);}],
+   [.34,function*(B,r){yield* voice(B,r,0,[V(.05,'ng',[85,95],[0,.6],{growl:.8,gr:26}),V(.2,['ng','eu'],[95,125,80],[.6,1,0],{growl:.9,gr:28,bi:.55})],CHIEF);}]],
+  chief_fall:[[1.3,function*(B,r){yield* thud(B,r,0,{f:58,amp:1,decay:.18,dust:1});yield* metal(B,r,0,{f:280,amp:.5,decay:.04,count:11,rattle:3});yield* metal(B,r,.02,{f:700,amp:.3,decay:.015,count:8,rattle:2});
+   for(const [at,a]of [[.1,.5],[.3,.25],[.45,.12]])yield* metal(B,r,at,{f:450+r()*200,amp:a,decay:.02,count:9,rattle:2});yield* crackle(B,r,.05,.6,{rate:90,amp:.12,lo:800,hi:3500});}]],
  };
  // Traînée de caisse : boucle sans couture (frottement bois sur pierre et petits accrocs).
  const LOOPS={crate_scrape:[2.4,function*(B,r){yield* scrape(B,r,0,B.n/B.sr,{amp:.6,f:600,q:.7,grit:25,low:160,attack:0,release:0});yield* creak(B,r,0,B.n/B.sr,{rate:[30,38],res:TIMBER,amp:.25,attack:0,release:0,wobble:.4});}]};

@@ -20,6 +20,25 @@ test('the dungeon bank synthesises every sound in small slices, with variants, a
  const pick=bank.pick('gob_hurt',()=>0);assert.notEqual(bank.pick('gob_hurt',()=>0),pick,'never the same variant twice in a row');
 });
 
+// Longest time a narrow spectral line (300 Hz to 8 kHz) stays 15 dB above its neighbourhood: a bell rings on, a clank doesn't.
+function ringing(d,sr){const N=2048,hop=512,lo=Math.floor(300/sr*N),hi=Math.floor(8000/sr*N),spec=[];let top=-1e9;
+ for(let f=0;f+N<=d.length;f+=hop){const re=new Float64Array(N),im=new Float64Array(N);for(let i=0;i<N;i++)re[i]=d[f+i]*(.5-.5*Math.cos(2*Math.PI*i/N));
+  for(let i=1,j=0;i<N;i++){let b=N>>1;for(;j&b;b>>=1)j^=b;j^=b;if(i<j){[re[i],re[j]]=[re[j],re[i]];}}
+  for(let len=2;len<=N;len<<=1){const a=-2*Math.PI/len;for(let i=0;i<N;i+=len)for(let j=0;j<len/2;j++){const cr=Math.cos(a*j),ci=Math.sin(a*j),p=i+j,q=p+len/2,vr=re[q]*cr-im[q]*ci,vi=re[q]*ci+im[q]*cr;re[q]=re[p]-vr;im[q]=im[p]-vi;re[p]+=vr;im[p]+=vi;}}
+  const m=new Float64Array(hi+32);for(let k=lo-32;k<hi+32;k++){m[k]=20*Math.log10(Math.hypot(re[k],im[k])+1e-9);top=Math.max(top,m[k]);}spec.push(m);}
+ let run=new Map(),best=0;
+ for(const m of spec){const now=new Map();for(let k=lo;k<hi;k++){if(!(m[k]>m[k-1]&&m[k]>=m[k+1])||m[k]<top-45)continue;
+  const near=[];for(let j=k-30;j<=k+30;j++)if(Math.abs(j-k)>2)near.push(m[j]);near.sort((a,b)=>a-b);if(m[k]-near[near.length>>1]<15)continue;
+  const n=Math.max(run.get(k-1)||0,run.get(k)||0,run.get(k+1)||0)+1;now.set(k,n);best=Math.max(best,n);}run=now;}
+ return best*hop/sr;}
+
+test('iron clanks and rattles instead of ringing like a bell, wood knocks',()=>{
+ const bank=DungeonSfx.create(fake);while(!bank.prepare(50));
+ // Voices are tonal by nature, and so is the long squeaking hinge of an opening door.
+ for(const name of DungeonSfx.names){if(/^(gob|chief)_(hurt|die|bark|effort|roar)$|^door_open$/.test(name))continue;
+  for(const b of bank.bank[name]){const t=ringing(b.getChannelData(0),b.sampleRate);assert.ok(t<.42,name+' rings '+t.toFixed(2)+' s');}}
+});
+
 test('each dungeon mechanism plays its own sound once, from the change of state',()=>{
  const g=dungeon(),F=a.FirstDungeon,s=F.state(g),tick=listen(g);assert.deepEqual(tick(),[]);
  s.levers.push('20,1,N');s.open.push('7,3,N','9,3,N','13,3,N','15,3,N');assert.deepEqual(tick(),['lever','gate_cells']);

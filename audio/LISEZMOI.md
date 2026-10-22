@@ -26,7 +26,7 @@ Exploration, voyage et donjons sont des **ambiances**, pas des thèmes : bourdon
 | `biome_polar` | Glace éternelle | do dièse mineur, 44 | chœur comme un vent, cloche de loin en loin |
 | `biome_cursed` | Terres maudites | do mineur, 48 | cœur qui bat, glas, soupir qui tremble |
 | `biome_travel` | Sur la route | ré dorien, 60 | pas régulier de la basse, tambour sourd |
-| `dungeon` | Sous la pierre | ré locrien, 40 | bourdon qui glisse d'un demi-ton, cors en grappe, cloche fêlée, gong |
+| `dungeon` | Sous la pierre | ré locrien, 40 | bourdon qui glisse d'un demi-ton, cors en grappe, plainte lointaine, tambour sourd |
 | `dungeon_alert` | Ils t'ont vu | ré locrien, 80 | même bourdon, basse qui bat, cordes graves, tambours de guerre |
 | `combat` | Le choc des colosses | mi phrygien, 138 | thème : ostinato de cordes, chœur scandé, tambours |
 | `boss` | Le Prêtre du Serpent | do phrygien, 150 | thème : motif qui ondule, chœur de culte, gong |
@@ -44,7 +44,7 @@ Les niveaux (`gain`) sont calibrés par rendu hors ligne au volume musique par d
 
 Tous les donjons partagent la même musique, choisie par `scripts/dungeon-audio.js` (intégré au jeu par `npm run build:music`) :
 
-- *Sous la pierre* (`dungeon`) en exploration, minimaliste : bourdon de ré qui monte parfois d'un demi-ton, chœur qui ne vient que par moments, cors graves en grappe, une cloche fêlée qui pose un triton sans le résoudre, tambour lointain et gong.
+- *Sous la pierre* (`dungeon`) en exploration, minimaliste : bourdon de ré qui monte parfois d'un demi-ton, chœur qui ne vient que par moments, cors graves en grappe, une plainte lointaine (pulsation fine et voilée, vibrato lent) qui pose un triton sans le résoudre, tambour lointain. Ni cloche, ni gong, ni enclume sous terre, ni dans la musique ni dans la cave (demande de Lino, 22 octobre).
 - *Ils t'ont vu* (`dungeon_alert`) dès qu'un gobelin vivant voit le héros (moins de 150 px, ligne de vue dégagée), puis cinq secondes encore. Même tonalité et même bourdon : le passage se fait en 0,65 s, le retour en 1,8 s.
 - Le thème du boss pendant le combat contre le chef du donjon (`bossFight`), puis retour à *Sous la pierre*.
 
@@ -52,7 +52,7 @@ Sous terre, le vent, la faune et les grillons se taisent. La cave prend leur pla
 
 ## Bruitages du donjon
 
-`scripts/dungeon-sfx.js` synthétise tous les bruitages du donjon dans le jeu, sans fichier audio : modes amortis pour le bois et le fer, frottement collé-glissé pour les gonds, poulies et planches, maillons de chaîne, raclements, bulles, et voix à formants pour les gobelins (impulsions glottiques avec gigue, râle et sous-harmonique, quatre formants qui glissent d'une voyelle à l'autre, conduit vocal court ; Grise-Gueule a un conduit plus long et une voix plus grave et plus rauque). La banque se fabrique à l'entrée du donjon, 3 ms par image au plus (environ 1 s de calcul en tout, gobelins et casse d'abord), à 32 kHz. 31 familles, 84 variantes ; une variante n'est jamais jouée deux fois de suite.
+`scripts/dungeon-sfx.js` synthétise tous les bruitages du donjon dans le jeu, sans fichier audio : modes amortis pour le bois ; pour le fer, un choc mat (une douzaine de modes inharmoniques serrés qui s'éteignent en quelques centièmes de seconde, un claquement de bruit coloré, de petits rebonds qui cliquettent) pour qu'aucune pièce ne sonne comme une cloche, même dans la réverbération de pierre ; frottement collé-glissé pour les gonds, poulies et planches, maillons de chaîne, raclements, bulles. Les gobelins et Grise-Gueule ont des voix de créatures : impulsions glottiques avec gigue, voix qui casse d'un coup à l'octave ou à la quinte, seconde source désaccordée qui gronde à l'octave dessous, râle des fausses cordes (bruit haché de 15 à 70 Hz), quatre formants larges qui glissent et tremblent, saturation asymétrique. Conduit court et cris qui cassent pour les gobelins ; conduit long, voix très grave, grondement et poitrine pour Grise-Gueule, sans laisser le grave seul (les haut-parleurs de téléphone ne le rendent pas). La banque se fabrique à l'entrée du donjon, 3 ms par image au plus (environ 1 s de calcul en tout, gobelins et casse d'abord), à 32 kHz. 31 familles, 84 variantes ; une variante n'est jamais jouée deux fois de suite.
 
 | Famille | Quand |
 |---|---|

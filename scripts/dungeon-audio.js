@@ -46,11 +46,12 @@ const DungeonCave=(()=>{
  function air(c,seed){return loop(c,9.7,2,function*(t,k){const r=rng(seed+k*101);let b=0;for(let i=0;i<t.length;i++){b=.994*b+(r()*2-1)*.04;t[i]=b;if(tick(i))yield;}normalize(t,.6);},22050);}
  // Souffle des galeries : bruit rose, passé dans un passe-bande qui se déplace lentement en jeu.
  function draft(c,seed){return loop(c,8.1,1,function*(t){const r=rng(seed);let b0=0,b1=0,b2=0;for(let i=0;i<t.length;i++){const w=r()*2-1;b0=.99765*b0+w*.099;b1=.963*b1+w*.2965;b2=.57*b2+w*1.0527;t[i]=(b0+b1+b2+w*.1848)*.11;if(tick(i))yield;}normalize(t,.6);},22050);}
- // Bruits lointains : chaînes qui s'entrechoquent, pierre qui tombe puis cailloux, gond qui grince, eau profonde.
+ // Bruits lointains : chaînes qui s'entrechoquent (cliquetis mats, sans résonance de cloche), pierre qui tombe puis
+ // cailloux, gond qui grince, eau profonde.
  function* chains(c,seed){const sr=c.sampleRate,n=Math.floor(sr*1.4),b=c.createBuffer(1,n,sr),d=b.getChannelData(0),r=rng(seed);
-  for(let at=.01,k=0,count=6+Math.floor(r()*6);k<count&&at<1.1;k++,at+=.03+r()*.13){const f=1500+r()*1000,amp=.4+.6*r();
-   for(const [ratio,level,decay]of [[1,.5,.09],[2.41,.3,.06],[3.93,.2,.04],[5.52,.12,.025]]){for(let i=Math.floor(at*sr),ph=0;i<n;i++){const x=i/sr-at,e=Math.exp(-x/decay);if(e<1e-3)break;d[i]+=amp*level*e*Math.sin(ph+=2*Math.PI*f*ratio/sr);}yield;}
-   for(let i=Math.floor(at*sr),j=0;j<sr*.003&&i<n;i++,j++)d[i]+=amp*.25*(r()*2-1)*Math.exp(-j/sr/.0006);}
+  for(let at=.01,k=0,count=6+Math.floor(r()*6);k<count&&at<1.1;k++,at+=.03+r()*.13){const f=700+r()*900,amp=.4+.6*r(),bp=band(f*2.2,.9,sr);
+   for(const [ratio,level,decay]of [[1,.5,.014],[1.47,.42,.012],[1.93,.34,.01],[2.44,.28,.008],[3.58,.2,.006],[4.93,.14,.005]]){const fr=f*ratio*(.93+r()*.14);for(let i=Math.floor(at*sr),ph=0;i<n;i++){const x=i/sr-at,e=Math.exp(-x/decay);if(e<1e-3)break;d[i]+=amp*level*e*Math.sin(ph+=2*Math.PI*fr/sr);}yield;}
+   for(let i=Math.floor(at*sr),j=0;j<sr*.03&&i<n;i++,j++)d[i]+=amp*.6*bp(r()*2-1)*Math.exp(-j/sr/.005);}
   normalize(d,.8);return b;}
  function* stone(c,seed){const sr=c.sampleRate,n=Math.floor(sr*1.8),b=c.createBuffer(1,n,sr),d=b.getChannelData(0),r=rng(seed);let ph=0,lp=0;
   for(let i=0;i<n;i++){const t=i/sr;ph+=2*Math.PI*(38+18*Math.exp(-t/.06))/sr;lp+=.04*((r()*2-1)-lp);d[i]=Math.sin(ph)*Math.exp(-t/.22)+lp*2.2*Math.exp(-t/.12)*Math.min(1,t/.003);if(tick(i))yield;}

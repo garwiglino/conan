@@ -328,22 +328,23 @@ const SONGS = [
   order: ['A', 'B']},
 
  // Donjons : une seule ambiance pour tous, minimaliste, menaçante et intrigante. Bourdon de ré qui glisse d'un
- // demi-ton, chœur qui ne vient que par moments, cors graves en grappe, une cloche fêlée qui pose une question
- // (un triton) sans y répondre, tambour lointain et gong. La variante d'alerte garde la même tonalité et le
- // même bourdon : le jeu passe de l'une à l'autre quand les gobelins voient le héros, sans changer de morceau.
- {name: 'dungeon', title: 'Sous la pierre', mood: 'Donjons : ré locrien, bourdon qui glisse d’un demi-ton, cors en grappe, cloche fêlée lointaine et gong.', bpm: 40, gain: .5,
+ // demi-ton, chœur qui ne vient que par moments, cors graves en grappe, une plainte lointaine qui pose une question
+ // (un triton) sans y répondre, tambour lointain. Ni cloche, ni gong, ni enclume sous terre (demande de Lino,
+ // 22 octobre). La variante d'alerte garde la même tonalité et le même bourdon : le jeu passe de l'une à l'autre
+ // quand les gobelins voient le héros, sans changer de morceau.
+ {name: 'dungeon', title: 'Sous la pierre', mood: 'Donjons : ré locrien, bourdon qui glisse d’un demi-ton, cors en grappe, plainte lointaine et tambour sourd.', bpm: 40, gain: .5,
   bass: 'R:16', bassLow: 37, pad: true, padMode: 'fifth', padLow: 49, echo: .9, echoGain: .34,
-  timbres: ambient({lead: {kind: 'bell', g: .18, pan: .2}, harm: {g: .1, a: 1.8, rel: 2.2, filter: 620}, saw: {a: 2.6, rel: 2.6}}),
-  programs: {lead: 14},
+  timbres: ambient({lead: {w: 'p125', g: .07, pan: .2, a: .35, tau: 1, sus: .75, rel: .9, vib: 18, filter: 1400}, harm: {g: .1, a: 1.8, rel: 2.2, filter: 620}, saw: {a: 2.6, rel: 2.6}}),
+  programs: {lead: 75},
   sections: {
    A: {chords: ['D5', 'D5', 'D5', 'Eb5', 'D5', 'D5', 'Ddim', 'D5'],
     padRhythm: ['-:16', '-:4 x:12', 'x:16', 'x:16', 'x:12 -:4', '-:16', 'x:16', 'x:8 -:8'],
-    lead: ['-:16', '-:16', '-:8 A5:4 Eb6:4', '-:16', '-:16', '-:16', '-:16', '-:4 D6:4 C#6:8'],
+    lead: ['-:16', '-:16', '-:8 A4:4 Eb5:4', '-:16', '-:16', '-:16', '-:16', '-:4 D5:4 C#5:8'],
     harm: ['-:16', '-:16', '-:16', 'D3:16', '-:16', '-:4 Ab2:12', '-:16', '-:16'],
-    drums: [{B: 'g...............', G: 'g...............'}, null, null, null, {B: 'g...............'}, null, null, null]},
+    drums: [{B: 'g...............'}, null, null, null, {B: 'g...............'}, null, null, null]},
    B: {chords: ['D5', 'D5', 'Eb5', 'Eb5', 'D5', 'C#dim', 'C#dim', 'D5'],
     padRhythm: ['-:16', '-:8 x:8', 'x:16', 'x:16', 'x:12 -:4', 'x:16', '-:16', 'x:8 -:8'],
-    lead: ['-:16', '-:16', '-:16', '-:6 Bb5:4 E6:6', '-:16', '-:16', '-:16', '-:16'],
+    lead: ['-:16', '-:16', '-:16', '-:6 Bb4:4 E5:6', '-:16', '-:16', '-:16', '-:16'],
     harm: ['-:16', '-:16', 'D3:16', '-:16', '-:16', '-:16', '-:4 G2:12', '-:16'],
     drums: [{B: 'g.......g.......'}, null, null, null, {B: 'g...............'}, null, null, null]}
   },
@@ -360,7 +361,7 @@ const SONGS = [
     lead: ['-:16', '-:16', '-:16', 'D4:6 Eb4:10', '-:16', '-:16', '-:16', 'Eb4:6 D4:10'],
     harm: ['-:16', '-:16', 'D3:16', '-:16', '-:16', '-:16', 'G2:16', '-:16'],
     drums: {B: 'x.......x...g...', K: 'g...g...g...g...'},
-    fill: {B: 'x.......x.x.x...', K: 'g...g...g...g...', A: '............g...'}}
+    fill: {B: 'x.......x.x.x...', K: 'g...g...g...g...'}}
   },
   order: ['A']},
 
