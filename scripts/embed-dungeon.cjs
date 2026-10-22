@@ -1,6 +1,10 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 let html=read('index.html');
+// Light hits stagger a goblin locally; only finishers send it seven units away.
+// The legacy seven-unit shove plus its old recovery made each light hit a reset.
+html=html.replace('this.move(e,(e.x-this.player.x)/d*7,(e.y-this.player.y)/d*7);',
+ "this.move(e,(e.x-this.player.x)/d*(e.kind==='goblin'&&this.player.combo!==3?2:7),(e.y-this.player.y)/d*(e.kind==='goblin'&&this.player.combo!==3?2:7));");
 // Keep the shared light compositor current without rebuilding world geography.
 html=html.replace(/\/\/ BEGIN WEATHER RENDER[\s\S]*?\/\/ END WEATHER RENDER/,()=> '// BEGIN WEATHER RENDER\n'+read('scripts/weather-render.js')+'\n// END WEATHER RENDER');
 html=html.replaceAll("'Clés '+g.dungeon.keys.length+'/3 · Fioles '","'Fioles '");

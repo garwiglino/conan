@@ -160,10 +160,12 @@ const bodies=Game.prototype.bodies;Game.prototype.bodies=function(o){return this
 const damageEnemy=Game.prototype.damageEnemy;
 Game.prototype.damageEnemy=function(e,n){
  if(!this.dungeon?.active)return damageEnemy.call(this,e,n);if(e.dead)return;
- const before=e.hp,result=damageEnemy.call(this,e,n);if(e.hp>=before)return result;
+ const committed=Number.isFinite(e.swingElapsed)&&e.swingElapsed>=HearthreaverGoblins.times('attack',!!e.chief,e.goblinCombo||0)[0]&&this.player.combo!==3;
+ const priorStun=e.stun||0,before=e.hp,result=damageEnemy.call(this,e,n);if(e.hp>=before)return result;
  // Keep the shared power, riposte, hit sound, blood, target, loot and feedback.
  // The goblin rig only supplies its own reaction and the dungeon boss outcome.
- e.hurtElapsed=0;e.stun=Math.max(e.stun||0,HearthreaverGoblins.duration('hurt'));HearthreaverGoblins.cancel(e);GoblinTactics.provoke(this,e);
+ if(!committed||e.dead){e.hurtElapsed=0;e.stun=Math.max(priorStun,HearthreaverGoblins.duration('hurt',!!e.chief),this.player.combo===3?.34:0);if(!e.chief)e.cooldown=Math.min(e.cooldown||0,.04);HearthreaverGoblins.cancel(e);}
+ GoblinTactics.provoke(this,e);
  if(e.dead){e.deathElapsed=0;this.gainXP(e.chief?40:8);if(e.chief){this.dungeon.bossDead=true;this.dungeon.bossFight=false;this.player.hp=this.player.maxHp;this.emit('notice',{title:'Grise-Gueule est vaincu',text:'Le levier au fond de la salle est maintenant accessible.'});}this.emit('save');}
  return result;
 };
@@ -205,8 +207,8 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
   if(e.stun>0)continue;const d=dist(e,p);if(e.chief&&!this.dungeon.bossFight||e.bossGuard&&!this.dungeon.bossFight&&!this.dungeon.bossDead)continue;
   if(impact){if(HearthreaverGoblins.hits(e,p)&&this.lineClear(e,p))this.damagePlayer(e.chief?2:1,e);e.cooldown=e.chief?1.25:.32;}
   if(Number.isFinite(e.swingElapsed)){GoblinTactics.combatMove(this,e,tactics,dt);continue;}
-  const dir=this.direction(p.x-e.x,p.y-e.y),reachable=d<=(e.chief?32:21)&&HearthreaverGoblins.hits({...e,swingDir:dir,goblinCombo:e.nextCombo||0},p);
-  if(reachable&&e.cooldown<=0&&this.lineClear(e,p)&&GoblinTactics.canStrike(this,e,tactics)){e.dir=dir;HearthreaverGoblins.start(e);GoblinTactics.reserve(tactics,e);this.emit('foe',{kind:'skeleton',act:'strike',vol:.4});}
+  const dir=this.direction(p.x-e.x,p.y-e.y),reachable=d<=(e.chief?32:21)&&HearthreaverGoblins.hits({...e,swingDir:dir,goblinCombo:e.nextCombo||0,swingAim:HearthreaverGoblins.aim(e,p,dir,e.nextCombo||0)},p);
+  if(reachable&&e.cooldown<=0&&this.lineClear(e,p)&&GoblinTactics.canStrike(this,e,tactics)){e.dir=dir;HearthreaverGoblins.start(e,p);GoblinTactics.reserve(tactics,e);this.emit('foe',{kind:'skeleton',act:'strike',vol:.4});}
   else GoblinTactics.move(this,e,GoblinTactics.goal(this,e,tactics),tactics,dt);
  }
  this.dungeonRevealTimer=(this.dungeonRevealTimer||0)-dt;if(this.dungeonRevealTimer<=0){this.revealDungeon();this.dungeonRevealTimer=.15;}

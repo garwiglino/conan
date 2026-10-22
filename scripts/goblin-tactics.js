@@ -25,8 +25,9 @@ const GoblinTactics=(()=>{
   const s=state(g),p=g.player,now=g.time,live=g.enemies.filter(e=>!e.dead&&(!e.chief||g.dungeon.bossFight)&&(!e.bossGuard||g.dungeon.bossFight||g.dungeon.bossDead)),visible=live.filter(e=>length(e,p)<170&&g.lineClear(e,p));
   for(const e of live){let m=s.actors.get(e);if(!m){m={until:0,slot:null,route:[],repath:0,retreatUntil:0};s.actors.set(e,m);}
    const sees=visible.includes(e),witness=sees?null:visible.find(a=>length(a,e)<100&&g.lineClear(a,e));
+   if(sees&&!swing(e)&&e.stun<=0&&m.until<=now&&!e.chief)e.cooldown=Math.min(e.cooldown||0,.12);
    if(sees||witness){if(m.until<=now&&now>=s.nextBark&&now>=(m.nextBark||0)){const lines=e.chief?['Tu ne sortiras pas !']:sees?['Un intrus !','Attrapez-le !','Il est là !','À moi !']:['Par ici !','On le tient !'],seed=String(e.id).split('').reduce((n,c)=>n+c.charCodeAt(0),0);s.lines=[{actor:e,text:lines[seed%lines.length],start:now,until:now+2.2}];s.nextBark=now+2.6;m.nextBark=now+10;}m.until=now+2.8;m.last={x:p.x,y:p.y};}
-   m.sees=sees;if(m.wasSwing&&!swing(e)){m.retreatUntil=now+.6;s.engagers.delete(e);}m.wasSwing=swing(e);
+   m.sees=sees;if(m.wasSwing&&!swing(e)){m.retreatUntil=now+(e.chief?.35:.14);s.engagers.delete(e);}m.wasSwing=swing(e);
   }
   const active=live.filter(e=>{const m=s.actors.get(e);return m.until>now&&length(e,m.sees?p:m.last)<210;}),group=active.filter(e=>s.actors.get(e).sees);
   portalPlan(g,s,active,now);
@@ -37,7 +38,7 @@ const GoblinTactics=(()=>{
   for(const e of group){const m=s.actors.get(e);m.slot=s.sectors.get(e);m.angle=m.slot===null?angle(e,p):s.gap+Math.PI/6+(m.slot+.5)*span/count;m.local=length(e,p)<=29;m.threat=m.local||p.attack>0&&g.targetId===e.id&&length(e,p)<48;
    m.priority=m.local?100-length(e,p):m.provokedUntil>now?55:p.attack>0&&m.threat?45:0;
    m.ready=m.local||group.length<2||m.portal?.owner||Math.abs(delta(m.angle,angle(e,p)))<.6;}
-  for(const e of [...s.engagers]){const m=s.actors.get(e);if(!group.includes(e)||e.stun>0||m.portal&&!m.portal.owner||m.retreatUntil>now||!swing(e)&&now>m.engageUntil){s.engagers.delete(e);if(m&&now>m.engageUntil&&!m.portal&&!m.clearingPortal)m.retreatUntil=now+.3;}}
+  for(const e of [...s.engagers]){const m=s.actors.get(e);if(!group.includes(e)||e.stun>0||m.portal&&!m.portal.owner||m.retreatUntil>now||!swing(e)&&now>m.engageUntil){s.engagers.delete(e);if(m&&now>m.engageUntil&&!m.portal&&!m.clearingPortal)m.retreatUntil=now+.12;}}
   for(const e of group)if(swing(e))s.engagers.add(e);
   // Committed blows own capacity first, including after a local priority transfer.
   const committed=[...s.engagers].filter(swing);
@@ -60,7 +61,7 @@ const GoblinTactics=(()=>{
  // Approach a position the authored impact can actually reach. Isometric body
  // collisions can stop a straight pursuit beside, rather than inside, its arc.
  function contactGoal(g,e,m){
-  const p=g.player,combo=e.nextCombo||0,dir=g.direction(p.x-e.x,p.y-e.y),connects=q=>HearthreaverGoblins.hits({...e,x:q.x,y:q.y,swingDir:g.direction(p.x-q.x,p.y-q.y),goblinCombo:combo},p);
+  const p=g.player,combo=e.nextCombo||0,dir=g.direction(p.x-e.x,p.y-e.y),connects=q=>HearthreaverGoblins.hits({...e,x:q.x,y:q.y,swingDir:g.direction(p.x-q.x,p.y-q.y),goblinCombo:combo,swingAim:HearthreaverGoblins.aim(q,p,g.direction(p.x-q.x,p.y-q.y),combo)},p);
   const distance=length(e,p);
   if(distance>42){m.contact=null;return p;}
   // Keep ordinary pursuit direct. Orbit only when a body actually blocks
@@ -89,14 +90,14 @@ const GoblinTactics=(()=>{
   if(plan.pressing.has(e)&&m.ready){if(length(e,g.player)>30&&plan.active.filter(a=>a!==e&&length(a,g.player)<30).length>=2)return ring(g.player,angle(e,g.player),37);return contactGoal(g,e,m);}
   if(m.portal?.owner){if(m.retreatUntil>plan.now){const q={x:m.portal.x,y:m.portal.y};q[m.portal.axis]+=m.portal.side*32;return q;}return g.player;}
   if(plan.group.length<2&&m.retreatUntil<=plan.now)return length(e,g.player)>20?g.player:{x:e.x,y:e.y};
-  const radius=m.slot===null?70:m.retreatUntil>plan.now?53:46;
+  const radius=m.slot===null?70:m.retreatUntil>plan.now?33:46;
   for(const r of [radius,radius+10,radius-6])for(const offset of [0,.2,-.2,.4,-.4]){const q=ring(g.player,m.angle+offset,r);if(!g.solid(q.x,q.y,e.r||6)&&clear(g,g.player,q,e.r||6))return q;}
   // Back out along a clear local direction when a room wall blocks the sector.
   if(length(e,g.player)<35)for(const turn of [0,.5,-.5,1,-1]){const q=ring(g.player,angle(e,g.player)+turn,43);if(clear(g,e,q,e.r||6))return q;}
   return {x:e.x,y:e.y};
  }
  function canStrike(g,e,p){const m=p.s.actors.get(e);return m?.sees&&!swing(e)&&p.pressing.has(e)&&m.ready&&(!m.portal||m.portal.owner)&&p.now>=p.s.nextStrike&&g.enemies.filter(a=>!a.dead&&a.stun<=0&&swing(a)).length<2;}
- function reserve(p,e){p.s.nextStrike=p.now+.28;if(e){const m=p.s.actors.get(e);m.lastStrike=p.now;m.wasSwing=true;}}
+ function reserve(p,e){p.s.nextStrike=p.now+.16;if(e){const m=p.s.actors.get(e);m.lastStrike=p.now;m.wasSwing=true;}}
  function waypoint(g,e,target,m){
   const navigable=(a,b)=>{if(!clear(g,a,b,e.r||6))return false;if(!g.crowd||target===g.player)return true;const n=Math.ceil(length(a,b)/4);for(let i=1;i<=n;i++)if(g.crowd(e,a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n))return false;return true;};
   if(navigable(e,target)){m.route=[];return target;}
