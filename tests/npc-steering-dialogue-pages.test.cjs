@@ -4,7 +4,7 @@ before(async()=>{a=await loadGame();});
 function walker(){const g=new a.Game();g.solid=()=>false;g.party=[];return g;}
 test('NPCs follow arbitrary angles at normalized speed and adjust a target within its tile',()=>{
  const g=walker(),n={id:'steering',x:8,y:8},to={x:136,y:72};g.walkNpc(n,to,.25);
- assert.ok(Math.abs(n.y-8-(n.x-8)/2)<1e-8);assert.ok(Math.abs(Math.hypot(n.x-8,n.y-8)-8)<1e-8);
+ assert.ok(Math.abs(n.y-8-(n.x-8)/2)<1e-8);assert.ok(Math.abs(require('../scripts/world-projection').distance(n.x-8,n.y-8)-8)<1e-8);
  to.y=79;for(let i=0;i<100;i++)g.walkNpc(n,to,.1);assert.ok(Math.hypot(n.x-to.x,n.y-to.y)<.01);
 });
 test('a long NPC step cannot tunnel through a newly closed wall',()=>{

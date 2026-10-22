@@ -1545,7 +1545,7 @@ class Game{
   const link=attackEdge&&p.combo<3&&p.comboWindow>0&&p.comboRecoilShown&&p.hitPause<=0&&HearthreaverWeapons.canChain(p.attack,p.weapon,p.combo);
   if(attackEdge&&((p.attackCD<=0&&p.attack<=0)||link)&&p.dash<=0&&p.hurt<=0){if(link){p.attack=0;p.attackCD=0;}const ax=dx,ay=dy;if(ax||ay)this.aimAttack(ax,ay);else this.aimAttack(...this.facing(p.dir),true);this.faceTarget();if((ax||ay)&&!this.target())p.dir=this.direction(ax,ay);this.swingSword();}if(input.interact)this.interact();
   if(p.dash>0){this.movePlayer(p,p.dashX*dt*120,p.dashY*dt*120);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}
-  else if(l&&(p.attack<=0||this.target())){if(p.attack<=0)p.dir=this.turnTo(p.dir,dx,dy);const ox=p.x,oy=p.y,speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,dx*dt*speed,dy*dt*speed);const moved=Math.hypot(p.x-ox,p.y-oy);p.moving=moved>.001;if(p.moving)p.anim+=moved/5.5;else p.anim=0;}
+  else if(l&&(p.attack<=0||this.target())){if(p.attack<=0)p.dir=this.turnTo(p.dir,dx,dy);const ox=p.x,oy=p.y,speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,dx*dt*speed,dy*dt*speed);const moved=WorldProjection.distance(p.x-ox,p.y-oy);p.moving=moved>.001;if(p.moving)p.anim+=moved/5.5;else p.anim=0;}
   else{p.anim=0;p.moving=false;}
   if(p.onStairs){p.x=clamp(p.x,this.stairs.x-this.stairs.hw+4,this.stairs.x+this.stairs.hw-4);this.stairState(p);}
   this.checkSteles();this.questTimer-=dt;if(this.questTimer<=0){this.questTimer=.25;this.checkQuests();}p.lvlFX=Math.max(0,(p.lvlFX||0)-dt);
@@ -8048,7 +8048,7 @@ class Renderer{
  liftDeck(x,y){const P=RAMP.wood,I=RAMP.iron;box(this.c,x-19,y-13,38,27,P[0]);for(let j=0;j<5;j++){const yy=y-12+j*5;box(this.c,x-18,yy,36,4,P[j%2?3:4]);box(this.c,x-18,yy,36,1,P[5]);}
   for(const xx of[x-18,x+15]){box(this.c,xx,y-12,3,25,I[2]);box(this.c,xx,y-12,1,25,I[4]);}box(this.c,x-18,y-12,36,1,I[3]);box(this.c,x-18,y+12,36,1,I[1]);}
  chest(o){const s=this.propCache[o.open?'chest_open':'chest'];this.c.drawImage(s,Math.round(o.x)-32,Math.round(o.y)-56);}
- frame(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,T=this.top,VH=H-T,K=this.k||1,snap=v=>Math.round(v*K)/K;c.setTransform(K,0,0,K,0,0);const lift=p.elevation!==undefined?p.elevation:(p.level?12:0),dw=g.dialogue&&g.dialogue.who;let fx=p.x,fy=p.y-lift;if(dw){fx=(p.x+dw.x)/2;fy=(p.y-lift+dw.y-(dw.level?12:0)-(g.dialogue.head||40)-26)/2+14;}const now=g.time,dtc=Math.min(.1,Math.max(0,now-(this.lastT??now)));this.lastT=now;const F=this.focus||(this.focus={x:fx,y:fy});if(dw)this.easeT=.45;if(this.easeT>0){const k=1-Math.pow(.0005,dtc);F.x+=(fx-F.x)*k;F.y+=(fy-F.y)*k;if(!dw)this.easeT-=dtc;}else{F.x=fx;F.y=fy;}const bounds=this.projectionActive?{left:-1e10,top:-1e10,right:1e10,bottom:1e10}:g.atlas?{left:-Atlas.origin.x*16,top:-Atlas.origin.y*16,right:(Atlas.raw.width-Atlas.origin.x)*16,bottom:(Atlas.raw.height-Atlas.origin.y)*16}:{left:0,top:0,right:MW*16,bottom:MH*16};this.cam.x=snap(clamp(F.x-W/2,bounds.left,bounds.right-W));this.cam.y=snap(clamp(F.y-VH/2-14,bounds.top,bounds.bottom-VH));let shake=g.shake>0&&!(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches)?Math.round(Math.sin(g.time*132)*2*Math.min(1,g.shake/.08)):0;
+ frame(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,T=this.top,VH=H-T,K=this.k||1,snap=v=>WorldProjection.snap(v);c.setTransform(K,0,0,K,0,0);const lift=p.elevation!==undefined?p.elevation:(p.level?12:0),dw=g.dialogue&&g.dialogue.who;let fx=p.x,fy=p.y-lift;if(dw){fx=(p.x+dw.x)/2;fy=(p.y-lift+dw.y-(dw.level?12:0)-(g.dialogue.head||40)-26)/2+14;}const now=g.time,dtc=Math.min(.1,Math.max(0,now-(this.lastT??now)));this.lastT=now;const F=this.focus||(this.focus={x:fx,y:fy});if(dw)this.easeT=.45;if(this.easeT>0){const k=1-Math.pow(.0005,dtc);F.x+=(fx-F.x)*k;F.y+=(fy-F.y)*k;if(!dw)this.easeT-=dtc;}else{F.x=fx;F.y=fy;}const bounds=this.projectionActive?{left:-1e10,top:-1e10,right:1e10,bottom:1e10}:g.atlas?{left:-Atlas.origin.x*16,top:-Atlas.origin.y*16,right:(Atlas.raw.width-Atlas.origin.x)*16,bottom:(Atlas.raw.height-Atlas.origin.y)*16}:{left:0,top:0,right:MW*16,bottom:MH*16};this.cam.x=snap(clamp(F.x-Math.floor(W/2),bounds.left,bounds.right-W));this.cam.y=snap(clamp(F.y-Math.floor(VH/2)-14,bounds.top,bounds.bottom-VH));let shake=g.shake>0&&!(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches)?Math.round(Math.sin(g.time*132)*2*Math.min(1,g.shake/.08)):0;
   const contactShake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);if(Math.abs(contactShake)>Math.abs(shake))shake=contactShake;c.fillStyle=PAL.ink;c.fillRect(0,0,W,H);c.save();c.beginPath();c.rect(0,T,W,VH);c.clip();c.translate(-this.cam.x+shake,T-this.cam.y);this.drawAtlasGround();if(!this.projectionActive)c.drawImage(this.bg,0,0);
   const wf=this.projectionActive?null:this.waterFX;if(wf){const ax=Math.max(wf.x,Math.floor(this.cam.x)-2),ay=Math.max(wf.y,Math.floor(this.cam.y)-2),bx=Math.min(wf.x+wf.w,Math.ceil(this.cam.x+W)+2),by=Math.min(wf.y+wf.h,Math.ceil(this.cam.y+VH)+2);if(bx>ax&&by>ay)c.drawImage(wf.frames[Math.floor(g.time*4)%4],ax-wf.x,ay-wf.y,bx-ax,by-ay,ax,ay,bx-ax,by-ay);}
   renderRainGround(this,c,W,VH);
@@ -9043,7 +9043,7 @@ Game.prototype.walkNpc=function(n,to,dt){
  if(n.path?.length)n.path[n.path.length-1]={x:to.x,y:to.y};
  let budget=(this.party?.some(c=>c.id===n.id)?80:32)*dt;
  while(budget>0&&n.path?.length){
-  const q=n.path[0],dx=q.x-n.x,dy=q.y-n.y,d=Math.hypot(dx,dy),step=Math.min(d,budget);
+  const q=n.path[0],dx=q.x-n.x,dy=q.y-n.y,d=WorldProjection.distance(dx,dy),step=Math.min(d,budget);
   const next={x:n.x+(d?dx/d*step:0),y:n.y+(d?dy/d*step:0)};
   if(!this.npcSegmentFree(n,n,next)){n.path=[];break;}
   n.x=next.x;n.y=next.y;if(d){n.dir=this.direction(dx,dy);n.anim=(n.anim||0)+step/5.5;}
@@ -10508,7 +10508,7 @@ Game.prototype.civilianProjectiles=function(dt){
 };
 Game.prototype.stepCivilianAnimations=function(dt){
  for(const n of this.npcs){if(n.batracien&&!n.batracien.role){this.stepBatracienCivilian(n,dt);continue;}const c=this.ensureCivilian(n);if(!c)continue;const delta=c.tickTime===this.time?0:dt;c.tickTime=this.time;c.inv=Math.max(0,c.inv-delta);c.elapsed+=delta;
-  const moved=Math.hypot(n.x-c.lastX,n.y-c.lastY);c.lastX=n.x;c.lastY=n.y;const member=this.party?.find(v=>v.id===n.id);if(moved>.01&&moved<20){c.distance+=moved;c.moveTime=this.time;}
+  const moved=WorldProjection.distance(n.x-c.lastX,n.y-c.lastY);c.lastX=n.x;c.lastY=n.y;const member=this.party?.find(v=>v.id===n.id);if(moved>.01&&moved<20){c.distance+=moved;c.moveTime=this.time;}
   if(member){if(c.lastHP!==undefined&&member.hp<c.lastHP)this.civilianAction(n,member.down?'death':'hit',true);c.lastHP=member.hp;if(member.down){if(c.action!=='death')this.civilianAction(n,'death');continue;}if(c.action==='death')this.civilianAction(n,'stand_up');}
   if(c.dead)continue;
   if(c.critical){this.civilianAction(n,'cower');n.anim=0;n.path=[];continue;}
@@ -14358,7 +14358,7 @@ const Batraciens = (() => {
  Game.prototype.stepBatracienCivilian=function(n,dt){
   const b=n.batracien,c=this.ensureCivilian(n);if(!c)return;
   const delta=c.tickTime===this.time?0:Math.max(0,Math.min(.04,dt));c.tickTime=this.time;c.inv=Math.max(0,c.inv-delta);
-  const moved=Math.hypot(n.x-b.lastX,n.y-b.lastY);b.lastX=n.x;b.lastY=n.y;c.lastX=n.x;c.lastY=n.y;
+  const moved=WorldProjection.distance(n.x-b.lastX,n.y-b.lastY);b.lastX=n.x;b.lastY=n.y;c.lastX=n.x;c.lastY=n.y;
   if(moved>.001&&moved<30){b.distance+=moved;c.moveTime=this.time;}
   const m=member(this,n);if(c.dead){visual(n,'death');b.elapsed=Math.min(duration(n,'death'),b.elapsed+delta);syncCivil(n);return;}
   if(m){if(c.lastHP!==undefined&&m.hp<c.lastHP)visual(n,m.down?'death':'hit',true);c.lastHP=m.hp;
@@ -14446,7 +14446,7 @@ const Batraciens = (() => {
   b.footwork=(b.footwork||0)+dt;const sign=(hash(n.id+':footwork')%2?1:-1)*(Math.floor(b.footwork/2.4)%2?-1:1),radial=clampN((d-ideal)/14,-.7,1),lateral=d<ideal+28?.55*sign:0;
   const vx=ux*radial-uy*lateral,vy=uy*radial+ux*lateral,length=Math.max(1,Math.hypot(vx,vy)),dx=vx/length*speed*dt,dy=vy/length*speed*dt,old={x:n.x,y:n.y};
   const leash=n.post?(g.isHostileBatracien?.(n)?380:230):null;if(leash&&Math.hypot(n.x+dx-n.post.x,n.y+dy-n.post.y)>leash)return 0;
-  g.move(n,dx,dy);n.dir=g.direction(t.x-n.x,t.y-n.y);return dist(n,old);
+  g.move(n,dx,dy);n.dir=g.direction(t.x-n.x,t.y-n.y);return WorldProjection.distance(n.x-old.x,n.y-old.y);
  }
  function movingGuard(g,n,dt){const b=n.batracien;if(!tickGuard(n,dt))return false;
   const t=fightingTarget(g,n,b.guardTargetId);if(t&&b.action!=='block'){const moved=combatMove(g,n,t,dt,true);b.distance+=moved;visual(n,moved>.001?'guard_walk':'guard');}return true;
@@ -14503,7 +14503,7 @@ const Batraciens = (() => {
    if(spec.shield&&td<=spec.range+10&&b.cooldown>.25&&front(this,e,target,.25)&&this.lineClear(e,target)){beginGuard(e,target);return;}
    combatMove(this,e,target,dt);
   }else if(finite(br.tx)&&finite(br.ty)){const dx=br.tx-e.x,dy=br.ty-e.y,dd=Math.hypot(dx,dy);if(dd>5){e.dir=this.direction(dx,dy);this.move(e,dx/dd*e.speed*dt,dy/dd*e.speed*dt);}}
-  const moved=dist(e,before);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
+  const moved=WorldProjection.distance(e.x-before.x,e.y-before.y);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
  };
  const nativeEnemyDamage=Game.prototype.damageEnemy;
  Game.prototype.damageEnemy=function(n,amount){if(n?.batracien?.role&&this.npcs.includes(n))return this.damageBatracienGuard(n,amount,this.player);if(n?.batracien&&this.tryBatracienBlock(n,this.player))return;return nativeEnemyDamage.call(this,n,amount);};
@@ -14539,7 +14539,7 @@ const Batraciens = (() => {
     const post=n.post||n;const phase=Math.floor((this.time+(b.seed%12))/8)%4,offset=[[0,0],[24,0],[0,0],[-24,0]][phase],to={x:post.x+offset[0],y:post.y+offset[1]};
     if(dist(n,to)>2&&!this.solid(to.x,to.y,6,0))this.walkNpc(n,to,dt);
    }
-   const moved=dist(n,old);b.distance+=moved;visual(n,moved>.001?'patrol':'idle');b.elapsed+=dt;
+   const moved=WorldProjection.distance(n.x-old.x,n.y-old.y);b.distance+=moved;visual(n,moved>.001?'patrol':'idle');b.elapsed+=dt;
   }
  };
  Game.prototype.launchBatracienJavelin=function(n,t){
@@ -21508,6 +21508,11 @@ return {render,renderSteps,palette:PAL,rgb:RGB,shift,C,flora:FLORA,sets:Object.k
 const point=(x,y,z=0)=>({x:x-y,y:(x+y)/2-z}),inverse=(x,y,z=0)=>({x:y+z+x/2,y:y+z-x/2});
 function rect(r){const p=[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(v=>inverse(...v)),xs=p.map(p=>p.x),ys=p.map(p=>p.y);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};}
 function input(x=0,y=0){const p=inverse(x,y),l=Math.hypot(p.x,p.y),size=Math.min(1,Math.hypot(x,y));return l?{x:p.x/l*size,y:p.y/l*size}:{x:0,y:0};}
+// A movement budget is measured on screen, before collision response.
+function distance(x,y){const q=point(x,y);return Math.hypot(q.x,q.y);}
+function motion(x,y){const length=Math.hypot(x,y),projected=distance(x,y),scale=projected?length/projected:0;return {x:x*scale,y:y*scale};}
+// Static art and camera share the native sprite grid, regardless of render DPR.
+const snap=value=>Math.round(value);
 function display(game){
  const views=new WeakMap(),originals=new WeakMap();
  const raw=o=>originals.get(o)||o;
@@ -21540,7 +21545,7 @@ function display(game){
  }
  return {game:wrap(game),wrap,raw};
 }
-return Object.freeze({point,inverse,rect,input,display});
+return Object.freeze({point,inverse,rect,input,distance,motion,snap,display});
 });
 
 /* Serializable worker/fallback renderer. No DOM, PNG or synchronous full-world pass.
@@ -22072,14 +22077,14 @@ const GoblinTactics=(()=>{
   let dx=q.x-e.x,dy=q.y-e.y,d=Math.hypot(dx,dy);if(d<.01)return;dx/=d;dy/=d;
   // Separate rigid bodies without changing their art or rotating a committed strike.
   for(const a of plan.active)if(a!==e){const n=length(a,e),r=(a.r||6)+(e.r||6)+9;if(n<r&&n>.01){dx+=(e.x-a.x)/n*(r-n)/r*1.6;dy+=(e.y-a.y)/n*(r-n)/r*1.6;}}
-  const n=Math.hypot(dx,dy)||1,speed=e.chief?29:plan.pressing.has(e)||plan.group.length>1?42:32,amount=Math.min(speed*dt,d),ox=e.x,oy=e.y;
-  let mx=dx/n*amount,my=dy/n*amount;
+  const n=Math.hypot(dx,dy)||1,speed=e.chief?29:plan.pressing.has(e)||plan.group.length>1?42:32,amount=Math.min(speed*dt,WorldProjection.distance(q.x-e.x,q.y-e.y)),ox=e.x,oy=e.y;
+  const v=WorldProjection.motion(dx/n*amount,dy/n*amount);let mx=v.x,my=v.y;
   // A cached path or separation force may graze a corner: slide safely and replan.
   if(g.solid(e.x+mx,e.y+my,e.r||6)){m.route=[];m.repath=g.time+.12;if(!g.solid(e.x+mx,e.y,e.r||6))my=0;else if(!g.solid(e.x,e.y+my,e.r||6))mx=0;else return;}
   // Waiting actors yield the inner space; only token holders may approach it.
   if(!plan.pressing.has(e)&&!m.yield&&!m.portal&&!m.clearingPortal&&length({x:e.x+mx,y:e.y+my},g.player)<32&&length({x:e.x+mx,y:e.y+my},g.player)<length(e,g.player))return;
   if(!portalFree(g,e,e.x+mx,e.y+my,plan.s))return;
-  g.move(e,mx,my);const moved=Math.hypot(e.x-ox,e.y-oy);m.stuck=moved<.01?(m.stuck||0)+dt:0;if(m.stuck>.16){m.route=[];m.repath=g.time+.12;m.stuck=0;}e.moving=moved>.001;if(e.moving){e.dir=m.sees?g.direction(g.player.x-e.x,g.player.y-e.y):g.direction(e.x-ox,e.y-oy);e.anim=(e.anim||0)+moved/5.5;}
+  g.moveLogical(e,mx,my);const moved=WorldProjection.distance(e.x-ox,e.y-oy);m.stuck=moved<.01?(m.stuck||0)+dt:0;if(m.stuck>.16){m.route=[];m.repath=g.time+.12;m.stuck=0;}e.moving=moved>.001;if(e.moving){e.dir=m.sees?g.direction(g.player.x-e.x,g.player.y-e.y):g.direction(e.x-ox,e.y-oy);e.anim=(e.anim||0)+moved/5.5;}
  }
  function combatMove(g,e,plan,dt){
   const m=plan.s.actors.get(e);if(!m?.sees)return;if(m.yield){const dir=e.dir;move(g,e,m.yieldGoal,plan,dt);e.dir=dir;return;}const frame=HearthreaverGoblins.look(e).frame,stamp=e.swingElapsed;
@@ -22286,7 +22291,7 @@ function dungeonStep(dt,controls={}){dt=clamp(dt,0,.04);this.time+=dt;this.shake
  if(input.interact)this.interact();if(!this.dungeon.active)return;
  p.steer=!!(input.x||input.y);
  this.dungeonSteer={x:input.x||0,y:input.y||0};const ox=p.x,oy=p.y;if(this.dungeonGrip&&p.attack<=0&&p.hurt<=0){const k=Math.max(1,Math.hypot(input.x||0,input.y||0));this.movePlayer(p,(input.x||0)/k*dt*24,(input.y||0)/k*dt*24);}else if(p.dash>0){this.movePlayer(p,p.dashX*120*dt,p.dashY*120*dt);if(Math.floor(this.time*40)%2===0)this.particles.push({x:p.x,y:p.y-2,vx:0,vy:0,life:.16,color:'#e8cc96'});}else if((input.x||input.y)&&(p.attack<=0||this.target())&&p.hurt<=0){if(p.attack<=0)p.dir=this.turnTo(p.dir,input.x,input.y);const speed=p.guard?29:p.attack>0?18:67;this.movePlayer(p,input.x*dt*speed,input.y*dt*speed);}
- p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+Math.hypot(p.x-ox,p.y-oy)/5.5:0;
+ p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.anim=p.moving?(p.anim||0)+WorldProjection.distance(p.x-ox,p.y-oy)/5.5:0;
  if(!this.dungeonGrip)this.faceTarget();p.impactTick=p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===2&&!p.impactDone;if(p.impactTick)p.impactDone=true;p.comboRecoilShown=p.comboRecoilShown||p.attack>0&&HearthreaverWeapons.sample(p.attack,p.weapon,p.combo)===3.5;
  if(p.attack>0){if(p.impactTick&&!p.attackStep){p.attackStep=true;const [x,y]=this.facing(p.dir),step=HearthreaverWeapons.attackStep(p.weapon,p.combo);this.movePlayer(p,x*step,y*step);}const f=attackFrame(p.attack,p.combo,p.weapon);if(f===2||f===3)for(const e of this.enemies)if(!e.dead&&!this.hits.has(e.id)&&bladeHits(p,e,f)&&this.lineClear(p,e)){this.hits.add(e.id);this.damageEnemy(e,this.weaponDamage(p.combo===3?2:1));}}
  if(this.dungeon.floor==='trone'&&p.y<9*CELL&&!this.dungeon.bossDead)this.dungeon.bossFight=true;
@@ -22406,7 +22411,7 @@ function drawGoblinSpeech(r,g){
 Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call(this);
  const g=this.g,c=this.c,p=g.player,K=this.k||1,W=this.W,H=this.H,T=this.top,e=F.current(g),s=F.state(g),art=F.art,P=WorldProjection.point;
  c.setTransform(K,0,0,K,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#050408';c.fillRect(0,0,W,H);
- const hero=P(p.x,p.y),now=performance.now()/1000;this.dungeonOcclusionDt=Math.min(.05,Math.max(0,now-(this.dungeonOcclusionTime??now-1/60)));this.dungeonOcclusionTime=now;this.dungeonOcclusion=[];this.cam={x:Math.round(hero.x-W/2),y:Math.round(hero.y-(H-T)/2-10)};
+ const hero=P(p.x,p.y),now=performance.now()/1000;this.dungeonOcclusionDt=Math.min(.05,Math.max(0,now-(this.dungeonOcclusionTime??now-1/60)));this.dungeonOcclusionTime=now;this.dungeonOcclusion=[];this.cam={x:WorldProjection.snap(hero.x)-Math.floor(W/2),y:WorldProjection.snap(hero.y)-Math.floor((H-T)/2)-10};
  if(!art.ready){text(c,art.error?'Erreur de chargement du donjon':'Chargement du donjon…',12,T+30,'#eee0c8');return;}
  const a=art.floors[e.id],seen=g.dungeonSeen||new Set(s.seen),items=[],brightness=this.dungeonBrightness||(this.dungeonBrightness=new Map()),visible=(i,j)=>seen.has(i+','+j);
  c.save();c.beginPath();c.rect(0,T,W,H-T);c.clip();const shake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);c.translate(-this.cam.x+shake,T-this.cam.y);c.drawImage(a.ground,-a.origin[0],-a.origin[1]);
@@ -22460,6 +22465,30 @@ Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call
  drawGoblinSpeech(this,g);this.hud();KaldorArmaments.renderDiscovery(this);c.save();
  const boss=g.enemies.find(n=>n.chief);if(g.dungeon.bossFight&&boss&&!boss.dead&&!g.dialogue){const y=T+36;this.uiBox(W/2-78,y,156,24);text(c,'GRISE-GUEULE',W/2-35,y+4,'#e5bf67');c.fillStyle='#38242a';c.fillRect(W/2-70,y+16,140,3);c.fillStyle='#bf4a3a';c.fillRect(W/2-70,y+16,140*boss.hp/boss.maxHp,3);}
  c.restore();
+};
+})();
+
+/* Convert actor movement budgets to screen distance once, before collisions.
+ * Logical coordinates, collision geometry, navigation and saved positions stay intact. */
+(()=>{
+'use strict';
+const move=Game.prototype.move,movePlayer=Game.prototype.movePlayer,walkNpc=Game.prototype.walkNpc,converting=new WeakSet();
+// Preflight steering (portals and avoidance) may already have converted its vector.
+Game.prototype.moveLogical=function(actor,x,y){return move.call(this,actor,x,y);};
+Game.prototype.move=function(actor,x,y){
+ if(converting.has(actor))return move.call(this,actor,x,y);
+ const v=WorldProjection.motion(x,y);return move.call(this,actor,v.x,v.y);
+};
+Game.prototype.movePlayer=function(actor,x,y){
+ if(converting.has(actor))return movePlayer.call(this,actor,x,y);
+ const v=WorldProjection.motion(x,y);converting.add(actor);
+ try{return movePlayer.call(this,actor,v.x,v.y);}finally{converting.delete(actor);}
+};
+// Path walking already consumes a projected budget per segment. Some species
+// replay that displacement through move() to add body collisions: do not convert twice.
+Game.prototype.walkNpc=function(actor,target,dt){
+ if(converting.has(actor))return walkNpc.call(this,actor,target,dt);
+ converting.add(actor);try{return walkNpc.call(this,actor,target,dt);}finally{converting.delete(actor);}
 };
 })();
 

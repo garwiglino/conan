@@ -92,7 +92,7 @@ Game.prototype.walkNpc=function(n,to,dt){
  if(n.path?.length)n.path[n.path.length-1]={x:to.x,y:to.y};
  let budget=(this.party?.some(c=>c.id===n.id)?80:32)*dt;
  while(budget>0&&n.path?.length){
-  const q=n.path[0],dx=q.x-n.x,dy=q.y-n.y,d=Math.hypot(dx,dy),step=Math.min(d,budget);
+  const q=n.path[0],dx=q.x-n.x,dy=q.y-n.y,d=WorldProjection.distance(dx,dy),step=Math.min(d,budget);
   const next={x:n.x+(d?dx/d*step:0),y:n.y+(d?dy/d*step:0)};
   if(!this.npcSegmentFree(n,n,next)){n.path=[];break;}
   n.x=next.x;n.y=next.y;if(d){n.dir=this.direction(dx,dy);n.anim=(n.anim||0)+step/5.5;}

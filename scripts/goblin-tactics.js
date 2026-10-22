@@ -148,14 +148,14 @@ const GoblinTactics=(()=>{
   let dx=q.x-e.x,dy=q.y-e.y,d=Math.hypot(dx,dy);if(d<.01)return;dx/=d;dy/=d;
   // Separate rigid bodies without changing their art or rotating a committed strike.
   for(const a of plan.active)if(a!==e){const n=length(a,e),r=(a.r||6)+(e.r||6)+9;if(n<r&&n>.01){dx+=(e.x-a.x)/n*(r-n)/r*1.6;dy+=(e.y-a.y)/n*(r-n)/r*1.6;}}
-  const n=Math.hypot(dx,dy)||1,speed=e.chief?29:plan.pressing.has(e)||plan.group.length>1?42:32,amount=Math.min(speed*dt,d),ox=e.x,oy=e.y;
-  let mx=dx/n*amount,my=dy/n*amount;
+  const n=Math.hypot(dx,dy)||1,speed=e.chief?29:plan.pressing.has(e)||plan.group.length>1?42:32,amount=Math.min(speed*dt,WorldProjection.distance(q.x-e.x,q.y-e.y)),ox=e.x,oy=e.y;
+  const v=WorldProjection.motion(dx/n*amount,dy/n*amount);let mx=v.x,my=v.y;
   // A cached path or separation force may graze a corner: slide safely and replan.
   if(g.solid(e.x+mx,e.y+my,e.r||6)){m.route=[];m.repath=g.time+.12;if(!g.solid(e.x+mx,e.y,e.r||6))my=0;else if(!g.solid(e.x,e.y+my,e.r||6))mx=0;else return;}
   // Waiting actors yield the inner space; only token holders may approach it.
   if(!plan.pressing.has(e)&&!m.yield&&!m.portal&&!m.clearingPortal&&length({x:e.x+mx,y:e.y+my},g.player)<32&&length({x:e.x+mx,y:e.y+my},g.player)<length(e,g.player))return;
   if(!portalFree(g,e,e.x+mx,e.y+my,plan.s))return;
-  g.move(e,mx,my);const moved=Math.hypot(e.x-ox,e.y-oy);m.stuck=moved<.01?(m.stuck||0)+dt:0;if(m.stuck>.16){m.route=[];m.repath=g.time+.12;m.stuck=0;}e.moving=moved>.001;if(e.moving){e.dir=m.sees?g.direction(g.player.x-e.x,g.player.y-e.y):g.direction(e.x-ox,e.y-oy);e.anim=(e.anim||0)+moved/5.5;}
+  g.moveLogical(e,mx,my);const moved=WorldProjection.distance(e.x-ox,e.y-oy);m.stuck=moved<.01?(m.stuck||0)+dt:0;if(m.stuck>.16){m.route=[];m.repath=g.time+.12;m.stuck=0;}e.moving=moved>.001;if(e.moving){e.dir=m.sees?g.direction(g.player.x-e.x,g.player.y-e.y):g.direction(e.x-ox,e.y-oy);e.anim=(e.anim||0)+moved/5.5;}
  }
  function combatMove(g,e,plan,dt){
   const m=plan.s.actors.get(e);if(!m?.sees)return;if(m.yield){const dir=e.dir;move(g,e,m.yieldGoal,plan,dt);e.dir=dir;return;}const frame=HearthreaverGoblins.look(e).frame,stamp=e.swingElapsed;

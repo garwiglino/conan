@@ -132,7 +132,7 @@ const Batraciens = (() => {
  Game.prototype.stepBatracienCivilian=function(n,dt){
   const b=n.batracien,c=this.ensureCivilian(n);if(!c)return;
   const delta=c.tickTime===this.time?0:Math.max(0,Math.min(.04,dt));c.tickTime=this.time;c.inv=Math.max(0,c.inv-delta);
-  const moved=Math.hypot(n.x-b.lastX,n.y-b.lastY);b.lastX=n.x;b.lastY=n.y;c.lastX=n.x;c.lastY=n.y;
+  const moved=WorldProjection.distance(n.x-b.lastX,n.y-b.lastY);b.lastX=n.x;b.lastY=n.y;c.lastX=n.x;c.lastY=n.y;
   if(moved>.001&&moved<30){b.distance+=moved;c.moveTime=this.time;}
   const m=member(this,n);if(c.dead){visual(n,'death');b.elapsed=Math.min(duration(n,'death'),b.elapsed+delta);syncCivil(n);return;}
   if(m){if(c.lastHP!==undefined&&m.hp<c.lastHP)visual(n,m.down?'death':'hit',true);c.lastHP=m.hp;
@@ -220,7 +220,7 @@ const Batraciens = (() => {
   b.footwork=(b.footwork||0)+dt;const sign=(hash(n.id+':footwork')%2?1:-1)*(Math.floor(b.footwork/2.4)%2?-1:1),radial=clampN((d-ideal)/14,-.7,1),lateral=d<ideal+28?.55*sign:0;
   const vx=ux*radial-uy*lateral,vy=uy*radial+ux*lateral,length=Math.max(1,Math.hypot(vx,vy)),dx=vx/length*speed*dt,dy=vy/length*speed*dt,old={x:n.x,y:n.y};
   const leash=n.post?(g.isHostileBatracien?.(n)?380:230):null;if(leash&&Math.hypot(n.x+dx-n.post.x,n.y+dy-n.post.y)>leash)return 0;
-  g.move(n,dx,dy);n.dir=g.direction(t.x-n.x,t.y-n.y);return dist(n,old);
+  g.move(n,dx,dy);n.dir=g.direction(t.x-n.x,t.y-n.y);return WorldProjection.distance(n.x-old.x,n.y-old.y);
  }
  function movingGuard(g,n,dt){const b=n.batracien;if(!tickGuard(n,dt))return false;
   const t=fightingTarget(g,n,b.guardTargetId);if(t&&b.action!=='block'){const moved=combatMove(g,n,t,dt,true);b.distance+=moved;visual(n,moved>.001?'guard_walk':'guard');}return true;
@@ -277,7 +277,7 @@ const Batraciens = (() => {
    if(spec.shield&&td<=spec.range+10&&b.cooldown>.25&&front(this,e,target,.25)&&this.lineClear(e,target)){beginGuard(e,target);return;}
    combatMove(this,e,target,dt);
   }else if(finite(br.tx)&&finite(br.ty)){const dx=br.tx-e.x,dy=br.ty-e.y,dd=Math.hypot(dx,dy);if(dd>5){e.dir=this.direction(dx,dy);this.move(e,dx/dd*e.speed*dt,dy/dd*e.speed*dt);}}
-  const moved=dist(e,before);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
+  const moved=WorldProjection.distance(e.x-before.x,e.y-before.y);b.distance+=moved;visual(e,moved>.001?'walk':e.ai==='alert'?'alert':'idle');b.elapsed+=dt;
  };
  const nativeEnemyDamage=Game.prototype.damageEnemy;
  Game.prototype.damageEnemy=function(n,amount){if(n?.batracien?.role&&this.npcs.includes(n))return this.damageBatracienGuard(n,amount,this.player);if(n?.batracien&&this.tryBatracienBlock(n,this.player))return;return nativeEnemyDamage.call(this,n,amount);};
@@ -313,7 +313,7 @@ const Batraciens = (() => {
     const post=n.post||n;const phase=Math.floor((this.time+(b.seed%12))/8)%4,offset=[[0,0],[24,0],[0,0],[-24,0]][phase],to={x:post.x+offset[0],y:post.y+offset[1]};
     if(dist(n,to)>2&&!this.solid(to.x,to.y,6,0))this.walkNpc(n,to,dt);
    }
-   const moved=dist(n,old);b.distance+=moved;visual(n,moved>.001?'patrol':'idle');b.elapsed+=dt;
+   const moved=WorldProjection.distance(n.x-old.x,n.y-old.y);b.distance+=moved;visual(n,moved>.001?'patrol':'idle');b.elapsed+=dt;
   }
  };
  Game.prototype.launchBatracienJavelin=function(n,t){
