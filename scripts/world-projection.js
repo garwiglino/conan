@@ -7,8 +7,12 @@ function input(x=0,y=0){const p=inverse(x,y),l=Math.hypot(p.x,p.y),size=Math.min
 // A movement budget is measured on screen, before collision response.
 function distance(x,y){const q=point(x,y);return Math.hypot(q.x,q.y);}
 function motion(x,y){const length=Math.hypot(x,y),projected=distance(x,y),scale=projected?length/projected:0;return {x:x*scale,y:y*scale};}
-// Static art and camera share the native sprite grid, regardless of render DPR.
-const snap=value=>Math.round(value);
+// Snap the camera to final backing pixels, not a canvas that CSS will stretch.
+const snap=(value,k=1)=>Math.round(value*k)/k;
+function camera(x,y,w,h,top=0,offset=14,k=1){return {
+ x:snap(x,k)-Math.round(w*k/2)/k,
+ y:snap(y,k)-Math.round((h-top)*k/2+offset*k)/k
+};}
 function display(game){
  const views=new WeakMap(),originals=new WeakMap();
  const raw=o=>originals.get(o)||o;
@@ -41,5 +45,5 @@ function display(game){
  }
  return {game:wrap(game),wrap,raw};
 }
-return Object.freeze({point,inverse,rect,input,distance,motion,snap,display});
+return Object.freeze({point,inverse,rect,input,distance,motion,snap,camera,display});
 });

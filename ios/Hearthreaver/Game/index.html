@@ -8048,7 +8048,7 @@ class Renderer{
  liftDeck(x,y){const P=RAMP.wood,I=RAMP.iron;box(this.c,x-19,y-13,38,27,P[0]);for(let j=0;j<5;j++){const yy=y-12+j*5;box(this.c,x-18,yy,36,4,P[j%2?3:4]);box(this.c,x-18,yy,36,1,P[5]);}
   for(const xx of[x-18,x+15]){box(this.c,xx,y-12,3,25,I[2]);box(this.c,xx,y-12,1,25,I[4]);}box(this.c,x-18,y-12,36,1,I[3]);box(this.c,x-18,y+12,36,1,I[1]);}
  chest(o){const s=this.propCache[o.open?'chest_open':'chest'];this.c.drawImage(s,Math.round(o.x)-32,Math.round(o.y)-56);}
- frame(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,T=this.top,VH=H-T,K=this.k||1,snap=v=>WorldProjection.snap(v);c.setTransform(K,0,0,K,0,0);const lift=p.elevation!==undefined?p.elevation:(p.level?12:0),dw=g.dialogue&&g.dialogue.who;let fx=p.x,fy=p.y-lift;if(dw){fx=(p.x+dw.x)/2;fy=(p.y-lift+dw.y-(dw.level?12:0)-(g.dialogue.head||40)-26)/2+14;}const now=g.time,dtc=Math.min(.1,Math.max(0,now-(this.lastT??now)));this.lastT=now;const F=this.focus||(this.focus={x:fx,y:fy});if(dw)this.easeT=.45;if(this.easeT>0){const k=1-Math.pow(.0005,dtc);F.x+=(fx-F.x)*k;F.y+=(fy-F.y)*k;if(!dw)this.easeT-=dtc;}else{F.x=fx;F.y=fy;}const bounds=this.projectionActive?{left:-1e10,top:-1e10,right:1e10,bottom:1e10}:g.atlas?{left:-Atlas.origin.x*16,top:-Atlas.origin.y*16,right:(Atlas.raw.width-Atlas.origin.x)*16,bottom:(Atlas.raw.height-Atlas.origin.y)*16}:{left:0,top:0,right:MW*16,bottom:MH*16};this.cam.x=snap(clamp(F.x-Math.floor(W/2),bounds.left,bounds.right-W));this.cam.y=snap(clamp(F.y-Math.floor(VH/2)-14,bounds.top,bounds.bottom-VH));let shake=g.shake>0&&!(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches)?Math.round(Math.sin(g.time*132)*2*Math.min(1,g.shake/.08)):0;
+ frame(){const c=this.c,g=this.g,p=g.player,W=this.W,H=this.H,T=this.top,VH=H-T,K=this.k||1;c.setTransform(K,0,0,K,0,0);const lift=p.elevation!==undefined?p.elevation:(p.level?12:0),dw=g.dialogue&&g.dialogue.who;let fx=p.x,fy=p.y-lift;if(dw){fx=(p.x+dw.x)/2;fy=(p.y-lift+dw.y-(dw.level?12:0)-(g.dialogue.head||40)-26)/2+14;}const now=g.time,dtc=Math.min(.1,Math.max(0,now-(this.lastT??now)));this.lastT=now;const F=this.focus||(this.focus={x:fx,y:fy});if(dw)this.easeT=.45;if(this.easeT>0){const k=1-Math.pow(.0005,dtc);F.x+=(fx-F.x)*k;F.y+=(fy-F.y)*k;if(!dw)this.easeT-=dtc;}else{F.x=fx;F.y=fy;}const bounds=this.projectionActive?{left:-1e10,top:-1e10,right:1e10,bottom:1e10}:g.atlas?{left:-Atlas.origin.x*16,top:-Atlas.origin.y*16,right:(Atlas.raw.width-Atlas.origin.x)*16,bottom:(Atlas.raw.height-Atlas.origin.y)*16}:{left:0,top:0,right:MW*16,bottom:MH*16};const camera=WorldProjection.camera(F.x,F.y,W,H,T,14,K);this.cam.x=WorldProjection.snap(clamp(camera.x,bounds.left,bounds.right-W),K);this.cam.y=WorldProjection.snap(clamp(camera.y,bounds.top,bounds.bottom-VH),K);let shake=g.shake>0&&!(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches)?Math.round(Math.sin(g.time*132)*2*Math.min(1,g.shake/.08)):0;
   const contactShake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);if(Math.abs(contactShake)>Math.abs(shake))shake=contactShake;c.fillStyle=PAL.ink;c.fillRect(0,0,W,H);c.save();c.beginPath();c.rect(0,T,W,VH);c.clip();c.translate(-this.cam.x+shake,T-this.cam.y);this.drawAtlasGround();if(!this.projectionActive)c.drawImage(this.bg,0,0);
   const wf=this.projectionActive?null:this.waterFX;if(wf){const ax=Math.max(wf.x,Math.floor(this.cam.x)-2),ay=Math.max(wf.y,Math.floor(this.cam.y)-2),bx=Math.min(wf.x+wf.w,Math.ceil(this.cam.x+W)+2),by=Math.min(wf.y+wf.h,Math.ceil(this.cam.y+VH)+2);if(bx>ax&&by>ay)c.drawImage(wf.frames[Math.floor(g.time*4)%4],ax-wf.x,ay-wf.y,bx-ax,by-ay,ax,ay,bx-ax,by-ay);}
   renderRainGround(this,c,W,VH);
@@ -21891,8 +21891,12 @@ function input(x=0,y=0){const p=inverse(x,y),l=Math.hypot(p.x,p.y),size=Math.min
 // A movement budget is measured on screen, before collision response.
 function distance(x,y){const q=point(x,y);return Math.hypot(q.x,q.y);}
 function motion(x,y){const length=Math.hypot(x,y),projected=distance(x,y),scale=projected?length/projected:0;return {x:x*scale,y:y*scale};}
-// Static art and camera share the native sprite grid, regardless of render DPR.
-const snap=value=>Math.round(value);
+// Snap the camera to final backing pixels, not a canvas that CSS will stretch.
+const snap=(value,k=1)=>Math.round(value*k)/k;
+function camera(x,y,w,h,top=0,offset=14,k=1){return {
+ x:snap(x,k)-Math.round(w*k/2)/k,
+ y:snap(y,k)-Math.round((h-top)*k/2+offset*k)/k
+};}
 function display(game){
  const views=new WeakMap(),originals=new WeakMap();
  const raw=o=>originals.get(o)||o;
@@ -21925,7 +21929,7 @@ function display(game){
  }
  return {game:wrap(game),wrap,raw};
 }
-return Object.freeze({point,inverse,rect,input,distance,motion,snap,display});
+return Object.freeze({point,inverse,rect,input,distance,motion,snap,camera,display});
 });
 
 /* Serializable worker/fallback renderer. No DOM, PNG or synchronous full-world pass.
@@ -22791,7 +22795,7 @@ function drawGoblinSpeech(r,g){
 Renderer.prototype.frame=function(){if(!this.g.dungeon?.active)return frame.call(this);
  const g=this.g,c=this.c,p=g.player,K=this.k||1,W=this.W,H=this.H,T=this.top,e=F.current(g),s=F.state(g),art=F.art,P=WorldProjection.point;
  c.setTransform(K,0,0,K,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#050408';c.fillRect(0,0,W,H);
- const hero=P(p.x,p.y),now=performance.now()/1000;this.dungeonOcclusionDt=Math.min(.05,Math.max(0,now-(this.dungeonOcclusionTime??now-1/60)));this.dungeonOcclusionTime=now;this.dungeonOcclusion=[];this.cam={x:WorldProjection.snap(hero.x)-Math.floor(W/2),y:WorldProjection.snap(hero.y)-Math.floor((H-T)/2)-10};
+ const hero=P(p.x,p.y),now=performance.now()/1000;this.dungeonOcclusionDt=Math.min(.05,Math.max(0,now-(this.dungeonOcclusionTime??now-1/60)));this.dungeonOcclusionTime=now;this.dungeonOcclusion=[];this.cam=WorldProjection.camera(hero.x,hero.y,W,H,T,10,K);
  if(!art.ready){text(c,art.error?'Erreur de chargement du donjon':'Chargement du donjon…',12,T+30,'#eee0c8');return;}
  const a=art.floors[e.id],seen=g.dungeonSeen||new Set(s.seen),items=[],brightness=this.dungeonBrightness||(this.dungeonBrightness=new Map()),visible=(i,j)=>seen.has(i+','+j);
  c.save();c.beginPath();c.rect(0,T,W,H-T);c.clip();const shake=KaldorArsenal.cameraShake(g.weaponShake,typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);c.translate(-this.cam.x+shake,T-this.cam.y);c.drawImage(a.ground,-a.origin[0],-a.origin[1]);
@@ -22919,9 +22923,14 @@ function fitScreen(){
  scr.classList.toggle('panels-x',touch);scr.classList.remove('panels-y');
  const gw=Math.max(1,sw-gl-gr),gh=sh,ratio=gw/gh;let H=200,W=Math.round(200*ratio);
  if(W<216){W=216;H=Math.min(1000,Math.round(216/ratio));}
- const scale=gw/W,safe={t:Math.ceil(ins.t/scale),r:Math.ceil(Math.max(0,ins.r-gr)/scale),b:Math.ceil(ins.b/scale),l:Math.ceil(Math.max(0,ins.l-gl)/scale)};
- const K=Math.max(1,Math.min(4,Math.round(scale*(window.devicePixelRatio||1))));
- if(cv.width!==W*K)cv.width=W*K;if(cv.height!==H*K)cv.height=H*K;
+ // Match the backing bitmap to the phone's physical viewport. A rounded render
+ // multiplier followed by CSS stretching changes pixel widths during scrolling.
+ const dpr=window.devicePixelRatio||1,pw=Math.max(1,Math.round(gw*dpr)),ph=Math.max(1,Math.round(gh*dpr)),K=pw/W,scale=K/dpr;
+ H=ph/K;
+ const safe={t:Math.ceil(ins.t/scale),r:Math.ceil(Math.max(0,ins.r-gr)/scale),b:Math.ceil(ins.b/scale),l:Math.ceil(Math.max(0,ins.l-gl)/scale)};
+ if(cv.width!==pw)cv.width=pw;if(cv.height!==ph)cv.height=ph;
+ // Keep the bitmap's origin on the same physical grid, including fractional DPR.
+ Object.assign(cv.style,{left:Math.round(gl*dpr)/dpr+'px',top:Math.round(gt*dpr)/dpr+'px',width:pw/dpr+'px',height:ph/dpr+'px'});
  renderer.resize(W,H,safe,K,scale);
  for(const [k,v]of [['--gl',gl],['--gr',gr],['--gt',gt],['--gb',gb],['--hud',Math.round(renderer.top*scale)],['--pc',PANEL],['--control-left',ins.l],['--control-right',ins.r],['--control-bottom',ins.b]])scr.style.setProperty(k,v+'px');
  layoutStick();

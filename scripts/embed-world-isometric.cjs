@@ -3,9 +3,10 @@ const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirnam
 let html=read('index.html'),start=html.indexOf(' frame(){const c=this.c,g=this.g,p=g.player,W=this.W'),end=html.indexOf(' lifeHead(',start);
 if(start<0||end<0)throw Error('Main renderer frame anchor missing');
 let frame=html.slice(start,end);
-frame=frame.replace('snap=v=>Math.round(v*K)/K','snap=v=>WorldProjection.snap(v)');
-frame=frame.replace('snap(clamp(F.x-W/2,bounds.left,bounds.right-W))','snap(clamp(F.x-Math.floor(W/2),bounds.left,bounds.right-W))');
-frame=frame.replace('snap(clamp(F.y-VH/2-14,bounds.top,bounds.bottom-VH))','snap(clamp(F.y-Math.floor(VH/2)-14,bounds.top,bounds.bottom-VH))');
+// Both the outdoor and dungeon renderers use the final physical pixel grid.
+frame=frame.replace(/this\.cam\.x=snap\(clamp\(F\.x-(?:W\/2|Math\.floor\(W\/2\)),bounds\.left,bounds\.right-W\)\);this\.cam\.y=snap\(clamp\(F\.y-(?:VH\/2|Math\.floor\(VH\/2\))-14,bounds\.top,bounds\.bottom-VH\)\);/,
+ 'const camera=WorldProjection.camera(F.x,F.y,W,H,T,14,K);this.cam.x=WorldProjection.snap(clamp(camera.x,bounds.left,bounds.right-W),K);this.cam.y=WorldProjection.snap(clamp(camera.y,bounds.top,bounds.bottom-VH),K);');
+frame=frame.replace(/,snap=v=>(?:WorldProjection.snap\(v\)|Math.round\(v\*K\)\/K)/,'');
 if(!frame.includes('this.drawTempleGate()')){
  frame=frame.replace('this.drawAtlasGround();c.drawImage(this.bg,0,0);','this.drawAtlasGround();if(!this.projectionActive)c.drawImage(this.bg,0,0);');
  frame=frame.replace('const wf=this.waterFX','const wf=this.projectionActive?null:this.waterFX');
