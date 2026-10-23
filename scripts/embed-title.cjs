@@ -40,9 +40,14 @@ html=html.includes('// BEGIN BIOME MIDI')?html.replace(/\/\/ BEGIN BIOME MIDI[\s
 // Musiques 8 bits (biomes, voyage, combat, boss, défaite) : scripts/chiptune-songs.cjs → audio/music-scores.json.
 const musicScores='// BEGIN CHIPTUNE MUSIC\nconst MUSIC_SCORES='+JSON.stringify(json(path.join(root,'audio/music-scores.json')))+';\nObject.assign(MUSIC_DATA,MUSIC_SCORES);\n// END CHIPTUNE MUSIC';
 html=html.includes('// BEGIN CHIPTUNE MUSIC')?html.replace(/\/\/ BEGIN CHIPTUNE MUSIC[\s\S]*?\/\/ END CHIPTUNE MUSIC/,()=>musicScores):html.replace('// END BIOME MIDI',()=>'// END BIOME MIDI\n'+musicScores);
+// Bruitages 8 bits (scripts/build-chip-sfx.cjs → audio/chip-sfx.json, moteur scripts/chip-sfx.js), avant le donjon qui s'y branche.
+// Les anciens échantillons ne sont plus embarqués.
+const chipSfx='// BEGIN CHIP SFX\nconst CHIP_SFX_DATA='+JSON.stringify(json(path.join(root,'audio/chip-sfx.json')))+';\n'+fs.readFileSync(path.join(root,'scripts/chip-sfx.js'),'utf8')+'\n// END CHIP SFX';
+html=html.includes('// BEGIN CHIP SFX')?html.replace(/\/\/ BEGIN CHIP SFX[\s\S]*?\/\/ END CHIP SFX/,()=>chipSfx):html.replace('// END CHIPTUNE MUSIC',()=>'// END CHIPTUNE MUSIC\n'+chipSfx);
+html=html.replace(/const SFX_DATA=\{[^}]*\};/,'const SFX_DATA={};');
 // Donjons : musique, alerte, ambiance de cave (scripts/dungeon-audio.js) et bruitages (scripts/dungeon-sfx.js), juste après les partitions.
 const dungeonAudio='// BEGIN DUNGEON AUDIO\n'+['dungeon-audio.js','dungeon-sfx.js'].map(f=>fs.readFileSync(path.join(root,'scripts',f),'utf8')).join('\n')+'\n// END DUNGEON AUDIO';
-html=html.includes('// BEGIN DUNGEON AUDIO')?html.replace(/\/\/ BEGIN DUNGEON AUDIO[\s\S]*?\/\/ END DUNGEON AUDIO/,()=>dungeonAudio):html.replace('// END CHIPTUNE MUSIC',()=>'// END CHIPTUNE MUSIC\n'+dungeonAudio);
+html=html.includes('// BEGIN DUNGEON AUDIO')?html.replace(/\/\/ BEGIN DUNGEON AUDIO[\s\S]*?\/\/ END DUNGEON AUDIO/,()=>dungeonAudio):html.replace('// END CHIP SFX',()=>'// END CHIP SFX\n'+dungeonAudio);
 const weatherScores='// BEGIN WEATHER MIDI\nconst WEATHER_SCORES='+JSON.stringify(json(path.join(root,'audio/weather-scores.json')))+';\n// END WEATHER MIDI';
 html=html.includes('// BEGIN WEATHER MIDI')?html.replace(/\/\/ BEGIN WEATHER MIDI[\s\S]*?\/\/ END WEATHER MIDI/,()=>weatherScores):html.replace('// app.js',()=>weatherScores+'\n// app.js');
 const textCode='// BEGIN TEXT LAYOUT\n'+fs.readFileSync(path.join(root,'scripts/text-layout.js'),'utf8')+'\n// END TEXT LAYOUT';

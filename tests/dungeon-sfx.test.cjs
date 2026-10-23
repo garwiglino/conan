@@ -1,23 +1,22 @@
 'use strict';
 const {test,before}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{loadGame,combatGame}=require('./game-harness.cjs');
-// The bank is synthesised outside the vm sandbox, where math is many times faster; the game goes through the harness.
-const source=fs.readFileSync(path.join(__dirname,'../scripts/dungeon-sfx.js'),'utf8').match(/^const DungeonSfx=[\s\S]*?\n\}\)\(\);/m)[0];
-const DungeonSfx=new Function(source+';return DungeonSfx;')();
-const fake={sampleRate:48000,createBuffer(ch,n,sr){const d=[...Array(ch)].map(()=>new Float32Array(n));return {numberOfChannels:ch,length:n,sampleRate:sr,duration:n/sr,getChannelData:k=>d[k]};}};
+// The dungeon plays 8-bit families from the shared chip bank; they are rendered outside the vm sandbox, where math is fast.
+const ChipSfx=new Function(fs.readFileSync(path.join(__dirname,'../scripts/chip-sfx.js'),'utf8').match(/^const ChipSfx=[\s\S]*?\n\}\)\(\);/m)[0]+';return ChipSfx;')();
+const {families}=JSON.parse(fs.readFileSync(path.join(__dirname,'../audio/chip-sfx.json'),'utf8'));
+const DUNGEON=Object.keys(families).filter(n=>['Donjon','Gobelins'].includes(families[n].group)).concat(['door_open','lever','crate_hit','crate_break','barrel_hit','barrel_break']);
+const SR=32000,render=(name,k)=>{const v=families[name].variants[k],d=ChipSfx.render(v,SR);return d.map(x=>x*v.gain);};
 let a;before(async()=>{a=await loadGame();});
 function dungeon(){const g=combatGame(a);g.startFirstDungeon();g.player.spawnFX=0;for(const e of g.enemies)e.dead=true;return g;}
-// A listener with a silent bank: the watcher's decisions are recorded instead of played.
-function listen(g){const s=new a.Sound(),heard=[];Object.assign(s,{enabled:true,sfxOn:true,ctx:{currentTime:0},master:{},dsfx:{prepare(){},pick:()=>null}});s.dungeonPlay=name=>heard.push(name);
+// A listener with no audio: the watcher's decisions are recorded instead of played.
+function listen(g){const s=new a.Sound(),heard=[];Object.assign(s,{enabled:true,sfxOn:true,ctx:{currentTime:0},master:{}});s.dungeonPlay=name=>heard.push(name);s.chipBuffer=()=>null;
  const tick=()=>{s.watchDungeon(g,true,1/60);return heard.splice(0);};tick();return tick;}
 
-test('the dungeon bank synthesises every sound in small slices, with variants, audible and unclipped',()=>{
- const bank=DungeonSfx.create(fake);let steps=0;while(!bank.prepare(4))steps++;assert.ok(steps>20,'built across many frames');
- assert.ok(DungeonSfx.names.indexOf('gob_hurt')<DungeonSfx.names.indexOf('door_unlock'),'combat sounds come first');
- for(const name of DungeonSfx.names){const list=bank.bank[name],loop=DungeonSfx.loops.includes(name);assert.ok(DungeonSfx.LEVEL[name]>0,name);
-  assert.ok(list.length>=2||loop||/^chief_(roar|die|fall)$/.test(name),name+' has variants');
-  for(const b of list){const d=b.getChannelData(0);let peak=0;for(const v of d){assert.ok(Number.isFinite(v),name);peak=Math.max(peak,Math.abs(v));}
-   assert.ok(peak>.5&&peak<=.91,name+' peak '+peak);if(!loop)assert.ok(Math.abs(d[d.length-1])<.01,name+' fades out');}}
- const pick=bank.pick('gob_hurt',()=>0);assert.notEqual(bank.pick('gob_hurt',()=>0),pick,'never the same variant twice in a row');
+test('every dungeon sound is an 8-bit family with variants where it repeats, audible, unclipped and fading out',()=>{
+ for(const name of DUNGEON){const f=families[name];assert.ok(f&&f.level<-30&&f.level>-50,name);
+  if(/^(gob|chief)_(hurt|effort)$|^gob_|_(hit|break)$|^plate_|^crate_(grab|release)$|^door_(open|unlock|locked)$|^key$|^lever$/.test(name))assert.ok(f.variants.length>=2,name+' has variants');
+  for(let k=0;k<f.variants.length;k++){const d=render(name,k);let peak=0;for(const v of d){assert.ok(Number.isFinite(v),name);peak=Math.max(peak,Math.abs(v));}
+   assert.ok(peak>.02&&peak*.3<.5,name+' peak '+peak);if(!f.loop)assert.ok(Math.abs(d[d.length-1])<.002,name+' fades out');}}
+ assert.equal(families.crate_scrape.loop,1);
 });
 
 // Longest time a narrow spectral line (300 Hz to 8 kHz) stays 15 dB above its neighbourhood: a bell rings on, a clank doesn't.
@@ -33,10 +32,9 @@ function ringing(d,sr){const N=2048,hop=512,lo=Math.floor(300/sr*N),hi=Math.floo
  return best*hop/sr;}
 
 test('iron clanks and rattles instead of ringing like a bell, wood knocks',()=>{
- const bank=DungeonSfx.create(fake);while(!bank.prepare(50));
- // Voices are tonal by nature, and so is the long squeaking hinge of an opening door.
- for(const name of DungeonSfx.names){if(/^(gob|chief)_(hurt|die|bark|effort|roar)$|^door_open$/.test(name))continue;
-  for(const b of bank.bank[name]){const t=ringing(b.getChannelData(0),b.sampleRate);assert.ok(t<.42,name+' rings '+t.toFixed(2)+' s');}}
+ // Voices are tonal by nature, and so is the squeaking hinge of an opening door.
+ for(const name of DUNGEON){if(/^(gob|chief)_(hurt|die|bark|effort|roar)$|^door_open$/.test(name))continue;
+  for(let k=0;k<families[name].variants.length;k++){const t=ringing(render(name,k),SR);assert.ok(t<.42,name+' rings '+t.toFixed(2)+' s');}}
 });
 
 test('each dungeon mechanism plays its own sound once, from the change of state',()=>{

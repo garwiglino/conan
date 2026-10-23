@@ -9,8 +9,9 @@ const DungeonCave=(()=>{
  const hash=text=>{let h=2166136261;for(const ch of String(text))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return h;};
  const clock=()=>typeof performance!=='undefined'?performance.now():Date.now();
  // Niveaux relatifs des couches, calés par rendu hors ligne : la cave reste nettement sous l'ambiance d'une forêt
- // au grand jour, avec peu de gouttes et un souffle presque sans grave (demande de Lino, 22 octobre).
- const MIX={air:.05,draft:1.05,trickle:.15,leak:.2,drip:.24,events:.5,wet:1};
+ // au grand jour, avec peu de gouttes et un souffle presque sans grave (demande de Lino, 22 octobre). Les bruits
+ // lointains (chaînes, pierres, gonds) restent 5 dB sous les bruitages 8 bits proches, au niveau des gouttes (23 octobre).
+ const MIX={air:.05,draft:1.05,trickle:.15,leak:.2,drip:.24,events:.28,wet:1};
  // Filtre passe-bande RBJ pour le pré-calcul des tampons.
  function band(f,q,sr){const w=2*Math.PI*f/sr,al=Math.sin(w)/(2*q),a0=1+al;let x1=0,x2=0,y1=0,y2=0;
   const b0=al/a0,b2=-al/a0,a1=-2*Math.cos(w)/a0,a2=(1-al)/a0;return x=>{const y=b0*x+b2*x2-a1*y1-a2*y2;x2=x1;x1=x;y2=y1;y1=y;return y;};}

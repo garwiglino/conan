@@ -26,7 +26,7 @@ test('environment slider controls a separate bus and cannot alter music or actio
  const c=new RenderingAudioContext({sampleRate:16000}),s=new a.Sound();s.ctx=c;s.enabled=true;s.master=c.createGain();s.master.gain.value=.3;s.master.connect(c.destination);s.music=new a.Music(c,c.destination);const env=s.environmentOutput();let envTarget=.3,sfxTarget=.3;env.gain.setTargetAtTime=v=>{envTarget=v;};s.master.gain.setTargetAtTime=v=>{sfxTarget=v;};s.sfxOn=false;s.applyVolumes();c.processTo(1);assert.equal(envTarget,.3);assert.equal(sfxTarget,0);s.setEnvironmentVolume(.25);c.processTo(2);assert.equal(envTarget,.075);assert.equal(s.musicVolume,.45);assert.equal(s.sfxVolume,1);s.setEnvironmentVolume(0);c.processTo(3);assert.equal(envTarget,0);
 });
 
-test('interface mute suppresses UI cues without suppressing combat sounds',()=>{const c=new RenderingAudioContext({sampleRate:16000}),s=new a.Sound();s.ctx=c;s.enabled=true;s.master=c.createGain();let cues=0,tones=0;s.music={cue:()=>cues++};s.tone=()=>tones++;s.uiSoundsOn=false;s.fx('ui_select');s.fx('ui_confirm');assert.equal(cues,0);s.fx('sword');assert.equal(tones,1);s.uiSoundsOn=true;s.fx('ui_select');assert.equal(cues,1);});
+test('interface mute suppresses UI cues without suppressing combat sounds',()=>{const c=new RenderingAudioContext({sampleRate:16000}),s=new a.Sound();s.ctx=c;s.enabled=true;s.master=c.createGain();let cues=0,tones=0;s.music={cue:()=>cues++};s.chip=()=>tones++;s.uiSoundsOn=false;s.fx('ui_select');s.fx('ui_confirm');assert.equal(cues,0);s.fx('sword',{combo:0,weapon:'kaldor-sword'});assert.equal(tones,1);s.uiSoundsOn=true;s.fx('ui_select');assert.equal(cues,1);});
 
 
 test('every supported surface is reachable from the actual material resolver',()=>{

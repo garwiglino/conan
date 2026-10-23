@@ -29,8 +29,8 @@ Game.prototype.openDungeonChest=function(i){const e=current(this),s=state(this),
 };
 Game.prototype.damageDungeonProp=function(i,n){const o=current(this).objets[i],s=state(this);if(!o||!['tonneau','caisses'].includes(o[0]))return false;
  s.props??={};const prop=s.props[i]??={x:o[1]*CELL,y:o[2]*CELL,level:0,hp:2};if(prop.broken)return false;
- prop.hp=Math.max(0,prop.hp-n);if(prop.hp>0){this.emit('hit');return true;}
- prop.broken=true;prop.breakAge=0;const rule=BREAKABLE[o[0]==='tonneau'?'barrel':'crates'];this.emit('break',{mat:rule.mat});const loot=rule.loot();if(loot.length)this.ejectLoot(prop,loot,.12);this.emit('save');return true;
+ const rule=BREAKABLE[o[0]==='tonneau'?'barrel':'crates'];prop.hp=Math.max(0,prop.hp-n);if(prop.hp>0){this.emit('crack',{mat:rule.mat,x:prop.x,y:prop.y});return true;}
+ prop.broken=true;prop.breakAge=0;this.emit('break',{mat:rule.mat,x:prop.x,y:prop.y});const loot=rule.loot();if(loot.length)this.ejectLoot(prop,loot,.12);this.emit('save');return true;
 };
 Game.prototype.hitDungeonProps=function(){if(!this.player.impactTick)return;current(this).objets.forEach(([n,x,y],i)=>{const target={x:x*CELL,y:y*CELL,r:n==='tonneau'?8:10,level:0};if(['tonneau','caisses'].includes(n)&&!state(this).props?.[i]?.broken&&bladeHits(this.player,target,2)&&this.lineClear(this.player,target))this.damageDungeonProp(i,this.weaponDamage(this.player.combo===3?2:1));});};
 Game.prototype.stepDungeonProps=function(dt){for(const prop of Object.values(state(this).props||{}))if(prop.broken&&Number.isFinite(prop.breakAge))prop.breakAge=Math.min(.6,prop.breakAge+dt);};
