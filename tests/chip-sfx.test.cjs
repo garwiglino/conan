@@ -69,6 +69,17 @@ test('weapon impacts hit at once, sit in the mids and highs, and stand well abov
  assert.ok(families.hit_dagger.level>=families.hit_heavy.level,'small weapons hit as hard');
 });
 
+// Une lame qui tranche, pas une gifle (demande de Lino, 23 octobre) : le fil métallique (impulsion fine aiguë qui
+// tient), le grain de métal (bruit court juste après le contact), la chair (impulsion carrée), et un corps qui dure.
+test('weapon impacts are bloody metallic slashes: a ringing edge, a metal grain, a wet body, not a single slap',()=>{
+ for(const name of Object.keys(families).filter(n=>/^hit_/.test(n)))families[name].variants.forEach((v,k)=>{const id=name+'#'+k,P1=ChipSfx.unfold(v,'p1'),P2=ChipSfx.unfold(v,'p2'),N=ChipSfx.unfold(v,'noise');
+  assert.ok(P1.filter(e=>e&&e[2]===0&&e[0]>=80).length>=6,id+' edge rings');
+  assert.ok(N.slice(1,4).some(e=>e&&e[2]===1),id+' metal grain');
+  assert.ok(P2.filter(e=>e&&e[2]===2).length>=5&&N.slice(3).filter(e=>e&&e[2]===0).length>=4,id+' wet body');
+  const d=ChipSfx.render(v,SR),w=SR*.01,e=[];for(let i=0;i+w<=d.length;i+=w){let s=0;for(let j=i;j<i+w;j++)s+=d[j]*d[j];e.push(s);}
+  const top=Math.max(...e);assert.ok(e.filter(x=>x>=top*.1).length*10>=85,id+' body lasts');});
+});
+
 // Tous les événements sonores du jeu, avec leurs variantes de charge utile.
 const EVENTS=[['hit',{}],['hit',{heavy:true}],['kill',{}],['crack',{mat:'wood'}],['crack',{mat:'barrel'}],['crack',{mat:'clay'}],['break',{mat:'wood'}],['break',{mat:'barrel'}],['break',{mat:'clay'}],
  ['hurt',{big:false}],['hurt',{big:true}],['lifelost',{}],['dead',{}],['parry',{}],['block',{}],['dodge',{}],['loot',{}],['flask',{}],['heal',{}],['seal',{}],['bodyfall',{}],['dissolve',{}],['levelup',{}],['stele',{}],['respawn',{}],['win',{}],

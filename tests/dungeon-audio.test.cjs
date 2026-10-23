@@ -55,3 +55,16 @@ test('each floor has its own leaks, and a leak keeps its rhythm through slow fra
   for(let i=1;i<times.length;i++){const gap=times[i]-times[i-1];assert.ok(gap>=leak.period*.96-1e-9&&gap<=leak.period*1.04+1e-9,'leak '+k+' gap '+gap);}});
  assert.ok(log.some(x=>x.kind==='drip'));assert.ok(log.every(x=>x.at>=x.now-1e-9));
 });
+
+// Sous terre, plus aucun souffle (« on dirait une tempête de vent », Lino, 23 octobre) : seul le filet d'eau tourne en
+// continu, fait de bulles et non de bruit ou de clics, et la cave reste très en dessous de la musique du donjon.
+test('the cave carries no wind: only a trickle of separate bubbles runs continuously, well under the dungeon music',()=>{
+ assert.deepEqual(Object.keys(a.DungeonCave.MIX).sort(),['drip','events','leak','trickle','wet']);
+ const c=context(16000),bus=c.createGain();bus.gain.value=.3;bus.connect(c.destination);let seed=1;
+ const cave=a.DungeonCave.create(c,bus,{budget:1e6,random:()=>(seed=seed*16807%2147483647)/2147483647});
+ for(let t=0;t<20;t+=.1){cave.update(c.currentTime,{floor:'geoles',level:.45});c.processTo(t+.1);}
+ const d=cave.sounds.trickle.getChannelData(0);let e=0,diff=0;for(let i=1;i<d.length;i++){e+=d[i]*d[i];diff+=(d[i]-d[i-1])**2;}
+ assert.ok(e>0&&diff/e<.8,'bubbles, not clicks or hiss: '+(diff/e).toFixed(2));
+ const [l,r]=c.exportAsAudioData().channelData,W=6400,w=[];for(let i=3*16000;i+W<=l.length;i+=W){let s=0;for(let j=i;j<i+W;j++)s+=l[j]*l[j]+r[j]*r[j];w.push(10*Math.log10(s/(2*W)+1e-24));}
+ w.sort((x,y)=>x-y);const median=w[Math.floor(w.length/2)];assert.ok(median<-62&&median>-80,'quiet but present: '+median.toFixed(1)+' dB');
+});

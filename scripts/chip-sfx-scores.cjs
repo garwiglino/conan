@@ -58,25 +58,49 @@ const SW_BIG={
  dagger:(S,t)=>{SW.dagger(S,t);S.noise(6,6,{period:[3,2,1,1,2,3],vol:[6,10,12,8,4,1]});S.p1(6,5,{note:K([0,103+t],[4,95+t]),vol:[4,6,4,2,1],duty:0});},
  heavy:(S,t)=>{S.noise(0,16,{period:[10,9,8,7,6,5,5,4,4,5,6,7,8,9,10,11],vol:[2,4,6,8,10,11,12,12,11,9,7,5,4,3,2,1]});S.p1(3,10,{note:K([0,74+t],[9,60+t]),vol:[2,3,4,5,5,4,3,2,1,1],duty:1});S.p2(5,8,{note:K([0,67+t],[7,57+t]),vol:[2,3,3,3,2,2,1,1],duty:2});},
  pole:(S,t)=>{S.noise(0,13,{period:[8,7,6,5,4,3,3,3,4,5,6,7,8],vol:[3,5,8,10,11,12,11,9,7,5,3,2,1]});S.p1(2,8,{note:K([0,90+t],[7,77+t]),vol:[3,4,5,5,4,3,2,1],duty:1});S.p2(4,6,{note:K([0,95+t],[5,87+t]),vol:[2,3,3,2,1,1],duty:0});}};
+// Impacts : une lame qui tranche, pas une gifle. Trois couches à la suite, image par image :
+// le fil (deux impulsions fines désaccordées d'un intervalle inharmonique qui glissent et scintillent, le « chiing »),
+// le grain métallique (bruit court, une ou deux images, juste après le craquement du contact),
+// puis la chair (impulsion carrée en zigzag descendant et bruit long qui bat d'une image à l'autre, le « splotch »).
+const EDGE=(S,t,{edge,ring,grit=5.6,glide=.35,gritLen=3})=>{
+ S.p1(0,ring,{note:i=>edge+t-i*glide+(i%2?-.3:.3),vol:fall(13.5,ring,.8),duty:0});
+ S.p2(0,gritLen,{note:i=>edge+t-grit-i*glide*1.4,vol:i=>11-i*3.5,duty:0});};
+const GORE=(S,at,n,{t,pitch,nz,vol,spurt=0,drop=1.1})=>{
+ const env=i=>{const x=Math.max(0,1-i/n),s=spurt&&i>=n*.4?spurt*Math.max(0,1-Math.abs(i-n*.5)/(n*.2)):0;return Math.min(1,(i<1?.85:1)*x+s);};
+ S.p2(at,n,{note:i=>pitch+t-i*drop-(i%2?3.5:0)-(i%3===2?1.5:0),vol:i=>vol*env(i),duty:2});
+ S.noise(at,n,{period:i=>Math.min(12,nz+(i>>1)+(i%2)),vol:i=>(vol+1)*env(i)*(i%2?.55:1)});};
+// Contact : craquement sur le bruit long, puis le grain métallique en mode court.
+const CUT=(S,{crack,zing})=>{S.noise(0,1,{period:crack,vol:15});zing.forEach((p,i)=>S.noise(1+i,1,{period:p,vol:12-i*2,mode:1}));};
 const HIT={
- blade:(S,t)=>{S.noise(0,9,{period:[2,4,5,6,7,8,9,10,10],vol:[15,13,10,8,6,4,3,2,1]});S.p2(0,2,{note:[91+t,86+t],vol:[10,5],duty:0});S.p1(0,6,{note:add([79,73,68,64,61,59],t),vol:[14,12,9,6,3,1],duty:1});S.tri(0,3,add([62,56,51],t));},
- // Petite lame : transitoire très aigu et très court, deux clics décalés d'une image (« tchk »), pas de grave.
- dagger:(S,t)=>{S.noise(0,6,{period:[1,3,4,6,7,8],vol:[15,12,8,5,3,1]});S.p1(0,3,{note:add([96,90,85],t),vol:[13,9,4],duty:0});S.p2(1,3,{note:add([84,79,75],t),vol:[10,6,2],duty:1});},
- heavy:(S,t)=>{S.noise(0,12,{period:[3,5,6,7,8,8,9,9,10,10,11,11],vol:[15,14,12,10,8,7,5,4,3,2,1,1]});S.p2(0,2,{note:[84+t,78+t],vol:[9,5],duty:0});S.p1(0,7,{note:add([72,65,60,56,53,51,50],t),vol:[15,13,10,7,5,3,1],duty:2});S.tri(0,5,add([60,54,49,45,42],t));},
- pole:(S,t)=>{S.noise(0,8,{period:[3,4,6,7,8,9,10,11],vol:[15,12,9,7,5,3,2,1]});S.p2(0,2,{note:[88+t,83+t],vol:[8,4],duty:0});S.p1(0,6,{note:add([76,70,65,62,60,58],t),vol:[14,11,8,5,3,1],duty:1});S.tri(0,3,add([60,54,49],t));}};
+ blade:(S,t)=>{EDGE(S,t,{edge:98,ring:10});CUT(S,{crack:1,zing:[1,2]});GORE(S,3,9,{t,pitch:70,nz:5,vol:10});S.tri(2,2,add([60,53],t));},
+ // Petite lame : le fil le plus aigu, un seul grain, une chair brève et claire (« tsk »), rien dans le grave.
+ dagger:(S,t)=>{EDGE(S,t,{edge:104,ring:6,glide:.5,gritLen:2});CUT(S,{crack:0,zing:[0]});GORE(S,2,5,{t,pitch:78,nz:3,vol:8,drop:1.5});},
+ // Hache, masse : un fil plus sombre et plus large, l'os qui craque (bruit long qui saute), une chair plus lourde.
+ heavy:(S,t)=>{EDGE(S,t,{edge:89,ring:9,grit:6.3,glide:.45});CUT(S,{crack:3,zing:[2,3]});S.noise(3,2,{period:[4,9],vol:[13,10]});
+  GORE(S,5,11,{t,pitch:64,nz:6,vol:11});S.tri(1,3,add([57,50,46],t));},
+ // Hampe : l'estoc entre (« chnk »), le fil remonte d'abord puis retombe.
+ pole:(S,t)=>{S.p1(0,1,{note:97+t,vol:12,duty:1});EDGE(S,t,{edge:95,ring:8,glide:.4});S.p1(0,1,{note:97+t,vol:13,duty:0});CUT(S,{crack:1,zing:[1]});
+  GORE(S,2,9,{t,pitch:72,nz:5,vol:10,drop:1.3});S.tri(1,2,add([62,55],t));}};
 const HIT_BIG={
- blade:(S,t)=>{S.noise(0,14,{period:[2,3,5,6,6,7,8,8,9,9,10,10,11,11],vol:[15,15,13,11,10,8,7,6,5,4,3,2,1,1]});S.p2(0,3,{note:add([93,88,84],t),vol:[11,7,3],duty:0});S.p1(0,9,{note:K([0,81+t],[8,57+t]),vol:[15,13,11,9,7,5,3,2,1],duty:1});S.tri(0,4,add([64,57,51,46],t));},
- dagger:(S,t)=>{S.noise(0,9,{period:[1,2,4,5,6,7,8,9,10],vol:[15,14,11,8,6,4,3,2,1]});S.p1(0,4,{note:add([98,92,86,82],t),vol:[14,10,6,2],duty:0});S.p2(0,5,{note:add([86,80,75,71,68],t),vol:[12,9,6,3,1],duty:1});S.tri(0,2,add([67,60],t));S.noise(4,3,{period:[2,4,6],vol:[9,5,2]});},
- heavy:(S,t)=>{S.noise(0,18,{period:[3,4,5,6,7,5,6,7,8,8,9,9,10,10,11,11,12,12],vol:[15,15,14,12,10,13,11,9,8,7,6,5,4,3,2,2,1,1]});S.p2(0,3,{note:add([86,80,74],t),vol:[10,6,3],duty:0});S.p1(0,10,{note:K([0,74+t],[9,50+t]),vol:[15,14,12,10,8,6,4,3,2,1],duty:2});S.tri(0,6,add([62,56,51,47,44,42],t));},
- pole:(S,t)=>{S.noise(0,12,{period:[2,4,5,6,7,8,8,9,10,10,11,12],vol:[15,14,12,10,8,7,5,4,3,2,1,1]});S.p2(0,3,{note:add([90,85,81],t),vol:[10,6,3],duty:0});S.p1(0,8,{note:K([0,78+t],[7,56+t]),vol:[15,12,10,8,6,4,2,1],duty:1});S.tri(0,4,add([62,56,51,47],t));}};
+ blade:(S,t)=>{EDGE(S,t,{edge:99,ring:14,glide:.3,gritLen:4});CUT(S,{crack:1,zing:[1,2,1]});GORE(S,4,15,{t,pitch:71,nz:5,vol:11,spurt:.5});S.tri(2,3,add([62,55,50],t));},
+ dagger:(S,t)=>{EDGE(S,t,{edge:105,ring:8,glide:.5,gritLen:2});CUT(S,{crack:0,zing:[0,1]});GORE(S,3,8,{t,pitch:79,nz:3,vol:10,drop:1.4,spurt:.4});
+  S.noise(5,1,{period:0,vol:10,mode:1});},
+ heavy:(S,t)=>{EDGE(S,t,{edge:90,ring:13,grit:6.3,glide:.4,gritLen:4});CUT(S,{crack:3,zing:[2,3,2]});S.noise(4,3,{period:[4,9,3],vol:[14,11,12]});
+  GORE(S,6,13,{t,pitch:65,nz:6,vol:12,spurt:.5});S.tri(1,4,add([58,51,47,44],t));},
+ pole:(S,t)=>{EDGE(S,t,{edge:96,ring:12,glide:.35,gritLen:3});S.p1(0,1,{note:98+t,vol:14,duty:0});CUT(S,{crack:1,zing:[1,2]});
+  GORE(S,3,13,{t,pitch:73,nz:5,vol:11,drop:1.2,spurt:.45});S.tri(1,3,add([62,55,50],t));}};
 const TR=[0,1,-1];
 for(const cls of Object.keys(SW)){
  fam('swing_'+cls,'Armes','Élan, '+CLASS_TITLE[cls],-40,3,(S,r,k)=>SW[cls](S,TR[k]));
  fam('swing_'+cls+'_big','Armes','Coup final, élan, '+CLASS_TITLE[cls],-38,2,(S,r,k)=>SW_BIG[cls](S,TR[k]));
  fam('hit_'+cls,'Armes','Impact, '+CLASS_TITLE[cls],-33,3,(S,r,k)=>HIT[cls](S,TR[k]));
  fam('hit_'+cls+'_big','Armes','Coup final, impact, '+CLASS_TITLE[cls],-32,2,(S,r,k)=>HIT_BIG[cls](S,TR[k]));}
-// Coup fatal : s'ajoute à l'impact final de l'arme. Chute de hauteur courte et queue de bruit, sans jingle.
-fam('kill','Armes','Coup fatal',-36,3,(S,r,k)=>{const t=TR[k];S.p1(2,12,{note:K([0,86+t],[11,60+t]),vol:fall(11,12,1.2),duty:2});S.noise(3,12,{period:K([0,8],[11,12]),vol:fall(7,12)});});
+// Coup fatal : s'ajoute à l'impact final de l'arme. Une giclée : la chair qui repart par saccades irrégulières sur le
+// bruit long et une impulsion qui gargouille en descendant, sans jingle.
+fam('kill','Armes','Coup fatal',-36,3,(S,r,k)=>{const t=TR[k],J=Array.from({length:24},()=>r());
+ S.noise(3,22,{period:i=>Math.min(12,5+Math.floor(i/4)+(J[i]>.6?2:0)),vol:i=>(J[i]>.35?13:6)*Math.max(0,1-i/22)**.8});
+ S.p1(3,18,{note:i=>66+t-i*1.1-(i%2?4:0)+J[i],vol:i=>11*Math.max(0,1-i/18)*(i%3===1?.6:1),duty:2});
+ S.p2(5,12,{note:i=>75+t-i*1.3-(i%2?3:0),vol:i=>6*Math.max(0,1-i/12),duty:1});});
 
 // ---- Défense et blessures
 fam('parry','Combat','Parade parfaite',-36,3,(S,r,k)=>{const t=TR[k];S.noise(0,6,{period:[3,4,4,5,5,6],vol:[15,12,9,6,3,1],mode:[1,1,1,1,0,0]});

@@ -1,17 +1,19 @@
 // Donjons : une seule musique pour tous (« Sous la pierre »), sa variante quand les gobelins voient le héros,
 // le thème de boss contre leur chef, et une ambiance de cave humide à la place du vent et de la faune.
 // La cave est synthétisée au démarrage, par petites tranches d'une image à l'autre pour ne jamais figer le jeu :
-// gouttes qui tombent dans des flaques, fuites régulières, filet d'eau, air lourd qui respire, souffle des
-// galeries, chaînes, pierres et gonds au loin, le tout dans une réverbération de pierre. Chaque étage tire de
-// son nom ses propres fuites : même donjon, autre salle.
+// gouttes qui tombent dans des flaques, fuites régulières, filet d'eau, chaînes, pierres et gonds au loin, le tout
+// dans une réverbération de pierre. Aucun souffle : ni air, ni courant de galerie, ni clapotis de bruit filtré (sous
+// terre ils sonnaient comme une tempête de vent, demande de Lino, 23 octobre) ; le filet d'eau n'est fait que de bulles
+// séparées, et entre deux gouttes la pierre se tait. Chaque étage tire de son nom ses propres fuites : même donjon,
+// autre salle.
 const DungeonCave=(()=>{
  const rng=seed=>{let s=(seed>>>0)%2147483646+1;return ()=>(s=s*16807%2147483647)/2147483647;};
  const hash=text=>{let h=2166136261;for(const ch of String(text))h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;return h;};
  const clock=()=>typeof performance!=='undefined'?performance.now():Date.now();
  // Niveaux relatifs des couches, calés par rendu hors ligne : la cave reste nettement sous l'ambiance d'une forêt
- // au grand jour, avec peu de gouttes et un souffle presque sans grave (demande de Lino, 22 octobre). Les bruits
+ // au grand jour, avec peu de gouttes (demande de Lino, 22 octobre). Les bruits
  // lointains (chaînes, pierres, gonds) restent 5 dB sous les bruitages 8 bits proches, au niveau des gouttes (23 octobre).
- const MIX={air:.05,draft:1.05,trickle:.15,leak:.2,drip:.24,events:.28,wet:1};
+ const MIX={trickle:.1,leak:.2,drip:.24,events:.28,wet:1};
  // Filtre passe-bande RBJ pour le pré-calcul des tampons.
  function band(f,q,sr){const w=2*Math.PI*f/sr,al=Math.sin(w)/(2*q),a0=1+al;let x1=0,x2=0,y1=0,y2=0;
   const b0=al/a0,b2=-al/a0,a1=-2*Math.cos(w)/a0,a2=(1-al)/a0;return x=>{const y=b0*x+b2*x2-a1*y1-a2*y2;x2=x1;x1=x;y2=y1;y1=y;return y;};}
@@ -36,17 +38,12 @@ const DungeonCave=(()=>{
   yield* bubble(0,f0,1,tau);
   if(heavy){yield* bubble(.022+r()*.02,f0*(1.25+r()*.2),.35,tau*.7);let ph=0;for(let i=0;i<n;i++){const t=i/sr;ph+=2*Math.PI*(150+60*Math.exp(-t/.01))/sr;d[i]+=.32*Math.sin(ph)*Math.exp(-t/.03);if(tick(i))yield;}}
   normalize(d,.8);return b;}
- // Filet d'eau : une pluie de micro-bulles et un clapotis filtré, en stéréo large.
- function trickle(c,seed){return loop(c,7.3,2,function*(t,k,sr){const r=rng(seed+k*31),bp=band(2300,1.4,sr);let g=0,target=0,count=0;
-  for(let at=r()*.02;at<t.length/sr;at+=-Math.log(1-r()*.999)/55){const f=1600*3.2**r(),amp=.05+.3*r()**2,decay=.004+r()*.005;let ph=0;
-   for(let i=Math.floor(at*sr),e=1;i<t.length&&e>1e-3;i++){const x=i/sr-at;e=Math.min(1,x/.0004)*Math.exp(-x/decay);ph+=2*Math.PI*f*(1+.35*(1-Math.exp(-x/.004)))/sr;t[i]+=amp*e*Math.sin(ph);}
-   if(++count%24===0)yield;}
-  for(let i=0;i<t.length;i++){if(i%Math.floor(sr/9)===0)target=.3+r()*.7;g+=(target-g)*.0009;t[i]+=bp(r()*2-1)*.16*g;if(tick(i))yield;}
+ // Filet d'eau : de petites bulles une à une, bien séparées (une dizaine par seconde), sans bruit de fond.
+ function trickle(c,seed){return loop(c,7.3,2,function*(t,k,sr){const r=rng(seed+k*31);let count=0;
+  for(let at=r()*.05;at<t.length/sr;at+=.04-Math.log(1-r()*.999)/14){const f=900*2.6**r(),amp=.15+.6*r()**2,decay=.008+r()*.01;let ph=0;
+   for(let i=Math.ceil(at*sr);i<t.length;i++){const x=i/sr-at,e=Math.min(1,x/.0015)*Math.exp(-x/decay);if(x>.002&&e<1e-3)break;ph+=2*Math.PI*f*(1+.4*(1-Math.exp(-x/.006)))/sr;t[i]+=amp*e*Math.sin(ph);}
+   if(++count%12===0)yield;}
   normalize(t,.5);});}
- // Air lourd : bruit brun très grave, il gronde à peine.
- function air(c,seed){return loop(c,9.7,2,function*(t,k){const r=rng(seed+k*101);let b=0;for(let i=0;i<t.length;i++){b=.994*b+(r()*2-1)*.04;t[i]=b;if(tick(i))yield;}normalize(t,.6);},22050);}
- // Souffle des galeries : bruit rose, passé dans un passe-bande qui se déplace lentement en jeu.
- function draft(c,seed){return loop(c,8.1,1,function*(t){const r=rng(seed);let b0=0,b1=0,b2=0;for(let i=0;i<t.length;i++){const w=r()*2-1;b0=.99765*b0+w*.099;b1=.963*b1+w*.2965;b2=.57*b2+w*1.0527;t[i]=(b0+b1+b2+w*.1848)*.11;if(tick(i))yield;}normalize(t,.6);},22050);}
  // Bruits lointains : chaînes qui s'entrechoquent (cliquetis mats, sans résonance de cloche), pierre qui tombe puis
  // cailloux, gond qui grince, eau profonde.
  function* chains(c,seed){const sr=c.sampleRate,n=Math.floor(sr*1.4),b=c.createBuffer(1,n,sr),d=b.getChannelData(0),r=rng(seed);
@@ -68,11 +65,11 @@ const DungeonCave=(()=>{
   for(let i=0;i<n;i++){const t=i/sr;ph+=2*Math.PI*(270*(1+.55*(1-Math.exp(-t/.02))))/sr;d[i]=Math.sin(ph)*Math.exp(-t/.06)*Math.min(1,t/.001)+bp(r()*2-1)*.9*Math.exp(-t/.08)*Math.min(1,t/.004);if(tick(i))yield;}
   for(let k=0;k<3;k++){const at=.12+k*.09+r()*.06,f=900+r()*900;for(let i=Math.floor(at*sr),ph2=0;i<n;i++){const x=i/sr-at,e=Math.exp(-x/.015);if(e<1e-3)break;d[i]+=.3*e*Math.sin(ph2+=2*Math.PI*f*(1+.5*(1-Math.exp(-x/.01)))/sr);}yield;}
   normalize(d,.8);return b;}
- // Ordre de fabrication : d'abord les gouttes et la pierre (une fuite s'entend tout de suite), puis l'air,
- // le filet d'eau, le souffle et les bruits lointains. Chaque couche commence dès que son tampon est prêt.
+ // Ordre de fabrication : d'abord les gouttes et la pierre (une fuite s'entend tout de suite), puis le filet
+ // d'eau et les bruits lointains. Chaque couche commence dès que son tampon est prêt.
  function recipe(c){const r=rng(1709),jobs=[];
   for(let k=0;k<10;k++)jobs.push(['drops',k,drop(c,520*2.6**(k/9)*(.97+r()*.06),300+k*17,k<3)]);
-  jobs.push(['stoneIR',0,impulse(c,2.8,2600,5101)],['air',0,air(c,401)],['trickle',0,trickle(c,77)],['draft',0,draft(c,903)],['roomIR',0,impulse(c,1.5,3200,5303)]);
+  jobs.push(['stoneIR',0,impulse(c,2.8,2600,5101)],['trickle',0,trickle(c,77)],['roomIR',0,impulse(c,1.5,3200,5303)]);
   for(const [kind,make,seeds]of [['chains',chains,[11,12]],['stone',stone,[21,22]],['creak',creak,[31,32]],['splash',splash,[41]]])seeds.forEach((s,k)=>jobs.push([kind,k,make(c,s)]));
   return jobs;}
  // Ce que chaque étage tire de son nom : rythme et place des fuites, filet d'eau, densité des gouttes, écho.
@@ -84,7 +81,7 @@ const DungeonCave=(()=>{
    weights:{chains:1+r()*2,stone:1+r()*1.5,creak:.6+r()*1.4,splash:.5+r()}};}
  function create(c,destination,options={}){
   const M={...MIX,...options.mix},S={drops:[],chains:[],stone:[],creak:[],splash:[]},jobs=recipe(c),r=options.random||Math.random;
-  const cave={floor:null,plan:null,running:false,leakAt:[],dripAt:0,eventAt:0,draftAt:0,loops:{},leftAt:0};
+  const cave={floor:null,plan:null,running:false,leakAt:[],dripAt:0,eventAt:0,loops:{},leftAt:0};
   const out=c.createGain(),dry=c.createGain(),far=c.createBiquadFilter(),send=c.createGain(),verb=c.createConvolver(),ret=c.createGain();
   out.gain.value=0;out.connect(destination);dry.connect(out);far.type='lowpass';far.frequency.value=2000;far.connect(dry);
   send.connect(verb);verb.connect(ret);ret.gain.value=.85*M.wet;ret.connect(out);
@@ -93,28 +90,23 @@ const DungeonCave=(()=>{
    while(jobs.length&&clock()<end){const [key,index,gen]=jobs[0],step=gen.next();if(!step.done)continue;jobs.shift();
     if(Array.isArray(S[key]))S[key][index]=step.value;else S[key]=step.value;
     if(key==='stoneIR')verb.buffer=step.value;
-    if(cave.running&&['air','trickle','draft'].includes(key))layer(key,c.currentTime);}
+    if(cave.running&&key==='trickle')layer(key,c.currentTime);}
    return !jobs.length;}
   // Bruit ponctuel : direct (proche, ou étouffé par la distance) et départ vers la réverbération.
   function shot(buf,at,{gain=1,pan=0,rate=1,wet=.5,distant=false,kind='drip'}={}){if(!buf)return;options.log?.push({kind,at,now:c.currentTime});const s=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner(),w=c.createGain();
    s.buffer=buf;s.playbackRate.value=rate;g.gain.value=gain;p.pan.value=Math.max(-1,Math.min(1,pan));w.gain.value=wet;
    s.connect(g);g.connect(p);p.connect(distant?far:dry);p.connect(w);w.connect(send);s.onended=()=>{s.disconnect();g.disconnect();p.disconnect();w.disconnect();};s.start(at);}
-  // Couches continues : air, souffle, filet d'eau. Elles ne tournent que sous terre.
-  function layer(key,t){if(!S[key]||cave.loops[key])return;const s=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner(),w=c.createGain(),filter=key==='trickle'?null:c.createBiquadFilter();
-   s.buffer=S[key];s.loop=true;p.pan.value=0;w.gain.value=key==='air'?.1:key==='draft'?.6:.45;g.gain.value=0;
-   if(filter){filter.type=key==='air'?'highpass':'bandpass';filter.frequency.value=key==='air'?75:260;filter.Q.value=key==='air'?.7:4;s.connect(filter);filter.connect(g);}else s.connect(g);
-   g.connect(p);p.connect(dry);p.connect(w);w.connect(send);s.start(t,r()*S[key].duration);const l=cave.loops[key]={s,g,p,w,filter};
-   // L'air respire : un battement très lent de son niveau.
-   if(key==='air'){const lfo=c.createOscillator(),depth=c.createGain();lfo.frequency.value=.055;depth.gain.value=.3*M.air;lfo.connect(depth);depth.connect(g.gain);lfo.start(t);l.lfo=lfo;l.depth=depth;}
+  // Couche continue : le filet d'eau, seulement sous terre et seulement dans les salles qui en ont un.
+  function layer(key,t){if(!S[key]||cave.loops[key])return;const s=c.createBufferSource(),g=c.createGain(),p=c.createStereoPanner(),w=c.createGain();
+   s.buffer=S[key];s.loop=true;p.pan.value=0;w.gain.value=.15;g.gain.value=0;s.connect(g);
+   g.connect(p);p.connect(dry);p.connect(w);w.connect(send);s.start(t,r()*S[key].duration);cave.loops[key]={s,g,p,w};
    levels(t);}
-  function levels(t){const P=cave.plan;if(!P)return;const L=cave.loops;
-   L.air?.g.gain.setTargetAtTime(M.air,t,1.2);
-   if(L.trickle){L.trickle.g.gain.setTargetAtTime(P.trickle?P.trickle.gain*M.trickle:0,t,.8);L.trickle.p.pan.setTargetAtTime(P.trickle?P.trickle.pan:0,t,.3);}
-   if(L.draft&&!cave.draftAt)L.draft.g.gain.setTargetAtTime(.15*M.draft,t,2);}
-  function start(t){cave.running=true;for(const key of ['air','trickle','draft'])layer(key,t);}
-  function stop(){for(const l of Object.values(cave.loops)){try{l.s.stop();l.lfo?.stop();}catch{}for(const n of [l.s,l.g,l.p,l.w,l.filter,l.lfo,l.depth])n?.disconnect();}cave.loops={};cave.running=false;}
+  function levels(t){const P=cave.plan,L=cave.loops.trickle;if(!P||!L)return;
+   L.g.gain.setTargetAtTime(P.trickle?P.trickle.gain*M.trickle:0,t,.8);L.p.pan.setTargetAtTime(P.trickle?P.trickle.pan:0,t,.3);}
+  function start(t){cave.running=true;layer('trickle',t);}
+  function stop(){for(const l of Object.values(cave.loops)){try{l.s.stop();}catch{}for(const n of [l.s,l.g,l.p,l.w])n.disconnect();}cave.loops={};cave.running=false;}
   function enter(id,t){const P=cave.plan=floorPlan(id);cave.floor=id;
-   cave.leakAt=P.leaks.map(()=>t+.4+r()*P.leaks[0].period);cave.dripAt=t+r()*P.drip;cave.eventAt=t+6+r()*P.events*.6;cave.draftAt=0;
+   cave.leakAt=P.leaks.map(()=>t+.4+r()*P.leaks[0].period);cave.dripAt=t+r()*P.drip;cave.eventAt=t+6+r()*P.events*.6;
    send.gain.setTargetAtTime(P.wet,t,.5);levels(t);}
   // Programme les gouttes et les bruits lointains un peu en avance : une image lente ne casse pas le rythme d'une fuite.
   function update(t,{floor=null,level=0,duck=0}={}){
@@ -133,7 +125,6 @@ const DungeonCave=(()=>{
     for(const k of kinds)if((x-=W[k])<0){kind=k;break;}
     if(kind)shot(S[kind][Math.floor(r()*S[kind].length)],cave.eventAt,{gain:(kind==='stone'?.3:kind==='creak'?.32:.42)*M.events,pan:(r()*2-1)*.9,rate:.9+r()*.2,wet:1.3,distant:true,kind});
     cave.eventAt+=P.events*(.6+r()*.8);}
-   const D=cave.loops.draft;if(D&&t>cave.draftAt){cave.draftAt=t+3+r()*5;D.filter.frequency.setTargetAtTime(170+r()*240,t,2.2);D.g.gain.setTargetAtTime((.1+r()*.16)*M.draft,t,2.5);}
   }
   return {update,prepare,get floor(){return cave.floor;},get running(){return cave.running;},get ready(){return !jobs.length;},get sounds(){return S;},get plan(){return cave.plan;}};
  }
