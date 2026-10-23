@@ -97,12 +97,6 @@ const KaldorArsenal=(()=>{
   }
   return n;
  };
- // A single pending press survives the current stroke, including a heavy
- // wind-up. Further presses cannot stack attacks or change that queued aim.
- function queueAttack(p,x=0,y=0){
-  if(p.attackBuffer>0)return;
-  p.attackBuffer=Math.max(.26,p.attack+.12,p.attackCD+.08);p.bufferX=x;p.bufferY=y;
- }
  // One pixel at most, once per confirmed impact, shared by every target type.
  function contactShake(g){
   const p=g.player;if(!p.impactTick||p.attack<=0||g.weaponShake?.swing===g.swing)return;
@@ -125,21 +119,24 @@ const KaldorArsenal=(()=>{
    return result;
   };
  }
+ // Animate confirmed defensive contacts, never a mere press of the button.
+ const defend=Game.prototype.defend;
+ Game.prototype.defend=function(from){const p=this.player,parry=p.parry>0,result=defend.call(this,from);if(result){p.defenseFX={kind:parry?'parry':'guard_hit',elapsed:0};p.hitPause=Math.max(p.hitPause||0,parry?.035:.02);}return result;};
  // Freeze simulation at contact, including the victim and impact particles.
- // Input remains live: a press during this short pause is queued for the link.
+ // Consume presses during hit stop; they cannot become a delayed stroke.
  const updateCombat=Game.prototype.update;
  function combatStep(dt,input={},step=updateCombat){
-  dt=clamp(Number(dt)||0,0,.04);const p=this.player;p.impactTick=false;
+  dt=clamp(Number(dt)||0,0,.04);const p=this.player;p.impactTick=false;p.attackBuffer=0;
   // Decay in real update time, including hit stop, so the camera settles quickly.
   if(this.weaponShake)this.weaponShake.remaining=Math.max(0,this.weaponShake.remaining-dt);
   if(p.hitPause>0&&!this.dialogue&&!this.sleeping&&!this.dying&&!this.dead&&!this.won&&!this.journey){
-   if(input.attackPressed||(input.attack&&!p.attackHeld))queueAttack(p,input.x||0,input.y||0);
-   p.attackHeld=!!input.attack;
+   p.attackHeld=!!input.attack;input={...input,attackPressed:false};
    const stop=Math.min(dt,p.hitPause);p.hitPause=Math.max(0,p.hitPause-stop);dt-=stop;
    // Do not leave the previous tick's damage event live during the freeze.
    p.impactTick=false;
    if(dt<1e-7)return;
   }
+  if(p.defenseFX){p.defenseFX.elapsed+=dt;if(!W.defenseLook(p)||p.hurt>0||p.dash>0||p.attack>0)p.defenseFX=null;}
   return step.call(this,dt,input);
  }
  Game.prototype.update=function(dt,input={}){return combatStep.call(this,dt,input);};
@@ -210,5 +207,5 @@ const KaldorArsenal=(()=>{
  const row=KaldorWardrobe.inventoryHTML,bind=KaldorWardrobe.bindInventory;
  KaldorWardrobe.inventoryHTML=function(g){return row.call(this,g)+inventoryHTML(g);};
  KaldorWardrobe.bindInventory=function(body,g,refresh){bind.call(this,body,g,refresh);bindInventory(body,g,refresh);};
- return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,queueAttack,combatStep,contactShake};
+ return {normalize,stands,inventoryHTML,bindInventory,drawWeapon,cameraShake,combatStep,contactShake};
 })();

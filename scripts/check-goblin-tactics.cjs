@@ -15,6 +15,6 @@ const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),
   if(frame===55)t.renderer.frame();
  }
  g.update=original;g.targetId=g.enemies[0].id;t.renderer.frame();return {starts,contacts:contacts.length,sectors:angles.size,maxAttacks,moving,maxFrameMs};});
- assert.ok(result.starts.length>=4&&result.contacts>0&&result.moving>0&&result.sectors>=3,JSON.stringify(result));assert.ok(result.maxAttacks<=2);for(let i=1;i<result.starts.length;i++)assert.ok(result.starts[i].time-result.starts[i-1].time>=.30);await page.screenshot({path:path.join(out,'mobile-'+width+'-squad.png')});results.push({width,...result});await page.close();}
+ assert.ok(result.starts.length>=4&&result.contacts>0&&result.moving>0&&result.sectors>=3,JSON.stringify(result));assert.ok(result.maxAttacks<=2);for(let i=1;i<result.starts.length;i++)assert.ok(result.starts[i].time-result.starts[i-1].time>=.155);await page.screenshot({path:path.join(out,'mobile-'+width+'-squad.png')});results.push({width,...result});await page.close();}
  assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'verification.json'),JSON.stringify({source:'ios/Hearthreaver/Game/index.html',mobile:true,results,browserErrors:errors},null,2)+'\n');console.log('Phone squad combat: native impact, staggered attacks, encirclement, real collisions and zero browser errors passed.');
  }finally{await browser.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

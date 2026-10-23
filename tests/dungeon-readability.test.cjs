@@ -20,3 +20,9 @@ test('dungeon objective and notices do not reveal the fairy in the UI',()=>{cons
 test('authored world weapons also preview before a manual pickup and preserve ownership after reload',()=>{
  const g=combatGame(a),rack=g.atlasProps.find(o=>o.kind==='kaldor_weapon'&&o.weapon==='couteau-roulier');assert.ok(rack);Object.assign(g.player,{x:rack.x,y:rack.y+8,level:0,attack:0,dash:0,hurt:0});g.events=[];g.stepWeaponDrops(.04);assert.ok(!g.arsenal.owned.includes(rack.weapon));assert.ok(g.events.some(e=>e.type==='weaponfound'&&e.pickup&&e.weapon===rack.weapon));assert.equal(g.context().kind,'weapon');g.interact();assert.ok(rack.taken&&g.arsenal.owned.includes(rack.weapon));const r=combatGame(a,g.serialize());assert.ok(r.arsenal.owned.includes(rack.weapon));assert.ok(r.atlasProps.find(o=>o.kind==='kaldor_weapon'&&o.weapon===rack.weapon).taken);
 });
+
+test('a foreground crate covering the hero fades while background and nonoverlapping crates remain opaque',()=>{
+ const O=a.DungeonOcclusion,p={x:100,y:100},piece={w:60,h:60,anchor:[30,40]},im=canvas.createCanvas(60,60);im.getContext('2d').fillRect(0,0,60,60);
+ const it={piece:'caisse',ref:[108,108],key:6,sub:216};assert.equal(O.covered(it,piece,im,p),true);assert.equal(O.covered({...it,key:5},piece,im,p),false);assert.equal(O.covered({...it,ref:[160,80]},piece,im,p),false);
+ const r={g:{dungeon:{floor:'test'}},dungeonOcclusion:[],dungeonOcclusionDt:.04};let alpha;for(let i=0;i<20;i++)alpha=O.alpha(r,it,piece,im,p);assert.ok(alpha>=.55&&alpha<.56);
+});

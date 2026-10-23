@@ -10,6 +10,11 @@ Renderer.prototype.bubble=function(){
  const d=this.g.dialogue,el=document.getElementById('dialogue'),controls=document.getElementById('dialogueControls');
  if(!el?.style)return;
  if(!d||d.waitPanel){el.hidden=true;if(controls)controls.hidden=true;return;}
+ if(d.uiOnly){
+  el.hidden=true;if(controls){const r=document.getElementById('game').getBoundingClientRect(),sr=document.getElementById('screen').getBoundingClientRect(),probe=document.getElementById('safeProbe'),style=probe?getComputedStyle(probe):null,right=parseFloat(style?.paddingRight)||0,gutter=sr.right-right-r.right,actionWidth=Math.min(136,Math.max(76,gutter-16)),center=gutter>=90?r.right-sr.left+gutter/2:sr.width-right-actionWidth/2-12;
+   controls.hidden=false;controls.style.setProperty('--conversation-footer','130px');controls.style.setProperty('--choices-left',(r.left-sr.left+12)+'px');controls.style.setProperty('--choices-width',Math.max(1,r.width-24)+'px');controls.style.setProperty('--choices-bottom',(sr.bottom-r.bottom)+'px');controls.style.setProperty('--action-left',(center-actionWidth/2)+'px');controls.style.setProperty('--action-width',actionWidth+'px');
+  }return;
+ }
  let value=this.g.dialogueText(),screen=document.getElementById('screen'),cv=document.getElementById('game'),r=cv.getBoundingClientRect(),sr=screen.getBoundingClientRect();
  if(!value||!r.width){el.hidden=true;return;}
  const probe=document.getElementById('safeProbe'),style=probe?getComputedStyle(probe):null,safe={l:parseFloat(style?.paddingLeft)||0,r:parseFloat(style?.paddingRight)||0,t:parseFloat(style?.paddingTop)||0,b:parseFloat(style?.paddingBottom)||0};

@@ -74,7 +74,7 @@ test('standing workplaces do not render sitting poses without a physical seat',(
 
 test('workers walk around a tabletop between clear tile centres instead of retrying a blocked edge',()=>{
  const g=new a.Game(),[id,w]=[...g.humanWorkstations].find(([id,w])=>w.actor&&!w.cityFixture&&w.id==='workbench'),n=g.npcs.find(n=>n.id===id),b=g.settlements.buildings.find(b=>b.uid===w.building),door=b.geometry.portals[0];Object.assign(n,{x:door.x+door.nx*30,y:door.y+door.ny*30});n.civilian.action='idle';n.civilian.elapsed=1;n.path=[];assert.ok(!g.solid(n.x,n.y,4,0));
- let steps=0;while(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])>2&&steps++<800){const from={x:n.x,y:n.y};g.walkNpc(n,{x:w.feet[0],y:w.feet[1]},.04);assert.ok(Math.hypot(n.x-from.x,n.y-from.y)<=1.281);assert.ok(!g.solid(n.x,n.y,4,0));}
+ let steps=0;while(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])>2&&steps++<800){const from={x:n.x,y:n.y};g.walkNpc(n,{x:w.feet[0],y:w.feet[1]},.04);assert.ok(require('../scripts/world-projection').distance(n.x-from.x,n.y-from.y)<=1.281);assert.ok(!g.solid(n.x,n.y,4,0));}
  assert.ok(Math.hypot(n.x-w.feet[0],n.y-w.feet[1])<=2,'The real sweep must agree with the planned route');
 });
 

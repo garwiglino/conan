@@ -89,6 +89,20 @@
   const u=pole?(dir===0?[.12,-.993]:dir===2?[-.12,.993]:dir===1?[.985,-.173]:[-.985,-.173]):dir===0?[.6,-.8]:dir===2?[-.65,-.76]:dir===1?[.58,-.815]:[-.58,-.815];
   return {h,u,reach:w.length+2,profile};
  }
+ // Cross-body defense is separate from the relaxed attack-ready/carry pose.
+ const DEFENSE_TIMES=freeze({guard_hit:[.035,.065,.075,.085],parry:[.035,.055,.065,.105]});
+ function defenseLook(actor){const fx=actor?.defenseFX,row=DEFENSE_TIMES[fx?.kind];if(!row||fx.elapsed>=row.reduce((a,b)=>a+b,0))return null;let t=fx.elapsed;for(let f=0;f<row.length;f++){if(t<row[f])return {state:fx.kind,frame:f};t-=row[f];}return null;}
+ function defensePose(id,dir,state='guard',frame=0){
+  const w=get(id),profile=dir===1||dir===3,pole=isPole(id),f=Math.max(0,Math.min(3,frame|0)),[fx,fy]=forward(dir);
+  const h=profile?[dir===1?5:-5,-8]:dir===0?[pole?-3:5,-9]:[pole?3:-5,-8];
+  // The transverse plane foreshortens upright in profile; it never points
+  // into the opponent as if the defensive hold were a spear thrust.
+  const base=profile?[dir===1?-.16:.16,-.987]:dir===0?[-.97,-.243]:[.97,-.243];
+  const parry=state==='parry',hit=state==='guard_hit',recoil=hit?[1,2,1,0][f]:parry?[0,1,1,0][f]:0;
+  const turn=(dir===0||dir===3?-1:1)*(hit?[-.08,-.15,.05,0][f]:parry?[.10,.42,.23,0][f]:0),a=Math.atan2(base[1],base[0])+turn;
+  const body=[Math.round(-fx*recoil),Math.round(-fy*recoil*.5)],span=pole?(profile?5:8):2;
+  return {h:[h[0]+body[0],h[1]+body[1]-(parry?[0,2,1,0][f]:0)],u:[Math.cos(a),Math.sin(a)],body,head:[...body],span,profile,reach:w.length+2,smear:parry&&f===1?.5:parry&&f===2?.16:0};
+ }
  // Normal carrying differs from combat guard: shaft upright across the
  // chest, high leading hand and low supporting hand. The transverse diagonal
  // projects vertically in profile, retaining its shortened vertical component.
@@ -600,5 +614,5 @@
  function paintStored(b,id,dir){const s=storage(id,dir);storedShape(b,id,s.h,s.u,dir);}
 
 
- return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,category,handedness,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
+ return Object.freeze({START,all,get,loadouts,speciesOf,carriedBy,has:id=>Object.hasOwn(byId,id),families:FAMILIES,category,handedness,palettes:PALETTES,times,duration,frame,sample,advance,canChain,postHold,pose,combatPose,aimForTarget,deliveryEnd,vector,guard,defensePose,defenseLook,defenseTimes:DEFENSE_TIMES,carry,hits,paint,trail,fitGrip,handSpan,comboNames,cadence,hitPause,attackStep,holster,preview,finisherEffects,finisher:id=>get(id).finisher,storage,paintStored,spearNames:SPEAR_NAMES});
 });

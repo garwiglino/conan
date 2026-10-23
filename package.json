@@ -86,7 +86,18 @@
     "test:dungeon-crates": "node --test --test-concurrency=1 tests/dungeon-crates-population.test.cjs tests/dungeon-runtime.test.cjs",
     "check:dungeon-crates": "node scripts/check-dungeon-crates.cjs",
     "test:dungeon-loot": "node --test --test-concurrency=1 tests/dungeon-loot.test.cjs tests/goblin-pressure.test.cjs tests/weapon-handedness.test.cjs",
-    "check:dungeon-loot": "node scripts/check-dungeon-loot-combat.cjs"
+    "check:dungeon-loot": "node scripts/check-dungeon-loot-combat.cjs",
+    "build:dungeon-objects": "node scripts/build-dungeon-object-art.cjs && node scripts/build-dungeon.cjs && node scripts/embed-dungeon.cjs",
+    "test:dungeon-objects": "node --test --test-concurrency=1 tests/dungeon-prop-interactions.test.cjs tests/dungeon-loot.test.cjs tests/dungeon-runtime.test.cjs",
+    "check:dungeon-objects": "node scripts/check-dungeon-props.cjs",
+    "test:goblin-space": "node --test --test-concurrency=1 tests/goblin-tactics.test.cjs tests/goblin-pressure.test.cjs tests/goblin-space-vision.test.cjs tests/dungeon-runtime.test.cjs",
+    "check:goblin-space": "node scripts/check-goblin-space.cjs",
+    "test:combat-defense": "node --test --test-concurrency=1 tests/player-defense.test.cjs tests/goblin-animation.test.cjs tests/goblin-space-vision.test.cjs",
+    "check:combat-defense": "node scripts/check-combat-defense.cjs",
+    "preview:combat-defense": "node scripts/preview-combat-defense.cjs",
+    "embed:mobile-controls": "node scripts/embed-mobile-controls.cjs",
+    "check:mobile-controls": "node scripts/check-mobile-controls.cjs",
+    "test:isometric-motion": "node --test --test-concurrency=1 tests/isometric-motion.test.cjs tests/dungeon-crates-population.test.cjs tests/goblin-space-vision.test.cjs"
   },
   "devDependencies": {
     "@code-dot-org/piskel": "0.13.0-cdo.14",

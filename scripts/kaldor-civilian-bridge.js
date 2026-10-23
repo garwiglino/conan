@@ -91,6 +91,7 @@
  function remap(state,frame,walkFrame,time){
   if(state==='idle'||state==='sheathed_idle')return frameAt('idle',time);
   if(state==='walk'||state==='sheathed_walk')return walkFrame;
+  if(state==='guard'&&frame>=6)return 6+walkFrame;
   // Legacy weaponVisual transition: 6 phases x 6 gait frames.
   // Keep the 6 phases while replacing gait with NPC's 8 real frames.
   if(state==='sheathe_walk'||state==='draw_walk')return Math.floor(frame/6)*8+walkFrame;
@@ -576,6 +577,21 @@
   return {sword,hands,behind:held.behind,L,arms};
  }
 
+ // Block and parry use the same rigid native outfit/hand layers as attacks.
+ function defenseFrame(dir,state,frame){
+  const walking=state==='guard'&&frame>=6,p=walking?pose('walk',(frame-6)%8,dir):{action:'idle',frame:0},s=weapons().defensePose(wielded,dir,state,walking?0:frame),L=layers(p.action,dir,p.frame);if(!L)return null;
+  const gait=walking?bodyShift(p.action,dir,p.frame):[0,0];s.h=s.h.map((v,i)=>v+gait[i]);
+  const [out,c]=canvas80(),blade=buffer(),trail=buffer(),arms=nativeArmLayers(dir,s.h,s.u,[0,0],s.body.map((v,i)=>v+gait[i]),s.span);
+  paintSword(blade,...s.h,...s.u,{hands:0,dir});blade.outline();
+  if(s.smear){const prev=weapons().defensePose(wielded,dir,state,0),len=weapons().get(wielded).length;
+   for(let k=0;k<7;k++){const t=k/7,start=Math.atan2(prev.u[1],prev.u[0]),end=Math.atan2(s.u[1],s.u[0]),a=start+Math.atan2(Math.sin(end-start),Math.cos(end-start))*t;
+    if(s.smear<.2&&k%2)continue;trail.set(s.h[0]+Math.cos(a)*len,s.h[1]+Math.sin(a)*len,s.smear>.2?'#d9f1e8':'#78989d');}
+  }
+  if(dir===0){paintAt(c,trail);paintAt(c,blade);c.drawImage(arms.front,0,0);}
+  c.drawImage(arms.back,0,0);stack(c,L,L,dir,s.head,[0,0],s.body.map((v,i)=>v+gait[i]),s.body);
+  if(dir!==0){paintAt(c,trail);paintAt(c,blade);c.drawImage(arms.front,0,0);}
+  return out;
+ }
  function nativeFrame(dir,state,frame,combo=0,swordPose,swordPainter,flash=false){
   if(!Number.isInteger(dir)||dir<0||dir>3)throw new RangeError('Direction Kaldor: 0..3');
   if(!ready()){if(!loading&&!failed)preload();return null;}
@@ -588,6 +604,8 @@
   if(state==='dress'||state==='helm'){
    out=dressFrame(dir,Math.max(0,Math.min(clip(state).durations.length-1,frame|0)),state);
    if(!out)return null;
+  }else if(['guard','guard_hit','parry'].includes(state)&&customWeapon()){
+   out=defenseFrame(dir,state,frame);if(!out)return null;
   }else if(state==='attack'){
    out=attackFrame(dir,Math.max(0,Math.min(5,frame)),combo,swordPose);
    if(!out)return null;

@@ -2,6 +2,7 @@
 const LootPresentation=(()=>{
  const CHEST_LOOT=Object.freeze(['coin','coin','coin','coin','coin','heart','heart']),cache=new WeakMap();
  function chestFrame(ch){if(!ch?.open)return 0;const age=ch.openAge;if(!Number.isFinite(age)||age>=.33)return 4;return age<.06?0:age<.14?1:age<.23?2:3;}
+ function breakFrame(ch){if(!ch?.broken)return -1;let age=ch.breakAge??Infinity;for(const [f,t]of [.045,.035,.055,.065,.08,.10,.12].entries()){if(age<t)return f;age-=t;}return 7;}
  function chests(g){return g.dungeon?.active?Object.values(FirstDungeon.state(g).chestStates||{}):g.chests;}
  Game.prototype.openLootChest=function(ch){if(ch.open)return false;ch.open=true;ch.openAge=0;this.ejectLoot(ch,CHEST_LOOT);this.emit('chest');this.emit('save');return true;};
  Game.prototype.stepLoot=function(dt){
@@ -43,5 +44,5 @@ const LootPresentation=(()=>{
   const phase=Math.floor((time*8+seed)%12);if(phase<4){const a=Math.round(x-3),b=Math.round(y-height-3+bob),r=phase===1||phase===2?2:1;c.fillStyle='#ffe0a0';c.fillRect(a-r,b,2*r+1,1);c.fillRect(a,b-r,1,2*r+1);c.fillStyle='#fff6d3';c.fillRect(a,b,1,1);}
   c.restore();
  }
- return {CHEST_LOOT,chestFrame,key};
+ return {CHEST_LOOT,chestFrame,breakFrame,key};
 })();

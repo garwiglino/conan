@@ -18,12 +18,17 @@
  const character=id=>DATA.characters[id]||DATA.characters.gobelin;
  function times(state,chief=false,combo=0){
   const row=(CLIPS[state]||CLIPS.idle).times.slice();
-  if(state==='attack'){row[1]=chief?.765:.365;const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
+  if(state==='attack'){row[1]=chief?.50:.23;if(!chief){row[0]=.055;row[3]=.045;row[4]=.085;row[5]=.065;}const factor=combo===1?1.06:combo===2?.90:combo===3?1.14:1;for(const i of [0,1,3,4,5])row[i]*=factor;if(chief){row[4]*=1.35;row[5]*=1.25;}}
+  if(state==='hurt'&&!chief)return row.map(t=>t*.375);
   return row;
  }
  const duration=(state,chief=false,combo=0)=>times(state,chief,combo).reduce((a,b)=>a+b,0);
  function frame(state,time=0,chief=false,combo=0){const row=times(state,chief,combo),total=row.reduce((a,b)=>a+b,0);let t=Math.max(0,time);if(CLIPS[state]?.loop)t%=total;for(let i=0;i<row.length;i++){if(t<row[i]-1e-8)return i;t-=row[i];}return row.length-1;}
- function pose(state,dir=2,index=0,combo=0){
+ function pose(state,dir=2,index=0,combo=0,aim=0){
+  if(state==='attack'&&(index===.75||index===1.25)){
+   const low=index===.75?0:1,high=low+1,t=index===.75?.66:.16,a=pose(state,dir,low,combo,aim),b=pose(state,dir,high,combo,aim),p={...a,phase:index,angle:a.angle+Math.atan2(Math.sin(b.angle-a.angle),Math.cos(b.angle-a.angle))*t,smear:0};
+   for(const key of ['body','head','armL','armR','legL','legR','pouch','cape'])p[key]=a[key].map((v,i)=>Math.round(v+(b[key][i]-v)*t));return p;
+  }
   const [fx,fy]=FWD[dir]||FWD[2],a=Math.atan2(fy,fx),p={body:[0,0],head:[0,0],armL:[0,0],armR:[0,0],legL:[0,0],legR:[0,0],pouch:[0,0],cape:[0,0],angle:-Math.PI/2,smear:0,phase:index};
   const armedSide=dir===0||dir===3?'R':'L',main='arm'+armedSide,off='arm'+(armedSide==='L'?'R':'L'),side=dir===3?-1:1;
   if(state==='idle'){p.body[1]=index===1?-1:0;p.head[1]=index===2?-1:p.body[1];p.armL[1]=p.armR[1]=p.body[1];}
@@ -51,11 +56,18 @@
   if(['sit','sleep','cower'].includes(state)){const settled=state==='sleep'?3:Math.min(3,index);p.body=[0,settled];p.head=[0,settled+(state==='sleep'?2:0)];p.armL=[1,settled-1];p.armR=[-1,settled-1];p.angle=.2;if(state==='sleep'&&index===1)p.head[1]--;if(state==='cower'){p.armL=[1,-Math.min(3,index)];p.armR=[-1,-Math.min(3,index)];p.angle=-2.15;}}
   if(['talk','interact','celebrate'].includes(state)){const n=[0,-1,-2,0][index]||0;p[main]=[1,n];p.head=[0,index===1?-1:0];if(state==='celebrate')p[off]=[-1,n];}
   if(!['walk','run','carry','attack','work'].includes(state)){p.pouch=[...p.body];p.cape=[...p.body];}
+  if(state==='attack')p.angle+=Math.max(-.65,Math.min(.65,aim))*[.2,1,1,1,.6,0][Math.min(5,index)];
   return p;
  }
  const GRIP=[[31,31],[20,31],[16,31],[27,31]];
  function weaponPose(dir,p){const side=dir===0||dir===3?'R':'L',d=p['arm'+side],h=GRIP[dir].map((n,k)=>n-([24,36][k])+d[k]);return {h,u:[Math.cos(p.angle),Math.sin(p.angle)]};}
- function start(actor){const combo=actor.nextCombo||0;actor.goblinCombo=combo%4;actor.nextCombo=(combo+1)%4;actor.swingElapsed=0;actor.swingImpact=false;actor.swingDir=actor.dir;actor.wind=times('attack',actor.chief,actor.goblinCombo).slice(0,2).reduce((a,b)=>a+b,0);actor.attack=0;}
+ // Aim at the real torso in projected space, then lock the bounded adjustment
+ // for the whole stroke. Drawing, smear and contact share this exact angle.
+ function aim(actor,target,dir=actor.dir,combo=actor.nextCombo||0){
+  const p=pose('attack',dir,2,combo),v=weaponPose(dir,p),dx=target.x-actor.x,dy=target.y-actor.y,a=Math.atan2((dx+dy)/2-9-v.h[1],dx-dy-v.h[0]),d=Math.atan2(Math.sin(a-p.angle),Math.cos(a-p.angle));
+  return Math.round(Math.max(-.65,Math.min(.65,d))*32)/32;
+ }
+ function start(actor,target){const combo=actor.nextCombo||0;actor.goblinCombo=combo%4;actor.nextCombo=(combo+1)%4;actor.swingElapsed=0;actor.swingImpact=false;actor.swingDir=actor.dir;actor.swingAim=target?aim(actor,target,actor.dir,actor.goblinCombo):0;actor.wind=times('attack',actor.chief,actor.goblinCombo).slice(0,2).reduce((a,b)=>a+b,0);actor.attack=0;}
  function cancel(actor){actor.swingElapsed=null;actor.swingImpact=true;actor.wind=0;actor.attack=0;}
  function advance(actor,dt){
   if(actor.dead){if(Number.isFinite(actor.deathElapsed))actor.deathElapsed=Math.min(duration('death'),actor.deathElapsed+dt);return false;}
@@ -66,16 +78,18 @@
   const hit=!actor.swingImpact&&before<contact+row[2]&&actor.swingElapsed>=contact;if(hit)actor.swingImpact=true;
   if(actor.swingElapsed>=end){actor.swingElapsed=null;actor.wind=0;actor.attack=0;}return hit;
  }
+ function attackFrame(actor){const row=times('attack',actor.chief,actor.goblinCombo),t=actor.swingElapsed;if(t<row[0])return 0;const load=(t-row[0])/row[1];if(load<.30)return .75;if(load<.68)return 1;if(load<1)return 1.25;return frame('attack',t,actor.chief,actor.goblinCombo);}
+ function telegraph(actor){return !actor.dead&&(actor.stun||0)<=0&&Number.isFinite(actor.swingElapsed)&&actor.wind>0;}
  function look(actor,time=0){
   const dir=Number.isFinite(actor.swingElapsed)?actor.swingDir:actor.dir;
   if(actor.dead)return {state:'death',dir:actor.dir,frame:frame('death',actor.deathElapsed??duration('death')),combo:0};
   if(actor.stun>0)return {state:'hurt',dir:actor.dir,frame:frame('hurt',actor.hurtElapsed||0),combo:0};
-  if(Number.isFinite(actor.swingElapsed))return {state:'attack',dir,frame:frame('attack',actor.swingElapsed,actor.chief,actor.goblinCombo),combo:actor.goblinCombo||0};
+  if(Number.isFinite(actor.swingElapsed))return {state:'attack',dir,frame:attackFrame(actor),combo:actor.goblinCombo||0};
   if(CLIPS[actor.goblinState])return {state:actor.goblinState,dir:actor.dir,frame:frame(actor.goblinState,actor.stateElapsed||0),combo:actor.goblinCombo||0};
   const state=actor.moving?'walk':actor.guard?'guard':'idle';return {state,dir:actor.dir,frame:frame(state,actor.moving?(actor.anim||0)*.20:time),combo:0};
  }
  function hits(actor,target){
-  const dir=actor.swingDir??actor.dir,p=pose('attack',dir,2,actor.goblinCombo||0),v=weaponPose(dir,p),id=actor.weapon||character(actor.skin).weapon,scale=actor.chief?1:.85,length=W.get(id).length*scale;
+  const dir=actor.swingDir??actor.dir,p=pose('attack',dir,2,actor.goblinCombo||0,actor.swingAim||0),v=weaponPose(dir,p),id=actor.weapon||character(actor.skin).weapon,scale=actor.chief?1:.85,length=W.get(id).length*scale;
   const dx=target.x-actor.x,dy=target.y-actor.y,x=dx-dy,y=(dx+dy)/2-9,r=(target.r||5)+5;
   // The impact smear covers the final delivery of a cut, not its recovery.
   for(let k=0;k<=16;k++){const reverse=p.turn,a=p.angle-(actor.goblinCombo===2?0:reverse*.80*(1-k/16)),u=[Math.cos(a),Math.sin(a)],vx=u[0]*length,vy=u[1]*length,t=Math.max(0,Math.min(1,((x-v.h[0])*vx+(y-v.h[1])*vy)/(length*length)));
@@ -83,7 +97,7 @@
   }return false;
  }
  function raster(id,state='idle',dir=2,index=0,combo=0,options={}){
-  const ch=character(id),parts=ch.views[VIEW[dir]??0],p=pose(state,dir,index,combo),data=new Uint8ClampedArray(SIZE*SIZE*4),rgb=new Map();
+  const ch=character(id),parts=ch.views[VIEW[dir]??0],p=pose(state,dir,index,combo,options.aim||0),data=new Uint8ClampedArray(SIZE*SIZE*4),rgb=new Map();
   const set=(x,y,c)=>{x=Math.round(x)+40;y=Math.round(y)+52;if(x<0||x>=SIZE||y<0||y>=SIZE)return;let color=rgb.get(c);if(!color){color=[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)).concat(255);rgb.set(c,color);}data.set(color,(y*SIZE+x)*4);};
   const line=(x,y,X,Y,c)=>{const n=Math.max(1,Math.ceil(Math.hypot(X-x,Y-y)*2));for(let i=0;i<=n;i++)set(x+(X-x)*i/n,y+(Y-y)*i/n,c);};
   const b={set,line},weapon=options.weapon||ch.weapon,armed=options.armed??ch.armed,v=weaponPose(dir,p),rear=dir===0||p.angle< -Math.PI*.85||p.angle>Math.PI*.85;
@@ -96,9 +110,9 @@
   if(!rear){trail();blade();}return {width:SIZE,height:SIZE,data,pose:p};
  }
  const cache=new Map();
- function draw(ctx,actor,time=0){const l=look(actor,time),id=actor.skin||'gobelin',options={weapon:actor.weapon,armed:actor.armed??character(id).armed},key=[id,l.state,l.dir,l.frame,l.combo,options.weapon,options.armed].join('/');let cv=cache.get(key);
+ function draw(ctx,actor,time=0){const l=look(actor,time),id=actor.skin||'gobelin',options={weapon:actor.weapon,armed:actor.armed??character(id).armed,aim:Number.isFinite(actor.swingElapsed)?actor.swingAim||0:0},key=[id,l.state,l.dir,l.frame,l.combo,options.weapon,options.armed,options.aim].join('/');let cv=cache.get(key);
   if(!cv){cv=ctx.canvas.ownerDocument?.createElement('canvas')||(typeof document!=='undefined'?document.createElement('canvas'):null);if(!cv)throw Error('Goblin drawing requires a canvas factory');cv.width=cv.height=SIZE;const c=cv.getContext('2d'),r=raster(id,l.state,l.dir,l.frame,l.combo,options),im=c.createImageData(SIZE,SIZE);im.data.set(r.data);c.putImageData(im,0,0);if(cache.size>=256)cache.delete(cache.keys().next().value);cache.set(key,cv);}
   const x=Math.round(actor.x)-40,y=Math.round(actor.y)-52;ctx.drawImage(cv,x,y);if(actor.flash>0){ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha*=.45;ctx.drawImage(cv,x,y);ctx.restore();}return l;
  }
- return Object.freeze({DATA,SIZE,ANCHOR,CLIPS,LABELS,character,times,duration,frame,pose,weaponPose,start,cancel,advance,look,hits,raster,draw});
+ return Object.freeze({DATA,SIZE,ANCHOR,CLIPS,LABELS,character,times,duration,frame,pose,weaponPose,aim,start,cancel,advance,look,telegraph,hits,raster,draw});
 });

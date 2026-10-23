@@ -107,7 +107,7 @@ Game.prototype.civilianProjectiles=function(dt){
 };
 Game.prototype.stepCivilianAnimations=function(dt){
  for(const n of this.npcs){if(n.batracien&&!n.batracien.role){this.stepBatracienCivilian(n,dt);continue;}const c=this.ensureCivilian(n);if(!c)continue;const delta=c.tickTime===this.time?0:dt;c.tickTime=this.time;c.inv=Math.max(0,c.inv-delta);c.elapsed+=delta;
-  const moved=Math.hypot(n.x-c.lastX,n.y-c.lastY);c.lastX=n.x;c.lastY=n.y;const member=this.party?.find(v=>v.id===n.id);if(moved>.01&&moved<20){c.distance+=moved;c.moveTime=this.time;}
+  const moved=WorldProjection.distance(n.x-c.lastX,n.y-c.lastY);c.lastX=n.x;c.lastY=n.y;const member=this.party?.find(v=>v.id===n.id);if(moved>.01&&moved<20){c.distance+=moved;c.moveTime=this.time;}
   if(member){if(c.lastHP!==undefined&&member.hp<c.lastHP)this.civilianAction(n,member.down?'death':'hit',true);c.lastHP=member.hp;if(member.down){if(c.action!=='death')this.civilianAction(n,'death');continue;}if(c.action==='death')this.civilianAction(n,'stand_up');}
   if(c.dead)continue;
   if(c.critical){this.civilianAction(n,'cower');n.anim=0;n.path=[];continue;}

@@ -1,0 +1,79 @@
+{
+  "mobile": true,
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "width": 844,
+      "impact": {
+        "contacts": 2,
+        "broken": true
+      },
+      "pickup": 3,
+      "choices": [
+        {
+          "floor": "geoles",
+          "destination": "grande-salle",
+          "labels": [
+            "La grande salle",
+            "Les galeries"
+          ]
+        },
+        {
+          "floor": "galeries",
+          "destination": "grande-salle",
+          "labels": [
+            "Les geôles",
+            "La grande salle"
+          ]
+        },
+        {
+          "floor": "grande-salle",
+          "destination": "geoles",
+          "labels": [
+            "Les geôles",
+            "Les galeries"
+          ]
+        }
+      ],
+      "hudKeys": false,
+      "inventoryKeys": true
+    },
+    {
+      "width": 568,
+      "impact": {
+        "contacts": 2,
+        "broken": true
+      },
+      "pickup": 3,
+      "choices": [
+        {
+          "floor": "geoles",
+          "destination": "grande-salle",
+          "labels": [
+            "La grande salle",
+            "Les galeries"
+          ]
+        },
+        {
+          "floor": "galeries",
+          "destination": "grande-salle",
+          "labels": [
+            "Les geôles",
+            "La grande salle"
+          ]
+        },
+        {
+          "floor": "grande-salle",
+          "destination": "geoles",
+          "labels": [
+            "Les geôles",
+            "Les galeries"
+          ]
+        }
+      ],
+      "hudKeys": false,
+      "inventoryKeys": true
+    }
+  ],
+  "browserErrors": []
+}

@@ -74,7 +74,6 @@
           0.47999999999998977,
           0.47999999999998977
         ],
-        "axis": "y",
         "facing": 1,
         "crate": [
           368,
@@ -85,6 +84,206 @@
           245.1999999999996
         ]
       },
+      "freedom": [
+        {
+          "x": 1,
+          "y": 0,
+          "distance": 3.8400000000001455
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "distance": 3.840000000000057
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "distance": 3.839999999999918
+        },
+        {
+          "x": -1,
+          "y": 1,
+          "distance": 3.840000000000057
+        },
+        {
+          "x": -1,
+          "y": 0,
+          "distance": 3.8400000000001455
+        },
+        {
+          "x": -1,
+          "y": -1,
+          "distance": 3.840000000000057
+        },
+        {
+          "x": 0,
+          "y": -1,
+          "distance": 3.839999999999918
+        },
+        {
+          "x": 1,
+          "y": -1,
+          "distance": 3.840000000000057
+        }
+      ],
+      "noPush": {
+        "unchanged": true,
+        "label": "SAISIR"
+      },
+      "depthViews": [
+        {
+          "side": "back-left",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "hero",
+            "crate"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            478,
+            176
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        },
+        {
+          "side": "back-right",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "hero",
+            "crate"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            496,
+            158
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        },
+        {
+          "side": "front-right",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "crate",
+            "hero"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            514,
+            176
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        },
+        {
+          "side": "front-left",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "crate",
+            "hero"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            496,
+            194
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        }
+      ],
       "touchRelease": true
     },
     {
@@ -159,7 +358,6 @@
           0.47999999999998977,
           0.47999999999998977
         ],
-        "axis": "y",
         "facing": 1,
         "crate": [
           368,
@@ -170,6 +368,206 @@
           245.1999999999996
         ]
       },
+      "freedom": [
+        {
+          "x": 1,
+          "y": 0,
+          "distance": 3.8400000000001455
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "distance": 3.840000000000057
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "distance": 3.839999999999918
+        },
+        {
+          "x": -1,
+          "y": 1,
+          "distance": 3.840000000000057
+        },
+        {
+          "x": -1,
+          "y": 0,
+          "distance": 3.8400000000001455
+        },
+        {
+          "x": -1,
+          "y": -1,
+          "distance": 3.840000000000057
+        },
+        {
+          "x": 0,
+          "y": -1,
+          "distance": 3.839999999999918
+        },
+        {
+          "x": 1,
+          "y": -1,
+          "distance": 3.840000000000057
+        }
+      ],
+      "noPush": {
+        "unchanged": true,
+        "label": "SAISIR"
+      },
+      "depthViews": [
+        {
+          "side": "back-left",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "hero",
+            "crate"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            478,
+            176
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        },
+        {
+          "side": "back-right",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "hero",
+            "crate"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            496,
+            158
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        },
+        {
+          "side": "front-right",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "crate",
+            "hero"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            514,
+            176
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        },
+        {
+          "side": "front-left",
+          "order": [
+            "plate",
+            "plate",
+            "crate",
+            "crate",
+            "hero"
+          ],
+          "occlusion": [
+            {
+              "piece": "caisse",
+              "ref": [
+                83.2,
+                108.8
+              ],
+              "covered": false,
+              "alpha": 1
+            },
+            {
+              "piece": "caisse",
+              "ref": [
+                496,
+                176
+              ],
+              "covered": false,
+              "alpha": 1
+            }
+          ],
+          "player": [
+            496,
+            194
+          ],
+          "crate": [
+            496,
+            176
+          ]
+        }
+      ],
       "touchRelease": true
     }
   ],

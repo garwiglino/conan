@@ -1,0 +1,157 @@
+{
+  "mobile": true,
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "width": 568,
+      "height": 320,
+      "inset": 0,
+      "bottom": 0,
+      "game": {
+        "x": 150,
+        "y": 0,
+        "width": 268,
+        "height": 320,
+        "right": 418,
+        "bottom": 320
+      },
+      "attack": {
+        "x": 470,
+        "y": 216,
+        "width": 88,
+        "height": 88,
+        "right": 558,
+        "bottom": 304
+      },
+      "stableFrame": true,
+      "nativeCameraGrid": true,
+      "offJoystickStart": true,
+      "nearAttack": true,
+      "multiTouch": true,
+      "holdDoesNotRepeat": true,
+      "returnsHome": true,
+      "cancelledCleanly": true
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "inset": 44,
+      "bottom": 21,
+      "game": {
+        "x": 150,
+        "y": 0,
+        "width": 268,
+        "height": 320,
+        "right": 418,
+        "bottom": 320
+      },
+      "attack": {
+        "x": 426,
+        "y": 195,
+        "width": 88,
+        "height": 88,
+        "right": 514,
+        "bottom": 283
+      },
+      "stableFrame": true,
+      "nativeCameraGrid": true,
+      "offJoystickStart": true,
+      "nearAttack": true,
+      "multiTouch": true,
+      "holdDoesNotRepeat": true,
+      "returnsHome": true,
+      "cancelledCleanly": true
+    },
+    {
+      "width": 667,
+      "height": 375,
+      "inset": 0,
+      "bottom": 0,
+      "game": {
+        "x": 150,
+        "y": 0,
+        "width": 367,
+        "height": 375,
+        "right": 517,
+        "bottom": 375
+      },
+      "attack": {
+        "x": 569,
+        "y": 271,
+        "width": 88,
+        "height": 88,
+        "right": 657,
+        "bottom": 359
+      },
+      "stableFrame": true,
+      "nativeCameraGrid": true,
+      "offJoystickStart": true,
+      "nearAttack": true,
+      "multiTouch": true,
+      "holdDoesNotRepeat": true,
+      "returnsHome": true,
+      "cancelledCleanly": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "inset": 44,
+      "bottom": 21,
+      "game": {
+        "x": 150,
+        "y": 0,
+        "width": 544,
+        "height": 390,
+        "right": 694,
+        "bottom": 390
+      },
+      "attack": {
+        "x": 702,
+        "y": 265,
+        "width": 88,
+        "height": 88,
+        "right": 790,
+        "bottom": 353
+      },
+      "stableFrame": true,
+      "nativeCameraGrid": true,
+      "offJoystickStart": true,
+      "nearAttack": true,
+      "multiTouch": true,
+      "holdDoesNotRepeat": true,
+      "returnsHome": true,
+      "cancelledCleanly": true
+    },
+    {
+      "width": 932,
+      "height": 430,
+      "inset": 59,
+      "bottom": 21,
+      "game": {
+        "x": 150,
+        "y": 0,
+        "width": 632,
+        "height": 430,
+        "right": 782,
+        "bottom": 430
+      },
+      "attack": {
+        "x": 775,
+        "y": 305,
+        "width": 88,
+        "height": 88,
+        "right": 863,
+        "bottom": 393
+      },
+      "stableFrame": true,
+      "nativeCameraGrid": true,
+      "offJoystickStart": true,
+      "nearAttack": true,
+      "multiTouch": true,
+      "holdDoesNotRepeat": true,
+      "returnsHome": true,
+      "cancelledCleanly": true
+    }
+  ],
+  "browserErrors": []
+}

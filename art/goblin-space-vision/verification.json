@@ -1,0 +1,141 @@
+{
+  "mobile": true,
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "width": 844,
+      "open": {
+        "impacts": 29,
+        "starts": 29,
+        "maxClose": 2,
+        "maxSwings": 2,
+        "hpLost": 1,
+        "p95ms": 16.90000000037253
+      },
+      "escape": 160.80000000000197,
+      "doorway": {
+        "maxThreshold": 1,
+        "queued": 3,
+        "crossed": 3,
+        "p95ms": 10.800000000745058
+      },
+      "flow": {
+        "playerX": 300.2999999999992,
+        "allCrossed": true,
+        "positions": [
+          [
+            320.74260127973804,
+            94.08564351169879
+          ],
+          [
+            256.0774856677452,
+            102.20342665999273
+          ],
+          [
+            246.60380383679134,
+            110.26243832620857
+          ],
+          [
+            256.44650609178024,
+            85.91235752501144
+          ]
+        ]
+      },
+      "sight": {
+        "blocked": true,
+        "reverse": true,
+        "detected": 0,
+        "swings": 0
+      },
+      "detectedAfterOpen": 1,
+      "engagement": {
+        "priority": true,
+        "reacted": true,
+        "started": true,
+        "reactionSeconds": 0.86,
+        "position": [
+          367.6194011149565,
+          190.21637316206636
+        ]
+      },
+      "input": {
+        "afterSpam": 1,
+        "linked": true,
+        "held": 2
+      },
+      "pressure": {
+        "counters": 5,
+        "hpLost": 4,
+        "enemyDamage": 24.960000000000036
+      }
+    },
+    {
+      "width": 568,
+      "open": {
+        "impacts": 29,
+        "starts": 29,
+        "maxClose": 2,
+        "maxSwings": 2,
+        "hpLost": 1,
+        "p95ms": 15.699999999254942
+      },
+      "escape": 160.80000000000197,
+      "doorway": {
+        "maxThreshold": 1,
+        "queued": 3,
+        "crossed": 3,
+        "p95ms": 5.899999998509884
+      },
+      "flow": {
+        "playerX": 300.2999999999992,
+        "allCrossed": true,
+        "positions": [
+          [
+            320.74260127973804,
+            94.08564351169879
+          ],
+          [
+            256.0774856677452,
+            102.20342665999273
+          ],
+          [
+            246.60380383679134,
+            110.26243832620857
+          ],
+          [
+            256.44650609178024,
+            85.91235752501144
+          ]
+        ]
+      },
+      "sight": {
+        "blocked": true,
+        "reverse": true,
+        "detected": 0,
+        "swings": 0
+      },
+      "detectedAfterOpen": 1,
+      "engagement": {
+        "priority": true,
+        "reacted": true,
+        "started": true,
+        "reactionSeconds": 0.86,
+        "position": [
+          367.6194011149565,
+          190.21637316206636
+        ]
+      },
+      "input": {
+        "afterSpam": 1,
+        "linked": true,
+        "held": 2
+      },
+      "pressure": {
+        "counters": 5,
+        "hpLost": 4,
+        "enemyDamage": 24.960000000000036
+      }
+    }
+  ],
+  "browserErrors": []
+}

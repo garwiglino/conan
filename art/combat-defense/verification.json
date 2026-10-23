@@ -1,0 +1,65 @@
+{
+  "mobile": true,
+  "source": "ios/Hearthreaver/Game/index.html",
+  "results": [
+    {
+      "width": 844,
+      "corner": {
+        "escaped": 196.32028983271402,
+        "yields": 49
+      },
+      "telegraph": {
+        "visible": true,
+        "frame": 1,
+        "smear": 0
+      },
+      "parry": {
+        "kind": "parry",
+        "hpUnchanged": true,
+        "staggered": true,
+        "state": "parry"
+      },
+      "block": {
+        "kind": "guard_hit",
+        "hpUnchanged": true,
+        "state": "guard_hit"
+      },
+      "walking": {
+        "distance": 46.39999999999935,
+        "feetFrames": 11,
+        "guard": true
+      },
+      "trustedTouch": true
+    },
+    {
+      "width": 568,
+      "corner": {
+        "escaped": 196.32028983271402,
+        "yields": 49
+      },
+      "telegraph": {
+        "visible": true,
+        "frame": 1,
+        "smear": 0
+      },
+      "parry": {
+        "kind": "parry",
+        "hpUnchanged": true,
+        "staggered": true,
+        "state": "parry"
+      },
+      "block": {
+        "kind": "guard_hit",
+        "hpUnchanged": true,
+        "state": "guard_hit"
+      },
+      "walking": {
+        "distance": 46.39999999999935,
+        "feetFrames": 11,
+        "guard": true
+      },
+      "trustedTouch": true
+    }
+  ],
+  "browserErrors": []
+}

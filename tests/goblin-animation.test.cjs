@@ -40,3 +40,25 @@ test('every combo returns to the exact native ready drawing and leads into its p
   const angle=G.pose('attack',dir,0,combo).angle+Math.PI/2;assert.ok(Math.abs(Math.atan2(Math.sin(angle),Math.cos(angle)))<.65,'restrained initial tension');
  }
 });
+
+test('bounded target aim is shared by the drawn blade and impact, keeps original limb layers, and settles back to idle',()=>{
+ const P=require('../scripts/world-projection.js');
+ for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
+  const [x,y]=[[0,-18],[18,0],[0,18],[-18,0]][dir],q=P.inverse(x,y),e={x:0,y:0,dir,skin:'guerrier-kesh',nextCombo:combo},target={x:q.x,y:q.y,r:5};G.start(e,target);
+  assert.ok(Math.abs(e.swingAim)<=.66);
+  const base=G.pose('attack',dir,2,combo),draw=G.raster(e.skin,'attack',dir,2,combo,{aim:e.swingAim}).pose,expected=G.pose('attack',dir,2,combo,e.swingAim);
+  assert.equal(draw.angle,expected.angle);for(const limb of ['body','head','armL','armR','legL','legR'])assert.deepEqual(draw[limb],base[limb]);
+  assert.equal(G.pose('attack',dir,5,combo,e.swingAim).angle,G.pose('idle',dir,0).angle);
+ }
+});
+
+test('every goblin combo telegraphs four distinct pre-hit poses without smears, then hits once and follows through',()=>{
+ for(const chief of [false,true])for(let dir=0;dir<4;dir++)for(let combo=0;combo<4;combo++){
+  const e={dir,chief,nextCombo:combo};G.start(e);const poses=new Set();let contacts=0;
+  for(let i=0;i<200&&Number.isFinite(e.swingElapsed);i++){
+   const look=G.look(e);if(G.telegraph(e)){poses.add(look.frame);assert.equal(G.pose('attack',dir,look.frame,combo).smear,0);}
+   if(G.advance(e,1/120)){contacts++;assert.equal(G.look(e).frame,2);assert.equal(G.telegraph(e),false);}
+  }
+  assert.deepEqual([...poses],[0,.75,1,1.25]);assert.equal(contacts,1);
+ }
+});

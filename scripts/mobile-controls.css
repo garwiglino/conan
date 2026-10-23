@@ -1,0 +1,18 @@
+/* Thumb controls keep one CSS coordinate system, independent of font size/DPR. */
+#screen.panels-x .joystick{--joy-size:116px;bottom:calc(var(--control-bottom,0px) + 20px)!important}
+#screen.panels-x .joystick:not(.active){left:max(calc(var(--control-left,0px) + 8px),calc((var(--pc,150px) - var(--joy-size))/2))!important}
+#screen.panels-x #stickZone{left:0;width:48%;bottom:0;height:auto;pointer-events:none}
+#screen.panels-x .action-pad{width:156px!important;height:168px!important;right:calc(var(--control-right,0px) + 4px)!important;bottom:calc(var(--control-bottom,0px) + 8px)!important;transform:none!important;transform-origin:right bottom}
+#screen.panels-x .action-pad [data-key="attack"]{left:62px!important;top:72px!important;width:88px!important;height:88px!important}
+#screen.panels-x .action-pad [data-key="dodge"]{left:0!important;top:106px!important;width:52px!important;height:52px!important}
+#screen.panels-x .action-pad [data-key="guard"]{left:98px!important;top:8px!important;width:52px!important;height:52px!important}
+#screen.panels-x .action-pad [data-key="interact"]{left:8px!important;top:24px!important;width:50px!important;height:50px!important}
+#screen.panels-x .action-pad button.held{transform:none!important}
+#screen.panels-x .console-bar{right:calc(var(--control-right,0px) + 4px)!important;width:max(94px,calc(var(--pc,150px) - var(--control-right,0px) - 8px))!important}
+#screen.panels-x .tracker{left:calc(var(--control-left,0px) + 4px)!important;width:max(94px,calc(var(--pc,150px) - var(--control-left,0px) - 8px))!important}
+
+@media(max-height:350px){
+#screen.panels-x .action-pad [data-key="interact"]{left:-52px!important;top:0!important}
+#screen.panels-x .action-pad [data-key="guard"]{left:0!important;top:52px!important}
+#screen.panels-x .action-pad [data-key="dodge"]{top:112px!important}
+}

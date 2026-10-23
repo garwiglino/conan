@@ -99,3 +99,13 @@ Le travail médian d'une image baisse d'environ 56 % dans ces deux séquences. �
 Les intervalles entre callbacks d'affichage donnent aussi environ **39 → 58 images/s** après le dialogue à Sarak et **33 → 52 images/s** à Haut-Givre dans cette recette Chromium. Ils incluent le traitement d'interface et des sauvegardes de la page de test ; ils ne préjugent pas du débit d'un téléphone particulier.
 
 Validation finale : **519 tests JavaScript et 24 tests de bible réussis**, compilation de la bible sans avertissement, recettes soutenues et chargement avec et sans worker, reconstruction HTML idempotente, scripts web/iOS identiques et archive native vérifiée. Les tests spécifiques couvrent les buts de navigation bloqués puis rouverts, les pas de durée nulle, les acteurs qui entrent dans le rayon de menace, les métiers après réutilisation du registre, les représentations de mission mortes, les propriétaires de projectile absents et les coordonnées négatives du monde.
+
+## Grille de rendu et vitesse isométrique
+
+La caméra se cale sur les pixels natifs des sprites, indépendamment du facteur de rendu `K`. Le centre de l’écran est entier, même si sa largeur ou sa hauteur est impaire : terrain, personnages et décor conservent ainsi la même phase de rasterisation pendant le suivi. Le donjon utilise la même règle. Les petits mouvements de caméra dus aux impacts confirmés restent intentionnels.
+
+`WorldProjection.distance(dx,dy)` mesure un déplacement projeté ; `motion(dx,dy)` adapte un budget de déplacement à cette métrique. `world-motion-runtime.js`, installé après les contrôleurs du donjon, applique cette conversion une seule fois avant les collisions du joueur et des ennemis. Les PNJ consomment leur budget projeté par segment de chemin, y compris dans les virages ; le replay des collisions des batraciens ne reconvertit pas leur déplacement. L’évitement et les réservations de portes des gobelins vérifient le vecteur déjà converti. Les données de navigation et de sauvegarde restent dans les coordonnées logiques.
+
+Les foulées du joueur, des gobelins, des civils et des batraciens suivent la distance projetée réellement parcourue. Les vitesses propres à la marche, la garde, l’esquive et chaque espèce sont conservées ; leur direction ne multiplie plus la vitesse visible.
+
+Vérification : `node --test --test-concurrency=1 tests/isometric-motion.test.cjs` (seize directions, contrôleur du donjon, virages et arrivée des PNJ, collisions, caméra aux densités 1 à 4 sur un écran impair).

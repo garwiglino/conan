@@ -100,13 +100,13 @@ const OBJECTS={
   }
 };
 // Coffre : caisse cerclée, couvercle bombé (ou ouvert, dressé derrière, l'or dedans).
-function chest(M,o,{open=false,progress=open?1:0}={}){
+function chest(M,o,{open=false,progress=open?1:0,empty=false}={}){
  M.box(-8,-5,0,8,5,6,'bois');for(const a of [-7,5])M.box(a,-5,0,a+2,6,7,'fer');
- if(progress>=1){M.box(-8,-6,6,8,-4,15,'bois');M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1?'or':undefined,[-7,-4,5,7,4,7]);}
+ if(progress>=1){M.box(-8,-6,6,8,-4,15,'bois');M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1&&!empty?'or':undefined,[-7,-4,5,7,4,7]);}
  else if(progress>0){
   const angle=progress*Math.PI/2,co=Math.cos(angle),si=Math.sin(angle);
   M.shape((a,b,z)=>{const db=b+5,dz=z-6,v=db*co+dz*si,w=-db*si+dz*co,q=v-5;return v>=0&&v<10&&w>=0&&q*q+w*w<=25?((a>=-7&&a<-5)||(a>=5&&a<7)?'fer':'bois'):undefined;},[-8,-12,6,8,6,18]);
-  M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1?'or':undefined,[-7,-4,5,7,4,7]);
+  M.shape((a,b,z)=>(a/7)**2+(b/4)**2<1&&!empty?'or':undefined,[-7,-4,5,7,4,7]);
  }else{M.shape((a,b,z)=>b*b+(z-6)**2<=5*5&&z>=6?((a>=-7&&a<-5)||(a>=5&&a<7)?'fer':'bois'):undefined,[-8,-5,6,8,5,12]);M.box(-1,5,3,1,6,7,'fer');}
 }
 // Planches de caisse : bords sombres, planches de 3, traverse en diagonale.
@@ -120,8 +120,8 @@ function crateShade(base,boxes){
  * noir autour : l'objet se détache par sa valeur et son ombre de contact). */
 function outline(s){const src=s.g.clone(),P=require('./palette.cjs');for(let y=0;y<s.h;y++)for(let x=0;x<s.w;x++){if(!src.get(x,y))continue;if(src.get(x+1,y)&&src.get(x,y+1))continue;
  const c=s.g.name(x,y),ramp=c.replace(/\d+$/,''),t=+c.match(/\d+$/)[0];if(ramp==='torche')continue;s.g.set(x,y,ramp+Math.max(0,t-1));}}
-function object(name,{image=0,progress}={}){
- const M=new Model(-16,-16,0,18,18,52),o={};OBJECTS[name](M,o,progress===undefined?undefined:{progress});
+function object(name,{image=0,progress,empty=false}={}){
+ const M=new Model(-16,-16,0,18,18,52),o={};OBJECTS[name](M,o,progress===undefined?undefined:{progress,empty});
  let sh=shader(o);if(o.crate)sh=crateShade(sh,o.crate);
  const s=render(M,sh);
  outline(s);

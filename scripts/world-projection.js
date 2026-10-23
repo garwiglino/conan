@@ -4,6 +4,11 @@
 const point=(x,y,z=0)=>({x:x-y,y:(x+y)/2-z}),inverse=(x,y,z=0)=>({x:y+z+x/2,y:y+z-x/2});
 function rect(r){const p=[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(v=>inverse(...v)),xs=p.map(p=>p.x),ys=p.map(p=>p.y);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};}
 function input(x=0,y=0){const p=inverse(x,y),l=Math.hypot(p.x,p.y),size=Math.min(1,Math.hypot(x,y));return l?{x:p.x/l*size,y:p.y/l*size}:{x:0,y:0};}
+// A movement budget is measured on screen, before collision response.
+function distance(x,y){const q=point(x,y);return Math.hypot(q.x,q.y);}
+function motion(x,y){const length=Math.hypot(x,y),projected=distance(x,y),scale=projected?length/projected:0;return {x:x*scale,y:y*scale};}
+// Static art and camera share the native sprite grid, regardless of render DPR.
+const snap=value=>Math.round(value);
 function display(game){
  const views=new WeakMap(),originals=new WeakMap();
  const raw=o=>originals.get(o)||o;
@@ -36,5 +41,5 @@ function display(game){
  }
  return {game:wrap(game),wrap,raw};
 }
-return Object.freeze({point,inverse,rect,input,display});
+return Object.freeze({point,inverse,rect,input,distance,motion,snap,display});
 });
