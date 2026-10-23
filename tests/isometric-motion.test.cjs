@@ -41,11 +41,11 @@ test('batracien path replay does not apply the projection compensation twice',()
 test('corrected steps still stop at solid geometry',()=>{
  const g=arena(),e={x:1000,y:1000,r:5};g.solid=(x,y)=>x>1001||y>1001;g.move(e,5,5);assert.ok(e.x<=1001&&e.y<=1001);
 });
-test('world camera keeps one native pixel phase at every render density and odd viewport size',()=>{
+test('world camera keeps one physical pixel phase at integer and fractional render densities',()=>{
  const g=arena(),r=new a.Renderer(canvas.createCanvas(640,400),canvas.createCanvas(1,1),g);
  const cameraReady=Error('camera-ready');r.drawAtlasGround=()=>{throw cameraReady;};
  g.player.spawnFX=0;Object.assign(g.player,{x:800,y:800});
- for(const K of [1,2,3,4]){r.resize(321,201,{l:0,r:0,t:0,b:0},K);
-  for(const f of [.05,.22,.49,.51,.78,.95]){Object.assign(g.player,{x:800+f,y:800+f*.3});g.time+=.02;assert.throws(()=>r.frame(),e=>e===cameraReady);r.c.restore();const p=P.point(g.player.x,g.player.y);assert.ok(Number.isInteger(r.cam.x)&&Number.isInteger(r.cam.y));near(P.snap(p.x)-r.cam.x,160);near(P.snap(p.y)-r.cam.y,Math.floor((201-r.top)/2)+14);}
+ for(const K of [1,2,3,4,1632/279]){r.resize(321,201,{l:0,r:0,t:0,b:0},K);
+  for(const f of [.05,.22,.49,.51,.78,.95]){Object.assign(g.player,{x:800+f,y:800+f*.3});g.time+=.02;assert.throws(()=>r.frame(),e=>e===cameraReady);r.c.restore();const p=P.point(g.player.x,g.player.y);near(r.cam.x*K,Math.round(r.cam.x*K));near(r.cam.y*K,Math.round(r.cam.y*K));near(Math.round(p.x*K)-r.cam.x*K,Math.round(321*K/2));near(Math.round(p.y*K)-r.cam.y*K,Math.round((201-r.top)*K/2+14*K));}
  }
 });

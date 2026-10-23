@@ -24,7 +24,7 @@
         "bottom": 304
       },
       "stableFrame": true,
-      "nativeCameraGrid": true,
+      "physicalCameraGrid": true,
       "offJoystickStart": true,
       "nearAttack": true,
       "multiTouch": true,
@@ -54,7 +54,7 @@
         "bottom": 283
       },
       "stableFrame": true,
-      "nativeCameraGrid": true,
+      "physicalCameraGrid": true,
       "offJoystickStart": true,
       "nearAttack": true,
       "multiTouch": true,
@@ -84,7 +84,7 @@
         "bottom": 359
       },
       "stableFrame": true,
-      "nativeCameraGrid": true,
+      "physicalCameraGrid": true,
       "offJoystickStart": true,
       "nearAttack": true,
       "multiTouch": true,
@@ -114,7 +114,7 @@
         "bottom": 353
       },
       "stableFrame": true,
-      "nativeCameraGrid": true,
+      "physicalCameraGrid": true,
       "offJoystickStart": true,
       "nearAttack": true,
       "multiTouch": true,
@@ -144,7 +144,7 @@
         "bottom": 393
       },
       "stableFrame": true,
-      "nativeCameraGrid": true,
+      "physicalCameraGrid": true,
       "offJoystickStart": true,
       "nearAttack": true,
       "multiTouch": true,

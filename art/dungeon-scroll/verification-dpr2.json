@@ -1,0 +1,175 @@
+{
+  "results": [
+    {
+      "W": 279,
+      "H": 200.0183823529412,
+      "K": 3.899641577060932,
+      "css": {
+        "x": 150,
+        "y": 0,
+        "w": 544,
+        "h": 390
+      },
+      "backing": {
+        "w": 1088,
+        "h": 780
+      },
+      "dpr": 2,
+      "width": 844,
+      "height": 390,
+      "maxChanged": 0,
+      "samples": [
+        {
+          "index": 1,
+          "changed": 0,
+          "shift": [
+            -4,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "changed": 0,
+          "shift": [
+            -4,
+            0
+          ]
+        },
+        {
+          "index": 3,
+          "changed": 0,
+          "shift": [
+            -4,
+            0
+          ]
+        },
+        {
+          "index": 4,
+          "changed": 0,
+          "shift": [
+            -4,
+            -4
+          ]
+        },
+        {
+          "index": 5,
+          "changed": 0,
+          "shift": [
+            -3,
+            -4
+          ]
+        },
+        {
+          "index": 6,
+          "changed": 0,
+          "shift": [
+            -4,
+            -4
+          ]
+        },
+        {
+          "index": 7,
+          "changed": 0,
+          "shift": [
+            4,
+            -4
+          ]
+        },
+        {
+          "index": 8,
+          "changed": 0,
+          "shift": [
+            3,
+            -4
+          ]
+        }
+      ]
+    },
+    {
+      "W": 216,
+      "H": 257.91044776119406,
+      "K": 2.4814814814814814,
+      "css": {
+        "x": 150,
+        "y": 0,
+        "w": 268,
+        "h": 320
+      },
+      "backing": {
+        "w": 536,
+        "h": 640
+      },
+      "dpr": 2,
+      "width": 568,
+      "height": 320,
+      "maxChanged": 0,
+      "samples": [
+        {
+          "index": 1,
+          "changed": 0,
+          "shift": [
+            -3,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "changed": 0,
+          "shift": [
+            -2,
+            0
+          ]
+        },
+        {
+          "index": 3,
+          "changed": 0,
+          "shift": [
+            -2,
+            0
+          ]
+        },
+        {
+          "index": 4,
+          "changed": 0,
+          "shift": [
+            -3,
+            -2
+          ]
+        },
+        {
+          "index": 5,
+          "changed": 0,
+          "shift": [
+            -2,
+            -3
+          ]
+        },
+        {
+          "index": 6,
+          "changed": 0,
+          "shift": [
+            -3,
+            -2
+          ]
+        },
+        {
+          "index": 7,
+          "changed": 0,
+          "shift": [
+            3,
+            -3
+          ]
+        },
+        {
+          "index": 8,
+          "changed": 0,
+          "shift": [
+            2,
+            -2
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
